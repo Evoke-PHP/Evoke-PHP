@@ -1,0 +1,30 @@
+.Admin_Header
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.Admin_Home
+{
+    border: 3px #01f solid;
+    background-color: #FF0;
+    padding: 8px;
+    font-size: 2em;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 1px;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.Admin_Home:hover
+{
+    border: 4px solid #00F;
+    margin: 0px;
+}
+
+.Language_Images
+{
+    padding-top: 0px;
+}

@@ -1,0 +1,30 @@
+.Heading_Item,.Data_Item
+{
+    display: inline-block;
+}
+
+.Data_Row,.Heading_Row
+{
+    display: inline-block;
+    margin-left: 5px;
+    padding: 5px;
+    width: 85%;
+}
+
+.Heading_Row
+{
+    background: #FFFFAA;
+    font-weight: 700;
+}
+
+.Data_Row
+{
+    -moz-border-radius: 5px;
+}
+
+.Record_Buttons
+{
+    display: inline-block;
+    background: #8888FF;
+    padding: 3px;
+}
