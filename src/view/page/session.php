@@ -5,9 +5,9 @@ class View_Page_Session extends View_Page
    public function __construct(Array $setup)
    {
       $setup += array('Start_Base' => array(
-			 'CSS' => array('/styleslib/global.css',
-					'/styleslib/common.css',
-					'/styleslib/session.css')));
+			 'CSS' => array('/csslib/global.css',
+					'/csslib/common.css',
+					'/csslib/session.css')));
       
       parent::__construct($setup);
    }

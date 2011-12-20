@@ -12,8 +12,8 @@ abstract class View_Page extends View
       $setup += array('Joint_Key'     => 'Joint_Data',
 		      'Start'         => array(),
 		      'Start_Base'    => array(
-			 'CSS' => array('/styleslib/global.css',
-					'/styleslib/common.css')),
+			 'CSS' => array('/csslib/global.css',
+					'/csslib/common.css')),
 		      'XWR'           => NULL);
       
       parent::__construct($setup);

@@ -11,12 +11,12 @@ class View_Page_Admin extends View_Page
 	 'Record_List_Setup' => array(),
 	 'Start'             => array(),
 	 'Start_Base'        => array(
-	    'CSS' => array('/styleslib/global.css',
-			   '/styleslib/common.css',
-			   '/styleslib/admin/admin.css',
-			   '/styleslib/element/language.css',
-			   '/styleslib/element/admin_header.css',
-			   '/styleslib/element/error.css')),
+	    'CSS' => array('/csslib/global.css',
+			   '/csslib/common.css',
+			   '/csslib/admin/admin.css',
+			   '/csslib/element/language.css',
+			   '/csslib/element/admin_header.css',
+			   '/csslib/element/error.css')),
 	 'Table_Info'        => NULL,
 	 'Table_Name'        => NULL);
 

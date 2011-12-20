@@ -99,7 +99,7 @@ class System_Handler_Exception extends System_Handler
 	 '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n" .
          '   <head>' . "\n" .
 	 '      <title>Error</title>' . "\n" .
-	 '      <link type="text/css" href="/styleslib/global.css" ' .
+	 '      <link type="text/css" href="/csslib/global.css" ' .
 	 'rel="stylesheet"></link>' . "\n" .
 	 '   </head>' . "\n" .
 	 '   <body>' . "\n" .

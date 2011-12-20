@@ -71,7 +71,7 @@ class System_Handler_Shutdown extends System_Handler
 				 'Session' => $c->getShared('Session')))))));
 
       $css = array('link',
-		   array('href' => '/styleslib/global.css',
+		   array('href' => '/csslib/global.css',
 			 'rel'  => 'stylesheet',
 			 'type' => 'text/css'));
       
