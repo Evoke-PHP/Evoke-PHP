@@ -1,7 +1,6 @@
 <?php
-require_once 'system/files.php';
 
-class System_Handler_Error extends System_Handler
+class Evoke_Handler_Error extends Evoke_Handler
 {
    public function __construct()
    {
@@ -54,7 +53,7 @@ class System_Handler_Error extends System_Handler
       case E_CORE_WARNING:
       case E_ERROR:
       case E_PARSE:
-	 throw new Exception(
+	 throw new OutOfBoundsException(
 	    __METHOD__ . ' Unexpected error type: [' . $errTypeStr . '] ' .
 	    $errStr . ' in file ' . $errFile . ' at ' . $errLine .
 	    ' received. The PHP Manual for set_error_handler states that ' .

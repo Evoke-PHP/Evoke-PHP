@@ -1,6 +1,6 @@
 <?php
 
-class System_Handler_Shutdown extends System_Handler
+class Evoke_Handler_Shutdown extends Evoke_Handler
 { 
    public function __construct()
    {
@@ -34,6 +34,11 @@ class System_Handler_Shutdown extends System_Handler
 	 return;
       }
 
+      if (!headers_sent())
+      {
+	 header('HTTP/1.1 500 Internal Server Error');
+      }
+      
       $title = 'Fatal Error';
       $message = 'The administrator has been notified of this error.  ' .
 	 'Sorry, we will fix this.';
@@ -52,7 +57,7 @@ class System_Handler_Shutdown extends System_Handler
 	 if ($detailed)
 	 {
 	    $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
+	    $message .= var_export($backtrace, true);
 	    if (count($backtrace) > 1)
 	    {
 	       $message .= var_export($backtrace, true);

@@ -1,8 +1,7 @@
 <?php
-require_once 'system/files.php';
 
 /// The system exception handler.
-class System_Handler_Exception extends System_Handler
+class Evoke_Handler_Exception extends Evoke_Handler
 {
    public function __construct()
    {

@@ -1,6 +1,6 @@
 <?php
 
-abstract class System_Handler
+abstract class Evoke_Handler
 { 
    /******************/
    /* Public Methods */

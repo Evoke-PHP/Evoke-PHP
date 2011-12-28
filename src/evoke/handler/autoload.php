@@ -1,6 +1,6 @@
 <?php
 
-class System_Handler_Autoload extends System_Handler
+class Evoke_Handler_Autoload extends Evoke_Handler
 {
    // We only use the extension php.
    protected $extensions = array('.php');
