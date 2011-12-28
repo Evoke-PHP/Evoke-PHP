@@ -1,6 +1,5 @@
 <?php
 
-
 /// Data class to allow arrangement of data within processing.
 abstract class Data implements Iterator
 {

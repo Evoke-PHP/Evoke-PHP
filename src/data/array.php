@@ -1,20 +1,18 @@
 <?php
 
-class Data_List extends Data
-{
-   protected $listItem;
+class Data_Array extends Data
+{ 
+   protected $arrayItem;
    
    public function __construct(Array $setup)
    {
       $setup += array('App'          => NULL,
-		      'List_Item'    => NULL,
-		      'Parent_Field' => NULL);
+		      'Array_Item'   => NULL);
 
       $setup['App']->needs(
-	 array('Instance' => array('Data' => $setup['List_Item']),
-	       'Set'      => array('Parent_Field' => $setup['Parent_Field'])));
+	 array('Instance' => array('Data' => $setup['Array_Item'])));
 
-      $this->listItem = $setup['List_Item'];
+      $this->arrayItem =& $setup['Array_Item'];
    }
 
    /******************/
@@ -30,13 +28,9 @@ class Data_List extends Data
    /* Protected Methods */
    /*********************/
 
-   protected function setListItem($data)
+   protected function setArrayItem($data)
    {
-      $jKey = $this->setup['Joint_Key'];
-      $data += array($jKey);
-      $data[$jKey] += array($this->setup['Parent_Field'] => array());
-      
-      $this->listItem->setData($data[$jKey][$this->setup['Parent_Field']]);
+      $this->arrayItem->setData($data);
    }
    
    /***********************/
@@ -46,12 +40,12 @@ class Data_List extends Data
    // Return the current item.
    public function current()
    {
-      return $this->listItem;
+      return $this->arrayItem;
    }
 
    public function key()
    {
-      Return $this->listItem->getID();
+      Return $this->arrayItem->getID();
    }
    
    // Adjust the next function to move between list items.
@@ -64,9 +58,9 @@ class Data_List extends Data
 	 return false;
       }
 
-      $this->setListItem($nextItem);
+      $this->setArrayItem($nextItem);
       
-      return $this->listItem;
+      return $this->arrayItem;
    }
 
    public function rewind()
@@ -75,14 +69,14 @@ class Data_List extends Data
 
       if ($first !== false)
       {
-	 $this->setListItem($first);
+	 $this->setArrayItem($first);
       }
    }
 
    public function valid()
    {
       return (current($this->data) !== false);
-   }   
+   }
 }
 
 // EOF

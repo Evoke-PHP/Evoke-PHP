@@ -1,5 +1,4 @@
 <?php
-// Copyright (c) 2009 - 2011 Skyshops Marketing. All Rights Reserved.
 
 /** Model_DB_Joint_Admin_Linked provides a CRUD interface to a joint set of data
  *  with linked information stored in files referenced from the database.

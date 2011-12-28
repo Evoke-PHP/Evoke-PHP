@@ -1,5 +1,4 @@
 <?php
-// Copyright (c) 2009 - 2011 Skyshops Marketing. All Rights Reserved.
 
 /// Model_DB_Joint_Admin provides a CRUD interface to a joint set of data.
 class Model_DB_Joint_Admin extends Model_DB_Joint implements Iface_Model_Admin

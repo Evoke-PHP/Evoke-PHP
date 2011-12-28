@@ -13,11 +13,6 @@ require_once 'system/db_connection.php';
  * Provides wrappers to help the writing of the following SQL statements:
  *   SELECT, UPDATE, DELETE, INSERT
  *
- * \par Assumptions
- *   Values contain any quotes required.
- *      Example: For a Name column of type string the value should be passed
- *               in as '`Magnus`' (not 'Magnus').
- * \par
  *   Conditions for WHERE statements are either in string format or as a keyed
  *   array which is AND'ed together and the comparison operator '=' is used.
  *      Example: array(ID => 1, Name => '`Peter`') becomes ID=1 AND Name=`Peter`

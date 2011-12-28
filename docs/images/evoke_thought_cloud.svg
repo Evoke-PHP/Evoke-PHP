@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="640px"
+   height="480px"
+   id="svg3012"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="evoke_thought_cloud.svg"
+   inkscape:export-filename="/home/pyoung/Coding/General_Img_Dev/evoke_thought_cloud.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3014" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.77472527"
+     inkscape:cx="152.20524"
+     inkscape:cy="283.7703"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:window-width="1084"
+     inkscape:window-height="741"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3017">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:32.308;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 273.03701,86.959343 c -18.1316,0 -34.1965,9.112736 -43.99807,23.047757 -8.78144,-11.706591 -22.57469,-19.234102 -38.08792,-19.234102 -26.52735,0 -48.02588,22.035062 -48.02588,49.245892 0,5.65962 0.95829,11.10483 2.67062,16.16662 -16.14712,8.25699 -26.66162,21.6837 -26.66162,36.89296 0,21.3042 20.61832,39.20807 48.46362,44.14719 9.16052,23.0097 31.46678,39.25579 57.56967,39.25579 18.79145,0 35.64162,-8.41932 47.01887,-21.72121 9.86352,6.5034 21.9827,10.36315 35.06718,10.36315 7.71602,0 15.06935,-1.38684 21.84585,-3.81364 8.3015,9.37251 19.63958,15.1717 32.17768,15.1717 21.18828,0 38.99234,-16.5031 44.34833,-38.96562 28.47077,-4.23637 49.73321,-20.80607 49.73321,-40.62372 0,-12.94118 -9.07639,-24.52068 -23.29047,-32.16732 2.10507,-4.8063 3.23963,-9.91495 3.23963,-15.21318 0,-28.25746 -32.2257,-51.152781 -72.01686,-51.152781 -17.48642,0 -33.53365,4.414921 -46.01195,11.772661 -9.7934,-14.005681 -25.85608,-23.172147 -44.04189,-23.172147 z"
+       id="path3766"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/pyoung/Coding/General_Img_Dev/thought_cloud.png"
+       inkscape:export-xdpi="87.978546"
+       inkscape:export-ydpi="87.978546" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#000000;stroke-width:16.38713284;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3805"
+       sodipodi:cx="358.57144"
+       sodipodi:cy="353.79074"
+       sodipodi:rx="18.571428"
+       sodipodi:ry="12.857142"
+       d="m 377.14287,353.79074 a 18.571428,12.857142 0 1 1 -37.14286,0 18.571428,12.857142 0 1 1 37.14286,0 z"
+       transform="matrix(1.400935,0,0,1.3264886,-73.212813,-149.23853)"
+       inkscape:export-filename="/home/pyoung/Coding/General_Img_Dev/thought_cloud.png"
+       inkscape:export-xdpi="87.978546"
+       inkscape:export-ydpi="87.978546" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#000000;stroke-width:15.58020973;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3807"
+       sodipodi:cx="387.14285"
+       sodipodi:cy="409.50504"
+       sodipodi:rx="10"
+       sodipodi:ry="8.5714283"
+       d="m 397.14285,409.50504 a 10,8.5714283 0 1 1 -20,0 10,8.5714283 0 1 1 20,0 z"
+       transform="matrix(1.1563529,0,0,1.0411429,25.993113,-27.870281)"
+       inkscape:export-filename="/home/pyoung/Coding/General_Img_Dev/thought_cloud.png"
+       inkscape:export-xdpi="87.978546"
+       inkscape:export-ydpi="87.978546" />
+  </g>
+</svg>

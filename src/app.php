@@ -10,6 +10,7 @@ class App extends Container
    private $em;
    private $logger;
    private $session;
+   private $settings;
    private $sql;
    private $translator;
    private $xwr;
@@ -20,6 +21,7 @@ class App extends Container
       $this->em = $this->getShared('Event_Manager');
       $this->logger = $this->getShared('Logger', array('App' => $this));
       $this->session = $this->getShared('Session');
+      $this->settings = $this->getShared('Settings');
       $this->sql = $this->getShared(
 	 'SQL', array('DB' => $this->getShared(
 			 'PDO_Wrapped',
