@@ -126,7 +126,7 @@ class Event_Manager
    
    /** Notifiy the observers of the event.
     *  @param name \string The event name.
-    *  @param params \mixed Parameters for the call.
+    *  @param callParams \mixed Parameters for the call.
     */
    public function notify($name, $callParams=array())
    {
@@ -140,13 +140,12 @@ class Event_Manager
 	    call_user_func_array($observer['Callback'], array($params));
 	 }
       }
+      elseif (in_array($name, $this->nonCriticalEvents))
+      {
+	 return;
+      }
       else
       {
-	 if (in_array($name, $this->nonCriticalEvents))
-	 {
-	    return;
-	 }
-	    
 	 throw new RuntimeException(
 	    __METHOD__ . ' Event: ' . var_export($name, true) .
 	    ' needs an observer to be notified. Make sure an observer is ' .

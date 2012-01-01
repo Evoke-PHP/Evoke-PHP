@@ -1,10 +1,4 @@
 <?php
-
-require_once 'system/constants.php';
-require_once 'system/directories.php';
-require_once 'system/files.php';
-
-/// Translator
 class Translator
 {
    private $setup;
@@ -12,22 +6,34 @@ class Translator
    public function __construct($setup=array())
    {
       $this->setup = array_merge(
-	 array('Default_Language'  => DEFAULT_LANGUAGE,
-	       'Languages'         => NULL,
-	       'Lang_Key'          => 'l',
-	       'Session_Manager'   => NULL,
-	       'Translations_File' => TRANSLATIONS_FILE,
-	       'TR_Arr'            => array()),
+	 array('Default_Language' => NULL,
+	       'Languages'        => NULL,
+	       'Lang_Key'         => 'l',
+	       'Session_Manager'  => NULL,
+	       'Translation_File' => NULL,
+	       'TR_Arr'           => array()),
 	 $setup);
 
+      if (!isset($this->setup['Default_Language']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Default_Language');
+      }
+      
       if (!$this->setup['Session_Manager'] instanceof Session_Manager)
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' needs Session_Manager');
       }
+
+      if (!isset($this->setup['Translation_File']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Translation_File');
+      }
       
       // Get the language definitions which set up the local translationArr.
-      require $this->setup['Translations_File'];
+      require $this->setup['Translation_File'];
       $this->setup['TR_Arr'] = $translationArr;
 
       if (!isset($this->setup['Languages']))
@@ -149,7 +155,6 @@ class Translator
    {
       $lang = $this->getLanguage();
       $errText = $this->setup['TR_Arr']['Languages'][$lang]['Error_Text'];
-      $trPage = str_replace(WEB_ROOT . '/', '', $page);
 
       // Missing translations should display an error.
       foreach($this->setup['TR_Arr']['Translation_Keys'] as $key => $val)
@@ -166,8 +171,8 @@ class Translator
 
       $specificTranslations =
 	 (isset($this->setup['TR_Arr']['Translations'][$lang]) &&
-	  isset($this->setup['TR_Arr']['Translations'][$lang][$trPage])) ?
-	 $this->setup['TR_Arr']['Translations'][$lang][$trPage] : array();
+	  isset($this->setup['TR_Arr']['Translations'][$lang][$page])) ?
+	 $this->setup['TR_Arr']['Translations'][$lang][$page] : array();
 
       $translations = array_merge(
 	 $missingTranslations, $defaultTranslations, $specificTranslations);
@@ -184,9 +189,8 @@ class Translator
    {
       $lang = $this->getLanguage();
       $trans = $this->setup['TR_Arr']['Translations'][$lang];
-      $trPage = str_replace(WEB_ROOT . '/', '', $page);
 
-      if ($trPage === 'default')
+      if ($page === 'default')
       {
 	 // If there is a default translation return it otherwise return an
 	 // error.
@@ -204,9 +208,9 @@ class Translator
       {
 	 // If there is a specific translation return it, otherwise if the
 	 // default translation exists return that, otherwise return an error.
-	 if (isset($trans[$trPage]) && isset($trans[$trPage][$trKey]))
+	 if (isset($trans[$page]) && isset($trans[$page][$trKey]))
 	 {
-	    return $trans[$trPage][$trKey];
+	    return $trans[$page][$trKey];
 	 }
 	 elseif (isset($trans['default']) && isset($trans['default'][$trKey]))
 	 {
@@ -231,7 +235,6 @@ class Translator
       $translationMatches = array();
       $lang = $this->getLanguage();
       $trans = $this->setup['TR_Arr']['Translations'][$lang];
-      $trPage = str_replace(WEB_ROOT . '/', '', $page);
 
       // Find all of the default translations.
       if (isset($trans['default']))
@@ -247,9 +250,9 @@ class Translator
 
       // Override the defaults with any specific translations that have been
       // defined.
-      if (($trPage !== 'default') && isset($trans[$trPage]))
+      if (($page !== 'default') && isset($trans[$page]))
       {
-	 foreach ($trans[$trPage] as $specKey => $specTrans)
+	 foreach ($trans[$page] as $specKey => $specTrans)
 	 {
 	    if (preg_match($trKey, $specKey))
 	    {
@@ -271,7 +274,6 @@ class Translator
    {
       $lang = $this->getLanguage();
       $trans = $this->setup['TR_Arr']['Translations'][$lang];
-      $trPage = str_replace(WEB_ROOT . '/', '', $page);
 
       $defaultTranslationMatches = array();
       $specificTranslationMatches = array();
@@ -286,9 +288,9 @@ class Translator
       
       // If the page is non-default we take translations from the specific page
       // in preference to the default translations.
-      if ($trPage !== 'default')
+      if ($page !== 'default')
       {
-	 foreach ($trans[$trPage] as $trKey => $trVal)
+	 foreach ($trans[$page] as $trKey => $trVal)
 	 {
 	    if (preg_match($keyMatch, $trKey))
 	    {

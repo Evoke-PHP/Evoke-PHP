@@ -1,7 +1,4 @@
 <?php
-
-require_once 'system/constants.php';
-
 /** XHTML Writing Resource
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.
@@ -15,7 +12,7 @@ class XWR extends XMLWriter
    {
       $this->setup = array_merge(
 	 array('Attribs_Pos' => 1,
-	       'Language'    => DEFAULT_LANGUAGE,
+	       'Language'    => 'EN',
 	       'Options_Pos' => 2,
 	       'Tag_Pos'     => 0),
 	 $setup);
@@ -232,7 +229,7 @@ class XWR extends XMLWriter
       $name='XHTML_1_1', $publicId='', $systemId='', $subset='', $lang='')
    {
       if (empty($lang))
-      {
+      {	    
 	 $lang = $this->setup['Language'];
       }
       

@@ -1,6 +1,4 @@
 <?php
-
-
 /// Session_Manager provide management of a session domain.
 class Session_Manager
 {
@@ -201,5 +199,4 @@ class Session_Manager
    }
 
 }
-
 // EOF

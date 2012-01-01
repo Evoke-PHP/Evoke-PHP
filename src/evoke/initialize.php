@@ -49,10 +49,11 @@ class Evoke_Initialize
 
       $requireFiles = array();
       $orderedObjects = array();
+      $reversePath = array_reverse($paths);
       
       // Work through the include path backwards so that lowest priority
       // objects are loaded first and can be overriden.
-      foreach ($paths as $path)
+      foreach ($reversePath as $path)
       {
 	 $pathLen = strlen($path);
 	 $rDir = new RecursiveDirectoryIterator(

@@ -1,11 +1,4 @@
 <?php
-
-
-/** \file
- *  SQL wrapper class
- */
-require_once 'system/db_connection.php';
-
 /** SQL wrapper class
  *
  * Provides simple pass-through wrappers for the DB interface functions.
@@ -574,5 +567,4 @@ class SQL implements Iface_DB
    }
 
 }
-
 // EOF

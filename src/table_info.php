@@ -1,7 +1,4 @@
 <?php
-
-require_once 'system/errors.php';
-
 /// Table_Info provides an interface to gather information about a table.
 class Table_Info implements Iface_Validity_Checker
 { 
@@ -164,7 +161,7 @@ class Table_Info implements Iface_Validity_Checker
 
       if (!is_array($fieldset))
       {
-	 $this->setup['Failures']->add('Data', FORMAT_ERROR);
+	 $this->setup['Failures']->add('Data', 'Format_Error');
 	 return false;
       }
 
@@ -174,7 +171,7 @@ class Table_Info implements Iface_Validity_Checker
 	 if (!in_array($reqField, $ignoredFields) &&
 	     !array_key_exists($reqField, $fieldset))
 	 {
-	    $this->setup['Failures']->add($reqField, REQUIRED_FIELD_ERROR);
+	    $this->setup['Failures']->add($reqField, 'Required_Field_Error');
 	 }
       }
       
@@ -251,7 +248,7 @@ class Table_Info implements Iface_Validity_Checker
 	    break;
 
 	 default:
-	    $this->setup['Failures']->add($key, UNKNOWN_TYPE_ERROR);
+	    $this->setup['Failures']->add($key, 'Unknown_Type_Error');
 	 }
       }
 
@@ -340,7 +337,7 @@ class Table_Info implements Iface_Validity_Checker
    {
       if ($required && empty($val))
       {
-	 $this->setup['Failures']->add($key, REQUIRED_FIELD_ERROR);
+	 $this->setup['Failures']->add($key, 'Required_Field_Error');
 	 return false;
       }
       else
@@ -359,7 +356,7 @@ class Table_Info implements Iface_Validity_Checker
       
       if (strlen($val) > $subType)
       {
-	 $this->setup['Failures']->add($key, OVERFLOW_ERROR);
+	 $this->setup['Failures']->add($key, 'Overflow_Error');
 	 $this->setup['Failures']->add($key, 'STRLEN: ' . var_export($val, true) .
 			      ' Allowed: ' . var_export($subType, true));
 	 return false;
@@ -396,7 +393,7 @@ class Table_Info implements Iface_Validity_Checker
 
       if (!preg_match('/^[0-9]' . $repetitions . '$/', $val))
       {
-	 $this->setup['Failures']->add($key, OVERFLOW_ERROR);
+	 $this->setup['Failures']->add($key, 'Overflow_Error');
 	 return false;
       }
       else
@@ -423,7 +420,7 @@ class Table_Info implements Iface_Validity_Checker
       // Any numbers should be able to be handled by the a float type field.
       if (!is_numeric($val))
       {
-	 $this->setup['Failures']->add($key, FORMAT_ERROR);
+	 $this->setup['Failures']->add($key, 'Format_Error');
 	 return false;
       }
 
@@ -444,7 +441,7 @@ class Table_Info implements Iface_Validity_Checker
       
       if (abs($actualInt) > abs($maxInt))
       {
-	 $this->setup['Failures']->add($key, OVERFLOW_ERROR);
+	 $this->setup['Failures']->add($key, 'Overflow_Error');
 	 return false;
       }
 
@@ -469,7 +466,7 @@ class Table_Info implements Iface_Validity_Checker
       // This is a very crude match.
       if (!preg_match("/[0-9:\.]+/", $val))
       {
-	 $this->setup['Failures']->add($key, FORMAT_ERROR);
+	 $this->setup['Failures']->add($key, 'Format_Error');
 	 return false;
       }
       else
@@ -502,12 +499,11 @@ class Table_Info implements Iface_Validity_Checker
       
       if (!in_array($val, $setArr))
       {
-	 $this->setup['Failures']->add($key, RANGE_ERROR);
+	 $this->setup['Failures']->add($key, 'Range_Error');
 	 return false;
       }
 
       return true;
    }
 }
-
 // EOF

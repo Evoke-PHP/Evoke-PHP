@@ -1,10 +1,29 @@
 <?php
-
 /// The system exception handler.
 class Evoke_Handler_Exception extends Evoke_Handler
 {
-   public function __construct()
+   protected $detailed;
+   protected $em;
+   
+   public function __construct(Array $setup)
    {
+      $setup += array('Detailed_Insecure_Message' => NULL,
+		      'Event_Manager'             => NULL);
+
+      if (!is_bool($setup['Detailed_Insecure_Message']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
+      }
+
+      if (!$setup['Event_Manager'] instanceof Event_Manager)
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Event_Manager');
+      }
+
+      $this->detailed = $setup['Detailed_Insecure_Message'];
+      $this->em = $setup['Event_Manager'];
       $this->register('set_exception_handler', array($this, 'handler'));
    }
    
@@ -12,7 +31,13 @@ class Evoke_Handler_Exception extends Evoke_Handler
    /* Public Methods */
    /******************/
 
-   public function handler($e)
+   /** Handle uncaught exceptions for the system by logging information and
+    *  displaying a generic notice to the user so that they are informaed of an
+    *  error without exposing information that could be used for an attack.
+    *
+    *  @param uncaughtException An exception that was not caught in the system.
+    */
+   public function handler($uncaughtException)
    {
       try
       {
@@ -20,40 +45,18 @@ class Evoke_Handler_Exception extends Evoke_Handler
 	 {
 	    header('HTTP/1.1 500 Internal Server Error');
 	 }
-	 
-	 $c = new Container();
-	 $log = $c->getShared('Logger', array('App' => $c->getShared('App')));
-
-	 $eventManager = $c->getShared('Event_Manager');
-	 
-	 $logFile = $c->getShared(
-	    'Logger_File',
-	    array('Event_Manager' => $eventManager,
-		  'Filename'      => LOG_FILE,
-		  'File_System'   => $c->getShared('File_System')));
 				
-	 $eventManager->notify(
-	    'Log',
-	    array('Level'  => LOG_CRIT,
-		  'Message' => $e->getMessage(),
-		  'Method' => __METHOD__));
+	 $this->em->notify('Log',
+			   array('Level'   => LOG_CRIT,
+				 'Message' => $uncaughtException->getMessage(),
+				 'Method'  => __METHOD__));
 	 $loggedError = true;
       }
       catch (Exception $raisedException)
       {
 	 $loggedError = false;
       }
-      
-      if (strtoupper(php_uname('n')) === 'BERNIE')
-      {
-	 $details = (string)($e);
-	 $details = preg_replace('/\n/', '<br>' . "\n", $details);
-      }
-      else
-      {
-	 $details = '';
-      }
-      
+
       if (isset($_GET['l']) && ($_GET['l'] === 'ES'))
       {
 	 $title = 'Error de Sistema';
@@ -87,11 +90,13 @@ class Evoke_Handler_Exception extends Evoke_Handler
 	 }
       }
 
-      if (!empty($details))
+      // Provide extended details for development servers.
+      if ($this->detailed)
       {
-	 $message .= "<br>\n<br>\n" . $details;
+	 $message .= "<br>\n<br>\n" .
+	    preg_replace('/\n/', '<br>' . "\n", (string)($uncaughtException));
       }
-	 
+      
       $errorDocument =
 	 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" ' . 
 	 '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\n" .
@@ -112,5 +117,4 @@ class Evoke_Handler_Exception extends Evoke_Handler
       echo $errorDocument;
    }
 }
-
 // EOF

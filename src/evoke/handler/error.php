@@ -1,9 +1,36 @@
 <?php
-
 class Evoke_Handler_Error extends Evoke_Handler
 {
-   public function __construct()
+   protected $detailed;
+   protected $em;
+   protected $xwr;
+
+   public function __construct(Array $setup)
    {
+      $setup += array('Detailed_Insecure_Message' => NULL,
+		      'Event_Manager'  	          => NULL,
+		      'XWR'          	          => NULL);
+
+      if (!is_bool($setup['Detailed_Insecure_Message']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
+      }
+
+      if (!$setup['Event_Manager'] instanceof Event_Manager)
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Event_Manager');
+      }
+
+      if (!$setup['XWR'] instanceof XWR)
+      {
+	 throw new InvalidArgumentException(__METHOD__ . ' requires XWR');
+      }
+     
+      $this->detailed = $setup['Detailed_Insecure_Message'];
+      $this->em = $setup['Event_Manager'];
+      $this->xwr = $setup['XWR'];
       $this->register('set_error_handler', array($this, 'handler'));
    }
    
@@ -88,22 +115,10 @@ class Evoke_Handler_Error extends Evoke_Handler
    {
       try
       {
-	 $c = new Container();
-	 $log = $c->getShared('Logger', array('App' => $c->getShared('App')));
-
-	 $eventManager = $c->getShared('Event_Manager');
-	 
-	 $logFile = $c->getShared(
-	    'Logger_File',
-	    array('Event_Manager' => $eventManager,
-		  'Filename'      => LOG_FILE,
-		  'File_System'   => $c->getShared('File_System')));
-
-	 $message =
-	    'Bootstrap Error handling [' . $typeStr . '] ' . $str .
+	 $message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
 	    ' in ' . $file . ' on ' . $line;
 				
-	 $eventManager->notify(
+	 $this->em->notify(
 	    'Log',
 	    array('Level'   => LOG_WARNING,
 		  'Message' => $message,
@@ -148,7 +163,7 @@ class Evoke_Handler_Error extends Evoke_Handler
 	 }
       }
 
-      if (strtoupper(php_uname('n')) === 'BERNIE')
+      if ($this->detailed)
       {
 	 $message .= "<p>\n" .
 	    'PHP [' . $typeStr . '] ' . $str . ' in file ' .
@@ -168,21 +183,12 @@ class Evoke_Handler_Error extends Evoke_Handler
 	 $message .= '</p>';
       }
 
-      $xwr = $c->getShared(
-	 'XWR',
-	 array('Translator' => $c->getShared(
-		  'Translator',
-		  array('Session_Manager' => $c->getShared(
-			   'Session_Manager',
-			   array('Domain'  => 'Lang',
-				 'Session' => $c->getShared('Session')))))));
-
-      $xwr->writeRaw(
+      $this->xwr->writeRaw(
 	 '      <div class="Error_Handler Message_Box System">' . "\n" .
 	 '         <div class="Title">' . $title . '</div>' . "\n" .
 	 '         <div class="Description">' . $message . '</div>' . "\n" .
 	 '      </div>' . "\n");
-      $xwr->outputXHTML();
+      $this->xwr->outputXHTML();
    }
 }
 

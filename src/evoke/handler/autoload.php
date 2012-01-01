@@ -1,5 +1,4 @@
 <?php
-
 class Evoke_Handler_Autoload extends Evoke_Handler
 {
    // We only use the extension php.
@@ -154,5 +153,4 @@ class Evoke_Handler_Autoload extends Evoke_Handler
       return false;     
    }	 
 }
-
 // EOF

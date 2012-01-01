@@ -1,6 +1,4 @@
 <?php
-require_once 'system/db_connection.php';
-
 /** The resources for the application.
  *  This holds all of the important resources that classes could need - one of
  *  them being the inherited container which allows any object to be created.
@@ -9,6 +7,7 @@ class App extends Container
 {
    private $em;
    private $logger;
+   private $loggerFile;
    private $session;
    private $settings;
    private $sql;
@@ -16,27 +15,64 @@ class App extends Container
    private $xwr;
    
    // Get or create the shared resources for the system.
-   public function __construct()
+   public function __construct(Array $setup=array())
    {
+      $setup += array('DB_Setup'             => NULL,
+		      'Logger_File_Filename' => NULL);
+      
+      // Create the simple resources that do not rely on system settings.
       $this->em = $this->getShared('Event_Manager');
       $this->logger = $this->getShared('Logger', array('App' => $this));
       $this->session = $this->getShared('Session');
-      $this->settings = $this->getShared('Settings');
-      $this->sql = $this->getShared(
-	 'SQL', array('DB' => $this->getShared(
-			 'PDO_Wrapped',
-			 array('App'      => $this,
-			       'DSN'      => DB_DSN,
-			       'Options'  => array(
-				  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION),
-			       'Password' => DB_PASSWORD,
-			       'Username' => DB_USERNAME))));
+      $this->settings = $this->getShared('Settings', array('Separator' => ':'));
+      $this->xwr = $this->getShared('XWR');
+
+      // Create a file logger if we have a filename for it.
+      if (isset($setup['Logger_File_Filename']))
+      {
+	 $this->loggerFile = $this->getShared(
+	    'Logger_File',
+	    array('Event_Manager' => $this->em,
+		  'File_System'   => $this->getShared('File_System'),
+		  'Filename'      => $setup['Logger_File_Filename']));
+      }
+      elseif (isset($this->settings['File:Log']))
+      {
+	 $this->loggerFile = $this->getShared(
+	    'Logger_File',
+	    array('Event_Manager' => $this->em,
+		  'File_System'   => $this->getShared('File_System'),
+		  'Filename'      => $this->settings['File:Log']));
+      }
+      
+      // Create the database connections and their sql objects
+      $this->sql = array();
+      $dbConnections = array();
+      
+      if (isset($setup['DB_Setup']))
+      {
+	 $dbConnections = $setup['DB_Setup'];
+      }
+      elseif (isset($this->settings['DB']))
+      {
+	 $dbConnections = $this->settings['DB'];
+      }
+      
+      foreach ($dbConnections as $name => $dbSettings)
+      {
+	 $this->sql[$name] = $this->getShared(
+	    'SQL', array('DB' => $this->getShared('PDO_Wrapped', $dbSettings)));
+      }
+
+      // Create the translator.
       $this->translator = $this->getShared(
 	 'Translator',
-	 array('Session_Manager' => $this->get(
+	 array('Default_Language' => $this->settings[
+		  'Constant:Default_Language'],
+	       'Session_Manager'  => $this->get(
 		  'Session_Manager', array('Domain'  => 'Lang',
-					   'Session' => $this->session))));
-      $this->xwr = $this->getShared('XWR');
+					   'Session' => $this->session)),
+	       'Translation_File' => $this->settings['File:Translation']));
    }
 
    /******************/
@@ -76,7 +112,7 @@ class App extends Container
    {
       $setup += array('App'           => $this,
 		      'Event_Manager' => $this->em,
-		      'SQL'           => $this->sql);
+		      'SQL'           => $this->getSQL());
 
       return $this->get($model, $setup);
    }
@@ -100,7 +136,7 @@ class App extends Container
    {
       $setup += array('Failures'      => $this->get('Message_Array'),
 		      'Notifications' => $this->get('Message_Array'),
-		      'SQL'           => $this->sql,
+		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_List_ID' => $this->getTableListID());
       
@@ -112,7 +148,7 @@ class App extends Container
    {
       $setup += array('Failures'      => $this->get('Message_Array'),
 		      'Notifications' => $this->get('Message_Array'),
-		      'SQL'           => $this->sql,
+		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_List_ID' => $this->getTableListID());
       
@@ -126,7 +162,7 @@ class App extends Container
 		      'Event_Manager' => $this->em,
 		      'Failures'      => $this->get('Message_Array'),
 		      'Notifications' => $this->get('Message_Array'),
-		      'SQL'           => $this->sql,
+		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_Name'    => NULL);
 
@@ -148,7 +184,7 @@ class App extends Container
 			   'Event_Manager' => $this->em,
 			   'Failures'      => $this->get('Message_Array'),
 			   'Notifications' => $this->get('Message_Array'),
-			   'SQL'           => $this->sql),
+			   'SQL'           => $this->getSQL()),
 		     $setup));
    }
 
@@ -166,7 +202,7 @@ class App extends Container
 	    'Fields'     => '*',
 	    'Order'      => 'Lft ASC',
 	    'Limit'      => 0),
-	 'SQL'              => $this->sql,
+	 'SQL'              => $this->getSQL(),
 	 'Table_Name'       => 'Menu',
 	 'Table_References' => $this->getTableReferences(
 	    array('References' => array(
@@ -203,9 +239,21 @@ class App extends Container
    }
    
    /// Get the sql object.
-   public function getSQL()
+   public function getSQL($name=NULL)
    {
-      return $this->sql;
+      if (!isset($name) && !empty($this->sql))
+      {
+	 return reset($this->sql);
+      }
+
+      if (isset($this->sql[$name]))
+      {
+	 return $this->sql[$name];
+      }
+
+      throw new RuntimeException(
+	 __METHOD__ . ' No DB connection exists for name: ' .
+	 var_export($name, true));
    }
    
    /// Get a Table_Info object.
@@ -214,13 +262,13 @@ class App extends Container
       return $this->getShared(
 	 'Table_Info',
 	 array_merge(array('Failures' => $this->get('Message_Array'),
-			   'SQL'      => $this->sql),
+			   'SQL'      => $this->getSQL()),
 		     $setup));
    }
 
    public function getTableListID()
    {
-      return $this->getShared('Table_List_ID', array('SQL' => $this->sql));
+      return $this->getShared('Table_List_ID', array('SQL' => $this->getSQL()));
    }
    
    /** Get a Table_References object (Recursive).
