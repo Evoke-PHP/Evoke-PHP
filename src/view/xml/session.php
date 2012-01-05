@@ -1,6 +1,5 @@
 <?php
-
-class View_Page_Session extends View_Page
+class View_XML_Session extends View_XML
 { 
    public function __construct(Array $setup)
    {
@@ -41,5 +40,4 @@ class View_Page_Session extends View_Page
 	       array('Text' => var_export($data, true))));
    }
 }
-
 // EOF

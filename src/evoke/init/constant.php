@@ -12,8 +12,8 @@ class Evoke_Init_Constant extends Evoke_Init
    {
       parent::__construct($setup);
 
-      $this->settins['Constant'] = array('Default_Language'    => 'EN',
-					 'Development_Servers' => array());
+      $this->settings['Constant'] = array('Default_Language'    => 'EN',
+					  'Development_Servers' => array());
    }
 }
 // EOF

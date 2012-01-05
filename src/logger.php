@@ -85,7 +85,7 @@ class Logger
 	 return;
       }
 
-      $time = $this->setup['App']->get('DateTime', 'now');
+      $time = $this->setup['App']->getNew('DateTime', 'now');
 
       $message += array(
 	 'Date_Time'    => $time->format($this->setup['Time_Format']),

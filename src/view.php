@@ -1,12 +1,10 @@
 <?php
-
-
 abstract class View implements Iface_View
-{ 
-   protected $app; ///< App
-   protected $tr;  ///< Translator
-
+{
+   protected $app;
+   protected $em; ///< Event_Manager
    protected $setup;
+   protected $tr; ///< Translator
 
    public function __construct(Array $setup)
    {
@@ -19,13 +17,12 @@ abstract class View implements Iface_View
 	 array('Instance' => array(
 		  'Event_Manager' => $this->setup['Event_Manager'],
 		  'Translator'    => $this->setup['Translator'])));
+								  
+      $this->app = $this->setup['App'];
+      $this->em =& $this->setup['Event_Manager'];
+      $this->tr =& $this->setup['Translator'];
 
-      $this->app =& $this->setup['App'];
-      $this->tr  =& $this->setup['Translator'];
-
-      $this->setup['Event_Manager']->connect('View.Write',
-					     array($this, 'write'));
+      $this->em->connect('View.Write', array($this, 'write'));
    }
 }
-
 // EOF

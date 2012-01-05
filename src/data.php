@@ -1,24 +1,38 @@
 <?php
-
-/// Data class to allow arrangement of data within processing.
-abstract class Data implements Iterator
+class Data implements Iterator
 {
    protected $data;
+   protected $record;
    protected $setup;
    
-   public function __construct(Array $setup=array())
+   public function __construct(Array $setup)
    {
-      $this->setup = array_merge(array('Joint_Key' => 'Joint_Data'),
-				 $setup);
+      $this->setup = array_merge(array('Record' => NULL), $setup);
+
+      if (!$this->setup['Record'] instanceof Record)
+      {
+	 throw new InvalidArgumentException(__METHOD__ . ' requires Record');
+      }
+
+      $this->record =& $this->setup['Record'];
    }
    
    /******************/
    /* Public Methods */
    /******************/
-
+      
    /// Set the data which is used when iterating over the object.
    public function setData($data)
    {
+      $first = reset($data);
+
+      if (!is_array($first))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' invalid data: ' . var_export($data, true));
+      }
+
+      $this->record->setRecord($first);
       $this->data = $data;
    }
    
@@ -28,7 +42,7 @@ abstract class Data implements Iterator
 
    public function current()
    {
-      return current($this->data);
+      return $this->record;
    }
    
    public function key()
@@ -36,26 +50,27 @@ abstract class Data implements Iterator
       return key($this->data);
    }
 
-   // Return the next item, skipping Joint Data.
    public function next()
    {
       $nextItem = next($this->data);
 
-      // If we have run out of items or the next one is not the Joint Key then
-      // we have found the next record.
-      if (current($this->data) === false ||
-	  key($this->data) !== $this->setup['Joint_Key'])
+      if ($nextItem === false)
       {
-	 return $nextItem;
+	 return false;
       }
 
-      // Otherwise get the next one as this one didn't count.
-      return $this->next();
+      $this->record->setRecord($nextItem);
+      return $this->record;
    }
 
    public function rewind()
    {
-      reset($this->data);
+      $first = reset($this->data);
+
+      if ($first !== false)
+      {
+	 $this->record->setRecord($first);
+      }
    }
    
    public function valid()
@@ -63,5 +78,4 @@ abstract class Data implements Iterator
       return (current($this->data) !== false);
    }
 }
-
 // EOF

@@ -1,6 +1,4 @@
 <?php
-
-
 class Image
 { 
    /******************/
@@ -65,5 +63,4 @@ class Image
       return $dimensions;
    }
 }
-
 // EOF

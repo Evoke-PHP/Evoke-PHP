@@ -1,6 +1,4 @@
 <?php
-
-
 /// Element_Menu
 class Element_Menu extends Element
 {
@@ -71,5 +69,4 @@ class Element_Menu extends Element
       return $menu;
    }
 }
-
 // EOF

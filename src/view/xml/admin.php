@@ -1,7 +1,5 @@
 <?php
-
-
-class View_Page_Admin extends View_Page
+class View_XML_Admin extends View_XML
 {
    public function __construct($setup=array())
    {
@@ -75,7 +73,7 @@ class View_Page_Admin extends View_Page
       if (!empty($failures))
       {
 	 $this->xwr->write(
-	    $this->app->get('Element_Failures', array('Data' => $failures)));
+	    $this->app->getNew('Element_Failures', array('Data' => $failures)));
       }
    }
 
@@ -86,8 +84,8 @@ class View_Page_Admin extends View_Page
       if (!empty($notifications))
       {
 	 $this->xwr->write(
-	    $this->app->get('Element_Notifications',
-			    array('Data' => $notifications)));
+	    $this->app->getNew('Element_Notifications',
+			       array('Data' => $notifications)));
       }
    }
 
@@ -147,7 +145,7 @@ class View_Page_Admin extends View_Page
    protected function writeCurrentRecord($record, $isNew)
    {
       $this->xwr->write(
-	 $this->app->get(
+	 $this->app->getNew(
 	    'Element_Form_Entry',
 	    array('App'            => $this->app,
 		  'Field_Values'   => $record,
@@ -173,7 +171,7 @@ class View_Page_Admin extends View_Page
 		     'type'  => 'submit',
 		     'value' => $this->tr->get('Cancel'))));
       
-      $recordToDelete = $this->app->get(
+      $recordToDelete = $this->app->getNew(
 	 'Element_Record_List_Table',
 	 array_merge(array('App'            => $this->app,
 			   'Attribs'        => array(
@@ -186,7 +184,7 @@ class View_Page_Admin extends View_Page
 			   'Translator'     => $this->tr)));      
 			   
       $this->xwr->write(
-	 $this->app->get(
+	 $this->app->getNew(
 	    'Element_Form_Dialog',
 	    array('Attribs'          => array('class'  => 'Dialog Bad',
 					      'action' => '',
@@ -201,10 +199,10 @@ class View_Page_Admin extends View_Page
    protected function writeHeader($header)
    {
       $this->xwr->write(
-	 $this->app->get('Element_Admin_Header',
-			 array('App'        => $this->app,
-			       'Languages'  => $header['Languages'],
-			       'Translator' => $this->tr)));
+	 $this->app->getNew('Element_Admin_Header',
+			    array('App'        => $this->app,
+				  'Languages'  => $header['Languages'],
+				  'Translator' => $this->tr)));
 
       if (isset($this->setup['Page_Name']))
       {
@@ -220,7 +218,7 @@ class View_Page_Admin extends View_Page
    protected function writeRecordList($data)
    {
       $this->xwr->write(
-	 $this->app->get(
+	 $this->app->getNew(
 	    'Element_Record_List_Table',
 	    array_merge(
 	       array('App'            => $this->app,
@@ -245,5 +243,4 @@ class View_Page_Admin extends View_Page
 	       $this->setup['Record_List_Setup'])));
    }
 }
-
 // EOF

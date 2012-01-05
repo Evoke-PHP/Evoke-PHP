@@ -1,6 +1,4 @@
 <?php
-
-
 /// Element to represent a list of records.
 class Element_Record_List extends Element
 {
@@ -189,7 +187,7 @@ class Element_Record_List extends Element
    {
       if ($this->setup['Row_Buttons_As_Form'])
       {
-	 return $this->app->get(
+	 return $this->app->getNew(
 	    'Element_Form_Hidden_Input',
 	    array('App'            => $this->setup['App'],
 		  'Attribs'        => array_merge(
@@ -357,7 +355,7 @@ class Element_Record_List extends Element
 
       foreach ($this->setup['Row_Buttons'] as $button)
       {
-	 $buttonElem = $this->app->get('Element', $button);
+	 $buttonElem = $this->app->getNew('Element', $button);
 	 $buttonElem->appendAttrib('name', '_' . $row);
 
 	 $buttons[] = $buttonElem;
@@ -389,5 +387,4 @@ class Element_Record_List extends Element
       return true;
    }
 }
-
 // EOF

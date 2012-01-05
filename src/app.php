@@ -69,7 +69,7 @@ class App extends Container
 	 'Translator',
 	 array('Default_Language' => $this->settings[
 		  'Constant:Default_Language'],
-	       'Session_Manager'  => $this->get(
+	       'Session_Manager'  => $this->getNew(
 		  'Session_Manager', array('Domain'  => 'Lang',
 					   'Session' => $this->session)),
 	       'Translation_File' => $this->settings['File:Translation']));
@@ -84,7 +84,17 @@ class App extends Container
       $setup += array('App'           => $this,
 		      'Event_Manager' => $this->em);
       
-      return $this->get('Controller', $setup);
+      return $this->getNew('Controller', $setup);
+   }
+
+   /** Get a data object, specifying any referenced record data.
+    */
+   public function getData(Array $references=array())
+   {
+      return $this->getNew(
+	 'Data',
+	 array('Record' => $this->getNew('Record',
+					 array('References' => $references))));
    }
    
    /// Return the event manager.
@@ -105,7 +115,7 @@ class App extends Container
       $setup += array('App'           => $this,
 		      'Event_Manager' => $this->em);
 
-      return $this->get($model, $setup);
+      return $this->getNew($model, $setup);
    }
 
    public function getModelDB($model, Array $setup)
@@ -114,7 +124,7 @@ class App extends Container
 		      'Event_Manager' => $this->em,
 		      'SQL'           => $this->getSQL());
 
-      return $this->get($model, $setup);
+      return $this->getNew($model, $setup);
    }
    
    public function getModelDBAdminRequestKeys()
@@ -134,8 +144,8 @@ class App extends Container
    // Get an Admin model for a joint table.
    public function getModelDBJointAdmin(Array $setup)
    {
-      $setup += array('Failures'      => $this->get('Message_Array'),
-		      'Notifications' => $this->get('Message_Array'),
+      $setup += array('Failures'      => $this->getNew('Message_Array'),
+		      'Notifications' => $this->getNew('Message_Array'),
 		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_List_ID' => $this->getTableListID());
@@ -146,8 +156,8 @@ class App extends Container
    // Get an Admin model for a joint table with linked information.
    public function getModelDBJointAdminLinked(Array $setup)
    {
-      $setup += array('Failures'      => $this->get('Message_Array'),
-		      'Notifications' => $this->get('Message_Array'),
+      $setup += array('Failures'      => $this->getNew('Message_Array'),
+		      'Notifications' => $this->getNew('Message_Array'),
 		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_List_ID' => $this->getTableListID());
@@ -160,8 +170,8 @@ class App extends Container
    {
       $setup += array('App'           => $this,
 		      'Event_Manager' => $this->em,
-		      'Failures'      => $this->get('Message_Array'),
-		      'Notifications' => $this->get('Message_Array'),
+		      'Failures'      => $this->getNew('Message_Array'),
+		      'Notifications' => $this->getNew('Message_Array'),
 		      'SQL'           => $this->getSQL(),
 		      'Table_Info'    => NULL,
 		      'Table_Name'    => NULL);
@@ -182,23 +192,23 @@ class App extends Container
 	 'Model_DB_Table',
 	 array_merge(array('App'           => $this,
 			   'Event_Manager' => $this->em,
-			   'Failures'      => $this->get('Message_Array'),
-			   'Notifications' => $this->get('Message_Array'),
+			   'Failures'      => $this->getNew('Message_Array'),
+			   'Notifications' => $this->getNew('Message_Array'),
 			   'SQL'           => $this->getSQL()),
 		     $setup));
    }
 
-   /// Get a menu model.
-   public function getModelMenu(Array $setup=array())
+   /// Get a menu model for the named menu.
+   public function getModelMenu($menuName)
    {
-      $setup += array(
+      $setup = array(
 	 'App'              => $this,
 	 'Data_Prefix'      => array('Header', 'Menu'),
 	 'Event_Manager'    => $this->em,
-	 'Failures'         => $this->get('Message_Array'),
-	 'Notifications'    => $this->get('Message_Array'),
+	 'Failures'         => $this->getNew('Message_Array'),
+	 'Notifications'    => $this->getNew('Message_Array'),
 	 'Select_Setup'     => array(
-	    'Conditions' => array('Menu.Name' => 'Main_Menu'),
+	    'Conditions' => array('Menu.Name' => $menuName),
 	    'Fields'     => '*',
 	    'Order'      => 'Lft ASC',
 	    'Limit'      => 0),
@@ -210,15 +220,15 @@ class App extends Container
 					'Table_Name'  => 'Menu_List')),
 		  'Table_Name' => 'Menu')));
 
-      return $this->get('Model_DB_Joint', $setup);
+      return $this->getNew('Model_DB_Joint', $setup);
    }
    
    /// Get processing that takes no action for a page.
    public function getProcessingNone(Array $setup=array())
    {
-      return $this->get('Processing_None',
-			array('App'           => $this,
-			      'Event_Manager' => $this->em));
+      return $this->getNew('Processing_None',
+			   array('App'           => $this,
+				 'Event_Manager' => $this->em));
    }
    
    /// Get the session object.
@@ -233,9 +243,14 @@ class App extends Container
     */
    public function getSessionManager($domain)
    {
-      return $this->get('Session_Manager',
-			array('Domain'  => $domain,
-			      'Session' => $this->getSession()));
+      return $this->getNew('Session_Manager',
+			   array('Domain'  => $domain,
+				 'Session' => $this->getSession()));
+   }
+
+   public function getSettings()
+   {
+      return $this->settings;
    }
    
    /// Get the sql object.
@@ -261,7 +276,7 @@ class App extends Container
    {
       return $this->getShared(
 	 'Table_Info',
-	 array_merge(array('Failures' => $this->get('Message_Array'),
+	 array_merge(array('Failures' => $this->getNew('Message_Array'),
 			   'SQL'      => $this->getSQL()),
 		     $setup));
    }
@@ -300,7 +315,7 @@ class App extends Container
 	 }
       }
 
-      return $this->get(
+      return $this->getNew(
 	 'Table_References',
 	 array_merge(
 	    $setup,
@@ -318,7 +333,7 @@ class App extends Container
    /// Get a view object.
    public function getView($view, Array $setup=array())
    {
-      return $this->get(
+      return $this->getNew(
 	 $view,
 	 array_merge(array('App'           => $this,
 			   'Event_Manager' => $this->em,

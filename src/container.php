@@ -1,6 +1,4 @@
 <?php
-
-
 /** Container provides the single interface to object creation.
  *  It should be used to create every single object and shared object in the
  *  system.  While testing this should be the only class requiring stubbing.
@@ -17,7 +15,7 @@ class Container
     *  @param class \string The class of object to create.
     *  @param params \array Parameters to pass to the constructor.
     */
-   public function get($class, $params=array())
+   public function getNew($class, $params=array())
    {
       return new $class($params);
    }
@@ -72,5 +70,4 @@ class Container
       return $details;
    }
 }
-
 // EOF

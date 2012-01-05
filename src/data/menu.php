@@ -2,12 +2,18 @@
 
 class Data_Menu extends Data
 {
+   protected $left;
+   protected $right;
+
    public function __construct(Array $setup=array())
    {
       $setup += array('Left_Field'  => 'Lft',
 		      'Right_Field' => 'Rgt');
-      
+
       parent::__construct($setup);
+
+      $this->left = $setup['Left_Field'];
+      $this->right = $setup['Right_Field'];
    }
 
    /******************/
@@ -48,7 +54,7 @@ class Data_Menu extends Data
     */
    protected function arrangeRecord($record)
    {
-      $list = array_values($record[$this->setup['Joint_Key']]['List_ID']);
+      $list = array_values($record[$this->jointKey]['List_ID']);
       $tree = array();
       
       // We are adding from left to right, so all we need to remember is how
@@ -64,8 +70,8 @@ class Data_Menu extends Data
       for ($i = 0; $i < count($list); ++$i)
       {
 	 $item = $list[$i];
-	 $numChildren = ($item[$this->setup['Right_Field']] -
-			 $item[$this->setup['Left_Field']] - 1) / 2;
+	 $numChildren = ($item[$this->right] -
+			 $item[$this->left] - 1) / 2;
 
 	 if ($numChildren > 0)
 	 {

@@ -1,9 +1,7 @@
 <?php
-
-
 interface Iface_Model
 {
-   /// Get the data that the model represents.x
+   /// Get the data that the model represents.
    public function getData();
    
    /// Get the events used for processing in the model.
@@ -12,5 +10,4 @@ interface Iface_Model
    /// Notify the system of the data represented by the model.
    public function notifyData();
 }
-
 // EOF

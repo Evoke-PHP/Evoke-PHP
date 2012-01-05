@@ -1,6 +1,4 @@
 <?php
-
-
 class View_Ajax extends View
 { 
    /******************/
@@ -19,5 +17,4 @@ class View_Ajax extends View
       }
    }
 }
-
 // EOF
