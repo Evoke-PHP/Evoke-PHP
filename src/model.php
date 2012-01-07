@@ -1,6 +1,4 @@
 <?php
-
-
 /// Model provides the basic implementation for a model.
 abstract class Model implements Iface_Model
 { 
@@ -25,7 +23,6 @@ abstract class Model implements Iface_Model
 
       $this->app =& $this->setup['App'];
       $this->em =& $this->setup['Event_Manager'];
-
 
       if ($this->setup['Connect_Events'])
       {
@@ -188,5 +185,4 @@ abstract class Model implements Iface_Model
       return $offsetData;
    }
 }
-
 // EOF

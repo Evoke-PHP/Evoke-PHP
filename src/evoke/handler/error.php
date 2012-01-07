@@ -163,31 +163,60 @@ class Evoke_Handler_Error extends Evoke_Handler
 	 }
       }
 
+      $descriptionElems = array(array('div',
+				      array('class' => 'Message'),
+				      array('Text' => $message)));
+
       if ($this->detailed)
       {
-	 $message .= "<p>\n" .
-	    'PHP [' . $typeStr . '] ' . $str . ' in file ' .
-	    $file . ' at ' . $line;
+	 $descriptionElems[] = array(
+	    'div',
+	    array('class' => 'Breakpoint'),
+	    array('Text'  => 'PHP [' . $typeStr . '] ' . $str . ' in file ' .
+		  $file . ' at ' . $line));
 
-	 /// \todo Choose which one we want.
-	 $detailed = false;
-	 $detailed = true;
+	 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+	 array_shift($trace);
+	 $traceElems = array();
 	 
-	 if ($detailed)
+	 foreach ($trace as $level => $info)
 	 {
-	    $message .= var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
-				   true);
+	    $lineElems = array(array('span',
+				     array('class' => 'Level'),
+				     array('Text' => $level)));
+	    
+	    $info += array('file'     => '',
+			   'line'     => '',
+			   'function' => '',
+			   'class'    => '',
+			   'type'     => '');
+	    
+	    $text = '#' . $level . ' ' . $info['file'] . '(' .
+	       $info['line'] . '): ' . $info['class'] .
+	       $info['type'] . $info['function'];
+	    
+	    $traceElems[] = array(
+	       'div',
+	       array('class' => ($level % 2) ? 'Even' : 'Odd'),
+	       array('Text'  => $text));
 	 }
 
-	 $message = str_replace("\n", "<br>\n", $message);
-	 $message .= '</p>';
+	 $descriptionElems[] = array(
+	    'div',
+	    array('class' => 'Trace'),
+	    array('Children' => $traceElems));
       }
-
-      $this->xwr->writeRaw(
-	 '      <div class="Error_Handler Message_Box System">' . "\n" .
-	 '         <div class="Title">' . $title . '</div>' . "\n" .
-	 '         <div class="Description">' . $message . '</div>' . "\n" .
-	 '      </div>' . "\n");
+      
+      $this->xwr->write(
+	 array('div',
+	       array('class' => 'Error_Handler Message_Box System'),
+	       array('Children' => array(
+			array('div',
+			      array('class' => 'Title'),
+			      array('Text' => $title)),
+			array('div',
+			      array('class' => 'Description'),
+			      array('Children' => $descriptionElems))))));
       $this->xwr->outputXHTML();
    }
 }

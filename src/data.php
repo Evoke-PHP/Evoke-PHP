@@ -1,4 +1,8 @@
 <?php
+/** Data Transfer Object.
+ *  Provide access to data via records (\ref Record) and allow methods to be
+ *  added to provide aggregated details of the data.
+ */
 class Data implements Iterator
 {
    protected $data;

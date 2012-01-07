@@ -1,6 +1,4 @@
 <?php
-
-
 /** \class Event_Manager
  *  Manage the events for the system.
  *  The Event_Manager decouples method calls between objects.  The observer
@@ -105,6 +103,28 @@ class Event_Manager
       }
    }
 
+   /** Disconnect the objects from all events.
+    *  @param object \Array An array of objects to disconnect.
+    */
+   public function disconnectObjects(Array $objects)
+   {
+      foreach ($this->observers as $eventName => $observers)
+      {
+	 foreach ($observers as $key => $observer)
+	 {
+	    if (in_array($observer['Callback'][0], $objects))
+	    {
+	       unset($this->observers[$eventName][$key]);
+	    }
+	 }
+
+	 if (empty($this->observers[$eventName]))
+	 {
+	    unset($this->observers[$eventName]);
+	 }
+      }
+   }
+   
    /** Allow checking to see if an event name is defined.
     *  @param name \string The event name.
     *  \return \bool Whether the event is defined.

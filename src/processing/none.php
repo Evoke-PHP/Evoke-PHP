@@ -1,6 +1,4 @@
 <?php
-
-
 class Processing_None extends Processing
 {
    final public function __construct($setup)
@@ -29,5 +27,4 @@ class Processing_None extends Processing
       return $this->setup['Request_Method'] . ' AND THIS TO MAKE IT NOT MATCH!';
    }
 }
-
 // EOF

@@ -1,6 +1,5 @@
 <?php
-
-class Data_Menu extends Data
+class Record_Menu extends Record
 {
    protected $left;
    protected $right;
@@ -20,28 +19,11 @@ class Data_Menu extends Data
    /* Public Methods */
    /******************/
 
-   public function getMenu($name)
+   /** Get the menu as a tree.
+    */
+   public function getMenu()
    {
-      foreach ($this->data as $menuName => $menu)
-      {
-	 if ($name === $menuName)
-	 {
-	    return $menu;
-	 }
-      }
-
-      return false;	 
-   }
-
-   public function setData($data)
-   {
-      $this->data = array();
-      
-      foreach ($data as $menuRecord)
-      {
-	 $rootMenuItem = $this->arrangeRecord($menuRecord);
-	 $this->data[$menuRecord['Name']] = $rootMenuItem['Children'];
-      }
+      return $this->arrangeRecord($this->list);
    }
    
    /*********************/
@@ -53,8 +35,9 @@ class Data_Menu extends Data
     *  from the ROOT item, left to right.
     */
    protected function arrangeRecord($record)
-   {
-      $list = array_values($record[$this->jointKey]['List_ID']);
+   {      
+      //$list = array_values($record[$this->jointKey]['List_ID']);
+      $list = $record;
       $tree = array();
       
       // We are adding from left to right, so all we need to remember is how
@@ -67,15 +50,19 @@ class Data_Menu extends Data
       $childrenToProcess = array();
       
       // Add each item from the list in its correct place.
-      for ($i = 0; $i < count($list); ++$i)
+      //for ($i = 0; $i < count($list); ++$i)
+      //{
+      foreach ($list as $item)
       {
-	 $item = $list[$i];
-	 $numChildren = ($item[$this->right] -
-			 $item[$this->left] - 1) / 2;
+	 $menuItem = $item->getRecord();
+
+	 //$item = $list[$i];
+	 $numChildren = ($menuItem[$this->right] -
+			 $menuItem[$this->left] - 1) / 2;
 
 	 if ($numChildren > 0)
 	 {
-	    $item['Children'] = array();
+	    $menuItem['Children'] = array();
 	 }
 	 
 	 // Go to the correct depth of the tree and add the item.
@@ -86,7 +73,7 @@ class Data_Menu extends Data
 	    $ref =& $ref[count($ref) - 1]['Children'];
 	 }
 
-	 $ref[] = $item;
+	 $ref[] = $menuItem;
 
 	 // We have processed an item.
 	 foreach ($childrenToProcess as &$children)
@@ -109,5 +96,4 @@ class Data_Menu extends Data
       return $tree[0];
    }
 }
-
 // EOF

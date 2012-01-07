@@ -1,0 +1,149 @@
+/******************/
+/* Messages Boxes */
+/******************/
+.Message_Box
+{
+    display: inline-block;
+    width: 500px;
+    vertical-align: top;
+    margin-left: 20px;
+    margin-top: 20px;
+    border-width: 2px;
+    border-style: solid;
+    -moz-border-radius: 10px 10px 0px 0px;
+}
+
+.Message_Box .Title
+{
+    padding: 10px;
+
+    font-size: 1.2em;
+    font-weight: 900;
+
+    -moz-border-radius: 10px 10px 0px 0px;
+}
+
+.Message_Box .Description
+{
+    padding: 10px;
+}
+
+/* Good */
+.Message_Box.Good
+{
+    border-color: #050;
+}
+
+.Message_Box.Good .Title
+{
+    color: #FFF;
+    background: #050;
+}
+
+.Message_Box.Good .Description
+{
+    background: #DFD;
+}
+
+/* Info */
+.Message_Box.Info
+{
+    border-color: #005;
+}
+
+.Message_Box.Info .Title
+{
+    color: #FFF;
+    background: #115;
+}
+
+.Message_Box.Info .Description
+{
+    background: #DDF;
+}
+
+/* Error */
+.Message_Box.Error
+{
+    border-color: #F00;
+}
+
+.Message_Box.Error .Title
+{
+    color: #FFF;
+    background: #F22;
+}
+
+.Message_Box.Error .Description
+{
+    background: #FDD;
+}
+
+/* System */
+.Message_Box.System
+{
+    background: #FF0;
+    padding: 10px;
+    border: 5px solid #000;
+}
+
+.Message_Box.System .Title
+{
+    color: #FFF;
+    background: #F00;
+}
+
+.Message_Box.System .Description
+{
+    background: #FDD;
+}
+
+/***********/
+/* Buttons */
+/***********/
+.Button
+{
+    border: 3px solid #DDD;
+    padding: 10px;
+    color: #FFF;
+    font-size: 1.5em;
+    font-weight: 900;
+    text-decoration: none;
+    -moz-border-radius: 10px;
+}
+
+.Button.Small
+{
+    border: 2px solid #DDD;
+    padding: 2px;
+    font-size: 1em;
+    font-weight: 900;
+    text-decoration: none;
+    vertical-align: top;
+    -moz-border-radius: 5px;
+}
+
+.Button:hover
+{
+    border: 3px solid #FF8;    
+}
+
+.Button.Small:hover
+{
+    border: 2px solid #FF8;
+}
+
+.Button.Info
+{
+    background: #005;
+}
+
+.Button.Good
+{
+    background: #050;
+}
+
+.Button:disabled
+{
+    background: #BBB;
+}

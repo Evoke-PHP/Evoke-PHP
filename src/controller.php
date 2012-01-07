@@ -1,6 +1,4 @@
 <?php
-
-
 class Controller
 {
    protected $data;
@@ -24,7 +22,7 @@ class Controller
       // Connect the Got Data for receiving data from models.
       $this->em->connect('Got_Data', array($this, 'addData'));
    }
-   
+
    /******************/
    /* Public Methods */
    /******************/

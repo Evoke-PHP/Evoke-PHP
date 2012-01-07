@@ -1,6 +1,4 @@
 <?php
-
-
 /** Processing
  *  This handles the routing of request information to processing callbacks
  *  via \ref Event_Manager::notify.  It is de-coupled from the request by
@@ -88,7 +86,6 @@ abstract class Processing
       }
    }
 
-
    /*********************/
    /* Protected Methods */
    /*********************/
@@ -157,5 +154,4 @@ abstract class Processing
       return array_intersect_key($this->setup['Request_Keys'], $data);
    }
 }
-
 // EOF

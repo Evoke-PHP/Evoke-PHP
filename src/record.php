@@ -1,7 +1,7 @@
 <?php
 /** Provide access to a record (possibly containing joint data).
  */
-class Record implements Iterator
+class Record implements Iterator, ArrayAccess
 {
    protected $recInternal;
    protected $jointKey;
@@ -64,6 +64,14 @@ class Record implements Iterator
 	 var_export($referenceName, true));
    }
 
+   /** Get the record that we are managing as a simple array.
+    *  \return Array The record that we are managing.
+    */
+   public function getRecord()
+   {
+      return $this->recInternal;
+   }
+   
    /** Set the record that we are managing.
     */
    public function setRecord($record)
@@ -73,6 +81,13 @@ class Record implements Iterator
       foreach ($this->references as $parentField => $dataContainer)
       {
 	 $record[$this->jointKey] += array($parentField => array());
+
+	 // Ensure the joint data is data (an array of arrays).
+	 if (empty($record[$this->jointKey][$parentField]))
+	 {
+	    $record[$this->jointKey][$parentField][] = array();
+	 }
+	 
 	 $dataContainer->setData($record[$this->jointKey][$parentField]);
       }
 
@@ -114,6 +129,42 @@ class Record implements Iterator
    public function valid()
    {
       return (current($this->recInternal) !== false);
+   }
+
+   /**************************/
+   /* Implements ArrayAccess */
+   /**************************/
+   
+   /// Provide the array isset operator.
+   public function offsetExists($offset)
+   {
+      return isset($this->recInternal[$offset]);
+   }
+
+   /// Provide the array access operator.
+   public function offsetGet($offset)
+   {
+      return $this->recInternal[$offset];
+   }
+
+   /** We are required to make these available to complete the interface,
+    *  but we don't want the element to change.
+    */
+   public function offsetSet($offset, $value)
+   {
+      throw new RuntimeException(
+         __METHOD__ . ' should never be called - data is only transferrable ' .
+	 'it is not to be modified.');
+   }
+
+   /** We are required to make these available to complete the interface,
+    *  but we don't want the element to change.
+    */
+   public function offsetUnset($offset)
+   {
+      throw new RuntimeException(
+         __METHOD__ . ' should never be called - data is only transferrable ' .
+	 'it is not to be modified.');
    }
    
    /*******************/

@@ -1,6 +1,4 @@
 <?php
-
-
 /// Model_DB_Joint - Provide a read only model for joint table data.
 class Model_DB_Joint extends Model_DB
 {

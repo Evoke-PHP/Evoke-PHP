@@ -1,0 +1,20 @@
+.Input_File_Container
+{
+    display: inline-block;
+}
+
+.Input_File_Container input[type="submit"].Input_File
+{
+    position: absolute;
+    font-size: 1em;
+    font-weight: 900;
+    z-index: 1;
+}
+
+.Input_File_Container input[type="file"].Input_File
+{
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
