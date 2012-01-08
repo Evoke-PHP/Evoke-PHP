@@ -14,12 +14,12 @@
     foreach ($obj as $key => $record)
     {
        // Access a field as though it is an array.
-       echo $record['Field'];
+       $x = $record['Field'];
 
        // Access joint data (with ->).  The joint data is itself a data object.
        foreach ($record->list as $listRecord)
        {
-          echo $listRecord['Joint_Record_Field'];
+          $y = $listRecord['Joint_Record_Field'];
        }
     }
     \endcode
