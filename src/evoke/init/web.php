@@ -16,9 +16,9 @@ class Evoke_Init_Web extends Evoke_Init
       
       $this->set(
 	 'Web',
-	 array('DB_Incoming'     => 'db/incoming',
-	       'DB_Storage'     => 'db/storage',
-	       'Lang_Image_Dir' => 'images/languages',
+	 array('DB_Incoming'     => '/db/incoming/',
+	       'DB_Storage'     => '/db/storage/',
+	       'Lang_Image_Dir' => 'images/languages/',
 	       'No_Photo'       => 'images/No_Photo/No_Photo_%LANG%.png'));
    }
 }

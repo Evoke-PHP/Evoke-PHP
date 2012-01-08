@@ -1,5 +1,5 @@
 <?php
-class Record_Menu extends Record
+class Data_Menu extends Data
 {
    protected $left;
    protected $right;
@@ -23,7 +23,14 @@ class Record_Menu extends Record
     */
    public function getMenu()
    {
-      return $this->arrangeRecord($this->list);
+      $data = array();
+      
+      foreach ($this->list as $record)
+      {
+	 $data[] = $this->arrangeRecord($record);
+      }
+      
+      return $data;
    }
    
    /*********************/

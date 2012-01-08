@@ -1,5 +1,4 @@
 <?php
-
 /** Initialize the system constants by loading all of the Evoke_Init objects.
  *  These are found in the /evoke/init path by default and are loaded if they
  *  are the highest priority object within the php include path.  This allows
@@ -106,5 +105,4 @@ class Evoke_Initialize
       }
    }
 }
-
 //EOF

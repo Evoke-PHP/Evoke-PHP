@@ -91,10 +91,7 @@ class App extends Container
     */
    public function getData(Array $references=array())
    {
-      return $this->getNew(
-	 'Data',
-	 array('Record' => $this->getNew('Record',
-					 array('References' => $references))));
+      return $this->getNew('Data', array('References' => $references));
    }
    
    /// Return the event manager.

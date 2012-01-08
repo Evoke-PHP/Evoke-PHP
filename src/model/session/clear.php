@@ -1,13 +1,11 @@
 <?php
-
-
 class Model_Session_Clear extends Model_Session
 {
    public function __construct(Array $setup)
    {
       parent::__construct($setup);
 
-      $this->em->connect('Post.', function() {});
+      $this->em->connect('Post.', array($this, 'doNothing'));
       $this->em->connect('Post.Clear', array($this, 'clear'));
    }
 
@@ -19,6 +17,10 @@ class Model_Session_Clear extends Model_Session
    {
       $this->setup['Session_Manager']->remove();
    }
-}
 
+   public function doNothing()
+   {
+
+   }
+}
 // EOF

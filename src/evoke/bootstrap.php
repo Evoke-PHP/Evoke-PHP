@@ -1,10 +1,14 @@
 <?php
-/// Provide the bootstrapping for the system.
+/** Provide the bootstrapping for the system.
+ *  Start the autoloading of classes.
+ *  Initialize the system settings.
+ *  Register the Shutdown, Exception and Error handlers.
+ */
 class Evoke_Bootstrap
 {
    public function __construct()
    {
-      // First get autoload handler up and running.
+      // Get the autoload up and running so that we don't need requires.
       require_once 'container.php';
       require_once 'evoke/handler.php';
       require_once 'evoke/handler/autoload.php';
@@ -25,7 +29,7 @@ class Evoke_Bootstrap
 	 isset($settings['Constant']['Development_Servers']) &&
 	 in_array(php_uname('n'), $settings['Constant']['Development_Servers']);
       
-      // Register all of the other handlers.
+      // Register the Shutdown, Exception and Error handlers.
       $c->getNew('Evoke_Handler_Shutdown',
 		 array('Administrator_Email'       => $settings[
 			  'Email']['Administrator'],

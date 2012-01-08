@@ -1,6 +1,4 @@
 <?php
-
-
 /** Element - Provide an element container with array access suitable for
  *  an XML Writing Resource that takes the form:
  *  \verbatim
@@ -131,5 +129,4 @@ class Element implements ArrayAccess
 	 __METHOD__ . ' should never be called - our elements are private.');
    }
 }
-
 // EOF

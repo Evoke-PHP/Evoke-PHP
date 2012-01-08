@@ -134,7 +134,16 @@ class XWR extends XMLWriter
 	    }
 
 	    $msg .= ' contains invalid child at index ' .
-	       var_export($key, true) . ': ' . var_export($child, true);
+	       var_export($key, true) . ': ';
+
+	    if (is_object($child))
+	    {
+	       $msg .= get_class($child);
+	    }
+	    else
+	    {
+	       $msg .= var_export($child, true);
+	    }
 
 	    throw new RuntimeException(__METHOD__ . $msg, 0, $e);
 	 }
