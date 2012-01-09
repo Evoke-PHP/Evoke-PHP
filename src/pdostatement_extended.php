@@ -1,7 +1,4 @@
 <?php
-
-
-/// PDOStatement_Extended
 class PDOStatement_Extended extends PDOStatement
 {
    private $namedPlaceholders;
@@ -44,5 +41,4 @@ class PDOStatement_Extended extends PDOStatement
       }
    }
 }
-
 // EOF

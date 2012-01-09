@@ -288,16 +288,16 @@ class SQL implements Iface_DB
 	    $q .= 'DISTINCT ';
 	 }
 	 
-	 $q .= Utils::expand($fields) . ' FROM ' . Utils::expand($tables);
+	 $q .= $this->expand($fields) . ' FROM ' . $this->expand($tables);
 	 
 	 if (!empty($conditions))
 	 {
-	    $q .= ' WHERE ' . Utils::placeholdersKeyed($conditions);
+	    $q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
 	 }
 	 
 	 if (!empty($order))
 	 {
-	    $q .= ' ORDER BY ' . Utils::placeholdersKeyed($order, ' ', ',');
+	    $q .= ' ORDER BY ' . $this->placeholdersKeyed($order, ' ', ',');
 	 }
 	 
 	 if (!empty($limit) && $limit !== 0)
@@ -350,7 +350,7 @@ class SQL implements Iface_DB
 	 
 	 if (!empty($conditions))
 	 {
-	    $q .= ' WHERE ' . Utils::placeholdersKeyed($conditions);
+	    $q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
 	 }
 	 
 	 $stmt = $this->prepare($q);
@@ -377,12 +377,12 @@ class SQL implements Iface_DB
     */
    public function update($tables, $setValues, $conditions='', $limit=0)
    {
-      $q  = 'UPDATE ' . Utils::expand($tables);
-      $q .= ' SET ' . Utils::placeholdersKeyed($setValues, '=', ',');
+      $q  = 'UPDATE ' . $this->expand($tables);
+      $q .= ' SET ' . $this->placeholdersKeyed($setValues, '=', ',');
 
       if (!empty($conditions))
       {
-	 $q .= ' WHERE ' . Utils::placeholdersKeyed($conditions, '=', ' AND ');
+	 $q .= ' WHERE ' . $this->placeholdersKeyed($conditions, '=', ' AND ');
       }
       
       if (!empty($limit) && $limit !== 0)
@@ -418,7 +418,7 @@ class SQL implements Iface_DB
     */
    public function delete($tables, $conditions)
    {
-      $q = 'DELETE FROM ' . Utils::expand($tables) . ' WHERE ';
+      $q = 'DELETE FROM ' . $this->expand($tables) . ' WHERE ';
 
       foreach ($conditions as $field => $value)
       {
@@ -475,8 +475,8 @@ class SQL implements Iface_DB
       try
       {
 	 $stmt = $this->prepare(
-	    'INSERT INTO ' . $table . ' (' . Utils::expand($fields) . ') ' .
-	    'VALUES (' . Utils::placeholders($fields) . ')');
+	    'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
+	    'VALUES (' . $this->placeholders($fields) . ')');
       }
       catch (Exception $e)
       {
@@ -565,6 +565,167 @@ class SQL implements Iface_DB
         $newCol . '` ' . $fieldType;
       return $this->exec($q);      
    }
+   
+   /*******************/
+   /* Private Methods */
+   /*******************/
 
+   /** Expand an array using the separator given.
+    *  @param arg \mixed The array to separate or a string to return.
+    *  @param separator \string The separator to use between each element
+    *  of the array.
+    *  \returns A \string of the separated array or the string arg.
+    */
+   private function expand($arg, $separator=',')
+   {
+      try
+      {
+	 if (is_array($arg))
+	 {
+	    return implode($separator, $arg);
+	 }
+	 else
+	 {
+	    return (string)$arg;
+	 }
+      }
+      catch (Exception $e)
+      {
+	 throw new Exception_Base(
+	    __METHOD__,
+	    'arg: ' . var_export($arg, true) .
+	    ' separator: ' . var_export($separator, true),
+	    $e);
+      }
+   }
+
+   /** Expand a keyed array using the between value between the key and the
+    *  value and the separator between each element pair.
+    *  @param arg \mixed Either a keyed array that is to be expanded or the
+    *  value to be converted to a string.
+    *  @param between \string The separator to use between each key and value.
+    *  @param separator \string The separator to use between each key/value
+    *  pair.
+    *  \returns A \string of the separated keyed array or the string for arg.
+    */
+   private function expandKeyedArr($arg, $between='=', $separator=' AND ')
+   {
+      try
+      {
+	 if (is_array($arg))
+	 {
+	    $str = '';
+	    
+	    if (!empty($arg))
+	    {
+	       foreach ($arg as $key => $val)
+	       {
+		  $str .= $key . $between . $val . $separator;
+	       }
+	       
+	       // The array is not empty so we can cut the last separator which
+	       // has definitely been added to str.
+	       $str = substr($str, 0, -1 * strlen((string)$separator));
+	    }
+	 
+	    return $str;
+	 }
+	 else
+	 {
+	    return (string)$arg;
+	 }      
+      }
+      catch (Exception $e)
+      {
+	 throw new Exception_Base(
+	    __METHOD__,
+	    'arg: ' . var_export($arg, true) . ' separator: ' .
+	    var_export($separator, true) . ' between: ' .
+	    var_export($between, true),
+	    $e);
+      }
+   }
+
+   /** Create a string with unnamed placeholders for each item specified.
+    *  @param arg \mixed Either an array where every item is replaced or a
+    *  single placeholder for an object or string entry. An empty string will
+    *  be returned for an empty array.
+    *  @param separator \string The separator to place between each placeholder.
+    *  \return A \string of the placeholders correctly separated.
+    */
+   private function placeholders($arg, $separator=',')
+   {
+      if (!is_array($arg))
+      {
+	 return '?';
+      }
+      
+      $str = '';
+      
+      if (!empty($arg))
+      {
+	 foreach ($arg as $item)
+	 {
+	    $str .= '?' . $separator;
+	 }
+	 
+	 // The array is not empty so we can cut the last separator which has
+	 // definitely been added to str.
+	 $str = substr($str, 0, -1 * strlen($separator));
+      }
+      
+      return $str;
+   }
+
+   /** Create a string with the array keys and unnamed placeholders. The string
+    *  will be of the format: 'key1=? AND key2=? AND key3=?' with default
+    *  parameters.
+    *  @param arg \mixed Either a keyed array that is to be expanded or the
+    *  value to be converted to a string.
+    *  @param between \string String between each key and unnamed placeholder.
+    *  @param separator \string String between each key/placeholder pair.
+    *  \returns A \string with the keys and placeholders in it.
+    */
+   private function placeholdersKeyed(
+      $arg, $between='=', $separator=' AND ')
+   {
+      /** \todo Fix for NULL placeholders.  So where conditions can accept NULL
+       *  values.
+       */
+      try
+      {
+	 if (is_array($arg))
+	 {
+	    $str = '';
+	    
+	    if (!empty($arg))
+	    {
+	       foreach ($arg as $key => $val)
+	       {
+		  $str .= $key . $between . '?' . $separator;
+	       }
+	       
+	       // The array is not empty so we can cut the last separator which
+	       // has definitely been added to str.
+	       $str = substr($str, 0, -1 * strlen((string)$separator));
+	    }
+	 
+	    return $str;
+	 }
+	 else
+	 {
+	    return (string)$arg;
+	 }      
+      }
+      catch (Exception $e)
+      {
+	 throw new Exception_Base(
+	    __METHOD__,
+	    'arg: ' . var_export($arg, true) .
+	    ' separator: ' . var_export($separator, true) .
+	    ' between: ' . var_export($between, true),
+	    $e);
+      }
+   }
 }
 // EOF

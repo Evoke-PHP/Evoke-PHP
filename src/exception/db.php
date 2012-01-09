@@ -1,5 +1,4 @@
 <?php
-
 class Exception_DB extends Exception_Base
 { 
    public function __construct(
@@ -7,16 +6,13 @@ class Exception_DB extends Exception_Base
    {
       $msg = $message;
       
-      if (method_exists($db, 'errorCode') && method_exists($db, 'errorInfo'))
+      if (method_exists($db, 'errorCode') && $db->errorCode() != '00000' &&
+	  method_exists($db, 'errorInfo'))
       {
-	 if ($db->errorCode() != '00000')
-	 {
-	   $msg .= ' Error: ' . Utils::expand($db->errorInfo(), ' ');
-	 }
+	 $msg .= ' Error: ' . implode(' ', $db->errorInfo());
       }
 
       parent::__construct($method, $msg, $previous, $code);
    }
 }
-
 // EOF
