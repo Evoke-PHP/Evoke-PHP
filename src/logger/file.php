@@ -1,6 +1,4 @@
 <?php
-
-
 class Logger_File
 {
    /// Indicates whether or not the resource has been opened.
@@ -44,35 +42,6 @@ class Logger_File
    /* Public Methods */
    /******************/
 
-   /** Open the log file for output. Creating directories, files as appropriate.
-    *  Use the modes from setup for the directory, file and append settings.
-    */
-   public function open()
-   {
-      $writeMode = 'w';
-      $dir = dirname($this->setup['Filename']);
-
-      if (!is_dir($dir))
-      {
-	 $this->setup['File_System']->mkdir(
-	    dirname($dir), $this->setup['Dir_Mode'], true);
-      }
-            
-      if ($this->setup['Append'])
-      {
-	 $writeMode = 'a';
-      }
-
-      // Open the log file and ensure it is at the right chmod level.
-      $this->fp = $this->setup['File_System']->fopen(
-	 $this->setup['Filename'], $writeMode);
-      
-      $this->setup['File_System']->chmod(
-	 $this->setup['Filename'], $this->setup['File_Mode']);
-
-      $this->opened = true;
-   }
-
    /** Logs a message to the file.
     *  @param message \array The message to log as created by \ref Logger::log.
     */
@@ -98,6 +67,39 @@ class Logger_File
       {
 	 $this->setup['File_System']->fwrite($this->fp, $entry);
       }
+   }
+   
+   /*******************/
+   /* Private Methods */
+   /*******************/
+
+   /** Open the log file for output. Creating directories, files as appropriate.
+    *  Use the modes from setup for the directory, file and append settings.
+    */
+   private function open()
+   {
+      $writeMode = 'w';
+      $dir = dirname($this->setup['Filename']);
+
+      if (!is_dir($dir))
+      {
+	 $this->setup['File_System']->mkdir(
+	    dirname($dir), $this->setup['Dir_Mode'], true);
+      }
+            
+      if ($this->setup['Append'])
+      {
+	 $writeMode = 'a';
+      }
+
+      // Open the log file and ensure it is at the right chmod level.
+      $this->fp = $this->setup['File_System']->fopen(
+	 $this->setup['Filename'], $writeMode);
+      
+      $this->setup['File_System']->chmod(
+	 $this->setup['Filename'], $this->setup['File_Mode']);
+
+      $this->opened = true;
    }
 }
 
