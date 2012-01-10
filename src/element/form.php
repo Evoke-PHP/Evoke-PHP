@@ -1,6 +1,4 @@
 <?php
-
-
 /** \file
  *  Provide an abstract class to enable the generic writing of a form.
  */
@@ -25,12 +23,11 @@ abstract class Element_Form extends Element
    {
       $this->setup = array_merge(
 	 array('Append_Elements'       => array(),
-	       'Attribs'               => array('action' => '',
+	       'Default_Attribs'       => array('action' => '',
 						'method' => 'post'),
 	       'Encasing'              => true,
 	       'Encasing_Tag'          => 'div',
 	       'Encasing_Attribs'      => array('class' => 'Form_Row'),
-	       'Options'               => array(),
 	       'Prepend_Elements'      => array(),
 	       'Submit_Button_Attribs' => array('class' => 'Form_Buttons'),
 	       'Submit_Buttons'        => array()),
@@ -38,11 +35,9 @@ abstract class Element_Form extends Element
 
       $this->buildFormChildren();
 
-      parent::__construct(
-	 array('form',
-	       $this->setup['Attribs'],
-	       array_merge($this->setup['Options'],
-			   array('Children' => $this->elements))));
+      parent::__set(array('form',
+			  array(),
+			  array('Children' => $this->elements)));
    }
 
    /*********************/
@@ -111,5 +106,4 @@ abstract class Element_Form extends Element
 		   array('Children' => $rowElems));
    }
 }
-
 // EOF

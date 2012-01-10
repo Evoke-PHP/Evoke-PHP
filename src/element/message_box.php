@@ -1,42 +1,42 @@
 <?php
-
-
-/// Element_Message_Box
 class Element_Message_Box extends Element
 { 
    public function __construct(Array $setup)
    {
-      $setup = array_merge(array('Class'       => '',
-				 'Description' => NULL,
-				 'Severity'    => 'Info',
-				 'Title'       => NULL),
-			   $setup);
+      $setup += array('Default_Attribs' => array('class' => 'Message_Box Info'));
 
-      if (!isset($setup['Description']))
+      parent::__construct($setup);
+   }
+   
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   public function set(Array $message)
+   {
+      $message += array('Description' => NULL,
+			'Title'       => NULL);
+
+      if (!isset($message['Description']))
       {
-	 throw new InvalidArgumentException(
-	    __METHOD__ . ' needs Description');
+	 throw new InvalidArgumentException(__METHOD__ . ' needs Description');
       }
 
-      if (!isset($setup['Title']))
+      if (!isset($message['Title']))
       {
 	 throw new InvalidArgumentException(__METHOD__ . ' needs Title');
       }
-	    
-      $messageBoxClass = rtrim('Message_Box ' . $setup['Severity'] .
-			       $setup['Class']);
       
-      parent::__construct(
+      return parent::set(
 	 array('div',
-	       array('class' => $messageBoxClass),
+	       array(),
 	       array('Children' => array(
 			array('div',
 			      array('class' => 'Title'),
-			      array('Text' => $setup['Title'])),
+			      array('Text' => $message['Title'])),
 			array('div',
 			      array('class' => 'Description'),
-			      array('Text' => $setup['Description']))))));
+			      array('Text' => $message['Description']))))));
    }
 }
-
 // EOF

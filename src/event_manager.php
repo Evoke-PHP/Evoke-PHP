@@ -22,11 +22,11 @@ class Event_Manager
    
    /** Connect an event to an observer callback.
     *  This creates the event if it did not exist before.
-    * @param name \string The event name.
-    * @param callback \mixed Observer callback.
-    * @param params \array Parameters to use with the callback.
-    * @param critical \bool Does someone have to be notified of this event?
-    * @param position \int Position to insert the callback (default end).
+    *  @param name \string The event name.
+    *  @param callback \mixed Observer callback.
+    *  @param params \array Parameters to use with the callback.
+    *  @param critical \bool Does someone have to be notified of this event?
+    *  @param position \int Position to insert the callback (default end).
     */
    public function connect(
       $name, $callback, Array $params=array(), $critical=true, $position=NULL)
@@ -125,23 +125,13 @@ class Event_Manager
       }
    }
    
-   /** Allow checking to see if an event name is defined.
+   /** Check to see if an event name is defined.
     *  @param name \string The event name.
     *  \return \bool Whether the event is defined.
     */
    public function exists($name)
    {
       return isset($this->observers[$name]);
-   }
-   
-   /** Merge the parameters for a callback.
-    *  @param observerParams \array The parameters from the observer entry.
-    *  @param callParams \array The parameters from the call.
-    *  \return The parameters that will be used when calling the callback.
-    */
-   public function mergeParams($observerParams, $callParams)
-   {
-      return array_merge($observerParams, $callParams);
    }
    
    /** Notifiy the observers of the event.
@@ -189,6 +179,19 @@ class Event_Manager
 	 $this->nonCriticalEvents[] = $name;
       }
    }
-}
 
+   /*********************/
+   /* Protected Methods */
+   /*********************/
+
+   /** Merge the parameters for a callback.
+    *  @param observerParams \array The parameters from the observer entry.
+    *  @param callParams \array The parameters from the call.
+    *  \return The parameters that will be used when calling the callback.
+    */
+   protected function mergeParams($observerParams, $callParams)
+   {
+      return array_merge($observerParams, $callParams);
+   }
+}
 // EOF

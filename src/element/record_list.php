@@ -32,6 +32,9 @@ class Element_Record_List extends Element
 	    'Translator'          => NULL),
 	 $setup);
 
+      /// \todo Update to new element interface.
+      throw new Exception(__METHOD__ . ' requires update to new element interface.');
+      
       $this->app = $this->setup['App'];
       $this->data = $this->setup['Data'];
 

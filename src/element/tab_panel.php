@@ -1,22 +1,30 @@
 <?php
-
-
-/// Element_Tab_Panel
 class Element_Tab_Panel extends Element
 { 
-   public function __construct($tabEntries, $setup=array())
+   public function __construct($setup=array())
    {
-      $setup = array_merge(
-	 array('Active_Class'         => 'Active',
-	       'Attribs'              => array('class' => 'Tab_Panel'),
-	       'Clear_Attribs'        => array('class' => 'Clear'),
-	       'Content_Attribs'      => array('class' => 'Content'),
-	       'Content_List_Attribs' => array('class' => 'Content_List'),
-	       'Heading_Attribs'      => array('class' => 'Tab'),
-	       'Heading_List_Attribs' => array('class' => 'Heading_List'),
-	       'Inactive_Class'       => 'Inactive'),
-	 $setup);
+      $setup += array(
+	 'Active_Class'         => 'Active',
+	 'Attribs'              => array('class' => 'Tab_Panel'),
+	 'Clear_Attribs'        => array('class' => 'Clear'),
+	 'Content_Attribs'      => array('class' => 'Content'),
+	 'Content_List_Attribs' => array('class' => 'Content_List'),
+	 'Heading_Attribs'      => array('class' => 'Tab'),
+	 'Heading_List_Attribs' => array('class' => 'Heading_List'),
+	 'Inactive_Class'       => 'Inactive');
 
+      parent::__construct($setup);
+   }
+
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   /** Set the Tab panel entries.
+    *  @param tabEntries \array The tab panel entries for the element.
+    */
+   public function set(Array $tabEntries)
+   {
       $headingElems = array();
       $contentElems = array(); 
 
@@ -40,7 +48,7 @@ class Element_Tab_Panel extends Element
 	    $this->buildListItem($tabEntry['Content'], $contentAttribs);
       }
 
-      parent::__construct(
+      return parent::set(
 	 array('div',
 	       $setup['Attribs'],
 	       array('Children' => array(
@@ -72,7 +80,5 @@ class Element_Tab_Panel extends Element
 
       return array('li', $attribs, array('Children' => $entry));
    }
-
 }
-
 // EOF

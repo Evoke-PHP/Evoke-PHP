@@ -11,42 +11,25 @@ class Element implements ArrayAccess
 {
    protected $el;
    protected $offsets;
+   protected $setup;
    
-   public function __construct(Array $element)
+   public function __construct(Array $setup=array())
    {
-      $this->offsets = array('Tag'     => 0,
-			     'Attribs' => 1,
-			     'Options' => 2);
-      
-       if (!isset($element[$this->offsets['Tag']]))
-      {
-	 throw new InvalidArgumentException(__METHOD__ . ' needs tag');
-      }
+      $this->setup = array_merge(
+	 array('Default_Attribs' => array(),
+	       'Default_Options' => array('Children' => array(),
+					  'Finish'   => true,
+					  'Start'    => true,
+					  'Text'     => NULL),
+	       'Offsets'         => array('Attribs' => 1,
+					  'Options' => 2,
+					  'Tag'     => 0)),
+	 $setup);
 
-      if (!isset($element[$this->offsets['Attribs']]))
-      {
-	 $element[$this->offsets['Attribs']] = array();
-      }
-
-      $defaultOptions = array('Children' => array(),
-			      'Finish'   => true,  
-			      'Start'    => true,
-			      'Text'     => NULL);
-      
-      if (isset($element[$this->offsets['Options']]) &&
-	  is_array($element[$this->offsets['Options']]))
-      {
-	 $element[$this->offsets['Options']] = array_merge(
-	    $defaultOptions, $element[$this->offsets['Options']]);
-      }
-      else
-      {
-	 $element[$this->offsets['Options']] = $defaultOptions;
-      }
-
-      $this->el = $element;
+      $this->el = array();
+      $this->offsets =& $this->setup['Offsets'];
    }
-   
+
    /******************/
    /* Public Methods */
    /******************/
@@ -94,6 +77,50 @@ class Element implements ArrayAccess
 	 $this->el[$this->offsets['Attribs']][$attrib] = $value;
       }
    }
+
+   /** Set the element from the array values passed in for the element.  The
+    *  element should be passed in as an array with the numerical keys
+    *  corresponding to the desired element data.  By default this is:
+    *  \verbatim
+       0 => Tag
+       1 => Attribs
+       2 => Options
+       \endverbatim
+    *
+    *  Atrribs and Options data is merged with the Default values from the
+    *  setup.
+    *
+    *  Any data that is not passed in is not set.
+    *  Any data with a key outside of this range is ignored.
+    *
+    *  @param element \array The element data to set ourselves to.
+    *  \return \array Return the data that has been set.
+    */
+   public function set(Array $element)
+   {
+      $this->el = array();
+      
+      if (isset($element[$this->offsets['Tag']]))
+      {
+	 $this->el[$this->offsets['Tag']] = $element[$this->offsets['Tag']];
+      }
+      
+      if (isset($element[$this->offsets['Attribs']]))
+      {
+	 $this->el[$this->offsets['Attribs']] =
+	    array_merge($this->setup['Default_Attribs'],
+			$element[$this->offsets['Attribs']]);
+      }
+
+      if (isset($element[$this->offsets['Options']]))
+      {
+	 $this->el[$this->offsets['Options']] =
+	    array_merge($this->setup['Default_Options'],
+			$element[$this->offsets['Options']]);
+      }
+
+      return $this->el;
+   }
    
    /******************************************/
    /* Public Methods - ArrayAccess Interface */
@@ -117,7 +144,7 @@ class Element implements ArrayAccess
    public function offsetSet($offset, $value)
    {
       throw new RuntimeException(
-	 __METHOD__ . ' should never be called - our elements are private.');
+	 __METHOD__ . ' should never be called - use the set method.');
    }
 
    /** We are required to make these available to complete the interface,
@@ -126,7 +153,7 @@ class Element implements ArrayAccess
    public function offsetUnset($offset)
    {
       throw new RuntimeException(
-	 __METHOD__ . ' should never be called - our elements are private.');
+	 __METHOD__ . ' should never be called - use the set method.');
    }
 }
 // EOF

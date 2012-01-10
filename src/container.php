@@ -11,9 +11,14 @@ class Container
    /* Public Methods */
    /******************/
 
-   /** Get an object with the specified parameters.
+   /** Get an object with the specified parameters.  This is the standard way
+    *  to instantiate objects with the Evoke framework.  Using this method
+    *  decouples object creation from your code.  This makes it easy to test
+    *  your code as it is not tightly bound to the objects that it creates.
+    *
     *  @param class \string The class of object to create.
     *  @param params \array Parameters to pass to the constructor.
+    *  \return The object that has been created.
     */
    public function getNew($class, $params=array())
    {
@@ -21,9 +26,15 @@ class Container
    }
    
    /** Get a shared object with the specified parameters.  The same object is
-    *  returned for repeated calls with identical class and parameters.
+    *  returned for repeated calls with identical class and parameters.  This
+    *  should be used for objects that will be shared throughout the system.
+    *  There is a small overhead to find the shared object.  Few objects should
+    *  be created as shared, so this overhead should remain small.
+    *
     *  @param class \string The class of object to create or return.
     *  @param params \array Parameters to pass to the constructor.
+    *  \return The shared object that has been retrieved or created (if it
+    *  didn't exist.)
     */
    public function getShared($class, $params=array())
    {
@@ -47,10 +58,30 @@ class Container
       return $obj;
    }
 
-   /// \todo Add variable arg construction methods.
-   // $objClass = new ReflectionClass($class);
-   // $obj = $objClass->newInstanceArgs($args);
-   
+   /** Get a new object with a variable number of construction arguments. These
+    *  arguments are described below in order:
+    *
+    *  \verbatim
+       Class                   - The name of the class to be constructed.
+       Construction Parameters - A variable number of construction parameters.
+       \endverbatim
+    *  \return The object that has been created.
+    */
+   public function getNewVarArgs(/* Var Args */)
+   {
+      if (func_num_args() === 0)
+      {
+	 throw new BadMethodCallException(
+	    __METOHD__ . ' needs at least one argument.');
+      }
+      
+      $args = func_get_args();
+      $class = array_shift($args);
+      
+      $objClass = new ReflectionClass($class);
+      return $objClass->newInstanceArgs($args);
+   }
+      
    /** Enable a string conversion for the object that gives a summary while
     *  avoiding circular references.
     */

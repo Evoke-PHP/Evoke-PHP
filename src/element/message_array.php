@@ -1,30 +1,25 @@
 <?php
-
-
-/// Element_Message_Array
 class Element_Message_Array extends Element
 {
-   protected $setup;
-   
    public function __construct(Array $setup)
    {      
-      $this->setup = array_merge(
-	 array('Container_Attribs' => array('class' => 'Message_Container'),
-	       'Data'              => NULL,
-	       'Element_Class'     => 'Message'),
-	 $setup);
+      $setup += array('Container_Attribs' => array('class' => 'Message_Container'),
+		      'Element_Class'     => 'Message');
 
-      if (!isset($this->setup['Data']))
-      {
-	 throw new InvalidArgumentException(__METHOD__ . ' needs Data');
-      }
-      
-      parent::__construct(
-	 array('div',
-	       $this->setup['Container_Attribs'],
-	       array('Children' => $this->buildElems($this->setup['Data']))));
+      parent::__construct($setup);
    }
 
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   public function set(Array $data)
+   {
+      return parent::set(
+	 array('div',
+	       $this->setup['Container_Attribs'],
+	       array('Children' => $this->buildElems($data))));
+   }
    
    /*******************/
    /* Private Methods */
@@ -67,5 +62,4 @@ class Element_Message_Array extends Element
       return $msgElems;
    }
 }
-
 // EOF

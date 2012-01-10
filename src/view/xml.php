@@ -17,5 +17,4 @@ abstract class View_XML extends View
       $this->xwr =& $this->setup['XWR'];
    }
 }
-
 // EOF

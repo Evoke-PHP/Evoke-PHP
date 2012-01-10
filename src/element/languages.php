@@ -1,23 +1,20 @@
 <?php
-
 class Element_Languages extends Element
 {
-   protected $setup;
-   
-   public function __construct($setup=array())
+   public function __construct(Array $setup)
    {
-      $this->setup = array_merge(
-	 array('Format'     => '_h24.png',
-	       'Lang_Dir'   => '/images/languages/',
-	       'Translator' => NULL),
-	 $setup);
+      $setup += array('Format'     => '_h24.png',
+		      'Lang_Dir'   => '/images/languages/',
+		      'Translator' => NULL);
 
+      parent::__construct($setup);
+      
       if (!$this->setup['Translator'] instanceof Translator)
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' needs Translator');
       }
-      
+
       $currentLanguage = $this->setup['Translator']->getLanguage();
       $languages = $this->setup['Translator']->getLanguages();
 
@@ -69,10 +66,9 @@ class Element_Languages extends Element
 		     array('Children' => $otherLanguages))))));
       
       
-      parent::__construct(array('ul',
-				array('id' => 'Language_Menu'),
-				array('Children' => $languageMenuElems)));
+      parent::set(array('ul',
+			array('id' => 'Language_Menu'),
+			array('Children' => $languageMenuElems)));
    }
 }
-
 // EOF

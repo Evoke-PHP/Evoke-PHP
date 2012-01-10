@@ -1,16 +1,16 @@
 <?php
-
-
-/// Element_Footer
 class Element_Footer extends Element
 { 
-   public function __construct()
+   public function __construct($setup)
    {
-      parent::__construct(
-	 array('div',
-	       array('class' => 'Footer'),
-	       array('Text'  => 'Website Design by Paul Young')));
+      $setup += array('Attribs' => array('class' => 'Footer'),
+		      'Text'    => '');
+      
+      parent::__construct($setup);
+
+      parent::set(array('div',
+			$this->setup['Attribs'],
+			array('Text' => $this->setup['Text'])));
    }
 }
-
 // EOF

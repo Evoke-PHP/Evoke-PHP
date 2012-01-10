@@ -1,6 +1,4 @@
 <?php
-
-
 /** Entry form for a databse record.
  *  Provide a form to show and allow modification to database tables.
  */
@@ -238,5 +236,4 @@ class Element_Form_Entry extends Element_Form
       return $fieldSetup;
    }
 }
-
 // EOF

@@ -1,5 +1,4 @@
 <?php
-
 /** Logger class to control the logging of messages in the system.
  *  PHP has the following predefined constants defined for us which we use to
  *  log our messages. These default Log Levels are as per syslog entries as
@@ -131,5 +130,4 @@ class Logger
       return $this->setup['Default_Level_Str'] . var_export($level, true);
    }
 }
-
 // EOF

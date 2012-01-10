@@ -1,7 +1,4 @@
 <?php
-
-
-/// Element_Input_File
 class Element_Input_File extends Element
 { 
    /** Construct a button/input that will enable styling to be done on the ugly
@@ -33,11 +30,11 @@ class Element_Input_File extends Element
    {
       /// The default setup assumes setup 1 as above in the construct comment.
       $setup += array(
-	 'Attribs'           => array('class' => 'Input_File_Container'),
 	 'Button_Attribs'    => array('class' => 'Input_File Button Good',
 				      'type'  => 'submit',
 				      'name'  => 'Input_File_Redirect'),
 	 'Button_Text'       => NULL,
+	 'Default_Attribs'   => array('class' => 'Input_File_Container'),
 	 'Input_Attribs'     => array('class' => 'Input_File Hidden',
 				      'type'  => 'file',
 				      'size'  => 7),
@@ -45,32 +42,33 @@ class Element_Input_File extends Element
 	 'Request_Prefix'    => 'Input_File',
 	 'Request_Separator' => '_');
 
-      if (!isset($setup['Button_Text']))
+      parent::__construct($setup);
+      
+      if (!isset($this->setup['Button_Text']))
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' needs Button_Text');
       }
 
-      $setup['Button_Attribs']['value'] = $setup['Button_Text'];
+      $this->setup['Button_Attribs']['value'] = $this->setup['Button_Text'];
 
-      if (!isset($setup['Input_Attribs']['name']))
+      if (!isset($this->setup['Input_Attribs']['name']))
       {
-	 $setup['Input_Attribs']['name'] = $setup['Request_Prefix'];
+	 $this->setup['Input_Attribs']['name'] = $this->setup['Request_Prefix'];
 
-	 if (isset($setup['Request_Alias']))
+	 if (isset($this->setup['Request_Alias']))
 	 {
-	    $setup['Input_Attribs']['name'] .=
-	       $setup['Request_Separator'] . $setup['Request_Alias'];
+	    $this->setup['Input_Attribs']['name'] .=
+	       $this->setup['Request_Separator'] . $this->setup['Request_Alias'];
 	 }
       }
       
-      parent::__construct(
+      parent::set(
 	 array('div',
-	       $setup['Attribs'],
+	       array(),
 	       array('Children' => array(
-			array('input', $setup['Button_Attribs']),
-			array('input', $setup['Input_Attribs'])))));
+			array('input', $this->setup['Button_Attribs']),
+			array('input', $this->setup['Input_Attribs'])))));
    }
 }
-
 // EOF

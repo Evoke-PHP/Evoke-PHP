@@ -1,22 +1,19 @@
 <?php
-
-
-/// Element_Required_Field_Instructions
 class Element_Required_Field_Instructions extends Element
 { 
-   public function __construct($setup=array())
+   public function __construct(Array $setup)
    {
-      $setup = array_merge(
-	 array('Translator' => NULL),
-	 $setup);
+      $setup += array('Translator' => NULL);
 
-      if (!$setup['Translator'] instanceof Translator)
+      parent::__construct($setup);
+
+      if (!$this->setup['Translator'] instanceof Translator)
       {
 	 throw new InvalidArgumentException(
-	    __METHOD__ . ' needs Translator');
+	    __METHOD__ . ' requires Translator');
       }
-      
-      parent::__construct(
+
+      parent::set(
 	 array(
 	    'div',
 	    array('class' => 'Required_Field_Instructions'),
@@ -27,9 +24,7 @@ class Element_Required_Field_Instructions extends Element
 				    'Required_Field_Instructions'))),
 		     array('span',
 			   array('class' => 'Required'),
-			   array('Text' => '*')))));
-		     
+			   array('Text' => '*')))));		     
    }
 }
-
 // EOF

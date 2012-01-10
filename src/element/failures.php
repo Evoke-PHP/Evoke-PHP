@@ -1,18 +1,13 @@
 <?php
-
-
-/// Element_Failures
 class Element_Failures extends Element_Message_Array
 { 
-   public function __construct($failures, $setup=array())
+   public function __construct(Array $setup=array())
    {
-      $setup = array_merge(
-	 array('Container_Attribs' => array('class' => 'Failure_Container'),
-	       'Element_Class' => 'Failure'),
-	 $setup);
+      $setup += array(
+	 'Container_Attribs' => array('class' => 'Failure_Container'),
+	 'Element_Class'     => 'Failure');
 
-      parent::__construct($failures, $setup);
+      parent::__construct($setup);
    }
 }
-
 // EOF

@@ -1,12 +1,12 @@
 <?php
-
-
 class Element_Header extends Element
 { 
-   public function __construct($setup=array())
+   public function __construct(Array $setup=array())
    {
-      parent::__construct(array('div', array('class' => 'Header')));
+      $setup += array('Default_Attribs' => array('class' => 'Header'));
+	 
+      parent::__construct($setup);
+      parent::set(array('div'));
    }
 }
-
 // EOF

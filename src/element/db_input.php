@@ -1,12 +1,6 @@
 <?php
-
-
-/// Element_DB_Input provide elements for input to the database.
-class Element_DB_Input extends Element
-{
-   protected $setup;
-   
-  /** Make an element from the database describe table information.
+/** Element_DB_Input provide elements for input to the database.
+  * Make an element from the database describe table information.
     * @param fieldInfo \array A single row from the describe table information.
     *
     *  Below is an example of the describe table information (A single row from
@@ -19,57 +13,66 @@ class Element_DB_Input extends Element
        | Name  | varchar(100) | YES  |     | 'Smith' |                |
        +-------+--------------+------+-----+---------+----------------+
       \endverbatim
-    */
+*/
+class Element_DB_Input extends Element
+{
    public function __construct(Array $setup)
    {
-      $setup = array_merge(
-	 array('Attribs'             => array('class' => 'DB_Input'),
-	       'Encasing'            => true,
-	       'Field_Attribs'       => array(),
-	       'Field_Info'          => NULL,
-	       'Field_Value'         => NULL,
-	       'Field_Prefix'        => '',
-	       'Hidden'              => false,
-	       'Highlighted'         => false,
-	       'ID'                  => NULL,
-	       'Label'               => NULL,
-	       'Options'             => array(),
-	       'Required_Indication' => true,
-	       'Tag'                 => 'div',
-	       'Translate_Prefix'    => '',
-	       'Translate_Label'     => true,
-	       'Translator'          => NULL),
-	 $setup);
+      $setup += array('Default_Attribs'     => array('class' => 'DB_Input'),
+		      'Encasing'            => true,
+		      'Field_Attribs'       => array(),
+		      'Field_Info'          => NULL,
+		      'Field_Value'         => NULL,
+		      'Field_Prefix'        => '',
+		      'Hidden'              => false,
+		      'Highlighted'         => false,
+		      'ID'                  => NULL,
+		      'Label'               => NULL,
+		      'Default_Options'     => array('Children' => array(),
+						     'Finish'   => true,
+						     'Start'    => true,
+						     'Text'     => NULL),
+		      'Required_Indication' => true,
+		      'Tag'                 => 'div',
+		      'Translate_Prefix'    => '',
+		      'Translate_Label'     => true,
+		      'Translator'          => NULL);
             
       if (!($setup['Encasing']))
       {
-	 $setup['Options']['Start'] = false;
-	 $setup['Options']['Finish'] = false;
+	 $setup['Defualt_Options']['Start'] = false;
+	 $setup['Default_Options']['Finish'] = false;
       }
 
-      $this->setup = $setup;
-
-      if (!isset($this->setup['Field_Info']))
-      {
-	 throw new InvalidArgumentException(
-	    __METHOD__ . ' needs Field_Info');
-      }
+      /// \todo Fix the code for the new element interface.
+      throw new Exception(__METHOD__ . ' element not updated to new interface.');
       
+      parent::__construct($setup);
+
       if (!$this->setup['Translator'] instanceof Translator)
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' needs Translator');
       }
-      
-      $this->setup['Options'] = array_merge(
-	 $this->setup['Options'],
-	 array('Children' => $this->getElements()));
-      
-      parent::__construct(array($this->setup['Tag'],
-				$this->setup['Attribs'],
-				$this->setup['Options']));
    }
 
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   public function set(Array $data)
+   {
+      if (!isset($data['Field_Info']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' needs Field_Info');
+      }
+
+      return parent::set(array($this->setup['Tag'],
+			       array(),
+			       array('Children' => $this->getElements())));
+   }
+   
    /*********************/
    /* Protected Methods */
    /*********************/

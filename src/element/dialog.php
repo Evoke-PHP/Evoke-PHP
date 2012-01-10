@@ -1,54 +1,59 @@
 <?php
-
-
 class Element_Dialog extends Element
 {
-   protected $setup;
-   
    public function __construct(Array $setup)
    {
-      $this->setup = array_merge(
-	 array('Buttons'         => array(),
-	       'Buttons_Attribs' => array('class' => 'Buttons'),
-	       'Content'         => NULL,
-	       'Content_Attribs' => array('class' => 'Content'),
-	       'Form_Attribs'    => array('class'  => 'Dialog',
-					  'action' => '',
-					  'method' => 'POST'),
-	       'Heading'         => NULL,
-	       'Heading_Attribs' => array('class' => 'Heading')),
-	 $setup);
+      $setup += array('Buttons'         => array(),
+		      'Buttons_Attribs' => array('class' => 'Buttons'),
+		      'Content_Attribs' => array('class' => 'Content'),
+		      'Default_Attribs' => array('class'  => 'Dialog',
+						 'action' => '',
+						 'method' => 'POST'),
+		      'Heading_Attribs' => array('class' => 'Heading'));
 
-      if (!isset($this->setup['Content']))
+      parent::__construct($setup);
+   }
+
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   public function set(Array $data)
+   {
+      $data += array('Buttons'      => array(),
+		     'Content'      => NULL,
+		     'Form_Attribs' => array(),
+		     'Heading'      => NULL);
+
+      if (!isset($data['Content']))
       {
-	 throw new InvalidArgumentException(__METHOD__ . ' needs Content');
+	 throw new InvalidArgumentException(__METHOD__ . ' requires Content');
       }
 
-      if (!isset($this->setup['Heading']))
+      if (!isset($data['Heading']))
       {
-	 throw new InvalidArgumentException(__METHOD__ . ' needs Heading');
+	 throw new InvalidArgumentException(__METHOD__ . ' requires Heading');
       }
       
       $dialogItems = array(
 	 array('div',
 	       $this->setup['Heading_Attribs'],
-	       array('Text' => $this->setup['Heading'])),
+	       array('Text' => $data['Heading'])),
 	 array('div',
 	       $this->setup['Content_Attribs'],
-	       array('Text' => $this->setup['Content'])));
+	       array('Text' => $data['Content'])));
 
-      if (!empty($this->setup['Buttons']))
+      if (!empty($data['Buttons']))
       {
 	 $dialogItems[] =
 	    array('div',
 		  $this->setup['Buttons_Attribs'],
-		  array('Children' => $this->setup['Buttons']));
+		  array('Children' => $data['Buttons']));
       }
       
       parent::__construct(array('form',
-				$this->setup['Form_Attribs'],
+				$data['Form_Attribs'],
 				array('Children' => $dialogItems)));
    }
 }
-
 // EOF
