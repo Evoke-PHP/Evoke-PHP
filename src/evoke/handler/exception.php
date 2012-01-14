@@ -2,28 +2,33 @@
 /// The system exception handler.
 class Evoke_Handler_Exception extends Evoke_Handler
 {
-   protected $detailed;
-   protected $em;
+   protected $setup;
    
    public function __construct(Array $setup)
    {
-      $setup += array('Detailed_Insecure_Message' => NULL,
-		      'Event_Manager'             => NULL);
-
-      if (!is_bool($setup['Detailed_Insecure_Message']))
+      $this->setup = array_merge(array('Detailed_Insecure_Message'    => NULL,
+				       'Event_Manager'                => NULL,
+				       'Max_Length_Exception_Message' => NULL),
+				 $setup);
+				 
+      if (!is_bool($this->setup['Detailed_Insecure_Message']))
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
       }
 
-      if (!$setup['Event_Manager'] instanceof Event_Manager)
+      if (!$this->setup['Event_Manager'] instanceof Event_Manager)
       {
 	 throw new InvalidArgumentException(
 	    __METHOD__ . ' requires Event_Manager');
       }
 
-      $this->detailed = $setup['Detailed_Insecure_Message'];
-      $this->em = $setup['Event_Manager'];
+      if (!isset($this->setup['Max_Length_Exception_Message']))
+      {
+	 throw new InvalidArgumentException(
+	    __METHOD__ . ' requires Max_Length_Exception_Message');
+      }
+      
       $this->register('set_exception_handler', array($this, 'handler'));
    }
    
@@ -46,10 +51,11 @@ class Evoke_Handler_Exception extends Evoke_Handler
 	    header('HTTP/1.1 500 Internal Server Error');
 	 }
 				
-	 $this->em->notify('Log',
-			   array('Level'   => LOG_CRIT,
-				 'Message' => $uncaughtException->getMessage(),
-				 'Method'  => __METHOD__));
+	 $this->setup['Event_Manager']->notify(
+	    'Log',
+	    array('Level'   => LOG_CRIT,
+		  'Message' => $uncaughtException->getMessage(),
+		  'Method'  => __METHOD__));
 	 $loggedError = true;
       }
       catch (Exception $raisedException)
@@ -91,10 +97,23 @@ class Evoke_Handler_Exception extends Evoke_Handler
       }
 
       // Provide extended details for development servers.
-      if ($this->detailed)
+      if ($this->setup['Detailed_Insecure_Message'])
       {
+	 $exceptionMessage = (string)($uncaughtException);
+
+	 // If the exception is huge, only include the start and end on screen.
+	 if ($loggedError && $this->setup['Max_Length_Exception_Message'] > 0 &&
+	     mb_strlen($exceptionMessage) > $this->setup[
+		'Max_Length_Exception_Message'])
+	 {
+	    $halfMessage = $this->setup['Max_Length_Exception_Message'] / 2;
+	    $exceptionMessage = mb_substr($exceptionMessage, 0, $halfMessage) .
+	       "\n\n <<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>> \n\n" .
+	       mb_substr($exceptionMessage, -$halfMessage);
+	 }
+
 	 $message .= "<br>\n<br>\n" .
-	    preg_replace('/\n/', '<br>' . "\n", (string)($uncaughtException));
+	    preg_replace('/\n/', '<br>' . "\n", $exceptionMessage); //(string)($uncaughtException));
       }
       
       $errorDocument =

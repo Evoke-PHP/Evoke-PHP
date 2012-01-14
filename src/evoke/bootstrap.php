@@ -34,10 +34,12 @@ class Evoke_Bootstrap
 		 array('Administrator_Email'       => $settings[
 			  'Email']['Administrator'],
 		       'Detailed_Insecure_Message' => $isDevelopmentServer));
-   
+
       $c->getNew('Evoke_Handler_Exception',
-		 array('Detailed_Insecure_Message' => $isDevelopmentServer,
-		       'Event_Manager'             => $em));
+		 array('Detailed_Insecure_Message'    => $isDevelopmentServer,
+		       'Event_Manager'                => $em,
+		       'Max_Length_Exception_Message' => $settings['Constant'][
+			  'Max_Length_Exception_Message']));
 
       $c->getNew('Evoke_Handler_Error',
 		 array('Detailed_Insecure_Message' => $isDevelopmentServer,

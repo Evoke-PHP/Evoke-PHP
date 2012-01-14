@@ -11,8 +11,10 @@ abstract class View_XML extends View
       
       parent::__construct($setup);
 
-      $this->app->needs(
-	 array('Instance' => array('XWR' => $this->setup['XWR'])));
+      if (!$this->setup['XWR'] instanceof XWR)
+      {
+	 throw new InvalidArgumentException(__METHOD__ . ' requires XWR');
+      }
 
       $this->xwr =& $this->setup['XWR'];
    }

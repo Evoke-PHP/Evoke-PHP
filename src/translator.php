@@ -303,5 +303,4 @@ class Translator
 			 $specificTranslationMatches);
    }
 }
-
 // EOF

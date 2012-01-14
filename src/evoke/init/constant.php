@@ -11,9 +11,11 @@ class Evoke_Init_Constant extends Evoke_Init
    public function __construct(Array $setup)
    {
       parent::__construct($setup);
-
-      $this->settings['Constant'] = array('Default_Language'    => 'EN',
-					  'Development_Servers' => array());
+      echo 'LOAD';
+      $this->settings['Constant'] = array(
+	 'Default_Language'             => 'EN',
+	 'Development_Servers'          => array(),
+	 'Max_Length_Exception_Message' => 6000);
    }
 }
 // EOF

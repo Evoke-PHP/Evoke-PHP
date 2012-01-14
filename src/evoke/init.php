@@ -1,5 +1,4 @@
 <?php
-
 abstract class Evoke_Init
 {
    protected $container;
@@ -49,5 +48,4 @@ abstract class Evoke_Init
       }
    }
 }
-
 // EOF

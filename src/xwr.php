@@ -56,7 +56,7 @@ class XWR extends XMLWriter
 	                'Start'    => true,    // Whether to start the tag.
 	                'Text'     => NULL),   // Text within the tag.
 	    )
-       \verbatim
+       \endverbatim
    */
    public function write($xml)
    {

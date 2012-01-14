@@ -72,7 +72,8 @@ class Logger
        array('Level'   => LOG_LEVEL,          // Number
              'Message' => 'Message Contents', // String
 	     'Method'  => __METHOD__);        // String
-
+       \endverbatim
+       
        This should then be enhanced by adding the date/time and Level String.
     */
    public function log(Array $message)
