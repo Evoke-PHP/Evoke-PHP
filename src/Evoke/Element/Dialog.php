@@ -1,0 +1,61 @@
+<?php
+namespace Evoke;
+
+class Element_Dialog extends Element
+{
+   public function __construct(Array $setup)
+   {
+      $setup += array('Buttons'         => array(),
+		      'Buttons_Attribs' => array('class' => 'Buttons'),
+		      'Content_Attribs' => array('class' => 'Content'),
+		      'Default_Attribs' => array('class'  => 'Dialog',
+						 'action' => '',
+						 'method' => 'POST'),
+		      'Heading_Attribs' => array('class' => 'Heading'));
+
+      parent::__construct($setup);
+   }
+
+   /******************/
+   /* Public Methods */
+   /******************/
+
+   public function set(Array $data)
+   {
+      $data += array('Buttons'      => array(),
+		     'Content'      => NULL,
+		     'Form_Attribs' => array(),
+		     'Heading'      => NULL);
+
+      if (!isset($data['Content']))
+      {
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires Content');
+      }
+
+      if (!isset($data['Heading']))
+      {
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires Heading');
+      }
+      
+      $dialogItems = array(
+	 array('div',
+	       $this->setup['Heading_Attribs'],
+	       array('Text' => $data['Heading'])),
+	 array('div',
+	       $this->setup['Content_Attribs'],
+	       array('Text' => $data['Content'])));
+
+      if (!empty($data['Buttons']))
+      {
+	 $dialogItems[] =
+	    array('div',
+		  $this->setup['Buttons_Attribs'],
+		  array('Children' => $data['Buttons']));
+      }
+      
+      parent::__construct(array('form',
+				$data['Form_Attribs'],
+				array('Children' => $dialogItems)));
+   }
+}
+// EOF
