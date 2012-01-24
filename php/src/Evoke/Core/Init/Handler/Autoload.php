@@ -9,17 +9,17 @@ class Autoload implements \Evoke\Core\Iface\Handler
    {
       /** The setup for the Autoload.
 	  \verbatim
-	  Authorative - Whether we should allow other autoloaders a chance to
-	                load the classes for our domain.
-	  Base_Dir    - The base directory for the files.
-	  Extension   - The file extension to use.
-	  Namespace   - The base namespace that we are autoloading.
+	  Authoritative - Whether it has complete authority over the namespace.we should allow other autoloaders a chance to
+	                  load the classes for our domain.
+	  Base_Dir      - The base directory for the files.
+	  Extension     - The file extension to use.
+	  Namespace     - The base namespace that we are autoloading.
 	  \endverbatim
       */
-      $this->setup = array_merge(array('Authorative' => true,
-				       'Base_Dir'    => NULL,
-				       'Extension'   => '.php',
-				       'Namespace'   => NULL),
+      $this->setup = array_merge(array('Authoritative' => true,
+				       'Base_Dir'      => NULL,
+				       'Extension'     => '.php',
+				       'Namespace'     => NULL),
 				 $setup);
 
       if (!is_string($this->setup['Base_Dir']))
@@ -57,11 +57,6 @@ class Autoload implements \Evoke\Core\Iface\Handler
       if ($lastSlash === false)
       {
 	 $filename .= str_replace('_', DIRECTORY_SEPARATOR, $name);
-
-	 if (strstr($name, 'DB_Joint') !== false)
-	 {
-	    echo 'FFS: ' . $filename . "\n<br>";
-	 }
       }
       else
       {
@@ -69,28 +64,22 @@ class Autoload implements \Evoke\Core\Iface\Handler
 	 $className = substr($name, $lastSlash + 1);
 	 $filename .= str_replace('\\', DIRECTORY_SEPARATOR, $namespace) .
 	    str_replace('_', DIRECTORY_SEPARATOR, $className);
-
-	 if (strstr($name, 'DB_Joint') !== false)
-	 {
-	    echo 'NS: ' . $namespace .' ' . 'CL: ' . $className . "\n<br>";
-	 }
-
       }
 
       $filename .= $this->setup['Extension'];
 
-      // echo 'FFS: ' . $filename . "\n<br>";
-      
-      if (!file_exists($filename) && $this->setup['Authorative'])
+      if (file_exists($filename))
       {
-	 // We are the authorative autoloader for the namespace - If we can't
+	 require $filename;
+      }
+      elseif ($this->setup['Authoritative'])
+      {
+	 // We are the authoritative autoloader for the namespace - If we can't
 	 // find it no-one can.
 	 throw new \RuntimeException(
 	    __METHOD__ . ' filename: ' . $filename . ' does not exist for ' .
-	    'authorative autoloader.');
+	    'authoritative autoloader.');
       }
-      
-      require $filename;
    }
    
    public function register()
