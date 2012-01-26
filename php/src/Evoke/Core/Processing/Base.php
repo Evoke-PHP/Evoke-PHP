@@ -28,8 +28,7 @@ abstract class Base
    public function __construct(Array $setup)
    {
       $this->setup = array_merge(
-	 array('App'            => NULL,
-	       'EventManager'   => NULL,
+	 array('EventManager'   => NULL,
 	       'Event_Prefix'   => NULL,
 	       'Match_Required' => true,
 	       'Request_Keys'   => array(),

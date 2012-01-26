@@ -23,8 +23,7 @@ class Logger
    public function __construct($setup=array())
    {
       $this->setup = array_merge(
-	 array('Container'         => NULL,
-	       'Default_Level'     => LOG_INFO,
+	 array('Default_Level'     => LOG_INFO,
 	       'Default_Level_Str' => 'Level_',
 	       'EventManager'      => NULL,
 	       'Mask'              => NULL,
@@ -38,14 +37,15 @@ class Logger
 		  LOG_INFO    => 'Info',
 		  LOG_DEBUG   => 'Debug'),
 	       'Logging_Mandatory' => true,
-	       'Time_Format'       => 'Y-M-d@H:i:sP',
-	       'Num_Levels'        => 8),
+	       'Num_Levels'        => 8,
+	       'ObjectHandler'         => NULL,
+	       'Time_Format'       => 'Y-M-d@H:i:sP'),
 	 $setup);
 
-      if (!$this->setup['Container'] instanceof Container)
+      if (!$this->setup['ObjectHandler'] instanceof Iface\ObjectHandler)
       {
 	 throw new \InvalidArgumentException(
-	    __METHOD__ . ' requires Container');
+	    __METHOD__ . ' requires ObjectHandler');
       }
 
       if (!$this->setup['EventManager'] instanceof EventManager)
@@ -94,7 +94,7 @@ class Logger
 	 return;
       }
 
-      $time = $this->setup['Container']->getNew('DateTime', 'now');
+      $time = $this->setup['ObjectHandler']->getNew('DateTime', 'now');
 
       $message += array(
 	 'Date_Time'    => $time->format($this->setup['Time_Format']),

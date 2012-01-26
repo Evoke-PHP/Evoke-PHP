@@ -4,7 +4,7 @@ namespace Evoke\Core;
  *  This holds all of the important resources that classes could need - one of
  *  them being the inherited container which allows any object to be created.
  */
-class App extends Container
+class App extends ObjectHandler
 {
    private $em;
    private $session;

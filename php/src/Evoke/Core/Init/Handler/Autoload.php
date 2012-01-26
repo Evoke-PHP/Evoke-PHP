@@ -17,9 +17,9 @@ class Autoload implements \Evoke\Core\Iface\Handler
 	  \endverbatim
       */
       $this->setup = array_merge(array('Authoritative' => true,
-				       'Base_Dir'      => NULL,
+                                       'Base_Dir'      => \NULL,
 				       'Extension'     => '.php',
-				       'Namespace'     => NULL),
+				       'Namespace'     => \NULL),
 				 $setup);
 
       if (!is_string($this->setup['Base_Dir']))

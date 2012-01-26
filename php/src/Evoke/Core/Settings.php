@@ -6,7 +6,7 @@ class Settings implements \ArrayAccess
    protected $frozen;
    protected $variable;
    
-   public function __construct(Array $setup)
+   public function __construct(Array $setup=array())
    {
       $setup += array('Frozen'    => array(),
 		      'Variable'  => array());
