@@ -228,7 +228,7 @@ class Error implements \Evoke\Core\Iface\Handler
 			array('div',
 			      array('class' => 'Description'),
 			      array('Children' => $descriptionElems))))));
-      $this->xwr->outputXHTML();
+      $this->xwr->output();
    }
 }
 // EOF

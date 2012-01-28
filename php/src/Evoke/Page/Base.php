@@ -1,13 +1,32 @@
 <?php
 namespace Evoke\Page;
-/// Create the app object and run the page with the load method.
+/// The basic definition of a page.
 abstract class Base
 {
-   protected $app;
-
-   public function __construct()
+   protected $factory;
+   protected $instanceManager;
+   protected $setup;
+   
+   public function __construct(Array $setup)
    {
-      $this->app = new \Evoke\Core\App();
+      $this->setup = array_merge(array('Factory'         => NULL,
+				       'InstanceManager' => NULL),
+				 $setup);
+
+      if (!$this->setup['Factory'] instanceof \Evoke\Core\Factory)
+      {
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
+      }
+      
+      if (!$this->setup['InstanceManager'] instanceof
+	  \Evoke\Core\Iface\InstanceManager)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires InstanceManager');
+      }
+
+      $this->factory =& $this->setup['Factory'];
+      $this->instanceManager =& $this->setup['InstanceManager'];
    }
 
    /********************/

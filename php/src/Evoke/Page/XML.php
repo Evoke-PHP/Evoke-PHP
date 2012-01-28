@@ -5,19 +5,30 @@ abstract class XML extends Base
    protected $tr;
    protected $xwr;
    
-   public function __construct(Array $setup=array())
+   public function __construct(Array $setup)
    {
-      parent::__construct();
+      $setup += array('Start'      => array(),
+		      'Start_Base' => array(
+			 'CSS' => array('/csslib/global.css',
+					'/csslib/common.css')),
+		      'Translator' => NULL,
+		      'XWR'        => NULL);
 
-      $this->setup = array_merge(
-	 array('Start'         => array(),
-	       'Start_Base'    => array(
-		  'CSS' => array('/csslib/global.css',
-				 '/csslib/common.css'))),
-	 $setup);
+      if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires Translator');
+      }
+      
+      if (!$setup['XWR'] instanceof \Evoke\Core\XWR)
+      {
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires XWR');
+      }
+      
+      parent::__construct($setup);
 
-      $this->tr = $this->app->getTranslator();
-      $this->xwr = $this->app->getXWR();
+      $this->tr = $this->setup['Translator'];
+      $this->xwr = $this->setup['XWR'];
    }
    
    /******************/
@@ -29,6 +40,7 @@ abstract class XML extends Base
       $this->start();
       $this->content();
       $this->end();
+      $this->output();
    }
    
    /*********************/
@@ -38,6 +50,11 @@ abstract class XML extends Base
    protected function end()
    {
       $this->xwr->writeEnd();
+   }
+
+   protected function output()
+   {
+      $this->xwr->output();
    }
    
    protected function start()

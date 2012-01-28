@@ -9,13 +9,21 @@ class Router
    
    public function __construct(Array $setup)
    {
-      $this->setup = array_merge(array('App'           => NULL,
-				       'Response_Base' => NULL),
+      $this->setup = array_merge(array('Factory'         => NULL,
+				       'InstanceManager' => NULL,
+				       'Response_Base'   => NULL),
 				 $setup);
 
-      if (!$this->setup['App'] instanceof \Evoke\Core\App)
+      if (!$this->setup['Factory'] instanceof \Evoke\Core\Factory)
       {
-	 throw new \InvalidArgumentException(__METHOD__ . ' requires App');
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
+      }
+      
+      if (!$this->setup['InstanceManager'] instanceof
+	  \Evoke\Core\Iface\InstanceManager)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires InstanceManager');
       }
       
       if (!is_string($this->setup['Response_Base']))
@@ -62,9 +70,12 @@ class Router
       // Create the response object.
       try
       {
-	 return $this->setup['App']->getNew(
+	 return $this->setup['InstanceManager']->create(
 	    $response,
-	    array_merge(array('App' => $this->setup['App']), $params));
+	    array_merge(
+	       array('Factory'         => $this->setup['Factory'],
+		     'InstanceManager' => $this->setup['InstanceManager']),
+	       $params));
       }
       catch (\Exception $e)
       {

@@ -26,6 +26,7 @@ class Logger
 	 array('Default_Level'     => LOG_INFO,
 	       'Default_Level_Str' => 'Level_',
 	       'EventManager'      => NULL,
+	       'InstanceManager'   => NULL,
 	       'Mask'              => NULL,
 	       'Levels'            => array(
 		  LOG_EMERG   => 'Emergency',
@@ -38,15 +39,8 @@ class Logger
 		  LOG_DEBUG   => 'Debug'),
 	       'Logging_Mandatory' => true,
 	       'Num_Levels'        => 8,
-	       'ObjectHandler'         => NULL,
 	       'Time_Format'       => 'Y-M-d@H:i:sP'),
 	 $setup);
-
-      if (!$this->setup['ObjectHandler'] instanceof Iface\ObjectHandler)
-      {
-	 throw new \InvalidArgumentException(
-	    __METHOD__ . ' requires ObjectHandler');
-      }
 
       if (!$this->setup['EventManager'] instanceof EventManager)
       {
@@ -54,6 +48,12 @@ class Logger
 	    __METHOD__ . ' requires EventManager');
       }
             
+      if (!$this->setup['InstanceManager'] instanceof Iface\InstanceManager)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires InstanceManager');
+      }
+
       if (!isset($this->setup['Mask']))
       {
 	 // Default to all levels logged.
@@ -94,7 +94,7 @@ class Logger
 	 return;
       }
 
-      $time = $this->setup['ObjectHandler']->getNew('DateTime', 'now');
+      $time = $this->setup['InstanceManager']->create('DateTime', 'now');
 
       $message += array(
 	 'Date_Time'    => $time->format($this->setup['Time_Format']),

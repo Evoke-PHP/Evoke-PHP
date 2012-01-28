@@ -28,20 +28,17 @@ class XWR extends \XMLWriter
    /******************/
    
    /** Get the XHTML that has been created.
-    *  @param flush \bool Whether to flush the XHTML buffer (default false).
     *  \return A string of the XHTML.
     */
-   public function getXHTML($flush=false)
+   public function get()
    {
-      return $this->outputMemory($flush);
+      return $this->outputMemory(false);
    }
    
-   /** Output the XHTML that has been created.
-    *  @param flush \bool Whether to clear the XHTML buffer (default true).
-    */
-   public function outputXHTML($flush=true)
+   /// Output the XHTML that has been created.
+   public function output()
    {
-      echo($this->outputMemory($flush));
+      echo($this->outputMemory(true));
    }
 
    /** Write XML elements into the current document.
@@ -167,30 +164,12 @@ class XWR extends \XMLWriter
 	 }
       }
    }
-   
-   /** Write a header to show that the document should be cached. This must
-    *  come before any output is set in the document. (i.e the XWR is output).
-    *  @param days    \int The number of days to cache the document for.
-    *  @param hours   \int The number of hours to cache the document for.
-    *  @param minutes \int The number of minutes to cache the document for.
-    *  @param seconds \int The number of seconds to cache the document for.
-    */
-   public function writeCache($days=0, $hours=0, $minutes=0, $seconds=0)
-   {
-      // Calculate the offset in seconds.
-      $offset = ((((($days * 24) + $hours) * 60) + $minutes) * 60) + $seconds;
-
-      header('Pragma: public');
-      header('Cache-Control: must-revalidate maxage=' . $offset);
-      header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
-   }
 
    /// End the html page and write the output.
    public function writeEnd()
    {
       $this->endElement(); // body
       $this->endElement(); // html
-      $this->outputXHTML();
    }
 
    /// Write the DTD, html head and start the body of the document.

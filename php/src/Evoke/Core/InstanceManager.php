@@ -1,14 +1,23 @@
 <?php
 namespace Evoke\Core;
-/** ObjectHandler implements the interface to object creation.  It is important
- *  to create objects using an object from a class like this so that the code
- *  creating an object is not tightly coupled to an implementation of the class
- *  of object that it is creating.
- * 
- *  Testing code with 'new' is difficult, but testing it with
- *  $objectHandler->getNew('xxx') is easy.
+/** InstanceManager implements the interface to manage instances.  It is used to
+ *  create objects and retrieve shared objects in the system.  Using an instance
+ *  manager decouples code that would otherwise use the new operator and gives
+ *  control for the creation of instances, avoiding nasty singleton type
+ *  methods.
+ *
+ *  Calling `new foo()` or bar::getInstance in code makes that code require a
+ *  foo class or a bar class with a getInstance method.  This is a tight
+ *  coupling that can be avoided by using this class.  By using this class the
+ *  only requirement created in code that creates or gets instances of objects
+ *  is that it is always injected with an object that implements the
+ *  InstanceManager interface.
+ *
+ *  Using this class for all of your objects and shared resources makes it easy
+ *  to test your code (you won't need stubs) as you will be able to inject all
+ *  of the required objects.
  */
-class ObjectHandler implements Iface\ObjectHandler
+class InstanceManager implements Iface\InstanceManager
 {
    protected static $shared = array();
 
@@ -29,14 +38,14 @@ class ObjectHandler implements Iface\ObjectHandler
     *
     *  \return The object that has been created.
     */
-   public function getNew(/* Var Args */)
+   public function create(/* Var Args */)
    {
       $numArgs = func_num_args();
       
       if ($numArgs === 0)
       {
 	 throw new \BadMethodCallException(
-	    __METOHD__ . ' needs at least one argument.');
+	    __METHOD__ . ' needs at least one argument.');
       }
       
       $args = func_get_args();
@@ -73,14 +82,14 @@ class ObjectHandler implements Iface\ObjectHandler
     *  \return The shared object that has been retrieved or created (if it
     *  didn't exist.)
     */
-   public function getShared(/* Var Args */)
+   public function get(/* Var Args */)
    {
       $numArgs = func_num_args();
       
       if ($numArgs === 0)
       {
 	 throw new \BadMethodCallException(
-	    __METOHD__ . ' needs at least one argument.');
+	    __METHOD__ . ' needs at least one argument.');
       }
       
       $args = func_get_args();
