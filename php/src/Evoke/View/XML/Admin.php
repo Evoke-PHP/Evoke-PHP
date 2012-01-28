@@ -81,7 +81,8 @@ class Admin extends Base
       if (!empty($failures))
       {
 	 $this->xwr->write(
-	    $this->app->getNew('Element_Failures', array('Data' => $failures)));
+	    $this->instanceManager->create(
+	       'Element_Failures', array('Data' => $failures)));
       }
    }
 
@@ -92,8 +93,8 @@ class Admin extends Base
       if (!empty($notifications))
       {
 	 $this->xwr->write(
-	    $this->app->getNew('Element_Notifications',
-			       array('Data' => $notifications)));
+	    $this->instanceManager->create(
+	       'Element_Notifications', array('Data' => $notifications)));
       }
    }
 
@@ -153,10 +154,9 @@ class Admin extends Base
    protected function writeCurrentRecord($record, $isNew)
    {
       $this->xwr->write(
-	 $this->app->getNew(
+	 $this->instanceManager->create(
 	    'Element_Form_Entry',
-	    array('App'            => $this->app,
-		  'Field_Values'   => $record,
+	    array('Field_Values'   => $record,
 		  'Submit_Buttons' => $this->getSubmitButtons($isNew),
 		  'Table_Info'     => $this->setup['Table_Info'],
 		  'Table_Name'     => $this->setup['Table_Name'],
@@ -179,10 +179,9 @@ class Admin extends Base
 		     'type'  => 'submit',
 		     'value' => $this->tr->get('Cancel'))));
       
-      $recordToDelete = $this->app->getNew(
+      $recordToDelete = $this->instanceManager->create(
 	 'Element_Record_List_Table',
-	 array_merge(array('App'            => $this->app,
-			   'Attribs'        => array(
+	 array_merge(array('Attribs'        => array(
 			      'class' => 'Delete_Request Record_List'),
 			   'Data'           => $request,
 			   'Heading_Setup'  => array('Inline' => true),
@@ -192,7 +191,7 @@ class Admin extends Base
 			   'Translator'     => $this->tr)));      
 			   
       $this->xwr->write(
-	 $this->app->getNew(
+	 $this->instanceManager->create(
 	    'Element_Form_Dialog',
 	    array('Attribs'          => array('class'  => 'Dialog Bad',
 					      'action' => '',
@@ -207,10 +206,10 @@ class Admin extends Base
    protected function writeHeader($header)
    {
       $this->xwr->write(
-	 $this->app->getNew('Element_Admin_Header',
-			    array('App'        => $this->app,
-				  'Languages'  => $header['Languages'],
-				  'Translator' => $this->tr)));
+	 $this->instanceManager->create(
+	    'Element_Admin_Header',
+	    array('Languages'  => $header['Languages'],
+		  'Translator' => $this->tr)));
 
       if (isset($this->setup['Page_Name']))
       {
@@ -226,11 +225,10 @@ class Admin extends Base
    protected function writeRecordList($data)
    {
       $this->xwr->write(
-	 $this->app->getNew(
+	 $this->instanceManager->create(
 	    'Element_Record_List_Table',
 	    array_merge(
-	       array('App'            => $this->app,
-		     'Data'           => $data,
+	       array('Data'           => $data,
 		     'Row_Buttons'    => array(
 			array(
 			   'input',

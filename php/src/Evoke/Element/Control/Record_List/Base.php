@@ -34,17 +34,32 @@ class Element_Record_List extends Element
 
       /// \todo Update to new element interface.
       throw new Exception(__METHOD__ . ' requires update to new element interface.');
+
+      if (!isset($this->setup['Data']))
+      {
+	 throw new \InvalidArgumentException(__METHOD__ . ' requires Data');
+      }
       
+      if (!isset($this->setup['Row_Buttons']))
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires Row_Buttons');
+      }
+
+      if (!isset($this->setup['Table_Name']))
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires Table_Name');
+      }
+
+      if (!$this->setup['Translator'] instanceof Translator)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires Translator');
+      }
+
       $this->data = $this->setup['Data'];
-
-      $this->app->needs(
-	 array(
-	    'Instance' => array('Translator' => $this->setup['Translator']),
-	    'Set'      => array(
-	       'Data'           => $this->setup['Data'],
-	       'Row_Buttons'    => $this->setup['Row_Buttons'],
-	       'Table_Name'     => $this->setup['Table_Name'])));
-
+      
       // Merge the Heading Setup so that information is added to a blank
       // heading setup whereas the default is for only a top heading.
       if (isset($setup['Heading_Setup']) && !empty($setup['Heading_Setup']))

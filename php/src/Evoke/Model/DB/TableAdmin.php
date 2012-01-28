@@ -4,43 +4,49 @@ namespace Evoke\Model\DB;
 class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 {
    protected $failures;
+   protected $info;
    protected $notifications;
    protected $sessionManager;
    
    public function __construct(Array $setup)
    {
-      $setup += array('Auto_Fields'     => array('ID'),
-		      'Failures'        => NULL,
-		      'Notifications'   => NULL,
-		      'Session_Manager' => NULL,
-		      'Table_Info'      => NULL,
-		      'Validate'        => true);
+      $setup += array('Auto_Fields'    => array('ID'),
+		      'Failures'       => NULL,
+		      'Info'           => NULL,
+		      'Notifications'  => NULL,
+		      'SessionManager' => NULL,
+		      'Validate'       => true);
 
-      parent::__construct($setup);
-
-      if (!$this->setup['Failures'] instanceof \Evoke\Core\MessageArray)
+      if (!$setup['Failures'] instanceof \Evoke\Core\MessageArray)
       {
 	 throw new \InvalidArgumentException(
 	    __METHOD__ . ' requires Failures as Message_Array');
       }
 
-      if (!$this->setup['Notifications'] instanceof \Evoke\Core\MessageArray)
+      if (!$setup['Info'] instanceof \Evoke\Core\DB\Table\Info)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires DB Table Info');
+      }
+
+      if (!$setup['Notifications'] instanceof \Evoke\Core\MessageArray)
       {
 	 throw new \InvalidArgumentException(
 	    __METHOD__ . ' requires Notifications as Message_Array');
       }
 
-      $this->app->needs(
-	 array('Instance' => array(
-		  'Session_Manager' => $this->setup['Session_Manager'],
-		  'Table_Info'      => $this->setup['Table_Info']),
-	       'Instances' => array(
-		  'Message_Array' => array($this->setup['Failures'],
-					   $this->setup['Notifications']))));
+      if (!$setup['SessionManager'] instanceof \Evoke\Core\SessionManager)
+      {
+	 throw new \InvalidArgumentException(
+	    __METHOD__ . ' requires SessionManager');
+      }
+
+      parent::__construct($setup);
       
       $this->failures =& $this->setup['Failures'];
+      $this->info =& $this->setup['Info'];
       $this->notifications =& $this->setup['Notifications'];
-      $this->sessionManager =& $this->setup['Session_Manager'];
+      $this->sessionManager =& $this->setup['SessionManager'];
    }
 
    /******************/
@@ -60,9 +66,9 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
       if ($this->setup['Validate'])
       {
-	 if (!$this->setup['Table_Info']->isValid($record))
+	 if (!$this->info->isValid($record))
 	 {
-	    $this->failures = $this->setup['Table_Info']->getFailures();
+	    $this->failures = $this->info->getFailures();
 	    return false;
 	 }
       }
@@ -210,9 +216,9 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
 	 if ($this->setup['Validate_Record'])
 	 {
-	    if (!$this->setup['Table_Info']->isValid($record))
+	    if (!$this->info->isValid($record))
 	    {
-	       $this->failures = $this->setup['Table_Info']->getFailures();
+	       $this->failures = $this->info->getFailures();
 	       return false;
 	    }
 	 }

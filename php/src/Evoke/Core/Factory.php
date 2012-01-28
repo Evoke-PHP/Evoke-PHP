@@ -194,12 +194,16 @@ class Factory
 	 $this->namespace['Model'] . 'DB\Joint', $setup);
    }
    
-   /// Get processing that takes no action for a page.
-   public function getProcessingNone(Array $setup=array())
+   /** Get a processing object.
+    *  @param processing \string The class of processing.
+    *  @param setup \array Setup for the processing class.
+    */
+   public function getProcessing($processing, Array $setup=array())
    {
       return $this->instanceManager->create(
-	 $this->namespace['Core'] . 'Processing\None',
-	 array('EventManager' => $this->getEventManager()));
+	 $processing,
+	 array_merge($setup,
+		     array('EventManager' => $this->getEventManager())));
    }
    
    /// Get the session object.
