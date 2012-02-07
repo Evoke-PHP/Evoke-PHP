@@ -43,26 +43,24 @@ class MapperRegex extends Mapper
 	 *
 	 *  The whole structure is outlined below ('//' is a regex String):
 	 *     
-	 \verbatim
-	 // First Level Regex.
-	 'Match'    => '//',
-	 // The definition of the parameters with their second level regex.
-	 'Params'   => array(
-	 array('Name'     => array('Pattern'         => '//',
-	 'Replacement'     => '//',
-	 'URI_Replacement' => '//'),
-	 'Required' => true,
-	 'Value'    => array('Pattern'         => '//',
-	 'Replacement'     => '//',
-	 'URI_Replacement' => '//'),
-	 // The second level Regex used to calculate the Response class (or the
-	 // URI for the response class) if this is a chained non-authoritative
-	 // Mapper.
-	 'Response' => array('Pattern'         => '//',
-	 'Replacement'     => '//',
-	 'URI_Replacement' => '//')
-	 \endverbatim		   
-	*/ 
+	 * // First Level Regex.
+	 * 'Match'    => '//',
+	 * // The definition of the parameters with their second level regex.
+	 * 'Params'   => array(
+	 *    array('Name'     => array('Pattern'         => '//',
+	 *                              'Replacement'     => '//',
+	 *                              'URI_Replacement' => '//'),
+	 *          'Required' => true,
+	 *          'Value'    => array('Pattern'         => '//',
+	 *                              'Replacement'     => '//',
+	 *                              'URI_Replacement' => '//'),
+	 * // The second level Regex used to calculate the Response class (or the
+	 * // URI for the response class) if this is a chained non-authoritative
+	 * // Mapper.
+	 * 'Response' => array('Pattern'         => '//',
+	 *                     'Replacement'     => '//',
+	 *                     'URI_Replacement' => '//')
+	 */ 
 	public function __construct(Array $setup)
 	{
 		$setup += array('Match'    => NULL,

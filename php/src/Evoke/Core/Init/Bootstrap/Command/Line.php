@@ -7,23 +7,23 @@ namespace Evoke\Core\Init\Command;
 //    _GET='{ "key1": "val1", "key2": "val2" }'\&foo='"bar"' 
 if ($argc > 1)
 {
-   $parsedArgs = array(); 
+	$parsedArgs = array(); 
    
-   for ($i = 1; $i < $argc; $i++)
-   {
-      parse_str($argv[$i], $parsedArgs[$i]);
-   }
+	for ($i = 1; $i < $argc; $i++)
+	{
+		parse_str($argv[$i], $parsedArgs[$i]);
+	}
    
-   foreach ($parsedArgs as $arg)
-   {
-      foreach ($arg as $key => $val)
-      {
-	 // Set the global variable of name $key to the json decoded value.
-	 $$key = json_decode($val, true);
-      }
-   }
+	foreach ($parsedArgs as $arg)
+	{
+		foreach ($arg as $key => $val)
+		{
+			// Set the global variable of name $key to the json decoded value.
+			$$key = json_decode($val, true);
+		}
+	}
 
-   unset($parsedArgs);
+	unset($parsedArgs);
 }
 
 // EOF

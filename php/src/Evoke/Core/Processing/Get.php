@@ -3,31 +3,31 @@ namespace Evoke\Core\Processing;
 
 class Get extends Base
 { 
-   public function __construct(Array $setup)
-   {
-      $setup += array('Event_Prefix'   => 'Get.',
-		      'Request_Method' => 'GET');
+	public function __construct(Array $setup)
+	{
+		$setup += array('Event_Prefix'   => 'Get.',
+		                'Request_Method' => 'GET');
       
-      parent::__construct($setup);
-   }
+		parent::__construct($setup);
+	}
 
-   /******************/
-   /* Public Methods */
-   /******************/
+	/******************/
+	/* Public Methods */
+	/******************/
 
-   public function getRequest()
-   {
-      $getRequest = $_GET;
+	public function getRequest()
+	{
+		$getRequest = $_GET;
 
-      /// \todo Deal with the language from the get request properly.
-      unset($getRequest['l']);
+		/// \todo Deal with the language from the get request properly.
+		unset($getRequest['l']);
       
-      if (empty($getRequest))
-      {
-	 return array('' => '');
-      }
+		if (empty($getRequest))
+		{
+			return array('' => '');
+		}
 
-      return $getRequest;
-   }
+		return $getRequest;
+	}
 }
 // EOF

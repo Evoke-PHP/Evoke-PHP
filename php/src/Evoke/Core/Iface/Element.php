@@ -3,6 +3,6 @@ namespace Evoke\Core\Iface;
 
 interface Element extends \ArrayAccess
 {
-   public function set(Array $data);
+	public function set(Array $data);
 }
 // EOF

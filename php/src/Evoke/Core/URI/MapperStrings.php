@@ -6,58 +6,58 @@ namespace Evoke\Core\URI;
  */
 class MapperStrings extends Mapper
 {
-   public function __construct(Array $setup)
-   {
-      $setup += array('Rules' => NULL);
+	public function __construct(Array $setup)
+	{
+		$setup += array('Rules' => NULL);
 
-      if (!is_array($setup['Rules']))
-      {
-	 throw new \InvalidArgumentException(
-	    __METHOD__ . ' requires Rules as array');
-      }
+		if (!is_array($setup['Rules']))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Rules as array');
+		}
 
-      foreach ($setup['Rules'] as $rule)
-      {
-	 if (!isset($rule['Match'], $rule['Replacement']))
-	 {
-	    throw new \InvalidArgumentException(
-	       __METHOD__ . ' requires Rule with Match and Replacement.');
-	 }
-      }	    
+		foreach ($setup['Rules'] as $rule)
+		{
+			if (!isset($rule['Match'], $rule['Replacement']))
+			{
+				throw new \InvalidArgumentException(
+					__METHOD__ . ' requires Rule with Match and Replacement.');
+			}
+		}	    
       
-      parent::__construct($setup);
-   }
+		parent::__construct($setup);
+	}
    
-   /******************/
-   /* Public Methods */
-   /******************/
+	/******************/
+	/* Public Methods */
+	/******************/
 
-   public function matches($uri)
-   {
-      foreach ($this->setup['Rules'] as $rule)
-      {
-	 if (strpos($uri, $rule['Match']) !== false)
-	 {
-	    return true;
-	 }
-      }
+	public function matches($uri)
+	{
+		foreach ($this->setup['Rules'] as $rule)
+		{
+			if (strpos($uri, $rule['Match']) !== false)
+			{
+				return true;
+			}
+		}
       
-      return false;
-   }
+		return false;
+	}
    
-   public function getParams($uri)
-   {
-      return array();
-   }
+	public function getParams($uri)
+	{
+		return array();
+	}
    
-   public function getResponse($uri)
-   {
-      foreach ($this->setup['Rules'] as $rule)
-      {
-	 $uri = str_replace($rule['Match'], $rule['Replacement'], $uri);
-      }
+	public function getResponse($uri)
+	{
+		foreach ($this->setup['Rules'] as $rule)
+		{
+			$uri = str_replace($rule['Match'], $rule['Replacement'], $uri);
+		}
 
-      return $uri;
-   }
+		return $uri;
+	}
 }
 // EOF

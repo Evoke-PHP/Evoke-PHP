@@ -3,13 +3,13 @@ namespace Evoke\Core\Iface\URI;
 
 interface Router
 {
-   /// Append a URI mapper to the router rules.
-   public function appendMapper(Mapper $map);
+	/// Append a URI mapper to the router rules.
+	public function appendMapper(Mapper $map);
 
-   /// Create a response from the URI and the mapping rules.
-   public function createResponse();
+	/// Create a response from the URI and the mapping rules.
+	public function createResponse();
 
-   /// Prepend a URI mapper to the router rules.
-   public function prependMapper(Mapper $map);
+	/// Prepend a URI mapper to the router rules.
+	public function prependMapper(Mapper $map);
 }
 // EOF

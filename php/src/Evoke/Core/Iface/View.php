@@ -3,6 +3,6 @@ namespace Evoke\Core\Iface;
 
 interface View
 {
-   public function write($data);
+	public function write($data);
 }
 // EOF
