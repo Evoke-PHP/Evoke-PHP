@@ -25,7 +25,7 @@ namespace Evoke\Data;
     }
     \endcode
  */
-class Base implements \Iterator, \ArrayAccess
+class Base implements \Evoke\Core\Iface\Data
 {
    /** The data is protected, which is important to note in this class.  Being
     *  protected means that it will still be accessible from extended classes,
@@ -91,10 +91,11 @@ class Base implements \Iterator, \ArrayAccess
       
       throw new \OutOfBoundsException(
 	 __METHOD__ . ' record does not refer to: ' .
-	 var_export($referenceName, true));
+	 var_export($referenceName, true) . ' references are: ' . var_export($this->setup['References'], true));
    }
 
-   /** Get the record that we are managing as a simple array.
+   /** Get the current record as a simple array (without iterator or reference
+    *  access).
     *  \return Array The record that we are managing.
     */
    public function getRecord()
@@ -113,7 +114,7 @@ class Base implements \Iterator, \ArrayAccess
    /** Set the data that we are managing.
     *  @param \array The data we want to manage.
     */
-   public function setData($data)
+   public function setData(Array $data)
    {
       if (!is_array($data))
       {
@@ -129,7 +130,10 @@ class Base implements \Iterator, \ArrayAccess
    /* Implements Iterator */
    /***********************/
 
-   /// We are our own iterator, so the current is us.
+   /** Return the current record of data (as a Data object with iterator and
+    *  reference access).  This is just the object as the object implements the
+    *  iterator and references.
+    */
    public function current()
    {
       return $this;
@@ -141,8 +145,8 @@ class Base implements \Iterator, \ArrayAccess
       return key($this->data);
    }
 
-   /** Go to the next item internally and return ourself as we are the
-    *  iterator that provides access to data.
+   /** Get the next record of data. Set the next record within the Data object
+    *  and return the object.
     */
    public function next()
    {
@@ -168,7 +172,9 @@ class Base implements \Iterator, \ArrayAccess
       }
    }
 
-   /// Whether the iteration point is valid.
+   /** Return whether there are still data records to iterate over.
+    *  \return \bool Whether the current data record is valid.
+    */
    public function valid()
    {
       return (current($this->data) !== false);
@@ -207,7 +213,7 @@ class Base implements \Iterator, \ArrayAccess
     */
    public function offsetUnset($offset)
    {
-      throw new RuntimeException(
+      throw new \RuntimeException(
          __METHOD__ . ' should never be called - data is only transferrable ' .
 	 'it is not to be modified.');
    }
