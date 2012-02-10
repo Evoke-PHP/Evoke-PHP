@@ -91,9 +91,9 @@ class SessionManager
 	}
    
 	/// Return the string of the session ID.
-	public function id()
+	public function getID()
 	{
-		return $this->setup['Session']->id();
+		return $this->setup['Session']->getID();
 	}
 
 	/** Increment the value in the session by the offset.

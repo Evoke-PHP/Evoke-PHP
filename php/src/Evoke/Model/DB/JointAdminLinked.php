@@ -90,7 +90,7 @@ class JointAdminLinked extends Admin
       
 		if (isset($link['Session_Manager']))
 		{
-			$dir .= $link['Session_Manager']->id() . '/' .
+			$dir .= $link['Session_Manager']->getID() . '/' .
 				$link['Session_Manager']->keyCount() . '/';
 			$this->addToSession($link, $file);
 		}
@@ -272,7 +272,7 @@ class JointAdminLinked extends Admin
 		$srcBase = $link['Storage'] . $firstRecord[$ref->getChildField()];
       
 		// Make sure the destination exists or is created.
-		$destBase = $link['Incoming'] . $this->sessionManager->id() . '/';
+		$destBase = $link['Incoming'] . $this->sessionManager->getID() . '/';
       
 		if (!$this->setup['File_System']->is_dir($destBase))
 		{
@@ -299,7 +299,7 @@ class JointAdminLinked extends Admin
 	/// Delete the incoming directory and reset the session.
 	private function deleteIncoming($link)
 	{
-		$dir = $link['Incoming'] . $this->sessionManager->id();
+		$dir = $link['Incoming'] . $this->sessionManager->getID();
       
 		if ($this->setup['File_System']->is_dir($dir))
 		{
@@ -317,7 +317,7 @@ class JointAdminLinked extends Admin
 	/// Move the incoming files to storage.
 	private function moveIncomingToStorage($link, $data, $ref)
 	{
-		$srcBase = $link['Incoming'] . $this->sessionManager->id() . '/';
+		$srcBase = $link['Incoming'] . $this->sessionManager->getID() . '/';
 		$destBase = $link['Storage'];
 
 		foreach ($data as $num => $record)

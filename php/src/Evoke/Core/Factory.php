@@ -10,7 +10,6 @@ class Factory
 	protected $namespace;
 	protected $settings;
    
-	// Get or create the shared resources for the system.
 	public function __construct(Array $setup=array())
 	{
 		$setup += array('InstanceManager' => NULL,

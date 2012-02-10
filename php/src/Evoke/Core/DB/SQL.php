@@ -420,6 +420,7 @@ class SQL implements \Evoke\Core\Iface\DB
 	/** Simple SQL DELETE statement wrapper.
 	 *  @param tables \mixed Tables to delete from.
 	 *  @param conditions \mixed Conditions (see class description).
+	 *  \return The number of rows affected by the delete.
 	 */
 	public function delete($tables, $conditions)
 	{
@@ -440,34 +441,22 @@ class SQL implements \Evoke\Core\Iface\DB
 
 		$q = rtrim($q, 'AND ');
       
-		// Prepare
 		try
 		{
 			$stmt = $this->prepare($q);
+			$stmt->execute($conditions);
+
+			return $stmt->rowCount();
 		}
 		catch (\Exception $e)
 		{
 			throw new Exception_DB(
-				__METHOD__,
-				'Prepare query: ' . var_export($q, true),
+				__METHOD__ . ' query: ' . var_export($q, true) .
+				' conditions: ' . var_export($conditions, true),
 				$this->setup['DB'],
 				$e);
 		}
-
-		// Execute
-		try
-		{
-			$stmt->execute($conditions);
-		}
-		catch (\Exception $e)
-		{
-			throw new Exception_DB(
-				__METHOD__,
-				'Execute with conditions: ' . var_export($conditions, true),
-				$stmt);
-		}
 	}
-
 
 	/** Simple SQL INSERT statement wrapper.
 	 *  @param table \string Table to insert into.

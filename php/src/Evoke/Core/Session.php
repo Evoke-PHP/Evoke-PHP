@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core;
 
-class Session
+class Session implements Iface\Session
 { 
 	public function __construct()
 	{
@@ -38,11 +38,11 @@ class Session
 	}
 
 	/// Return the string of the session ID.
-	public function id()
+	public function getID()
 	{
 		if (PHP_SAPI === 'cli')
 		{
-			return 'SESSION';
+			return 'CLI_SESSION';
 		}
 		else
 		{

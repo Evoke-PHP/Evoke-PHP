@@ -33,7 +33,8 @@ class Loader
 			'Constant',
 			array('Default_Language'             => 'EN',
 			      'Development_Servers'          => array(),
-			      'Max_Length_Exception_Message' => 6000));
+			      'Max_Length_Exception_Message' => 6000,
+			      'SQL_Date_Time_Format'         => 'Y-m-d H:i:s'));
 
 		/** Initialize the DB connections for the evoke system. This should be an
 		 *  array of connection settings.  Each item in the array should be of the

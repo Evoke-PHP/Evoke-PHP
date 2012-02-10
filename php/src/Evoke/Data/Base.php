@@ -8,21 +8,21 @@ namespace Evoke\Data;
  *
  *  Below is a usage example containing each different type of access:
  *  \code
- $obj = new Data();
- $obj->setData($data);
-
- // Traverse over each record in the data.
- foreach ($obj as $key => $record)
- {
- // Access a field as though it is an array.
- $x = $record['Field'];
-
- // Access joint data (with ->).  The joint data is itself a data object.
- foreach ($record->list as $listRecord)
- {
- $y = $listRecord['Joint_Record_Field'];
- }
- }
+ *  $obj = new Data();
+ *  $obj->setData($data);
+ *
+ *  // Traverse over each record in the data.
+ *  foreach ($obj as $key => $record)
+ *  {
+ *     // Access a field as though it is an array.
+ *     $x = $record['Field'];
+ *
+ *     // Access joint data (with ->).  The joint data is itself a data object.
+ *     foreach ($record->list as $listRecord)
+ *     {
+ *        $y = $listRecord['Joint_Record_Field'];
+ *     }
+ *  }
  \endcode
 */
 class Base implements \Evoke\Core\Iface\Data
