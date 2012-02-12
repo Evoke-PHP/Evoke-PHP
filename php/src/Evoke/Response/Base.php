@@ -3,8 +3,8 @@ namespace Evoke\Response;
 
 abstract class Base
 {
-	protected $factory;
-	protected $instanceManager;
+	protected $Factory;
+	protected $InstanceManager;
 
 	public function __construct(Array $setup)
 	{
@@ -23,8 +23,8 @@ abstract class Base
 				__METHOD__ . ' requires InstanceManager');
 		}
 
-		$this->factory = $setup['Factory'];
-		$this->instanceManager = $setup['InstanceManager'];
+		$this->Factory = $setup['Factory'];
+		$this->InstanceManager = $setup['InstanceManager'];
 	}
    
 	/******************/

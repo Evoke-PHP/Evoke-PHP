@@ -3,8 +3,8 @@ namespace Evoke\Page;
 /// The basic definition of a page.
 abstract class Base
 {
-	protected $factory;
-	protected $instanceManager;
+	protected $Factory;
+	protected $InstanceManager;
 	protected $setup;
    
 	public function __construct(Array $setup)
@@ -25,8 +25,8 @@ abstract class Base
 				__METHOD__ . ' requires InstanceManager');
 		}
 
-		$this->factory =& $this->setup['Factory'];
-		$this->instanceManager =& $this->setup['InstanceManager'];
+		$this->Factory =& $this->setup['Factory'];
+		$this->InstanceManager =& $this->setup['InstanceManager'];
 	}
 
 	/********************/

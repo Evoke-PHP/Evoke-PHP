@@ -17,10 +17,10 @@ class Bootstrap
 
 		require_once $evokeDir . 'Core/Iface/InstanceManager.php';
 		require_once $evokeDir . 'Core/InstanceManager.php';
-		$this->instanceManager = new \Evoke\Core\InstanceManager();
+		$this->InstanceManager = new \Evoke\Core\InstanceManager();
       
 		require_once $evokeDir . 'Core/Init/Bootstrap.php';
-		$this->evokeBootstrap = $this->instanceManager->create(
+		$this->evokeBootstrap = $this->InstanceManager->create(
 			'\Evoke\Core\Init\Bootstrap');
 	}
 

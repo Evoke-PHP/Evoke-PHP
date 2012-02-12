@@ -20,12 +20,12 @@ class Session extends Base
 	/// Write the session so that we can see it.
 	public function writeContent($data)
 	{
-		$this->xwr->write(
+		$this->XWR->write(
 			array('div',
 			      array('class' => 'Heading'),
 			      array('Text' => 'Session')));
 
-		$this->xwr->write(
+		$this->XWR->write(
 			array('form',
 			      array('action' => '',
 			            'class'  => 'Clear_Form',
@@ -35,8 +35,8 @@ class Session extends Base
 				                  array('name'  => 'Clear',
 				                        'type'  => 'submit',
 				                        'value' => 'Clear Session'))))));
-		$this->xwr->write(array('div'));
-		$this->xwr->write(
+		$this->XWR->write(array('div'));
+		$this->XWR->write(
 			array('p',
 			      array('class' => 'Session_Data'),
 			      array('Text' => var_export($data, true))));

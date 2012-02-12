@@ -3,7 +3,7 @@ namespace Evoke\Page;
 abstract class XML extends Base
 {
 	protected $tr;
-	protected $xwr;
+	protected $XWR;
    
 	public function __construct(Array $setup)
 	{
@@ -27,8 +27,8 @@ abstract class XML extends Base
       
 		parent::__construct($setup);
 
-		$this->tr = $this->setup['Translator'];
-		$this->xwr = $this->setup['XWR'];
+		$this->Translator = $this->setup['Translator'];
+		$this->XWR = $this->setup['XWR'];
 	}
    
 	/******************/
@@ -49,12 +49,12 @@ abstract class XML extends Base
 
 	protected function end()
 	{
-		$this->xwr->writeEnd();
+		$this->XWR->writeEnd();
 	}
 
 	protected function output()
 	{
-		$this->xwr->output();
+		$this->XWR->output();
 	}
    
 	protected function start()
@@ -77,15 +77,15 @@ abstract class XML extends Base
 
 		if (!isset($start['Title']))
 		{
-			$start['Title'] = $this->tr->get('Title', $_SERVER['PHP_SELF']);
+			$start['Title'] = $this->Translator->get('Title', $_SERVER['PHP_SELF']);
 		}
 
 		if (!isset($start['Keywords']))
 		{
-			$start['Keywords'] = $this->tr->get('Keywords', $_SERVER['PHP_SELF']);
+			$start['Keywords'] = $this->Translator->get('Keywords', $_SERVER['PHP_SELF']);
 		}
       
-		$this->xwr->writeStart($start);
+		$this->XWR->writeStart($start);
 	}
    
 	/********************/

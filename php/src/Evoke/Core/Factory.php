@@ -1,14 +1,25 @@
 <?php
 namespace Evoke\Core;
-/** The factory for the core objects that are commonly used.  The factory can
+/** The Factory for the core objects that are commonly used.  The Factory can
  *  be used to create and retrieve shared objects in the system.  It provides
  *  helper methods to aid the creation of frequently used objects.
  */
 class Factory
 {
-	protected $instanceManager;   
+	/** @property $namespace
+	 * \array of namespace settings for the Factory.
+	 */
 	protected $namespace;
-	protected $settings;
+
+	/** @property $InstanceManager
+	 *  InstanceManager \object for creating new and shared objects.
+	 */
+	protected $InstanceManager;
+
+	/** @property $Settings
+	 *  Settings \object for configuring created and retrieved objects.
+	 */
+	protected $Settings;
    
 	public function __construct(Array $setup=array())
 	{
@@ -32,9 +43,9 @@ class Factory
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Settings');
 		}
 
-		$this->instanceManager = $setup['InstanceManager'];
 		$this->namespace = $setup['Namespace'];
-		$this->settings = $setup['Settings'];
+		$this->InstanceManager = $setup['InstanceManager'];
+		$this->Settings        = $setup['Settings'];
 	}
    
 	/******************/
@@ -44,38 +55,39 @@ class Factory
 	// Create a controller object.
 	public function getController(Array $setup=array())
 	{
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$this->namespace['Core'] . 'Controller',
 			array_merge(array('EventManager' => $this->getEventManager()),
 			            $setup));
 	}
 
-	/** Get a data object, specifying any referenced record data.
+	/** Get a data object, specifying any joint data.
+	 *  @param joins \array Joint data.
 	 */
-	public function getData(Array $references=array())
+	public function getData(Array $joins=array())
 	{
-		return $this->instanceManager->create(
-			$this->namespace['Data'] . 'Base', array('References' => $references));
+		return $this->InstanceManager->create(
+			$this->namespace['Data'] . 'Base', array('Joins' => $joins));
 	}
    
 	/// Return the event manager.
 	public function getEventManager()
 	{
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'EventManager');
 	}
 
 	/// Return the file system object.
 	public function getFilesystem()
 	{
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'Filesystem');
 	}
 
 	/// Create a message array.
 	public function getMessageArray()
 	{
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$this->namespace['Core'] . 'MessageArray');
 	}
    
@@ -84,7 +96,7 @@ class Factory
 	{
 		$setup += array('EventManager' => $this->getEventManager());
 
-		return $this->instanceManager->create($model, $setup);
+		return $this->InstanceManager->create($model, $setup);
 	}
 
 	/// Get a Database model.
@@ -93,7 +105,7 @@ class Factory
 		$setup += array('EventManager' => $this->getEventManager(),
 		                'SQL'          => $this->getSQL());
 
-		return $this->instanceManager->create($model, $setup);
+		return $this->InstanceManager->create($model, $setup);
 	}
 
 	/// Get Request keys for a Model DB Admin.
@@ -153,14 +165,14 @@ class Factory
 				array('Table_Name' => $setup['Table_Name']));
 		}
       
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Model'] . 'DB\TableAdmin', $setup);
 	}
    
 	/// Get a Model_Table object.
 	public function getModelDBTable(Array $setup)
 	{
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Model'] . 'DB\Table',
 			array_merge(array('EventManager'  => $this->getEventManager(),
 			                  'Failures'      => $this->getMessageArray(),
@@ -173,23 +185,23 @@ class Factory
 	public function getModelMenu($menuName)
 	{
 		$setup = array(
-			'EventManager'    => $this->getEventManager(),
-			'Failures'        => $this->getMessageArray(),
-			'Notifications'   => $this->getMessageArray(),
-			'Select_Setup'    => array(
+			'EventManager'  => $this->getEventManager(),
+			'Failures'      => $this->getMessageArray(),
+			'Joins'         => $this->getJoins(
+				array('Joins' => array(
+					      'List_ID' => array('Child_Field' => 'Menu_ID',
+					                         'Table_Name'  => 'Menu_List')),
+				      'Table_Name' => 'Menu')),
+			'Notifications' => $this->getMessageArray(),
+			'Select'        => array(
 				'Conditions' => array('Menu.Name' => $menuName),
 				'Fields'     => '*',
 				'Order'      => 'Lft ASC',
 				'Limit'      => 0),
-			'SQL'             => $this->getSQL(),
-			'Table_Name'      => 'Menu',
-			'TableReferences' => $this->getTableReferences(
-				array('References' => array(
-					      'List_ID' => array('Child_Field' => 'Menu_ID',
-					                         'Table_Name'  => 'Menu_List')),
-				      'Table_Name' => 'Menu')));
+			'SQL'           => $this->getSQL(),
+			'Table_Name'    => 'Menu');			
 
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$this->namespace['Model'] . 'DB\Joint', $setup);
 	}
 
@@ -197,11 +209,11 @@ class Factory
 	public function getPageXML($page, Array $setup=array())
 	{
 		$setup += array('Factory'         => $this,
-		                'InstanceManager' => $this->instanceManager,
+		                'InstanceManager' => $this->InstanceManager,
 		                'Translator'      => $this->getTranslator(),
 		                'XWR'             => $this->getXWR());
 
-		return $this->instanceManager->create($page, $setup);
+		return $this->InstanceManager->create($page, $setup);
 	}
    
 	/** Get a processing object.
@@ -210,7 +222,7 @@ class Factory
 	 */
 	public function getProcessing($processing, Array $setup=array())
 	{
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$processing,
 			array_merge($setup,
 			            array('EventManager' => $this->getEventManager())));
@@ -219,7 +231,7 @@ class Factory
 	/// Get the session object.
 	public function getSession()
 	{
-		return $this->instanceManager->get($this->namespace['Core'] . 'Session');
+		return $this->InstanceManager->get($this->namespace['Core'] . 'Session');
 	}
 
 	/** Get a session manager object using the default session.
@@ -228,7 +240,7 @@ class Factory
 	 */
 	public function getSessionManager($domain)
 	{
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$this->namespace['Core'] . 'SessionManager',
 			array('Domain'  => $domain,
 			      'Session' => $this->getSession()));
@@ -236,7 +248,7 @@ class Factory
 
 	public function getSettings()
 	{
-		return $this->instanceManager->get($this->namespace['Core'] . 'Settings');
+		return $this->InstanceManager->get($this->namespace['Core'] . 'Settings');
 	}
    
 	/// Get the sql object.
@@ -244,40 +256,40 @@ class Factory
 	{
 		if ($name === NULL)
 		{
-			if (empty($this->settings['DB']) || !is_array($this->settings['DB']))
+			if (empty($this->Settings['DB']) || !is_array($this->Settings['DB']))
 			{    
 				throw new \UnexpectedValueException(
 					__METHOD__ . ' DB Settings are needed to create an SQL object.');
 			}
 
-			// We cannot call reset on settings (as it causes an
+			// We cannot call reset on Settings (as it causes an
 			// 'Indirect modification of overloaded element' notice.
-			$allSettings = $this->settings['DB'];
+			$allSettings = $this->Settings['DB'];
 			$dbSettings = reset($allSettings);
 		}
 		else
 		{
-			if (!isset($this->settings['DB'][$name]))
+			if (!isset($this->Settings['DB'][$name]))
 			{
 				throw new \OutOfBoundsException(
-					__METHOD__ . ' no settings for DB: ' . $name . ' are defined.');
+					__METHOD__ . ' no Settings for DB: ' . $name . ' are defined.');
 			}
 
-			$dbSettings = $this->settings['DB'][$name];
+			$dbSettings = $this->Settings['DB'][$name];
 		}
 
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'DB\SQL',
-			array('DB' => $this->instanceManager->get(
+			array('DB' => $this->InstanceManager->get(
 				      $this->namespace['Core'] . 'DB\PDO', $dbSettings)));
 	}
 
 	/// Get a TableInfo object.
 	public function getTableInfo(Array $setup)
 	{
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'DB\Table\Info',
-			array_merge(array('Failures' => $this->instanceManager->create(
+			array_merge(array('Failures' => $this->InstanceManager->create(
 				                  $this->namespace['Core'] . 'MessageArray'),
 			                  'SQL'      => $this->getSQL()),
 			            $setup));
@@ -285,45 +297,44 @@ class Factory
 
 	public function getTableListID()
 	{
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'DB\Table\ListID',
 			array('SQL' => $this->getSQL()));
 	}
    
-	/** Get a TableReferences object (Recursive).
-	 *  Recursively create the TableReferences from the recursive structure
-	 *  passed in.
+	/** Get a Joins object (Recursive).
+	 *  Recursively create the Joins from the tree structure passed in.
 	 */
-	public function getTableReferences(Array $setup)
+	public function getJoins(Array $setup)
 	{
-		$tRefs = array();
+		$tableJoins = array();
 
-		if (isset($setup['Multi_References']))
+		if (isset($setup['Multi_Joins']))
 		{
-			foreach ($setup['Multi_References'] as $references)
+			foreach ($setup['Multi_Joins'] as $joins)
 			{
-				foreach ($references as $parentField => $ref)
+				foreach ($joins as $parentField => $join)
 				{
-					$ref['Parent_Field'] = $parentField;
-					$tRefs[] = $this->getTableReferences($ref);
+					$join['Parent_Field'] = $parentField;
+					$tableJoins[] = $this->getJoins($join);
 				}
 			}
 		}
 
-		if (isset($setup['References']))
+		if (isset($setup['Joins']))
 		{
-			foreach ($setup['References'] as $parentField => $ref)
+			foreach ($setup['Joins'] as $parentField => $join)
 			{
-				$ref['Parent_Field'] = $parentField;	 
-				$tRefs[] = $this->getTableReferences($ref);
+				$join['Parent_Field'] = $parentField;	 
+				$tableJoins[] = $this->getJoins($join);
 			}
 		}
 
-		return $this->instanceManager->create(
-			$this->namespace['Core'] . 'DB\Table\References',
+		return $this->InstanceManager->create(
+			$this->namespace['Core'] . 'DB\Table\Joins',
 			array_merge(
 				$setup,
-				array('References' => $tRefs,
+				array('Joins'     => $tableJoins,
 				      'TableInfo' => $this->getTableInfo(
 					      array('Table_Name' => $setup['Table_Name'])))));
 	}
@@ -331,31 +342,30 @@ class Factory
 	// Get the Translator.
 	public function getTranslator()
 	{
-		// Create the translator.
-		return $this->instanceManager->get(
+		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'Translator',
-			array('Default_Language' => $this->settings['Constant'][
+			array('Default_Language' => $this->Settings['Constant'][
 				      'Default_Language'],
 			      'SessionManager'   => $this->getSessionManager('Lang'),
-			      'Translation_File' => $this->settings['File']['Translation']));
+			      'Translation_File' => $this->Settings['File']['Translation']));
 	}
 
 	/// Get a view object.
 	public function getView($view, Array $setup=array())
 	{
-		return $this->instanceManager->create(
+		return $this->InstanceManager->create(
 			$view,
 			array_merge(array('EventManager'    => $this->getEventManager(),
-			                  'InstanceManager' => $this->instanceManager,
+			                  'InstanceManager' => $this->InstanceManager,
 			                  'Translator'      => $this->getTranslator(),
 			                  'XWR'             => $this->getXWR()),
 			            $setup));
 	}
    
-	/// Get the XWR (XHTML Writing Resource).
+	/// Get the XWR (XML Writing Resource).
 	public function getXWR()
 	{
-		return $this->instanceManager->get($this->namespace['Core'] . 'XWR');
+		return $this->InstanceManager->get($this->namespace['Core'] . 'XWR');
 	}
 }
 // EOF

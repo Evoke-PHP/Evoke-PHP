@@ -1,10 +1,10 @@
 <?php
 namespace Evoke\Data;
-/** Provide access to data.  Referenced data is handled through the Joint_Data.
- *  An iterator is supplied to traverse the array of records that make up the
- *  data.  Fields from the array can be accessed as per standard Array access.
- *  Whilst Joint_Data is retrieved via class properties that are automatically
- *  created from the references passed at construction.
+/** Provide access to data.  Related data is handled through the Joins. An
+ *  iterator is supplied to traverse the array of records that make up the data.
+ *  Fields from the array can be accessed as per standard Array access.  Whilst
+ *  Joint_Data is retrieved via class properties that are automatically created
+ *  from the Joins passed at construction.
  *
  *  Below is a usage example containing each different type of access:
  *  \code
@@ -23,11 +23,12 @@ namespace Evoke\Data;
  *        $y = $listRecord['Joint_Record_Field'];
  *     }
  *  }
- \endcode
+ *  \endcode
 */
 class Base implements \Evoke\Core\Iface\Data
 {
-	/** The data is protected, which is important to note in this class.  Being
+	/** @property $data
+	 *  The data is protected, which is important to note in this class.  Being
 	 *  protected means that it will still be accessible from extended classes,
 	 *  however when joint fields are referenced externally this member does not
 	 *  get in the way.  This means that data is still a valid name for joining
@@ -36,26 +37,34 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	protected $data;
 
-	/// This is the setup, which is protected as per data.
-	protected $setup;
-   
+	/** @property $jointKey
+	 *  The Joint Key used to refer to joint data.
+	 */
+	protected $jointKey;
+
+	/** @property $joins
+	 *  Joins \array used to refer to joint data.
+	 */
+	protected $Joins;
+	
 	public function __construct(Array $setup)
 	{
 		$this->data = array();
-		$this->setup = array_merge(
-			array('Joint_Key'  => 'Joint_Data',
-			      'References' => NULL),
-			$setup);
+		$setup += array('Joins'     => NULL,
+		                'Joint_Key' => 'Joint_Data');
 
-		if (!is_array($this->setup['References']))
+		if (!is_array($setup['Joins']))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires References as array');
+				__METHOD__ . ' requires Joins as array');
 		}
 
-		foreach ($this->setup['References'] as $parentField => $dataContainer)
+		$this->joins = $setup['Joins'];
+		$this->jointKey = $setup['Joint_Key'];
+		
+		foreach ($this->joins as $parentField => $dataContainer)
 		{
-			if (!$dataContainer instanceof \Evoke\Data\Base)
+			if (!$dataContainer instanceof \Evoke\Core\Iface\Data)
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' requires Data for parent field: ' .
@@ -68,22 +77,22 @@ class Base implements \Evoke\Core\Iface\Data
 	/* Public Methods */
 	/******************/
 
-	/** Provide access to the referenced data.  This allows the object to be used
-	 *  like so:  $object->referencedData (for joint data with a parent field of
+	/** Provide access to the joint data.  This allows the object to be used like
+	 *   so:  $object->referencedData (for joint data with a parent field of
 	 *  'Referenced_Data').
-	 *  @param referenceName \string The parent field for the referenced data.
-	 *  This can be as per the return value of \ref getReferenceName.
+	 *  @param parentField \string The parent field for the joint data.
+	 *  This can be as per the return value of \ref getJoinName.
 	 */
-	public function __get($referenceName)
+	public function __get($parentField)
 	{
-		if (isset($this->setup['References'][$referenceName]))
+		if (isset($this->joins[$parentField]))
 		{
-			return $this->setup['References'][$referenceName];
+			return $this->joins[$parentField];
 		}
       
-		foreach ($this->setup['References'] as $parentField => $dataContainer)
+		foreach ($this->joins as $pField => $dataContainer)
 		{
-			if ($referenceName === $this->getReferenceName($parentField))
+			if ($parentField === $this->getJoinName($pField))
 			{
 				return $dataContainer;
 			}
@@ -91,7 +100,8 @@ class Base implements \Evoke\Core\Iface\Data
       
 		throw new \OutOfBoundsException(
 			__METHOD__ . ' record does not refer to: ' .
-			var_export($referenceName, true) . ' references are: ' . var_export($this->setup['References'], true));
+			var_export($parentField, true) . ' joins are: ' .
+			var_export($this->joins, true));
 	}
 
 	/** Get the current record as a simple array (without iterator or reference
@@ -116,12 +126,6 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function setData(Array $data)
 	{
-		if (!is_array($data))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires data as an array');
-		}
-
 		$this->data = $data;
 		$this->rewind();
 	}   
@@ -199,7 +203,8 @@ class Base implements \Evoke\Core\Iface\Data
 	}
 
 	/** We are required to make these available to complete the interface,
-	 *  but we don't want the element to change.
+	 *  but we don't want the element to change, so this should never be called.
+	 *  \return Throws an exception.
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -209,7 +214,8 @@ class Base implements \Evoke\Core\Iface\Data
 	}
 
 	/** We are required to make these available to complete the interface,
-	 *  but we don't want the element to change.
+	 *  but we don't want the element to change, so this should never be called.
+	 *  \return Throws an exception.
 	 */
 	public function offsetUnset($offset)
 	{
@@ -227,13 +233,11 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	protected function setRecord($record)
 	{
-		$jointKey = $this->setup['Joint_Key'];
-
-		foreach ($this->setup['References'] as $parentField => $data)
+		foreach ($this->joins as $parentField => $data)
 		{
-			if (isset($record[$jointKey][$parentField]))
+			if (isset($record[$this->jointKey][$parentField]))
 			{
-				$data->setData($record[$jointKey][$parentField]);
+				$data->setData($record[$this->jointKey][$parentField]);
 			}
 		}
 	}
@@ -242,13 +246,13 @@ class Base implements \Evoke\Core\Iface\Data
 	/* Private Methods */
 	/*******************/
 
-	/** Get the reference name that will be used for accessing the joint data
-	 *  from this object.  It should match our standard naming of properties
+	/** Get the Join name that will be used for accessing the joint data from
+	 *  this object.  It should match our standard naming of properties
 	 *  (camel case) and not contain the final ID which is not needed.
 	 *  @param parentField \string The parent field for the joint data.
 	 *  \return \string The reference name.
 	 */
-	private function getReferenceName($parentField)
+	private function getJoinName($parentField)
 	{
 		$nameParts = mb_split('_', $parentField);
 		$lastPart = end($nameParts);

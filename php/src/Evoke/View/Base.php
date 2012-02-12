@@ -1,44 +1,43 @@
 <?php
 namespace Evoke\View;
 
+use \Evoke\Core\Iface;
+
 abstract class Base implements \Evoke\Core\Iface\View
 {
-	protected $em; ///< Event_Manager
-	protected $instanceManager;
-	protected $setup;
-	protected $tr; ///< Translator
+	protected $EventManager;
+	protected $InstanceManager;
+	protected $Translator;
 
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('EventManager'    => NULL,
-		                                 'InstanceManager' => NULL,
-		                                 'Translator'      => NULL),
-		                           $setup);
+		$setup += array('EventManager'    => NULL,
+		                'InstanceManager' => NULL,
+		                'Translator'      => NULL);
 
-		if (!$this->setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['EventManager'] instanceof Iface\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		if (!$this->setup['InstanceManager'] instanceof
-		    \Evoke\Core\InstanceManager)
+		if (!$setup['InstanceManager'] instanceof Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires InstanceManager');
 		}
       
-		if (!$this->setup['Translator'] instanceof \Evoke\Core\Translator)
+		if (!$setup['Translator'] instanceof Iface\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
 		}
 						  
-		$this->em =& $this->setup['EventManager'];
-		$this->instanceManager =& $this->setup['InstanceManager'];
-		$this->tr =& $this->setup['Translator'];
+		$this->EventManager    = $setup['EventManager'];
+		$this->InstanceManager = $setup['InstanceManager'];
+		$this->Translator      = $setup['Translator'];
 
-		$this->em->connect('View.Write', array($this, 'write'));
+		$this->EventManager->connect('View.Write', array($this, 'write'));
 	}
 }
 // EOF

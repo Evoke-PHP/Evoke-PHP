@@ -27,8 +27,8 @@ class Bootstrap
 		require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .
 			'InstanceManager.php';
 
-		$instanceManager = new \Evoke\Core\InstanceManager();
-		$autoload = $instanceManager->create(
+		$InstanceManager = new \Evoke\Core\InstanceManager();
+		$autoload = $InstanceManager->create(
 			__NAMESPACE__ . '\Handler\Autoload',
 			array('Base_Dir'  => dirname(dirname(dirname(__DIR__))),
 			      'Namespace' => 'Evoke\\'));
@@ -37,23 +37,23 @@ class Bootstrap
    
 	public function initializeHandlers()
 	{
-		$instanceManager = new \Evoke\Core\InstanceManager();
-		$settings = $instanceManager->get('\Evoke\Core\Settings');
-		$eventManager = $instanceManager->get('\Evoke\Core\EventManager');
+		$InstanceManager = new \Evoke\Core\InstanceManager();
+		$settings = $InstanceManager->get('\Evoke\Core\Settings');
+		$eventManager = $InstanceManager->get('\Evoke\Core\EventManager');
 
 		$isDevelopmentServer =
 			isset($settings['Constant']['Development_Servers']) &&
 			in_array(php_uname('n'), $settings['Constant']['Development_Servers']);
 
 		// Register the Shutdown, Exception and Error handlers.
-		$shutdownHandler = $instanceManager->create(
+		$shutdownHandler = $InstanceManager->create(
 			'\Evoke\Core\Init\Handler\Shutdown',
 			array('Administrator_Email'       => $settings[
 				      'Email']['Administrator'],
 			      'Detailed_Insecure_Message' => $isDevelopmentServer));
 		$shutdownHandler->register();
       
-		$exceptionHandler = $instanceManager->create(
+		$exceptionHandler = $InstanceManager->create(
 			'\Evoke\Core\Init\Handler\Exception',
 			array('Detailed_Insecure_Message'    => $isDevelopmentServer,
 			      'EventManager'                 => $eventManager,
@@ -61,31 +61,31 @@ class Bootstrap
 				      'Max_Length_Exception_Message']));
 		$exceptionHandler->register();
 
-		$errorHandler = $instanceManager->create(
+		$errorHandler = $InstanceManager->create(
 			'\Evoke\Core\Init\Handler\Error',
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
 			      'EventManager'              => $eventManager,
-			      'XWR'                       => $instanceManager->get(
+			      'XWR'                       => $InstanceManager->get(
 				      '\Evoke\Core\XWR')));
 		$errorHandler->register();
 	}
 
 	public function initializeLogger()
 	{
-		$instanceManager = new \Evoke\Core\InstanceManager();
-		$instanceManager->get(
+		$InstanceManager = new \Evoke\Core\InstanceManager();
+		$InstanceManager->get(
 			'\Evoke\Core\Logger',
-			array('EventManager'    => $instanceManager->get(
+			array('EventManager'    => $InstanceManager->get(
 				      '\Evoke\Core\EventManager'),
-			      'InstanceManager' => $instanceManager));
+			      'InstanceManager' => $InstanceManager));
 	}
 
 	public function initializeSettings()
 	{
-		$instanceManager = new \Evoke\Core\InstanceManager();
-		$settings = $instanceManager->get('\Evoke\Core\Settings');
+		$InstanceManager = new \Evoke\Core\InstanceManager();
+		$settings = $InstanceManager->get('\Evoke\Core\Settings');
 		$settings->unfreezeAll();
-		$settingsLoader = $instanceManager->create(
+		$settingsLoader = $InstanceManager->create(
 			'\Evoke\Core\Init\Settings\Loader',
 			array('Settings' => $settings));
 		$settingsLoader->load();

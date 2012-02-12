@@ -63,7 +63,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$data = array($record);
       
 		if ($this->setup['Validate'] &&
-		    !$this->validate($data, $this->setup['Table_References']))
+		    !$this->validate($data, $this->setup['Joins']))
 		{
 			return false;
 		}
@@ -79,7 +79,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				array('Depth_First_Data'   => array($this, 'addEntries'),
 				      'Depth_First_Parent' => array($this, 'feedbackListID')),
 				$data,
-				$this->setup['Table_References']);
+				$this->setup['Joins']);
 	 
 			$this->sql->commit();
 			$this->sessionManager->reset();
@@ -104,7 +104,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	/// Begin creating a new record.
 	public function createNew()
 	{
-		$currentRecord = $this->setup['Table_References']->getEmpty();
+		$currentRecord = $this->setup['Joins']->getEmpty();
 		$this->sessionManager->set('New_Record', true);
 		$this->sessionManager->set('Current_Record', $currentRecord);
 		$this->sessionManager->set('Editing_Record', true);
@@ -133,7 +133,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			$this->recurse(
 				array('Breadth_First_Data' => array($this, 'deleteEntries')),
 				$deleteRecord,
-				$this->setup['Table_References']);
+				$this->setup['Joins']);
 	 
 			$this->sessionManager->reset();
 			$this->sql->commit();
@@ -232,7 +232,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
       
 		if ($this->setup['Validate'])
 		{
-			if (!$this->validate($addData, $this->setup['Table_References']))
+			if (!$this->validate($addData, $this->setup['Joins']))
 			{
 				return false;
 			}
@@ -277,14 +277,14 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				__METHOD__ . ' Current_Record is not set for update.');
 		}
 
-		$data = $this->setup['Table_References']->arrangeResults(
+		$data = $this->setup['Joins']->arrangeResults(
 			array($updateRecord));
 		$updateRecord = reset($data); 
 
 		if (!empty($updateRecord))
 		{
 			$currentRecord = $this->sessionManager->get('Current_Record');
-			$jointKey = $this->setup['Table_References']->getJointKey();
+			$jointKey = $this->setup['Joins']->getJointKey();
 	 
 			// First merge any joint data.
 			if (isset($updateRecord[$jointKey]))
@@ -325,15 +325,15 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	/* Protected Methods */
 	/*********************/
    
-	protected function addEntries(&$data, $ref)
+	protected function addEntries(&$data, $Join)
 	{
-		if (!$ref->isAdminManaged() || empty($data))
+		if (!$Join->isAdminManaged() || empty($data))
 		{
 			return;
 		}
 
-		$tableName = $ref->getTableName();
-		$childField = $ref->getChildField();
+		$tableName = $Join->getTableName();
+		$childField = $Join->getChildField();
       
 		// Work out whether we need a List_ID to be calculated.
 		if (isset($childField))
@@ -353,7 +353,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
       
 		foreach ($addData as &$addRecord)
 		{
-			unset($addRecord[$ref->getJointKey()]);
+			unset($addRecord[$Join->getJointKey()]);
 		}
 
 		$this->sql->insert($tableName, array_keys(reset($addData)), $addData);
@@ -384,94 +384,93 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
    
 	/** Delete the records for the current table.
 	 *  @param data \array The records to be deleted.
-	 *  @param ref \obj The Table_References object.
+	 *  @param Join \obj The Joins object.
 	 */
-	protected function deleteEntries($data, $ref)
+	protected function deleteEntries($data, $Join)
 	{
 		foreach ($data as $record)
 		{
-			unset($record[$ref->getJointKey()]);
-			$this->sql->delete($ref->getTableName(), $record);
+			unset($record[$Join->getJointKey()]);
+			$this->sql->delete($Join->getTableName(), $record);
 		}
 	}   
 
-	/** Recurse the data and table references calling the appropriate callbacks.
-	 *  This recursion is used to call the callback functions in varying breadth
-	 *  first or depth first manner.
+	/** Recurse the data and Joins calling the appropriate callbacks.  This
+	 *  recursion is used to call the callback functions in varying breadth first
+	 *  or depth first manner.
 	 *
 	 *  @param callbacks \array Callbacks to be called recursively on the data of
 	 *  the format:
 	 *  \verbatim
-	 // Supply callbacks as values in this array.
-	 // The comments show what the callback will receive.
-	 array('Breadth_First_Data'   => NULL, // Data,          Table Reference.
-	 'Breadth_First_Record' => NULL, // Record,        Table Reference.
-	 'Breadth_First_Parent' => NULL, // Parent Record, Child Reference.
-	 'Depth_First_Data'     => NULL, // Parent Record, Child Reference.
-	 'Depth_First_Record'   => NULL, // Record,        Table Reference.
-	 'Depth_First_Parent'   => NULL) // Data,          Table Reference.
-	 \endverbatim
+	 *  // Supply callbacks as values in this array.
+	 *  // The comments show what the callback will receive.
+	 *  array('Breadth_First_Data'   => NULL, // Data,          Joins.
+	 *       'Breadth_First_Record' => NULL, // Record,        Joins.
+	 *       'Breadth_First_Parent' => NULL, // Parent Record, Child Join.
+	 *       'Depth_First_Data'     => NULL, // Parent Record, Child Join.
+	 *       'Depth_First_Record'   => NULL, // Record,        Joins.
+	 *       'Depth_First_Parent'   => NULL) // Data,          Joins.
+	 *  \endverbatim
 	 *  For any one bit of data these functions are called in the following order:
 	 *  \verbatim
-	 1 Breadth_First_Data
-	 2 Breadth_First_Record
-	 3 Breadth_First_Parent
-	 4 Depth_First_parent
-	 5 Depth_First_Record
-	 6 Depth_First_Data
-	 \endverbatim
+	 *  1 Breadth_First_Data
+	 *  2 Breadth_First_Record
+	 *  3 Breadth_First_Parent
+	 *  4 Depth_First_parent
+	 *  5 Depth_First_Record
+	 *  6 Depth_First_Data
+	 *  \endverbatim
 	 *  Order is important when callback functions alter the data they receive.
 	 *
 	 *  @param data \array The data to traverse.
-	 *  @param tRef \obj The Table_References object to traverse the data with.
+	 *  @param Joins \obj The Joins object to traverse the data with.
 	 *  \return The data after possibly being modified by the callbacks.
 	 */
-	protected function recurse(Array $callbacks, Array &$data, $tRef)
+	protected function recurse(Array $callbacks, Array &$data, $Joins)
 	{
-		$jointKey = $tRef->getJointKey();
-		$childReferences = $tRef->getReferences();
+		$jointKey = $Joins->getJointKey();
+		$childJoins = $Joins->getJoins();
       
-		$this->call($callbacks, 'Breadth_First_Data', &$data, $tRef);
+		$this->call($callbacks, 'Breadth_First_Data', &$data, $Joins);
       
 		// Loop through the data record by record, recursing downwards through the
-		// data referenced by the table references.
+		// joint data referenced by the joins.
 		foreach ($data as &$record)
 		{
-			$this->call($callbacks, 'Breadth_First_Record', &$record, $tRef);
+			$this->call($callbacks, 'Breadth_First_Record', &$record, $Joins);
       
-			foreach ($childReferences as $ref)
+			foreach ($childJoins as $Join)
 			{	    
-				$parentField = $ref->getParentField();
+				$parentField = $Join->getParentField();
 	    
 				if (isset($record[$jointKey][$parentField]))
 				{
-					$this->call($callbacks, 'Breadth_First_Parent', &$record, $ref);
+					$this->call($callbacks, 'Breadth_First_Parent', &$record, $Join);
 	       
 					$record[$jointKey][$parentField] = $this->recurse(
-						$callbacks, $record[$jointKey][$parentField], $ref);
+						$callbacks, $record[$jointKey][$parentField], $Join);
 	       
-					$this->call($callbacks, 'Depth_First_Parent', &$record, $ref);
+					$this->call($callbacks, 'Depth_First_Parent', &$record, $Join);
 				}
 			}
 	 
-			$this->call($callbacks, 'Depth_First_Record', &$record, $tRef);
+			$this->call($callbacks, 'Depth_First_Record', &$record, $Joins);
 		}
       
-		$this->call($callbacks, 'Depth_First_Data', &$data, $tRef);
+		$this->call($callbacks, 'Depth_First_Data', &$data, $Joins);
       
 		return $data;
 	}
    
-	/** Feeback the List_ID from the referenced child records into the parent
-	 *  record.
+	/** Feeback the List_ID from the joint child records into the parent record.
 	 *  @param parentRecord \array The parent record.
-	 *  @param ref \object The reference to the child record. 
+	 *  @param Join \object The Join to the child record. 
 	 */
-	protected function feedbackListID(&$parentRecord, $ref)
+	protected function feedbackListID(&$parentRecord, $Join)
 	{
-		$jointKey    = $ref->getJointKey();
-		$childField  = $ref->getChildField();
-		$parentField = $ref->getParentField();
+		$jointKey    = $Join->getJointKey();
+		$childField  = $Join->getChildField();
+		$parentField = $Join->getParentField();
 
 		if (!isset($childField))
 		{
@@ -506,25 +505,26 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			      'Update_Current_Record' => 'updateCurrentRecord'));
 	}
    
-	/** Validate all of the data specified with the table references.
+	/** Validate all of the data specified with the Joins.
 	 *  @param data \array The data to validate.
-	 *  @param ref \obj The Table References object to validate the data with.
+	 *  @param Joins \obj The Joins object to validate the data with.
 	 *  @return \bool Whether the data is valid or not.
 	 */
-	protected function validate($data, $ref)
+	protected function validate($data, $Joins)
 	{
-		$this->recurse(array('Depth_First_Data' => array($this, 'validateEntries')),
-		               $data,
-		               $ref);
+		$this->recurse(
+			array('Depth_First_Data' => array($this, 'validateEntries')),
+			$data,
+			$Joins);
       
 		return $this->failures->isEmpty();
 	}
 
-	/** Validate the data for the referenced table.
+	/** Validate the data for the table.
 	 */
-	protected function validateEntries($data, $ref)
+	protected function validateEntries($data, $join)
 	{
-		if (!$ref->isAdminManaged() || empty($data))
+		if (!$join->isAdminManaged() || empty($data))
 		{
 			return;
 		}
@@ -533,17 +533,17 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		{
 			// We validate, ignoring the joint key field and any child and parent
 			// fields which are set automatically.
-			$ignoredFields = array($ref->getJointKey(), $ref->getChildField());
-			$refs = $ref->getReferences();
+			$ignoredFields = array($join->getJointKey(), $join->getChildField());
+			$joins = $join->getJoins();
 	 
-			foreach ($refs as $r)
+			foreach ($joins as $j)
 			{
-				$ignoredFields[] = $r->getParentField();
+				$ignoredFields[] = $j->getParentField();
 			}
 
-			if (!$ref->isValid($record, $ignoredFields))
+			if (!$join->isValid($record, $ignoredFields))
 			{
-				$this->failures->append($ref->getFailures());
+				$this->failures->append($join->getFailures());
 			}
 		}
 	}
@@ -556,13 +556,13 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 *  @param callbacks \array The array of callbacks that we are calling from.
 	 *  @param cb \string The index for the callback that we want to call.
 	 *  @param data \array The data to pass to the callback by reference.
-	 *  @param ref \obj The Table_References object to pass to the callback.
+	 *  @param Joins \object The Joins object to pass to the callback.
 	 */
-	private function call(Array $callbacks, $cb, Array &$data, $ref)
+	private function call(Array $callbacks, $cb, Array &$data, $Joins)
 	{
 		if (isset($callbacks[$cb]))
 		{
-			call_user_func($callbacks[$cb], &$data, $ref);
+			call_user_func($callbacks[$cb], &$data, $Joins);
 		}
 	}
 }

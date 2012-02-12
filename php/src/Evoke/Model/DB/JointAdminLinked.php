@@ -59,7 +59,7 @@ class JointAdminLinked extends Admin
 		$data = array($this->sessionManager->get('Current_Record'));
 		$this->recurse(array('Depth_First_Data' => array($this, 'cancelEntries')),
 		               $data,
-		               $this->setup['Table_References']);
+		               $this->setup['Joins']);
       
 		parent::cancel();
 	}
@@ -71,7 +71,7 @@ class JointAdminLinked extends Admin
 		$data = array($this->sessionManager->get('Edited_Record'));
 		$this->recurse(array('Breadth_First_Data' => array($this, 'editEntries')),
 		               $data,
-		               $this->setup['Table_References']);
+		               $this->setup['Joins']);
 	}
    
 	/** Upload a file.

@@ -5,7 +5,7 @@ class Error implements \Evoke\Core\Iface\Handler
 {
 	protected $detailed;
 	protected $em;
-	protected $xwr;
+	protected $XWR;
 
 	public function __construct(Array $setup)
 	{
@@ -32,7 +32,7 @@ class Error implements \Evoke\Core\Iface\Handler
      
 		$this->detailed = $setup['Detailed_Insecure_Message'];
 		$this->em = $setup['EventManager'];
-		$this->xwr = $setup['XWR'];
+		$this->XWR = $setup['XWR'];
 	}
    
 	/******************/
@@ -218,7 +218,7 @@ class Error implements \Evoke\Core\Iface\Handler
 				array('Children' => $traceElems));
 		}
       
-		$this->xwr->write(
+		$this->XWR->write(
 			array('div',
 			      array('class' => 'Error_Handler Message_Box System'),
 			      array('Children' => array(
@@ -228,7 +228,7 @@ class Error implements \Evoke\Core\Iface\Handler
 				            array('div',
 				                  array('class' => 'Description'),
 				                  array('Children' => $descriptionElems))))));
-		$this->xwr->output();
+		$this->XWR->output();
 	}
 }
 // EOF
