@@ -2,43 +2,38 @@
 namespace Evoke\Model;
 /// Provides the basic implementation for a model.
 abstract class Base implements \Evoke\Core\Iface\Model
-{ 
-	protected $em;
-	protected $setup;
-   
+{
+	/** @property $EventManager
+	 *  EventManager obect.
+	 */
+	protected $EventManager;
+
+	/** @property $dataPrefix
+	 *  \mixed String, array or NULL, specifying the prefix to offset the
+	 *  retrieved data with.
+	 */
+	protected $dataPrefix;	
+	
+	/** @property $gotDataEvent
+	 *  \string Event name to call when we have retrieved data.
+	 */
+	protected $gotDataEvent;
+	
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(
-			array('Connect_Events' => true,
-			      'Data_Prefix'    => NULL, // Can be NULL for no prefix.
-			      'EventManager'   => NULL,
-			      'Event_Prefix'   => 'Post.',
-			      'Got_Data_Event' => 'Got_Data'),
-			$setup);
+		$setup += array('Data_Prefix'    => NULL, // Can be NULL for no prefix.
+		                'EventManager'   => NULL,
+		                'Got_Data_Event' => 'Model.Got_Data');
 
-		if (!$this->setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		$this->em =& $this->setup['EventManager'];
-
-		if ($this->setup['Connect_Events'])
-		{
-			$this->connectEvents('Model.', array('Notify_Data' => 'notifyData'));
-
-			$processingEvents = $this->getProcessingEventMap();
-
-			if (!empty($processingEvents))
-			{
-				$this->connectEvents($this->setup['Event_Prefix'],
-				                     $processingEvents);
-			}
-
-			// The empty event is non-critical by default.
-			$this->em->setCritical($this->setup['Event_Prefix'] . '', false);
-		}
+		$this->EventManager = $setup['EventManager'];
+		$this->dataPrefix   = $setup['Data_Prefix'];
+		$this->gotDataEvent = $setup['Got_Data_Event'];
 	}
    
 	/******************/
@@ -50,104 +45,62 @@ abstract class Base implements \Evoke\Core\Iface\Model
 	{
 		return $this->offsetData(array());
 	}
-
-	/// Get the events used for processing in the model.
-	public function getProcessingEvents()
-	{
-		$events = array_keys($this->getProcessingEventMap());
-
-		// Add the no event to the list.
-		$events[] = '';
-
-		return $events;
-	}
    
 	/// Notify the data that the model has.
 	public function notifyData()
 	{
-		$this->em->notify($this->setup['Got_Data_Event'], $this->getData());
+		$this->EventManager->notify($this->gotDataEvent, $this->getData());
 	}
    
 	/*********************/
 	/* Protected Methods */
 	/*********************/
 
-	/** Connect events with the appropriate event name prefix to the specified
-	 *  methods of this model.
-	 *  @param prefix \string The event name prefix to use.
-	 *  @param events \array The event name to method name array.
+	/** Get a subset of the data at the specified prefix.
+	 *  @param data \array The data to retrieve a part from.
+	 *  @param prefix \mixed The offset in the data to return data from.
 	 */
-	protected function connectEvents($prefix, Array $events)
-	{
-		foreach ($events as $eventName => $method)
-		{
-			$this->em->connect($prefix . $eventName, array($this, $method));
-		}
-	}
-
-	/// Get a subset of the data at the specified prefix.
-	protected function getAtPrefix($data, $prefix)
+	protected function getAtPrefix(Array $data, $prefix)
 	{
 		if (empty($prefix))
 		{
 			return $data;
 		}
       
+		if (!is_array($prefix))
+		{
+			$prefix = array($prefix);
+		}
+
 		$ptr =& $data;
 
-		/** \todo I can't believe I wrote this? What was I thinking?  This really
-		 *  needs to be cleaned up.
-		 */
-		try
+		foreach ($prefix as $offset)
 		{
-			if (is_array($prefix))
+			if (!isset($ptr[$offset]))
 			{
-				foreach ($prefix as $p)
-				{
-					if (!isset($ptr[$p]))
-					{
-						throw new \Exception();
-					}
-	       
-					$ptr =& $ptr[$prefix];
-				}
-			}
-			else
-			{
-				if (isset($ptr[$prefix]))
-				{
-					$ptr =& $ptr[$prefix];
-				}
-				else
-				{
-					throw new \Exception();
-				}
-			}
-	 
-			return $ptr;
-		}
-		catch (\Exception $e)
-		{
-			$msg = 'failed for data: ' . var_export($data, true) .
-				' with desired prefix: ' . var_export($prefix, true);
-      
-			$this->em->notify('Log', array('Level'   => LOG_ERR,
-			                               'Method'  => __METHOD__,
-			                               'Message' => $msg));
+				$msg = 'failed for data: ' . var_export($data, true) .
+					' with desired prefix: ' . var_export($prefix, true) .
+					' at offset: ' . var_export($offset, true);
+				
+				$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+				                                         'Message' => $msg,
+				                                         'Method'  => __METHOD__));
 
-			throw new \RuntimeException(__METHOD__ . ' ' . $msg);
+				throw new \RuntimeException(__METHOD__ . ' ' . $msg);
+			}
+			
+			$ptr =& $ptr[$offset];
 		}
+
+		return $ptr;
 	}
 
-	/// Get the events used for processing in the model.
-	protected function getProcessingEventMap()
+	/** Offset the data to the \ref dataPrefix
+	 *  @param data \array The data to be offset.
+	 */
+	protected function offsetData(Array $data)
 	{
-		return array();
-	}
-   
-	protected function offsetData($data)
-	{
-		return $this->offsetToPrefix($data, $this->setup['Data_Prefix']);
+		return $this->offsetToPrefix($data, $this->dataPrefix);
 	}
 
 	/*******************/
@@ -159,7 +112,7 @@ abstract class Base implements \Evoke\Core\Iface\Model
 	 *  @param prefix \mixed The prefix to use.
 	 *  \return The data offset correctly.
 	 */
-	private function offsetToPrefix($data, $prefix)
+	private function offsetToPrefix(Array $data, $prefix)
 	{
 		if (empty($prefix))
 		{
@@ -169,18 +122,15 @@ abstract class Base implements \Evoke\Core\Iface\Model
 		$offsetData = array();
 		$offsetPtr =& $offsetData;
       
-		if (is_array($prefix))
+		if (!is_array($prefix))
 		{
-			foreach ($prefix as $p)
-			{
-				$offsetPtr[$p] = array();
-				$offsetPtr =& $offsetPtr[$p];
-			}
+			$prefix = array($prefix);
 		}
-		else
+		
+		foreach ($prefix as $offset)
 		{
-			$offsetPtr[$prefix] = array();
-			$offsetPtr =& $offsetPtr[$prefix];
+			$offsetPtr[$offset] = array();
+			$offsetPtr =& $offsetPtr[$offset];
 		}
 
 		$offsetPtr = $data;

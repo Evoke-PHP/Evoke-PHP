@@ -3,25 +3,27 @@ namespace Evoke\Core\DB\Table;
 
 class List_ID
 {
-	private $setup;
-	protected $sql;
+	private $fields;
+	private $tableName;
+
+	protected $SQL;
    
 	public function __construct($setup=array())
 	{
-		$this->setup = array_merge(
-			array('Fields' => array('Counter'  => 'Counter',
-			                        'DB_Table' => 'DB_Table',
-			                        'DB_Field' => 'DB_Field'),
-			      'Table_Name' => 'List_IDs',
-			      'SQL' => NULL),
-			$setup);
+		$setup += array('Fields'     => array('Counter'  => 'Counter',
+		                                      'DB_Table' => 'DB_Table',
+		                                      'DB_Field' => 'DB_Field'),
+		                'SQL'        => NULL,
+		                'Table_Name' => 'List_IDs');
 
-		if (!$this->setup['SQL'] instanceof \Evoke\Core\DB\SQL)
+		if (!$setup['SQL'] instanceof \Evoke\Core\DB\SQL)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
 		}
 
-		$this->sql = $this->setup['SQL'];
+		$this->fields    = $setup['Fields'];
+		$this->tableName = $setup['Table_Name'];
+		$this->SQL       = $setup['SQL'];
 	}
 
 	/******************/
@@ -35,36 +37,37 @@ class List_ID
 	 */
 	public function getNew($table, $field)
 	{
+		if (!$this->SQL->inTransaction())
+		{
+			throw new \LogicException(
+				__METHOD__ . ' we must be in a transaction to get a new List ID.');
+		}
+	 
 		try
 		{
-			/** \todo Trigger a warning or error if we are not in a transaction
-			 *  already.
-			 */
-	 
-			$listID = $this->sql->selectSingleValue(
-				$this->setup['Table_Name'],
-				$this->setup['Fields']['Counter'],
-				array($this->setup['Fields']['DB_Table'] => $table,
-				      $this->setup['Fields']['DB_Field'] => $field));
+			$listID = $this->SQL->selectSingleValue(
+				$this->tableName,
+				$this->fields['Counter'],
+				array($this->fields['DB_Table'] => $table,
+				      $this->fields['DB_Field'] => $field));
 
 			if ($listID === false)
 			{
 				return NULL;
 			}
 	 
-			$this->sql->update(
-				$this->setup['Table_Name'],
-				array($this->setup['Fields']['Counter'] => ++$listID),
-				array($this->setup['Fields']['DB_Table'] => $table,
-				      $this->setup['Fields']['DB_Field'] => $field));
+			$this->SQL->update($this->tableName,
+			                   array($this->fields['Counter'] => ++$listID),
+			                   array($this->fields['DB_Table'] => $table,
+			                         $this->fields['DB_Field'] => $field));
 
 			return $listID;
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new \Evoke\Core\Exception\DB(
 				__METHOD__, 'Unable to get new list ID for table: ' . $table .
-				' field: ' . $field, $this->sql, $e);
+				' field: ' . $field, $this->SQL, $E);
 		}
 	}   
 }

@@ -3,9 +3,9 @@ namespace Evoke\Model\DB;
 /// Model_DB_Joint_Admin provides a CRUD interface to a joint set of data.
 class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 {
-	protected $failures;
-	protected $notifications;
-	protected $sessionManager;
+	protected $Failures;
+	protected $Notifications;
+	protected $SessionManager;
 
 	public function __construct(Array $setup)
 	{
@@ -16,35 +16,35 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		                'TableListID'    => NULL,
 		                'Validate'       => true);
 
-		parent::__construct($setup);
-
-		if (!$this->setup['Failures'] instanceof Evoke\Core\MessageArray)
+		if (!$setup['Failures'] instanceof Evoke\Core\MessageArray)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Failures as Evoke\Core\MessageArray');
 		}
 
-		if (!$this->setup['Notifications'] instanceof Evoke\Core\MessageArray)
+		if (!$setup['Notifications'] instanceof Evoke\Core\MessageArray)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Notifications as Evoke\Core\MessageArray');
 		}
       
-		if (!$this->setup['SessionManager'] instanceof \Evoke\Core\SessionManager)
+		if (!$setup['SessionManager'] instanceof \Evoke\Core\SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires SessionManager');
 		}
       
-		if (!$this->setup['TableListID'] instanceof \Evoke\Core\DB\TableListID)
+		if (!$setup['TableListID'] instanceof \Evoke\Core\DB\TableListID)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires TableListID');
 		}
 
-		$this->failures =& $this->setup['Failures'];
-		$this->notifications =& $this->setup['Notifications'];
-		$this->sessionManager =& $this->setup['SessionManager'];
+		parent::__construct($setup);
+
+		$this->Failures       = $setup['Failures'];
+		$this->Notifications  = $setup['Notifications'];
+		$this->SessionManager = $setup['SessionManager'];
 	}
    
 	/******************/
@@ -56,10 +56,10 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 */
 	public function add($record)
 	{
-		$this->failures->reset();
+		$this->Failures->reset();
 
 		$this->updateCurrentRecord($record);
-		$record = $this->sessionManager->get('Current_Record');
+		$record = $this->SessionManager->get('Current_Record');
 		$data = array($record);
       
 		if ($this->setup['Validate'] &&
@@ -73,7 +73,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		////////////////////
 		try
 		{
-			$this->sql->beginTransaction();
+			$this->SQL->beginTransaction();
 
 			$this->recurse(
 				array('Depth_First_Data'   => array($this, 'addEntries'),
@@ -81,71 +81,73 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				$data,
 				$this->setup['Joins']);
 	 
-			$this->sql->commit();
-			$this->sessionManager->reset();
-			$this->notifications->add('Add', 'Successful');
+			$this->SQL->commit();
+			$this->SessionManager->reset();
+			$this->Notifications->add('Add', 'Successful');
 		}
 		catch (\Exception $e)
 		{
-			$this->em->notify('Log', array('Level'   => LOG_ERR,
-			                               'Method'  => __METHOD__,
-			                               'Message' => $e->getMessage()));
-			$this->failures->add('Add_Failed', 'Sys_Admin_Notified');	 
-			$this->sql->rollBack();
+			$this->EventManager->notify(
+				'Log', array('Level'   => LOG_ERR,
+				             'Method'  => __METHOD__,
+				             'Message' => $e->getMessage()));
+			$this->Failures->add('Add_Failed', 'Sys_Admin_Notified');	 
+			$this->SQL->rollBack();
 		}
 	}
 
 	/// Cancel the editing of the record.
 	public function cancel()
 	{
-		$this->sessionManager->reset();
+		$this->SessionManager->reset();
 	}
 
 	/// Begin creating a new record.
 	public function createNew()
 	{
 		$currentRecord = $this->setup['Joins']->getEmpty();
-		$this->sessionManager->set('New_Record', true);
-		$this->sessionManager->set('Current_Record', $currentRecord);
-		$this->sessionManager->set('Editing_Record', true);
-		$this->sessionManager->set('Edited_Record', array());
+		$this->SessionManager->set('New_Record', true);
+		$this->SessionManager->set('Current_Record', $currentRecord);
+		$this->SessionManager->set('Editing_Record', true);
+		$this->SessionManager->set('Edited_Record', array());
 	}
    
 	/// Cancel the currently requested deletion.
 	public function deleteCancel()
 	{
-		$this->sessionManager->reset();
+		$this->SessionManager->reset();
 	}
 
 	/// Delete the specified record.
 	public function deleteConfirm(Array $record)
 	{
-		$this->failures->reset();
+		$this->Failures->reset();
 
 		////////////////////
 		// DB Transaction //
 		////////////////////
 		try
 		{
-			$this->sql->beginTransaction();
-			$deleteRecord = $this->sessionManager->get('Delete_Record');
+			$this->SQL->beginTransaction();
+			$deleteRecord = $this->SessionManager->get('Delete_Record');
 	 
 			$this->recurse(
 				array('Breadth_First_Data' => array($this, 'deleteEntries')),
 				$deleteRecord,
 				$this->setup['Joins']);
 	 
-			$this->sessionManager->reset();
-			$this->sql->commit();
-			$this->notifications->add('Delete', 'Successful');
+			$this->SessionManager->reset();
+			$this->SQL->commit();
+			$this->Notifications->add('Delete', 'Successful');
 		}
 		catch (\Exception $e)
 		{
-			$this->em->notify('Log', array('Level'   => LOG_ERR,
-			                               'Method'  => __METHOD__,
-			                               'Message' => $e->getMessage()));
-			$this->failures->add('Delete_Failed', 'Sys_Admin_Notified');
-			$this->sql->rollBack();
+			$this->EventManager->notify(
+				'Log', array('Level'   => LOG_ERR,
+				             'Method'  => __METHOD__,
+				             'Message' => $e->getMessage()));
+			$this->Failures->add('Delete_Failed', 'Sys_Admin_Notified');
+			$this->SQL->rollBack();
 		}
 	}
 
@@ -168,8 +170,8 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$baseData = $this->getAtPrefix($data, $this->setup['Data_Prefix']);
 		$record = $baseData['Records'];
       
-		$this->sessionManager->set('Delete_Request', true);
-		$this->sessionManager->set('Delete_Record', $record);
+		$this->SessionManager->set('Delete_Request', true);
+		$this->SessionManager->set('Delete_Record', $record);
 	}
 
 	/** Edit a record.
@@ -191,13 +193,13 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		// We edit a single record at a time.
 		if (count($data) !== 1)
 		{
-			$this->em->notify(
+			$this->EventManager->notify(
 				'Log',
 				array('Level'   => LOG_ERR,
 				      'Method'  => __METHOD__,
 				      'Message' => 'multiple records received.'));
 	 
-			$this->failures->add('Edit_Failed', 'Sys_Admin_Notified');
+			$this->Failures->add('Edit_Failed', 'Sys_Admin_Notified');
 
 			return;
 		}
@@ -205,10 +207,10 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$record = reset($data);
       
 		// Set the session to show that the record is being edited.
-		$this->sessionManager->set('New_Record', false);
-		$this->sessionManager->set('Current_Record', $record);
-		$this->sessionManager->set('Editing_Record', true);
-		$this->sessionManager->set('Edited_Record', $record);
+		$this->SessionManager->set('New_Record', false);
+		$this->SessionManager->set('Current_Record', $record);
+		$this->SessionManager->set('Editing_Record', true);
+		$this->SessionManager->set('Edited_Record', $record);
 	}
    
 	/// Get the data for the model.
@@ -218,16 +220,16 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			array('AJAX_Data' => $this->setup['AJAX_Data'],
 			      'Records'   => parent::getData($selectSetup),
 			      'State'     => array_merge(
-				      array('Failures'      => $this->failures->get(),
-				            'Notifications' => $this->notifications->get()),
-				      $this->sessionManager->getAccess())));
+				      array('Failures'      => $this->Failures->get(),
+				            'Notifications' => $this->Notifications->get()),
+				      $this->SessionManager->getAccess())));
 	}
 
 	/// Modify a record in the database.
 	public function modify($updates)
 	{
 		$this->updateCurrentRecord($updates);
-		$addRecord = $this->sessionManager->get('Current_Record');
+		$addRecord = $this->SessionManager->get('Current_Record');
 		$addData = array($addRecord);
       
 		if ($this->setup['Validate'])
@@ -238,31 +240,32 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			}
 		}
 
-		$deleteData = $this->sessionManager->get('Edited_Record');
+		$deleteData = $this->SessionManager->get('Edited_Record');
       
 		////////////////////
 		// DB Transaction //
 		////////////////////
 		try
 		{
-			$this->sql->beginTransaction();
+			$this->SQL->beginTransaction();
 
 			/// \todo Implement modify.
 			throw new \Exception('Modify action not yet implemented.');
 
 			// Recurse and process the modify.
 
-			$this->sql->commit();
-			$this->sessionManager->reset();
-			$this->notifications->add('Modify', 'Successful');
+			$this->SQL->commit();
+			$this->SessionManager->reset();
+			$this->Notifications->add('Modify', 'Successful');
 		}
 		catch (\Exception $e)
 		{
-			$this->em->notify('Log', array('Level'   => LOG_ERR,
-			                               'Method'  => __METHOD__,
-			                               'Message' => $e->getMessage()));
-			$this->failures->add('Modify_Failed', 'Sys_Admin_Notified');
-			$this->sql->rollBack();
+			$this->EventManager->notify(
+				'Log', array('Level'   => LOG_ERR,
+				             'Method'  => __METHOD__,
+				             'Message' => $e->getMessage()));
+			$this->Failures->add('Modify_Failed', 'Sys_Admin_Notified');
+			$this->SQL->rollBack();
 		}
 	}
 
@@ -271,7 +274,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 */
 	public function updateCurrentRecord($updateRecord)
 	{
-		if (!$this->sessionManager->issetKey('Current_Record'))
+		if (!$this->SessionManager->issetKey('Current_Record'))
 		{
 			throw new \RuntimeException(
 				__METHOD__ . ' Current_Record is not set for update.');
@@ -283,7 +286,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 
 		if (!empty($updateRecord))
 		{
-			$currentRecord = $this->sessionManager->get('Current_Record');
+			$currentRecord = $this->SessionManager->get('Current_Record');
 			$jointKey = $this->setup['Joins']->getJointKey();
 	 
 			// First merge any joint data.
@@ -315,7 +318,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			unset($updateRecord[$jointKey]);
 			$currentRecord = array_merge($currentRecord, $updateRecord);
 	 
-			$this->sessionManager->set('Current_Record', $currentRecord);
+			$this->SessionManager->set('Current_Record', $currentRecord);
 		}
 
 		$this->setup['AJAX_Data'] = array('Success' => true);
@@ -356,7 +359,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			unset($addRecord[$Join->getJointKey()]);
 		}
 
-		$this->sql->insert($tableName, array_keys(reset($addData)), $addData);
+		$this->SQL->insert($tableName, array_keys(reset($addData)), $addData);
       
 		// If the listID was null then this is a one to one relationship with an
 		// ID that we can obtain with lastInsertID.  We set it so that it can be
@@ -374,7 +377,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 
 			foreach ($data as &$childRecord)
 			{
-				$childRecord[$childField] = $this->sql->lastInsertID($childField);
+				$childRecord[$childField] = $this->SQL->lastInsertID($childField);
 			}  
 		}
        
@@ -391,7 +394,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		foreach ($data as $record)
 		{
 			unset($record[$Join->getJointKey()]);
-			$this->sql->delete($Join->getTableName(), $record);
+			$this->SQL->delete($Join->getTableName(), $record);
 		}
 	}   
 
@@ -517,7 +520,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			$data,
 			$Joins);
       
-		return $this->failures->isEmpty();
+		return $this->Failures->isEmpty();
 	}
 
 	/** Validate the data for the table.
@@ -543,7 +546,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 
 			if (!$join->isValid($record, $ignoredFields))
 			{
-				$this->failures->append($join->getFailures());
+				$this->Failures->append($join->getFailures());
 			}
 		}
 	}

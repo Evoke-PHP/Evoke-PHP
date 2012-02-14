@@ -122,7 +122,7 @@ class JointAdminLinked extends Admin
 			$firstRecord = reset($data);
 			$conditions = array($childField => $firstRecord[$childField]);
 
-			$addedData = $this->sql->select(
+			$addedData = $this->SQL->select(
 				$ref->getTableName(), '*', $conditions);
 	 
 			$this->moveIncomingToStorage($link, $addedData, $ref);

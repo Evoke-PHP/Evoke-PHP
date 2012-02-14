@@ -251,7 +251,7 @@ class Factory
 		return $this->InstanceManager->get($this->namespace['Core'] . 'Settings');
 	}
    
-	/// Get the sql object.
+	/// Get the SQL object.
 	public function getSQL($name=NULL)
 	{
 		if ($name === NULL)

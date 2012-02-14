@@ -7,8 +7,8 @@ class Clear extends Session
 	{
 		parent::__construct($setup);
 
-		$this->em->connect('Post.', array($this, 'doNothing'));
-		$this->em->connect('Post.Clear', array($this, 'clear'));
+		$this->EventManager->connect('Post.', array($this, 'doNothing'));
+		$this->EventManager->connect('Post.Clear', array($this, 'clear'));
 	}
 
 	/******************/

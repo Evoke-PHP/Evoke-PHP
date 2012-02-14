@@ -24,11 +24,11 @@ class Tables extends Base
 
 		try
 		{
-			$tableResults = $this->sql->getAssoc('SHOW TABLES');
+			$tableResults = $this->SQL->getAssoc('SHOW TABLES');
 		}
 		catch (\Exception $e)
 		{
-			$this->em->notify(
+			$this->EventManager->notify(
 				'Log',
 				array('Level'   => LOG_ERR,
 				      'Method'  => __METHOD__,

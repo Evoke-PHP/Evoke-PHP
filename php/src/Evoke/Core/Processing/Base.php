@@ -12,7 +12,7 @@ namespace Evoke\Core\Processing;
  *  correct processing.  The use of request identifiers allows us to match the
  *  keys from the request and notify for the specific processing required.
  */
-abstract class Base
+abstract class Base implements \Evoke\Core\Iface\Processing
 {
 	protected $setup;
    
@@ -61,18 +61,10 @@ abstract class Base
 			'Request.Process', array($this, 'process'));
 	}
 
-	/// Get the request information.
-	abstract public function getRequest();
-
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	public function getRequestMethod()
-	{
-		return mb_strtoupper($_SERVER['REQUEST_METHOD']);
-	}
-   
 	/// Process the request and notify the event manager.
 	public function process()
 	{
@@ -158,6 +150,13 @@ abstract class Base
 	protected function getRequestMatches($data)
 	{
 		return array_intersect_key($this->setup['Request_Keys'], $data);
+	}
+
+	/** Get the request method.
+	 */
+	protected function getRequestMethod()
+	{
+		return mb_strtoupper($_SERVER['REQUEST_METHOD']);
 	}
 }
 // EOF

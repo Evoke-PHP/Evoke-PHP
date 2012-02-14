@@ -4,14 +4,15 @@ namespace Evoke\Core\Init\Handler;
 class Error implements \Evoke\Core\Iface\Handler
 {
 	protected $detailed;
-	protected $em;
+
+	protected $EventManager;
 	protected $XWR;
 
 	public function __construct(Array $setup)
 	{
 		$setup += array('Detailed_Insecure_Message' => NULL,
-		                'EventManager'  	          => NULL,
-		                'XWR'          	          => NULL);
+		                'EventManager'              => NULL,
+		                'XWR'                       => NULL);
 
 		if (!is_bool($setup['Detailed_Insecure_Message']))
 		{
@@ -31,7 +32,7 @@ class Error implements \Evoke\Core\Iface\Handler
 		}
      
 		$this->detailed = $setup['Detailed_Insecure_Message'];
-		$this->em = $setup['EventManager'];
+		$this->EventManager = $setup['EventManager'];
 		$this->XWR = $setup['XWR'];
 	}
    
@@ -129,7 +130,7 @@ class Error implements \Evoke\Core\Iface\Handler
 			$message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
 				' in ' . $file . ' on ' . $line;
 
-			$this->em->notify(
+			$this->EventManager->notify(
 				'Log',
 				array('Level'   => LOG_WARNING,
 				      'Message' => $message,

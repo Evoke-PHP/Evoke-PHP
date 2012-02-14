@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core;
 
-class Translator
+class Translator implements Iface\Translator
 {
 	private $setup;
    

@@ -139,18 +139,19 @@ class SQL implements \Evoke\Core\Iface\DB
 	 
 			return $this->setup['DB']->prepare($statement, $driverOptions);
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
-			throw new Exception_DB(__METHOD__, '', $this->setup['DB'], $e);
+			throw new Exception_DB(__METHOD__, '', $this->setup['DB'], $E);
 		}
 	}
 
 	/** Executes an SQL statement, returns a result set as a PDOStatement object.
 	 *  Any supplied object should be filled as per the fetch options.
+	 *  @param queryString \string The query string.
 	 */
-	public function query($sql, $fetchMode=0, $into=NULL)
+	public function query($queryString, $fetchMode=0, $into=NULL)
 	{
-		$namedPlaceholders = (strpos($sql, ':') !== false);
+		$namedPlaceholders = (strpos($queryString, ':') !== false);
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
@@ -158,11 +159,11 @@ class SQL implements \Evoke\Core\Iface\DB
 
 		if ($fetchMode === 0)
 		{
-			return $this->setup['DB']->query($sql);
+			return $this->setup['DB']->query($queryString);
 		}
 		else
 		{
-			return $this->setup['DB']->query($sql, $fetchMode, $into);
+			return $this->setup['DB']->query($queryString, $fetchMode, $into);
 		}
 	}  
 
@@ -182,92 +183,95 @@ class SQL implements \Evoke\Core\Iface\DB
 	/* Public Methods - Wrappers */
 	/*****************************/
    
-	/// Get an associative array of results for the sql.
-	public function getAssoc($sql, $params=array())
+	/** Get an associative array of results for a query.
+	 *  @param queryString \string Query string.
+	 *  \return \array Associative array of results from the query.
+	 */
+	public function getAssoc($queryString, $params=array())
 	{
 		try
 		{
-			$stmt = $this->prepare($sql);
+			$Statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$stmt->execute($params);
+			$Statement->execute($params);
 
-			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			return $Statement->fetchAll(\PDO::FETCH_ASSOC);
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__,
-				'Exception Raised for sql: ' . var_export($sql, true) .
+				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->setup['DB'],
-				$e);
+				$E);
 		}
 	}
 
 	/** Get a result set which must contain exactly one row and return it.
-	 *  @param sql \string The sql to get exactly one row.
+	 *  @param queryString \string The query to get exactly one row.
 	 *  @param params \array The parmeters for the sql query.
 	 */
-	public function getSingleRow($sql, $params=array())
+	public function getSingleRow($queryString, $params=array())
 	{
 		// Prepare
 		try
 		{
-			$stmt = $this->prepare($sql);
+			$Statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$stmt->execute($params);
-			$result = $stmt->fetch(\PDO::FETCH_ASSOC);
+			$Statement->execute($params);
+			$result = $Statement->fetch(\PDO::FETCH_ASSOC);
 
 			// Check if there is more than a single row.
-			if ($stmt->fetch(\PDO::FETCH_ASSOC))
+			if ($Statement->fetch(\PDO::FETCH_ASSOC))
 			{
 				throw new \Exception('Unexpected Multiple rows received.');
 			}
 	 
 			return $result;
 		}
-		catch (Exception $e)
+		catch (Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__,
-				'Exception Raised for sql: ' . var_export($sql, true) .
+				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->setup['DB'],
-				$e);
+				$E);
 		}
 	}
 
 	/** Get a single value result from an sql statement.
-	 *  @param sql \string The sql to get exactly one row.
+	 *  @param queryString \string The query string to get exactly one row.
 	 *  @param params \array The parmeters for the sql query.
 	 *  @param column \int The column of the row to return the value for.
 	 */
-	public function getSingleValue($sql, $params=array(), $column=0)
+	public function getSingleValue($queryString, $params=array(), $column=0)
 	{
 		// Prepare
 		try
 		{
-			$stmt = $this->prepare($sql);
+			$Statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$stmt->execute($params);
-			$result = $stmt->fetchColumn($column);
+			$Statement->execute($params);
+			$result = $Statement->fetchColumn($column);
 
 			// Check if there is more than a single row.
-			if ($stmt->fetchColumn($column))
+			if ($Statement->fetchColumn($column))
 			{
 				throw new \Exception('Unexpected multiple rows received.');
 			}
 	 
 			return $result;
 		}
-		catch (Exception $e)
+		catch (Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__,
-				'Exception Raised for sql: ' . var_export($sql, true) .
+				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->setup['DB'],
-				$e);
+				$E);
 		}
 	}
    
@@ -311,7 +315,7 @@ class SQL implements \Evoke\Core\Iface\DB
 			}
 
 			// Prepare
-			$stmt = $this->prepare($q);
+			$Statement = $this->prepare($q);
 	 
 			if (!is_array($conditions))
 			{
@@ -326,19 +330,19 @@ class SQL implements \Evoke\Core\Iface\DB
 			$params = array_merge($conditions, $order);
 	 
 			// Execute and fetch the results as an associated array.
-			$stmt->execute($params);
-			$assoc = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$Statement->execute($params);
+			$assoc = $Statement->fetchAll(\PDO::FETCH_ASSOC);
 
 			return $assoc;
 		}
-		catch(\Exception $e)
+		catch(\Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Tables: ' . var_export($tables, true) .
 				' Fields: ' .var_export($fields, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->setup['DB'], $e);
+				$this->setup['DB'], $E);
 		}	 
 	}
 
@@ -358,19 +362,19 @@ class SQL implements \Evoke\Core\Iface\DB
 				$q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
 			}
 	 
-			$stmt = $this->prepare($q);
-			$stmt->execute($conditions);
+			$Statement = $this->prepare($q);
+			$Statement->execute($conditions);
 
-			return $stmt->fetchColumn();
+			return $Statement->fetchColumn();
 		}
-		catch(\Exception $e)
+		catch(\Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Table: ' . var_export($table, true) .
 				' Field: ' .var_export($field, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->setup['DB'], $e);
+				$this->setup['DB'], $E);
 		}
 	}
 
@@ -398,20 +402,20 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$stmt = $this->prepare($q);
+			$Statement = $this->prepare($q);
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
-			throw new Exception_DB(__METHOD__, 'Prepare', $this->setup['DB'], $e);
+			throw new Exception_DB(__METHOD__, 'Prepare', $this->setup['DB'], $E);
 		}
 
 		$params = array_merge(array_values($setValues),
 		                      array_values($conditions));
 
 		// Execute
-		if ($stmt->execute($params) === false)
+		if ($Statement->execute($params) === false)
 		{
-			throw new Exception_DB(__METHOD__, 'Execute', $stmt);
+			throw new Exception_DB(__METHOD__, 'Execute', $Statement);
 		}
       
 		return true;
@@ -443,18 +447,18 @@ class SQL implements \Evoke\Core\Iface\DB
       
 		try
 		{
-			$stmt = $this->prepare($q);
-			$stmt->execute($conditions);
+			$Statement = $this->prepare($q);
+			$Statement->execute($conditions);
 
-			return $stmt->rowCount();
+			return $Statement->rowCount();
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new Exception_DB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
 				' conditions: ' . var_export($conditions, true),
 				$this->setup['DB'],
-				$e);
+				$E);
 		}
 	}
 
@@ -468,17 +472,17 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$stmt = $this->prepare(
+			$Statement = $this->prepare(
 				'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
 				'VALUES (' . $this->placeholders($fields) . ')');
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
 				var_export($fields, true);
 	 
 			throw new Exception_DB(
-				__METHOD__, $msg, $this->setup['DB'], $e);
+				__METHOD__, $msg, $this->setup['DB'], $E);
 		}
 
 		if (!is_array($valArr))
@@ -494,31 +498,31 @@ class SQL implements \Evoke\Core\Iface\DB
 			{
 				foreach ($valArr as $entryNum => $entry)
 				{
-					$stmt->execute($entry);
+					$Statement->execute($entry);
 				}
 			}
-			catch (\Exception $e)
+			catch (\Exception $E)
 			{
 				throw new Exception_DB(
 					__METHOD__,
 					'Multiple Values: ' . var_export($valArr, true),
 					$this->setup['DB'],
-					$e);
+					$E);
 			}
 		}
 		else // There should only be one entry to insert.
 		{
 			try
 			{
-				$stmt->execute($valArr);
+				$Statement->execute($valArr);
 			}
-			catch (\Exception $e)
+			catch (\Exception $E)
 			{
 				throw new Exception_DB(
 					__METHOD__,
 					'Single Value: ' . var_export($valArr, true),
 					$this->setup['DB'],
-					$e);
+					$E);
 			}
 		}
 	}
@@ -584,13 +588,13 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true),
-				$e);
+				$E);
 		}
 	}
 
@@ -630,14 +634,14 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) . ' separator: ' .
 				var_export($separator, true) . ' between: ' .
 				var_export($between, true),
-				$e);
+				$E);
 		}
 	}
 
@@ -712,14 +716,14 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $e)
+		catch (\Exception $E)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true) .
 				' between: ' . var_export($between, true),
-				$e);
+				$E);
 		}
 	}
 }

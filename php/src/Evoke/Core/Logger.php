@@ -17,57 +17,59 @@ namespace Evoke\Core;
 */
 class Logger
 {
-	protected $em;
+	protected $DateTime;
+	protected $EventManager;
+	
 	protected $setup;
    
-	public function __construct($setup=array())
+	public function __construct(Array $setup=array())
 	{
-		$this->setup = array_merge(
-			array('Default_Level'     => LOG_INFO,
-			      'Default_Level_Str' => 'Level_',
-			      'EventManager'      => NULL,
-			      'InstanceManager'   => NULL,
-			      'Mask'              => NULL,
-			      'Levels'            => array(
-				      LOG_EMERG   => 'Emergency',
-				      LOG_ALERT   => 'Alert',
-				      LOG_CRIT    => 'Critical',
-				      LOG_ERR     => 'Error',
-				      LOG_WARNING => 'Warning',
-				      LOG_NOTICE  => 'Notice',
-				      LOG_INFO    => 'Info',
-				      LOG_DEBUG   => 'Debug'),
-			      'Logging_Mandatory' => true,
-			      'Num_Levels'        => 8,
-			      'Time_Format'       => 'Y-M-d@H:i:sP'),
-			$setup);
+		$setup += array('DateTime'          => NULL,
+		                'Default_Level'     => LOG_INFO,
+		                'Default_Level_Str' => 'Level_',
+		                'EventManager'      => NULL,
+		                'Mask'              => NULL,
+		                'Levels'            => array(
+			                LOG_EMERG   => 'Emergency',
+			                LOG_ALERT   => 'Alert',
+			                LOG_CRIT    => 'Critical',
+			                LOG_ERR     => 'Error',
+			                LOG_WARNING => 'Warning',
+			                LOG_NOTICE  => 'Notice',
+			                LOG_INFO    => 'Info',
+			                LOG_DEBUG   => 'Debug'),
+		                'Logging_Mandatory' => true,
+		                'Num_Levels'        => 8,
+		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
-		if (!$this->setup['EventManager'] instanceof EventManager)
+		if (!$setup['DateTime'] instanceof \DateTime)
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' requires DateTime');
+		}
+		
+		if (!$setup['EventManager'] instanceof EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
-            
-		if (!$this->setup['InstanceManager'] instanceof Iface\InstanceManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires InstanceManager');
-		}
 
-		if (!isset($this->setup['Mask']))
+		$this->DateTime = $setup['DateTime'];
+		$this->EventManager = $setup['EventManager'];
+		
+		if (!isset($setup['Mask']))
 		{
 			// Default to all levels logged.
-			$this->setup['Mask'] = str_repeat('1', $this->setup['Num_Levels']);
+			$setup['Mask'] = str_repeat('1', $setup['Num_Levels']);
 		}
 
-		$this->em =& $this->setup['EventManager'];
-
+		$this->setup = $setup;
+		
 		// We observe Log events and remain decoupled to the code that calls us.
-		$this->em->connect('Log', array($this, 'log'));
+		$this->EventManager->connect('Log', array($this, 'log'));
 
 		// Create the Log.Write event as critical when logging is mandatory to
 		// ensure that messages are written.
-		$this->em->create('Log.Write', $this->setup['Logging_Mandatory']);
+		$this->EventManager->create('Log.Write', $this->setup['Logging_Mandatory']);
 	}
    
 	/******************/
@@ -94,14 +96,14 @@ class Logger
 			return;
 		}
 
-		$time = $this->setup['InstanceManager']->create('DateTime', 'now');
+		$this->DateTime->setTimestamp(time());
 
 		$message += array(
-			'Date_Time'    => $time->format($this->setup['Time_Format']),
+			'Date_Time'    => $this->DateTime->format($this->setup['Time_Format']),
 			'Level_String' => $this->getLevelString($message['Level']));
       
 		// Notify the listeners of the message!
-		$this->em->notify('Log.Write', $message);
+		$this->EventManager->notify('Log.Write', $message);
 	}
 
 	/** Return whether the message has the level to be logged. This is done by
