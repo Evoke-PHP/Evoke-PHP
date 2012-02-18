@@ -27,30 +27,19 @@ namespace Evoke\Data;
 */
 class Base implements \Evoke\Core\Iface\Data
 {
-	/** @property $data
-	 *  The data is protected, which is important to note in this class.  Being
-	 *  protected means that it will still be accessible from extended classes,
-	 *  however when joint fields are referenced externally this member does not
-	 *  get in the way.  This means that data is still a valid name for joining
-	 *  data. (External references like $obj->data will not be able to see
-	 *  $this->data and will instead find the appropriate joint data).
+	/** @property $collisionFreeSetup
+	 *  Due to the way data is accessed from the Data class the number of
+	 *  properties within the class must be limited to avoid collisions. The name
+	 *  of our one property is also designed to avoid collisions.  This is due to
+	 *  the implementation of the \ref __get method which provides access to
+	 *  joint data.
 	 */
-	protected $data;
-
-	/** @property $jointKey
-	 *  The Joint Key used to refer to joint data.
-	 */
-	protected $jointKey;
-
-	/** @property $joins
-	 *  Joins \array used to refer to joint data.
-	 */
-	protected $Joins;
-	
+	protected $collisionFreeSetup;
+		
 	public function __construct(Array $setup)
 	{
-		$this->data = array();
-		$setup += array('Joins'     => NULL,
+		$setup += array('Data'      => array(),
+		                'Joins'     => NULL,
 		                'Joint_Key' => 'Joint_Data');
 
 		if (!is_array($setup['Joins']))
@@ -58,11 +47,8 @@ class Base implements \Evoke\Core\Iface\Data
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Joins as array');
 		}
-
-		$this->joins = $setup['Joins'];
-		$this->jointKey = $setup['Joint_Key'];
 		
-		foreach ($this->joins as $parentField => $dataContainer)
+		foreach ($setup['Joins'] as $parentField => $dataContainer)
 		{
 			if (!$dataContainer instanceof \Evoke\Core\Iface\Data)
 			{
@@ -71,6 +57,8 @@ class Base implements \Evoke\Core\Iface\Data
 					$parentField);
 			}
 		}
+
+		$this->collisionFreeSetup = $setup;
 	}
 
 	/******************/
@@ -78,19 +66,19 @@ class Base implements \Evoke\Core\Iface\Data
 	/******************/
 
 	/** Provide access to the joint data.  This allows the object to be used like
-	 *   so:  $object->referencedData (for joint data with a parent field of
+	 *  so:  $object->referencedData (for joint data with a parent field of
 	 *  'Referenced_Data').
 	 *  @param parentField \string The parent field for the joint data.
 	 *  This can be as per the return value of \ref getJoinName.
 	 */
 	public function __get($parentField)
 	{
-		if (isset($this->joins[$parentField]))
+		if (isset($this->collisionFreeSetup['Joins'][$parentField]))
 		{
-			return $this->joins[$parentField];
+			return $this->collisionFreeSetup['Joins'][$parentField];
 		}
       
-		foreach ($this->joins as $pField => $dataContainer)
+		foreach ($this->collisionFreeSetup['Joins'] as $pField => $dataContainer)
 		{
 			if ($parentField === $this->getJoinName($pField))
 			{
@@ -101,7 +89,7 @@ class Base implements \Evoke\Core\Iface\Data
 		throw new \OutOfBoundsException(
 			__METHOD__ . ' record does not refer to: ' .
 			var_export($parentField, true) . ' joins are: ' .
-			var_export($this->joins, true));
+			var_export($this->collisionFreeSetup['Joins'], true));
 	}
 
 	/** Get the current record as a simple array (without iterator or reference
@@ -110,7 +98,7 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function getRecord()
 	{
-		return current($this->data);
+		return current($this->collisionFreeSetup['Data']);
 	}
 
 	/** Return whether the data is empty or not.
@@ -118,7 +106,7 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function isEmpty()
 	{
-		return empty($this->data);
+		return empty($this->collisionFreeSetup['Data']);
 	}
    
 	/** Set the data that we are managing.
@@ -126,7 +114,7 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function setData(Array $data)
 	{
-		$this->data = $data;
+		$this->collisionFreeSetup['Data'] = $data;
 		$this->rewind();
 	}   
    
@@ -146,7 +134,7 @@ class Base implements \Evoke\Core\Iface\Data
 	/// Return the key of the current data item.
 	public function key()
 	{
-		return key($this->data);
+		return key($this->collisionFreeSetup['Data']);
 	}
 
 	/** Get the next record of data. Set the next record within the Data object
@@ -154,7 +142,7 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function next()
 	{
-		$nextItem = next($this->data);
+		$nextItem = next($this->collisionFreeSetup['Data']);
 
 		if ($nextItem === false)
 		{
@@ -168,7 +156,7 @@ class Base implements \Evoke\Core\Iface\Data
 	/// Rewind to the first record of data.
 	public function rewind()
 	{
-		$first = reset($this->data);
+		$first = reset($this->collisionFreeSetup['Data']);
 
 		if ($first !== false)
 		{
@@ -181,7 +169,7 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	public function valid()
 	{
-		return (current($this->data) !== false);
+		return (current($this->collisionFreeSetup['Data']) !== false);
 	}
 
 	/**************************/
@@ -191,14 +179,14 @@ class Base implements \Evoke\Core\Iface\Data
 	/// Provide the array isset operator.
 	public function offsetExists($offset)
 	{
-		$record = current($this->data);
+		$record = current($this->collisionFreeSetup['Data']);
 		return isset($record[$offset]);
 	}
 
 	/// Provide the array access operator.
 	public function offsetGet($offset)
 	{
-		$record = current($this->data);
+		$record = current($this->collisionFreeSetup['Data']);
 		return $record[$offset];
 	}
 
@@ -233,11 +221,13 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	protected function setRecord($record)
 	{
-		foreach ($this->joins as $parentField => $data)
+		foreach ($this->collisionFreeSetup['Joins'] as $parentField => $data)
 		{
-			if (isset($record[$this->jointKey][$parentField]))
+			if (isset($record[
+				          $this->collisionFreeSetup['Joint_Key']][$parentField]))
 			{
-				$data->setData($record[$this->jointKey][$parentField]);
+				$data->setData(
+					$record[$this->collisionFreeSetup['Joint_Key']][$parentField]);
 			}
 		}
 	}

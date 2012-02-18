@@ -94,7 +94,8 @@ class Base implements \Evoke\Core\Iface\Element
 	 *  Any data that is not passed in is not set.
 	 *  Any data with a key outside of this range is ignored.
 	 *
-	 *  @param element \array The element data to set ourselves to.
+	 *  @param element \mixed The element data to set ourselves to must be array
+	 *  accessible.
 	 *  \return \array Return the data that has been set.
 	 */
 	public function set(Array $element)
@@ -105,7 +106,7 @@ class Base implements \Evoke\Core\Iface\Element
 		{
 			$this->el[$this->offsets['Tag']] = $element[$this->offsets['Tag']];
 		}
-      
+
 		if (isset($element[$this->offsets['Attribs']]))
 		{
 			$this->el[$this->offsets['Attribs']] =

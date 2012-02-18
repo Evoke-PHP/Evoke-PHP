@@ -56,7 +56,7 @@ class XWR extends \XMLWriter
 	 )
 	 \endverbatim
 	*/
-	public function write($xml)
+	public function write(Array $xml)
 	{
 		if (!isset($xml[$this->setup['Tag_Pos']]))
 		{
