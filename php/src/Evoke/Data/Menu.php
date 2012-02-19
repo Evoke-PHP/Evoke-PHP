@@ -27,9 +27,9 @@ class Menu extends Base
 	{
 		$data = array();
       
-		foreach ($this->list as $record)
+		foreach ($this->List as $MenuItems)
 		{
-			$data[] = $this->arrangeRecord($record);
+			$data[] = $this->getTree($MenuItems);
 		}
       
 		return $data;
@@ -39,14 +39,13 @@ class Menu extends Base
 	/* Protected Methods */
 	/*********************/
    
-	/** Arrange a single record (which is a single tree) from the data.  We are
-	 *  assuming that the data is arranged by Left order so that we can build
-	 *  from the ROOT item, left to right.
+	/** Arrange the menu items into a tree.  We assume that the data is arranged
+	 *  by Left order so that we can build from the ROOT item, left to right.
+	 *  @param MenuItems \Object Data object for the menu items.
+	 *  \return \array Menu tree.
 	 */
-	protected function arrangeRecord($record)
+	protected function getTree($MenuItems)
 	{      
-		//$list = array_values($record[$this->jointKey]['List_ID']);
-		$list = $record;
 		$tree = array();
       
 		// We are adding from left to right, so all we need to remember is how
@@ -58,16 +57,9 @@ class Menu extends Base
 		// current level, second to last = previous level, etc.
 		$childrenToProcess = array();
       
-		// Add each item from the list in its correct place.
-		//for ($i = 0; $i < count($list); ++$i)
-		//{
-		foreach ($list as $item)
+		foreach ($MenuItems as $Item)
 		{
-			$menuItem = $item->getRecord();
-
-			//$item = $list[$i];
-			$numChildren = ($menuItem[$this->right] -
-			                $menuItem[$this->left] - 1) / 2;
+			$numChildren = ($Item[$this->right] - $Item[$this->left] - 1) / 2;
 
 			if ($numChildren > 0)
 			{
@@ -82,7 +74,7 @@ class Menu extends Base
 				$ref =& $ref[count($ref) - 1]['Children'];
 			}
 
-			$ref[] = $menuItem;
+			$ref[] = $Item->getRecord();
 
 			// We have processed an item.
 			foreach ($childrenToProcess as &$children)

@@ -237,18 +237,19 @@ class Base implements \Evoke\Core\Iface\Data
 	/*******************/
 
 	/** Get the Join name that will be used for accessing the joint data from
-	 *  this object.  It should match our standard naming of properties
-	 *  (camel case) and not contain the final ID which is not needed.
+	 *  this object.  The joint data is a Data object and its name should match
+	 *  the standard naming of our objects (Upper Camel Case) and not contain the
+	 *  final ID which is not needed.
 	 *  @param parentField \string The parent field for the joint data.
 	 *  \return \string The reference name.
 	 */
 	private function getJoinName($parentField)
 	{
-		$nameParts = mb_split('_', $parentField);
+		$nameParts = explode('_', $parentField);
 		$lastPart = end($nameParts);
 
 		// Remove any final id.
-		if (mb_strtolower($lastPart) === 'id')
+		if (strtolower($lastPart) === 'id')
 		{
 			array_pop($nameParts);
 		}
@@ -257,11 +258,9 @@ class Base implements \Evoke\Core\Iface\Data
 
 		foreach ($nameParts as $part)
 		{
-			$name .= $part;
+			$name .= ucfirst($part);
 		}
-      
-		$name[0] = mb_strtolower($name[0]);
-      
+
 		return $name;
 	}
 }

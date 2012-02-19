@@ -45,8 +45,8 @@ class Joint extends Base
 		
 		parent::__construct($setup);
 
-		$this->Joins     = $setup['Joins'];
-		$this->select    = $setup['Select'];
+		$this->Joins      = $setup['Joins'];
+		$this->select     = $setup['Select'];
 		$this->tableName = $setup['Table_Name'];
 	}
 
