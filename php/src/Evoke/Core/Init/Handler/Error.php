@@ -11,7 +11,7 @@ class Error implements \Evoke\Core\Iface\Handler
 	public function __construct(Array $setup)
 	{
 		$setup += array('Detailed_Insecure_Message' => NULL,
-		                'EventManager'              => NULL,
+		                'Event_Manager'              => NULL,
 		                'XWR'                       => NULL);
 
 		if (!is_bool($setup['Detailed_Insecure_Message']))
@@ -20,7 +20,7 @@ class Error implements \Evoke\Core\Iface\Handler
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
 
-		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
@@ -32,7 +32,7 @@ class Error implements \Evoke\Core\Iface\Handler
 		}
      
 		$this->detailed = $setup['Detailed_Insecure_Message'];
-		$this->EventManager = $setup['EventManager'];
+		$this->EventManager = $setup['Event_Manager'];
 		$this->XWR = $setup['XWR'];
 	}
    

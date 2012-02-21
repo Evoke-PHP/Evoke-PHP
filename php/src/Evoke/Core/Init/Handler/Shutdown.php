@@ -13,13 +13,13 @@ class Shutdown implements \Evoke\Core\Iface\Handler
 			      'Detailed_Insecure_Message' => NULL),
 			$setup);
 
-		if (!is_string($this->setup['Administrator_Email']))
+		if (!is_string($this->administratorEmail))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Administrator_Email to be a string');
 		}
       
-		if (!is_bool($this->setup['Detailed_Insecure_Message']))
+		if (!is_bool($this->detailedInsecureMessage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
@@ -64,13 +64,13 @@ class Shutdown implements \Evoke\Core\Iface\Handler
 			'future.  Useful information such as the date, time and what you ' .
 			'were doing when the error occurred should help us fix this.';
 
-		if (!empty($this->setup['Administrator_Email']))
+		if (!empty($this->administratorEmail))
 		{
 			$message .= "<br>\n<br>\n" .
-				'Email us at ' . $this->setup['Administrator_Email'];
+				'Email us at ' . $this->administratorEmail;
 		}
       
-		if ($this->setup['Detailed_Insecure_Message'])
+		if ($this->detailedInsecureMessage)
 		{
 			$message .= "<br>\n<br>\n" .
 				'PHP [' . $handledErrorTypes[$err['type']] . '] ' .

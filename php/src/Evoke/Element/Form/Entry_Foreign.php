@@ -37,11 +37,11 @@ class EntryForeign extends Entry
 	protected function buildInput($description, $fieldSetup)
 	{
 		$field = $description['Field'];
-		$foreignKeys = $this->setup['Table_Info']->getForeignKeys();
+		$foreignKeys = $this->tableInfo->getForeignKeys();
 	    
 		if (strtoupper($description['Key'] !== 'MUL') ||
 		    !isset($foreignKeys[$field]) ||
-		    isset($this->setup['Ignore_As_Foreign_Key'][$field]))
+		    isset($this->ignoreAsForeignKey[$field]))
 		{
 			return parent::buildInput($description, $fieldSetup);
 		}
@@ -57,7 +57,7 @@ class EntryForeign extends Entry
 		$field = $description['Field'];
 		$elems = array();
       
-		if (!isset($this->setup['Foreign_Selector'][$field]))
+		if (!isset($this->foreignSelector[$field]))
 		{
 			throw new \Exception(
 				__METHOD__ . 'No Foreign Selector for field: ' . $field);
@@ -71,7 +71,7 @@ class EntryForeign extends Entry
 				      'Order_By'     => array(),
 				      'Prepend_Data' => array(),
 				      'Required'     => false),
-				$this->setup['Foreign_Selector'][$field]);
+				$this->foreignSelector[$field]);
       
 		$selectedFields = array(
 			'Field'          => $foreignKeys[$field]['Foreign_Field'],

@@ -56,7 +56,7 @@ class Bootstrap
 		$ExceptionHandler = $InstanceManager->create(
 			'\Evoke\Core\Init\Handler\Exception',
 			array('Detailed_Insecure_Message'    => $isDevelopmentServer,
-			      'EventManager'                 => $EventManager,
+			      'Event_Manager'                 => $EventManager,
 			      'Max_Length_Exception_Message' => $Settings['Constant'][
 				      'Max_Length_Exception_Message']));
 		$ExceptionHandler->register();
@@ -64,7 +64,7 @@ class Bootstrap
 		$ErrorHandler = $InstanceManager->create(
 			'\Evoke\Core\Init\Handler\Error',
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
-			      'EventManager'              => $EventManager,
+			      'Event_Manager'              => $EventManager,
 			      'XWR'                       => $InstanceManager->get(
 				      '\Evoke\Core\XWR')));
 		$ErrorHandler->register();
@@ -75,8 +75,8 @@ class Bootstrap
 		$InstanceManager = new \Evoke\Core\InstanceManager();
 		$InstanceManager->get(
 			'\Evoke\Core\Logger',
-			array('DateTime'        => $InstanceManager->get('DateTime'),
-			      'EventManager'    => $InstanceManager->get(
+			array('Date_Time'        => $InstanceManager->get('Date_Time'),
+			      'Event_Manager'    => $InstanceManager->get(
 				      '\Evoke\Core\EventManager')));
 	}
 

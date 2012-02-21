@@ -19,7 +19,7 @@ class Array extends Element
 	{
 		return parent::set(
 			array('div',
-			      $this->setup['Container_Attribs'],
+			      $this->containerAttribs,
 			      array('Children' => $this->buildElems($data))));
 	}
    
@@ -45,7 +45,7 @@ class Array extends Element
 			{
 				$msgElems[] = array(
 					'ul',
-					array('class' => $this->setup['Element_Class'] . ' Level_' .
+					array('class' => $this->elementClass . ' Level_' .
 					      $level),
 					array('Text' => $msg['Title'],
 					      'Children' => $this->buildElems(
@@ -56,7 +56,7 @@ class Array extends Element
 		{
 			$msgElems[] = array(
 				'li',
-				array('class' => $this->setup['Element_Class'] . ' Leaf Level_' .
+				array('class' => $this->elementClass . ' Leaf Level_' .
 				      $level),
 				array('Text' => $messageArray));
 		}

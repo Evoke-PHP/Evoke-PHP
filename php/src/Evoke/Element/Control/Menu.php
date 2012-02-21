@@ -31,7 +31,7 @@ class Menu extends \Evoke\Element\Base
 	{
 		return parent::set(
 			array('ul',
-			      $this->setup['Menu_Attribs'],
+			      $this->menuAttribs,
 			      array('Children' => $this->buildMenu($menuItems))));
 	}
    

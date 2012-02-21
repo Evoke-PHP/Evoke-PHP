@@ -29,16 +29,16 @@ class Foreign extends Base
 
 	protected function getElements()
 	{
-		$fieldInfo = $this->setup['Field_Info'];
+		$fieldInfo = $this->fieldInfo;
       
 		if (empty($data))
 		{
 			$elems = array($this->buildLabel($field));
 
-			if ($this->setup['Required_Indication'])
+			if ($this->requiredIndication)
 			{
 				$elems[] = $this->buildRequiredIndication(
-					$this->setup['Foreign_Selector']['Required']);
+					$this->foreignSelector['Required']);
 			}
 
 			$elems[] = array(
@@ -53,23 +53,23 @@ class Foreign extends Base
 		$optionElements = array();
       
 		$data = array_merge(
-			$this->setup['Foreign_Selector']['Prepend_Data'],
+			$this->foreignSelector['Prepend_Data'],
 			$data,
-			$this->setup['Foreign_Selector']['Append_Data']);
+			$this->foreignSelector['Append_Data']);
       
 		foreach ($data as $forKeyData)
 		{
 			$attribs = array(
 				'value' => $forKeyData[
-					$this->setup['Selected_Fields']['Field']]);
+					$this->selectedFields['Field']]);
 			$options = array(
 				'Text' => $forKeyData[
-					$this->setup['Selected_Fields']['Selector_Field']]);
+					$this->selectedFields['Selector_Field']]);
 	 
-			if (isset($this->setup['Field_Values'][$field]) &&
-			    ($this->setup['Field_Values'][$field] ===
+			if (isset($this->fieldValues[$field]) &&
+			    ($this->fieldValues[$field] ===
 			     $forKeyData[
-				     $this->setup['Selected_Fields']['Field']]))
+				     $this->selectedFields['Field']]))
 			{
 				$attribs = array_merge($attribs, array('selected' => 'selected'));
 			}
@@ -77,16 +77,16 @@ class Foreign extends Base
 			$optionElements[] = array('option', $attribs, $options);
 		}
       
-		if (isset($this->setup['Field_Attribs'][$field]))
+		if (isset($this->fieldAttribs[$field]))
 		{
-			$attribArr = $this->setup['Field_Attribs'][$field];
+			$attribArr = $this->fieldAttribs[$field];
 		}
 		else
 		{
 			$attribArr = array();
 		}
       
-		if (isset($this->setup['Highlighted_Fields'][$field]))
+		if (isset($this->highlightedFields[$field]))
 		{
 			if (isset($attribArr['class']))
 			{
@@ -101,7 +101,7 @@ class Foreign extends Base
 		return array(
 			$this->buildLabel($field),
 			$this->buildRequiredIndication(
-				$this->setup['Foreign_Selector']['Required']),
+				$this->foreignSelector['Required']),
 			array(
 				'select',
 				array_merge($attribArr, array('name' => $field)),

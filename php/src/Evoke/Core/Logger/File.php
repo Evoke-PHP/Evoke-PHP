@@ -17,14 +17,14 @@ class File
 		$this->setup = array_merge(
 			array('Append'       => true,
 			      'Dir_Mode'     => 0700,
-			      'EventManager' => NULL,
+			      'Event_Manager' => NULL,
 			      'Filesystem'   => NULL,
 			      'File_Mode'    => 0640,
 			      'Filename'     => 'php.log',
 			      'Locking'      => true),
 			$setup);
 
-		if (!$this->setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs EventManager');
@@ -36,7 +36,7 @@ class File
 				__METHOD__ . ' needs Filesystem');
 		}
 
-		$this->setup['EventManager']->connect(
+		$this->setup['Event_Manager']->connect(
 			'Log.Write', array($this, 'write'));
 	}
    
@@ -86,7 +86,7 @@ class File
 		if (!is_dir($dir))
 		{
 			$this->setup['Filesystem']->mkdir(
-				dirname($dir), $this->setup['Dir_Mode'], true);
+				dirname($dir), $this->dirMode, true);
 		}
             
 		if ($this->setup['Append'])
@@ -99,7 +99,7 @@ class File
 			$this->setup['Filename'], $writeMode);
       
 		$this->setup['Filesystem']->chmod(
-			$this->setup['Filename'], $this->setup['File_Mode']);
+			$this->setup['Filename'], $this->fileMode);
 
 		$this->opened = true;
 	}

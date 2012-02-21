@@ -172,7 +172,7 @@ class TableAdminTranslation extends TableAdmin
 			$langArr[$lang] = $language;
 		}
       
-		$translations = $this->SQL->select($this->setup['Table_Name'], '*');
+		$translations = $this->SQL->select($this->tableName, '*');
       
 		foreach($translations as $translation)
 		{

@@ -23,13 +23,13 @@ class Factory
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('InstanceManager' => NULL,
+		$setup += array('Instance_Manager' => NULL,
 		                'Namespace'       => array('Core'  => '\Evoke\Core\\',
 		                                           'Data'  => '\Evoke\Data\\',
 		                                           'Model' => '\Evoke\Model\\'),
 		                'Settings'        => NULL);
 
-		if (!$setup['InstanceManager'] instanceof
+		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
@@ -44,7 +44,7 @@ class Factory
 		}
 
 		$this->namespace = $setup['Namespace'];
-		$this->InstanceManager = $setup['InstanceManager'];
+		$this->InstanceManager = $setup['Instance_Manager'];
 		$this->Settings        = $setup['Settings'];
 	}
    
@@ -57,7 +57,7 @@ class Factory
 	{
 		return $this->InstanceManager->create(
 			$this->namespace['Core'] . 'Controller',
-			array_merge(array('EventManager' => $this->getEventManager()),
+			array_merge(array('Event_Manager' => $this->getEventManager()),
 			            $setup));
 	}
 
@@ -74,7 +74,7 @@ class Factory
 	public function getEventManager()
 	{
 		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'EventManager');
+			$this->namespace['Core'] . 'Event_Manager');
 	}
 
 	/// Return the file system object.
@@ -88,13 +88,13 @@ class Factory
 	public function getMessageArray()
 	{
 		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'MessageArray');
+			$this->namespace['Core'] . 'Message_Array');
 	}
    
 	/// Get a model.
 	public function getModel($model, Array $setup=array())
 	{
-		$setup += array('EventManager' => $this->getEventManager());
+		$setup += array('Event_Manager' => $this->getEventManager());
 
 		return $this->InstanceManager->create($model, $setup);
 	}
@@ -102,7 +102,7 @@ class Factory
 	/// Get a Database model.
 	public function getModelDB($model, Array $setup)
 	{
-		$setup += array('EventManager' => $this->getEventManager(),
+		$setup += array('Event_Manager' => $this->getEventManager(),
 		                'SQL'          => $this->getSQL());
 
 		return $this->InstanceManager->create($model, $setup);
@@ -129,8 +129,8 @@ class Factory
 		$setup += array('Failures'      => $this->getMessageArray(),
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'TableInfo'     => NULL,
-		                'TableListID'   => $this->getTableListID());
+		                'Table_Info'     => NULL,
+		                'Table_List_I_D'   => $this->getTableListID());
       
 		return $this->getModel($this->namespace['Model'] . 'DB\JointAdmin',
 		                       $setup);
@@ -142,8 +142,8 @@ class Factory
 		$setup += array('Failures'      => $this->getMessageArray(),
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'TableInfo'     => NULL,
-		                'TableListID'   => $this->getTableListID());
+		                'Table_Info'     => NULL,
+		                'Table_List_I_D'   => $this->getTableListID());
       
 		return $this->getModel($this->namespace['Model'] . 'DB\JointAdminLinked',
 		                       $setup);
@@ -152,16 +152,16 @@ class Factory
 	/// Get an Admin model for a table.
 	public function getModelDBTableAdmin(Array $setup)
 	{
-		$setup += array('EventManager'  => $this->getEventManager(),
+		$setup += array('Event_Manager'  => $this->getEventManager(),
 		                'Failures'      => $this->getMessageArray(),
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'TableInfo'     => NULL,
+		                'Table_Info'     => NULL,
 		                'Table_Name'    => NULL);
 
-		if (!isset($setup['TableInfo']) && isset($setup['Table_Name']))
+		if (!isset($setup['Table_Info']) && isset($setup['Table_Name']))
 		{
-			$setup['TableInfo'] = $this->getTableInfo(
+			$setup['Table_Info'] = $this->getTableInfo(
 				array('Table_Name' => $setup['Table_Name']));
 		}
       
@@ -174,7 +174,7 @@ class Factory
 	{
 		return $this->InstanceManager->get(
 			$this->namespace['Model'] . 'DB\Table',
-			array_merge(array('EventManager'  => $this->getEventManager(),
+			array_merge(array('Event_Manager'  => $this->getEventManager(),
 			                  'Failures'      => $this->getMessageArray(),
 			                  'Notifications' => $this->getMessageArray(),
 			                  'SQL'           => $this->getSQL()),
@@ -185,7 +185,7 @@ class Factory
 	public function getModelMenu($menuName)
 	{
 		$setup = array(
-			'EventManager'  => $this->getEventManager(),
+			'Event_Manager'  => $this->getEventManager(),
 			'Failures'      => $this->getMessageArray(),
 			'Joins'         => $this->getJoins(
 				array('Joins' => array(
@@ -209,7 +209,7 @@ class Factory
 	public function getPageXML($page, Array $setup=array())
 	{
 		$setup += array('Factory'         => $this,
-		                'InstanceManager' => $this->InstanceManager,
+		                'Instance_Manager' => $this->InstanceManager,
 		                'Translator'      => $this->getTranslator(),
 		                'XWR'             => $this->getXWR());
 
@@ -225,7 +225,7 @@ class Factory
 		return $this->InstanceManager->create(
 			$processing,
 			array_merge($setup,
-			            array('EventManager' => $this->getEventManager())));
+			            array('Event_Manager' => $this->getEventManager())));
 	}
    
 	/// Get the session object.
@@ -241,7 +241,7 @@ class Factory
 	public function getSessionManager($domain)
 	{
 		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'SessionManager',
+			$this->namespace['Core'] . 'Session_Manager',
 			array('Domain'  => $domain,
 			      'Session' => $this->getSession()));
 	}
@@ -290,7 +290,7 @@ class Factory
 		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'DB\Table\Info',
 			array_merge(array('Failures' => $this->InstanceManager->create(
-				                  $this->namespace['Core'] . 'MessageArray'),
+				                  $this->namespace['Core'] . 'Message_Array'),
 			                  'SQL'      => $this->getSQL()),
 			            $setup));
 	}
@@ -335,7 +335,7 @@ class Factory
 			array_merge(
 				$setup,
 				array('Joins'     => $tableJoins,
-				      'TableInfo' => $this->getTableInfo(
+				      'Table_Info' => $this->getTableInfo(
 					      array('Table_Name' => $setup['Table_Name'])))));
 	}
 
@@ -346,7 +346,7 @@ class Factory
 			$this->namespace['Core'] . 'Translator',
 			array('Default_Language' => $this->Settings['Constant'][
 				      'Default_Language'],
-			      'SessionManager'   => $this->getSessionManager('Lang'),
+			      'Session_Manager'   => $this->getSessionManager('Lang'),
 			      'Translation_File' => $this->Settings['File']['Translation']));
 	}
 
@@ -355,8 +355,8 @@ class Factory
 	{
 		return $this->InstanceManager->create(
 			$view,
-			array_merge(array('EventManager'    => $this->getEventManager(),
-			                  'InstanceManager' => $this->InstanceManager,
+			array_merge(array('Event_Manager'    => $this->getEventManager(),
+			                  'Instance_Manager' => $this->InstanceManager,
 			                  'Translator'      => $this->getTranslator(),
 			                  'XWR'             => $this->getXWR()),
 			            $setup));

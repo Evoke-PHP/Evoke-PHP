@@ -110,14 +110,14 @@ class Base implements \Evoke\Core\Iface\Element
 		if (isset($element[$this->offsets['Attribs']]))
 		{
 			$this->el[$this->offsets['Attribs']] =
-				array_merge($this->setup['Default_Attribs'],
+				array_merge($this->defaultAttribs,
 				            $element[$this->offsets['Attribs']]);
 		}
 
 		if (isset($element[$this->offsets['Options']]))
 		{
 			$this->el[$this->offsets['Options']] =
-				array_merge($this->setup['Default_Options'],
+				array_merge($this->defaultOptions,
 				            $element[$this->offsets['Options']]);
 		}
 

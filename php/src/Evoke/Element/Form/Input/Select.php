@@ -14,13 +14,13 @@ class Select extends \Evoke\Element
 
 		parent::__construct($setup);
 
-		if (!is_string($this->setup['Text_Field']))
+		if (!is_string($this->textField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Text_Field as string');
 		}
 
-		if (!is_string($this->setup['Value_Field']))
+		if (!is_string($this->valueField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Value_Field as string');
@@ -44,24 +44,24 @@ class Select extends \Evoke\Element
 		                 'Selected' => NULL);
 		$optionElements = array();
 
-		$fullData = array_merge($this->setup['Prepend_Data'],
+		$fullData = array_merge($this->prependData,
 		                        $select['Data'],
-		                        $this->setup['Append_Data']);
+		                        $this->appendData);
 
 		foreach ($fullData as $key => $record)
 		{
-			if (!isset($record[$this->setup['Text_Field']]) ||
-			    !isset($record[$this->setup['Value_Field']]))
+			if (!isset($record[$this->textField]) ||
+			    !isset($record[$this->valueField]))
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' Record: ' . var_export($record, true) .
 					' at key: ' . $key . ' does not contain the required fields ' .
-					'Text_Field: ' . $this->setup['Text_Field'] .
-					' and Value_Field: ' . $this->setup['Value_Field']);
+					'Text_Field: ' . $this->textField .
+					' and Value_Field: ' . $this->valueField);
 			}
 
-			$value = $record[$this->setup['Value_Field']];
-			$optionAttribs = array_merge($this->setup['Option_Attribs'],
+			$value = $record[$this->valueField];
+			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
 			if (isset($select['Selected']) && $value == $select['Selected'])
@@ -72,7 +72,7 @@ class Select extends \Evoke\Element
 			$optionElements[] =
 				array('option',
 				      $optionAttribs,
-				      array('Text' => $record[$this->setup['Text_Field']]));
+				      array('Text' => $record[$this->textField]));
 		}
 
 		return parent::set(array('select',

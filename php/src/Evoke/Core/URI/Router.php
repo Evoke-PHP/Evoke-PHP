@@ -10,7 +10,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 	public function __construct(Array $setup)
 	{
 		$this->setup = array_merge(array('Factory'         => NULL,
-		                                 'InstanceManager' => NULL,
+		                                 'Instance_Manager' => NULL,
 		                                 'Response_Base'   => NULL),
 		                           $setup);
 
@@ -19,14 +19,14 @@ class Router implements \Evoke\Core\Iface\URI\Router
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$this->setup['InstanceManager'] instanceof
+		if (!$this->setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires InstanceManager');
 		}
       
-		if (!is_string($this->setup['Response_Base']))
+		if (!is_string($this->responseBase))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Response_Base as string');
@@ -66,16 +66,16 @@ class Router implements \Evoke\Core\Iface\URI\Router
 			}
 		}
 
-		$response = $this->setup['Response_Base'] . $response;
+		$response = $this->responseBase . $response;
 
 		// Create the response object.
 		try
 		{
-			return $this->setup['InstanceManager']->create(
+			return $this->setup['Instance_Manager']->create(
 				$response,
 				array_merge(
 					array('Factory'         => $this->setup['Factory'],
-					      'InstanceManager' => $this->setup['InstanceManager']),
+					      'Instance_Manager' => $this->setup['Instance_Manager']),
 					$params));
 		}
 		catch (\Exception $e)

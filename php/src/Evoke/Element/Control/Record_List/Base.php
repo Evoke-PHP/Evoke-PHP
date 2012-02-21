@@ -40,13 +40,13 @@ class Element_Record_List extends Element
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Data');
 		}
       
-		if (!isset($this->setup['Row_Buttons']))
+		if (!isset($this->rowButtons))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Row_Buttons');
 		}
 
-		if (!isset($this->setup['Table_Name']))
+		if (!isset($this->tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name');
@@ -64,7 +64,7 @@ class Element_Record_List extends Element
 		// heading setup whereas the default is for only a top heading.
 		if (isset($setup['Heading_Setup']) && !empty($setup['Heading_Setup']))
 		{
-			$this->setup['Heading_Setup'] = array_merge(
+			$this->headingSetup = array_merge(
 				array('Bottom'          => false,
 				      'Buttons'         => array(),
 				      'Inline'          => false,
@@ -72,15 +72,15 @@ class Element_Record_List extends Element
 				      'Top'             => false),
 				$setup['Heading_Setup']);
 
-			if (!isset($this->setup['Heading_Setup']['Buttons_Attribs']))
+			if (!isset($this->headingSetup['Buttons_Attribs']))
 			{
-				$this->setup['Heading_Setup']['Buttons_Attribs'] =
+				$this->headingSetup['Buttons_Attribs'] =
 					array('class' => 'Heading_Buttons');
 			}
 		}
 		else
 		{
-			$this->setup['Heading_Setup'] =
+			$this->headingSetup =
 				array('Bottom'          => false,
 				      'Buttons'         => array(),
 				      'Buttons_Attribs' => array('class' => 'Heading_Buttons'),
@@ -105,7 +105,7 @@ class Element_Record_List extends Element
 		$fields = $this->getFields();
 
 		// Remove the ignored fields.
-		foreach ($this->setup['Ignored_Fields'] as $ignored)
+		foreach ($this->ignoredFields as $ignored)
 		{
 			unset($fields[$ignored]);
 		}
@@ -114,14 +114,14 @@ class Element_Record_List extends Element
 		$headingRow = $this->buildHeadingRow($headings);
 		$recordListElems = array();
 
-		if ($this->setup['Heading_Setup']['Top'])
+		if ($this->headingSetup['Top'])
 		{
 			$recordListElems[] = $headingRow;
 		}
 
 		$recordListElems[] = $this->buildContent($fields, $headings);
 
-		if ($this->setup['Heading_Setup']['Bottom'])
+		if ($this->headingSetup['Bottom'])
 		{
 			$recordListElems[] = $headingRow;
 		}
@@ -140,7 +140,7 @@ class Element_Record_List extends Element
 		{
 			$rowElems = array(
 				array('div',
-				      $this->setup['Row_Attribs'],
+				      $this->rowAttribs,
 				      array('Children' => array($this->buildEmptyData()))));
 		}
 		else
@@ -151,7 +151,7 @@ class Element_Record_List extends Element
 			{
 				$rowElems[] = array(
 					'div',
-					$this->setup['Row_Attribs'],
+					$this->rowAttribs,
 					array('Children' => array(
 						      $this->buildRowData($fields, $row, $rowData, $headings),
 						      $this->buildRowButtons($row, $rowData))));
@@ -159,7 +159,7 @@ class Element_Record_List extends Element
 		}
 
 		return array('div',
-		             $this->setup['Content_Attribs'],
+		             $this->contentAttribs,
 		             array('Children' => $rowElems));
 	}
 
@@ -171,7 +171,7 @@ class Element_Record_List extends Element
 	{
 		return array(
 			'div',
-			$this->setup['Empty_Data_Attribs'],
+			$this->emptyDataAttribs,
 			array('Text' => $this->setup['Translator']->get('No_Records_Found')));
 	}
    
@@ -183,15 +183,15 @@ class Element_Record_List extends Element
 	{
 		return array(
 			'div',
-			$this->setup['Heading_Setup']['Row_Attribs'],
+			$this->headingSetup['Row_Attribs'],
 			array('Children' => array(
 				      array(
 					      'div',
-					      $this->setup['Data_Attribs'],
+					      $this->dataAttribs,
 					      array('Children' => $headings)),
 				      array(
 					      'div',
-					      $this->setup['Heading_Setup']['Buttons_Attribs'],
+					      $this->headingSetup['Buttons_Attribs'],
 					      array('Children' => $this->getHeadingButtons())))));
 	}
 
@@ -202,7 +202,7 @@ class Element_Record_List extends Element
 	 */
 	protected function buildRowButtons($row, $rowData)
 	{
-		if ($this->setup['Row_Buttons_As_Form'])
+		if ($this->rowButtonsAsForm)
 		{
 			return $this->app->getNew(
 				'Element_Form_Hidden_Input',
@@ -210,19 +210,19 @@ class Element_Record_List extends Element
 				      'Attribs'        => array_merge(
 					      array('action' => '',
 					            'method' => 'post'),
-					      $this->setup['Row_Buttons_Attribs']),
+					      $this->rowButtonsAttribs),
 				      'Data'           => $rowData,
 				      'Encasing'       => false,
-				      'Ignored_Fields' => $this->setup['Ignored_Fields'],
-				      'Name_Prefix'    => $this->setup['Table_Name'] . '.',
+				      'Ignored_Fields' => $this->ignoredFields,
+				      'Name_Prefix'    => $this->tableName . '.',
 				      'Primary_Keys'   => $this->getPrimaryKeys(),
-				      'Submit_Buttons' => $this->setup['Row_Buttons'],
+				      'Submit_Buttons' => $this->rowButtons,
 				      'Translator'     => $this->setup['Translator']));
 		}
 		else
 		{
 			return array('div',
-			             $this->setup['Row_Buttons_Attribs'],
+			             $this->rowButtonsAttribs,
 			             array('Children' => $this->getRowButtons($row)));
 		}
 	}
@@ -240,7 +240,7 @@ class Element_Record_List extends Element
 			$rowElems = array();
 
 			// Add inline headings and row contents to the row.
-			if ($this->setup['Heading_Setup']['Inline'])
+			if ($this->headingSetup['Inline'])
 			{
 				foreach($fields as $field)
 				{
@@ -288,7 +288,7 @@ class Element_Record_List extends Element
 	 */
 	protected function getDataAttribs($row, $rowData)
 	{
-		$dataAttribs = $this->setup['Data_Attribs'];
+		$dataAttribs = $this->dataAttribs;
 
 		// Counting from 0 the first row should be odd.
 		if ($row%2 == 0)
@@ -317,7 +317,7 @@ class Element_Record_List extends Element
 	/// Get the heading buttons that appear with Top or Bottom headings.
 	protected function getHeadingButtons()
 	{
-		return $this->setup['Heading_Setup']['Buttons'];
+		return $this->headingSetup['Buttons'];
 	}
    
 	/** Build the headings for each field.
@@ -336,10 +336,10 @@ class Element_Record_List extends Element
 			{
 				$headingText = $this->setup['Labels'][$field];
 			}
-			elseif ($this->setup['Translate_Labels'])
+			elseif ($this->translateLabels)
 			{
 				$headingText = $this->setup['Translator']->get(
-					$this->setup['Table_Name'] . '_Field_' . $field);
+					$this->tableName . '_Field_' . $field);
 			}
 			else
 			{
@@ -358,7 +358,7 @@ class Element_Record_List extends Element
 	/// Get the primary keys for a row.
 	protected function getPrimaryKeys()
 	{
-		return $this->setup['Primary_Keys'];
+		return $this->primaryKeys;
 	}
 
    
@@ -370,7 +370,7 @@ class Element_Record_List extends Element
 	{
 		$buttons = array();
 
-		foreach ($this->setup['Row_Buttons'] as $button)
+		foreach ($this->rowButtons as $button)
 		{
 			$buttonElem = $this->app->getNew('Element', $button);
 			$buttonElem->appendAttrib('name', '_' . $row);
@@ -387,13 +387,13 @@ class Element_Record_List extends Element
 	 */
 	protected function isEditedRecord($rowData)
 	{
-		if (empty($this->setup['Edited_Record']))
+		if (empty($this->editedRecord))
 		{
 			return false;
 		}
 
 		// Check that every primary key matches.
-		foreach ($this->setup['Edited_Record'] as $pKey => $pValue)
+		foreach ($this->editedRecord as $pKey => $pValue)
 		{
 			if (!isset($rowData[$pKey]) || $rowData[$pKey] !== $pValue)
 			{

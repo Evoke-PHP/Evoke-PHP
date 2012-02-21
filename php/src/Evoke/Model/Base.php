@@ -22,16 +22,16 @@ abstract class Base implements \Evoke\Core\Iface\Model
 	public function __construct(Array $setup)
 	{
 		$setup += array('Data_Prefix'    => NULL, // Can be NULL for no prefix.
-		                'EventManager'   => NULL,
+		                'Event_Manager'   => NULL,
 		                'Got_Data_Event' => 'Model.Got_Data');
 
-		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		$this->EventManager = $setup['EventManager'];
+		$this->EventManager = $setup['Event_Manager'];
 		$this->dataPrefix   = $setup['Data_Prefix'];
 		$this->gotDataEvent = $setup['Got_Data_Event'];
 	}

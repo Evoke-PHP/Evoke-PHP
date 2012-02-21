@@ -56,7 +56,7 @@ class Entry extends Base
 	/// Build the elements for the entry form.
 	protected function buildFormElements()
 	{
-		$description = $this->setup['Table_Info']->getDescription();
+		$description = $this->tableInfo->getDescription();
 
 		// A keyed version of the description that is much more useful.
 		$tableDescription = array();
@@ -72,9 +72,9 @@ class Entry extends Base
 
 		// The field order is supplied by the caller or is defaulted to every
 		// field in the table.
-		if (!empty($this->setup['Field_Order']))
+		if (!empty($this->fieldOrder))
 		{
-			$fieldOrder = $this->setup['Field_Order'];
+			$fieldOrder = $this->fieldOrder;
 		}
 		else
 		{
@@ -88,19 +88,19 @@ class Entry extends Base
 			{
 				$groupElements = array();
 
-				if (isset($this->setup['Group_Headings'][$groupName]))
+				if (isset($this->groupHeadings[$groupName]))
 				{
 					$groupElements = array(
 						array(
 							'h2',
-							array('class' => $this->setup['Group_Heading_Class']),
-							array('Text' => $this->setup['Group_Headings'][$groupName])
+							array('class' => $this->groupHeadingClass),
+							array('Text' => $this->groupHeadings[$groupName])
 							));
 				}
 	    
 				foreach($fieldDescription as $field)
 				{
-					if (!in_array($field, $this->setup['Ignored_Fields']))
+					if (!in_array($field, $this->ignoredFields))
 					{
 						$groupElements[] = $this->buildRow(
 							$this->buildInput(
@@ -124,7 +124,7 @@ class Entry extends Base
 						      'id' => $groupName),
 						array('Children' => $groupElements)));
 			}
-			elseif (!in_array($fieldDescription, $this->setup['Ignored_Fields']))
+			elseif (!in_array($fieldDescription, $this->ignoredFields))
 			{
 				$fieldInfo = $tableDescription[$fieldDescription];
 	    
@@ -156,7 +156,7 @@ class Entry extends Base
 			return $rowElems;
 		}
 	 
-		$encasingAttribs = $this->setup['Encasing_Attribs'];
+		$encasingAttribs = $this->encasingAttribs;
       
 		if ($highlighted)
 		{
@@ -170,7 +170,7 @@ class Entry extends Base
 			}
 		}
       
-		return array($this->setup['Encasing_Tag'],
+		return array($this->encasingTag,
 		             $encasingAttribs,
 		             array('Children' => $rowElems));
 	}
@@ -199,41 +199,41 @@ class Entry extends Base
 
 		// Deal with special settings.
 		// Encasing
-		if (isset($this->setup['Field_Encasing'][$field]))
+		if (isset($this->fieldEncasing[$field]))
 		{
-			$fieldSetup['Encasing'] = $this->setup['Field_Encasing'][$field];
+			$fieldSetup['Encasing'] = $this->fieldEncasing[$field];
 		}
-		elseif (isset($this->setup['Field_Encasing']))
+		elseif (isset($this->fieldEncasing))
 		{
-			$fieldSetup['Encasing'] = $this->setup['Field_Encasing'];
+			$fieldSetup['Encasing'] = $this->fieldEncasing;
 		}
 
 		// Field_Prefix
-		$fieldSetup['Field_Prefix'] = $this->setup['Field_Prefix'];
+		$fieldSetup['Field_Prefix'] = $this->fieldPrefix;
 	 
-		if (is_array($this->setup['Field_Prefix']) &&
-		    array_key_exists($field, $this->setup['Field_Prefix']))
+		if (is_array($this->fieldPrefix) &&
+		    array_key_exists($field, $this->fieldPrefix))
 		{
-			$fieldSetup['Field_Prefix'] = $this->setup['Field_Prefix'][$field];
+			$fieldSetup['Field_Prefix'] = $this->fieldPrefix[$field];
 		}
 
 		// Required_Indication
-		if (isset($this->setup['Required_Indication']) &&
-		    isset($this->setup['Required_Indication'][$field]))
+		if (isset($this->requiredIndication) &&
+		    isset($this->requiredIndication[$field]))
 		{
 			$fieldSetup['Required_Indication'] =
-				$this->setup['Required_Indication'][$field];
+				$this->requiredIndication[$field];
 		}
-		elseif (isset($this->setup['Required_Indication']) &&
-		        ($this->setup['Required_Indication'] === false))
+		elseif (isset($this->requiredIndication) &&
+		        ($this->requiredIndication === false))
 		{
 			$fieldSetup['Required_Indication'] = false;
 		}
 
 		// Translate_Prefix
-		if (isset($this->setup['Translate_Prefix']))
+		if (isset($this->translatePrefix))
 		{
-			$fieldSetup['Translate_Prefix'] = $this->setup['Translate_Prefix'];
+			$fieldSetup['Translate_Prefix'] = $this->translatePrefix;
 		}
 
 		return $fieldSetup;

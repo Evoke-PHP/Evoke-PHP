@@ -20,7 +20,7 @@ class JointAdminLinked extends Admin
 				__METHOD__ . ' requires Filesystem');
 		}
 
-		if (!$this->setup['Image_Manip'] instanceof \Evoke\Core\Image\Manip)
+		if (!$this->imageManip instanceof \Evoke\Core\Image\Manip)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Image_Manip');
@@ -48,7 +48,7 @@ class JointAdminLinked extends Admin
 			}
 		}
 
-		if ($this->setup['Connect_Events'])
+		if ($this->connectEvents)
 		{
 			$this->connectEvents('File.', array('Input_File' => 'upload'));
 		}
@@ -231,17 +231,17 @@ class JointAdminLinked extends Admin
       
 		try
 		{
-			if (!$this->setup['File_System']->is_dir($dir))
+			if (!$this->fileSystem->is_dir($dir))
 			{
-				$this->setup['File_System']->mkdir($dir,
-				                                   $this->setup['Dir_Mode'],
+				$this->fileSystem->mkdir($dir,
+				                                   $this->dirMode,
 				                                   true);
 			}
 
-			$this->setup['File_System']->rename($file['Tmp_Name'],
+			$this->fileSystem->rename($file['Tmp_Name'],
 			                                    $newName);
-			$this->setup['File_System']->chmod($newName,
-			                                   $this->setup['File_Mode']);
+			$this->fileSystem->chmod($newName,
+			                                   $this->fileMode);
 		}
 		catch (\Exception $e)
 		{
@@ -249,7 +249,7 @@ class JointAdminLinked extends Admin
 				$newName . ' due to exception: ' .
 				$e->getMessage();
 	 
-			$this->setup['Event_Manager']->notify(
+			$this->eventManager->notify(
 				'Log',
 				array('Level'   => LOG_ERR,
 				      'Message' => $msg,
@@ -274,10 +274,10 @@ class JointAdminLinked extends Admin
 		// Make sure the destination exists or is created.
 		$destBase = $link['Incoming'] . $this->sessionManager->getID() . '/';
       
-		if (!$this->setup['File_System']->is_dir($destBase))
+		if (!$this->fileSystem->is_dir($destBase))
 		{
-			$this->setup['File_System']->mkdir(
-				$destBase, $this->setup['Dir_Mode'], true);
+			$this->fileSystem->mkdir(
+				$destBase, $this->dirMode, true);
 		}
       
 		foreach ($data as $record)
@@ -289,10 +289,10 @@ class JointAdminLinked extends Admin
 				$srcSpecific .= '/' . $record[$field];
 			}
 
-			$this->setup['File_System']->copy($srcSpecific,
+			$this->fileSystem->copy($srcSpecific,
 			                                  $destBase . $fileNum++ . '/',
-			                                  $this->setup['Dir_Mode'],
-			                                  $this->setup['File_Mode']);
+			                                  $this->dirMode,
+			                                  $this->fileMode);
 		}
 	}
 
@@ -301,9 +301,9 @@ class JointAdminLinked extends Admin
 	{
 		$dir = $link['Incoming'] . $this->sessionManager->getID();
       
-		if ($this->setup['File_System']->is_dir($dir))
+		if ($this->fileSystem->is_dir($dir))
 		{
-			$this->setup['File_System']->unlink($dir);
+			$this->fileSystem->unlink($dir);
 		}
 	}
 
@@ -311,7 +311,7 @@ class JointAdminLinked extends Admin
 	{
 		$firstRecord = reset($data);
 		$dir = $link['Storage'] . $firstRecord[$ref->getChildField()];
-		$this->setup['File_System']->unlink($dir);
+		$this->fileSystem->unlink($dir);
 	}
 
 	/// Move the incoming files to storage.
@@ -329,9 +329,9 @@ class JointAdminLinked extends Admin
 				$destSpecific .= $record[$field] . '/';
 			}
 
-			$this->setup['File_System']->mkdir(
-				$destSpecific, $this->setup['Dir_Mode'], true);
-			$this->setup['File_System']->rename($srcBase . $num, $destSpecific);
+			$this->fileSystem->mkdir(
+				$destSpecific, $this->dirMode, true);
+			$this->fileSystem->rename($srcBase . $num, $destSpecific);
 		}
 	}
    
@@ -350,18 +350,18 @@ class JointAdminLinked extends Admin
 			$setup = array_merge($size, array('Dir_Input' => $dir,
 			                                  'Dir_Output' => $dir));
 
-			$this->setup['Image_Manip']->setSettings($setup);
+			$this->imageManip->setSettings($setup);
 
 			try
 			{
-				$this->setup['Image_Manip']->scaleImage($filename);
+				$this->imageManip->scaleImage($filename);
 			}
 			catch (Exception $e)
 			{
 				$msg = 'Could not scale Image to ' . $format .
 					' due to exception: ' . $e->getMessage();
 
-				$this->setup['Event_Manager']->notify(
+				$this->eventManager->notify(
 					'Log',
 					array('Level'   => LOG_ERR,
 					      'Message' => $msg,

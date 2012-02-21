@@ -12,8 +12,8 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$setup += array('AJAX_Data'      => array(),
 		                'Failures'       => NULL,
 		                'Notifications'  => NULL,
-		                'SessionManager' => NULL,
-		                'TableListID'    => NULL,
+		                'Session_Manager' => NULL,
+		                'Table_List_I_D'    => NULL,
 		                'Validate'       => true);
 
 		if (!$setup['Failures'] instanceof Evoke\Core\MessageArray)
@@ -28,13 +28,13 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				__METHOD__ . ' requires Notifications as Evoke\Core\MessageArray');
 		}
       
-		if (!$setup['SessionManager'] instanceof \Evoke\Core\SessionManager)
+		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires SessionManager');
 		}
       
-		if (!$setup['TableListID'] instanceof \Evoke\Core\DB\TableListID)
+		if (!$setup['Table_List_I_D'] instanceof \Evoke\Core\DB\TableListID)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires TableListID');
@@ -44,7 +44,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 
 		$this->Failures       = $setup['Failures'];
 		$this->Notifications  = $setup['Notifications'];
-		$this->SessionManager = $setup['SessionManager'];
+		$this->SessionManager = $setup['Session_Manager'];
 	}
    
 	/******************/
@@ -161,13 +161,13 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		// The fields to select the record are from the record in the parent.
 		foreach ($record as $field => $value)
 		{
-			$conditions[$this->setup['Table_Name'] . '.' . $field] = $value;
+			$conditions[$this->tableName . '.' . $field] = $value;
 		}
 
 		$data = $this->getData(array('Conditions' => $conditions));
       
 		// Get the offset in the data where the record is found.
-		$baseData = $this->getAtPrefix($data, $this->setup['Data_Prefix']);
+		$baseData = $this->getAtPrefix($data, $this->dataPrefix);
 		$record = $baseData['Records'];
       
 		$this->SessionManager->set('Delete_Request', true);
@@ -184,11 +184,11 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		// The fields to select the record are from the record in the parent.
 		foreach ($record as $field => $value)
 		{
-			$conditions[$this->setup['Table_Name'] . '.' . $field] = $value;
+			$conditions[$this->tableName . '.' . $field] = $value;
 		}
       
 		$results = parent::getData(array('Conditions' => $conditions));
-		$data = $this->getAtPrefix($results, $this->setup['Data_Prefix']);
+		$data = $this->getAtPrefix($results, $this->dataPrefix);
       
 		// We edit a single record at a time.
 		if (count($data) !== 1)
@@ -341,7 +341,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		// Work out whether we need a List_ID to be calculated.
 		if (isset($childField))
 		{
-			$listID = $this->setup['Table_List_ID']->getNew(
+			$listID = $this->tableListID->getNew(
 				$tableName, $childField);
 	 
 			foreach ($data as &$record)

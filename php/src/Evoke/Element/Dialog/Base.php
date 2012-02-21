@@ -39,17 +39,17 @@ class Base extends \Evoke\Element\Base
       
 		$dialogItems = array(
 			array('div',
-			      $this->setup['Heading_Attribs'],
+			      $this->headingAttribs,
 			      array('Text' => $data['Heading'])),
 			array('div',
-			      $this->setup['Content_Attribs'],
+			      $this->contentAttribs,
 			      array('Text' => $data['Content'])));
 
 		if (!empty($data['Buttons']))
 		{
 			$dialogItems[] =
 				array('div',
-				      $this->setup['Buttons_Attribs'],
+				      $this->buttonsAttribs,
 				      array('Children' => $data['Buttons']));
 		}
       

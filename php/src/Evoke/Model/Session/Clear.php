@@ -17,7 +17,7 @@ class Clear extends Session
 
 	public function clear()
 	{
-		$this->setup['Session_Manager']->remove();
+		$this->sessionManager->remove();
 	}
 
 	public function doNothing()

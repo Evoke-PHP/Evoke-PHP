@@ -27,7 +27,7 @@ class File extends Base
 	{
 		if (isset($_FILES) && !empty($_FILES))
 		{
-			return $this->setup['Request_Method'];
+			return $this->requestMethod;
 		}
 	}
    
@@ -45,8 +45,8 @@ class File extends Base
 		foreach ($requestKeys as $requestKey => $data)
 		{
 			// Dispatch the processing using the event manager.
-			$this->setup['Event_Manager']->notify(
-				$this->setup['Event_Prefix'] . $requestKey,
+			$this->eventManager->notify(
+				$this->eventPrefix . $requestKey,
 				$data);	 
 		}
 	}
@@ -56,8 +56,8 @@ class File extends Base
 	 */
 	protected function getRequestMatches($data)
 	{
-		$fullRequestPrefix = $this->setup['Request_Prefix'] .
-			$this->setup['Request_Separator'];
+		$fullRequestPrefix = $this->requestPrefix .
+			$this->requestSeparator;
 		$fullPrefixLength = strlen($fullRequestPrefix);
 		$matches = array();
       
@@ -77,7 +77,7 @@ class File extends Base
 	    
 				$entry['Table_Alias'] = substr($key, $fullPrefixLength);
 
-				$matches[$this->setup['Request_Prefix']] = $entry;
+				$matches[$this->requestPrefix] = $entry;
 			}
 		}
       

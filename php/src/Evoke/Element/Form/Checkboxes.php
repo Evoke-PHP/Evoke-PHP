@@ -13,19 +13,19 @@ class Checkboxes extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		if (!is_string($this->setup['Empty_Text']))
+		if (!is_string($this->emptyText))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Empty_Text as string');
 		}
 
-		if (!is_string($this->setup['Text_Field']))
+		if (!is_string($this->textField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Text_Field as string');
 		}
 
-		if (!is_string($this->setup['Value_Field']))
+		if (!is_string($this->valueField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Value_Field as string');
@@ -66,27 +66,27 @@ class Checkboxes extends \Evoke\Element\Base
 					            array(
 						            'div',
 						            array('class' => 'No_Elements'),
-						            array('Text' => $this->setup['Empty_Text']))))));
+						            array('Text' => $this->emptyText))))));
 		}
 
 		$checkboxElems = array();
       
 		foreach ($data['Checkboxes'] as $key => $record)
 		{
-			if (!isset($record[$this->setup['Text_Field']]) ||
-			    !isset($record[$this->setup['Value_Field']]))
+			if (!isset($record[$this->textField]) ||
+			    !isset($record[$this->valueField]))
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' Record: ' . var_export($record, true) .
 					' at key: ' . $key . ' does not contain the required fields ' .
-					'Text_Field: ' . $this->setup['Text_Field'] .
-					' and Value_Field: ' . $this->setup['Value_Field']);
+					'Text_Field: ' . $this->textField .
+					' and Value_Field: ' . $this->valueField);
 			}
 	 
-			$id = $this->setup['Prefix'] . $record[$this->setup['Value_Field']];
+			$id = $this->setup['Prefix'] . $record[$this->valueField];
 			$isSelected = array();
 	 
-			if (in_array($record[$this->setup['Value_Field']], $data['Selected']))
+			if (in_array($record[$this->valueField], $data['Selected']))
 			{
 				$isSelected = array('checked' => 'checked');
 			}
@@ -98,7 +98,7 @@ class Checkboxes extends \Evoke\Element\Base
 					      array(
 						      'label',
 						      array('for' => $id),
-						      array('Text' => $record[$this->setup['Text_Field']])),
+						      array('Text' => $record[$this->textField])),
 					      array(
 						      'input',
 						      array_merge(array('type' => 'checkbox',
@@ -109,7 +109,7 @@ class Checkboxes extends \Evoke\Element\Base
       
 		// Set the fieldset to make the category selections from.
 		return parent::set(array('fieldset',
-		                         $this->setup['Fieldset_Attribs'],
+		                         $this->fieldsetAttribs,
 		                         array('Children' => $checkboxElems)));
 	}
 }

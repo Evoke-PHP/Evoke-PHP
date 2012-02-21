@@ -7,9 +7,9 @@ class Table extends \Base
 	public function __construct(Array $setup)
 	{
 		$setup +=	array('Data'         => NULL,
-			      'TableInfo'   => NULL);
+			      'Table_Info'   => NULL);
 
-		if (!$this->setup['TableInfo'] instanceof \Evoke\Core\DB\Table\Info)
+		if (!$this->setup['Table_Info'] instanceof \Evoke\Core\DB\Table\Info)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires TableInfo');

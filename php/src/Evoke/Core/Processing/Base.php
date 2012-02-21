@@ -28,7 +28,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	public function __construct(Array $setup)
 	{
 		$this->setup = array_merge(
-			array('EventManager'   => NULL,
+			array('Event_Manager'   => NULL,
 			      'Event_Prefix'   => NULL,
 			      'Match_Required' => true,
 			      'Request_Keys'   => array(),
@@ -36,28 +36,28 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 			      'Unique_Match'   => true),
 			$setup);
       
-		if (!$this->setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		if (!is_string($this->setup['Event_Prefix']))
+		if (!is_string($this->eventPrefix))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Event_Prefix as string');
 		}
 
 		// Duplicate the request key values to the keys for easier diffing.
-		if (!empty($this->setup['Request_Keys']))
+		if (!empty($this->requestKeys))
 		{
-			$this->setup['Request_Keys'] =
-				array_combine($this->setup['Request_Keys'],
-				              $this->setup['Request_Keys']);
+			$this->requestKeys =
+				array_combine($this->requestKeys,
+				              $this->requestKeys);
 		}
 
 		// By default we are connected for processing.
-		$this->setup['EventManager']->connect(
+		$this->setup['Event_Manager']->connect(
 			'Request.Process', array($this, 'process'));
 	}
 
@@ -69,7 +69,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	public function process()
 	{
 		if ($this->getRequestMethod() !== mb_strtoupper(
-			    $this->setup['Request_Method']))
+			    $this->requestMethod))
 		{
 			return;
 		}
@@ -101,8 +101,8 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 			unset($data[$key]);
 
 			// Dispatch the processing using the event manager.
-			$this->setup['EventManager']->notify(
-				$this->setup['Event_Prefix'] . $key,
+			$this->setup['Event_Manager']->notify(
+				$this->eventPrefix . $key,
 				$data);
 		}
 	}
@@ -114,14 +114,14 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	 */
 	protected function checkMatches(Array $matches, $requestData)
 	{
-		if ($this->setup['Match_Required'] && (count($matches) === 0))
+		if ($this->matchRequired && (count($matches) === 0))
 		{
 			$msg = 'Match_Required for Event_Prefix: ' .
-				var_export($this->setup['Event_Prefix'], true) . ' Request_Keys: ' .
-				var_export(array_keys($this->setup['Request_Keys']), true) .
+				var_export($this->eventPrefix, true) . ' Request_Keys: ' .
+				var_export(array_keys($this->requestKeys), true) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->setup['EventManager']->notify(
+			$this->setup['Event_Manager']->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));
@@ -129,13 +129,13 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 			throw new \RuntimeException(__METHOD__ . ' ' . $msg);
 		}
       
-		if ($this->setup['Unique_Match'] && count($matches) > 1)
+		if ($this->uniqueMatch && count($matches) > 1)
 		{
 			$msg = 'Unique_Match required for Request_Keys: ' .
-				var_export(array_keys($this->setup['Request_Keys'])) .
+				var_export(array_keys($this->requestKeys)) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->setup['EventManager']->notify(
+			$this->setup['Event_Manager']->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));
@@ -149,7 +149,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	 */
 	protected function getRequestMatches($data)
 	{
-		return array_intersect_key($this->setup['Request_Keys'], $data);
+		return array_intersect_key($this->requestKeys, $data);
 	}
 
 	/** Get the request method.

@@ -58,27 +58,27 @@ class XWR extends \XMLWriter
 	*/
 	public function write(Array $xml)
 	{
-		if (!isset($xml[$this->setup['Tag_Pos']]))
+		if (!isset($xml[$this->tagPos]))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' Bad element: ' . var_export($xml, true));
 		}
 
-		$tag = $xml[$this->setup['Tag_Pos']];
+		$tag = $xml[$this->tagPos];
 		$attribs = array();
 		$options = array('Children' => array(),
 		                 'Finish'   => true,  
 		                 'Start'    => true,
 		                 'Text'     => NULL);
 
-		if (isset($xml[$this->setup['Attribs_Pos']]))
+		if (isset($xml[$this->attribsPos]))
 		{
-			$attribs = $xml[$this->setup['Attribs_Pos']];
+			$attribs = $xml[$this->attribsPos];
 		}
 
-		if (isset($xml[$this->setup['Options_Pos']]))
+		if (isset($xml[$this->optionsPos]))
 		{
-			$options = array_merge($options, $xml[$this->setup['Options_Pos']]);
+			$options = array_merge($options, $xml[$this->optionsPos]);
 		}
       
 		if (!empty($tag) && $options['Start'])

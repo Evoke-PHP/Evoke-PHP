@@ -10,7 +10,7 @@ abstract class Base
 	public function __construct(Array $setup)
 	{
 		$this->setup = array_merge(array('Factory'         => NULL,
-		                                 'InstanceManager' => NULL),
+		                                 'Instance_Manager' => NULL),
 		                           $setup);
 
 		if (!$this->setup['Factory'] instanceof \Evoke\Core\Factory)
@@ -18,7 +18,7 @@ abstract class Base
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$this->setup['InstanceManager'] instanceof
+		if (!$this->setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
@@ -26,7 +26,7 @@ abstract class Base
 		}
 
 		$this->Factory =& $this->setup['Factory'];
-		$this->InstanceManager =& $this->setup['InstanceManager'];
+		$this->InstanceManager =& $this->setup['Instance_Manager'];
 	}
 
 	/********************/

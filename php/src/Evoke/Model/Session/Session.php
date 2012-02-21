@@ -5,11 +5,11 @@ class Session extends Evoke\Model\Base;
 { 
 	public function __construct(Array $setup)
 	{
-		$setup += array('SessionManager' => NULL);
+		$setup += array('Session_Manager' => NULL);
       
 		parent::__construct($setup);
 
-		if (!$this->setup['SessionManager'] instanceof \Evoke\Core\SessionManager)
+		if (!$this->setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires SessionManager');
@@ -23,7 +23,7 @@ class Session extends Evoke\Model\Base;
 	// Get the data from the session.
 	public function getData()
 	{
-		$session = $this->setup['Session_Manager']->getAccess();
+		$session = $this->sessionManager->getAccess();
 
 		if (!is_array($session))
 		{

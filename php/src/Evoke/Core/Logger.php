@@ -24,10 +24,10 @@ class Logger
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('DateTime'          => NULL,
+		$setup += array('Date_Time'          => NULL,
 		                'Default_Level'     => LOG_INFO,
 		                'Default_Level_Str' => 'Level_',
-		                'EventManager'      => NULL,
+		                'Event_Manager'      => NULL,
 		                'Mask'              => NULL,
 		                'Levels'            => array(
 			                LOG_EMERG   => 'Emergency',
@@ -42,19 +42,19 @@ class Logger
 		                'Num_Levels'        => 8,
 		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
-		if (!$setup['DateTime'] instanceof \DateTime)
+		if (!$setup['Date_Time'] instanceof \DateTime)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires DateTime');
 		}
 		
-		if (!$setup['EventManager'] instanceof EventManager)
+		if (!$setup['Event_Manager'] instanceof EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		$this->DateTime = $setup['DateTime'];
-		$this->EventManager = $setup['EventManager'];
+		$this->DateTime = $setup['Date_Time'];
+		$this->EventManager = $setup['Event_Manager'];
 		
 		if (!isset($setup['Mask']))
 		{
@@ -69,7 +69,7 @@ class Logger
 
 		// Create the Log.Write event as critical when logging is mandatory to
 		// ensure that messages are written.
-		$this->EventManager->create('Log.Write', $this->setup['Logging_Mandatory']);
+		$this->EventManager->create('Log.Write', $this->loggingMandatory);
 	}
    
 	/******************/
@@ -89,7 +89,7 @@ class Logger
 	*/
 	public function log(Array $message)
 	{
-		$message += array('Level' => $this->setup['Default_Level']);
+		$message += array('Level' => $this->defaultLevel);
 
 		if (!$this->loggable($message['Level']))
 		{
@@ -99,7 +99,7 @@ class Logger
 		$this->DateTime->setTimestamp(time());
 
 		$message += array(
-			'Date_Time'    => $this->DateTime->format($this->setup['Time_Format']),
+			'Date_Time'    => $this->DateTime->format($this->timeFormat),
 			'Level_String' => $this->getLevelString($message['Level']));
       
 		// Notify the listeners of the message!
@@ -139,7 +139,7 @@ class Logger
 			return $this->setup['Levels'][$level];
 		}
 
-		return $this->setup['Default_Level_Str'] . var_export($level, true);
+		return $this->defaultLevelStr . var_export($level, true);
 	}
 }
 // EOF

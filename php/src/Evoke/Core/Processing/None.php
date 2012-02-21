@@ -26,7 +26,7 @@ class None extends Base
 	/// Get the Request Method so that no processing can be done.
 	public function getRequestMethod()
 	{
-		return $this->setup['Request_Method'] . ' AND THIS TO MAKE IT NOT MATCH!';
+		return $this->requestMethod . ' AND THIS TO MAKE IT NOT MATCH!';
 	}
 }
 // EOF

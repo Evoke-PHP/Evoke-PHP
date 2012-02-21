@@ -11,31 +11,31 @@ class Translator implements Iface\Translator
 			array('Default_Language' => NULL,
 			      'Languages'        => NULL,
 			      'Lang_Key'         => 'l',
-			      'SessionManager'   => NULL,
+			      'Session_Manager'   => NULL,
 			      'Translation_File' => NULL,
 			      'TR_Arr'           => array()),
 			$setup);
 
-		if (!isset($this->setup['Default_Language']))
+		if (!isset($this->defaultLanguage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Default_Language');
 		}
       
-		if (!$this->setup['SessionManager'] instanceof SessionManager)
+		if (!$this->setup['Session_Manager'] instanceof SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs SessionManager');
 		}
 
-		if (!isset($this->setup['Translation_File']))
+		if (!isset($this->translationFile))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translation_File');
 		}
       
 		// Get the language definitions which set up the local translationArr.
-		require $this->setup['Translation_File'];
+		require $this->translationFile;
 		$this->setup['TR_Arr'] = $translationArr;
 
 		if (!isset($this->setup['Languages']))
@@ -43,10 +43,10 @@ class Translator implements Iface\Translator
 			$this->setup['Languages'] = $this->getLanguages();
 		}
 
-		if (!empty($_GET) && isset($_GET[$this->setup['Lang_Key']]) &&
-		    isset($this->setup['Languages'][$_GET[$this->setup['Lang_Key']]]))
+		if (!empty($_GET) && isset($_GET[$this->langKey]) &&
+		    isset($this->setup['Languages'][$_GET[$this->langKey]]))
 		{
-			$this->setLanguage($_GET[$this->setup['Lang_Key']]);
+			$this->setLanguage($_GET[$this->langKey]);
 		}
 	}
    
@@ -57,9 +57,9 @@ class Translator implements Iface\Translator
 	/// Return the current language in its short form (e.g EN or ES).
 	public function getLanguage()
 	{
-		if ($this->setup['SessionManager']->issetKey($this->setup['Lang_Key']))
+		if ($this->setup['Session_Manager']->issetKey($this->langKey))
 		{
-			return $this->setup['SessionManager']->get($this->setup['Lang_Key']);
+			return $this->setup['Session_Manager']->get($this->langKey);
 		}
 		else
 		{
@@ -92,7 +92,7 @@ class Translator implements Iface\Translator
 			$lang = $this->getLanguage();
 		}
 
-		return http_build_query(array($this->setup['Lang_Key'] => $lang));
+		return http_build_query(array($this->langKey => $lang));
 	}
    
 	/// \todo Check whether HTTP_ACCEPT_LANGUAGE with all unsupported languages
@@ -101,7 +101,7 @@ class Translator implements Iface\Translator
 	{
 		if (!empty($setLang))
 		{
-			$this->setup['SessionManager']->set($this->setup['Lang_Key'], $setLang);
+			$this->setup['Session_Manager']->set($this->langKey, $setLang);
 		}
 		else
 		{
@@ -140,17 +140,17 @@ class Translator implements Iface\Translator
 				$acceptedLanguages = array_keys($langArr);
 				$preferredLanguage = reset($acceptedLanguages);
 
-				$this->setup['SessionManager']->set(
-					$this->setup['Lang_Key'], $preferredLanguage);
+				$this->setup['Session_Manager']->set(
+					$this->langKey, $preferredLanguage);
 			}
 			else
 			{
-				$this->setup['SessionManager']->set(
-					$this->setup['Lang_Key'], $this->setup['Default_Language']);
+				$this->setup['Session_Manager']->set(
+					$this->langKey, $this->defaultLanguage);
 			}
 		}
 
-		return $this->setup['SessionManager']->get($this->setup['Lang_Key']);
+		return $this->setup['Session_Manager']->get($this->langKey);
 	}
 
 	public function getPage($page = 'default')

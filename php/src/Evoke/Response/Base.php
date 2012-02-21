@@ -9,14 +9,14 @@ abstract class Base
 	public function __construct(Array $setup)
 	{
 		$setup += array('Factory'         => NULL,
-		                'InstanceManager' => NULL);
+		                'Instance_Manager' => NULL);
 
 		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$setup['InstanceManager'] instanceof
+		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
@@ -24,7 +24,7 @@ abstract class Base
 		}
 
 		$this->Factory = $setup['Factory'];
-		$this->InstanceManager = $setup['InstanceManager'];
+		$this->InstanceManager = $setup['Instance_Manager'];
 	}
    
 	/******************/

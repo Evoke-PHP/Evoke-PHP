@@ -56,18 +56,18 @@ class Joins
 			      'Joint_Key'       => 'Joint_Data',
 			      'Parent_Field'    => NULL,
 			      'Table_Alias'     => NULL,
-			      'TableInfo'       => NULL,
+			      'Table_Info'       => NULL,
 			      'Table_Name'      => NULL,
 			      'Table_Separator' => '_T_'),
 			$setup);
 
-		if (!$this->setup['TableInfo'] instanceof Info)
+		if (!$this->setup['Table_Info'] instanceof Info)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires TableInfo');
 		}
       
-		if (!isset($this->setup['Table_Name']))
+		if (!isset($this->tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs Table_Name');
@@ -104,12 +104,12 @@ class Joins
 				// lower in the heirachy set it in the joint data.
 				if (!empty($this->setup['Joins']))
 				{
-					if (!isset($data[$rowID][$this->setup['Joint_Key']]))
+					if (!isset($data[$rowID][$this->jointKey]))
 					{
-						$data[$rowID][$this->setup['Joint_Key']] = array();
+						$data[$rowID][$this->jointKey] = array();
 					}
 
-					$jointData = &$data[$rowID][$this->setup['Joint_Key']];
+					$jointData = &$data[$rowID][$this->jointKey];
 
 					// Fill in the data for the joins by recursion.
 					foreach($this->setup['Joins'] as $ref)
@@ -136,12 +136,12 @@ class Joins
 	public function getAllFields()
 	{
 		$fields = array();
-		$tableFields = $this->setup['TableInfo']->getFields();
+		$tableFields = $this->setup['Table_Info']->getFields();
 
 		foreach ($tableFields as $field)
 		{
 			$fields[] = $this->getTableAlias() . '.' . $field . ' AS ' .
-				$this->getTableAlias() . $this->setup['Table_Separator'] . $field;
+				$this->getTableAlias() . $this->tableSeparator . $field;
 		}
       
 		if (!empty($this->setup['Joins']))
@@ -158,19 +158,19 @@ class Joins
 	/// Get the fields that should be left for auto filling.
 	public function getAutoFields()
 	{
-		return $this->setup['Auto_Fields'];
+		return $this->autoFields;
 	}
    
 	/// Get the child field.
 	public function getChildField()
 	{
-		return $this->setup['Child_Field'];
+		return $this->childField;
 	}
    
 	/// Get the compare type.
 	public function getCompareType()
 	{
-		return $this->setup['Compare_Type'];
+		return $this->compareType;
 	}
 
 	/// Get an empty joint data record.
@@ -180,7 +180,7 @@ class Joins
 
 		foreach ($this->setup['Joins'] as $ref)
 		{
-			$emptyRecord[$this->setup['Joint_Key']][$ref->getParentField()]
+			$emptyRecord[$this->jointKey][$ref->getParentField()]
 				= $ref->getEmpty();
 		}
 
@@ -190,7 +190,7 @@ class Joins
 	/// Return any failures from validation of data.
 	public function getFailures()
 	{
-		return $this->setup['TableInfo']->getFailures();
+		return $this->setup['Table_Info']->getFailures();
 	}
 	
 	/// Get the joins.
@@ -218,32 +218,32 @@ class Joins
 	/// Get the join type.
 	public function getJoinType()
 	{
-		return $this->setup['Join_Type'];
+		return $this->joinType;
 	}
    
 	// Get the Joint_Key.
 	public function getJointKey()
 	{
-		return $this->setup['Joint_Key'];
+		return $this->jointKey;
 	}
 
 	/// Get the parent field.
 	public function getParentField()
 	{
-		return $this->setup['Parent_Field'];
+		return $this->parentField;
 	}
 
 	/// Get the primary keys for the table (not all primary keys for all referenced tables).
 	public function getPrimaryKeys()
 	{
-		return $this->setup['TableInfo']->getPrimaryKeys();
+		return $this->setup['Table_Info']->getPrimaryKeys();
 	}
    
 	// Get a row ID that uniquely identifies a row for a table.
 	protected function getRowID($row)
 	{
 		$id = NULL;
-		$primaryKeys = $this->setup['TableInfo']->getPrimaryKeys();
+		$primaryKeys = $this->setup['Table_Info']->getPrimaryKeys();
 
 		foreach ($primaryKeys as $primaryKey)
 		{
@@ -266,43 +266,43 @@ class Joins
 	/// Get the table name that has possibly been aliassed.
 	public function getTableAlias()
 	{
-		if (isset($this->setup['Table_Alias']))
+		if (isset($this->tableAlias))
 		{
-			return $this->setup['Table_Alias'];
+			return $this->tableAlias;
 		}
 		else
 		{
-			return $this->setup['Table_Name'];
+			return $this->tableName;
 		}
 	}
 
 	/// Get the table name.
 	public function getTableName()
 	{
-		return $this->setup['Table_Name'];
+		return $this->tableName;
 	}
 
 	/// Get the table separator.
 	public function getTableSeparator()
 	{
-		return $this->setup['Table_Separator'];
+		return $this->tableSeparator;
 	}
    
 	/// Whether the table reference is administratively managed.
 	public function isAdminManaged()
 	{
-		return $this->setup['Admin_Managed'];
+		return $this->adminManaged;
 	}
    
 	/// Return whether the table has an alias that is set.
 	public function isTableAliassed()
 	{
-		return isset($this->setup['Table_Alias']);
+		return isset($this->tableAlias);
 	}
 
 	public function isValid($fieldset, $ignoredFields=array())
 	{
-		return $this->setup['TableInfo']->isValid($fieldset, $ignoredFields);
+		return $this->setup['Table_Info']->isValid($fieldset, $ignoredFields);
 	}
    
    /*******************/
@@ -331,7 +331,7 @@ class Joins
 	{
 		$filteredFields = array();
 		$pattern =
-			'/^' . $this->getTableAlias() . $this->setup['Table_Separator'] . '/';
+			'/^' . $this->getTableAlias() . $this->tableSeparator . '/';
 
 		foreach ($fieldList as $key => $value)
 		{

@@ -28,18 +28,18 @@ class Info implements \Evoke\Core\Iface\Validity
 			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
 		}
       
-		if (!isset($this->setup['Table_Name']))
+		if (!isset($this->tableName))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Table_Name');
 		}
       
 		$this->createInfo = $this->setup['SQL']->getSingleValue(
-			'SHOW CREATE TABLE ' . $this->setup['Table_Name'],
+			'SHOW CREATE TABLE ' . $this->tableName,
 			array(),
 			1);
       
 		$this->description = $this->setup['SQL']->getAssoc(
-			'DESCRIBE ' . $this->setup['Table_Name']);
+			'DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
 		$this->calculateRequiredFields();
@@ -83,7 +83,7 @@ class Info implements \Evoke\Core\Iface\Validity
 	/// Get the table name.
 	public function getTableName()
 	{
-		return $this->setup['Table_Name'];
+		return $this->tableName;
 	}
    
 	/// Get the type of the specified field.
@@ -93,7 +93,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		{
 			throw new \OutOfRangeException(
 				__METHOD__ . 'Unknown field: ' . $field . ' for table: ' .
-				$this->setup['Table_Name']);
+				$this->tableName);
 		}
       
 		$type = '';
@@ -130,7 +130,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		{
 			throw new \OutOfRangeException(
 				__METHOD__ . 'Unknown field: ' . $field . ' for table: ' .
-				$this->setup['Table_Name']);
+				$this->tableName);
 		}
 
 		return (!empty($this->requiredFields) &&

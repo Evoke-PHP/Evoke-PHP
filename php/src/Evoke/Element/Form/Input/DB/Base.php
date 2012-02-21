@@ -104,10 +104,10 @@ class Base extends \Evoke\Element\Base
 		{
 			$text = $this->setup['Label'];
 		}
-		elseif ($this->setup['Translate_Label'])
+		elseif ($this->translateLabel)
 		{
 			$text = $this->setup['Translator']->get(
-				$this->setup['Translate_Prefix'] . $field);
+				$this->translatePrefix . $field);
 		}
 		else
 		{
@@ -137,7 +137,7 @@ class Base extends \Evoke\Element\Base
 	// Get the input elements for the field
 	protected function getElements()
 	{
-		$fieldInfo = $this->setup['Field_Info'];
+		$fieldInfo = $this->fieldInfo;
       
 		// The elements that make up the DB Element that is being built.
 		$elems = array();
@@ -145,20 +145,20 @@ class Base extends \Evoke\Element\Base
 		$field = $fieldInfo['Field'];
 		$value = '';
       
-		if (isset($this->setup['Field_Value']))
+		if (isset($this->fieldValue))
 		{
-			$value = $this->setup['Field_Value'];
+			$value = $this->fieldValue;
 		}
 
 		// Get the base attributes defaulting the id and name for the inputs.
-		$attribs = array('name' => $this->setup['Field_Prefix'] . $field);
+		$attribs = array('name' => $this->fieldPrefix . $field);
 
 		if (isset($this->setup['ID']))
 		{
 			$attribs['id'] = $this->setup['ID'];
 		}
 
-		$attribs = array_merge($attribs, $this->setup['Field_Attribs']);
+		$attribs = array_merge($attribs, $this->fieldAttribs);
       
 		// Highlight fields that should be.
 		if (isset($this->setup['Highlighted'][$field]))
@@ -207,7 +207,7 @@ class Base extends \Evoke\Element\Base
 		{
 			$elems[] = $this->buildLabel($field, $this->setup['ID'], $type);
 	 
-			if ($this->setup['Required_Indication'])
+			if ($this->requiredIndication)
 			{
 				$required = ($fieldInfo['Null'] === 'NO');
 				$elems[] = $this->buildRequiredIndication($required);

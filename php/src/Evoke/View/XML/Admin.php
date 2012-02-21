@@ -22,13 +22,13 @@ class Admin extends Base
 
 		parent::__construct($setup);
 
-		if (!$this->setup['Table_Info'] instanceof \Evoke\Core\DB\Table_Info)
+		if (!$this->tableInfo instanceof \Evoke\Core\DB\Table_Info)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Info');
 		}
 
-		if (!is_string($this->setup['Table_Name']))
+		if (!is_string($this->tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name as string');
@@ -69,7 +69,7 @@ class Admin extends Base
 			$this->writeCreateNew();
 		}
       
-		if (!($state['Editing_Record'] && $this->setup['Edit_Separately']))
+		if (!($state['Editing_Record'] && $this->editSeparately))
 		{
 			$this->writeRecordList($data['Records']);
 		}
@@ -158,8 +158,8 @@ class Admin extends Base
 				'Element_Form_Entry',
 				array('Field_Values'   => $record,
 				      'Submit_Buttons' => $this->getSubmitButtons($isNew),
-				      'Table_Info'     => $this->setup['Table_Info'],
-				      'Table_Name'     => $this->setup['Table_Name'],
+				      'Table_Info'     => $this->tableInfo,
+				      'Table_Name'     => $this->tableName,
 				      'Translator'     => $this->Translator)));
 	}
 
@@ -186,8 +186,8 @@ class Admin extends Base
 			                  'Data'           => $request,
 			                  'Heading_Setup'  => array('Inline' => true),
 			                  'Row_Buttons'    => $rowButtons,
-			                  'Table_Info'     => $this->setup['Table_Info'],
-			                  'Table_Name'     => $this->setup['Table_Name'],
+			                  'Table_Info'     => $this->tableInfo,
+			                  'Table_Name'     => $this->tableName,
 			                  'Translator'     => $this->Translator)));      
 			   
 		$this->XWR->write(
@@ -211,13 +211,13 @@ class Admin extends Base
 				array('Languages'  => $header['Languages'],
 				      'Translator' => $this->Translator)));
 
-		if (isset($this->setup['Page_Name']))
+		if (isset($this->pageName))
 		{
 			$this->XWR->write(
 				array('h1',
 				      array('class' => 'Admin_Heading'),
 				      array('Text' => $this->Translator->get(
-					            $this->setup['Page_Name']))));
+					            $this->pageName))));
 		}
 	}
 
@@ -243,10 +243,10 @@ class Admin extends Base
 							            'type'  => 'submit',
 							            'value' => $this->Translator->get('Delete')))),
 					      'Row_Buttons_As_Form' => true,
-					      'Table_Info'          => $this->setup['Table_Info'],
-					      'Table_Name'          => $this->setup['Table_Name'],
+					      'Table_Info'          => $this->tableInfo,
+					      'Table_Name'          => $this->tableName,
 					      'Translator'          => $this->Translator),
-					$this->setup['Record_List_Setup'])));
+					$this->recordListSetup)));
 	}
 }
 // EOF

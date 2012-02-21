@@ -46,22 +46,22 @@ class File extends \Evoke\Element\Base
 
 		parent::__construct($setup);
       
-		if (!isset($this->setup['Button_Text']))
+		if (!isset($this->buttonText))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs Button_Text');
 		}
 
-		$this->setup['Button_Attribs']['value'] = $this->setup['Button_Text'];
+		$this->buttonAttribs['value'] = $this->buttonText;
 
-		if (!isset($this->setup['Input_Attribs']['name']))
+		if (!isset($this->inputAttribs['name']))
 		{
-			$this->setup['Input_Attribs']['name'] = $this->setup['Request_Prefix'];
+			$this->inputAttribs['name'] = $this->requestPrefix;
 
-			if (isset($this->setup['Request_Alias']))
+			if (isset($this->requestAlias))
 			{
-				$this->setup['Input_Attribs']['name'] .=
-					$this->setup['Request_Separator'] . $this->setup['Request_Alias'];
+				$this->inputAttribs['name'] .=
+					$this->requestSeparator . $this->requestAlias;
 			}
 		}
       
@@ -69,8 +69,8 @@ class File extends \Evoke\Element\Base
 			array('div',
 			      array(),
 			      array('Children' => array(
-				            array('input', $this->setup['Button_Attribs']),
-				            array('input', $this->setup['Input_Attribs'])))));
+				            array('input', $this->buttonAttribs),
+				            array('input', $this->inputAttribs)))));
 	}
 }
 // EOF

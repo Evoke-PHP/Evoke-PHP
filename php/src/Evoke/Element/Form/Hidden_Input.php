@@ -37,7 +37,7 @@ class HiddenInput extends Base
 	{
 		foreach ($this->primaryKeys as $key)
 		{
-			if (!in_array($key, $this->setup['Ignored_Fields']))
+			if (!in_array($key, $this->ignoredFields))
 			{
 				$this->addElement(
 					array('input',

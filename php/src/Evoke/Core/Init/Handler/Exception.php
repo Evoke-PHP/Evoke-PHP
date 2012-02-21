@@ -9,23 +9,23 @@ class Exception implements \Evoke\Core\Iface\Handler
 	public function __construct(Array $setup)
 	{
 		$this->setup = array_merge(array('Detailed_Insecure_Message'    => NULL,
-		                                 'EventManager'                 => NULL,
+		                                 'Event_Manager'                 => NULL,
 		                                 'Max_Length_Exception_Message' => NULL),
 		                           $setup);
 				 
-		if (!is_bool($this->setup['Detailed_Insecure_Message']))
+		if (!is_bool($this->detailedInsecureMessage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
 
-		if (!$this->setup['EventManager'] instanceof \Evoke\Core\EventManager)
+		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		if (!isset($this->setup['Max_Length_Exception_Message']))
+		if (!isset($this->maxLengthExceptionMessage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Max_Length_Exception_Message');
@@ -51,7 +51,7 @@ class Exception implements \Evoke\Core\Iface\Handler
 				header('HTTP/1.1 500 Internal Server Error');
 			}
 
-			$this->setup['EventManager']->notify(
+			$this->setup['Event_Manager']->notify(
 				'Log',
 				array('Level'   => LOG_CRIT,
 				      'Message' => $uncaughtException->getMessage(),
@@ -97,16 +97,16 @@ class Exception implements \Evoke\Core\Iface\Handler
 		}
 
 		// Provide extended details for development servers.
-		if ($this->setup['Detailed_Insecure_Message'])
+		if ($this->detailedInsecureMessage)
 		{
 			$exceptionMessage = (string)($uncaughtException);
 
 			// If the exception is huge, only include the start and end on screen.
-			if ($loggedError && $this->setup['Max_Length_Exception_Message'] > 0 &&
+			if ($loggedError && $this->maxLengthExceptionMessage > 0 &&
 			    mb_strlen($exceptionMessage) > $this->setup[
 				    'Max_Length_Exception_Message'])
 			{
-				$halfMessage = $this->setup['Max_Length_Exception_Message'] / 2;
+				$halfMessage = $this->maxLengthExceptionMessage / 2;
 				$exceptionMessage = mb_substr($exceptionMessage, 0, $halfMessage) .
 					"\n\n <<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>> \n\n" .
 					mb_substr($exceptionMessage, -$halfMessage);

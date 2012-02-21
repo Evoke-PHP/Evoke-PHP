@@ -59,7 +59,7 @@ abstract class XML extends Base
    
 	protected function start()
 	{
-		$start = $this->setup['Start_Base'];
+		$start = $this->startBase;
 
 		foreach ($this->setup['Start'] as $key => $entry)
 		{

@@ -41,21 +41,21 @@ class Dialog extends Base
 	{
 		$headingChildren = array();
       
-		if (!empty($this->setup['Heading_Text']))
+		if (!empty($this->headingText))
 		{
 			$headingChildren[] = array(
 				'div',
-				$this->setup['Heading_Text_Attribs'],
-				array('Text' => $this->setup['Heading_Text']));
+				$this->headingTextAttribs,
+				array('Text' => $this->headingText));
 		}
 
 		$headingChildren[] = array(
 			'div',
-			$this->setup['Heading_Elements_Attribs'],
-			array('Children' => $this->setup['Heading_Elements']));
+			$this->headingElementsAttribs,
+			array('Children' => $this->headingElements));
       
 		$this->addElement(array('div',
-		                        $this->setup['Heading_Attribs'],
+		                        $this->headingAttribs,
 		                        array('Children' => $headingChildren)));
 	}
 
@@ -64,22 +64,22 @@ class Dialog extends Base
 	{
 		$messageChildren = array();
 
-		if (!empty($this->setup['Message_Text']))
+		if (!empty($this->messageText))
 		{
 			$messageChildren[] = array(
 				'div',
-				$this->setup['Message_Text_Attribs'],
-				array('Text' => $this->setup['Message_Text']));
+				$this->messageTextAttribs,
+				array('Text' => $this->messageText));
 		}
 
 		$messageChildren[] = array(
 			'div',
-			$this->setup['Message_Elements_Attribs'],
-			array('Children' => $this->setup['Message_Elements']));
+			$this->messageElementsAttribs,
+			array('Children' => $this->messageElements));
       
       
 		$this->addElement(array('div',
-		                        $this->setup['Message_Attribs'],
+		                        $this->messageAttribs,
 		                        array('Children' => $messageChildren)));
 	}
 }

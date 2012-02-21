@@ -28,7 +28,7 @@ namespace Evoke\Core;
  *
  *  Usage:
  *  \code
- *  $controller = new \Evoke\Core\Controller('EventManager' => $EventManager);
+ *  $controller = new \Evoke\Core\Controller('Event_Manager' => $EventManager);
  *  $controller->add($Model, $Processing, $View,
  *                   $AnyAmountOfModelViewOrProcessingObjects);
  *  // Execute the controller 
@@ -57,19 +57,19 @@ class Controller
 
 	public function __construct(Array $setup)
 	{
-		$setup += array('EventManager' => NULL,
+		$setup += array('Event_Manager' => NULL,
 		                'Events'       => array(
 			                'Model'      => 'Model.Notify_Data',
 			                'Processing' => 'Processing.Process',
 			                'View'       => 'View.Write'));
 
-		if (!$setup['EventManager'] instanceof EventManager)
+		if (!$setup['Event_Manager'] instanceof EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		$this->EventManager = $setup['EventManager'];
+		$this->EventManager = $setup['Event_Manager'];
 		$this->data = array();
 		$this->events = $setup['Events'];
 

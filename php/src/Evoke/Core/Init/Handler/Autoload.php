@@ -22,7 +22,7 @@ class Autoload implements \Evoke\Core\Iface\Handler
 		                                 'Namespace'     => \NULL),
 		                           $setup);
 
-		if (!is_string($this->setup['Base_Dir']))
+		if (!is_string($this->baseDir))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Base_Dir as string');
@@ -51,7 +51,7 @@ class Autoload implements \Evoke\Core\Iface\Handler
 			return;
 		}
 
-		$filename = $this->setup['Base_Dir'] . DIRECTORY_SEPARATOR;
+		$filename = $this->baseDir . DIRECTORY_SEPARATOR;
 		$lastSlash = strrpos($name, '\\');
       
 		if ($lastSlash === false)

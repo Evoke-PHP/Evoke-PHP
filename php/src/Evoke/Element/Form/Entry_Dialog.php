@@ -27,12 +27,12 @@ class EntryDialog extends Entry
 	/// Build the buttons that are contained in the form.
 	protected function buildFormButtons()
 	{
-		if (empty($this->setup['Field_Values']))
+		if (empty($this->fieldValues))
 		{
 			$submitButtons = array(
 				new Element_Submit(
 					array('class' => 'Dialog_Submit Button Good Small',
-					      'name'  => $this->setup['Table_Name'] . '_Add',
+					      'name'  => $this->tableName . '_Add',
 					      'value' => $this->setup['Translator']->get('Add'))));
 		}
 		else
@@ -40,19 +40,19 @@ class EntryDialog extends Entry
 			$submitButtons = array(
 				new Element_Submit(
 					array('class' => 'Dialog_Submit Button Info Small',
-					      'name'  => $this->setup['Table_Name'] . '_Modify',
+					      'name'  => $this->tableName . '_Modify',
 					      'value' => $this->setup['Translator']->get('Edit'))));
 		}
 	    
 		$submitButtons[] = new Element_Submit(
 			array('class' => 'Dialog_Cancel Button Bad Small',
-			      'name'  => $this->setup['Table_Name'] . '_Cancel',
+			      'name'  => $this->tableName . '_Cancel',
 			      'value' => $this->setup['Translator']->get('Cancel')));
       
 		$this->addElement(
 			array(
 				'div',
-				$this->setup['Submit_Button_Attribs'],
+				$this->submitButtonAttribs,
 				array('Children' => $submitButtons)));
 	}
 }

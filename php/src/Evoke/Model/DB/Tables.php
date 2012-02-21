@@ -46,8 +46,8 @@ class Tables extends Base
 			}
 		}
 
-		$tables = array_merge($tables, $this->setup['Extra_Tables']);
-		$tables = array_diff($tables, $this->setup['Ignored_Tables']);
+		$tables = array_merge($tables, $this->extraTables);
+		$tables = array_diff($tables, $this->ignoredTables);
 		ksort($tables);
 
 		return $this->offsetData($tables);

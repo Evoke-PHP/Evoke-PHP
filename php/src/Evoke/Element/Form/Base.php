@@ -52,7 +52,7 @@ abstract class Base extends \Evoke\Element\Base
 	/// Build elements at the end of the form (but before the buttons).
 	protected function buildAppendElements()
 	{
-		foreach ($this->setup['Append_Elements'] as $appendElement)
+		foreach ($this->appendElements as $appendElement)
 		{
 			$this->addElement($appendElement);
 		}
@@ -63,8 +63,8 @@ abstract class Base extends \Evoke\Element\Base
 	{
 		$this->addElement(
 			array('div',
-			      $this->setup['Submit_Button_Attribs'],
-			      array('Children' => $this->setup['Submit_Buttons'])));
+			      $this->submitButtonAttribs,
+			      array('Children' => $this->submitButtons)));
 	}
 
 	/// Build all of the elements that make up the form.
@@ -82,7 +82,7 @@ abstract class Base extends \Evoke\Element\Base
 	/// Build elements at the start of the form.
 	protected function buildPrependElements()
 	{
-		foreach ($this->setup['Prepend_Elements'] as $prependElement)
+		foreach ($this->prependElements as $prependElement)
 		{
 			$this->addElement($prependElement);
 		}
@@ -98,8 +98,8 @@ abstract class Base extends \Evoke\Element\Base
 			return $rowElems;
 		}
 
-		return array($this->setup['Encasing_Tag'],
-		             $this->setup['Encasing_Attribs'],
+		return array($this->encasingTag,
+		             $this->encasingAttribs,
 		             array('Children' => $rowElems));
 	}
 }
