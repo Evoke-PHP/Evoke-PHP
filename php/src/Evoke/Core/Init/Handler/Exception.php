@@ -4,32 +4,48 @@ namespace Evoke\Core\Init\Handler;
 /// The system exception handler.
 class Exception implements \Evoke\Core\Iface\Handler
 {
-	protected $setup;
+	/** @property $detailedInsecureMessage
+	 *  \bool Whether to display a detailed insecure message.
+	 */
+	protected $detailedInsecureMessage;
+
+	/** @property $EventManager
+	 *  EventManager \object
+	 */
+	protected $EventManager;
+
+	/** @property $maxLengthExceptionMessage
+	 *  \int The maximum length of exception message to display.
+	 */
+	protected $maxLengthExceptionMessage;
    
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('Detailed_Insecure_Message'    => NULL,
-		                                 'Event_Manager'                 => NULL,
-		                                 'Max_Length_Exception_Message' => NULL),
-		                           $setup);
+		$setup += array('Detailed_Insecure_Message'    => NULL,
+		                'Event_Manager'                => NULL,
+		                'Max_Length_Exception_Message' => NULL);
 				 
-		if (!is_bool($this->detailedInsecureMessage))
+		if (!is_bool($setup['Detailed_Insecure_Message']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
 
-		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
+				__METHOD__ . ' requires Event_Manager');
 		}
 
-		if (!isset($this->maxLengthExceptionMessage))
+		if (!isset($setup['Max_Length_Exception_Message']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Max_Length_Exception_Message');
 		}
+
+		$this->detailedInsecureMessage   = $setup['Detailed_Insecure_Message'];
+		$this->EventManager              = $setup['Event_Manager'];
+		$this->maxLengthExceptionMessage = $setup['Max_Length_Exception_Message'];
 	}
    
 	/******************/
@@ -51,7 +67,7 @@ class Exception implements \Evoke\Core\Iface\Handler
 				header('HTTP/1.1 500 Internal Server Error');
 			}
 
-			$this->setup['Event_Manager']->notify(
+			$this->EventManager->notify(
 				'Log',
 				array('Level'   => LOG_CRIT,
 				      'Message' => $uncaughtException->getMessage(),
@@ -103,8 +119,7 @@ class Exception implements \Evoke\Core\Iface\Handler
 
 			// If the exception is huge, only include the start and end on screen.
 			if ($loggedError && $this->maxLengthExceptionMessage > 0 &&
-			    mb_strlen($exceptionMessage) > $this->setup[
-				    'Max_Length_Exception_Message'])
+			    mb_strlen($exceptionMessage) > $this->maxLengthExceptionMessage)
 			{
 				$halfMessage = $this->maxLengthExceptionMessage / 2;
 				$exceptionMessage = mb_substr($exceptionMessage, 0, $halfMessage) .

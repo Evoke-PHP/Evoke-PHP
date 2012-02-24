@@ -3,36 +3,51 @@ namespace Evoke\Core\Init\Handler;
 
 class Autoload implements \Evoke\Core\Iface\Handler
 {
-	protected $setup;
+	/** @property $authoritative
+	 *  Whether we have complete authority over the namespace, or we should allow
+	 *  other autoloaders a chance to load the classes for our domain (if we are
+	 *  not able to).
+	 */
+	protected $authoritative;
+
+	/** @property $baseDir
+	 *  The base directory for the files.
+	 */
+	protected $baseDir;
+
+	/** @property $extension
+	 *  The file extension to use.
+	 */
+	protected $extension;
+
+	/** @property $namespace
+	 *  The base namespace that we are autoloading.
+	 */
+	protected $namespace;
 
 	public function __construct(Array $setup=array())
 	{
-		/** The setup for the Autoload.
-		    \verbatim
-		    Authoritative - Whether it has complete authority over the namespace.we should allow other autoloaders a chance to
-		    load the classes for our domain.
-		    Base_Dir      - The base directory for the files.
-		    Extension     - The file extension to use.
-		    Namespace     - The base namespace that we are autoloading.
-		    \endverbatim
-		*/
-		$this->setup = array_merge(array('Authoritative' => true,
-		                                 'Base_Dir'      => \NULL,
-		                                 'Extension'     => '.php',
-		                                 'Namespace'     => \NULL),
-		                           $setup);
-
-		if (!is_string($this->baseDir))
+		$setup += array('Authoritative' => true,
+		                'Base_Dir'      => \NULL,
+		                'Extension'     => '.php',
+		                'Namespace'     => \NULL);
+		
+		if (!is_string($setup['Base_Dir']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Base_Dir as string');
 		}
 
-		if (!is_string($this->setup['Namespace']))
+		if (!is_string($setup['Namespace']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Namespace as string');
 		}
+
+		$this->authoritative = $setup['Authoritative'];
+		$this->baseDir       = $setup['Base_Dir'];
+		$this->extension     = $setup['Extension'];
+		$this->namespace     = $setup['Namespace'];
 	}
 
 	/******************/
@@ -45,8 +60,7 @@ class Autoload implements \Evoke\Core\Iface\Handler
 	public function handler($name)
 	{
 		// Only handle the specified namespace (and its subnamespaces).
-		if (substr($name, 0, strlen($this->setup['Namespace'])) !==
-		    $this->setup['Namespace'])
+		if (substr($name, 0, strlen($this->namespace)) !== $this->namespace)
 		{
 			return;
 		}
@@ -66,13 +80,13 @@ class Autoload implements \Evoke\Core\Iface\Handler
 				str_replace('_', DIRECTORY_SEPARATOR, $className);
 		}
 
-		$filename .= $this->setup['Extension'];
+		$filename .= $this->extension;
 
 		if (file_exists($filename))
 		{
 			require $filename;
 		}
-		elseif ($this->setup['Authoritative'])
+		elseif ($this->authoritative)
 		{
 			// We are the authoritative autoloader for the namespace - If we can't
 			// find it no-one can.

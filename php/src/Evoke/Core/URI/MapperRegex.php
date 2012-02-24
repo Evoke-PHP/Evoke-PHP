@@ -4,6 +4,21 @@ namespace Evoke\Core\URI;
 /// A powerful URI mapper based on regular expressions.
 class MapperRegex extends Mapper
 {
+	/** @property $match
+	 *  The regex match to determine whether this object matches the URI. 
+	 */
+	protected $match;
+
+	/** @property $params
+	 *  \array The parameters to calculate from the URI (see __construct).
+	 */
+	protected $params;
+
+	/** @property $response
+	 *  The response to calculate from the URI (see __construct);
+	 */
+	protected $response;
+	
 	/** Create a MapperRegex.
 	 *  @param setup \array The setup array is very powerful.  It is used to
 	 *  perform a two level regex on the URI.
@@ -86,6 +101,10 @@ class MapperRegex extends Mapper
 		}
       
 		parent::__construct($setup);
+
+		$this->match    = $setup['Match'];
+		$this->params   = $setup['Params'];
+		$this->response = $setup['Response'];
 	}
 
 	/******************/
@@ -98,7 +117,7 @@ class MapperRegex extends Mapper
 	 */
 	public function matches($uri)
 	{
-		if (preg_match($this->setup['Match'], $uri))
+		if (preg_match($this->match, $uri))
 		{
 			return true;
 		}
@@ -115,7 +134,7 @@ class MapperRegex extends Mapper
 	{
 		$params = array();
 
-		foreach ($this->setup['Params'] as $paramSpec)
+		foreach ($this->params as $paramSpec)
 		{
 			if (!isset($paramSpec['Name'], $paramSpec['Required'], $paramSpec['Value']))
 			{
@@ -150,7 +169,7 @@ class MapperRegex extends Mapper
 	 */
 	public function getResponse($uri)
 	{
-		return $this->getMappedValue($this->setup['Response'], $uri);
+		return $this->getMappedValue($this->response, $uri);
 	}
    
 	/*******************/
@@ -164,7 +183,7 @@ class MapperRegex extends Mapper
 	 */
 	private function getMappedValue($secondLevelRegex, $uri)
 	{
-		if (!preg_match($this->setup['Match'], $uri))
+		if (!preg_match($this->match, $uri))
 		{
 			throw new \RuntimeException(
 				__METHOD__ .  ' Mapper does not match URI.');
@@ -180,7 +199,7 @@ class MapperRegex extends Mapper
 				'Pattern, Replacement, URI_Replacement format for URI: ' . $uri);
 		}
 
-		$subject = preg_replace($this->setup['Match'],
+		$subject = preg_replace($this->match,
 		                        $secondLevelRegex['URI_Replacement'],
 		                        $uri);
 

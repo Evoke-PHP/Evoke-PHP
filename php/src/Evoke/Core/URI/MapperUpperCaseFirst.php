@@ -6,6 +6,12 @@ namespace Evoke\Core\URI;
  */
 class MapperUpperCaseFirst extends Mapper
 {
+	/** @property $delimiters
+	 *  \array of delimiters that specify where a new word begins that should
+	 *  have its first letter made upper case.
+	 */
+	protected $delimiters;
+	
 	public function __construct(Array $setup)
 	{
 		$setup += array('Delimiters' => NULL);
@@ -17,6 +23,8 @@ class MapperUpperCaseFirst extends Mapper
 		}
 
 		parent::__construct($setup);
+
+		$this->delimiters = $setup['Delimiters'];
 	}
    
 	/******************/
@@ -25,7 +33,7 @@ class MapperUpperCaseFirst extends Mapper
 
 	public function matches($uri)
 	{
-		foreach ($this->setup['Delimiters'] as $delimiter)
+		foreach ($this->delimiters as $delimiter)
 		{
 			if (strpos($uri, $delimiter) !== false)
 			{
@@ -46,7 +54,7 @@ class MapperUpperCaseFirst extends Mapper
 	 */
 	public function getResponse($uri)
 	{      
-		foreach ($this->setup['Delimiters'] as $delimiter)
+		foreach ($this->delimiters as $delimiter)
 		{
 			$parts = explode($delimiter, $uri);
 

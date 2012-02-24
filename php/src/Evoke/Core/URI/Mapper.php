@@ -3,18 +3,23 @@ namespace Evoke\Core\URI;
 
 abstract class Mapper implements \Evoke\Core\Iface\URI\Mapper
 {
-	protected $setup;
+	/** @property $authoritative
+	 *  \bool Whether the mapper can definitely give the final route for all URI
+	 *  mappings that it receives.
+	 */
+	protected $authoritative;
    
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('Authoritative' => NULL),
-		                           $setup);
+		$setup += array('Authoritative' => NULL);
 
-		if (!is_bool($this->setup['Authoritative']))
+		if (!is_bool($setup['Authoritative']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Authoritative as a bool');
 		}
+
+		$this->authoritative = $setup['Authoritative'];
 	}
    
 	/******************/
@@ -23,7 +28,7 @@ abstract class Mapper implements \Evoke\Core\Iface\URI\Mapper
    
 	public function isAuthoritative()
 	{
-		return $this->setup['Authoritative'];
+		return $this->authoritative;
 	}
 }
 // EOF

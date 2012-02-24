@@ -74,7 +74,7 @@ class Factory
 	public function getEventManager()
 	{
 		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'Event_Manager');
+			$this->namespace['Core'] . 'EventManager');
 	}
 
 	/// Return the file system object.
@@ -84,11 +84,48 @@ class Factory
 			$this->namespace['Core'] . 'Filesystem');
 	}
 
+	/** Get a Joins object (Recursive).
+	 *  Recursively create the Joins from the tree structure passed in.
+	 */
+	public function getJoins(Array $setup)
+	{
+		$tableJoins = array();
+
+		if (isset($setup['Multi_Joins']))
+		{
+			foreach ($setup['Multi_Joins'] as $joins)
+			{
+				foreach ($joins as $parentField => $join)
+				{
+					$join['Parent_Field'] = $parentField;
+					$tableJoins[] = $this->getJoins($join);
+				}
+			}
+		}
+
+		if (isset($setup['Joins']))
+		{
+			foreach ($setup['Joins'] as $parentField => $join)
+			{
+				$join['Parent_Field'] = $parentField;	 
+				$tableJoins[] = $this->getJoins($join);
+			}
+		}
+
+		return $this->InstanceManager->create(
+			$this->namespace['Core'] . 'DB\Table\Joins',
+			array_merge(
+				$setup,
+				array('Joins' => $tableJoins,
+				      'Info'  => $this->getTableInfo(
+					      array('Table_Name' => $setup['Table_Name'])))));
+	}
+
 	/// Create a message array.
 	public function getMessageArray()
 	{
 		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'Message_Array');
+			$this->namespace['Core'] . 'MessageArray');
 	}
    
 	/// Get a model.
@@ -241,7 +278,7 @@ class Factory
 	public function getSessionManager($domain)
 	{
 		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'Session_Manager',
+			$this->namespace['Core'] . 'SessionManager',
 			array('Domain'  => $domain,
 			      'Session' => $this->getSession()));
 	}
@@ -290,7 +327,7 @@ class Factory
 		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'DB\Table\Info',
 			array_merge(array('Failures' => $this->InstanceManager->create(
-				                  $this->namespace['Core'] . 'Message_Array'),
+				                  $this->namespace['Core'] . 'MessageArray'),
 			                  'SQL'      => $this->getSQL()),
 			            $setup));
 	}
@@ -302,43 +339,6 @@ class Factory
 			array('SQL' => $this->getSQL()));
 	}
    
-	/** Get a Joins object (Recursive).
-	 *  Recursively create the Joins from the tree structure passed in.
-	 */
-	public function getJoins(Array $setup)
-	{
-		$tableJoins = array();
-
-		if (isset($setup['Multi_Joins']))
-		{
-			foreach ($setup['Multi_Joins'] as $joins)
-			{
-				foreach ($joins as $parentField => $join)
-				{
-					$join['Parent_Field'] = $parentField;
-					$tableJoins[] = $this->getJoins($join);
-				}
-			}
-		}
-
-		if (isset($setup['Joins']))
-		{
-			foreach ($setup['Joins'] as $parentField => $join)
-			{
-				$join['Parent_Field'] = $parentField;	 
-				$tableJoins[] = $this->getJoins($join);
-			}
-		}
-
-		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'DB\Table\Joins',
-			array_merge(
-				$setup,
-				array('Joins'     => $tableJoins,
-				      'Table_Info' => $this->getTableInfo(
-					      array('Table_Name' => $setup['Table_Name'])))));
-	}
-
 	// Get the Translator.
 	public function getTranslator()
 	{
@@ -346,8 +346,8 @@ class Factory
 			$this->namespace['Core'] . 'Translator',
 			array('Default_Language' => $this->Settings['Constant'][
 				      'Default_Language'],
-			      'Session_Manager'   => $this->getSessionManager('Lang'),
-			      'Translation_File' => $this->Settings['File']['Translation']));
+			      'Filename'         => $this->Settings['File']['Translation'],
+			      'Session_Manager'  => $this->getSessionManager('Lang')));
 	}
 
 	/// Get a view object.
@@ -357,8 +357,8 @@ class Factory
 			$view,
 			array_merge(array('Event_Manager'    => $this->getEventManager(),
 			                  'Instance_Manager' => $this->InstanceManager,
-			                  'Translator'      => $this->getTranslator(),
-			                  'XWR'             => $this->getXWR()),
+			                  'Translator'       => $this->getTranslator(),
+			                  'XWR'              => $this->getXWR()),
 			            $setup));
 	}
    

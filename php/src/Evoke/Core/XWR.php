@@ -6,21 +6,48 @@ namespace Evoke\Core;
  */
 class XWR extends \XMLWriter
 {
-	protected $setup;
-   
+	/** @property $attribsPos
+	 *  \int The position of the attributes in the XML arrays being written.
+	 */
+	protected $attribsPos;
+
+	/** @property $language
+	 *  \string The language of the XML being written.
+	 */
+	protected $language;
+
+	/** @property $optionsPos
+	 *  \int The position of the options in the XML arrays being written.
+	 */
+	protected $optionsPos;
+
+	/** @property $tagsPos
+	 *  \int The position of the tags in the XML arrays being written.
+	 */
+	protected $tagsPos;
+	
 	/// Create the interface to writing our XHTML.
-	public function __construct($setup=array())
+	public function __construct(Array $setup=array())
 	{
-		$this->setup = array_merge(
-			array('Attribs_Pos' => 1,
-			      'Language'    => 'EN',
-			      'Options_Pos' => 2,
-			      'Tag_Pos'     => 0),
-			$setup);
-      
+		$setup += array('Attribs_Pos'   => 1,
+		                'Indent'        => true,
+		                'Indent_String' => '   ',
+		                'Language'      => 'EN',
+		                'Options_Pos'   => 2,
+		                'Tag_Pos'       => 0);
+
+		$this->attribsPos = $setup['Attribs_Pos'];
+		$this->language   = $setup['Language'];
+		$this->optionsPos = $setup['Options_Pos'];
+		$this->tagPos     = $setup['Tag_Pos'];
+		
 		$this->openMemory();
-		$this->setIndentString('   ');
-		$this->setIndent(true);
+
+		if ($setup['Indent'])
+		{
+			$this->setIndentString($setup['Indent_String']);
+			$this->setIndent(true);
+		}
 	}
 
 	/******************/
@@ -47,15 +74,15 @@ class XWR extends \XMLWriter
 	 *  An example of this is below with the default values that are used for the
 	 *  options array. Attributes and options are optional.
 	 *  \verbatim
-	 array(0 => tag,
-	 1 => array('attrib_1' => '1', 'attrib_2' => '2'),
-	 2 => array('Children' => array(), // Child elements within the tag.
-	 'Finish'   => true,    // Whether to end the tag.
-	 'Start'    => true,    // Whether to start the tag.
-	 'Text'     => NULL),   // Text within the tag.
-	 )
-	 \endverbatim
-	*/
+	 *  array(0 => tag,
+	 *        1 => array('attrib_1' => '1', 'attrib_2' => '2'),
+	 *        2 => array('Children' => array(), // Child elements within the tag.
+	 *                   'Finish'   => true,    // Whether to end the tag.
+	 *                   'Start'    => true,    // Whether to start the tag.
+	 *                   'Text'     => NULL),   // Text within the tag.
+	 *       )
+	 *  \endverbatim
+	 */
 	public function write(Array $xml)
 	{
 		if (!isset($xml[$this->tagPos]))
@@ -219,7 +246,7 @@ class XWR extends \XMLWriter
 	{
 		if (empty($lang))
 		{	    
-			$lang = $this->setup['Language'];
+			$lang = $this->language;
 		}
       
 		switch ($name)

@@ -6,6 +6,12 @@ namespace Evoke\Core\URI;
  */
 class MapperStrings extends Mapper
 {
+	/** @property $rules
+	 *  The rules \array to be used for the mapping With each element having
+	 *  a 'Match' and 'Replacement' value.
+	 */
+	protected $rules;
+
 	public function __construct(Array $setup)
 	{
 		$setup += array('Rules' => NULL);
@@ -26,6 +32,8 @@ class MapperStrings extends Mapper
 		}	    
       
 		parent::__construct($setup);
+
+		$this->rules = $setup['Rules'];
 	}
    
 	/******************/
@@ -34,7 +42,7 @@ class MapperStrings extends Mapper
 
 	public function matches($uri)
 	{
-		foreach ($this->setup['Rules'] as $rule)
+		foreach ($this->rules as $rule)
 		{
 			if (strpos($uri, $rule['Match']) !== false)
 			{
@@ -52,7 +60,7 @@ class MapperStrings extends Mapper
    
 	public function getResponse($uri)
 	{
-		foreach ($this->setup['Rules'] as $rule)
+		foreach ($this->rules as $rule)
 		{
 			$uri = str_replace($rule['Match'], $rule['Replacement'], $uri);
 		}

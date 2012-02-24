@@ -3,30 +3,35 @@ namespace Evoke\Page;
 /// The basic definition of a page.
 abstract class Base
 {
+	/** @property $Factory
+	 *  Factory \object for building other objects.
+	 */
 	protected $Factory;
+
+	/** @property InstanceManager
+	 *  InstanceManager \object for creating new objects.
+	 */
 	protected $InstanceManager;
-	protected $setup;
    
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('Factory'         => NULL,
-		                                 'Instance_Manager' => NULL),
-		                           $setup);
+		$setup +=array('Factory'          => NULL,
+		               'Instance_Manager' => NULL);
 
-		if (!$this->setup['Factory'] instanceof \Evoke\Core\Factory)
+		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$this->setup['Instance_Manager'] instanceof
+		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires InstanceManager');
+				__METHOD__ . ' requires Instance_Manager');
 		}
 
-		$this->Factory =& $this->setup['Factory'];
-		$this->InstanceManager =& $this->setup['Instance_Manager'];
+		$this->Factory         = $setup['Factory'];
+		$this->InstanceManager = $setup['Instance_Manager'];
 	}
 
 	/********************/

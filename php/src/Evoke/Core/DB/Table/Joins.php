@@ -38,40 +38,119 @@ namespace Evoke\Core\DB\Table;
  */
 class Joins
 {
-	/** @property $setup
-	 *  The setup for the Joins data.
+	/** @property $adminManaged
+	 *  \bool Whether the current join is administatively managed (for the
+	 *  purposes of adding, editing or deleting data).
 	 */
-	protected $setup;
-   
+	protected $adminManaged;
+
+	/** @property $autoFields
+	 *  Fields \array that are handled automatically by the database.
+	 */
+	protected $autoFields;
+
+	/** @property $childField
+	 *  The child field \string of the join.  This is the name of the field in
+	 *  the table that this join points to.
+	 */
+	protected $childField;
+
+	/** @property $compareType
+	 *  \string How a match should be determined between the parent field and
+	 *  child field.
+	 */
+	protected $compareType;
+
+	/** @property $idSeparator
+	 *  \string Separator string to use between IDs in a table with multiple
+	 *  keys.
+	 */
+	protected $idSeparator;
+
+	/** @property $Info
+	 *  Database Table Info \object
+	 */
+	protected $Info;
+	
+	/** @property $joinType
+	 *  \string The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
+	 */
+	protected $joinType;
+
+	/** @property $joins
+	 *  \array of Join objects from this node to other Join objects in the join
+	 *  tree.
+	 */
+	protected $joins;
+
+	/** @property $jointKey
+	 *  \string The field used to join records together.
+	 */
+	protected $jointKey;
+
+	/** @property $parentField
+	 *  The parent field for the current join.  The parent field is related to
+	 *  the Join object that is the current node's parent.  It is the field in
+	 *  that node's Table.
+	 */
+	protected $parentField;
+
+	/** @property $tableAlias
+	 *  The table name \string to be used for the current table (Aliases can be
+	 *  used to disambiguate data).
+	 */
+	protected $tableAlias;
+
+	/** @property $tableName
+	 *  The table name \string of the current table.
+	 */
+	protected $tableName;
+
+	/** @property $tableSeparator
+	 *  The table separator \string to be used between tables.
+	 */
+	protected $tableSeparator;
+	
 	public function __construct(Array $setup=array())
 	{
-		$this->setup = array_merge(
-			array('Admin_Managed'   => true,
-			      'Auto_Fields'     => array('ID'),
-			      'Child_Field'     => NULL,
-			      'Compare_Type'    => '=',
-			      'ID_Separator'    => '_',
-			      'Join_Type'       => 'LEFT JOIN',
-			      'Joins'           => array(),
-			      'Joint_Key'       => 'Joint_Data',
-			      'Parent_Field'    => NULL,
-			      'Table_Alias'     => NULL,
-			      'Table_Info'       => NULL,
-			      'Table_Name'      => NULL,
-			      'Table_Separator' => '_T_'),
-			$setup);
+		$setup += array('Admin_Managed'   => true,
+		                'Auto_Fields'     => array('ID'),
+		                'Child_Field'     => NULL,
+		                'Compare_Type'    => '=',
+		                'ID_Separator'    => '_',
+		                'Info'            => NULL,
+		                'Join_Type'       => 'LEFT JOIN',
+		                'Joins'           => array(),
+		                'Joint_Key'       => 'Joint_Data',
+		                'Parent_Field'    => NULL,
+		                'Table_Alias'     => NULL,
+		                'Table_Name'      => NULL,
+		                'Table_Separator' => '_T_');
 
-		if (!$this->setup['Table_Info'] instanceof Info)
+		if (!$setup['Info'] instanceof \Evoke\Core\DB\Table\Info)
 		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires TableInfo');
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Info');
 		}
       
-		if (!isset($this->tableName))
+		if (!isset($setup['Table_Name']))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs Table_Name');
+				__METHOD__ . ' requires Table_Name');
 		}
+		
+		$this->adminManaged   = $setup['Admin_Managed'];
+		$this->autoFields     = $setup['Auto_Fields'];
+		$this->childField     = $setup['Child_Field'];
+		$this->compareType    = $setup['Compare_Type'];
+		$this->idSeparator    = $setup['ID_Separator'];
+		$this->Info           = $setup['Info'];
+		$this->joinType       = $setup['Join_Type'];
+		$this->joins          = $setup['Joins'];
+		$this->jointKey       = $setup['Joint_Key'];
+		$this->parentField    = $setup['Parent_Field'];
+		$this->tableAlias     = $setup['Table_Alias'];
+		$this->tableName      = $setup['Table_Name'];
+		$this->tableSeparator = $setup['Table_Separator'];
 	}
    
 	/******************/
@@ -102,7 +181,7 @@ class Joins
 
 				// If this result could contain information for referenced tables
 				// lower in the heirachy set it in the joint data.
-				if (!empty($this->setup['Joins']))
+				if (!empty($this->joins))
 				{
 					if (!isset($data[$rowID][$this->jointKey]))
 					{
@@ -112,7 +191,7 @@ class Joins
 					$jointData = &$data[$rowID][$this->jointKey];
 
 					// Fill in the data for the joins by recursion.
-					foreach($this->setup['Joins'] as $ref)
+					foreach($this->joins as $ref)
 					{
 						$jointDataField = $ref->getParentField();
 		  
@@ -136,7 +215,7 @@ class Joins
 	public function getAllFields()
 	{
 		$fields = array();
-		$tableFields = $this->setup['Table_Info']->getFields();
+		$tableFields = $this->Info->getFields();
 
 		foreach ($tableFields as $field)
 		{
@@ -144,9 +223,9 @@ class Joins
 				$this->getTableAlias() . $this->tableSeparator . $field;
 		}
       
-		if (!empty($this->setup['Joins']))
+		if (!empty($this->joins))
 		{
-			foreach ($this->setup['Joins'] as $ref)
+			foreach ($this->joins as $ref)
 			{
 				$fields = array_merge($fields, $ref->getAllFields());
 			}
@@ -178,7 +257,7 @@ class Joins
 	{
 		$emptyRecord = array();
 
-		foreach ($this->setup['Joins'] as $ref)
+		foreach ($this->joins as $ref)
 		{
 			$emptyRecord[$this->jointKey][$ref->getParentField()]
 				= $ref->getEmpty();
@@ -190,13 +269,13 @@ class Joins
 	/// Return any failures from validation of data.
 	public function getFailures()
 	{
-		return $this->setup['Table_Info']->getFailures();
+		return $this->Info->getFailures();
 	}
 	
 	/// Get the joins.
 	public function getJoins()
 	{
-		return $this->setup['Joins'];
+		return $this->joins;
 	}
       
 	/// Get the join statement for the tables.
@@ -204,9 +283,9 @@ class Joins
 	{
 		$joinStatement = '';
 
-		if (!empty($this->setup['Joins']))
+		if (!empty($this->joins))
 		{
-			foreach ($this->setup['Joins'] as $ref)
+			foreach ($this->joins as $ref)
 			{
 				$joinStatement .= $this->buildJoin($ref) . $ref->getJoinStatement();
 			}
@@ -236,14 +315,14 @@ class Joins
 	/// Get the primary keys for the table (not all primary keys for all referenced tables).
 	public function getPrimaryKeys()
 	{
-		return $this->setup['Table_Info']->getPrimaryKeys();
+		return $this->Info->getPrimaryKeys();
 	}
    
 	// Get a row ID that uniquely identifies a row for a table.
 	protected function getRowID($row)
 	{
 		$id = NULL;
-		$primaryKeys = $this->setup['Table_Info']->getPrimaryKeys();
+		$primaryKeys = $this->Info->getPrimaryKeys();
 
 		foreach ($primaryKeys as $primaryKey)
 		{
@@ -255,7 +334,7 @@ class Joins
 				}
 				else
 				{
-					$id .= $this->setup['ID_Separator'] . $row[$primaryKey];
+					$id .= $this->idSeparator . $row[$primaryKey];
 				}
 			}
 		}
@@ -302,7 +381,7 @@ class Joins
 
 	public function isValid($fieldset, $ignoredFields=array())
 	{
-		return $this->setup['Table_Info']->isValid($fieldset, $ignoredFields);
+		return $this->Info->isValid($fieldset, $ignoredFields);
 	}
    
    /*******************/

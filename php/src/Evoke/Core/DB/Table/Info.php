@@ -3,43 +3,77 @@ namespace Evoke\Core\DB\Table;
 /// Table_Info provides an interface to gather information about a table.
 class Info implements \Evoke\Core\Iface\Validity
 { 
+	/** @property $createInfo
+	 *  The create information \string for the database table.
+	 */
 	private $createInfo;
+
+	/** @property $description
+	 *  The description information \string for the database table.
+	 */
 	private $description;
+
+	/** @property $Failures
+	 *  The failures MessageArray \object
+	 */
+	protected $Failures;
+
+	/** @property $fields
+	 *  The fields \array for the database table.
+	 */
 	private $fields;
+
+	/** @property $primaryKeys
+	 *  The primary keys \array for the database table.
+	 */
 	private $primaryKeys;
+
+	/** @property $requiredFields
+	 *  The required fields \array for the database table.
+	 */
 	private $requiredFields;
-	private $setup;
+
+	/** @property $SQL
+	 *  SQL \object
+	 */
+	protected $SQL;
+
+	/** @property $tableName
+	 *  The table name \string for the table we are retrieving information for.
+	 */
+	protected $tableName;
    
 	public function __construct(Array $setup=array())
 	{
-		$this->setup = array_merge(
-			array('Failures'   => NULL,
-			      'SQL'        => NULL,
-			      'Table_Name' => NULL),
-			$setup);
+		$setup += array('Failures'   => NULL,
+		                'SQL'        => NULL,
+		                'Table_Name' => NULL);
 
-		if (!$this->setup['Failures'] instanceof \Evoke\Core\MessageArray)
+		if (!$setup['Failures'] instanceof \Evoke\Core\MessageArray)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Failures');
 		}
 
-		if (!$this->setup['SQL'] instanceof \Evoke\Core\DB\SQL)
+		if (!$setup['SQL'] instanceof \Evoke\Core\DB\SQL)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
 		}
       
-		if (!isset($this->tableName))
+		if (!isset($setup['Table_Name']))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Table_Name');
 		}
+
+		$this->Failures  = $setup['Failures'];
+		$this->SQL       = $setup['SQL'];
+		$this->tableName = $setup['Table_Name'];
       
-		$this->createInfo = $this->setup['SQL']->getSingleValue(
+		$this->createInfo = $this->SQL->getSingleValue(
 			'SHOW CREATE TABLE ' . $this->tableName,
 			array(),
 			1);
       
-		$this->description = $this->setup['SQL']->getAssoc(
-			'DESCRIBE ' . $this->tableName);
+		$this->description = $this->SQL->getAssoc('DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
 		$this->calculateRequiredFields();
@@ -143,7 +177,7 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	public function getFailures()
 	{
-		return $this->setup['Failures'];
+		return $this->Failures;
 	}
 
 	/** Check whether a set of fields would be valid for an insert or delete
@@ -157,11 +191,11 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	public function isValid($fieldset, $ignoredFields=array())
 	{
-		$this->setup['Failures']->reset();
+		$this->Failures->reset();
 
 		if (!is_array($fieldset))
 		{
-			$this->setup['Failures']->add('Data', 'Format_Error');
+			$this->Failures->add('Data', 'Format_Error');
 			return false;
 		}
 
@@ -171,7 +205,7 @@ class Info implements \Evoke\Core\Iface\Validity
 			if (!in_array($reqField, $ignoredFields) &&
 			    !array_key_exists($reqField, $fieldset))
 			{
-				$this->setup['Failures']->add($reqField, 'Required_Field_Error');
+				$this->Failures->add($reqField, 'Required_Field_Error');
 			}
 		}
       
@@ -248,11 +282,11 @@ class Info implements \Evoke\Core\Iface\Validity
 				break;
 
 			default:
-				$this->setup['Failures']->add($key, 'Unknown_Type_Error');
+				$this->Failures->add($key, 'Unknown_Type_Error');
 			}
 		}
 
-		return $this->setup['Failures']->isEmpty();
+		return $this->Failures->isEmpty();
 	}
    
 	/*********************/
@@ -337,7 +371,7 @@ class Info implements \Evoke\Core\Iface\Validity
 	{
 		if ($required && empty($val))
 		{
-			$this->setup['Failures']->add($key, 'Required_Field_Error');
+			$this->Failures->add($key, 'Required_Field_Error');
 			return false;
 		}
 		else
@@ -356,8 +390,8 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (strlen($val) > $subType)
 		{
-			$this->setup['Failures']->add($key, 'Overflow_Error');
-			$this->setup['Failures']->add($key, 'STRLEN: ' . var_export($val, true) .
+			$this->Failures->add($key, 'Overflow_Error');
+			$this->Failures->add($key, 'STRLEN: ' . var_export($val, true) .
 			                              ' Allowed: ' . var_export($subType, true));
 			return false;
 		}
@@ -393,7 +427,7 @@ class Info implements \Evoke\Core\Iface\Validity
 
 		if (!preg_match('/^[0-9]' . $repetitions . '$/', $val))
 		{
-			$this->setup['Failures']->add($key, 'Overflow_Error');
+			$this->Failures->add($key, 'Overflow_Error');
 			return false;
 		}
 		else
@@ -420,7 +454,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		// Any numbers should be able to be handled by the a float type field.
 		if (!is_numeric($val))
 		{
-			$this->setup['Failures']->add($key, 'Format_Error');
+			$this->Failures->add($key, 'Format_Error');
 			return false;
 		}
 
@@ -441,7 +475,7 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (abs($actualInt) > abs($maxInt))
 		{
-			$this->setup['Failures']->add($key, 'Overflow_Error');
+			$this->Failures->add($key, 'Overflow_Error');
 			return false;
 		}
 
@@ -466,7 +500,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		// This is a very crude match.
 		if (!preg_match("/[0-9:\.]+/", $val))
 		{
-			$this->setup['Failures']->add($key, 'Format_Error');
+			$this->Failures->add($key, 'Format_Error');
 			return false;
 		}
 		else
@@ -499,7 +533,7 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (!in_array($val, $setArr))
 		{
-			$this->setup['Failures']->add($key, 'Range_Error');
+			$this->Failures->add($key, 'Range_Error');
 			return false;
 		}
 

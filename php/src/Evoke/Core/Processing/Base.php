@@ -14,51 +14,68 @@ namespace Evoke\Core\Processing;
  */
 abstract class Base implements \Evoke\Core\Iface\Processing
 {
-	protected $setup;
-   
-	/** Construct the processing object.
-	 *  @param setup \array The settings for the class:
-	 *  EventManager   - Event manager that we will notify about the request.
-	 *  Event_Prefix   - Prefix to the event notifications.
-	 *  Match_Required - Whether a key is required each time we are called.
-	 *  Request_Keys   - Keys that indicate the type of request received.
-	 *  Throw_On_Error - Whether an exception should be thrown on errors.
-	 *  Unique_Match   - Whether only a single request type can appear each time.
-	 */	   
+	/** @property $EventManager
+	 *  EventManager \object
+	 */
+	protected $EventManager;
+
+	/** @property $eventPrefix
+	 *  \string Prefix to the event notification.
+	 */
+	protected $eventPrefix;
+
+	/** @property $matchRequired
+	 *  \bool Whether a key is required to match for processing.
+	 */
+	protected $matchRequired;
+
+	/** @property $requestKeys
+	 *  \array Keys that indicate the type of request received.
+	 */
+	protected $requestKeys;
+
+	/** @property $uniqueMatch
+	 *  \bool Whether only a single request type can be processed at a time.
+	 */
+	protected $uniqueMatch;
+
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(
-			array('Event_Manager'   => NULL,
-			      'Event_Prefix'   => NULL,
-			      'Match_Required' => true,
-			      'Request_Keys'   => array(),
-			      'Request_Method' => '',
-			      'Unique_Match'   => true),
-			$setup);
+		$setup += array('Event_Manager'   => NULL,
+		                'Event_Prefix'   => NULL,
+		                'Match_Required' => true,
+		                'Request_Keys'   => array(),
+		                'Request_Method' => '',
+		                'Unique_Match'   => true);
       
-		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
+				__METHOD__ . ' requires Event_Manager');
 		}
 
-		if (!is_string($this->eventPrefix))
+		if (!is_string($setup['Event_Prefix']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Event_Prefix as string');
 		}
 
+		$this->EventManager  = $setup['Event_Manager'];
+		$this->eventPrefix   = $setup['Event_Prefix'];
+		$this->matchRequired = $setup['Match_Required'];
+		$this->requestKeys   = $setup['Request_Keys'];
+		$this->requestMethod = $setup['Request_Method'];
+		$this->uniqueMatch   = $setup['Unique_Match'];
+		
 		// Duplicate the request key values to the keys for easier diffing.
 		if (!empty($this->requestKeys))
 		{
 			$this->requestKeys =
-				array_combine($this->requestKeys,
-				              $this->requestKeys);
+				array_combine($this->requestKeys, $this->requestKeys);
 		}
 
 		// By default we are connected for processing.
-		$this->setup['Event_Manager']->connect(
-			'Request.Process', array($this, 'process'));
+		$this->EventManager->connect('Request.Process', array($this, 'process'));
 	}
 
 	/******************/
@@ -68,8 +85,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	/// Process the request and notify the event manager.
 	public function process()
 	{
-		if ($this->getRequestMethod() !== mb_strtoupper(
-			    $this->requestMethod))
+		if ($this->getRequestMethod() !== mb_strtoupper($this->requestMethod))
 		{
 			return;
 		}
@@ -101,9 +117,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 			unset($data[$key]);
 
 			// Dispatch the processing using the event manager.
-			$this->setup['Event_Manager']->notify(
-				$this->eventPrefix . $key,
-				$data);
+			$this->EventManager->notify($this->eventPrefix . $key, $data);
 		}
 	}
 
@@ -121,7 +135,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 				var_export(array_keys($this->requestKeys), true) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->setup['Event_Manager']->notify(
+			$this->EventManager->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));
@@ -135,7 +149,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 				var_export(array_keys($this->requestKeys)) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->setup['Event_Manager']->notify(
+			$this->EventManager->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));

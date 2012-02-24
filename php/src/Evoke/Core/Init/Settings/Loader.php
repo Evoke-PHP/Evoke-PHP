@@ -3,17 +3,21 @@ namespace Evoke\Core\Init\Settings;
 
 class Loader
 {
-	protected $setup;
-   
+	/** @property $Settings
+	 *  Settings \object
+	 */
+	protected $Settings;
+
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('Settings' => NULL),
-		                           $setup);
+		$setup += array('Settings' => NULL);
 
-		if (!$this->setup['Settings'] instanceof \Evoke\Core\Settings)
+		if (!$setup['Settings'] instanceof \Evoke\Core\Settings)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Settings');
 		}
+
+		$this->Settings = $setup['Settings'];
 	}
 
 	/******************/
@@ -29,7 +33,7 @@ class Loader
 		    Development_Servers - List of Development servers (for logging etc.)
 		    \endverbatim
 		*/
-		$this->setup['Settings']->set(
+		$this->Settings->set(
 			'Constant',
 			array('Default_Language'             => 'EN',
 			      'Development_Servers'          => array(),
@@ -47,7 +51,7 @@ class Loader
 		 \endverbatim
 		 * No database connections by default.
 		 */
-		$this->setup['Settings']->set('DB', array());
+		$this->Settings->set('DB', array());
 
 		/** Initialize the Dir (directory) constants for the evoke system:
 		    \verbatim
@@ -57,7 +61,7 @@ class Loader
 		    Web_Root      - Website root.
 		    \endverbatim
 		*/
-		$this->setup['Settings']->set(
+		$this->Settings->set(
 			'Dir',
 			array('DB_Incoming'   => '/srv/db/incoming',
 			      'DB_Storage'    => '/srv/db/storage',
@@ -69,7 +73,7 @@ class Loader
 		    Administrator - Administrator Email
 		    \endverbatim
 		*/
-		$this->setup['Settings']->set(
+		$this->Settings->set(
 			'Email',
 			array('Administrator' => ''));
 
@@ -79,7 +83,7 @@ class Loader
 		    Translation - Translations File.
 		    \endverbatim
 		*/
-		$this->setup['Settings']->set(
+		$this->Settings->set(
 			'File',
 			array('Log'         => '/srv/log/log.txt',
 			      'Translation' => '/srv/site_lib/evoke/translations.php'));
@@ -92,7 +96,7 @@ class Loader
 		    No_Photo       - No Photo Image File.
 		    \endverbatim
 		*/
-		$this->setup['Settings']->set(
+		$this->Settings->set(
 			'Web',
 			array('DB_Incoming'     => '/db/incoming/',
 			      'DB_Storage'     => '/db/storage/',

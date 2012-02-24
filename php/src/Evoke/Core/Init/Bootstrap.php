@@ -75,7 +75,7 @@ class Bootstrap
 		$InstanceManager = new \Evoke\Core\InstanceManager();
 		$InstanceManager->get(
 			'\Evoke\Core\Logger',
-			array('Date_Time'        => $InstanceManager->get('Date_Time'),
+			array('Date_Time'        => $InstanceManager->get('DateTime'),
 			      'Event_Manager'    => $InstanceManager->get(
 				      '\Evoke\Core\EventManager')));
 	}

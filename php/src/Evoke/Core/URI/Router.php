@@ -4,35 +4,56 @@ namespace Evoke\Core\URI;
 /// Receive the request and create the correct response for it.
 class Router implements \Evoke\Core\Iface\URI\Router
 {
+	/** @property $Factory
+	 *  The Factory \object for sending to the response.
+	 */
+	protected $Factory;
+
+	/** @property $InstanceManager
+	 *  The InstanceManager \object for sending to the response.
+	 */
+	protected $InstanceManager;
+
+	/** @property $mappings
+	 *  The \array of mappings that have been added to the Router for use in
+	 *  mapping the URI to the correct response.
+	 */
 	protected $mappings;
-	protected $setup;
-   
+
+	/** @property $responseBase
+	 *  The base \string for the response class.
+	 */
+	protected $responseBase;
+	
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('Factory'         => NULL,
-		                                 'Instance_Manager' => NULL,
-		                                 'Response_Base'   => NULL),
-		                           $setup);
+		$setup +=array('Factory'          => NULL,
+		               'Instance_Manager' => NULL,
+		               'Response_Base'    => NULL);
 
-		if (!$this->setup['Factory'] instanceof \Evoke\Core\Factory)
+		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$this->setup['Instance_Manager'] instanceof
+		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires InstanceManager');
 		}
       
-		if (!is_string($this->responseBase))
+		if (!is_string($setup['Response_Base']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Response_Base as string');
 		}
 
 		$this->mappings = array();
+
+		$this->Factory         = $setup['Factory'];
+		$this->InstanceManager = $setup['Instance_Manager'];
+		$this->responseBase    = $setup['Response_Base'];
 	}
 
 	public function appendMapper(\Evoke\Core\Iface\URI\Mapper $map)
@@ -71,11 +92,11 @@ class Router implements \Evoke\Core\Iface\URI\Router
 		// Create the response object.
 		try
 		{
-			return $this->setup['Instance_Manager']->create(
+			return $this->InstanceManager->create(
 				$response,
 				array_merge(
-					array('Factory'         => $this->setup['Factory'],
-					      'Instance_Manager' => $this->setup['Instance_Manager']),
+					array('Factory'         => $this->Factory,
+					      'Instance_Manager' => $this->InstanceManager),
 					$params));
 		}
 		catch (\Exception $e)

@@ -7,6 +7,16 @@ namespace Evoke\Core\URI;
  */
 class MapperSimpleReplace extends Mapper
 {
+	/** @property $match
+	 *  Regex match \string
+	 */
+	protected $match;
+
+	/** @property $replacement
+	 *  Regex replacement \string
+	 */
+	protected $replacement;
+	
 	public function __construct(Array $setup)
 	{
 		$setup += array('Match'       => NULL,
@@ -23,9 +33,11 @@ class MapperSimpleReplace extends Mapper
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Replacement as string');
 		}
-
       
 		parent::__construct($setup);
+
+		$this->match       = $setup['Match'];
+		$this->replacement = $setup['Replacement'];
 	}
    
 	/******************/
@@ -34,7 +46,7 @@ class MapperSimpleReplace extends Mapper
 
 	public function matches($uri)
 	{
-		return (preg_match($this->setup['Match'], $uri) > 0);
+		return (preg_match($this->match, $uri) > 0);
 	}
    
 	public function getParams($uri)
@@ -44,9 +56,7 @@ class MapperSimpleReplace extends Mapper
    
 	public function getResponse($uri)
 	{
-		return preg_replace($this->setup['Match'],
-		                    $this->setup['Replacement'],
-		                    $uri);
+		return preg_replace($this->match, $this->replacement, $uri);
 	}
 }
 // EOF

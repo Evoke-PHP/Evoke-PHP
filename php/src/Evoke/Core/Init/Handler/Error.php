@@ -3,15 +3,25 @@ namespace Evoke\Core\Init\Handler;
 
 class Error implements \Evoke\Core\Iface\Handler
 {
-	protected $detailed;
+	/** @property $detailedInsecureMessage
+	 *  \bool Whether to display a detailed insecure error message.
+	 */
+	protected $detailedInsecureMessage;
 
+	/** @property $EventManager
+	 *  EventManager \object
+	 */
 	protected $EventManager;
+
+	/** @property $XWR
+	 *  XHTML Writer \object
+	 */
 	protected $XWR;
 
 	public function __construct(Array $setup)
 	{
 		$setup += array('Detailed_Insecure_Message' => NULL,
-		                'Event_Manager'              => NULL,
+		                'Event_Manager'             => NULL,
 		                'XWR'                       => NULL);
 
 		if (!is_bool($setup['Detailed_Insecure_Message']))
@@ -31,9 +41,9 @@ class Error implements \Evoke\Core\Iface\Handler
 			throw new \InvalidArgumentException(__METHOD__ . ' requires XWR');
 		}
      
-		$this->detailed = $setup['Detailed_Insecure_Message'];
-		$this->EventManager = $setup['Event_Manager'];
-		$this->XWR = $setup['XWR'];
+		$this->detailedInsecureMessage = $setup['Detailed_Insecure_Message'];
+		$this->EventManager            = $setup['Event_Manager'];
+		$this->XWR                     = $setup['XWR'];
 	}
    
 	/******************/
@@ -179,7 +189,7 @@ class Error implements \Evoke\Core\Iface\Handler
 		                                array('class' => 'Message'),
 		                                array('Text' => $message)));
 
-		if ($this->detailed)
+		if ($this->detailedInsecureMessage)
 		{
 			$descriptionElems[] = array(
 				'div',

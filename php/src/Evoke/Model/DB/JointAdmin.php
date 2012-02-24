@@ -3,18 +3,39 @@ namespace Evoke\Model\DB;
 /// Model_DB_Joint_Admin provides a CRUD interface to a joint set of data.
 class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 {
+	/** @property $ajaxData
+	 *  AJAX data \array
+	 */
+	protected $ajaxData;
+	
+	/** @property $Failures
+	 *  Failure message array \object
+	 */
 	protected $Failures;
+
+	/** @property $Notifications
+	 *  Notification message array \object
+	 */
 	protected $Notifications;
+
+	/** @property $SessionManager
+	 *  Session Manager \object
+	 */
 	protected $SessionManager;
 
+	/** @property $Table_List_ID
+	 *  List_ID Table \object
+	 */
+	protected $Table_List_ID;
+	
 	public function __construct(Array $setup)
 	{
-		$setup += array('AJAX_Data'      => array(),
-		                'Failures'       => NULL,
-		                'Notifications'  => NULL,
+		$setup += array('Ajax_Data'       => array(),
+		                'Failures'        => NULL,
+		                'Notifications'   => NULL,
 		                'Session_Manager' => NULL,
-		                'Table_List_I_D'    => NULL,
-		                'Validate'       => true);
+		                'Table_List_ID'   => NULL,
+		                'Validate'        => true);
 
 		if (!$setup['Failures'] instanceof Evoke\Core\MessageArray)
 		{
@@ -34,7 +55,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				__METHOD__ . ' requires SessionManager');
 		}
       
-		if (!$setup['Table_List_I_D'] instanceof \Evoke\Core\DB\TableListID)
+		if (!$setup['Table_List_ID'] instanceof \Evoke\Core\DB\TableListID)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires TableListID');
@@ -42,9 +63,11 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 
 		parent::__construct($setup);
 
+		$this->ajaxData       = $setup['Ajax_Data'];
 		$this->Failures       = $setup['Failures'];
 		$this->Notifications  = $setup['Notifications'];
 		$this->SessionManager = $setup['Session_Manager'];
+		$this->TableListID    = $setup['Table_List_ID'];
 	}
    
 	/******************/
@@ -62,8 +85,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$record = $this->SessionManager->get('Current_Record');
 		$data = array($record);
       
-		if ($this->setup['Validate'] &&
-		    !$this->validate($data, $this->setup['Joins']))
+		if ($this->validate && !$this->validate($data, $this->Joins))
 		{
 			return false;
 		}
@@ -79,7 +101,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				array('Depth_First_Data'   => array($this, 'addEntries'),
 				      'Depth_First_Parent' => array($this, 'feedbackListID')),
 				$data,
-				$this->setup['Joins']);
+				$this->Joins);
 	 
 			$this->SQL->commit();
 			$this->SessionManager->reset();
@@ -105,7 +127,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	/// Begin creating a new record.
 	public function createNew()
 	{
-		$currentRecord = $this->setup['Joins']->getEmpty();
+		$currentRecord = $this->Joins->getEmpty();
 		$this->SessionManager->set('New_Record', true);
 		$this->SessionManager->set('Current_Record', $currentRecord);
 		$this->SessionManager->set('Editing_Record', true);
@@ -134,7 +156,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			$this->recurse(
 				array('Breadth_First_Data' => array($this, 'deleteEntries')),
 				$deleteRecord,
-				$this->setup['Joins']);
+				$this->Joins);
 	 
 			$this->SessionManager->reset();
 			$this->SQL->commit();
@@ -217,7 +239,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	public function getData($selectSetup=array())
 	{
 		return $this->offsetData(
-			array('AJAX_Data' => $this->setup['AJAX_Data'],
+			array('Ajax_Data' => $this->ajaxData,
 			      'Records'   => parent::getData($selectSetup),
 			      'State'     => array_merge(
 				      array('Failures'      => $this->Failures->get(),
@@ -232,9 +254,9 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		$addRecord = $this->SessionManager->get('Current_Record');
 		$addData = array($addRecord);
       
-		if ($this->setup['Validate'])
+		if ($this->validate)
 		{
-			if (!$this->validate($addData, $this->setup['Joins']))
+			if (!$this->validate($addData, $this->Joins))
 			{
 				return false;
 			}
@@ -280,14 +302,13 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				__METHOD__ . ' Current_Record is not set for update.');
 		}
 
-		$data = $this->setup['Joins']->arrangeResults(
-			array($updateRecord));
+		$data = $this->Joins->arrangeResults(array($updateRecord));
 		$updateRecord = reset($data); 
 
 		if (!empty($updateRecord))
 		{
 			$currentRecord = $this->SessionManager->get('Current_Record');
-			$jointKey = $this->setup['Joins']->getJointKey();
+			$jointKey = $this->Joins->getJointKey();
 	 
 			// First merge any joint data.
 			if (isset($updateRecord[$jointKey]))
@@ -321,7 +342,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			$this->SessionManager->set('Current_Record', $currentRecord);
 		}
 
-		$this->setup['AJAX_Data'] = array('Success' => true);
+		$this->ajaxData = array('Success' => true);
 	}
    
 	/*********************/

@@ -20,7 +20,7 @@ abstract class Base extends \Evoke\Element\Base
 	{
 		$this->setup = array_merge(
 			array('Append_Elements'       => array(),
-			      'Default_Attribs'       => array('action' => '',
+			      'Attribs'               => array('action' => '',
 			                                       'method' => 'post'),
 			      'Encasing'              => true,
 			      'Encasing_Tag'          => 'div',

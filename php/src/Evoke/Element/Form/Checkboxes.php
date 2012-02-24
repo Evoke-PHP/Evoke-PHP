@@ -2,16 +2,34 @@
 namespace Evoke\Element\Form;
 
 class Checkboxes extends \Evoke\Element\Base
-{ 
+{
+	/** @property $emptyText
+	 *  The text \string if there are no checkboxes.
+	 */
+	protected $emptyText;
+
+	/** @property $prefix
+	 *  Prefix \string for the id attribute of the checkboxes.
+	 */
+	protected $prefix;
+
+	/** @property $textField
+	 *  \string The field to use for the checkbox text.
+	 */
+	protected $textField;
+
+	/** @property $valueField
+	 *  \string The field that defines the value of the checkbox.
+	 */
+	protected $valueField;
+
 	public function __construct(Array $setup)
 	{
-		$setup += array('Empty_Text'       => NULL,
-		                'Fieldset_Attribs' => array('class' => 'Checkbox_Group'),
-		                'Prefix'           => '',
-		                'Text_Field'       => NULL,
-		                'Value_Field'      => 'ID');
-
-		parent::__construct($setup);
+		$setup += array('Attribs'     => array('class' => 'Checkbox_Group'),
+		                'Empty_Text'  => NULL,
+		                'Prefix'      => '',
+		                'Text_Field'  => NULL,
+		                'Value_Field' => 'ID');
 
 		if (!is_string($this->emptyText))
 		{
@@ -30,15 +48,22 @@ class Checkboxes extends \Evoke\Element\Base
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Value_Field as string');
 		}
+
+		parent::__construct($setup);
+
+		$this->emptyText  = $setup['Empty_Text'];
+		$this->prefix     = $setup['Prefix'];
+		$this->textField  = $setup['Text_Field'];
+		$this->valueField = $setup['Value_Field'];
 	}
 
 	/** Set the checkboxes element which is a fieldset of checkbox inputs.
 	 *  @param data \array The checkbox data of the form:
 	 *  \verbatim
-	 array('Checkboxes' => array()  // Array of records.
-	 'Selected'   => array()) // Array of values that are checked.
-	 \endverbatim
-	*/
+	 *  array('Checkboxes' => array()  // Array of records.
+	 *        'Selected'   => array()) // Array of values that are checked.
+	 *  \endverbatim
+	 */
 	public function set(Array $data)
 	{
 		$data += array('Checkboxes'    => NULL,
@@ -83,7 +108,7 @@ class Checkboxes extends \Evoke\Element\Base
 					' and Value_Field: ' . $this->valueField);
 			}
 	 
-			$id = $this->setup['Prefix'] . $record[$this->valueField];
+			$id = $this->prefix . $record[$this->valueField];
 			$isSelected = array();
 	 
 			if (in_array($record[$this->valueField], $data['Selected']))

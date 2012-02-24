@@ -4,26 +4,35 @@ namespace Evoke\Core\Init\Handler;
 /// The system shutdown handler.
 class Shutdown implements \Evoke\Core\Iface\Handler
 {
-	protected $setup;
+	/** @property $administratorEmail
+	 *  \string The administrator's email address.
+	 */
+	protected $administratorEmail;
+
+	/** @property $detailedInsecureMessage
+	 *  \bool Whether to display a detailed insecure message.
+	 */
+	protected $detailedInsecureMessage;
    
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(
-			array('Administrator_Email'       => NULL,
-			      'Detailed_Insecure_Message' => NULL),
-			$setup);
+		$setup += array('Administrator_Email'       => NULL,
+		                'Detailed_Insecure_Message' => NULL);
 
-		if (!is_string($this->administratorEmail))
+		if (!is_string($setup['Administrator_Email']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Administrator_Email to be a string');
 		}
       
-		if (!is_bool($this->detailedInsecureMessage))
+		if (!is_bool($setup['Detailed_Insecure_Message']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
+
+		$this->administratorEmail      = $setup['Administrator_Email'];
+		$this->detailedInsecureMessage = $setup['Detailed_Insecure_Message'];
 	}
 
 	/******************/

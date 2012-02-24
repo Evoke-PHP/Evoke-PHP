@@ -17,34 +17,68 @@ namespace Evoke\Core;
 */
 class Logger
 {
+	/** @property $DateTime
+	 *  DateTIme \object
+	 */
 	protected $DateTime;
+
+	/** @property $defaultLevel
+	 *  The default level to log to \int (defaults to LOG_INFO).
+	 */
+	protected $defaultLevel;
+
+	/** @property $defaultLevelStr
+	 *  The default level string to use.
+	 */
+	protected $defaultLevelStr;
+
+	/** @property $EventManager
+	 *  EventManager \object
+	 */
 	protected $EventManager;
-	
-	protected $setup;
-   
+
+	/** @property $levels
+	 *  \array of levels.
+	 */
+	protected $levels;
+
+	/** @property $loggingMandatory
+	 *  \bool Whether the logging is optional or mandatory.
+	 */
+	protected $loggingMandatory;
+
+	/** @property $mask
+	 *  \int The mask of levels that should be logged.
+	 */
+	protected $mask;
+
+	/** @property $timeFormat
+	 *  The format for the time within the log.
+	 */
+	protected $timeFormat;
+	 
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Date_Time'          => NULL,
+		$setup += array('Date_Time'         => NULL,
 		                'Default_Level'     => LOG_INFO,
 		                'Default_Level_Str' => 'Level_',
-		                'Event_Manager'      => NULL,
-		                'Mask'              => NULL,
-		                'Levels'            => array(
-			                LOG_EMERG   => 'Emergency',
-			                LOG_ALERT   => 'Alert',
-			                LOG_CRIT    => 'Critical',
-			                LOG_ERR     => 'Error',
-			                LOG_WARNING => 'Warning',
-			                LOG_NOTICE  => 'Notice',
-			                LOG_INFO    => 'Info',
-			                LOG_DEBUG   => 'Debug'),
+		                'Event_Manager'     => NULL,
+		                'Levels'            => array(LOG_EMERG   => 'Emergency',
+		                                             LOG_ALERT   => 'Alert',
+		                                             LOG_CRIT    => 'Critical',
+		                                             LOG_ERR     => 'Error',
+		                                             LOG_WARNING => 'Warning',
+		                                             LOG_NOTICE  => 'Notice',
+		                                             LOG_INFO    => 'Info',
+		                                             LOG_DEBUG   => 'Debug'),
 		                'Logging_Mandatory' => true,
+		                'Mask'              => NULL,
 		                'Num_Levels'        => 8,
 		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
 		if (!$setup['Date_Time'] instanceof \DateTime)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires DateTime');
+			throw new \InvalidArgumentException(__METHOD__ . ' needs Date_Time');
 		}
 		
 		if (!$setup['Event_Manager'] instanceof EventManager)
@@ -52,17 +86,20 @@ class Logger
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
-
-		$this->DateTime = $setup['Date_Time'];
-		$this->EventManager = $setup['Event_Manager'];
+		
+		$this->DateTime         = $setup['Date_Time'];
+		$this->defaultLevel     = $setup['Default_Level'];
+		$this->defaultLevelStr  = $setup['Default_Level_Str'];
+		$this->EventManager     = $setup['Event_Manager'];
+		$this->levels           = $setup['Levels'];
+		$this->loggingMandatory = $setup['Logging_Mandatory'];
+		$this->timeFormat       = $setup['Time_Format'];
 		
 		if (!isset($setup['Mask']))
 		{
 			// Default to all levels logged.
 			$setup['Mask'] = str_repeat('1', $setup['Num_Levels']);
 		}
-
-		$this->setup = $setup;
 		
 		// We observe Log events and remain decoupled to the code that calls us.
 		$this->EventManager->connect('Log', array($this, 'log'));
@@ -79,14 +116,14 @@ class Logger
 	/** Log the message with all of our connected listeners.
 	 *  @param message \array Message array containing information to log of the
 	 *  form:
-	 \verbatim
-	 array('Level'   => LOG_LEVEL,          // Number
-	 'Message' => 'Message Contents', // String
-	 'Method'  => __METHOD__);        // String
-	 \endverbatim
-       
-	 This should then be enhanced by adding the date/time and Level String.
-	*/
+	 *  \verbatim
+	 *  array('Level'   => LOG_LEVEL,          // Number
+	 *        'Message' => 'Message Contents', // String
+	 *        'Method'  => __METHOD__);        // String
+	 *  \endverbatim
+	 *   
+	 * This should then be enhanced by adding the date/time and Level String.
+	 */
 	public function log(Array $message)
 	{
 		$message += array('Level' => $this->defaultLevel);
@@ -113,7 +150,7 @@ class Logger
 	 */
 	public function loggable($level)
 	{
-		return ($this->setup['Mask'][$level] == true);
+		return ($this->mask[$level] == true);
 	}
    
 	/** Set the logging level to the value.
@@ -121,7 +158,7 @@ class Logger
 	 */
 	public function setLevel($level, $value=true)
 	{
-		$this->setup['Mask'][$level] = ($value == true);
+		$this->mask[$level] = ($value == true);
 	}
    
 	/*********************/
@@ -134,9 +171,9 @@ class Logger
 	 */
 	public function getLevelString($level)
 	{
-		if (isset($this->setup['Levels'][$level]))
+		if (isset($this->levels[$level]))
 		{
-			return $this->setup['Levels'][$level];
+			return $this->levels[$level];
 		}
 
 		return $this->defaultLevelStr . var_export($level, true);

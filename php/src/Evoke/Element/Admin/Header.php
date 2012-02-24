@@ -3,22 +3,53 @@ namespace Evoke\Element\Admin;
 
 class Header extends \Evoke\Element\Base
 {
-	protected $setup;
-   
+	/** @property $ElementLanguage
+	 *  Language element
+	 */
+	protected $ElementLanguage;
+
+	/** @property $languages
+	 *  \array of languages.
+	 */
+	protected $languages;
+
+	/** @property $Translator
+	 *  Translator object
+	 */
+	protected $Translator;
+	
 	public function __construct(Array $setup)
 	{
-		$this->setup = array_merge(array('App'        => NULL,
-		                                 'Languages'  => NULL,
-		                                 'Translator' => NULL),
-		                           $setup);
+		$setup += array('Element_Language' => NULL,
+		                'Languages'        => NULL,
+		                'Translator'       => NULL);
 
-		$this->setup['App']->needs(
-			array('Instance' => array('Translator' => $this->setup['Translator']),
-			      'Set'      => array('Languages' => $this->setup['Languages'])));
+		if (!$setup['Element_Language'] instanceof \Evoke\Core\Iface\Element)
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Element_Language');
+		}
 
-		$tr =& $this->setup['Translator'];
-      
-		parent::__construct(
+		if (!$setup['Translator'] instanceof \Evoke\Core\Iface\Translator)
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Translator');
+		}
+
+		parent::__construct($setup);
+
+		$this->ElementLanguage = $setup['Element_Language'];
+		$this->languages       = $setup['Languages'];
+		$this->Translator      = $setup['Translator'];
+	}
+	
+   /******************/
+   /* Public Methods */
+   /******************/
+
+	public function set(Array $data)
+	{
+		return parent::set(
 			array('div',
 			      array('class' => 'Admin_Header'),
 			      array('Children' => array(		     
@@ -26,21 +57,17 @@ class Header extends \Evoke\Element\Base
 					            'a',
 					            array('class' => 'Admin_Home',
 					                  'href' => '/admin/index.php?' .
-					                  $tr->getLanguageHTTPQuery()),
-					            array('Children' => array(
-						                  array(
-							                  'img',
+					                  $this->Translator->getLanguageHTTPQuery()),
+					            array(
+						            'Children' => array(
+							            array('img',
 							                  array('src' => '/images/admin_home.png',
 							                        'alt' => 'Home')),
-						                  array('span',
-						                        array(),
-						                        array('Text' => $tr->get(
-							                              'Admin_Home')))))),
-				            $this->setup['App']->get(
-					            'Element_Language',
-					            array('App'        => $this->setup['App'],
-					                  'Languages'  => $this->setup['Languages'],
-					                  'Translator' => $tr))))));
+							            array('span',
+							                  array(),
+							                  array('Text' => $this->Translator->get(
+								                        'Admin_Home')))))),
+				            $this->ElementLanguages->set($data)))));
 	}
 }
 // EOF

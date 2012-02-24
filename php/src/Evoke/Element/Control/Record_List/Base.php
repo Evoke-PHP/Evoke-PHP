@@ -4,89 +4,149 @@ namespace Evoke\Element;
 /// Element to represent a list of records.
 class Element_Record_List extends Element
 {
+	/** @property $contentAttribs
+	 *  Attributes \array for the content.
+	 */
+	protected $contentAttribs;
+
+	/** @property $data
+	 *  \array The data for the record list.
+	 */
 	protected $data;
-	protected $setup;
+
+	/** @property $dataAttribs
+	 *  Attributes \array for the data.
+	 */
+	protected $dataAttribs;
+
+	/** @property $editedRecord
+	 *  \array The edited record from the record list.
+	 */
+	protected $editedRecord;
+
+	/** @property $emptyDataAttribs
+	 *  Attributes \array for an empty data element.
+	 */
+	protected $emptyDataAttribs;
+
+	/** @property $fields
+	 *  \array of fields in the record list.
+	 */
+	protected $fields;
+
+	/** @property $headingSetup
+	 *  The setup for the headings.
+	 */
+	protected $headingSetup;
+
+	/** @property $ignoredFields
+	 *  \array Fields to be ignored in the record list.
+	 */
+	protected $ignoredFields;
+
+	/** @property $labels
+	 *  \array Labels.
+	 */
+	protected $labels;
+
+	/** @property $primaryKeys
+	 *  \array The primary keys for the record list.
+	 */
+	protected $primaryKeys;
+
+	/** @property $rowAttribs
+	 *  \array Attributes for the record list rows.
+	 */
+	protected $rowAttribs;
+
+	/** @property $rowButtons
+	 *  \array Buttons for each row.
+	 */
+	protected $rowButtons;
+
+	/** @property $rowButtonsAsForm
+	 *  \bool Whether the row buttons should be in a form.
+	 */
+	protected $rowButtonsAsForm;
+
+	/** @property $rowButtonsAttribs
+	 *  \array Attributes for the row buttons.
+	 */
+	protected $rowButtonsAttribs;
+
+	/** @property $tableName
+	 *  \string The table name for the record data.
+	 */
+	protected $tableName;
+
+	/** @property $translateLabels
+	 *  \bool Whether to translate the labels for the fields.
+	 */
+	protected $translateLabels;
+
+	/** @property $Translator
+	 *  Translator \object
+	 */
+	protected $Translator;
 
 	public function __construct(Array $setup)
 	{
-      
-		$this->setup = array_merge(
-			array(
-				'Attribs'             => array('class' => 'Record_List'),
-				'Content_Attribs'     => array('class' => 'Content'),
-				'Data'                => NULL,
-				'Data_Attribs'        => array('class' => 'Data'),
-				'Edited_Record'       => array(),
-				'Empty_Data_Attribs'  => array('class' => 'Empty Data'),
-				'Fields'              => array(),
-				'Heading_Setup'       => NULL,	    
-				'Ignored_Fields'      => array('Joint_Data'),
-				'Labels'              => array(),
-				'Primary_Keys'        => array(),
-				'Row_Attribs'         => array('class' => 'Row'),
-				'Row_Buttons'         => NULL,
-				'Row_Buttons_As_Form' => true,
-				'Row_Buttons_Attribs' => array('class' => 'Row_Buttons'),
-				'Table_Name'          => NULL,
-				'Translate_Labels'    => true,
-				'Translator'          => NULL),
-			$setup);
+		$setup += array('Content_Attribs'     => array('class' => 'Content'),
+		                'Data'                => NULL,
+		                'Data_Attribs'        => array('class' => 'Data'),
+		                'Default_Attribs'     => array('class' => 'Record_List'),
+		                'Edited_Record'       => array(),
+		                'Empty_Data_Attribs'  => array('class' => 'Empty Data'),
+		                'Fields'              => array(),
+		                'Heading_Setup'       => NULL,	    
+		                'Ignored_Fields'      => array('Joint_Data'),
+		                'Labels'              => array(),
+		                'Primary_Keys'        => array(),
+		                'Row_Attribs'         => array('class' => 'Row'),
+		                'Row_Buttons'         => NULL,
+		                'Row_Buttons_As_Form' => true,
+		                'Row_Buttons_Attribs' => array('class' => 'Row_Buttons'),
+		                'Table_Name'          => NULL,
+		                'Translate_Labels'    => true,
+		                'Translator'          => NULL);
 
-		/// \todo Update to new element interface.
-		throw new Exception(__METHOD__ . ' requires update to new element interface.');
-
-		if (!isset($this->setup['Data']))
+		if (!isset($setup['Data']))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Data');
 		}
       
-		if (!isset($this->rowButtons))
+		if (!isset($setup['Row_Buttons']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Row_Buttons');
 		}
 
-		if (!isset($this->tableName))
+		if (!isset($setup['Table_Name']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name');
 		}
 
-		if (!$this->setup['Translator'] instanceof Translator)
+		if (!$setup['Translator'] instanceof Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
 		}
 
-		$this->data = $this->setup['Data'];
+		$this->data = $setup['Data'];
       
 		// Merge the Heading Setup so that information is added to a blank
 		// heading setup whereas the default is for only a top heading.
-		if (isset($setup['Heading_Setup']) && !empty($setup['Heading_Setup']))
+		if (!empty($setup['Heading_Setup']))
 		{
 			$this->headingSetup = array_merge(
-				array('Bottom'          => false,
-				      'Buttons'         => array(),
-				      'Inline'          => false,
-				      'Row_Attribs'     => array('class' => 'Heading Row'),
-				      'Top'             => false),
-				$setup['Heading_Setup']);
-
-			if (!isset($this->headingSetup['Buttons_Attribs']))
-			{
-				$this->headingSetup['Buttons_Attribs'] =
-					array('class' => 'Heading_Buttons');
-			}
-		}
-		else
-		{
-			$this->headingSetup =
 				array('Bottom'          => false,
 				      'Buttons'         => array(),
 				      'Buttons_Attribs' => array('class' => 'Heading_Buttons'),
 				      'Inline'          => false,
 				      'Row_Attribs'     => array('class' => 'Heading Row'),
-				      'Top'             => true);
+				      'Top'             => false),
+				$setup['Heading_Setup']);
 		}
       
 		parent::__construct(

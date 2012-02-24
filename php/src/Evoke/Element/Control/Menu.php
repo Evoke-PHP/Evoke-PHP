@@ -3,20 +3,24 @@ namespace Evoke\Element\Control;
 
 class Menu extends \Evoke\Element\Base
 {
-	protected $setup;
+	/** @property $Translator
+	 *  Translator \object
+	 */
+	protected $Translator;
 
 	public function __construct($setup=array())
 	{
-		$setup += array('Menu_Attribs' => array(),
-		                'Translator'   => NULL);
+		$setup += array('Translator' => NULL);
 
-		parent::__construct($setup);
-
-		if (!$this->setup['Translator'] instanceof \Evoke\Core\Translator)
+		if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs Translator');
 		}
+		
+		parent::__construct($setup);
+		
+		$this->Translator = $setup['Translator'];
 	}
 
 	/******************/
@@ -31,7 +35,7 @@ class Menu extends \Evoke\Element\Base
 	{
 		return parent::set(
 			array('ul',
-			      $this->menuAttribs,
+			      array(),
 			      array('Children' => $this->buildMenu($menuItems))));
 	}
    
@@ -41,7 +45,7 @@ class Menu extends \Evoke\Element\Base
 
 	private function buildMenu($data, $level = 0)
 	{
-		$lang = $this->setup['Translator']->getLanguage();
+		$lang = $this->Translator->getLanguage();
 		$menu = array();
       
 		foreach ($data as $menuItem)

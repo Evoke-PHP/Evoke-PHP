@@ -17,44 +17,109 @@ namespace Evoke\Element\Input\DB;
 */
 class Base extends \Evoke\Element\Base
 {
+	/** @property $encasing
+	 *  \bool Whether the input is to be encased within a div element.
+	 */
+	protected $encasing;
+
+	/** @property $fieldAttribs
+	 *  \array of attributes for the field.
+	 */
+	protected $fieldAttribs;
+
+	/** @property $fieldInfo
+	 *  \array Information for the field.
+	 */
+	protected $fieldInfo;
+
+	/** @property $fieldPrefix
+	 *  Prefix \string to be used for the name attribute of the field.
+	 */
+	protected $fieldPrefix;
+
+	/** @property $fieldValue
+	 *  \string The value of the input (the text within it).
+	 */
+	protected $fieldValue;
+
+	/** @property $hidden
+	 *  \bool Whether the input is hidden.
+	 */
+	protected $hidden;
+
+	/** @property $highlighted
+	 *  \bool Whether the input is highlighted.
+	 */
+	protected $highlighted;
+
+	/** @property $id
+	 *  \string The id attribute for the input.
+	 */
+	protected $id;
+
+	/** @property $label
+	 *  \string The label for the input.
+	 */
+	protected $label;
+
+	/** @property $requiredIndication
+	 *  \bool Whether there should be a required indication for the input (*).
+	 */
+	protected $requiredIndication;
+
+	/** @property $translateLabel
+	 *  \bool Whether the label should be translated.
+	 */
+	protected $translateLabel;
+
+	/** @property $translatePrefix
+	 *  \string The prefix to use for the translation.
+	 */
+	protected $translatePrefix;
+
+	/** @property $Translator
+	 *  Translator \object
+	 */
+	protected $Translator;
+
 	public function __construct(Array $setup)
 	{
-		$setup += array('Default_Attribs'     => array('class' => 'DB_Input'),
+		$setup += array('Attribs'             => array('class' => 'DB_Input'),
 		                'Encasing'            => true,
 		                'Field_Attribs'       => array(),
 		                'Field_Info'          => NULL,
-		                'Field_Value'         => NULL,
 		                'Field_Prefix'        => '',
+		                'Field_Value'         => NULL,
 		                'Hidden'              => false,
 		                'Highlighted'         => false,
 		                'ID'                  => NULL,
 		                'Label'               => NULL,
-		                'Default_Options'     => array('Children' => array(),
-		                                               'Finish'   => true,
-		                                               'Start'    => true,
-		                                               'Text'     => NULL),
 		                'Required_Indication' => true,
-		                'Tag'                 => 'div',
-		                'Translate_Prefix'    => '',
 		                'Translate_Label'     => true,
+		                'Translate_Prefix'    => '',
 		                'Translator'          => NULL);
-            
-		if (!($setup['Encasing']))
-		{
-			$setup['Defualt_Options']['Start'] = false;
-			$setup['Default_Options']['Finish'] = false;
-		}
 
-		/// \todo Fix the code for the new element interface.
-		throw new \Exception(__METHOD__ . ' element not updated to new interface.');
+		if (!$setup['Translator'] instanceof \Evoke\Core\Iface\Translator)
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' needs Translator');
+		}
       
 		parent::__construct($setup);
 
-		if (!$this->setup['Translator'] instanceof \Evoke\Core\Translator)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs Translator');
-		}
+		$this->attribs      		  = $setup['Attribs'];
+		$this->encasing     		  = $setup['Encasing'];
+		$this->fieldAttribs 		  = $setup['Field_Attribs'];
+		$this->fieldInfo    		  = $setup['Field_Info'];
+		$this->fieldPrefix  		  = $setup['Field_Prefix'];
+		$this->fieldValue   		  = $setup['Field_Value'];
+		$this->hidden       		  = $setup['Hidden'];
+		$this->highlighted  		  = $setup['Highlighted'];
+		$this->id           		  = $setup['ID'];
+		$this->label        		  = $setup['Label'];
+		$this->requiredIndication = $setup['Required_Indication'];
+		$this->translateLabel     = $setup['Translate_Label'];
+		$this->translatePrefix    = $setup['Translate_Prefix'];
+		$this->Translator         = $setup['Translator'];
 	}
 
 	/******************/
@@ -69,6 +134,7 @@ class Base extends \Evoke\Element\Base
 				__METHOD__ . ' needs Field_Info');
 		}
 
+		
 		return parent::set(array($this->setup['Tag'],
 		                         array(),
 		                         array('Children' => $this->getElements())));

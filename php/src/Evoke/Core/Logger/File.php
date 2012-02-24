@@ -3,41 +3,69 @@ namespace Evoke\Core\Logger;
 
 class File
 {
-	/// Indicates whether or not the resource has been opened.
-	protected $opened = false;
+	/** @property $append
+	 *  Whether the file should be appended to.
+	 */
+	protected $append;
 
-	/// File pointer to the log file.
-	private $fp = false;
+	/** @property $dirMode
+	 *  The mode for any created directories \int (octal).
+	 */
+	protected $dirMode;
+
+	/** @property $fileMode
+	 *  The mode for the file \int (octal).
+	 */
+	protected $fileMode;
+
+	/** @property $filename
+	 *  The filename \string to log to.
+	 */
+	protected $filename;
+	
+	/** @property $filePointer
+	 *  File pointer to the log file.
+	 */
+	private $filePointer;
+
+	/** @property $Filesystem
+	 *  Filesystem \object
+	 */
+	protected $Filesystem;
+
+	/** @property $locking
+	 *  Whether the file is locked when writing to the file.
+	 */
+	protected $locking;
+	
+	/** @property $opened
+	 *  \bool Indicates whether or not the resource has been opened.
+	 */
+	protected $opened = false;
 
 	/** Constructs a new Logger_File object.
 	 *  @param conf  \array   The configuration array.
 	 */
 	public function __construct(Array $setup=array())
 	{
-		$this->setup = array_merge(
-			array('Append'       => true,
-			      'Dir_Mode'     => 0700,
-			      'Event_Manager' => NULL,
-			      'Filesystem'   => NULL,
-			      'File_Mode'    => 0640,
-			      'Filename'     => 'php.log',
-			      'Locking'      => true),
-			$setup);
+		$setup += array('Append'     => true,
+		                'Dir_Mode'   => 0700,
+		                'Filename'   => 'php.log',
+		                'File_Mode'  => 0640,
+		                'Filesystem' => NULL,
+		                'Locking'    => true);
 
-		if (!$this->setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['Filesystem'] instanceof \Evoke\Core\Filesystem)
 		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs EventManager');
+			throw new \InvalidArgumentException(__METHOD__ . ' needs Filesystem');
 		}
 
-		if (!$this->setup['Filesystem'] instanceof \Evoke\Core\Filesystem)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs Filesystem');
-		}
-
-		$this->setup['Event_Manager']->connect(
-			'Log.Write', array($this, 'write'));
+		$this->append     = $setup['Append'];
+		$this->dirMode    = $setup['Dir_Mode'];
+		$this->filename   = $setup['Filename'];
+		$this->fileMode   = $setup['File_Mode'];
+		$this->Filesystem = $setup['Filesystem'];
+		$this->locking    = $setup['Locking'];
 	}
    
 	/******************/
@@ -59,15 +87,15 @@ class File
 			$message['Level_String'] . '] ' . $message['Message'] . "\n";
 
 		// Write to the file, with or without file locking.
-		if ($this->setup['Locking'])
+		if ($this->locking)
 		{
-			$this->setup['Filesystem']->flock($this->fp, LOCK_EX);
-			$this->setup['Filesystem']->fwrite($this->fp, $entry);
-			$this->setup['Filesystem']->flock($this->fp, LOCK_UN);
+			$this->Filesystem->flock($this->filePointer, LOCK_EX);
+			$this->Filesystem->fwrite($this->filePointer, $entry);
+			$this->Filesystem->flock($this->filePointer, LOCK_UN);
 		}
 		else
 		{
-			$this->setup['Filesystem']->fwrite($this->fp, $entry);
+			$this->Filesystem->fwrite($this->filePointer, $entry);
 		}
 	}
    
@@ -81,26 +109,22 @@ class File
 	private function open()
 	{
 		$writeMode = 'w';
-		$dir = dirname($this->setup['Filename']);
+		$dir = dirname($this->filename);
 
 		if (!is_dir($dir))
 		{
-			$this->setup['Filesystem']->mkdir(
-				dirname($dir), $this->dirMode, true);
+			$this->Filesystem->mkdir(dirname($dir), $this->dirMode, true);
 		}
             
-		if ($this->setup['Append'])
+		if ($this->append)
 		{
 			$writeMode = 'a';
 		}
 
 		// Open the log file and ensure it is at the right chmod level.
-		$this->fp = $this->setup['Filesystem']->fopen(
-			$this->setup['Filename'], $writeMode);
-      
-		$this->setup['Filesystem']->chmod(
-			$this->setup['Filename'], $this->fileMode);
-
+		$this->filePointer =
+			$this->Filesystem->fopen($this->filename, $writeMode);
+		$this->Filesystem->chmod($this->filename, $this->fileMode);
 		$this->opened = true;
 	}
 }

@@ -3,30 +3,47 @@ namespace Evoke\Core;
 /// Session_Manager provide management of a session domain.
 class SessionManager
 {
-	/** Domain within $_SESSION to manage specified as a 1 dimensional array.
-	 *  (i.e  array(Lev_1, Lev_2, Lev_3) is $_SESSION[Lev_1][Lev_2][Lev_3])
+	/** @property $domain
+	 *  \mixed Array or string specfiying the domain within the session that we
+	 *  are managing.  When passed as an array the array is an ordered list of
+	 *  the keys required to reach the domain (i.e  array(Lev_1, Lev_2, Lev_3) is
+	 *  $_SESSION[Lev_1][Lev_2][Lev_3]).
+	 *
+	 *  A string can be used for a single level domain.
 	 */
-	private $setup;
+	protected $domain;
+
+	/** @property $Session
+	 *  Session \object
+	 */
+	protected $Session;
    
 	public function __construct($setup=array())
 	{
-		$this->setup = array_merge(
-			array('Domain' => array(),
-			      'Session' => NULL),
-			$setup);
+		$setup += array('Domain'  => array(),
+		                'Session' => NULL);
 
 		// Ensure the domain is an array for all of the methods that use it.  When
 		// a string is passed in we should use that as the domain. 
-		if (!(is_array($this->setup['Domain'])))
+		if (!is_array($setup['Domain']))
 		{
-			$this->setup['Domain'] = array((string)($this->setup['Domain']));
+			if (!is_string($setup['Domain']))
+			{
+				throw new \InvalidArgumentException(
+					__METHOD__ . ' requires Domain as array or string.');
+			}
+			
+			$setup['Domain'] = array($setup['Domain']);
 		}
 
-		if (!$this->setup['Session'] instanceof Session)
+		if (!$setup['Session'] instanceof \Evoke\Core\Iface\Session)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Session');
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Session');
 		}
-      
+
+		$this->domain  = $setup['Domain'];
+		$this->Session = $setup['Session'];		
+		
 		$this->ensure();
 	}
 
@@ -44,13 +61,13 @@ class SessionManager
 	/// Ensure the session is started and the session domain is set or created.
 	public function ensure()
 	{
-		$this->setup['Session']->ensure();
+		$this->Session->ensure();
       
 		// Make currentDomain a reference to $_SESSION so that when we change it
 		// we are modifying the session.
 		$currentDomain =& $_SESSION;
 
-		foreach($this->setup['Domain'] as $subdomain)
+		foreach($this->domain as $subdomain)
 		{
 			if (!isset($currentDomain[$subdomain]))
 			{
@@ -75,7 +92,7 @@ class SessionManager
 		// Set currentDomain to reference $_SESSION.
 		$currentDomain =& $_SESSION;
 
-		foreach($this->setup['Domain'] as $subdomain)
+		foreach($this->domain as $subdomain)
 		{
 			// Update the currentDomain to reference the session subdomain.
 			$currentDomain =& $currentDomain[$subdomain]; 
@@ -87,13 +104,13 @@ class SessionManager
 	/// Return the domain as a flat array.
 	public function getFlatDomain()
 	{
-		return $this->setup['Domain'];
+		return $this->domain;
 	}
    
 	/// Return the string of the session ID.
 	public function getID()
 	{
-		return $this->setup['Session']->getID();
+		return $this->Session->getID();
 	}
 
 	/** Increment the value in the session by the offset.
@@ -139,7 +156,7 @@ class SessionManager
 	 */
 	public function remove()
 	{
-		if (empty($this->setup['Domain']))
+		if (empty($this->domain))
 		{
 			session_unset();
 		}
@@ -150,7 +167,7 @@ class SessionManager
 
 			$previousSubdomain = $currentDomain;
 	 
-			foreach($this->setup['Domain'] as $subdomain)
+			foreach($this->domain as $subdomain)
 			{
 				// Update the currentDomain to reference the session subdomain.
 				$previousSubdomain =& $currentDomain;

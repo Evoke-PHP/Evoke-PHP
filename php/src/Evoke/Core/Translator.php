@@ -3,48 +3,73 @@ namespace Evoke\Core;
 
 class Translator implements Iface\Translator
 {
-	private $setup;
-   
-	public function __construct($setup=array())
-	{
-		$this->setup = array_merge(
-			array('Default_Language' => NULL,
-			      'Languages'        => NULL,
-			      'Lang_Key'         => 'l',
-			      'Session_Manager'   => NULL,
-			      'Translation_File' => NULL,
-			      'TR_Arr'           => array()),
-			$setup);
+	/** @property $defaultLanguage
+	 *  The default language to use for translations.
+	 */
+	protected $defaultLanguage;
 
-		if (!isset($this->defaultLanguage))
+	/** @property $langKey
+	 *  The key that is used in HTTP queries for the language parameter.
+	 */
+	protected $langKey;
+
+	/** @property $languages
+	 *  The languages that the translator should support.
+	 */
+	protected $languages;
+
+	/** @property $SessionManager
+	 *  SessionManager \object
+	 */
+	protected $SessionManager;
+
+
+	/** @property $translationArr
+	 *  \array The array of translations.
+	 */
+	protected $translations;
+
+	public function __construct(Array $setup=array())
+	{
+		$setup += array('Default_Language' => NULL,
+		                'Filename'         => NULL,
+		                'Lang_Key'         => 'l',
+		                'Languages'        => NULL,
+		                'Session_Manager'  => NULL);
+
+		if (!isset($setup['Default_Language']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Default_Language');
 		}
+
+		if (!is_string($setup['Filename']))
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Filename');
+		}
       
-		if (!$this->setup['Session_Manager'] instanceof SessionManager)
+		if (!$setup['Session_Manager'] instanceof SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs SessionManager');
 		}
 
-		if (!isset($this->translationFile))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Translation_File');
-		}
-      
 		// Get the language definitions which set up the local translationArr.
-		require $this->translationFile;
-		$this->setup['TR_Arr'] = $translationArr;
+		require $setup['Filename'];
+		$this->translations = $translationArr;
 
-		if (!isset($this->setup['Languages']))
+		$this->defaultLangauge = $setup['Default_Language'];
+		$this->langKey         = $setup['Lang_Key'];
+		$this->languages       = $setup['Languages'];
+		$this->SessionManager  = $setup['Session_Manager'];
+		
+		if (!isset($this->languages))
 		{
-			$this->setup['Languages'] = $this->getLanguages();
+			$this->languages = $this->getLanguages();
 		}
 
 		if (!empty($_GET) && isset($_GET[$this->langKey]) &&
-		    isset($this->setup['Languages'][$_GET[$this->langKey]]))
+		    isset($this->languages[$_GET[$this->langKey]]))
 		{
 			$this->setLanguage($_GET[$this->langKey]);
 		}
@@ -57,9 +82,9 @@ class Translator implements Iface\Translator
 	/// Return the current language in its short form (e.g EN or ES).
 	public function getLanguage()
 	{
-		if ($this->setup['Session_Manager']->issetKey($this->langKey))
+		if ($this->SessionManager->issetKey($this->langKey))
 		{
-			return $this->setup['Session_Manager']->get($this->langKey);
+			return $this->SessionManager->get($this->langKey);
 		}
 		else
 		{
@@ -71,7 +96,7 @@ class Translator implements Iface\Translator
 	public function getLanguages()
 	{
 		$languageArr = array();
-		$langs = array_keys($this->setup['TR_Arr']['Languages']);
+		$langs = array_keys($this->translations['Languages']);
 
 		foreach ($langs as $lang)
 		{
@@ -101,7 +126,7 @@ class Translator implements Iface\Translator
 	{
 		if (!empty($setLang))
 		{
-			$this->setup['Session_Manager']->set($this->langKey, $setLang);
+			$this->SessionManager->set($this->langKey, $setLang);
 		}
 		else
 		{
@@ -140,26 +165,26 @@ class Translator implements Iface\Translator
 				$acceptedLanguages = array_keys($langArr);
 				$preferredLanguage = reset($acceptedLanguages);
 
-				$this->setup['Session_Manager']->set(
+				$this->SessionManager->set(
 					$this->langKey, $preferredLanguage);
 			}
 			else
 			{
-				$this->setup['Session_Manager']->set(
+				$this->SessionManager->set(
 					$this->langKey, $this->defaultLanguage);
 			}
 		}
 
-		return $this->setup['Session_Manager']->get($this->langKey);
+		return $this->SessionManager->get($this->langKey);
 	}
 
 	public function getPage($page = 'default')
 	{
 		$lang = $this->getLanguage();
-		$errText = $this->setup['TR_Arr']['Languages'][$lang]['Error_Text'];
+		$errText = $this->translations['Languages'][$lang]['Error_Text'];
 
 		// Missing translations should display an error.
-		foreach($this->setup['TR_Arr']['Translation_Keys'] as $key => $val)
+		foreach($this->translations['Translation_Keys'] as $key => $val)
 		{
 			$missingTranslations[$key] = $errText;
 		}
@@ -167,14 +192,14 @@ class Translator implements Iface\Translator
 		// Get the translations from the default page if it exists and merge it
 		// with the specific page - keeping the specific page values.
 		$defaultTranslations =
-			(isset($this->setup['TR_Arr']['Translations'][$lang]) &&
-			 isset($this->setup['TR_Arr']['Translations'][$lang]['default'])) ?
-			$this->setup['TR_Arr']['Translations'][$lang]['default'] : array();
+			(isset($this->translations['Translations'][$lang]) &&
+			 isset($this->translations['Translations'][$lang]['default'])) ?
+			$this->translations['Translations'][$lang]['default'] : array();
 
 		$specificTranslations =
-			(isset($this->setup['TR_Arr']['Translations'][$lang]) &&
-			 isset($this->setup['TR_Arr']['Translations'][$lang][$page])) ?
-			$this->setup['TR_Arr']['Translations'][$lang][$page] : array();
+			(isset($this->translations['Translations'][$lang]) &&
+			 isset($this->translations['Translations'][$lang][$page])) ?
+			$this->translations['Translations'][$lang][$page] : array();
 
 		$translations = array_merge(
 			$missingTranslations, $defaultTranslations, $specificTranslations);
@@ -190,7 +215,7 @@ class Translator implements Iface\Translator
 	public function get($trKey, $page='default')
 	{
 		$lang = $this->getLanguage();
-		$trans = $this->setup['TR_Arr']['Translations'][$lang];
+		$trans = $this->translations['Translations'][$lang];
 
 		if ($page === 'default')
 		{
@@ -203,7 +228,7 @@ class Translator implements Iface\Translator
 			else
 			{
 				return $trKey . ' ' .
-					$this->setup['TR_Arr']['Languages'][$lang]['Error_Text'];
+					$this->translations['Languages'][$lang]['Error_Text'];
 			}
 		}
 		else
@@ -221,7 +246,7 @@ class Translator implements Iface\Translator
 			else
 			{
 				return $trKey . ' ' .
-					$this->setup['TR_Arr']['Languages'][$lang]['Error_Text'];
+					$this->translations['Languages'][$lang]['Error_Text'];
 			}
 		}
 	}
@@ -236,7 +261,7 @@ class Translator implements Iface\Translator
 	{
 		$translationMatches = array();
 		$lang = $this->getLanguage();
-		$trans = $this->setup['TR_Arr']['Translations'][$lang];
+		$trans = $this->translations['Translations'][$lang];
 
 		// Find all of the default translations.
 		if (isset($trans['default']))
@@ -275,7 +300,7 @@ class Translator implements Iface\Translator
 	public function getTranslations($keyMatch, $page='default')
 	{
 		$lang = $this->getLanguage();
-		$trans = $this->setup['TR_Arr']['Translations'][$lang];
+		$trans = $this->translations['Translations'][$lang];
 
 		$defaultTranslationMatches = array();
 		$specificTranslationMatches = array();

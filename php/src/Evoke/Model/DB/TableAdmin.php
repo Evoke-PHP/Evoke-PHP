@@ -3,11 +3,36 @@ namespace Evoke\Model\DB;
 /// Provide a CRUD interface to a database table.
 class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 {
+	/** @property $autoFields
+	 *  Fields \array for fields that are auto_increment.
+	 */
+	protected $autoFields;
+
+	/** @property $Failures
+	 *  Failure message array \object
+	 */
 	protected $Failures;
+
+	/** @proprty $Info
+	 *  DB Table Information \object
+	 */
 	protected $Info;
+
+	/** @property $Notifications
+	 *  Notification message array \object
+	 */
 	protected $Notifications;
+
+	/** @property $SessionManager
+	 *  Session Manager \object
+	 */
 	protected $SessionManager;
-   
+
+	/** @property $validate
+	 *  \bool Whether to validate the data.
+	 */
+	protected $validate;
+	
 	public function __construct(Array $setup)
 	{
 		$setup += array('Auto_Fields'    => array('ID'),
@@ -43,10 +68,12 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
 		parent::__construct($setup);
       
+		$this->autoFields     = $setup['Auto_Fields'];
 		$this->Failures       = $setup['Failures'];
 		$this->Info           = $setup['Info'];
 		$this->Notifications  = $setup['Notifications'];
 		$this->SessionManager = $setup['Session_Manager'];
+		$this->validate       = $setup['Validate'];
 	}
 
 	/******************/
@@ -64,7 +91,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 			unset($record[$auto]);
 		}
 
-		if ($this->setup['Validate'])
+		if ($this->validate)
 		{
 			if (!$this->Info->isValid($record))
 			{
@@ -214,7 +241,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 		{
 			$this->Failures->reset();
 
-			if ($this->validateRecord)
+			if ($this->validate)
 			{
 				if (!$this->Info->isValid($record))
 				{

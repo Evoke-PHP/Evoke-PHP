@@ -2,7 +2,24 @@
 namespace Evoke\Page;
 abstract class XML extends Base
 {
-	protected $tr;
+	/** @property $start
+	 *  CSS and JS \array to be linked at the start of the page.
+	 */
+	protected $start;
+
+	/** @property $startBase
+	 *  CSS and JS \array that forms the base CSS and JS for all pages.
+	 */
+	protected $startBase;
+	
+	/** @property $Translator
+	 *  Translator \object
+	 */
+	protected $Translator;
+
+	/** @property $XWR
+	 *  XHTML Writing Resource
+	 */
 	protected $XWR;
    
 	public function __construct(Array $setup)
@@ -27,8 +44,10 @@ abstract class XML extends Base
       
 		parent::__construct($setup);
 
-		$this->Translator = $this->setup['Translator'];
-		$this->XWR = $this->setup['XWR'];
+		$this->start      = $setup['Start'];
+		$this->startBase  = $setup['Start_Base'];
+		$this->Translator = $setup['Translator'];
+		$this->XWR        = $setup['XWR'];
 	}
    
 	/******************/
@@ -61,7 +80,7 @@ abstract class XML extends Base
 	{
 		$start = $this->startBase;
 
-		foreach ($this->setup['Start'] as $key => $entry)
+		foreach ($this->start as $key => $entry)
 		{
 			// Arrays should be appended to with only the new elements.
 			if (isset($start[$key]) && is_array($start[$key]))
