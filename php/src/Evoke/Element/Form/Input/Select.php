@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Input;
+namespace Evoke\Element\Form\Input;
 
-class Select extends \Evoke\Element
+class Select extends \Evoke\Element\Base
 {
 	/** @property $appendData
 	 *  \array Data to be appended to the options available for selection.  
@@ -62,21 +62,35 @@ class Select extends \Evoke\Element
 	/******************/
 
 	/** Set the select element.
-	 *  @param select \array The select data in the form:
+	 *  @param data \array The select data in the form:
 	 *  \verbatim
-	 *  array('Data'     => \array records, // Records for the select
+	 *  array('Records'  => \array records, // Records for the select
 	 *        'Selected' => \scalar value); // The value that is selected.
 	 *  \endverbatim
 	 */    
-	public function set(Array $select)
+	public function set(Array $data)
 	{
-		$select += array('Data'     => array(),
-		                 'Selected' => NULL);
-		$optionElements = array();
+		$data += array('Records'  => NULL,
+		               'Selected' => NULL);
+
+		if (!is_array($data['Records']))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Records as array');
+		}
 
 		$fullData = array_merge($this->prependData,
-		                        $select['Data'],
+		                        $data['Records'],
 		                        $this->appendData);
+
+		if (empty($fullData))
+		{
+			throw new \RuntimeException(
+				__METHOD__ . ' cannot set select element without having options ' .
+				'to select from (The XHTML would be invalid).');
+		}
+
+		$optionElements = array();
 
 		foreach ($fullData as $key => $record)
 		{
@@ -94,7 +108,7 @@ class Select extends \Evoke\Element
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
-			if (isset($select['Selected']) && $value == $select['Selected'])
+			if (isset($data['Selected']) && $value == $data['Selected'])
 			{
 				$optionAttribs['selected'] = 'selected';
 			}

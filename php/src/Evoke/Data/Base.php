@@ -91,16 +91,16 @@ class Base implements \Evoke\Core\Iface\Data
 			var_export($parentField, true) . ' joins are: ' .
 			var_export($this->collisionFreeSetup['Joins'], true));
 	}
-
-	/** Get the current record as a simple array (without iterator or reference
-	 *  access).
+	
+	/** Get the current record as a simple array (without iterator or class
+	 *  properties).
 	 *  \return Array The record that we are managing.
 	 */
 	public function getRecord()
 	{
 		return current($this->collisionFreeSetup['Data']);
 	}
-
+	
 	/** Return whether the data is empty or not.
 	 *  \return \bool Whether the data is empty or not.
 	 */
@@ -216,6 +216,15 @@ class Base implements \Evoke\Core\Iface\Data
 	/* Protected Methods */
 	/*********************/
 
+	/** Get the collision free setup so that inherited classes don't have to
+	 *  refer to $this->collisionFreeSetup.
+	 *  \return \array The value of $this->collisionFreeSetup
+	 */
+	protected function getSetup()
+	{
+		return $this->collisionFreeSetup;
+	}
+	
 	/** Set all of the Joint Data from the current record into the data
 	 *  containers supplied by the references given at construction.
 	 */
