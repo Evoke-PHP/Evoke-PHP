@@ -19,6 +19,8 @@ abstract class Translator extends Base
 				__METHOD__ . ' requires Translator');
 		}
 
+		parent::__construct($setup);
+		
 		$this->Translator = $setup['Translator'];
 	}
 }

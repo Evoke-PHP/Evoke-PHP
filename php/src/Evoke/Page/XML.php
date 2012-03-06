@@ -1,5 +1,8 @@
 <?php
 namespace Evoke\Page;
+
+use Evoke\Core\Iface;
+
 abstract class XML extends Base
 {
 	/** @property $start
@@ -17,10 +20,10 @@ abstract class XML extends Base
 	 */
 	protected $Translator;
 
-	/** @property $XWR
+	/** @property $Writer
 	 *  XHTML Writing Resource
 	 */
-	protected $XWR;
+	protected $Writer;
    
 	public function __construct(Array $setup)
 	{
@@ -29,17 +32,18 @@ abstract class XML extends Base
 			                'CSS' => array('/csslib/global.css',
 			                               '/csslib/common.css')),
 		                'Translator' => NULL,
-		                'XWR'        => NULL);
+		                'Writer'     => NULL);
 
-		if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
+		if (!$setup['Translator'] instanceof Iface\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
 		}
       
-		if (!$setup['XWR'] instanceof \Evoke\Core\XWR)
+		if (!$setup['Writer'] instanceof Iface\Writer\Page)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires XWR');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Page Writer');
 		}
       
 		parent::__construct($setup);
@@ -47,7 +51,7 @@ abstract class XML extends Base
 		$this->start      = $setup['Start'];
 		$this->startBase  = $setup['Start_Base'];
 		$this->Translator = $setup['Translator'];
-		$this->XWR        = $setup['XWR'];
+		$this->Writer     = $setup['Writer'];
 	}
    
 	/******************/
@@ -68,12 +72,12 @@ abstract class XML extends Base
 
 	protected function end()
 	{
-		$this->XWR->writeEnd();
+		$this->Writer->writeEnd();
 	}
 
 	protected function output()
 	{
-		$this->XWR->output();
+		$this->Writer->output();
 	}
    
 	protected function start()
@@ -104,7 +108,7 @@ abstract class XML extends Base
 			$start['Keywords'] = $this->Translator->get('Keywords', $_SERVER['PHP_SELF']);
 		}
       
-		$this->XWR->writeStart($start);
+		$this->Writer->writeStart($start);
 	}
    
 	/********************/

@@ -13,16 +13,16 @@ class Error implements \Evoke\Core\Iface\Handler
 	 */
 	protected $EventManager;
 
-	/** @property $XWR
-	 *  XHTML Writer \object
+	/** @property $Writer
+	 *  Writer \object
 	 */
-	protected $XWR;
+	protected $Writer;
 
 	public function __construct(Array $setup)
 	{
 		$setup += array('Detailed_Insecure_Message' => NULL,
-		                'Event_Manager'             => NULL,
-		                'XWR'                       => NULL);
+		                'EventManager'              => NULL,
+		                'Writer'                    => NULL);
 
 		if (!is_bool($setup['Detailed_Insecure_Message']))
 		{
@@ -30,20 +30,20 @@ class Error implements \Evoke\Core\Iface\Handler
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
 
-		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
+		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 
-		if (!$setup['XWR'] instanceof \Evoke\Core\XWR)
+		if (!$setup['Writer'] instanceof \Evoke\Core\Iface\Writer)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires XWR');
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Writer');
 		}
      
 		$this->detailedInsecureMessage = $setup['Detailed_Insecure_Message'];
-		$this->EventManager            = $setup['Event_Manager'];
-		$this->XWR                     = $setup['XWR'];
+		$this->EventManager            = $setup['EventManager'];
+		$this->Writer                  = $setup['Writer'];
 	}
    
 	/******************/
@@ -229,7 +229,7 @@ class Error implements \Evoke\Core\Iface\Handler
 				array('Children' => $traceElems));
 		}
       
-		$this->XWR->write(
+		$this->Writer->write(
 			array('div',
 			      array('class' => 'Error_Handler Message_Box System'),
 			      array('Children' => array(
@@ -239,7 +239,7 @@ class Error implements \Evoke\Core\Iface\Handler
 				            array('div',
 				                  array('class' => 'Description'),
 				                  array('Children' => $descriptionElems))))));
-		$this->XWR->output();
+		$this->Writer->output();
 	}
 }
 // EOF

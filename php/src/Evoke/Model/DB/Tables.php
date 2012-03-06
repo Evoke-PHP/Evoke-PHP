@@ -3,12 +3,25 @@ namespace Evoke\Model\DB;
 /// Get a list of tables from the database.
 class Tables extends Base
 {
+	/** @property $extraTables
+	 *  \array Extra tables to include in the data.
+	 */
+	protected $extraTables;
+
+	/** @property $ignoredTables
+	 *  \array Table to ignore in the data.
+	 */
+	protected $ignoredTables;
+
 	public function __construct(Array $setup)
 	{
 		$setup += array('Extra_Tables'   => array(),
 		                'Ignored_Tables' => array());
       
 		parent::__construct($setup);
+
+		$this->extraTables   = $setup['Extra_Tables'];
+		$this->ignoredTables = $setup['Ignored_Tables'];
 	}
 
 	/******************/

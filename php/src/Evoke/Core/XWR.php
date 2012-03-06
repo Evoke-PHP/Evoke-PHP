@@ -4,7 +4,7 @@ namespace Evoke\Core;
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.
  */
-class XWR extends \XMLWriter
+class XWR implements Iface\Writer\Page
 {
 	/** @property $attribsPos
 	 *  \int The position of the attributes in the XML arrays being written.
@@ -21,10 +21,15 @@ class XWR extends \XMLWriter
 	 */
 	protected $optionsPos;
 
-	/** @property $tagsPos
-	 *  \int The position of the tags in the XML arrays being written.
+	/** @property $tagPos
+	 *  \int The position of the tag in the XML arrays being written.
 	 */
-	protected $tagsPos;
+	protected $tagPos;
+
+	/** @property $XMLWriter
+	 *  The XML Writer \object
+	 */
+	protected $XMLWriter;
 	
 	/// Create the interface to writing our XHTML.
 	public function __construct(Array $setup=array())
@@ -34,43 +39,61 @@ class XWR extends \XMLWriter
 		                'Indent_String' => '   ',
 		                'Language'      => 'EN',
 		                'Options_Pos'   => 2,
-		                'Tag_Pos'       => 0);
+		                'Tag_Pos'       => 0,
+		                'XMLWriter'     => NULL);
 
+		if (!$setup['XMLWriter'] instanceof \XMLWriter)
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires XMLWriter');
+		}
+		
 		$this->attribsPos = $setup['Attribs_Pos'];
 		$this->language   = $setup['Language'];
 		$this->optionsPos = $setup['Options_Pos'];
 		$this->tagPos     = $setup['Tag_Pos'];
+		$this->XMLWriter  = $setup['XMLWriter'];
 		
-		$this->openMemory();
+		$this->XMLWriter->openMemory();
 
 		if ($setup['Indent'])
 		{
-			$this->setIndentString($setup['Indent_String']);
-			$this->setIndent(true);
+			$this->XMLWriter->setIndentString($setup['Indent_String']);
+			$this->XMLWriter->setIndent(true);
 		}
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
-   
-	/** Get the XHTML that has been created.
+
+	/** Get the XHTML that has been written into the memory buffer (without
+	 *  resetting it).
 	 *  \return A string of the XHTML.
 	 */
-	public function get()
+	public function __toString()
 	{
-		return $this->outputMemory(false);
+		return $this->XMLWriter->outputMemory(false);
 	}
    
-	/// Output the XHTML that has been created.
+	/// Flush the memory buffer containing the XHTML that has been written.
+	public function flush()
+	{
+		$this->XMLWriter->flush();
+	}
+	
+	/** Output the memory buffer for the XHTML that has been written and reset
+	 *  the memory buffer.
+	 */
 	public function output()
 	{
-		echo($this->outputMemory(true));
+		echo($this->XMLWriter->outputMemory(true));
 	}
 
-	/** Write XML elements into the current document.
-	 *  @param xml \array An array holding the xml to be written of the form:
-	 *     array($tag, $attributes, $options)
+	/** Write XML elements into the memory buffer.
+	 *  @param xml \mixed Array accessible value for the xml to be written of the
+	 *  form: array($tag, $attributes, $options)
+	 *
 	 *  An example of this is below with the default values that are used for the
 	 *  options array. Attributes and options are optional.
 	 *  \verbatim
@@ -83,7 +106,7 @@ class XWR extends \XMLWriter
 	 *       )
 	 *  \endverbatim
 	 */
-	public function write(Array $xml)
+	public function write($xml)
 	{
 		if (!isset($xml[$this->tagPos]))
 		{
@@ -110,12 +133,12 @@ class XWR extends \XMLWriter
       
 		if (!empty($tag) && $options['Start'])
 		{
-			$this->startElement($tag);
+			$this->XMLWriter->startElement($tag);
 		}
 
 		foreach ($attribs as $attrib => $value)
 		{
-			$this->writeAttribute($attrib, $value);
+			$this->XMLWriter->writeAttribute($attrib, $value);
 		}
 
 		if (isset($options['Text']))
@@ -128,7 +151,7 @@ class XWR extends \XMLWriter
 				$text .= "\n";
 			}
 	 
-			$this->text($text);
+			$this->XMLWriter->text($text);
 		}
 
 		if (!is_array($options['Children']))
@@ -183,45 +206,46 @@ class XWR extends \XMLWriter
 			if ($tagStr === 'DIV' || $tagStr === 'LINK' || $tagStr === 'SCRIPT' ||
 			    $tagStr === 'TEXTAREA')
 			{
-				$this->fullEndElement();
+				$this->XMLWriter->fullEndElement();
 			}
 			else
 			{
-				$this->endElement();
+				$this->XMLWriter->endElement();
 			}
 		}
 	}
-
+		
 	/// End the html page and write the output.
 	public function writeEnd()
 	{
-		$this->endElement(); // body
-		$this->endElement(); // html
+		$this->XMLWriter->endElement(); // body
+		$this->XMLWriter->endElement(); // html
 	}
 
-	/// Write the DTD, html head and start the body of the document.
-	public function writeStart($setup=array())
+	/** Write the DTD, html head and start the body of the document.
+	 *  @param setup \array The setup for the start of the document.
+	 */
+	public function writeStart(Array $setup=array())
 	{
-		$setup = array_merge(array('CSS' => array(),
-		                           'Description' => '',
-		                           'DTD' => 'XHTML_1_1',
-		                           'Keywords' => '',
-		                           'Lang' => '',
-		                           'JS' => array(),
-		                           'Title' => ''),
-		                     $setup);
-      
+		$setup += array('CSS'         => array(),
+		                'Description' => '',
+		                'DTD'         => 'XHTML_1_1',
+		                'Keywords'    => '',
+		                'Lang'        => '',
+		                'JS'          => array(),
+		                'Title'       => '');
+		                
 		$this->writeDTD($setup['DTD'], '', '', '', $setup['Lang']);
       
-		$this->startElement('head');
-		$this->writeElement('title', $setup['Title']);
+		$this->XMLWriter->startElement('head');
+		$this->XMLWriter->writeElement('title', $setup['Title']);
 		$this->writeMeta('description', $setup['Description']);
 		$this->writeMeta('keywords', $setup['Keywords']);
 		$this->writeCSS($setup['CSS']);
 		$this->writeJS($setup['JS']);
-		$this->endElement(); // head
+		$this->XMLWriter->endElement(); // head
 
-		$this->startElement('body');
+		$this->XMLWriter->startElement('body');
 	}
 
 	/*******************/
@@ -241,7 +265,7 @@ class XWR extends \XMLWriter
 	}
 
 	/// Write the DTD.
-	public function writeDTD(
+	private function writeDTD(
 		$name='XHTML_1_1', $publicId='', $systemId='', $subset='', $lang='')
 	{
 		if (empty($lang))
@@ -253,13 +277,15 @@ class XWR extends \XMLWriter
 		{
 		case 'XHTML_1_1':
 		default:
-			$this->startDTD('html', '-//W3C//DTD XHTML 1.1//EN',
-			                'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
-			$this->endDTD();
+			$this->XMLWriter->startDTD(
+				'html', '-//W3C//DTD XHTML 1.1//EN',
+				'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
+			$this->XMLWriter->endDTD();
 	 
-			$this->startElementNS(null, 'html', 'http://www.w3.org/1999/xhtml');
-			$this->writeAttribute('lang', $lang);
-			$this->writeAttribute('xml:lang', $lang);
+			$this->XMLWriter->startElementNS(
+				null, 'html', 'http://www.w3.org/1999/xhtml');
+			$this->XMLWriter->writeAttribute('lang', $lang);
+			$this->XMLWriter->writeAttribute('xml:lang', $lang);
 			break;
 		}
 	}
@@ -278,11 +304,9 @@ class XWR extends \XMLWriter
 	/// Write meta information to the document.
 	private function writeMeta($name, $content)
 	{
-		$this->startElement('meta');
-		$this->writeAttribute('name', $name);
-		$this->writeAttribute('content', $content);
-		$this->endElement();
-
+		$this->write(array('meta',
+		                   array('content' => $content,
+		                         'name'    => $name)));
 	}
 }
 // EOF

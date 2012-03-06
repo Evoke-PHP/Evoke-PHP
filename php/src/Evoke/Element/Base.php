@@ -16,7 +16,7 @@ class Base implements \Evoke\Core\Iface\Element
 	protected $attribs;
 
 	/** @property $attribsPos
-	 *  \int The position of the attributes in the XML arrays being written.
+	 *  \int The position of the attributes in the element.
 	 */
 	protected $attribsPos;	
 
@@ -31,14 +31,14 @@ class Base implements \Evoke\Core\Iface\Element
 	protected $options;
 
 	/** @property $optionsPos
-	 *  \int The position of the options in the XML arrays being written.
+	 *  \int The position of the options in the element.
 	 */
 	protected $optionsPos;
 	
-	/** @property $tagsPos
-	 *  \int The position of the tags in the XML arrays being written.
+	/** @property $tagPos
+	 *  \int The position of the tag in the element.
 	 */
-	protected $tagsPos;
+	protected $tagPos;
    
 	public function __construct(Array $setup=array())
 	{

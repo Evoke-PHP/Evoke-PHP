@@ -59,10 +59,10 @@ class Logger
 	 
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Date_Time'         => NULL,
+		$setup += array('DateTime'          => NULL,
 		                'Default_Level'     => LOG_INFO,
 		                'Default_Level_Str' => 'Level_',
-		                'Event_Manager'     => NULL,
+		                'EventManager'      => NULL,
 		                'Levels'            => array(LOG_EMERG   => 'Emergency',
 		                                             LOG_ALERT   => 'Alert',
 		                                             LOG_CRIT    => 'Critical',
@@ -76,21 +76,21 @@ class Logger
 		                'Num_Levels'        => 8,
 		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
-		if (!$setup['Date_Time'] instanceof \DateTime)
+		if (!$setup['DateTime'] instanceof \DateTime)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Date_Time');
+			throw new \InvalidArgumentException(__METHOD__ . ' needs DateTime');
 		}
 		
-		if (!$setup['Event_Manager'] instanceof EventManager)
+		if (!$setup['EventManager'] instanceof EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 		
-		$this->DateTime         = $setup['Date_Time'];
+		$this->DateTime         = $setup['DateTime'];
 		$this->defaultLevel     = $setup['Default_Level'];
 		$this->defaultLevelStr  = $setup['Default_Level_Str'];
-		$this->EventManager     = $setup['Event_Manager'];
+		$this->EventManager     = $setup['EventManager'];
 		$this->levels           = $setup['Levels'];
 		$this->loggingMandatory = $setup['Logging_Mandatory'];
 		$this->timeFormat       = $setup['Time_Format'];

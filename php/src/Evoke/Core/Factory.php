@@ -246,9 +246,9 @@ class Factory
 	public function getPageXML($page, Array $setup=array())
 	{
 		$setup += array('Factory'         => $this,
-		                'Instance_Manager' => $this->InstanceManager,
+		                'InstanceManager' => $this->InstanceManager,
 		                'Translator'      => $this->getTranslator(),
-		                'XWR'             => $this->getXWR());
+		                'Writer'          => $this->getXWR());
 
 		return $this->InstanceManager->create($page, $setup);
 	}
@@ -358,14 +358,16 @@ class Factory
 			array_merge(array('Event_Manager'    => $this->getEventManager(),
 			                  'Instance_Manager' => $this->InstanceManager,
 			                  'Translator'       => $this->getTranslator(),
-			                  'XWR'              => $this->getXWR()),
+			                  'Writer'           => $this->getXWR()),
 			            $setup));
 	}
    
 	/// Get the XWR (XML Writing Resource).
 	public function getXWR()
 	{
-		return $this->InstanceManager->get($this->namespace['Core'] . 'XWR');
+		return $this->InstanceManager->get(
+			$this->namespace['Core'] . 'XWR',
+			array('XMLWriter' => $this->InstanceManager->get('XMLWriter')));
 	}
 }
 // EOF

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XML;
+namespace Evoke\View;
 
 class Admin extends Base
 {
@@ -80,7 +80,7 @@ class Admin extends Base
 	{
 		if (!empty($failures))
 		{
-			$this->XWR->write(
+			$this->Writer->write(
 				$this->InstanceManager->create(
 					'Element_Failures', array('Data' => $failures)));
 		}
@@ -92,7 +92,7 @@ class Admin extends Base
 	{
 		if (!empty($notifications))
 		{
-			$this->XWR->write(
+			$this->Writer->write(
 				$this->InstanceManager->create(
 					'Element_Notifications', array('Data' => $notifications)));
 		}
@@ -136,7 +136,7 @@ class Admin extends Base
 	/// Write a Create New button.
 	protected function writeCreateNew()
 	{
-		$this->XWR->write(
+		$this->Writer->write(
 			array('form',
 			      array('class'  => 'Create_New',
 			            'action' => '',
@@ -153,7 +153,7 @@ class Admin extends Base
 	/// Write an entry form for the current record.
 	protected function writeCurrentRecord($record, $isNew)
 	{
-		$this->XWR->write(
+		$this->Writer->write(
 			$this->InstanceManager->create(
 				'Element_Form_Entry',
 				array('Field_Values'   => $record,
@@ -165,7 +165,7 @@ class Admin extends Base
 
 	protected function writeDeleteRequest($request)
 	{
-		$this->XWR->write(array('div', array('class' => 'mask')));
+		$this->Writer->write(array('div', array('class' => 'mask')));
 
 		$rowButtons = array(
 			array('input',
@@ -190,7 +190,7 @@ class Admin extends Base
 			                  'Table_Name'     => $this->tableName,
 			                  'Translator'     => $this->Translator)));      
 			   
-		$this->XWR->write(
+		$this->Writer->write(
 			$this->InstanceManager->create(
 				'Element_Form_Dialog',
 				array('Attribs'          => array('class'  => 'Dialog Bad',
@@ -205,7 +205,7 @@ class Admin extends Base
 	/// Write a header.
 	protected function writeHeader($header)
 	{
-		$this->XWR->write(
+		$this->Writer->write(
 			$this->InstanceManager->create(
 				'Element_Admin_Header',
 				array('Languages'  => $header['Languages'],
@@ -213,7 +213,7 @@ class Admin extends Base
 
 		if (isset($this->pageName))
 		{
-			$this->XWR->write(
+			$this->Writer->write(
 				array('h1',
 				      array('class' => 'Admin_Heading'),
 				      array('Text' => $this->Translator->get(
@@ -224,7 +224,7 @@ class Admin extends Base
 	/// Write a list of records.
 	protected function writeRecordList($data)
 	{
-		$this->XWR->write(
+		$this->Writer->write(
 			$this->InstanceManager->create(
 				'Element_Record_List_Table',
 				array_merge(

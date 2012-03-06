@@ -26,13 +26,14 @@ class Session implements Iface\Session
 			{
 				if (!session_start())
 				{
-					throw new \RuntimeException(__METHOD__, 'session_start failed.');
+					throw new \RuntimeException(
+						__METHOD__ . ' session_start failed.');
 				}
 			}
 			else
 			{
 				throw new \RuntimeException(
-					__METHOD__, 'Session started after headers sent.');
+					__METHOD__ . ' Session started after headers sent.');
 			}
 		}
 	}
