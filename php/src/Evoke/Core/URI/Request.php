@@ -63,8 +63,6 @@ class Request implements \Evoke\Core\Iface\URI\Request
 		}
 
 		$acceptString = $_SERVER['HTTP_ACCEPT'];
-		$acceptString = 'text/html;q=1.000;fun=endless;paramet=ers,' .
-			'paul/young;q=1.000;fun=over;time=late;bed=imminent;stat;numstat;oh=yeah';
 		
 		$acceptPatterns =
 			'(?<ACCEPT_EXTENSION>  ;(?&LWS)?(?&TOKEN)' . "\n" .
