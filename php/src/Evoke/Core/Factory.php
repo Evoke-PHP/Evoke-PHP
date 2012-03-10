@@ -189,16 +189,16 @@ class Factory
 	/// Get an Admin model for a table.
 	public function getModelDBTableAdmin(Array $setup)
 	{
-		$setup += array('Event_Manager'  => $this->getEventManager(),
+		$setup += array('EventManager'  => $this->getEventManager(),
 		                'Failures'      => $this->getMessageArray(),
+		                'Info'          => NULL,
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'Table_Info'     => NULL,
 		                'Table_Name'    => NULL);
 
-		if (!isset($setup['Table_Info']) && isset($setup['Table_Name']))
+		if (!isset($setup['Info']) && isset($setup['Table_Name']))
 		{
-			$setup['Table_Info'] = $this->getTableInfo(
+			$setup['Info'] = $this->getTableInfo(
 				array('Table_Name' => $setup['Table_Name']));
 		}
       

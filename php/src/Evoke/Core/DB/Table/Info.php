@@ -1,6 +1,6 @@
 <?php
 namespace Evoke\Core\DB\Table;
-/// Table_Info provides an interface to gather information about a table.
+/// Info provides an interface to gather information about a DB table.
 class Info implements \Evoke\Core\Iface\Validity
 { 
 	/** @property $createInfo

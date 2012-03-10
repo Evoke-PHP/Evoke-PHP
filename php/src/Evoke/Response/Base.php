@@ -30,6 +30,8 @@ abstract class Base
 	/******************/
 	/* Public Methods */
 	/******************/
+	
+	abstract public function execute();
 
 	/** Set the headers to show that the document should be cached. This must
 	 *  come before any output is set in the document (otherwise the headers will
@@ -40,7 +42,7 @@ abstract class Base
 	 *  @param minutes \int The number of minutes to cache the document for.
 	 *  @param seconds \int The number of seconds to cache the document for.
 	 */
-	public function cache($days=0, $hours=0, $minutes=0, $seconds=0)
+	public function setCache($days=0, $hours=0, $minutes=0, $seconds=0)
 	{
 		if (headers_sent())
 		{
@@ -56,6 +58,17 @@ abstract class Base
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
 	}
 
-	abstract public function execute();
+	/** Set the content type for the document.
+	 */
+	public function setContentType($contentType)
+	{
+		if (headers_sent())
+		{
+			throw new \RuntimeException(
+				__METHOD__ . ' headers have already been sent.');
+		}
+
+		header('Content-Type: ' . $contentType);
+	}
 }
 // EOF
