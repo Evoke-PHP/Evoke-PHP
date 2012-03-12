@@ -23,13 +23,13 @@ class Factory
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Instance_Manager' => NULL,
+		$setup += array('InstanceManager' => NULL,
 		                'Namespace'       => array('Core'  => '\Evoke\Core\\',
 		                                           'Data'  => '\Evoke\Data\\',
 		                                           'Model' => '\Evoke\Model\\'),
 		                'Settings'        => NULL);
 
-		if (!$setup['Instance_Manager'] instanceof
+		if (!$setup['InstanceManager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
@@ -43,8 +43,8 @@ class Factory
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Settings');
 		}
 
-		$this->namespace = $setup['Namespace'];
-		$this->InstanceManager = $setup['Instance_Manager'];
+		$this->namespace       = $setup['Namespace'];
+		$this->InstanceManager = $setup['InstanceManager'];
 		$this->Settings        = $setup['Settings'];
 	}
    

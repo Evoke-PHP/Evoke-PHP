@@ -20,6 +20,11 @@ class Router implements \Evoke\Core\Iface\URI\Router
 	 */
 	protected $mappings;
 
+	/** @property $Request
+	 *  Request \object
+	 */
+	protected $Request;
+
 	/** @property $responseBase
 	 *  The base \string for the response class.
 	 */
@@ -27,22 +32,28 @@ class Router implements \Evoke\Core\Iface\URI\Router
 	
 	public function __construct(Array $setup)
 	{
-		$setup +=array('Factory'          => NULL,
-		               'Instance_Manager' => NULL,
-		               'Response_Base'    => NULL);
+		$setup +=array('Factory'         => NULL,
+		               'InstanceManager' => NULL,
+		               'Request'         => NULL,
+		               'Response_Base'   => NULL);
 
 		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$setup['Instance_Manager'] instanceof
+		if (!$setup['InstanceManager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires InstanceManager');
 		}
-      
+
+		if (!$setup['Request'] instanceof \Evoke\Core\Iface\URI\Request)
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
+		}
+		
 		if (!is_string($setup['Response_Base']))
 		{
 			throw new \InvalidArgumentException(
@@ -52,7 +63,8 @@ class Router implements \Evoke\Core\Iface\URI\Router
 		$this->mappings = array();
 
 		$this->Factory         = $setup['Factory'];
-		$this->InstanceManager = $setup['Instance_Manager'];
+		$this->InstanceManager = $setup['InstanceManager'];
+		$this->Request         = $setup['Request'];
 		$this->responseBase    = $setup['Response_Base'];
 	}
 
@@ -96,7 +108,8 @@ class Router implements \Evoke\Core\Iface\URI\Router
 				$response,
 				array_merge(
 					array('Factory'         => $this->Factory,
-					      'Instance_Manager' => $this->InstanceManager),
+					      'InstanceManager' => $this->InstanceManager,
+					      'Request'         => $this->Request),
 					$params));
 		}
 		catch (\Exception $e)
