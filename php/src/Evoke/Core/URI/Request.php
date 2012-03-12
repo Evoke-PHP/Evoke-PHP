@@ -27,8 +27,6 @@ class Request implements \Evoke\Core\Iface\URI\Request
 			'(?<CHAR>          [\x00-\x7f])' .
 			'(?<CRLF>          \x0d\x0a)' .
 			'(?<CTL>           [\x00-\x1f\x7f])' .
-			// The optional linear whitespace that litters the regex thanks to a
-			// line in the RFC
 			// A shortcut subroutine for the linear whitespace that litters the
 			// regex thanks to the following in RFC2616-sec2.1:
 			// implied *LWS
