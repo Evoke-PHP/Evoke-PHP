@@ -23,19 +23,29 @@ class Request implements \Evoke\Core\Iface\URI\Request
 		 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6 to 3.7.
 		 */
 		$this->basicPatterns =
-			'(?<ATTRIBUTE>     (?&TOKEN))' . "\n" .
-			'(?<CHAR>          [\x00-\x7f])' . "\n" .
-			'(?<CRLF>          \x0d \x0a)' . "\n" .
-			'(?<CTL>           [\x00-\x1f\x7f])' . "\n" .
-			'(?<LWS>           (?&CRLF)? (\x09 | \x20)+)' . "\n" .
-			'(?<NON_CTL>       [^\x00-\x1f\x7f])' . "\n" .
-			'(?<Q_VALUE>       (0(\.[[:digit:]]{0,3})?) | (1(\.0{0,3})))' . "\n" .
-			'(?<QDTEXT>        [\x09\x0a\x0d\x20\x21\x23-\x7e\x80-\xff])' . "\n" .
-			'(?<QUOTED_PAIR>   \x5c(?&CHAR))' . "\n" .
-			'(?<QUOTED_STRING> "((?&QDTEXT) | (?&QUOTED_PAIR))*")' . "\n" .
-			'(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d])' . "\n" .
-			'(?<TOKEN>         (?&TOKEN_CHAR)+)' . "\n" .
-			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])' . "\n" .
+			'(?<ATTRIBUTE>     (?&TOKEN))' .
+			'(?<CHAR>          [\x00-\x7f])' .
+			'(?<CRLF>          \x0d\x0a)' .
+			'(?<CTL>           [\x00-\x1f\x7f])' .
+			// The optional linear whitespace that litters the regex thanks to a
+			// line in the RFC
+			// A shortcut subroutine for the linear whitespace that litters the
+			// regex thanks to the following in RFC2616-sec2.1:
+			// implied *LWS
+			//     The grammar described by this specification is word-based.
+			//     Except where noted otherwise, linear white space (LWS) can be
+			//     included between any two adjacent words (token or
+			//     quoted-string), and between adjacent words and separators,
+			//     without changing the interpretation of a field.
+			'(?<L>             (?&LWS)*)' .
+			'(?<LWS>           (?&CRLF)? (\x09 | \x20)+)' .
+			'(?<Q_VALUE>       (0(\.[[:digit:]]{0,3})?) | (1(\.0{0,3})))' .
+			'(?<QDTEXT>        [\x09\x0a\x0d\x20\x21\x23-\x7e\x80-\xff])' .
+			'(?<QUOTED_PAIR>   \x5c(?&CHAR))' .
+			'(?<QUOTED_STRING> "((?&QDTEXT) | (?&QUOTED_PAIR))*")' .
+			'(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d])' .
+			'(?<TOKEN>         (?&TOKEN_CHAR)+)' .
+			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])' .
 			'(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))';
 	}
 			
@@ -65,24 +75,22 @@ class Request implements \Evoke\Core\Iface\URI\Request
 		$acceptString = $_SERVER['HTTP_ACCEPT'];
 		
 		$acceptPatterns =
-			'(?<ACCEPT_EXTENSION>  ;(?&LWS)?(?&TOKEN)' . "\n" .
-			'    ((?&LWS)?=(?&LWS)?((?&TOKEN)|(?&QUOTED_STRING)))?)' . "\n" .
-			'(?<SUBTYPE>           (?&TOKEN)|\*)' . "\n" .
-			'(?<TYPE>              (?&TOKEN)|\*)';
+			'(?<ACCEPT_EXTENSION>' .
+			'   ;(?&L)(?&TOKEN)((?&L)=(?&L)((?&TOKEN)|(?&QUOTED_STRING)))?)' .
+			'(?<SUBTYPE>          (?&TOKEN)|\*)' .
+			'(?<TYPE>             (?&TOKEN)|\*)';
 
 		if ($this->validateHeaders)
 		{
 			$validationPattern =
 				'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns .
-				'   (?<ACCEPT>' .
-				'      ((?&ACCEPT_ELEMENT)(?&LWS)?,?)*)' .
-				'   (?<ACCEPT_ELEMENT>' .
-				'      (?&MEDIA_RANGE)(?&LWS)?(?&ACCEPT_PARAMS)?)' .
-				'   (?<ACCEPT_PARAMS>' .
-				'      (?&LWS)?;(?&LWS)?q(?&LWS)?=(?&LWS)?(?&Q_VALUE)' .
-				'      (?&ACCEPT_EXTENSION)*)' .
-				'   (?<MEDIA_RANGE>' .
-				'      (?&LWS)?(?&TYPE)(?&LWS)?\/(?&LWS)?(?&SUBTYPE))' .
+				// Accept the ',' separator except  
+				'    (?<ACCEPT>' .
+				'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
+				'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)(?&ACCEPT_PARAMS)?)' .
+				'    (?<ACCEPT_PARAMS>' .
+				'        (?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
+				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)(?&L)\/(?&L)(?&SUBTYPE))' .
 				')^(?&ACCEPT)$/x';
 				
 			if (!preg_match($validationPattern, $acceptString))
@@ -95,14 +103,12 @@ class Request implements \Evoke\Core\Iface\URI\Request
 
 		$acceptElementPattern =
 			'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns . ')' .
-			'(?&LWS)?(?<Type>(?&TYPE))' .              // Type
-			'(?&LWS)?\/(?&LWS)?' .                  	 // /
-			'(?<Subtype>(?&SUBTYPE))' .             	 // Subtype
-			'(' .                                   	 // <Optional>
-			'   (?&LWS)?;(?&LWS)?q(?&LWS)?=(?&LWS)?' . //    ;q=
-			'   (?<Q_Factor>(?&Q_VALUE))' .        	 //    Q_Factor
-			')?' .                                     // </Optional>
-			'(?<Params>(?&ACCEPT_EXTENSION)*)' .       // Params
+			// Type / Subtype
+			'(?&L)(?<Type>(?&TYPE))(?&L)\/(?&L)(?<Subtype>(?&SUBTYPE))' .
+			// (;q=Q_Factor)?
+			'((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?' .
+			// Params
+			'(?<Params>(?&ACCEPT_EXTENSION)*)' .
 			'/x';
 
 		$accepted = array();		
@@ -112,9 +118,9 @@ class Request implements \Evoke\Core\Iface\URI\Request
 		if ($numMatches > 0)
 		{
 			$paramsPattern =
-				'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns . ')' .
-				';(?&LWS)?(?<P_KEY>(?&TOKEN))' . "\n" .
-				'((?&LWS)?=(?&LWS)?(?<P_VAL>((?&TOKEN)|(?&QUOTED_STRING))))?' .
+				'/(?(DEFINE)' . $this->basicPatterns . ')' .
+				';(?&L)(?<P_KEY>(?&TOKEN))' .
+				'((?&L)=(?&L)(?<P_VAL>((?&TOKEN)|(?&QUOTED_STRING))))?' .
 				'/x';
 
 			// Loop through each match, storing it in the accepted array.
@@ -151,6 +157,7 @@ class Request implements \Evoke\Core\Iface\URI\Request
 	}
 
 	/** Parse the Accept-Language header from the request according to:
+	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10
 	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
 	 *
 	 *  This field specifies the preferred languages for responses.
@@ -163,43 +170,50 @@ class Request implements \Evoke\Core\Iface\URI\Request
 				__METHOD__ . ' HTTP_ACCEPT_LANGUAGE is not set.');
 		}
 
+		$acceptLanguageString = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		$languagePatterns = $this->basicPatterns .
-			'(?<ALPHA_18> [[:alpha:]]{1,8})';
-		
-		$pattern = '/(?(DEFINE)' .	$languagePatterns . ')' .
-			'((?&ALPHA_18)(-(?&ALPHA_18))*)|\*(;q=(?&Q_VALUE))?/x';
+			'(?<ACCEPT_LANGUAGE>' .
+			'    (?&ACCEPT_LANGUAGE_ELEMENT)' .
+			'    ((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)' .
+			'(?<ACCEPT_LANGUAGE_ELEMENT>' .
+			'    (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE))?)' .
+			'(?<ALPHA_18>                [[:alpha:]]{1,8})' .
+			'(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))';
 
-		preg_match_all($pattern, 
-		               $_SERVER['HTTP_ACCEPT_LANGUAGE'],
-		               $langParse);
-
-		/** \todo Rewrite the Initial Rubbish from previous version.
-		$langs = $langParse[1];
-		$quals = $langParse[4];
-
-		$numLanguages = count($langs);
-		$langArr = array();
-		
-		for ($num = 0; $num < $numLanguages; $num++)
+		if ($this->validateHeaders)
 		{
-			$newLang = strtoupper($langs[$num]);
-			$newQual = isset($quals[$num]) ?
-				(empty($quals[$num]) ? 1.0 : floatval($quals[$num])) : 0.0;
-			
-			// Choose whether to upgrade or set the quality factor for the
-			// primary language.
-			$langArr[$newLang] = (isset($langArr[$newLang])) ?
-				max($langArr[$newLang], $newQual) : $newQual;
+			$validationPattern =
+				'/(?(DEFINE)' . $languagePatterns . ')^(?&ACCEPT_LANGUAGE)$/x';
+				
+			if (!preg_match($validationPattern, $acceptLanguageString))
+			{
+				throw new \InvalidArgumentException(
+					__METHOD__ . ' Accept request header: ' . $acceptLanguageString .
+					' is invalid.');
+			}
 		}
+
+		// Match the language and its optional Q_Factor.
+		$pattern = '/(?(DEFINE)' .	$languagePatterns . ')' .
+			'(?<Language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
+			'((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
+
+		$acceptLanguages = array();
+		$numLanguages = preg_match_all($pattern, $acceptLanguageString, $matches);
+
+		for ($i = 0; $i < $numLanguages; $i++)
+		{
+			// The quality value defaults to 1.
+			$qFactor =
+				empty($matches['Q_Factor'][$i]) ? 1 : $matches['Q_Factor'][$i];
+			
+			$acceptLanguages[] = array('Language' => $matches['Language'][$i],
+			                             'Q_Factor' => $qFactor);
+		}
+
+		usort($acceptLanguages, array($this, 'compareAcceptLanguage'));
 		
-		// sort list based on value
-		arsort($langArr, SORT_NUMERIC);
-		$acceptedLanguages = array_keys($langArr);
-		$preferredLanguage = reset($acceptedLanguages);
-		
-		$this->SessionManager->set(
-			$this->langKey, $preferredLanguage);
-		*/
+		return $acceptLanguages;
 	}
 	
    /*********************/
@@ -209,12 +223,23 @@ class Request implements \Evoke\Core\Iface\URI\Request
 	/** Compare two accept media types so that they can be sorted via usort.
 	 *  @param a \array The first accepted media type.
 	 *  @param b \array The second accepted media type.
-	 *  \return \int -1, 0, 1 (as required by usort).
+	 *  \return \int as required by usort.
 	 */
 	protected function compareAccept(Array $a, Array $b)
 	{
 		return $this->scoreAccept($b) - $this->scoreAccept($a);
 	}
+
+	/** Compare two accept languages so that they can be sorted via usort.
+	 *  @param a \array The first accept language.
+	 *  @param b \array The second accept language.
+	 *  \return \int as required by usort.
+	 */
+	protected function compareAcceptLanguage(Array $a, Array $b)
+	{
+		return $this->scoreAcceptLanguage($b) - $this->scoreAcceptLanguage($a);
+	}
+
 	
    /*******************/
    /* Private Methods */
@@ -236,6 +261,16 @@ class Request implements \Evoke\Core\Iface\URI\Request
 			((($accept['Type'] !== '*') ? 1 : 0)      *  900000) +
 			((($accept['Subtype'] !== '*') ? 1 : 0)   *   90000) +
 			((count($accept['Params']))               *       1);
+	}
+
+	/** Score an accept language so that they can be compared.
+	 *  @param accept \array The accept language array.
+	 *  \return \int The score of the accept language array for comparison.
+	 */
+	private function scoreAcceptLanguage(Array $acceptLanguage)
+	{
+		// Make it at least +-1 so that it doesn't evaluate to 0 (i.e equal).
+		return $acceptLanguage['Q_Factor'] * 1000;
 	}
 }
 // EOF
