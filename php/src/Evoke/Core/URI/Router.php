@@ -32,23 +32,23 @@ class Router implements \Evoke\Core\Iface\URI\Router
 	
 	public function __construct(Array $setup)
 	{
-		$setup +=array('Factory'         => NULL,
-		               'InstanceManager' => NULL,
-		               'Request'         => NULL,
-		               'Response_Base'   => NULL);
+		$setup +=array('Factory'          => NULL,
+		               'Instance_Manager' => NULL,
+		               'Request'          => NULL,
+		               'Response_Base'    => NULL);
 
 		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$setup['InstanceManager'] instanceof
+		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires InstanceManager');
 		}
-
+      
 		if (!$setup['Request'] instanceof \Evoke\Core\Iface\URI\Request)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
@@ -63,7 +63,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 		$this->mappings = array();
 
 		$this->Factory         = $setup['Factory'];
-		$this->InstanceManager = $setup['InstanceManager'];
+		$this->InstanceManager = $setup['Instance_Manager'];
 		$this->Request         = $setup['Request'];
 		$this->responseBase    = $setup['Response_Base'];
 	}
@@ -108,8 +108,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 				$response,
 				array_merge(
 					array('Factory'         => $this->Factory,
-					      'InstanceManager' => $this->InstanceManager,
-					      'Request'         => $this->Request),
+					      'Instance_Manager' => $this->InstanceManager),
 					$params));
 		}
 		catch (\Exception $e)
