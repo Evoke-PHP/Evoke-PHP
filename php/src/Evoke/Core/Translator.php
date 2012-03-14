@@ -13,29 +13,43 @@ class Translator implements Iface\Translator
 	 */
 	protected $langKey;
 
+	/** @property $language
+	 *  The current language that the translator is set to.
+	 */
+	private $language;
+	
 	/** @property $languages
-	 *  The languages that the translator should support.
+	 *  The languages that the translator supports.
 	 */
 	protected $languages;
+
+	/** @property $Request
+	 *  Request \object
+	 */
+	protected $Request;
 
 	/** @property $SessionManager
 	 *  SessionManager \object
 	 */
 	protected $SessionManager;
 
-
 	/** @property $translationArr
 	 *  \array The array of translations.
 	 */
 	protected $translations;
 
+	/** @property $translationsFilename
+	 *  \string The filename for the file that holds the translations.
+	 */
+	private $translationsFilename;
+
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Default_Language' => NULL,
-		                'Filename'         => NULL,
-		                'Lang_Key'         => 'l',
-		                'Languages'        => NULL,
-		                'Session_Manager'  => NULL);
+		$setup += array('Default_Language'      => NULL,
+		                'Lang_Key'              => 'l',
+		                'Request'               => NULL,
+		                'Session_Manager'       => NULL,
+		                'Translations_Filename' => NULL);
 
 		if (!isset($setup['Default_Language']))
 		{
@@ -43,36 +57,31 @@ class Translator implements Iface\Translator
 				__METHOD__ . ' requires Default_Language');
 		}
 
-		if (!is_string($setup['Filename']))
+		if (!$setup['Request'] instanceof \Evoke\Core\Iface\URI\Request)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Filename');
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
 		}
-      
+
 		if (!$setup['Session_Manager'] instanceof SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs SessionManager');
 		}
 
-		// Get the language definitions which set up the local translationArr.
-		require $setup['Filename'];
-		$this->translations = $translationArr;
-
-		$this->defaultLangauge = $setup['Default_Language'];
-		$this->langKey         = $setup['Lang_Key'];
-		$this->languages       = $setup['Languages'];
-		$this->SessionManager  = $setup['Session_Manager'];
-		
-		if (!isset($this->languages))
+		if (!is_string($setup['Translations_Filename']))
 		{
-			$this->languages = $this->getLanguages();
+			throw new \InvalidArgumentException(__METHOD__ . ' requires Filename');
 		}
 
-		if (!empty($_GET) && isset($_GET[$this->langKey]) &&
-		    isset($this->languages[$_GET[$this->langKey]]))
-		{
-			$this->setLanguage($_GET[$this->langKey]);
-		}
+		$this->defaultLangauge 		 = $setup['Default_Language'];
+		$this->langKey         		 = $setup['Lang_Key'];
+		$this->language             = NULL;
+		$this->Request              = $setup['Request'];
+		$this->SessionManager  		 = $setup['Session_Manager'];
+		$this->translationsFilename = $setup['Translations_Filename'];
+
+		// Update the translations and langauges.
+		$this->update();
 	}
    
 	/******************/
@@ -82,28 +91,18 @@ class Translator implements Iface\Translator
 	/// Return the current language in its short form (e.g EN or ES).
 	public function getLanguage()
 	{
-		if ($this->SessionManager->issetKey($this->langKey))
+		if (!isset($this->language))
 		{
-			return $this->SessionManager->get($this->langKey);
+			$this->setLanguage();
 		}
-		else
-		{
-			return $this->setLanguage();
-		}
+
+		return $this->language;
 	}
 
-	// Return a keyed array to the languages used.
+	/// The languages that the translator has translations for.
 	public function getLanguages()
 	{
-		$languageArr = array();
-		$langs = array_keys($this->translations['Languages']);
-
-		foreach ($langs as $lang)
-		{
-			$languageArr[$lang] = $this->get($lang . '_FULL');
-		}
-
-		return $languageArr;
+		return $this->languages;
 	}
 
 	/** Get the language HTTP Query for the end of a URL (e.g 'l=EN' or 'l=ES').
@@ -119,63 +118,104 @@ class Translator implements Iface\Translator
 
 		return http_build_query(array($this->langKey => $lang));
 	}
-   
-	/// \todo Check whether HTTP_ACCEPT_LANGUAGE with all unsupported languages
-	/// resolves to the default language.
-	public function setLanguage($setLang='')
+	
+	/// Reset the language so that it can be recalculated from the input sources.
+	public function resetLanguage()
 	{
-		if (!empty($setLang))
+		$this->language = NULL;
+	}
+	
+	/** Set the language that the translator uses to display text.
+	 *
+	 *  There are a number of sources that determine the language that should be
+	 *  used by the translator:
+	 *
+	 *  -# The value passed to the function.
+	 *  -# URI Query parameter e.g ?l=EN
+	 *  -# Session containing the previously set language.
+	 *  -# HTTP Request AcceptLanguage header.
+	 *  -# The Default Language the Translator was constructed with.
+	 *  -# The order of the languages that the Translator has translations for.
+	 *
+	 *  These sources have the priority as in the above list for setting the
+	 *  language.  The highest priority source with a language that exists within
+	 *  the translator will be set (and stored in the session for future use).
+	 *
+	 *  @param lang \string The language to set (defaults to NULL).  If no
+	 *  language is passed then the above sources should be used to determine the
+	 *  correct language.
+	 */
+	public function setLanguage($lang=NULL)
+	{
+		if (empty($this->languages))
 		{
-			$this->SessionManager->set($this->langKey, $setLang);
+			throw new LogicException(
+				__METHOD__ . ' no languages exist in the translator to allow ' .
+				'setting of the language.');
 		}
-		else
+		
+		if (isset($lang))
 		{
-			if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+			if (!$this->isValidLanguage($lang))
 			{
-				// Parse the Accept-Language according to:
-				//    http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
-				preg_match_all(
-					'/([a-z]{1,8})' .     // Primary Tag e.g en   ISO-639
-					'(-[a-z]{1,8})*\s*' . // Sub Tag(s)  e.g -us  ISO-3166
-					// Optional quality factor
-					'(;\s*q\s*=\s*((1(\.0{0,3}))|(0(\.[0-9]{0,3}))))?/i',
-					$_SERVER['HTTP_ACCEPT_LANGUAGE'],
-					$langParse);
-
-				$langs = $langParse[1];
-				$quals = $langParse[4];
-
-				$numLanguages = count($langs);
-				$langArr = array();
-
-				for ($num = 0; $num < $numLanguages; $num++)
-				{
-					$newLang = strtoupper($langs[$num]);
-					$newQual = isset($quals[$num]) ?
-						(empty($quals[$num]) ? 1.0 : floatval($quals[$num])) : 0.0;
-
-					// Choose whether to upgrade or set the quality factor for the
-					// primary language.
-					$langArr[$newLang] = (isset($langArr[$newLang])) ?
-						max($langArr[$newLang], $newQual) : $newQual;
-				}
-
-				// sort list based on value
-				arsort($langArr, SORT_NUMERIC);
-				$acceptedLanguages = array_keys($langArr);
-				$preferredLanguage = reset($acceptedLanguages);
-
-				$this->SessionManager->set(
-					$this->langKey, $preferredLanguage);
+				throw new \DomainException(
+					__METHOD__ . ' Language must be valid for the translator. ' .
+					'Unknown language: ' . var_export($lang, true));
 			}
-			else
-			{
-				$this->SessionManager->set(
-					$this->langKey, $this->defaultLanguage);
-			}
+			
+			$this->language = $lang;
+			$this->SessionManager->set($this->langKey, $lang);
+			return;
 		}
 
-		return $this->SessionManager->get($this->langKey);
+		if ($this->Request->issetQueryParam($this->langKey))
+		{
+			$lang = $this->Request->getQueryParam($this->langKey);
+
+			if ($this->isValidLanguage($lang))
+			{
+				$this->language = $lang;
+				return;
+			}
+		}
+
+		if ($this->SessionManager->issetKey($this->langKey))
+		{
+			$lang = $this->SessionManager->get($this->langKey);
+
+			if ($this->isValidLanguage($lang))
+			{
+				$this->language = $lang;
+				return;
+			}
+		}
+
+		$acceptLanguages = $this->Request->parseAcceptLanguage();
+
+		foreach ($acceptLanguages as $lang)
+		{
+			// The accept langauges are ordered by preference, so the first one
+			// that is available should be the one that we choose.  Accept
+			// languages can be specific e.g en-us, but the translator is not so
+			// specific.  So we only need the major part of the language.
+			$l = strtoupper(
+				preg_replace('/^([[:alpha:]]+)-?.*/', '\1', $lang['Language']));
+
+			
+			if ($this->isValidLanguage($l))
+			{
+				$this->language = $l;
+				return;
+			}
+		}
+			
+		if ($this->isValidLanguage($this->defaultLanguage))
+		{
+			$this->language = $this->defaultLanguage;
+			return;
+		}
+
+		$this->language = reset($this->languages);
 	}
 
 	public function getPage($page = 'default')
@@ -328,6 +368,24 @@ class Translator implements Iface\Translator
 
 		return array_merge($defaultTranslationMatches,
 		                   $specificTranslationMatches);
+	}
+
+	/// Update the translations and languages from the translations file.
+	public function update()
+	{
+		// Get the language definitions which set up the local translationArr.
+		require $this->translationsFilename;
+		$this->translations = $translationArr;
+		$this->languages = $this->translations['Languages'];
+	}
+	
+   /*********************/
+   /* Protected Methods */
+   /*********************/
+
+	protected function isValidLanguage($lang)
+	{
+		return isset($lang) && array_key_exists($lang, $this->languages);
 	}
 }
 // EOF

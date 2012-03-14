@@ -13,7 +13,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	 */
 	protected $Failures;
 
-	/** @proprty $Info
+	/** @property $Info
 	 *  DB Table Information \object
 	 */
 	protected $Info;

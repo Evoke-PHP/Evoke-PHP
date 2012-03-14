@@ -7,6 +7,11 @@ class Request implements \Evoke\Core\Iface\URI\Request
 	/// Regexp strings to match components of the request header values.
 	private $basicPatterns;
 
+	/** @property $params
+	 *  \array of parameters for the request ($_GET, $_POST etc.)
+	 */
+	protected $params;
+	
 	/** @property $validateHeaders
 	 *  \bool Whether to validate the headers before parsing.
 	 */
@@ -46,7 +51,48 @@ class Request implements \Evoke\Core\Iface\URI\Request
 			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])' .
 			'(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))';
 	}
-			
+
+   /******************/
+   /* Public Methods */
+   /******************/
+
+	/** Get the URI of the request.
+	 *  \return The URI of the request.
+	 */
+	public function getURI()
+	{
+		if (!isset($_SERVER['REQUEST_URI']))
+		{
+			throw new \RuntimeException(__METHOD__ . ' no REQUEST_URI.');
+		}
+      
+		return $_SERVER['REQUEST_URI'];		
+	}
+
+	/** Get the query parameter.
+	 *  @param param \string The parameter to get.
+	 *  \return \bool The query parameter.
+	 */
+	public function getQueryParam($param)
+	{
+		if (!isset($_REQUEST[$param]))
+		{
+			throw new \LogicException(
+				__METHOD__ . ' should only be called if the parameter is set.');
+		}
+
+		return $_REQUEST[$param];
+	}
+	
+	/** Whether the query parameter is set.
+	 *  @param param \string The parameter to check.
+	 *  \return \bool Whether the query parameter is set.
+	 */
+	public function issetQueryParam($param)
+	{
+		return isset($_REQUEST[$param]);
+	}
+	
 	/** Parse the Accept header field from the request according to:
 	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
 	 *

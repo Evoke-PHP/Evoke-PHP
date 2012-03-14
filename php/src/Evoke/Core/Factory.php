@@ -33,7 +33,7 @@ class Factory
 		    \Evoke\Core\Iface\InstanceManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires InstanceManager');
+				__METHOD__ . ' requires Instance_Manager');
 		}
       
 		// We are only going to read from the settings, so we only need
@@ -264,8 +264,15 @@ class Factory
 			array_merge($setup,
 			            array('Event_Manager' => $this->getEventManager())));
 	}
-   
-	/// Get the session object.
+
+	/// Get the Request object.
+	public function getRequest()
+	{
+		return $this->InstanceManager->get(
+			$this->namespace['Core'] . 'URI\Request');
+	}
+	
+	/// Get the Session object.
 	public function getSession()
 	{
 		return $this->InstanceManager->get($this->namespace['Core'] . 'Session');
@@ -344,10 +351,11 @@ class Factory
 	{
 		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'Translator',
-			array('Default_Language' => $this->Settings['Constant'][
+			array('Default_Language'      => $this->Settings['Constant'][
 				      'Default_Language'],
-			      'Filename'         => $this->Settings['File']['Translation'],
-			      'Session_Manager'  => $this->getSessionManager('Lang')));
+			      'Request'               => $this->getRequest(),
+			      'Session_Manager'       => $this->getSessionManager('Lang'),
+			      'Translations_Filename' => $this->Settings['File']['Translation']));
 	}
 
 	/// Get a view object.
