@@ -1,11 +1,11 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
 /** A URI mapper to map a simple request to a response.
  *  This is for a request that does not have any parameters and only needs to
  *  be mapped to an appropriate Response class.
  */
-class MapperSimpleReplace extends Mapper
+class SimpleReplace extends Base
 {
 	/** @property $match
 	 *  Regex match \string

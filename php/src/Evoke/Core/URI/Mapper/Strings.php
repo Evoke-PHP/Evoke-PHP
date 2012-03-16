@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
 /** A URI mapper to change strings from a request so that a response can be
  *  formed.  No parameters are matched by this class.
  */
-class MapperStrings extends Mapper
+class Strings extends Base
 {
 	/** @property $rules
 	 *  The rules \array to be used for the mapping With each element having

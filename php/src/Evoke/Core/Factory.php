@@ -24,10 +24,10 @@ class Factory
 	public function __construct(Array $setup=array())
 	{
 		$setup += array('Instance_Manager' => NULL,
-		                'Namespace'       => array('Core'  => '\Evoke\Core\\',
-		                                           'Data'  => '\Evoke\Data\\',
-		                                           'Model' => '\Evoke\Model\\'),
-		                'Settings'        => NULL);
+		                'Namespace'        => array('Core'  => '\Evoke\Core\\',
+		                                            'Data'  => '\Evoke\Data\\',
+		                                            'Model' => '\Evoke\Model\\'),
+		                'Settings'         => NULL);
 
 		if (!$setup['Instance_Manager'] instanceof
 		    \Evoke\Core\Iface\InstanceManager)
@@ -259,10 +259,9 @@ class Factory
 	 */
 	public function getProcessing($processing, Array $setup=array())
 	{
-		return $this->InstanceManager->create(
-			$processing,
-			array_merge($setup,
-			            array('Event_Manager' => $this->getEventManager())));
+		$setup += array('Event_Manager' => $this->getEventManager());
+		
+		return $this->InstanceManager->create($processing, $setup);
 	}
 
 	/// Get the Request object.
@@ -270,6 +269,15 @@ class Factory
 	{
 		return $this->InstanceManager->get(
 			$this->namespace['Core'] . 'URI\Request');
+	}
+
+	/// Get a Response object.
+	public function getResponse($response, Array $setup=array())
+	{
+		$setup += array('Factory'          => $this,
+		                'Instance_Manager' => $this->InstanceManager);
+		
+		return $this->InstanceManager->create($response, $setup);
 	}
 	
 	/// Get the Session object.

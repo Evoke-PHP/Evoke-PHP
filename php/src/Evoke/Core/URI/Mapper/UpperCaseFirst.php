@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
 /** A URI mapper to strip unwanted characters from a request so that a response
  *  can be formed.  No parameters are matched by this class.
  */
-class MapperUpperCaseFirst extends Mapper
+class UpperCaseFirst extends Base
 {
 	/** @property $delimiters
 	 *  \array of delimiters that specify where a new word begins that should

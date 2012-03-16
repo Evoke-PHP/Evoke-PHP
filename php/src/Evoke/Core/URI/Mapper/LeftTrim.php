@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
 /** A URI mapper to trim characters from the left side of the URI.
  */
-class MapperLeftTrim extends Mapper
+class LeftTrim extends Base
 {
 	/** @property $characters
 	 *  Characters to trim from the left side of the URI as a \string

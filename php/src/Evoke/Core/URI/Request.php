@@ -56,19 +56,6 @@ class Request implements \Evoke\Core\Iface\URI\Request
    /* Public Methods */
    /******************/
 
-	/** Get the URI of the request.
-	 *  \return The URI of the request.
-	 */
-	public function getURI()
-	{
-		if (!isset($_SERVER['REQUEST_URI']))
-		{
-			throw new \RuntimeException(__METHOD__ . ' no REQUEST_URI.');
-		}
-      
-		return $_SERVER['REQUEST_URI'];		
-	}
-
 	/** Get the query parameter.
 	 *  @param param \string The parameter to get.
 	 *  \return \bool The query parameter.
@@ -83,7 +70,23 @@ class Request implements \Evoke\Core\Iface\URI\Request
 
 		return $_REQUEST[$param];
 	}
+
+	/** Get the query parameters.
+	 *  \return The query parameters as an array.
+	 */
+	public function getQueryParams()
+	{
+		return $_REQUEST;
+	}
 	
+	/** Get the URI of the request (without the query string).
+	 *  \return The URI of the request.
+	 */
+	public function getURI()
+	{
+		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	}
+
 	/** Whether the query parameter is set.
 	 *  @param param \string The parameter to check.
 	 *  \return \bool Whether the query parameter is set.
@@ -288,7 +291,7 @@ class Request implements \Evoke\Core\Iface\URI\Request
    /*******************/
    /* Private Methods */
    /*******************/
-
+			                    
 	/** Score an accept media type so that they can be compared.
 	 *  @param accept \array The accept media type array.
 	 *  \return \int The score of the accept array for comparison.

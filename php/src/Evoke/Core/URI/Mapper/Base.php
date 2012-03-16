@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
-abstract class Mapper implements \Evoke\Core\Iface\URI\Mapper
+abstract class Base implements \Evoke\Core\Iface\URI\Mapper
 {
 	/** @property $authoritative
 	 *  \bool Whether the mapper can definitely give the final route for all URI

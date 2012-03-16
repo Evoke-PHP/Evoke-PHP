@@ -8,7 +8,7 @@ abstract class Base
 
 	public function __construct(Array $setup)
 	{
-		$setup += array('Factory'         => NULL,
+		$setup += array('Factory'          => NULL,
 		                'Instance_Manager' => NULL);
 
 		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
@@ -23,7 +23,7 @@ abstract class Base
 				__METHOD__ . ' requires InstanceManager');
 		}
 
-		$this->Factory = $setup['Factory'];
+		$this->Factory         = $setup['Factory'];
 		$this->InstanceManager = $setup['Instance_Manager'];
 	}
    

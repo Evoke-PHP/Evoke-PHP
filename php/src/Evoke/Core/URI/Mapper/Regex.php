@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\URI\Mapper;
 
 /// A powerful URI mapper based on regular expressions.
-class MapperRegex extends Mapper
+class Regex extends Base
 {
 	/** @property $match
 	 *  The regex match to determine whether this object matches the URI. 
@@ -186,7 +186,7 @@ class MapperRegex extends Mapper
 		if (!preg_match($this->match, $uri))
 		{
 			throw new \RuntimeException(
-				__METHOD__ .  ' Mapper does not match URI.');
+				__METHOD__ .  ' Mapper does not match URI: ' . $uri);
 		}
       
 		if (!isset($secondLevelRegex['Pattern'],        
@@ -210,7 +210,7 @@ class MapperRegex extends Mapper
 				var_export($secondLevelRegex['Pattern'], true) .
 				' does not match subject: ' . var_export($subject, true));
 		}
-      
+
 		return preg_replace($secondLevelRegex['Pattern'],
 		                    $secondLevelRegex['Replacement'],
 		                    $subject);
