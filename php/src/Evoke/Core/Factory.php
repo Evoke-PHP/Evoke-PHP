@@ -53,12 +53,11 @@ class Factory
 	/******************/
 
 	// Create a controller object.
-	public function getController(Array $setup=array())
+	public function getController()
 	{
 		return $this->InstanceManager->create(
 			$this->namespace['Core'] . 'Controller',
-			array_merge(array('Event_Manager' => $this->getEventManager()),
-			            $setup));
+			$this->getEventManager());
 	}
 
 	/** Get a data object, specifying any joint data.
@@ -166,8 +165,8 @@ class Factory
 		$setup += array('Failures'      => $this->getMessageArray(),
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'Table_Info'     => NULL,
-		                'Table_List_I_D'   => $this->getTableListID());
+		                'Table_Info'    => NULL,
+		                'Table_List_ID' => $this->getTableListID());
       
 		return $this->getModel($this->namespace['Model'] . 'DB\JointAdmin',
 		                       $setup);
@@ -179,8 +178,8 @@ class Factory
 		$setup += array('Failures'      => $this->getMessageArray(),
 		                'Notifications' => $this->getMessageArray(),
 		                'SQL'           => $this->getSQL(),
-		                'Table_Info'     => NULL,
-		                'Table_List_I_D'   => $this->getTableListID());
+		                'Table_Info'    => NULL,
+		                'Table_List_ID' => $this->getTableListID());
       
 		return $this->getModel($this->namespace['Model'] . 'DB\JointAdminLinked',
 		                       $setup);
@@ -189,7 +188,7 @@ class Factory
 	/// Get an Admin model for a table.
 	public function getModelDBTableAdmin(Array $setup)
 	{
-		$setup += array('EventManager'  => $this->getEventManager(),
+		$setup += array('Event_Manager' => $this->getEventManager(),
 		                'Failures'      => $this->getMessageArray(),
 		                'Info'          => NULL,
 		                'Notifications' => $this->getMessageArray(),
@@ -211,7 +210,7 @@ class Factory
 	{
 		return $this->InstanceManager->get(
 			$this->namespace['Model'] . 'DB\Table',
-			array_merge(array('Event_Manager'  => $this->getEventManager(),
+			array_merge(array('Event_Manager' => $this->getEventManager(),
 			                  'Failures'      => $this->getMessageArray(),
 			                  'Notifications' => $this->getMessageArray(),
 			                  'SQL'           => $this->getSQL()),

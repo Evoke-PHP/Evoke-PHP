@@ -26,20 +26,35 @@ namespace Evoke\Core;
  *  execution the Controller notifies the EventManager with the appropriate
  *  events to acheive the processing, retrieval and display of data.
  *
+ *  After the controller is executed any Model, Processing and View objects that
+ *  were connected to it (in the event manager) are disconnected.
+ *
  *  Usage:
  *  \code
  *  $controller = new \Evoke\Core\Controller('Event_Manager' => $EventManager);
- *  $controller->add($Model, $Processing, $View,
- *                   $AnyAmountOfModelViewOrProcessingObjects);
+ *  $controller->connect($Model, $Processing, $View,
+ *                       $AnyAmountOfModelViewOrProcessingObjects);
  *  // Execute the controller 
  *  $controller->execute();
- *  // Remove the events from the event manager so that the same MVC triad is
- *  // not re-used later on.
- *  $controller->remove($Model, $Processing, $View,
- *                      $AnyAmountOfModelViewOrProcessingObjects);
+ *  \endcode
  */
 class Controller
 {
+	/** @property $connectedModels
+	 *  \array of Model objects connected to the controller.
+	 */
+	protected $connectedModels;
+
+	/** @property $connectedProcessing
+	 *  \array of Processing objects connected to the controller.
+	 */
+	protected $connectedProcessing;
+
+	/** @property $connectedViews
+	 *  \array of View objects connected to the controller.
+	 */
+	protected $connectedViews;
+	
 	/** @param $EventManager
 	 *  \object EventManager used to communicate events between the MVC layers.
 	 */
@@ -55,23 +70,22 @@ class Controller
 	 */
 	protected $events;
 
-	public function __construct(Array $setup)
+	/** Construct the controller.
+	 *  @param EventManager \object The event manager object.
+	 *  @param events \array The event names to trigger processing in each layer.
+	 */
+	public function __construct(
+		EventManager $EventManager,
+		Array        $events=array('Model'      => 'Model.Notify_Data',
+		                           'Processing' => 'Processing.Process',
+		                           'View'       => 'View.Write'))
 	{
-		$setup += array('Event_Manager' => NULL,
-		                'Events'       => array(
-			                'Model'      => 'Model.Notify_Data',
-			                'Processing' => 'Processing.Process',
-			                'View'       => 'View.Write'));
-
-		if (!$setup['Event_Manager'] instanceof EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
-		}
-
-		$this->EventManager = $setup['Event_Manager'];
-		$this->data = array();
-		$this->events = $setup['Events'];
+		$this->connectedModels         = array();
+		$this->connectedProcessing     = array();
+		$this->connectedViews          = array();		
+		$this->data                    = array();
+		$this->EventManager            = $EventManager;
+		$this->events                  = $events;
 
 		// Connect the Controller to receive data from the model(s).
 		$this->EventManager->connect(
@@ -82,38 +96,43 @@ class Controller
 	/* Public Methods */
 	/******************/
 
-	/** Add Model, Processing and View objects (or arrays of them) to the
+	/** Add the data retrieved from the Model(s) for sending to the View(s).
+	 *  @param The data to be added for later notification to the view.
+	 */
+	public function addData($data)
+	{
+		$this->data = array_merge_recursive($this->data, $data);
+	}
+
+	/** Connect Model, Processing and View objects (or arrays of them) to the
 	 *  controller.  This method takes a variable number of arguments.  All
 	 *  arguments must be either objects conforming to the Model, Processing or
 	 *  View interfaces or arrays filled entirely of those objects.
 	 */
-	public function add(/* Var Args */)
+	public function connect(/* Var Args */)
 	{
 		$args = func_get_args();
 
 		foreach ($args as $arg)
 		{
+			// Allow the connection of arrays of objects.
 			if (is_array($arg))
 			{
-				// Add the array of objects.
-				call_user_func_array(array($this, 'add'), $arg);
+				call_user_func_array(array($this, 'connect'), $arg);
 				continue;
 			}
 			
 			if ($arg instanceof Iface\Model)
 			{
-				$this->EventManager->connect(
-					$this->events['Model'],	array($arg, 'notifyData'));
-			}
-			elseif ($arg instanceof Iface\View)
-			{
-				$this->EventManager->connect(
-					$this->events['View'], array($arg, 'write'));
+				$this->connectModel($arg);
 			}
 			elseif ($arg instanceof Iface\Processing)
 			{
-				$this->EventManager->connect(
-					$this->events['Processing'], array($arg, 'process'));
+				$this->connectProcessing($arg);
+			}
+			elseif ($arg instanceof Iface\View)
+			{
+				$this->connectView($arg);
 			}
 			else
 			{
@@ -124,15 +143,36 @@ class Controller
 		}
 	}
 
-	/** Add the data retrieved from the Model(s) for sending to the View(s).
-	 *  @param The data to be added for later notification to the view.
+	/** Connect a Model to the controller.
+	 *  @param Model \object The model to connect.
 	 */
-	public function addData($data)
+	public function connectModel(Iface\Model $Model)
 	{
-		$this->data = array_merge_recursive($this->data, $data);
+		$this->EventManager->connect($this->events['Model'],
+		                             array($Model, 'notifyData'));
+		$this->connectedModels[] = $Model;
 	}
-
-
+	
+	/** Connect a Processing object to the controller.
+	 *  @param Processing \object The processing to connect.
+	 */
+	public function connectProcessing(Iface\Processing $Processing)
+	{
+		$this->EventManager->connect($this->events['Processing'],
+		                             array($Processing, 'process'));
+		$this->connectedProcessing[] = $Processing;
+	}
+	
+	/** Connect a View to the controller.
+	 *  @param View \object The view to connect.
+	 */
+	public function connectView(Iface\View $View)
+	{
+		$this->EventManager->connect($this->events['View'],
+		                             array($View, 'write'));
+		$this->connectedViews[] = $View;
+	}
+	
 	/** Execute the Controller.  Process any user input, retrieve data from
 	 *  the Model(s) and send it to the View(s).
 	 */   
@@ -142,53 +182,38 @@ class Controller
 		$this->getData();
 		$this->write();
 		$this->resetData();
-	}
-   
-	/** Remove Model, Processing and View objects (or arrays of them) from the
-	 *  controller.  This method takes a variable number of arguments.  All
-	 *  arguments must be either objects conforming to the Model, Processing or
-	 *  View interfaces or arrays filled entirely of those objects.
-	 */
-	public function remove(/* Var Args */)
-	{
-		$args = func_get_args();
-
-		foreach ($args as $arg)
-		{
-			if (is_array($arg))
-			{
-				// Remove the array of objects.
-				call_user_func_array(array($this, 'remove'), $arg);
-				continue;
-			}
-			
-			if ($arg instanceof Iface\Model)
-			{
-				$this->EventManager->disconnect(
-					$this->events['Model'],	array($arg, 'notifyData'));
-			}
-			elseif ($arg instanceof Iface\View)
-			{
-				$this->EventManager->disconnect(
-					$this->events['View'], array($arg, 'write'));
-			}
-			elseif ($arg instanceof Iface\Processing)
-			{
-				$this->EventManager->disconnect(
-					$this->events['Processing'], array($arg, 'process'));
-			}
-			else
-			{
-				throw new \DomainException(
-					__METHOD__ . ' requires object with an interface of Model, ' .
-					'Processing or View');
-			}
-		}
-	}
+		$this->disconnectAll();
+	}   
 	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
+
+	/// Disconnect all objects from the controller.
+	protected function disconnectAll()
+	{
+		foreach ($this->connectedModels as $Model)
+		{
+			$this->EventManager->disconnect($this->events['Model'],
+			                                array($Model, 'notifyData'));
+		}
+
+		foreach ($this->connectedProcessing as $Processing)
+		{
+			$this->EventManager->disconnect($this->events['Processing'],
+			                                array($Processing, 'process'));
+		}
+
+		foreach ($this->connectedViews as $View)
+		{
+			$this->EventManager->disconnect($this->events['View'],
+			                                array($View, 'write'));
+ 		}
+
+		$this->connectedModels     = array();
+		$this->connectedProcessing = array();
+		$this->connectedViews      = array();
+	}
 
 	/// Do the processing with the Processing objects.
 	protected function doProcessing()

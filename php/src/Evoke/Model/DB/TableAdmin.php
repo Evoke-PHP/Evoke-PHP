@@ -63,7 +63,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires SessionManager');
+				__METHOD__ . ' requires Session_Manager');
 		}
 
 		parent::__construct($setup);

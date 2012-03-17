@@ -28,7 +28,7 @@ abstract class Base implements \Evoke\Core\Iface\Model
 		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
+				__METHOD__ . ' requires Event_Manager');
 		}
 
 		$this->EventManager = $setup['Event_Manager'];
