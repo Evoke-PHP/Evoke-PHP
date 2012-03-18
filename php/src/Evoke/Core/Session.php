@@ -2,7 +2,7 @@
 namespace Evoke\Core;
 
 class Session implements Iface\Session
-{ 
+{
 	public function __construct()
 	{
 		$this->ensure();
