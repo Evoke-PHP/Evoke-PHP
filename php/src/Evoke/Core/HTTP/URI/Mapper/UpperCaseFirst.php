@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\Mapper;
+namespace Evoke\Core\HTTP\URI\Mapper;
 
 /** A mapper to strip unwanted characters from a request so that a response can
  *  be formed.  No parameters are matched by this class.

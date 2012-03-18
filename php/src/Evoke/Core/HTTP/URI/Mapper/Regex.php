@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\Mapper;
+namespace Evoke\Core\HTTP\URI\Mapper;
 
 /// A powerful mapper based on regular expressions.
 class Regex extends Base

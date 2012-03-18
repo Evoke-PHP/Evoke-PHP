@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Core\HTTP\Mapper;
+namespace Evoke\Core\HTTP\URI\Mapper;
 
-/** HTTP Mapper class for mapping the received URI to a response.
+/** HTTP URI Mapper class for mapping the received URI to a response.
  */
-abstract class Base implements \Evoke\Core\Iface\HTTP\Mapper
+abstract class Base implements \Evoke\Core\Iface\HTTP\URI\Mapper
 {
 	/** @property $authoritative
 	 *  \bool Whether the mapper can definitely give the final route for all

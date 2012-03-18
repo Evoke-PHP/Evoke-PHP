@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\HTTP;
+namespace Evoke\Core\HTTP\URI;
 
 /// Receive the request and create the correct response for it.
-class Router implements \Evoke\Core\Iface\HTTP\Router
+class Router implements \Evoke\Core\Iface\HTTP\URI\Router
 {
 	/** @property $Factory
 	 *  The Factory \object for sending to the response.
@@ -61,7 +61,7 @@ class Router implements \Evoke\Core\Iface\HTTP\Router
 	/** Append a mapping rule into the Router's mapping list.
 	 *  @param map \object Mapper object.
 	 */
-	public function appendMapper(\Evoke\Core\Iface\HTTP\Mapper $map)
+	public function appendMapper(\Evoke\Core\Iface\HTTP\URI\Mapper $map)
 	{
 		$this->mappings[] = $map;
 	}
@@ -109,7 +109,7 @@ class Router implements \Evoke\Core\Iface\HTTP\Router
 	/** Prepend a mapping rule into the Router's mapping list.
 	 *  @param map \object Mapper object.
 	 */
-	public function prependMapper(\Evoke\Core\Iface\HTTP\Mapper $map)
+	public function prependMapper(\Evoke\Core\Iface\HTTP\URI\Mapper $map)
 	{
 		array_unshift($this->mappings, $map);
 	}

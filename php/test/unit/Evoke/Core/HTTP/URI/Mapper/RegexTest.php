@@ -1,17 +1,17 @@
 <?php
-use \Evoke\Core\HTTP\Mapper as Mapper;
+use \Evoke\Core\HTTP\URI\Mapper as Mapper;
 
 class RegexTest extends PHPUnit_Framework_TestCase
-{ 
-	/** @covers \Evoke\Core\HTTP\Mapper\Regex::__construct
+{
+	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::__construct
 	 */
 	public function test__construct()
 	{
-		$testMethod = 'Evoke\Core\HTTP\Mapper\Regex::__construct';
+		$testMethod = 'Evoke\Core\HTTP\URI\Mapper\Regex::__construct';
 		$requirements = array('Match'    => ' requires Match as string',
 		                      'Params'   => ' requires Params as array',
 		                      'Response' => ' requires Response as array');
-      
+
 		$tests = array(
 			'Empty Setup' => array(
 				'Exception_Expected' => true,
@@ -35,10 +35,11 @@ class RegexTest extends PHPUnit_Framework_TestCase
 				                              'Response' => 'bad')),
 			'Good' => array(
 				'Exception_Expected' => false,
-				'Setup'              => array('Authoritative' => true,
-				                              'Match'         => '/good/',
-				                              'Params'        => array('good'),
-				                              'Response'      => array('good'))));
+				'Setup'              => array(
+					'Authoritative' => true,
+					'Match'         => '/good/',
+					'Params'        => array('good'),
+					'Response'      => array('good'))));
 
 		foreach ($tests as $name => $test)
 		{
@@ -65,7 +66,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	/** @covers \Evoke\Core\HTTP\Mapper\Regex::matches
+	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::matches
 	 */
 	public function testMatches()
 	{
@@ -104,11 +105,12 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals(
 				$test['Expected_Return'],
 				$obj->matches($test['URI']),
-				$name . ' does not return expected boolean for presence of match.');
-		}	 
+				$name . ' does not return expected boolean for presence of ' .
+				'match.');
+		}
 	}
 
-	/** @covers \Evoke\Core\HTTP\Mapper\Regex::getParams
+	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getParams
 	 */
 	public function testGetParams()
 	{
@@ -173,10 +175,11 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			try
 			{
 				$params = $obj->getParams($test['URI']);
-	    
+
 				$this->assertSame($test['Expected_Return'],
 				                  $params,
-				                  $name . ' does not return params as expected.');
+				                  $name . ' does not return params as ' .
+				                  'expected.');
 			}
 			catch (Exception $e)
 			{
@@ -187,9 +190,9 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	}
 
 	/** Test getResponse and the private method getMappedValue.
-	 *  
-	 *  @covers \Evoke\Core\HTTP\Mapper\Regex::getResponse
-	 *  @covers \Evoke\Core\HTTP\Mapper\Regex::getMappedValue
+	 *
+	 *  @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getResponse
+	 *  @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getMappedValue
 	 */
 	public function testGetResponse()
 	{
@@ -242,17 +245,18 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			try
 			{
 				$response = $obj->getResponse($test['URI']);
-				
+
 				$this->assertEquals($test['Expected_Return'],
 				                    $response,
-				                    $name . ' does not return Response as expected.');
+				                    $name . ' does not return Response as ' .
+				                    'expected.');
 			}
 			catch (Exception $e)
 			{
 				$this->assertTrue($test['Throws_Exception'],
 				                  $name . ' should not throw exception.');
 			}
-		}		
+		}
 	}
 }
 // EOF

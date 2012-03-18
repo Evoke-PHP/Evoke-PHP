@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\Mapper;
+namespace Evoke\Core\HTTP\URI\Mapper;
 
 /** A mapper to map a simple request to a response.
  *  This is for a request that does not have any parameters and only needs to
