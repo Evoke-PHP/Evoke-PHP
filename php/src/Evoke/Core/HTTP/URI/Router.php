@@ -1,19 +1,15 @@
 <?php
 namespace Evoke\Core\HTTP\URI;
 
+use Evoke\Core\Iface;
+
 /// Receive the request and create the correct response for it.
-class Router implements \Evoke\Core\Iface\HTTP\URI\Router
+class Router extends \Evoke\Core\Router
 {
 	/** @property $Factory
 	 *  The Factory \object for sending to the response.
 	 */
 	protected $Factory;
-
-	/** @property $mappings
-	 *  The \array of mappings that have been added to the Router for use in
-	 *  mapping the URI to the correct response.
-	 */
-	protected $mappings;
 
 	/** @property $Request
 	 *  Request \object
@@ -25,66 +21,54 @@ class Router implements \Evoke\Core\Iface\HTTP\URI\Router
 	 */
 	protected $responseBase;
 	
-	public function __construct(Array $setup)
+	public function __construct(\Evoke\Core\Factory $Factory,
+	                            Iface\HTTP\Request $Request,
+	                            $responseBase)
 	{
-		$setup +=array('Factory'       => NULL,
-		               'Request'       => NULL,
-		               'Response_Base' => NULL);
+		parent::__construct();
 
-		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
-		}
-      
-		if (!$setup['Request'] instanceof \Evoke\Core\Iface\HTTP\Request)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
-		}
-		
-		if (!is_string($setup['Response_Base']))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Response_Base as string');
-		}
-
-		$this->mappings = array();
-
-		$this->Factory         = $setup['Factory'];
-		$this->Request         = $setup['Request'];
-		$this->responseBase    = $setup['Response_Base'];
+		$this->Factory         = $Factory;
+		$this->Request         = $Request;
+		$this->responseBase    = $responseBase;
 	}
 	
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Append a mapping rule into the Router's mapping list.
-	 *  @param map \object Mapper object.
+	/** Add a rule to the router.
+	 *  @param rule \object HTTP URI Mapper object.
 	 */
-	public function appendMapper(\Evoke\Core\Iface\HTTP\URI\Mapper $map)
+	public function addRule($rule)
 	{
-		$this->mappings[] = $map;
+		if (!$rule instanceof Iface\HTTP\URI\Mapper)
+		{
+			throw new InvalidArgumentException(
+				__METHOD__ . ' rule must be a HTTP\URI\Mapper');
+		}
+		
+		$this->rules[] = $rule;
 	}
 
 	/** Create the response object (that responds to the routed URI).
 	 *  \return \object Response
 	 */
-	public function createResponse()
+	public function route()
 	{
 		// The response starts as the request URI and is refined by the mappers
 		// until it is able to create the correct response object.
 		$response = $this->Request->getURI();
 		$responseParams = array();
       
-		foreach ($this->mappings as $map)
+		foreach ($this->rules as $rule)
 		{
-			if ($map->matches($response))
+			if ($rule->matches($response))
 			{
 				// Set the parameters for the response before updating the response.
-				$responseParams += $map->getParams($response);
-				$response = $map->getResponse($response);
+				$responseParams += $rule->getParams($response);
+				$response = $rule->getResponse($response);
 
-				if ($map->isAuthoritative())
+				if ($rule->isAuthoritative())
 				{
 					break;
 				}
@@ -104,14 +88,6 @@ class Router implements \Evoke\Core\Iface\HTTP\URI\Router
 				__METHOD__ . ' unable to create response: ' . $this->responseBase .
 				$response . ' due to: ' . $e->getMessage());
 		}
-	}
-
-	/** Prepend a mapping rule into the Router's mapping list.
-	 *  @param map \object Mapper object.
-	 */
-	public function prependMapper(\Evoke\Core\Iface\HTTP\URI\Mapper $map)
-	{
-		array_unshift($this->mappings, $map);
 	}
 }
 // EOF
