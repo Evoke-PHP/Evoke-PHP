@@ -4,7 +4,10 @@ namespace Evoke\Core\URI;
 /// Provide details of the request.
 class Request implements \Evoke\Core\Iface\URI\Request
 {
-	/// Regexp strings to match components of the request header values.
+	/** @property $basicPatterns
+	 *  \string Regexp subpatterns to match components of the request header
+	 *  values.
+	 */
 	private $basicPatterns;
 
 	/** @property $params
@@ -123,7 +126,7 @@ class Request implements \Evoke\Core\Iface\URI\Request
 		
 		$acceptPatterns =
 			'(?<ACCEPT_EXTENSION>' .
-			'   ;(?&L)(?&TOKEN)((?&L)=(?&L)((?&TOKEN)|(?&QUOTED_STRING)))?)' .
+			'   ;(?&L)(?&TOKEN)(=((?&TOKEN)|(?&QUOTED_STRING)))?)' .
 			'(?<SUBTYPE>          (?&TOKEN)|\*)' .
 			'(?<TYPE>             (?&TOKEN)|\*)';
 
@@ -136,8 +139,8 @@ class Request implements \Evoke\Core\Iface\URI\Request
 				'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
 				'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)(?&ACCEPT_PARAMS)?)' .
 				'    (?<ACCEPT_PARAMS>' .
-				'        (?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
-				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)(?&L)\/(?&L)(?&SUBTYPE))' .
+				'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
+				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
 				')^(?&ACCEPT)$/x';
 				
 			if (!preg_match($validationPattern, $acceptString))
@@ -150,10 +153,10 @@ class Request implements \Evoke\Core\Iface\URI\Request
 
 		$acceptElementPattern =
 			'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns . ')' .
-			// Type / Subtype
-			'(?&L)(?<Type>(?&TYPE))(?&L)\/(?&L)(?<Subtype>(?&SUBTYPE))' .
+			// Type/Subtype
+			'(?&L)(?<Type>(?&TYPE))\/(?<Subtype>(?&SUBTYPE))' .
 			// (;q=Q_Factor)?
-			'((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?' .
+			'((?&L);(?&L)q=(?<Q_Factor>(?&Q_VALUE)))?' .
 			// Params
 			'(?<Params>(?&ACCEPT_EXTENSION)*)' .
 			'/x';
@@ -167,7 +170,7 @@ class Request implements \Evoke\Core\Iface\URI\Request
 			$paramsPattern =
 				'/(?(DEFINE)' . $this->basicPatterns . ')' .
 				';(?&L)(?<P_KEY>(?&TOKEN))' .
-				'((?&L)=(?&L)(?<P_VAL>((?&TOKEN)|(?&QUOTED_STRING))))?' .
+				'(=(?<P_VAL>((?&TOKEN)|(?&QUOTED_STRING))))?' .
 				'/x';
 
 			// Loop through each match, storing it in the accepted array.
