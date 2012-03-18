@@ -91,6 +91,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 		try
 		{
 			return $this->Factory->getResponse($this->responseBase . $response,
+			                                   $this->Request,
 			                                   $responseParams);
 		}
 		catch (\Exception $e)

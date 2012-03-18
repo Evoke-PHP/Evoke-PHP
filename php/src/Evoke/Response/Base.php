@@ -3,28 +3,26 @@ namespace Evoke\Response;
 
 abstract class Base
 {
-	protected $Factory;
-	protected $InstanceManager;
+	/** @property $params
+	 *  \array Parameters for the response.
+	 */
+	protected $params;
 
-	public function __construct(Array $setup)
+	
+	/** @property $Request
+	 *  Request \object
+	 */
+	protected $Request;
+
+	/** Construct the response.
+	 *  @param Request \object Request object.
+	 *  @param params  \array  Parameters for the response.
+	 */
+	public function __construct(\Evoke\Core\Iface\URI\Request $Request,
+	                            Array $params=array())
 	{
-		$setup += array('Factory'          => NULL,
-		                'Instance_Manager' => NULL);
-
-		if (!$setup['Factory'] instanceof \Evoke\Core\Factory)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
-		}
-      
-		if (!$setup['Instance_Manager'] instanceof
-		    \Evoke\Core\Iface\InstanceManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires InstanceManager');
-		}
-
-		$this->Factory         = $setup['Factory'];
-		$this->InstanceManager = $setup['Instance_Manager'];
+		$this->params  = $params;
+		$this->Request = $Request;
 	}
    
 	/******************/

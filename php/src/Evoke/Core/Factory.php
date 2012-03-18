@@ -270,13 +270,18 @@ class Factory
 			$this->namespace['Core'] . 'URI\Request');
 	}
 
-	/// Get a Response object.
-	public function getResponse($response, Array $setup=array())
+	/** Get a Response object.
+	 *  @param response \string The class of the response (as a string).
+	 *  @param Request  \object The Request object (optional).
+	 *  @param params   \array Parameters for the response.
+	 */
+	public function getResponse($response,
+	                            Iface\URI\Request $Request=NULL,
+	                            Array $params=array())
 	{
-		$setup += array('Factory'          => $this,
-		                'Instance_Manager' => $this->InstanceManager);
-		
-		return $this->InstanceManager->create($response, $setup);
+		$Request = $Request ?: $this->getRequest();
+
+		return $this->InstanceManager->create($response, $Request, $params);
 	}
 	
 	/// Get the Session object.
