@@ -1,13 +1,13 @@
 <?php
-use \Evoke\Core\URI as URI;
+use \Evoke\Core\HTTP\Mapper as Mapper;
 
-class MapperRegexTest extends PHPUnit_Framework_TestCase
+class RegexTest extends PHPUnit_Framework_TestCase
 { 
-	/** @covers \Evoke\Core\URI\MapperRegex::__construct
+	/** @covers \Evoke\Core\HTTP\Mapper\Regex::__construct
 	 */
 	public function test__construct()
 	{
-		$testMethod = 'Evoke\Core\URI\MapperRegex::__construct';
+		$testMethod = 'Evoke\Core\HTTP\Mapper\Regex::__construct';
 		$requirements = array('Match'    => ' requires Match as string',
 		                      'Params'   => ' requires Params as array',
 		                      'Response' => ' requires Response as array');
@@ -46,7 +46,7 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 			{
 				try
 				{
-					$obj = new URI\MapperRegex($test['Setup']);
+					$obj = new Mapper\Regex($test['Setup']);
 				}
 				catch (Exception $e)
 				{
@@ -57,15 +57,15 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 			}
 			else
 			{
-				$obj = new URI\MapperRegex($test['Setup']);
-				$this->assertTrue($obj instanceof URI\MapperRegex,
-				                  $name . 'Object created as MapperRegex.');
+				$obj = new Mapper\Regex($test['Setup']);
+				$this->assertTrue($obj instanceof Mapper\Regex,
+				                  $name . 'Object created as Regex.');
 			}
 		}
 	}
 
 
-	/** @covers \Evoke\Core\URI\MapperRegex::matches
+	/** @covers \Evoke\Core\HTTP\Mapper\Regex::matches
 	 */
 	public function testMatches()
 	{
@@ -97,7 +97,7 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new URI\MapperRegex(
+			$obj = new Mapper\Regex(
 				array_merge(array('Authoritative' => true),
 				            $test['Setup']));
 
@@ -108,7 +108,7 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 		}	 
 	}
 
-	/** @covers \Evoke\Core\URI\MapperRegex::getParams
+	/** @covers \Evoke\Core\HTTP\Mapper\Regex::getParams
 	 */
 	public function testGetParams()
 	{
@@ -168,7 +168,7 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new URI\MapperRegex(array_merge(array('Authoritative' => true),
+			$obj = new Mapper\Regex(array_merge(array('Authoritative' => true),
 			                                       $test['Setup']));
 			try
 			{
@@ -188,8 +188,8 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 
 	/** Test getResponse and the private method getMappedValue.
 	 *  
-	 *  @covers \Evoke\Core\URI\MapperRegex::getResponse
-	 *  @covers \Evoke\Core\URI\MapperRegex::getMappedValue
+	 *  @covers \Evoke\Core\HTTP\Mapper\Regex::getResponse
+	 *  @covers \Evoke\Core\HTTP\Mapper\Regex::getMappedValue
 	 */
 	public function testGetResponse()
 	{
@@ -236,7 +236,7 @@ class MapperRegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new URI\MapperRegex(array_merge(array('Authoritative' => true),
+			$obj = new Mapper\Regex(array_merge(array('Authoritative' => true),
 			                                       $test['Setup']));
 
 			try

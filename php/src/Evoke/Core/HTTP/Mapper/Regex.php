@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\URI\Mapper;
+namespace Evoke\Core\HTTP\Mapper;
 
-/// A powerful URI mapper based on regular expressions.
+/// A powerful mapper based on regular expressions.
 class Regex extends Base
 {
 	/** @property $match
@@ -111,20 +111,6 @@ class Regex extends Base
 	/* Public Methods */
 	/******************/
 
-	/** Determine whether the mapper matches the given URI.
-	 *  @param uri \string The URI to check for a match.
-	 *  \return \bool Whether the URI is matched by this mapper.
-	 */
-	public function matches($uri)
-	{
-		if (preg_match($this->match, $uri))
-		{
-			return true;
-		}
-	   
-		return false;      
-	}
-
 	/** Get the parameters for the URI.  An exception will be thrown for URIs
 	 *  that aren't matched.  If you want to avoid this then you should call
 	 *  matches first to check that the URI is matched by this Mapper.
@@ -171,7 +157,21 @@ class Regex extends Base
 	{
 		return $this->getMappedValue($this->response, $uri);
 	}
-   
+
+	/** Determine whether the mapper matches the given URI.
+	 *  @param uri \string The URI to check for a match.
+	 *  \return \bool Whether the URI is matched by this mapper.
+	 */
+	public function matches($uri)
+	{
+		if (preg_match($this->match, $uri))
+		{
+			return true;
+		}
+	   
+		return false;      
+	}
+
 	/*******************/
 	/* Private Methods */
 	/*******************/

@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\URI\Mapper;
+namespace Evoke\Core\HTTP\Mapper;
 
-/** A URI mapper to strip unwanted characters from a request so that a response
- *  can be formed.  No parameters are matched by this class.
+/** A mapper to strip unwanted characters from a request so that a response can
+ *  be formed.  No parameters are matched by this class.
  */
 class UpperCaseFirst extends Base
 {
@@ -31,19 +31,6 @@ class UpperCaseFirst extends Base
 	/* Public Methods */
 	/******************/
 
-	public function matches($uri)
-	{
-		foreach ($this->delimiters as $delimiter)
-		{
-			if (strpos($uri, $delimiter) !== false)
-			{
-				return true;
-			}
-		}
-      
-		return false;
-	}
-   
 	public function getParams($uri)
 	{
 		return array();
@@ -67,6 +54,19 @@ class UpperCaseFirst extends Base
 		}
 
 		return $uri;
+	}
+
+	public function matches($uri)
+	{
+		foreach ($this->delimiters as $delimiter)
+		{
+			if (strpos($uri, $delimiter) !== false)
+			{
+				return true;
+			}
+		}
+      
+		return false;
 	}
 }
 // EOF

@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\URI;
+namespace Evoke\Core\HTTP;
 
 /// Receive the request and create the correct response for it.
-class Router implements \Evoke\Core\Iface\URI\Router
+class Router implements \Evoke\Core\Iface\HTTP\Router
 {
 	/** @property $Factory
 	 *  The Factory \object for sending to the response.
@@ -36,7 +36,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Factory');
 		}
       
-		if (!$setup['Request'] instanceof \Evoke\Core\Iface\URI\Request)
+		if (!$setup['Request'] instanceof \Evoke\Core\Iface\HTTP\Request)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
 		}
@@ -53,11 +53,15 @@ class Router implements \Evoke\Core\Iface\URI\Router
 		$this->Request         = $setup['Request'];
 		$this->responseBase    = $setup['Response_Base'];
 	}
+	
+	/******************/
+	/* Public Methods */
+	/******************/
 
 	/** Append a mapping rule into the Router's mapping list.
 	 *  @param map \object Mapper object.
 	 */
-	public function appendMapper(\Evoke\Core\Iface\URI\Mapper $map)
+	public function appendMapper(\Evoke\Core\Iface\HTTP\Mapper $map)
 	{
 		$this->mappings[] = $map;
 	}
@@ -105,7 +109,7 @@ class Router implements \Evoke\Core\Iface\URI\Router
 	/** Prepend a mapping rule into the Router's mapping list.
 	 *  @param map \object Mapper object.
 	 */
-	public function prependMapper(\Evoke\Core\Iface\URI\Mapper $map)
+	public function prependMapper(\Evoke\Core\Iface\HTTP\Mapper $map)
 	{
 		array_unshift($this->mappings, $map);
 	}

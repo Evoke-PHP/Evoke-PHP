@@ -18,7 +18,7 @@ abstract class Base
 	 *  @param Request \object Request object.
 	 *  @param params  \array  Parameters for the response.
 	 */
-	public function __construct(\Evoke\Core\Iface\URI\Request $Request,
+	public function __construct(\Evoke\Core\Iface\HTTP\Request $Request,
 	                            Array $params=array())
 	{
 		$this->params  = $params;

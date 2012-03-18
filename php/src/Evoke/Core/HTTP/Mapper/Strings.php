@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\URI\Mapper;
+namespace Evoke\Core\HTTP\Mapper;
 
-/** A URI mapper to change strings from a request so that a response can be
- *  formed.  No parameters are matched by this class.
+/** A mapper to change strings from a request so that a response can be formed.
+ *  No parameters are matched by this class.
  */
 class Strings extends Base
 {
@@ -40,19 +40,6 @@ class Strings extends Base
 	/* Public Methods */
 	/******************/
 
-	public function matches($uri)
-	{
-		foreach ($this->rules as $rule)
-		{
-			if (strpos($uri, $rule['Match']) !== false)
-			{
-				return true;
-			}
-		}
-      
-		return false;
-	}
-   
 	public function getParams($uri)
 	{
 		return array();
@@ -66,6 +53,19 @@ class Strings extends Base
 		}
 
 		return $uri;
+	}
+
+	public function matches($uri)
+	{
+		foreach ($this->rules as $rule)
+		{
+			if (strpos($uri, $rule['Match']) !== false)
+			{
+				return true;
+			}
+		}
+      
+		return false;
 	}
 }
 // EOF

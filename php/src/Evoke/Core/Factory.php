@@ -267,7 +267,7 @@ class Factory
 	public function getRequest()
 	{
 		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'URI\Request');
+			$this->namespace['Core'] . 'HTTP\Request');
 	}
 
 	/** Get a Response object.
@@ -276,7 +276,7 @@ class Factory
 	 *  @param params   \array Parameters for the response.
 	 */
 	public function getResponse($response,
-	                            Iface\URI\Request $Request=NULL,
+	                            Iface\HTTP\Request $Request=NULL,
 	                            Array $params=array())
 	{
 		$Request = $Request ?: $this->getRequest();

@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\URI\Mapper;
+namespace Evoke\Core\HTTP\Mapper;
 
-/** A URI mapper to map a simple request to a response.
+/** A mapper to map a simple request to a response.
  *  This is for a request that does not have any parameters and only needs to
  *  be mapped to an appropriate Response class.
  */
@@ -44,11 +44,6 @@ class SimpleReplace extends Base
 	/* Public Methods */
 	/******************/
 
-	public function matches($uri)
-	{
-		return (preg_match($this->match, $uri) > 0);
-	}
-   
 	public function getParams($uri)
 	{
 		return array();
@@ -57,6 +52,11 @@ class SimpleReplace extends Base
 	public function getResponse($uri)
 	{
 		return preg_replace($this->match, $this->replacement, $uri);
+	}
+
+	public function matches($uri)
+	{
+		return (preg_match($this->match, $uri) > 0);
 	}
 }
 // EOF

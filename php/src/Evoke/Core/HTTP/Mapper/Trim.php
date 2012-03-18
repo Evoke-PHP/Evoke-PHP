@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Core\URI\Mapper;
+namespace Evoke\Core\HTTP\Mapper;
 
-/** A URI mapper to trim characters from the left side of the URI.
+/** A mapper to trim characters from the left side of the URI.
  */
-class LeftTrim extends Base
+class Trim extends Base
 {
 	/** @property $characters
 	 *  Characters to trim from the left side of the URI as a \string
@@ -29,14 +29,6 @@ class LeftTrim extends Base
 	/* Public Methods */
 	/******************/
 
-	/** Check the uri to see if it matches.
-	 *  \return \bool Whether the uri is matched.
-	 */
-	public function matches($uri)
-	{
-		return isset($uri[0]) && (strpos($this->characters, $uri[0]) !== false);
-	}
-   
 	/** Return the parameters for the URI.
 	 *  \return \array An empty array as the trim does not get any parameters.
 	 */
@@ -44,14 +36,24 @@ class LeftTrim extends Base
 	{
 		return array();
 	}
-   
+
 	/** Get the response uri.
 	 *  @param uri \string The URI to get the response from.
 	 *  \return \string The uri trimmed appropriately.
 	 */
 	public function getResponse($uri)
 	{
-		return ltrim($uri, $this->characters);
+		return trim($uri, $this->characters);
 	}
+
+	/** Check the uri to see if it matches.
+	 *  \return \bool Whether the uri is matched.
+	 */
+	public function matches($uri)
+	{
+		return (
+			preg_match('/^[' . preg_quote($this->characters, '/') . ']+/', $uri) ||
+			preg_match('/[' . preg_quote($this->characters, '/') . ']+$/', $uri));
+	}	
 }
 // EOF
