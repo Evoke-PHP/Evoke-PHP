@@ -37,14 +37,14 @@ class Router extends \Evoke\Core\Router
 	/******************/
 
 	/** Add a rule to the router.
-	 *  @param rule \object HTTP URI Mapper object.
+	 *  @param rule \object HTTP URI Rule object.
 	 */
 	public function addRule($rule)
 	{
-		if (!$rule instanceof Iface\HTTP\URI\Mapper)
+		if (!$rule instanceof Iface\HTTP\URI\Rule)
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' rule must be a HTTP\URI\Mapper');
+				__METHOD__ . ' rule must be a HTTP\URI\Rule');
 		}
 		
 		$this->rules[] = $rule;
@@ -62,7 +62,7 @@ class Router extends \Evoke\Core\Router
       
 		foreach ($this->rules as $rule)
 		{
-			if ($rule->matches($response))
+			if ($rule->isMatch($response))
 			{
 				// Set the parameters for the response before updating the response.
 				$responseParams += $rule->getParams($response);
