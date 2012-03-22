@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core\Iface\HTTP\URI;
 
-interface Rule
+interface Rule extends \Evoke\Core\Iface\Rule
 {
 	/** Return the parameters for the URI.
 	 *  @param uri \string The URI.
@@ -14,16 +14,11 @@ interface Rule
 	 *  \return \string The uri mapped towards the response with the rule.
 	 */	
 	public function getResponse($uri);
-
+	
 	/** Check whether the rule is authoritative.
-	 *  @return \bool Whether the rule can definitely give the final route for
-	 *  all URIs that it matches.
+	 *  @return \bool Whether the rule can definitely give the final route when
+	 *  it matches the input.
 	 */
 	public function isAuthoritative();
-	
-	/** Check the uri to see if it matches.
-	 *  @return \bool Whether the uri is matched.
-	 */
-	public function isMatch($uri);
 }
 // EOF

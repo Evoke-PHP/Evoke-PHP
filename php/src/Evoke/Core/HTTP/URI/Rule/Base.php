@@ -38,7 +38,7 @@ abstract class Base implements \Evoke\Core\Iface\HTTP\URI\Rule
 	{
 		return array();
 	}
-	
+
 	/** Check whether the rule is authoritative.
 	 *  @return \bool Whether the rule can definitely give the final route for
 	 *  all URIs that it matches.

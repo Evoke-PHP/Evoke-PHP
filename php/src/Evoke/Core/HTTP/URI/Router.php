@@ -21,7 +21,7 @@ class Router extends \Evoke\Core\Router
 	 */
 	protected $responseBase;
 	
-	public function __construct(\Evoke\Core\Factory $Factory,
+	public function __construct(Iface\Factory $Factory,
 	                            Iface\HTTP\Request $Request,
 	                            $responseBase)
 	{
@@ -79,8 +79,9 @@ class Router extends \Evoke\Core\Router
 		try
 		{
 			return $this->Factory->getResponse($this->responseBase . $response,
-			                                   $this->Request,
-			                                   $responseParams);
+			                                   $responseParams,
+			                                   $this->Factory,
+			                                   $this->Request);
 		}
 		catch (\Exception $e)
 		{

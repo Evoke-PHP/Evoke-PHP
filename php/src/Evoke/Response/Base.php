@@ -1,13 +1,19 @@
 <?php
 namespace Evoke\Response;
 
+use Evoke\Core\Iface;
+
 abstract class Base
 {
+	/** @property $Factory
+	 *  \object Factory 
+	 */
+	protected $Factory;
+	
 	/** @property $params
 	 *  \array Parameters for the response.
 	 */
 	protected $params;
-
 	
 	/** @property $Request
 	 *  Request \object
@@ -15,12 +21,15 @@ abstract class Base
 	protected $Request;
 
 	/** Construct the response.
-	 *  @param Request \object Request object.
 	 *  @param params  \array  Parameters for the response.
+	 *  @param Factory \object Factory object.
+	 *  @param Request \object Request object.
 	 */
-	public function __construct(\Evoke\Core\Iface\HTTP\Request $Request,
-	                            Array $params=array())
+	public function __construct(Array $params,
+	                            Iface\Factory $Factory,
+	                            Iface\HTTP\Request $Request)
 	{
+		$this->Factory = $Factory;
 		$this->params  = $params;
 		$this->Request = $Request;
 	}

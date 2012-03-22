@@ -4,7 +4,7 @@ namespace Evoke\Core;
  *  be used to create and retrieve shared objects in the system.  It provides
  *  helper methods to aid the creation of frequently used objects.
  */
-class Factory
+class Factory implements Iface\Factory
 {
 	/** @property $namespace
 	 * \array of namespace settings for the Factory.
@@ -276,12 +276,15 @@ class Factory
 	 *  @param params   \array Parameters for the response.
 	 */
 	public function getResponse($response,
-	                            Iface\HTTP\Request $Request=NULL,
-	                            Array $params=array())
+	                            Array $params,
+	                            Iface\Factory $Factory=NULL,
+	                            Iface\HTTP\Request $Request=NULL)
 	{
+		$Factory = $Factory ?: $this;
 		$Request = $Request ?: $this->getRequest();
 
-		return $this->InstanceManager->create($response, $Request, $params);
+		return $this->InstanceManager->create(
+			$response, $params, $Factory, $Request);
 	}
 	
 	/// Get the Session object.
