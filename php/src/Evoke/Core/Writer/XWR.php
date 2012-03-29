@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke\Core\Writer;
 /** XHTML Writing Resource
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.
  */
-class XWR implements Iface\Writer\Page
+class XWR implements \Evoke\Core\Iface\Writer
 {
 	/** @property $attribsPos
 	 *  \int The position of the attributes in the XML arrays being written.

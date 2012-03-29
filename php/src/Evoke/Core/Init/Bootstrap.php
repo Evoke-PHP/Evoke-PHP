@@ -20,7 +20,7 @@ class Bootstrap
 		require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Iface' .
 			DIRECTORY_SEPARATOR . 'Handler.php';      
 		require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Iface' .
-			DIRECTORY_SEPARATOR . 'InstanceManager.php';
+			DIRECTORY_SEPARATOR . 'Factory.php';
       
 		require_once __DIR__ . DIRECTORY_SEPARATOR . 'Handler' .
 			DIRECTORY_SEPARATOR . 'Autoload.php';
@@ -28,7 +28,7 @@ class Bootstrap
 			'InstanceManager.php';
 
 		$InstanceManager = new \Evoke\Core\InstanceManager();
-		$Autoload = $InstanceManager->create(
+		$Autoload = $InstanceManager->build(
 			__NAMESPACE__ . '\Handler\Autoload',
 			array('Base_Dir'  => dirname(dirname(dirname(__DIR__))),
 			      'Namespace' => 'Evoke\\'));
@@ -46,14 +46,14 @@ class Bootstrap
 			in_array(php_uname('n'), $Settings['Constant']['Development_Servers']);
 
 		// Register the Shutdown, Exception and Error handlers.
-		$ShutdownHandler = $InstanceManager->create(
+		$ShutdownHandler = $InstanceManager->build(
 			'\Evoke\Core\Init\Handler\Shutdown',
 			array('Administrator_Email'       => $Settings[
 				      'Email']['Administrator'],
 			      'Detailed_Insecure_Message' => $isDevelopmentServer));
 		$ShutdownHandler->register();
       
-		$ExceptionHandler = $InstanceManager->create(
+		$ExceptionHandler = $InstanceManager->build(
 			'\Evoke\Core\Init\Handler\Exception',
 			array('Detailed_Insecure_Message'    => $isDevelopmentServer,
 			      'EventManager'                 => $EventManager,
@@ -61,14 +61,14 @@ class Bootstrap
 				      'Max_Length_Exception_Message']));
 		$ExceptionHandler->register();
 
-		$ErrorHandler = $InstanceManager->create(
+		$ErrorHandler = $InstanceManager->build(
 			'\Evoke\Core\Init\Handler\Error',
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
 			      'EventManager'              => $EventManager,
 			      'Writer'                    => $InstanceManager->get(
-				      '\Evoke\Core\XWR',
-				      array('XMLWriter' => $InstanceManager->create('XMLWriter')))
-				));
+				      '\Evoke\Core\Writer\XWR',
+				      array('XMLWriter' => $InstanceManager->get(
+					            'XMLWriter')))));
 		$ErrorHandler->register();
 	}
 
@@ -87,7 +87,7 @@ class Bootstrap
 		$InstanceManager = new \Evoke\Core\InstanceManager();
 		$Settings = $InstanceManager->get('\Evoke\Core\Settings');
 		$Settings->unfreezeAll();
-		$SettingsLoader = $InstanceManager->create(
+		$SettingsLoader = $InstanceManager->build(
 			'\Evoke\Core\Init\Settings\Loader',
 			array('Settings' => $Settings));
 		$SettingsLoader->load();

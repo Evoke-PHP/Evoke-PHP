@@ -5,7 +5,7 @@ class Box extends \Evoke\Element\Base
 { 
 	public function __construct(Array $setup)
 	{
-		$setup += array('Default_Attribs' => array('class' => 'Message_Box Info'));
+		$setup += array('Attribs' => array('class' => 'Message_Box Info'));
 
 		parent::__construct($setup);
 	}

@@ -4,38 +4,32 @@ namespace Evoke\Core;
  *  be used to create and retrieve shared objects in the system.  It provides
  *  helper methods to aid the creation of frequently used objects.
  */
-class Factory implements Iface\Factory
+class Factory extends InstanceManager implements Iface\Factory
 {
 	/** @property $namespace
 	 * \array of namespace settings for the Factory.
 	 */
 	protected $namespace;
 
-	/** @property $InstanceManager
-	 *  InstanceManager \object for creating new and shared objects.
-	 */
-	protected $InstanceManager;
-
 	/** @property $Settings
 	 *  Settings \object for configuring created and retrieved objects.
 	 */
 	protected $Settings;
+
+	/** @property $sharedInstances
+	 *  \array The instances for shared services that we generally only want to
+	 *  create one of.  These objects should not rely on any state (otherwise
+	 *  sharing them could cause problems).
+	 */
+	private $sharedInstances = array();
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Instance_Manager' => NULL,
-		                'Namespace'        => array('Core'  => '\Evoke\Core\\',
-		                                            'Data'  => '\Evoke\Data\\',
-		                                            'Model' => '\Evoke\Model\\'),
-		                'Settings'         => NULL);
+		$setup += array('Namespace' => array('Core'  => '\Evoke\Core\\',
+		                                     'Data'  => '\Evoke\Data\\',
+		                                     'Model' => '\Evoke\Model\\'),
+		                'Settings'  => NULL);
 
-		if (!$setup['Instance_Manager'] instanceof
-		    \Evoke\Core\Iface\InstanceManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Instance_Manager');
-		}
-      
 		// We are only going to read from the settings, so we only need
 		// ArrayAccess.
 		if (!$setup['Settings'] instanceof \ArrayAccess)
@@ -44,20 +38,49 @@ class Factory implements Iface\Factory
 		}
 
 		$this->namespace = $setup['Namespace'];
-		$this->InstanceManager = $setup['Instance_Manager'];
-		$this->Settings        = $setup['Settings'];
+		$this->Settings  = $setup['Settings'];
 	}
    
 	/******************/
 	/* Public Methods */
 	/******************/
 
+	/** Build a writer for the specified output format.
+	 *  @outputFormat \string The output format required from the writer.
+	 *  @return \object Writer object.
+	 */
+	public function buildWriter($outputFormat)
+	{
+		if (!is_string($outputFormat))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' outputFormat must be a string.');
+		}
+		
+		switch (strtoupper($outputFormat))
+		{
+		case 'XML':
+			return $this->buildWriterXWR();
+		default:
+			throw new \DomainException(
+				__METHOD__ . ' unknown output format: ' . $outputFormat);
+		}
+	}
+
+	/** Build an XHTML Writing Resource (XWR).
+	 *  @return \object XWR.
+	 */
+	public function buildWriterXWR()
+	{
+		return $this->get($this->namespace['Core'] . 'Writer\XWR', 
+		                  array('XMLWriter' => $this->get('XMLWriter')));
+	}
+		
 	// Create a controller object.
 	public function getController()
 	{
-		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'Controller',
-			$this->getEventManager());
+		return $this->build($this->namespace['Core'] . 'Controller',
+		                    $this->getEventManager());
 	}
 
 	/** Get a data object, specifying any joint data.
@@ -65,22 +88,20 @@ class Factory implements Iface\Factory
 	 */
 	public function getData(Array $joins=array())
 	{
-		return $this->InstanceManager->create(
-			$this->namespace['Data'] . 'Base', array('Joins' => $joins));
+		return $this->build($this->namespace['Data'] . 'Base',
+		                    array('Joins' => $joins));
 	}
    
 	/// Return the event manager.
 	public function getEventManager()
 	{
-		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'EventManager');
+		return $this->get($this->namespace['Core'] . 'EventManager');
 	}
 
 	/// Return the file system object.
 	public function getFilesystem()
 	{
-		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'Filesystem');
+		return $this->get($this->namespace['Core'] . 'Filesystem');
 	}
 
 	/** Get a Joins object (Recursive).
@@ -111,7 +132,7 @@ class Factory implements Iface\Factory
 			}
 		}
 
-		return $this->InstanceManager->create(
+		return $this->build(
 			$this->namespace['Core'] . 'DB\Table\Joins',
 			array_merge(
 				$setup,
@@ -123,8 +144,7 @@ class Factory implements Iface\Factory
 	/// Create a message array.
 	public function getMessageArray()
 	{
-		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'MessageArray');
+		return $this->build($this->namespace['Core'] . 'MessageArray');
 	}
    
 	/// Get a model.
@@ -132,16 +152,16 @@ class Factory implements Iface\Factory
 	{
 		$setup += array('Event_Manager' => $this->getEventManager());
 
-		return $this->InstanceManager->create($model, $setup);
+		return $this->build($model, $setup);
 	}
 
 	/// Get a Database model.
 	public function getModelDB($model, Array $setup)
 	{
 		$setup += array('Event_Manager' => $this->getEventManager(),
-		                'SQL'          => $this->getSQL());
+		                'SQL'           => $this->getSQL());
 
-		return $this->InstanceManager->create($model, $setup);
+		return $this->build($model, $setup);
 	}
 
 	/// Get Request keys for a Model DB Admin.
@@ -201,14 +221,13 @@ class Factory implements Iface\Factory
 				array('Table_Name' => $setup['Table_Name']));
 		}
       
-		return $this->InstanceManager->get(
-			$this->namespace['Model'] . 'DB\TableAdmin', $setup);
+		return $this->get($this->namespace['Model'] . 'DB\TableAdmin', $setup);
 	}
    
 	/// Get a Model_Table object.
 	public function getModelDBTable(Array $setup)
 	{
-		return $this->InstanceManager->get(
+		return $this->get(
 			$this->namespace['Model'] . 'DB\Table',
 			array_merge(array('Event_Manager' => $this->getEventManager(),
 			                  'Failures'      => $this->getMessageArray(),
@@ -237,19 +256,17 @@ class Factory implements Iface\Factory
 			'SQL'           => $this->getSQL(),
 			'Table_Name'    => 'Menu');			
 
-		return $this->InstanceManager->create(
-			$this->namespace['Model'] . 'DB\Joint', $setup);
+		return $this->build($this->namespace['Model'] . 'DB\Joint', $setup);
 	}
 
 	/// Get an XML Page.
 	public function getPageXML($page, Array $setup=array())
 	{
 		$setup += array('Factory'         => $this,
-		                'InstanceManager' => $this->InstanceManager,
 		                'Translator'      => $this->getTranslator(),
-		                'Writer'          => $this->getXWR());
+		                'Writer'          => $this->buildWriterXWR());
 
-		return $this->InstanceManager->create($page, $setup);
+		return $this->build($page, $setup);
 	}
    
 	/** Get a processing object.
@@ -260,14 +277,13 @@ class Factory implements Iface\Factory
 	{
 		$setup += array('Event_Manager' => $this->getEventManager());
 		
-		return $this->InstanceManager->create($processing, $setup);
+		return $this->build($processing, $setup);
 	}
 
 	/// Get the Request object.
 	public function getRequest()
 	{
-		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'HTTP\Request');
+		return $this->get($this->namespace['Core'] . 'HTTP\Request');
 	}
 
 	/** Get a Response object.
@@ -283,14 +299,13 @@ class Factory implements Iface\Factory
 		$Factory = $Factory ?: $this;
 		$Request = $Request ?: $this->getRequest();
 
-		return $this->InstanceManager->create(
-			$response, $params, $Factory, $Request);
+		return $this->build($response, $params, $Factory, $Request);
 	}
 	
 	/// Get the Session object.
 	public function getSession()
 	{
-		return $this->InstanceManager->get($this->namespace['Core'] . 'Session');
+		return $this->get($this->namespace['Core'] . 'Session');
 	}
 
 	/** Get a session manager object using the default session.
@@ -299,15 +314,14 @@ class Factory implements Iface\Factory
 	 */
 	public function getSessionManager($domain)
 	{
-		return $this->InstanceManager->create(
-			$this->namespace['Core'] . 'SessionManager',
-			array('Domain'  => $domain,
-			      'Session' => $this->getSession()));
+		return $this->build($this->namespace['Core'] . 'SessionManager',
+		                    array('Domain'  => $domain,
+		                          'Session' => $this->getSession()));
 	}
 
 	public function getSettings()
 	{
-		return $this->InstanceManager->get($this->namespace['Core'] . 'Settings');
+		return $this->get($this->namespace['Core'] . 'Settings');
 	}
    
 	/// Get the SQL object.
@@ -337,18 +351,18 @@ class Factory implements Iface\Factory
 			$dbSettings = $this->Settings['DB'][$name];
 		}
 
-		return $this->InstanceManager->get(
+		return $this->get(
 			$this->namespace['Core'] . 'DB\SQL',
-			array('DB' => $this->InstanceManager->get(
+			array('DB' => $this->get(
 				      $this->namespace['Core'] . 'DB\PDO', $dbSettings)));
 	}
 
 	/// Get a TableInfo object.
 	public function getTableInfo(Array $setup)
 	{
-		return $this->InstanceManager->get(
+		return $this->get(
 			$this->namespace['Core'] . 'DB\Table\Info',
-			array_merge(array('Failures' => $this->InstanceManager->create(
+			array_merge(array('Failures' => $this->build(
 				                  $this->namespace['Core'] . 'MessageArray'),
 			                  'SQL'      => $this->getSQL()),
 			            $setup));
@@ -356,7 +370,7 @@ class Factory implements Iface\Factory
 
 	public function getTableListID()
 	{
-		return $this->InstanceManager->get(
+		return $this->get(
 			$this->namespace['Core'] . 'DB\Table\ListID',
 			array('SQL' => $this->getSQL()));
 	}
@@ -364,33 +378,13 @@ class Factory implements Iface\Factory
 	// Get the Translator.
 	public function getTranslator()
 	{
-		return $this->InstanceManager->get(
+		return $this->get(
 			$this->namespace['Core'] . 'Translator',
 			array('Default_Language'      => $this->Settings['Constant'][
 				      'Default_Language'],
 			      'Request'               => $this->getRequest(),
 			      'Session_Manager'       => $this->getSessionManager('Lang'),
 			      'Translations_Filename' => $this->Settings['File']['Translation']));
-	}
-
-	/// Get a view object.
-	public function getView($view, Array $setup=array())
-	{
-		return $this->InstanceManager->create(
-			$view,
-			array_merge(array('Event_Manager'    => $this->getEventManager(),
-			                  'Instance_Manager' => $this->InstanceManager,
-			                  'Translator'       => $this->getTranslator(),
-			                  'Writer'           => $this->getXWR()),
-			            $setup));
-	}
-   
-	/// Get the XWR (XML Writing Resource).
-	public function getXWR()
-	{
-		return $this->InstanceManager->get(
-			$this->namespace['Core'] . 'XWR',
-			array('XMLWriter' => $this->InstanceManager->get('XMLWriter')));
 	}
 }
 // EOF

@@ -25,7 +25,7 @@ class InstanceManager implements Iface\InstanceManager
 	/* Public Methods */
 	/******************/
 
-	/** Create an object and return it.
+	/** Build an object and return it.
 	 *
 	 *  This is the standard way to instantiate objects with the Evoke framework.
 	 *  Using this method decouples object creation from your code.  This makes
@@ -38,7 +38,7 @@ class InstanceManager implements Iface\InstanceManager
 	 *
 	 *  \return The object that has been created.
 	 */
-	public function create(/* Var Args */)
+	public function build(/* Var Args */)
 	{
 		$numArgs = func_num_args();
       

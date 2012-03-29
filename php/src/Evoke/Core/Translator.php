@@ -57,7 +57,7 @@ class Translator implements Iface\Translator
 				__METHOD__ . ' requires Default_Language');
 		}
 
-		if (!$setup['Request'] instanceof \Evoke\Core\Iface\URI\Request)
+		if (!$setup['Request'] instanceof \Evoke\Core\Iface\HTTP\Request)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
 		}
