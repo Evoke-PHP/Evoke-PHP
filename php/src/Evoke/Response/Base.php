@@ -45,15 +45,6 @@ abstract class Base
 	{
 		$MediaTypeRouter = $this->buildMediaTypeRouter();
 		$outputFormat = $MediaTypeRouter->route();
-		$this->setWriter($outputFormat);
-		$this->respond($outputFormat);
-	}
-
-	/** Respond to the request in the correct output format.
-	 *  @param outputFormat \string The output format.
-	 */
-	public function respond($outputFormat)
-	{
 		$methodName = 'respondWith' . $outputFormat;
 		
 		if (!is_callable(array($this, $methodName)))
@@ -63,10 +54,40 @@ abstract class Base
 				' not defined).');
 		}
 
+		switch(strtoupper($outputFormat))
+		{
+		case 'JSON':
+			$contentType = 'application/json';
+			break;
+		case 'TEXT':
+			$contentType = 'text/plain';
+			break;
+		case 'XHTML':
+			$contentType = 'application/xhtml+xml';
+			break;
+		case 'XML':
+			$contentType = 'application/xml';
+			break;
+		default:
+			$EventManager = $this->Factory->getEventManager();
+			$EventManager->notify(
+				'Log',
+				array('Level'   => LOG_WARNING,
+				      'Message' => 'Unknown output format: ' . $outputFormat,
+				      'Method'  => __METHOD__));
+
+			// Default to XHTML output.
+			$contentType = 'application/xhtml+xml';
+			$outputFormat = 'XHTML';
+		}
+		
+		$this->Writer = $this->buildWriter($outputFormat);
+		$this->setContentType($contentType);
+
 		// Normally I hate variable references to methods, but this allows us
 		// to call any response to an output format that could be defined in
 		// subclasses that we are yet to know about.
-		$this->$methodName();
+		$this->{$methodName}();
 	}
 	
 	/** Set the headers to show that the document should be cached. This must
@@ -94,7 +115,8 @@ abstract class Base
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
 	}
 
-	/** Set the content type for the document.
+	/** Set the content type header for the response.
+	 *  @param contentType \string The content type.
 	 */
 	public function setContentType($contentType)
 	{
@@ -132,14 +154,6 @@ abstract class Base
 		}
 	}
 
-	/** Set the Writer object that will write the response.
-	 *  @param outputFormat \string Output format that the Writer should use.
-	 */
-	public function setWriter($outputFormat)
-	{
-		$this->Writer = $this->buildWriter($outputFormat);
-	}
-	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
@@ -152,35 +166,23 @@ abstract class Base
 		$Router->addRule(
 			new MediaType\Rule\Exact(array('Subtype' => '*',
 			                               'Type'    => '*'),
-			                         'XML'));
+			                         'XHTML'));
 		return $Router;
 	}
 
-	/** Build a writer for the specified output format.
-	 *  @outputFormat \string The output format required from the writer.
-	 *  @return \object Writer object.
+	/** Build a Writer object.
+	 *  @param outputFormat \string The type of output the Writer must write.
+	 *  @return \object The writer object.
 	 */
-	public function buildWriter($outputFormat)
+	protected function buildWriter($outputFormat, $setup=array())
 	{
-		if (!is_string($outputFormat))
+		if ($outputFormat === 'XHTML' || $outputFormat === 'XML')
 		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' outputFormat must be a string.');
+			$setup += array('XMLWriter' => $this->Factory->get('XMLWriter'));
 		}
 		
-		switch (strtoupper($outputFormat))
-		{
-		case 'TEXT':
-			return NULL;
-			break;
-		case 'XHTML':
-		case 'XML':
-			return new \Evoke\Core\Writer\XWR(
-				array('XMLWriter' => new \XMLWriter()));
-		default:
-			throw new \DomainException(
-				__METHOD__ . ' unknown output format: ' . $outputFormat);
-		}
+		return $this->Factory->get('Evoke\Core\Writer\\' . $outputFormat,
+		                           $setup);
 	}
 
 	/** Get the setup for the XHTML End.
@@ -224,6 +226,14 @@ abstract class Base
 		$this->respondWithXHTMLEnd($this->getXHTMLEndSetup());
 	}
 
+	/** Respond with XML. XML has a DTD and optionally XSLT before the content.
+	 */
+	protected function respondWithXML()
+	{
+		$this->respondWithXMLStart();
+		$this->respondWithXMLContent();
+	}
+	
 	/// Respond with XHTML Content.
 	protected function respondWithXHTMLContent()
 	{
@@ -249,10 +259,16 @@ abstract class Base
 	}
 	
 	/// Respond with XML.
-	protected function respondWithXML()
+	protected function respondWithXMLContent()
 	{
 		throw new \BadMethodCallException(
 			__METHOD__ . ' output format not handled.');
+	}
+
+	/// Respond with the XML Start.
+	protected function respondWithXMLStart()
+	{
+		$this->Writer->writeStart();
 	}
 }
 // EOF

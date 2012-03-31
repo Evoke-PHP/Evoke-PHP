@@ -73,7 +73,6 @@ class Logger
 		                                             LOG_DEBUG   => 'Debug'),
 		                'Logging_Mandatory' => true,
 		                'Mask'              => NULL,
-		                'Num_Levels'        => 8,
 		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
 		if (!$setup['DateTime'] instanceof \DateTime)
@@ -93,14 +92,11 @@ class Logger
 		$this->EventManager     = $setup['EventManager'];
 		$this->levels           = $setup['Levels'];
 		$this->loggingMandatory = $setup['Logging_Mandatory'];
+		// Use the mask provided or allow all logging levels.
+		$this->mask             = $setup['Mask'] ?:
+			str_repeat('1', count($this->levels));
 		$this->timeFormat       = $setup['Time_Format'];
-		
-		if (!isset($setup['Mask']))
-		{
-			// Default to all levels logged.
-			$setup['Mask'] = str_repeat('1', $setup['Num_Levels']);
-		}
-		
+				
 		// We observe Log events and remain decoupled to the code that calls us.
 		$this->EventManager->connect('Log', array($this, 'log'));
 

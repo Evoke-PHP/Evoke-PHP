@@ -66,7 +66,7 @@ class Bootstrap
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
 			      'EventManager'              => $EventManager,
 			      'Writer'                    => $InstanceManager->get(
-				      '\Evoke\Core\Writer\XWR',
+				      '\Evoke\Core\Writer\XHTML',
 				      array('XMLWriter' => $InstanceManager->get(
 					            'XMLWriter')))));
 		$ErrorHandler->register();

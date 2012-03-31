@@ -3,38 +3,15 @@ namespace Evoke\Core\Writer;
 
 /** Writer for JSON (buffered).
  */
-class JSON implements \Evoke\Core\Iface\Writer
-{
-	protected $buffer;
-
-	public function __construct()
-	{
-		$this->buffer = '';
-	}
-	
+class JSON extends Base
+{	
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/// Get the string representation of the buffer that we are writing to.
-	public function __toString()
-	{
-		return $this->buffer;
-	}
-
-	/// Reset the buffer that we are writing to.
-	public function flush()
-	{
-		$this->buffer = '';
-
-	/// Output the buffer that we have written into.
-	public function output()
-	{
-		echo $this->buffer;
-		$this->buffer = '';
-	}
-	
-	/// Write the data into the buffer.
+	/** Write the JSON data into the buffer.
+	 *  @param data \mixed PHP data to be converted to JSON for writing.
+	 */
 	public function write($data)
 	{
 		$this->buffer .= json_encode($data);

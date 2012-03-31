@@ -13,6 +13,11 @@ class File
 	 */
 	protected $dirMode;
 
+	/** @property $EventManager
+	 *  Event Manager \object
+	 */
+	protected $EventManager;
+
 	/** @property $fileMode
 	 *  The mode for the file \int (octal).
 	 */
@@ -48,24 +53,34 @@ class File
 	 */
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Append'     => true,
-		                'Dir_Mode'   => 0700,
-		                'Filename'   => 'php.log',
-		                'File_Mode'  => 0640,
-		                'Filesystem' => NULL,
-		                'Locking'    => true);
+		$setup += array('Append'       => true,
+		                'Dir_Mode'     => 0700,
+		                'EventManager' => NULL,
+		                'Filename'     => 'php.log',
+		                'File_Mode'    => 0640,
+		                'Filesystem'   => NULL,
+		                'Locking'      => true);
 
+		if (!$setup['EventManager'] instanceof \Evoke\Core\Iface\EventManager)
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires EventManager');
+		}
+		
 		if (!$setup['Filesystem'] instanceof \Evoke\Core\Filesystem)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Filesystem');
 		}
 
-		$this->append     = $setup['Append'];
-		$this->dirMode    = $setup['Dir_Mode'];
-		$this->filename   = $setup['Filename'];
-		$this->fileMode   = $setup['File_Mode'];
-		$this->Filesystem = $setup['Filesystem'];
-		$this->locking    = $setup['Locking'];
+		$this->append       = $setup['Append'];
+		$this->dirMode      = $setup['Dir_Mode'];
+		$this->filename     = $setup['Filename'];
+		$this->fileMode     = $setup['File_Mode'];
+		$this->EventManager = $setup['EventManager'];
+		$this->Filesystem   = $setup['Filesystem'];
+		$this->locking      = $setup['Locking'];
+
+		$this->EventManager->connect('Log.Write', array($this, 'write'));
 	}
    
 	/******************/

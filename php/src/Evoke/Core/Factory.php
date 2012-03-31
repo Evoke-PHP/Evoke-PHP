@@ -44,37 +44,6 @@ class Factory extends InstanceManager implements Iface\Factory
 	/******************/
 	/* Public Methods */
 	/******************/
-
-	/** Build a writer for the specified output format.
-	 *  @outputFormat \string The output format required from the writer.
-	 *  @return \object Writer object.
-	 */
-	public function buildWriter($outputFormat)
-	{
-		if (!is_string($outputFormat))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' outputFormat must be a string.');
-		}
-		
-		switch (strtoupper($outputFormat))
-		{
-		case 'XML':
-			return $this->buildWriterXWR();
-		default:
-			throw new \DomainException(
-				__METHOD__ . ' unknown output format: ' . $outputFormat);
-		}
-	}
-
-	/** Build an XHTML Writing Resource (XWR).
-	 *  @return \object XWR.
-	 */
-	public function buildWriterXWR()
-	{
-		return $this->get($this->namespace['Core'] . 'Writer\XWR', 
-		                  array('XMLWriter' => $this->get('XMLWriter')));
-	}
 		
 	// Create a controller object.
 	public function getController()

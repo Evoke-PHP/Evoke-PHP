@@ -10,7 +10,7 @@ namespace Evoke\Core;
  *
  *  Callbacks are run immediately upon event notification.
  */
-class EventManager
+class EventManager implements Iface\EventManager
 {
 	/** By default all events are critical, but if there are events that can
 	 *  occur that do not care if even one observer is notified then they should
@@ -80,20 +80,6 @@ class EventManager
 		}
 	}
 
-	/** Create an entry for the event, which ensures that it exists.
-	 *  @param name \string The event name.
-	 *  @param critical \bool Whether the event needs someone to be notified.
-	 */
-	public function create($name, $critical=true)
-	{
-		if (!isset($this->observers[$name]))
-		{
-			$this->observers[$name] = array();
-		}
-
-		$this->setCritical($name, $critical);
-	}
-   
 	/** Count the observers connected to an event.
 	 *  @param name \string The event name.
 	 *  \return \int Number of observers connected to the event.
@@ -106,6 +92,20 @@ class EventManager
 		}
       
 		return count($this->observers[$name]);
+	}
+   
+	/** Create an entry for the event, which ensures that it exists.
+	 *  @param name \string The event name.
+	 *  @param critical \bool Whether the event needs someone to be notified.
+	 */
+	public function create($name, $critical=true)
+	{
+		if (!isset($this->observers[$name]))
+		{
+			$this->observers[$name] = array();
+		}
+
+		$this->setCritical($name, $critical);
 	}
    
 	/** Disconnects an observer callback from the given event.
@@ -125,28 +125,6 @@ class EventManager
 			{
 				unset($this->observers[$name][$key]);
 				return;
-			}
-		}
-	}
-
-	/** Disconnect the objects from all events.
-	 *  @param object \Array An array of objects to disconnect.
-	 */
-	public function disconnectObjects(Array $objects)
-	{
-		foreach ($this->observers as $eventName => $observers)
-		{
-			foreach ($observers as $key => $observer)
-			{
-				if (in_array($observer['Callback'][0], $objects))
-				{
-					unset($this->observers[$eventName][$key]);
-				}
-			}
-
-			if (empty($this->observers[$eventName]))
-			{
-				unset($this->observers[$eventName]);
 			}
 		}
 	}
