@@ -6,18 +6,26 @@ use Evoke\Core\Iface;
 /** Route the Accepted Media Types from the request to the correct output
  *  format.
  */
-class Router extends \Evoke\Core\Router
+class Router implements Iface\HTTP\MediaType\Router
 {
 	/** @property $Request
 	 *  Request \object
 	 */
 	protected $Request;
-	
+
+	/** @property $rules
+	 *  \array of rules that the router uses to route.
+	 */
+	protected $rules;
+
+	/** Create a media type router that determines the output format based on
+	 *  the acceptable media types.
+	 *  @param Request \object Request object.
+	 */
 	public function __construct(Iface\HTTP\Request $Request)
 	{
-		parent::__construct();
-		
 		$this->Request = $Request;
+		$this->rules   = array();
 	}	
 	
 	/******************/
@@ -25,17 +33,11 @@ class Router extends \Evoke\Core\Router
 	/******************/
 
 	/** Add a rule to the router.
-	 *  @param rule \object HTTP MediaType Rule object.
+	 *  @param Rule \object HTTP MediaType Rule object.
 	 */
-	public function addRule($rule)
+	public function addRule(Iface\HTTP\MediaType\Rule $Rule)
 	{
-		if (!$rule instanceof Iface\HTTP\MediaType\Rule)
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' rule must be HTTP\MediaType\Rule');
-		}
-		
-		$this->rules[] = $rule;
+		$this->rules[] = $Rule;
 	}
 
 	/** Select the output format (that responds to the routed MediaType).
@@ -49,11 +51,11 @@ class Router extends \Evoke\Core\Router
 		
 		foreach ($acceptedMediaTypes as $mediaType)
 		{
-			foreach ($this->rules as $rule)
+			foreach ($this->rules as $Rule)
 			{
-				if ($rule->isMatch($mediaType))
+				if ($Rule->isMatch($mediaType))
 				{
-					return $rule->getOutputFormat($mediaType);
+					return $Rule->getOutputFormat($mediaType);
 				}
 			}
 		}

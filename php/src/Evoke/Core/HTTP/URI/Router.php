@@ -4,7 +4,7 @@ namespace Evoke\Core\HTTP\URI;
 use Evoke\Core\Iface;
 
 /// Receive the request and create the correct response for it.
-class Router extends \Evoke\Core\Router
+class Router implements Iface\HTTP\URI\Router
 {
 	/** @property $Factory
 	 *  The Factory \object for sending to the response.
@@ -20,16 +20,31 @@ class Router extends \Evoke\Core\Router
 	 *  The base \string for the response class.
 	 */
 	protected $responseBase;
-	
+
+	/** @property $rules
+	 *  \array of rules that the router uses to route.
+	 */
+	protected $rules;
+
+	/** Create a HTTP URI Router that routes the request to a response.
+	 *  @param Factory \object Factory for creating the response.
+	 *  @param Request \object Request object.
+	 *  @param responseBase \string Base class string for the response.
+	 */
 	public function __construct(Iface\Factory $Factory,
 	                            Iface\HTTP\Request $Request,
 	                            $responseBase)
 	{
-		parent::__construct();
-
-		$this->Factory         = $Factory;
-		$this->Request         = $Request;
-		$this->responseBase    = $responseBase;
+		if (!is_string($responseBase))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' responseBase must be a string.');
+		}
+		
+		$this->Factory      = $Factory;
+		$this->Request      = $Request;
+		$this->responseBase = $responseBase;
+		$this->rules        = array();
 	}
 	
 	/******************/
@@ -39,15 +54,9 @@ class Router extends \Evoke\Core\Router
 	/** Add a rule to the router.
 	 *  @param rule \object HTTP URI Rule object.
 	 */
-	public function addRule($rule)
+	public function addRule(Iface\HTTP\URI\Rule $Rule)
 	{
-		if (!$rule instanceof Iface\HTTP\URI\Rule)
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' rule must be a HTTP\URI\Rule');
-		}
-		
-		$this->rules[] = $rule;
+		$this->rules[] = $Rule;
 	}
 
 	/** Create the response object (that responds to the routed URI).
