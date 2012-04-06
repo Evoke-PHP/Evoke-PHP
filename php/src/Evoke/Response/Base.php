@@ -214,7 +214,7 @@ abstract class Base
 		             'Doc_Type'    => 'HTML5',
 		             'Keywords'    => '',
 		             'JS'          => array(),
-		             'Title'       => 'Title');
+		             'Title'       => '');
 	}
 
 	/** Perform any initialization of the response that does not relate to a

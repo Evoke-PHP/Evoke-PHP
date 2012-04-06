@@ -42,11 +42,11 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	public function __construct(Array $setup)
 	{
 		$setup += array('Event_Manager'   => NULL,
-		                'Event_Prefix'   => NULL,
-		                'Match_Required' => true,
-		                'Request_Keys'   => array(),
-		                'Request_Method' => '',
-		                'Unique_Match'   => true);
+		                'Event_Prefix'    => NULL,
+		                'Match_Required'  => true,
+		                'Request_Keys'    => array(),
+		                'Request_Method'  => '',
+		                'Unique_Match'    => true);
       
 		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
 		{
@@ -82,7 +82,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	/* Public Methods */
 	/******************/
 
-	/// Process the request and notify the event manager.
+	/// Process the request.
 	public function process()
 	{
 		if ($this->getRequestMethod() !== mb_strtoupper($this->requestMethod))
@@ -142,8 +142,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 	 
 			throw new \RuntimeException(__METHOD__ . ' ' . $msg);
 		}
-      
-		if ($this->uniqueMatch && count($matches) > 1)
+		elseif ($this->uniqueMatch && count($matches) > 1)
 		{
 			$msg = 'Unique_Match required for Request_Keys: ' .
 				var_export(array_keys($this->requestKeys)) .

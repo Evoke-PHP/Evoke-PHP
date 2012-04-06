@@ -71,13 +71,6 @@ class Factory extends InstanceManager implements Iface\Factory
 		return $this->build($className, $Writer, $Translator, $setup);
 	}
 	
-	// Create a controller object.
-	public function getController()
-	{
-		return $this->build($this->namespace['Core'] . 'Controller',
-		                    $this->getEventManager());
-	}
-
 	/** Get a data object, specifying any joint data.
 	 *  @param joins \array Joint data.
 	 */
@@ -380,6 +373,13 @@ class Factory extends InstanceManager implements Iface\Factory
 			      'Request'               => $this->getRequest(),
 			      'Session_Manager'       => $this->getSessionManager('Lang'),
 			      'Translations_Filename' => $this->Settings['File']['Translation']));
+	}
+
+	// Get the Triad object.
+	public function getTriad()
+	{
+		return $this->get(
+			$this->namespace['Core'] . 'Triad', $this->getEventManager());
 	}
 }
 // EOF

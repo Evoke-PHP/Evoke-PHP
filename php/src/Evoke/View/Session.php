@@ -3,22 +3,12 @@ namespace Evoke\View;
 
 class Session extends Base
 { 
-	public function __construct(Array $setup)
-	{
-		$setup += array('Start_Base' => array(
-			                'CSS' => array('/csslib/global.css',
-			                               '/csslib/common.css',
-			                               '/csslib/session.css')));
-      
-		parent::__construct($setup);
-	}
-   
 	/******************/
 	/* Public Methods */
 	/******************/
 
 	/// Write the session so that we can see it.
-	public function writeContent($data)
+	public function write($data)
 	{
 		$this->Writer->write(
 			array('div',
