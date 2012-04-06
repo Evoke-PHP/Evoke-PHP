@@ -11,7 +11,8 @@ abstract class Translated extends Base
 	protected $Translator;
 
 	/** Construct the View.
-	 *  @param Translator \object The writer object.
+	 *  @param Writer     \object The Writer object.
+	 *  @param Translator \object The Translator object.
 	 */
 	public function __construct(Iface\Writer $Writer,
 	                            Iface\Translator $Translator)

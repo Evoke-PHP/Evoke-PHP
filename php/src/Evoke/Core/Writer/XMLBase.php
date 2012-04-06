@@ -53,16 +53,16 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		$this->optionsPos = $setup['Options_Pos'];
 		$this->tagPos     = $setup['Tag_Pos'];
 		$this->XMLWriter  = $setup['XMLWriter'];
-		
-		$this->XMLWriter->openMemory();
 
+		$this->XMLWriter->openMemory();
+			
 		if ($setup['Indent'])
 		{
 			$this->XMLWriter->setIndentString($setup['Indent_String']);
 			$this->XMLWriter->setIndent(true);
 		}
 	}
-
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -219,11 +219,10 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 	/* Protected Methods */
 	/*********************/
 	
-	/** Write basic information about the document based on the type.
-	 *
+	/** Write the start of the document based on the type.
 	 *  @param type \string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
 	 */
-	protected function writeDocInfo($type)
+	protected function writeStartDocument($type)
 	{
 		switch (strtoupper($type))
 		{

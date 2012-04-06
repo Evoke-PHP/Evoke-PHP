@@ -219,7 +219,7 @@ class Error implements \Evoke\Core\Iface\Handler
 	    
 				$traceElems[] = array(
 					'div',
-					array('class' => ($level % 2) ? 'Even' : 'Odd'),
+					array('class' => ($level % 2) ? 'Odd' : 'Even'),
 					array('Text'  => $text));
 			}
 

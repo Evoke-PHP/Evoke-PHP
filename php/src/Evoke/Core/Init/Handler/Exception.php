@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
+use Evoke\Core\Iface;
+
 /// The system exception handler.
 class Exception implements \Evoke\Core\Iface\Handler
 {
@@ -18,34 +20,28 @@ class Exception implements \Evoke\Core\Iface\Handler
 	 *  \int The maximum length of exception message to display.
 	 */
 	protected $maxLengthExceptionMessage;
-   
-	public function __construct(Array $setup)
+
+	/** @property $Writer
+	 *  Writer \object
+	 */
+	protected $Writer;
+
+	
+	public function __construct($detailedInsecureMessage,
+	                            $maxLengthExceptionMessage,
+	                            Iface\EventManager $EventManager,
+	                            Iface\Writer $Writer)
 	{
-		$setup += array('Detailed_Insecure_Message'    => NULL,
-		                'EventManager'                 => NULL,
-		                'Max_Length_Exception_Message' => NULL);
-				 
-		if (!is_bool($setup['Detailed_Insecure_Message']))
+		if (!is_bool($detailedInsecureMessage))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
+				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
 		}
 
-		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
-		}
-
-		if (!isset($setup['Max_Length_Exception_Message']))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Max_Length_Exception_Message');
-		}
-
-		$this->detailedInsecureMessage   = $setup['Detailed_Insecure_Message'];
-		$this->EventManager              = $setup['EventManager'];
-		$this->maxLengthExceptionMessage = $setup['Max_Length_Exception_Message'];
+		$this->detailedInsecureMessage   = $detailedInsecureMessage;
+		$this->EventManager              = $EventManager;
+		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
+		$this->Writer                    = $Writer;
 	}
    
 	/******************/
@@ -130,25 +126,18 @@ class Exception implements \Evoke\Core\Iface\Handler
 			$message .= "<br>\n<br>\n" .
 				preg_replace('/\n/', '<br>' . "\n", $exceptionMessage); //(string)($uncaughtException));
 		}
-      
-		$errorDocument =
-			'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" ' . 
-			'"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\n" .
-			'<html xmlns="http://www.w3.org/1999/xhtml">' . "\n" .
-			'   <head>' . "\n" .
-			'      <title>Error</title>' . "\n" .
-			'      <link type="text/css" href="/csslib/global.css" ' .
-			'rel="stylesheet"></link>' . "\n" .
-			'   </head>' . "\n" .
-			'   <body>' . "\n" .
-			'      <div class="Exception_Handler Message_Box System">' . "\n" .
-			'         <div class="Title">' . $title . '</div>' . "\n" .
-			'         <div class="Description">' . $message . '</div>' . "\n" .
-			'      </div>' . "\n" .
-			'   </body>' . "\n" .
-			'</html>';
-	 
-		echo $errorDocument;
+		
+		$this->Writer->write(
+			array('div',
+			      array('class' => 'Exception_Handler Message_Box System'),
+			      array('Children' => array(
+				            array('div',
+				                  array('class' => 'Title'),
+				                  array('Text' => $title)),
+				            array('div',
+				                  array('class' => 'Description'),
+				                  array('Text' => $message))))));
+		$this->Writer->output();
 	}
 
 	public function register()

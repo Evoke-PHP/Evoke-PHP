@@ -24,14 +24,13 @@ class XHTML extends XMLBase
 	{
 		$setup += array('CSS'         => array(),
 		                'Description' => '',
-		                'Doc_Type'    => 'HTML5',
+		                'Doc_Type'    => 'XHTML_1_1',
 		                'Keywords'    => '',
-		                'Lang'        => '',
 		                'JS'          => array(),
 		                'Title'       => '');
 
 		
-		$this->writeDocInfo($setup['Doc_Type']);
+		$this->writeStartDocument($setup['Doc_Type']);
       
 		$this->XMLWriter->startElement('head');
 		$this->XMLWriter->writeElement('title', $setup['Title']);

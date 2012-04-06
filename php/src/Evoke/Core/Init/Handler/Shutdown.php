@@ -1,8 +1,10 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
+use Evoke\Core\Iface;
+
 /// The system shutdown handler.
-class Shutdown implements \Evoke\Core\Iface\Handler
+class Shutdown implements Iface\Handler
 {
 	/** @property $administratorEmail
 	 *  \string The administrator's email address.
@@ -13,26 +15,37 @@ class Shutdown implements \Evoke\Core\Iface\Handler
 	 *  \bool Whether to display a detailed insecure message.
 	 */
 	protected $detailedInsecureMessage;
-   
-	public function __construct(Array $setup)
-	{
-		$setup += array('Administrator_Email'       => NULL,
-		                'Detailed_Insecure_Message' => NULL);
 
-		if (!is_string($setup['Administrator_Email']))
+	/** @property $Writer
+	 *  Writer \object
+	 */
+	protected $Writer;
+
+	/** Construct the System Shutdown handler.
+	 *  @param administratorEmail \string Admin's Email to use as a contact.
+	 *  @param detailedInsecureMessage \bool Whether to show detailed logging
+	 *  information (which is insecure).
+	 *  @param Writer \object The writer object to write the fatal message.
+	 */
+	public function __construct($administratorEmail,
+	                            $detailedInsecureMessage,
+	                            Iface\Writer $Writer)
+	{
+		if (!is_string($administratorEmail))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Administrator_Email to be a string');
+				__METHOD__ . ' requires administratorEmail to be a string');
 		}
       
-		if (!is_bool($setup['Detailed_Insecure_Message']))
+		if (!is_bool($detailedInsecureMessage))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
+				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
 		}
 
-		$this->administratorEmail      = $setup['Administrator_Email'];
-		$this->detailedInsecureMessage = $setup['Detailed_Insecure_Message'];
+		$this->administratorEmail      = $administratorEmail;
+		$this->detailedInsecureMessage = $detailedInsecureMessage;
+		$this->Writer                  = $Writer;
 	}
 
 	/******************/
@@ -75,36 +88,30 @@ class Shutdown implements \Evoke\Core\Iface\Handler
 
 		if (!empty($this->administratorEmail))
 		{
-			$message .= "<br>\n<br>\n" .
+			$message .= "<br/>\n<br/>\n" .
 				'Email us at ' . $this->administratorEmail;
 		}
       
 		if ($this->detailedInsecureMessage)
 		{
-			$message .= "<br>\n<br>\n" .
+			$message .= "<br/>\n<br/>\n" .
 				'PHP [' . $handledErrorTypes[$err['type']] . '] ' .
-				$err['message'] . "<br>\n" .
+				$err['message'] . "<br/>\n" .
 				' in file ' . $err['file'] . ' at ' . $err['line'];
 		}
 
-		$errorDocument =
-			'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" ' . 
-			'"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . "\n" .
-			'<html xmlns="http://www.w3.org/1999/xhtml">' . "\n" .
-			'   <head>' . "\n" .
-			'      <title>' . $title . '</title>' . "\n" .
-			'      <link type="text/css" href="/csslib/global.css" ' .
-			'rel="stylesheet"></link>' . "\n" .
-			'   </head>' . "\n" .
-			'   <body>' . "\n" .
-			'      <div class="Error_Handler Message_Box System">' . "\n" .
-			'         <div class="Title">' . $title . '</div>' . "\n" .
-			'         <div class="Description">' . $message . '</div>' . "\n" .
-			'      </div>' . "\n" .
-			'   </body>' . "\n" .
-			'</html>';
-	 
-		echo $errorDocument;
+		$this->Writer->write(
+			array('div',
+			      array('class' => 'Error_Handler Message_Box System'),
+			      array('Children' => array(
+				            array('div',
+				                  array('class' => 'Title'),
+				                  array('Text' => $title)),
+				            array('div',
+				                  array('class' => 'Description'),
+				                  array('Text' => $message))))));
+		$this->Writer->writeEnd();
+		$this->Writer->output();
 	}
 
 	/// Register the shutdown handler.

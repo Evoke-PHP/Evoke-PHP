@@ -44,7 +44,33 @@ class Factory extends InstanceManager implements Iface\Factory
 	/******************/
 	/* Public Methods */
 	/******************/
-		
+
+	/** Build a View.
+	 *  @param className \string The class of view to create.
+	 *  @param Writer    \object Writer object.
+	 *  @param setup     \array  Setup parameters for the view.
+	 */
+	public function buildView(/* String */ $className,
+	                          Iface\Writer $Writer,
+	                          Array        $setup=array())
+	{		
+		return $this->build($className, $Writer, $setup);
+	}	
+
+	/** Build a View that is translated.
+	 *  @param className  \string The class of view to create.
+	 *  @param Writer     \object Writer object.
+	 *  @param Translator \object Translator object.
+	 *  @param setup      \array  Setup parameters for the view.
+	 */
+	public function buildViewTranslated(/* String */     $className,
+	                                    Iface\Writer     $Writer,
+	                                    Iface\Translator $Translator,
+	                                    Array            $setup=array())
+	{
+		return $this->build($className, $Writer, $Translator, $setup);
+	}
+	
 	// Create a controller object.
 	public function getController()
 	{

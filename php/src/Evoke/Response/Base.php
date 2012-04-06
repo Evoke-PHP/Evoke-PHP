@@ -34,7 +34,7 @@ abstract class Base
 		$this->params  = $params;
 		$this->Request = $Request;
 	}
-
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -56,6 +56,9 @@ abstract class Base
 
 		switch(strtoupper($outputFormat))
 		{
+		case 'HTML5':
+			$contentType = 'text/html';
+			break;
 		case 'JSON':
 			$contentType = 'application/json';
 			break;
@@ -84,10 +87,14 @@ abstract class Base
 		$this->Writer = $this->buildWriter($outputFormat);
 		$this->setContentType($contentType);
 
+		// Perform any content agnostic initialization of the reponse.
+		$this->initialize();
 		// Normally I hate variable references to methods, but this allows us
 		// to call any response to an output format that could be defined in
 		// subclasses that we are yet to know about.
 		$this->{$methodName}();
+		// Perform any content agnostic finalization of the response.
+		$this->finalize();
 	}
 	
 	/** Set the headers to show that the document should be cached. This must
@@ -128,7 +135,7 @@ abstract class Base
 
 		header('Content-Type: ' . $contentType);
 	}
-
+	
 	/** Set the reponse code (200 OK, 404 Not Found, etc.)
 	 *  @param code \int The HTTP status code.
 	 */
@@ -166,7 +173,7 @@ abstract class Base
 		$Router->addRule(
 			new MediaType\Rule\Exact(array('Subtype' => '*',
 			                               'Type'    => '*'),
-			                         'XHTML'));
+			                         'HTML5'));
 		return $Router;
 	}
 
@@ -176,7 +183,9 @@ abstract class Base
 	 */
 	protected function buildWriter($outputFormat, $setup=array())
 	{
-		if ($outputFormat === 'XHTML' || $outputFormat === 'XML')
+		if ($outputFormat === 'HTML5' ||
+		    $outputFormat === 'XHTML' ||
+		    $outputFormat === 'XML')
 		{
 			$setup += array('XMLWriter' => $this->Factory->get('XMLWriter'));
 		}
@@ -185,22 +194,86 @@ abstract class Base
 		                           $setup);
 	}
 
-	/** Get the setup for the XHTML End.
-	 *  @return \array The setup for the XHTML End.
+	/** Perform any finalization of the response that does not relate to a
+	 *  specific content type.  This is called just after the respondWith*
+	 *  methods allowing common content type agnostic processing to be grouped.
 	 */
-	protected function getXHTMLEndSetup()
+	protected function finalize()
 	{
-		return array();
+		$this->Writer->output();
+	}		
+	
+	/** Get the XHTML setup for the page.
+	 *  @return \array The XHTML Setup array.
+	 */
+	protected function getXHTMLSetup()
+	{
+		return array('CSS'         => array('/csslib/global.css',
+		                                    'csslib/common.css'),
+		             'Description' => 'Description',
+		             'Doc_Type'    => 'HTML5',
+		             'Keywords'    => '',
+		             'JS'          => array(),
+		             'Title'       => 'Title');
 	}
 
-	/** Get the setup for the XHTML Head.
-	 *  @return \array The setup for the XHTML Head.
+	/** Perform any initialization of the response that does not relate to a
+	 *  specific content type.  This has nothing to do with construction of the
+	 *  response object.  It is called just prior to the respondWith* methods
+	 *  allowing response codes or other shared data to be provided accross all
+	 *  content types.
 	 */
-	protected function getXHTMLHeadSetup()
+	protected function initialize()
 	{
-		return array('CSS' => array('/csslib/global.css',
-		                            '/csslib/common.css'));
-	}	
+		$this->setResponseCode(200);
+	}
+
+	/** Merge two XHTML setups with the second taking precedence.
+	 *  @param start \array The initial XHTML setup.
+	 *  @param overload \array The array that takes precedence.
+	 *  @return \array The final XHTML setup with sub-arrays being merged by
+	 *  value.
+	 */
+	protected function mergeXHTMLSetup($start, $overload)
+	{
+		foreach ($overload as $key => $entry)
+		{
+			// Arrays should be appended to with only the new elements.
+			if (isset($start[$key]) && is_array($start[$key]))
+			{
+				$start[$key] = array_merge($start[$key],
+				                           array_diff($entry, $start[$key]));
+			}
+			else
+			{
+				$start[$key] = $entry;
+			}
+		}
+
+		return $start;
+	}
+
+	/** Redirect to a different page.
+	 *  @param location \string Where to redirect to.
+	 */
+	protected function redirect($location)
+	{
+		if (headers_sent())
+		{
+			throw new \RuntimeException(
+				__METHOD__ . ' headers have already been sent.');
+		}
+
+		header('Location: ' . $location);
+	}
+	
+	/** Respond with XHTML5 which is by default the same as XHTML (just with a
+	 *  different writer (giving a different doctype).
+	 */	
+	protected function respondWithHTML5()
+	{
+		$this->respondWithXHTML();
+	}
 	
 	/// Respond with JSON.
 	protected function respondWithJSON()
@@ -221,17 +294,9 @@ abstract class Base
 	 */
 	protected function respondWithXHTML()
 	{
-		$this->respondWithXHTMLHead($this->getXHTMLHeadSetup());
+		$this->respondWithXHTMLHead();
 		$this->respondWithXHTMLContent();
-		$this->respondWithXHTMLEnd($this->getXHTMLEndSetup());
-	}
-
-	/** Respond with XML. XML has a DTD and optionally XSLT before the content.
-	 */
-	protected function respondWithXML()
-	{
-		$this->respondWithXMLStart();
-		$this->respondWithXMLContent();
+		$this->respondWithXHTMLEnd();
 	}
 	
 	/// Respond with XHTML Content.
@@ -244,31 +309,25 @@ abstract class Base
 	/** Respond with the end of the XHTML page.
 	 *  @param setup \array The setup for the XHTML end.
 	 */
-	protected function respondWithXHTMLEnd(Array $setup)
+	protected function respondWithXHTMLEnd()
 	{
-		$this->Writer->writeEnd($this->getXHTMLEndSetup());
-		$this->Writer->output();
+		$this->Writer->writeEnd();
 	}
 
 	/** Respond with the XHTML Head.
 	 *  @param setup \array The setup for the XHTML head.
 	 */
-	protected function respondWithXHTMLHead(Array $setup)
+	protected function respondWithXHTMLHead()
 	{
-		$this->Writer->writeStart($this->getXHTMLHeadSetup());
+		$this->Writer->writeStart($this->getXHTMLSetup());
 	}
-	
-	/// Respond with XML.
-	protected function respondWithXMLContent()
+
+	/** Respond with XML. XML has a DTD and optionally XSLT before the content.
+	 */
+	protected function respondWithXML()
 	{
 		throw new \BadMethodCallException(
 			__METHOD__ . ' output format not handled.');
-	}
-
-	/// Respond with the XML Start.
-	protected function respondWithXMLStart()
-	{
-		$this->Writer->writeStart();
 	}
 }
 // EOF

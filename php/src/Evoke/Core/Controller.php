@@ -143,38 +143,9 @@ class Controller
 		}
 	}
 
-	/** Connect a Model to the controller.
-	 *  @param Model \object The model to connect.
-	 */
-	public function connectModel(Iface\Model $Model)
-	{
-		$this->EventManager->connect($this->events['Model'],
-		                             array($Model, 'notifyData'));
-		$this->connectedModels[] = $Model;
-	}
-	
-	/** Connect a Processing object to the controller.
-	 *  @param Processing \object The processing to connect.
-	 */
-	public function connectProcessing(Iface\Processing $Processing)
-	{
-		$this->EventManager->connect($this->events['Processing'],
-		                             array($Processing, 'process'));
-		$this->connectedProcessing[] = $Processing;
-	}
-	
-	/** Connect a View to the controller.
-	 *  @param View \object The view to connect.
-	 */
-	public function connectView(Iface\View $View)
-	{
-		$this->EventManager->connect($this->events['View'],
-		                             array($View, 'write'));
-		$this->connectedViews[] = $View;
-	}
-	
-	/** Execute the Controller.  Process any user input, retrieve data from
-	 *  the Model(s) and send it to the View(s).
+	/** Execute the Controller.  Process user input, retrieve data from the
+	 *  Model(s) and send it to the View(s).  Disconnect all objects from the
+	 *  controller.
 	 */   
 	public function execute()
 	{
@@ -237,6 +208,40 @@ class Controller
 	protected function write()
 	{
 		$this->EventManager->notify($this->events['View'], $this->data);
+	}
+	
+	/*******************/
+	/* Private Methods */
+	/*******************/
+
+	/** Connect a Model to the controller.
+	 *  @param Model \object The model to connect.
+	 */
+	private function connectModel(Iface\Model $Model)
+	{
+		$this->EventManager->connect($this->events['Model'],
+		                             array($Model, 'notifyData'));
+		$this->connectedModels[] = $Model;
+	}
+	
+	/** Connect a Processing object to the controller.
+	 *  @param Processing \object The processing to connect.
+	 */
+	private function connectProcessing(Iface\Processing $Processing)
+	{
+		$this->EventManager->connect($this->events['Processing'],
+		                             array($Processing, 'process'));
+		$this->connectedProcessing[] = $Processing;
+	}
+	
+	/** Connect a View to the controller.
+	 *  @param View \object The view to connect.
+	 */
+	private function connectView(Iface\View $View)
+	{
+		$this->EventManager->connect($this->events['View'],
+		                             array($View, 'write'));
+		$this->connectedViews[] = $View;
 	}
 }
 // EOF

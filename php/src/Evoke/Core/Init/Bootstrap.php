@@ -40,35 +40,33 @@ class Bootstrap
 		$InstanceManager = new \Evoke\Core\InstanceManager();
 		$Settings = $InstanceManager->get('\Evoke\Core\Settings');
 		$EventManager = $InstanceManager->get('\Evoke\Core\EventManager');
-
+		$Writer = $InstanceManager->get(
+			'\Evoke\Core\Writer\XHTML',
+			array('XMLWriter' => $InstanceManager->get('XMLWriter')));
+		
 		$isDevelopmentServer =
 			isset($Settings['Constant']['Development_Servers']) &&
-			in_array(php_uname('n'), $Settings['Constant']['Development_Servers']);
+			in_array(php_uname('n'),
+			         $Settings['Constant']['Development_Servers']);
 
 		// Register the Shutdown, Exception and Error handlers.
-		$ShutdownHandler = $InstanceManager->build(
-			'\Evoke\Core\Init\Handler\Shutdown',
-			array('Administrator_Email'       => $Settings[
-				      'Email']['Administrator'],
-			      'Detailed_Insecure_Message' => $isDevelopmentServer));
+		$ShutdownHandler = new \Evoke\Core\Init\Handler\Shutdown(
+			$Settings['Email']['Administrator'], $isDevelopmentServer, $Writer);
 		$ShutdownHandler->register();
       
 		$ExceptionHandler = $InstanceManager->build(
 			'\Evoke\Core\Init\Handler\Exception',
-			array('Detailed_Insecure_Message'    => $isDevelopmentServer,
-			      'EventManager'                 => $EventManager,
-			      'Max_Length_Exception_Message' => $Settings['Constant'][
-				      'Max_Length_Exception_Message']));
+			$isDevelopmentServer,
+			$Settings['Constant']['Max_Length_Exception_Message'],
+			$EventManager,
+			$Writer);
 		$ExceptionHandler->register();
 
 		$ErrorHandler = $InstanceManager->build(
 			'\Evoke\Core\Init\Handler\Error',
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
 			      'EventManager'              => $EventManager,
-			      'Writer'                    => $InstanceManager->get(
-				      '\Evoke\Core\Writer\XHTML',
-				      array('XMLWriter' => $InstanceManager->get(
-					            'XMLWriter')))));
+			      'Writer'                    => $Writer));
 		$ErrorHandler->register();
 	}
 
