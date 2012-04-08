@@ -27,7 +27,7 @@ class InstanceManager implements Iface\InstanceManager
 
 	/** Build an object and return it.
 	 *
-	 *  This is the standard way to instantiate objects with the Evoke framework.
+	 *  This is the standard way to instantiate objects using Evoke.
 	 *  Using this method decouples object creation from your code.  This makes
 	 *  it easy to test your code as it is not tightly bound to the objects that
 	 *  it creates.

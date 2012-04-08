@@ -74,8 +74,8 @@ class Response implements \Evoke\Core\Iface\HTTP\Response
 				__METHOD__ . ' headers have already been sent.');
 		}
 
-		/** http_response_code should appear in PHP 5.4, but to keep the
-		 *  framework 5.3 compatible we only use it if it is callable.
+		/** http_response_code should appear in PHP 5.4, but to keep Evoke
+		 *  compatible with PHP 5.3 we only use it if it is callable.
 		 */
 		if (is_callable('http_response_code'))
 		{
