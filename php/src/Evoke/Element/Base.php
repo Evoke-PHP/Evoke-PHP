@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element;
-/** Element - Provide an element container with array access suitable for
- *  an XML Writing Resource that takes the form:
+/** An XML element.Provide an element container with array access suitable for
+ *  a writer:
  *  \verbatim
  *  array(0 => Tag,
  *        1 => Attribs,
@@ -15,49 +15,27 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	protected $attribs;
 
-	/** @property $attribsPos
-	 *  \int The position of the attributes in the element.
-	 */
-	protected $attribsPos;	
-
 	/** @property $el
 	 *  The element data.
 	 */
 	protected $el;
 	
-	/** @property $options
-	 *  \array The default options for the element.
+	/** @property $pos
+	 *  \array The position of the tag, attribs and children in the element.
 	 */
-	protected $options;
-
-	/** @property $optionsPos
-	 *  \int The position of the options in the element.
-	 */
-	protected $optionsPos;
-	
-	/** @property $tagPos
-	 *  \int The position of the tag in the element.
-	 */
-	protected $tagPos;
+	protected $pos;
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Attribs'     => array(),
-		                'Attribs_Pos' => 1,
-		                'Options'     => array('Children' => array(),
-		                                       'Finish'   => true,
-		                                       'Start'    => true,
-		                                       'Text'     => NULL),
-		                'Options_Pos' => 2,
-		                'Tag_Pos'     => 0);
+		$setup += array('Attribs' => array(),
+		                'Pos'     => array('Attribs'  => 1,
+		                                   'Children' => 2,
+		                                   'Tag'      => 0));
 
 		$this->el = array();
 
-		$this->attribs    = $setup['Attribs'];
-		$this->attribsPos = $setup['Attribs_Pos'];
-		$this->options    = $setup['Options'];
-		$this->optionsPos = $setup['Options_Pos'];
-		$this->tagPos     = $setup['Tag_Pos'];
+		$this->attribs = $setup['Attribs'];
+		$this->pos     = $setup['Pos'];
 	}
 
 	/******************/
@@ -69,21 +47,23 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	public function addClass($c)
 	{
-		if (isset($this->el[$this->attribsPos]['class']))
+		$attribsPos = $this->pos['Attribs'];
+		
+		if (isset($this->el[$attribsPos]['class']))
 		{
-			$this->el[$this->attribsPos]['class'] = preg_replace(
+			$this->el[$attribsPos]['class'] = preg_replace(
 				'/(^' . $c . '\s?|\s?' . $c . '\s?|\s?' . $c . '$)/',
 				'',
-				$this->el[$this->attribsPos]['class']) . ' ' . $c;
+				$this->el[$attribsPos]['class']) . ' ' . $c;
 		}
 		else
 		{
-			if (!isset($this->el[$this->attribsPos]))
+			if (!isset($this->el[$attribsPos]))
 			{
-				$this->el[$this->attribsPos] = array();
+				$this->el[$attribsPos] = array();
 			}
 	 
-			$this->el[$this->attribsPos]['class'] = $c;
+			$this->el[$attribsPos]['class'] = $c;
 		}
 	}
 
@@ -93,18 +73,20 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	public function appendAttrib($attrib, $value)
 	{
-		if (isset($this->el[$this->attribsPos][$attrib]))
+		$attribsPos = $this->pos['Attribs'];
+		
+		if (isset($this->el[$attribsPos][$attrib]))
 		{
-			$this->el[$this->attribsPos][$attrib] .= $value;
+			$this->el[$attribsPos][$attrib] .= $value;
 		}
 		else
 		{
-			if (!isset($this->el[$this->attribsPos]))
+			if (!isset($this->el[$attribsPos]))
 			{
-				$this->el[$this->attribsPos] = array();
+				$this->el[$attribsPos] = array();
 			}
 	 
-			$this->el[$this->attribsPos][$attrib] = $value;
+			$this->el[$attribsPos][$attrib] = $value;
 		}
 	}
 
@@ -114,13 +96,17 @@ class Base implements \Evoke\Core\Iface\Element
 	 *  \verbatim
 	 *  0 => Tag
 	 *  1 => Attribs
-	 *  2 => Options
+	 *  2 => Children
 	 *  \endverbatim
 	 *
-	 *  Atrribs and Options data is merged with the Default values from the
-	 *  setup.
+	 *  A Tag is required to be passed in as a string.
 	 *
-	 *  Any data that is not passed in is not set.
+	 *  Atrribs passed in are merged with the default attributes from the
+	 *  construction.
+	 *
+	 *  Children are optional and must be passed in as an array.  Strings should
+	 *  be used for text.  Array elements can provide nested Elements.
+	 *
 	 *  Any data with a key outside of this range is ignored.
 	 *
 	 *  @param element \mixed The element data to set ourselves to must be array
@@ -129,24 +115,37 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	public function set(Array $element)
 	{
-		$this->el = array();
-      
-		if (isset($element[$this->tagPos]))
+		$tagPos      = $this->pos['Tag'];
+		$attribsPos  = $this->pos['Attribs'];
+		$childrenPos = $this->pos['Children'];
+		
+		// Remove the need for isset calls and default the attribs and children
+		// to empty arrays.
+		$element += array($tagPos      => NULL,
+		                  $attribsPos  => array(),
+		                  $childrenPos => array());
+		
+		if (!is_string($element[$tagPos]))
 		{
-			$this->el[$this->tagPos] = $element[$this->tagPos];
+			throw new \DomainException(__METHOD__ . ' Tag must be a string.');
+		}
+		
+		if (!is_array($element[$attribsPos]))
+		{
+			throw new \DomainException(
+				__METHOD__ . ' if attribs are supplied they must be an array');
 		}
 
-		if (isset($element[$this->attribsPos]))
+		if (!is_array($element[$childrenPos]))
 		{
-			$this->el[$this->attribsPos] =
-				array_merge($this->attribs, $element[$this->attribsPos]);
+			throw new \DomainException(
+				__METHOD__ . ' if children are supplied they must be an array');
 		}
 
-		if (isset($element[$this->optionsPos]))
-		{
-			$this->el[$this->optionsPos] =
-				array_merge($this->options, $element[$this->optionsPos]);
-		}
+		$this->el = array(
+			$tagPos      => $element[$tagPos],
+			$attribsPos  => array_merge($this->attribs, $element[$attribsPos]),
+			$childrenPos => $element[$childrenPos]);
 
 		return $this->el;
 	}
