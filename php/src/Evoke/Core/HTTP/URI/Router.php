@@ -16,10 +16,10 @@ class Router implements Iface\HTTP\URI\Router
 	 */
 	protected $Request;
 
-	/** @property $responseBase
-	 *  The base \string for the response class.
+	/** @property $Reponse
+	 *  Response \object
 	 */
-	protected $responseBase;
+	protected $Reponse;
 
 	/** @property $rules
 	 *  \array of rules that the router uses to route.
@@ -27,24 +27,18 @@ class Router implements Iface\HTTP\URI\Router
 	protected $rules;
 
 	/** Create a HTTP URI Router that routes the request to a response.
-	 *  @param Factory \object Factory for creating the response.
-	 *  @param Request \object Request object.
-	 *  @param responseBase \string Base class string for the response.
+	 *  @param Factory  \object Factory for creating the response.
+	 *  @param Request  \object Request object.
+	 *  @param Response \object Response object.
 	 */
-	public function __construct(Iface\Factory $Factory,
-	                            Iface\HTTP\Request $Request,
-	                            $responseBase)
+	public function __construct(Iface\Factory       $Factory,
+	                            Iface\HTTP\Request  $Request,
+	                            Iface\HTTP\Response $Response)
 	{
-		if (!is_string($responseBase))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' responseBase must be a string.');
-		}
-		
-		$this->Factory      = $Factory;
-		$this->Request      = $Request;
-		$this->responseBase = $responseBase;
-		$this->rules        = array();
+		$this->Factory       = $Factory;
+		$this->Request       = $Request;
+		$this->Response      = $Response;
+		$this->rules         = array();
 	}
 	
 	/******************/
@@ -59,23 +53,23 @@ class Router implements Iface\HTTP\URI\Router
 		$this->rules[] = $Rule;
 	}
 
-	/** Create the response object (that responds to the routed URI).
-	 *  \return \object Response
+	/** Create the object that will respond to the routed URI).
+	 *  \return \object The object that will respond (generally a Controller).
 	 */
 	public function route()
 	{
-		// The response starts as the request URI and is refined by the mappers
-		// until it is able to create the correct response object.
-		$response = $this->Request->getURI();
-		$responseParams = array();
+		// The classname starts as the request URI and is refined by the mappers
+		// until it is able to create the correct classname.
+		$classname = $this->Request->getURI();
+		$params = array();
       
 		foreach ($this->rules as $rule)
 		{
-			if ($rule->isMatch($response))
+			if ($rule->isMatch($classname))
 			{
-				// Set the parameters for the response before updating the response.
-				$responseParams += $rule->getParams($response);
-				$response = $rule->getResponse($response);
+				// Set the parameters before updating the classname.
+				$params += $rule->getParams($classname);
+				$classname = $rule->getClassname($classname);
 
 				if ($rule->isAuthoritative())
 				{
@@ -84,20 +78,14 @@ class Router implements Iface\HTTP\URI\Router
 			}
 		}
 
-		// Create the response object.
-		try
-		{
-			return $this->Factory->getResponse($this->responseBase . $response,
-			                                   $responseParams,
-			                                   $this->Factory,
-			                                   $this->Request);
-		}
-		catch (\Exception $e)
-		{
-			throw new \Exception(
-				__METHOD__ . ' unable to create response: ' . $this->responseBase .
-				$response . ' due to: ' . $e->getMessage());
-		}
+		/** An exception will be thrown if an unknown class is atttempted to be
+		 *  built that should be caught at a higher level.
+		 */
+		return $this->Factory->build($classname,
+		                             $params,
+		                             $this->Factory,
+		                             $this->Request,
+		                             $this->Response);
 	}
 }
 // EOF

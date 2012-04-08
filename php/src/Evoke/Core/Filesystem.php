@@ -1,5 +1,10 @@
 <?php
 namespace Evoke\Core;
+
+/**************************************************/
+/** \todo Rewrite this, it is junk at the moment. */
+/**************************************************/
+
 /** File_System Wrapper class to enable exceptions on filesystem actions.
  *  File stream contexts are not dealt with by this wrapper.
  */

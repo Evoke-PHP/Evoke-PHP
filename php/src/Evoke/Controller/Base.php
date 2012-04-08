@@ -22,17 +22,20 @@ abstract class Base
 	protected $Request;
 
 	/** Construct the response.
-	 *  @param params  \array  Parameters for the response.
-	 *  @param Factory \object Factory object.
-	 *  @param Request \object Request object.
+	 *  @param params   \array  Parameters for the response.
+	 *  @param Factory  \object Factory object.
+	 *  @param Request  \object Request object.
+	 *  @param Response \object Response object.
 	 */
-	public function __construct(Array $params,
-	                            Iface\Factory $Factory,
-	                            Iface\HTTP\Request $Request)
+	public function __construct(Array               $params,
+	                            Iface\Factory       $Factory,
+	                            Iface\HTTP\Request  $Request,
+	                            Iface\HTTP\Response $Response)
 	{
-		$this->Factory = $Factory;
-		$this->params  = $params;
-		$this->Request = $Request;
+		$this->Factory  = $Factory;
+		$this->params   = $params;
+		$this->Request  = $Request;
+		$this->Response = $Response;
 	}
 	
 	/******************/
@@ -85,7 +88,7 @@ abstract class Base
 		}
 		
 		$this->Writer = $this->buildWriter($outputFormat);
-		$this->setContentType($contentType);
+		$this->Response->setContentType($contentType);
 
 		// Perform any content agnostic initialization of the reponse.
 		$this->initialize();
@@ -161,7 +164,7 @@ abstract class Base
 	 */
 	protected function initialize()
 	{
-		$this->setResponseCode(200);
+		$this->Response->setResponseCode(200);
 	}
 
 	/** Merge two XHTML setups with the second taking precedence.

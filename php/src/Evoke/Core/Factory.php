@@ -44,6 +44,20 @@ class Factory extends InstanceManager implements Iface\Factory
 	/******************/
 	/* Public Methods */
 	/******************/
+	
+	/** Build a Controller.
+	 *  @param className \string The class name of the controller.
+	 *  @param params    \array Parameters for the response.
+	 *  @param Request   \object The Request object (optional).
+	 */
+	public function buildController(/* String */       $className,
+	                                Array              $params,
+	                                Iface\HTTP\Request $Request=NULL)
+	{
+		$Request = $Request ?: $this->getRequest();
+
+		return $this->build($className, $params, $this, $Request);
+	}
 
 	/** Build a View.
 	 *  @param className \string The class of view to create.
@@ -274,20 +288,9 @@ class Factory extends InstanceManager implements Iface\Factory
 		return $this->get($this->namespace['Core'] . 'HTTP\Request');
 	}
 
-	/** Get a Response object.
-	 *  @param response \string The class of the response (as a string).
-	 *  @param Request  \object The Request object (optional).
-	 *  @param params   \array Parameters for the response.
-	 */
-	public function getResponse($response,
-	                            Array $params,
-	                            Iface\Factory $Factory=NULL,
-	                            Iface\HTTP\Request $Request=NULL)
+	public function getResponse()
 	{
-		$Factory = $Factory ?: $this;
-		$Request = $Request ?: $this->getRequest();
-
-		return $this->build($response, $params, $Factory, $Request);
+		return $this->get($this->namespace['Core'] . 'HTTP\Response');
 	}
 	
 	/// Get the Session object.

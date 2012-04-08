@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core\HTTP\URI\Rule;
 
-/** A rule to strip unwanted characters from a request so that a response can
+/** A rule to strip unwanted characters from a request so that a classname can
  *  be formed.  No parameters are matched by this class.
  */
 class UpperCaseFirst extends Base
@@ -38,25 +38,25 @@ class UpperCaseFirst extends Base
 
 	/** Split the string by the delimiters make the first letter uppercase and
 	 *  then rejoin the string with the delimiters.
-	 *  @return \string The string representing the Response.
+	 *  @return \string The string representing the Classname.
 	 */
-	public function getResponse($uri)
+	public function getClassname($uri)
 	{
-		$response = $uri;
+		$classname = $uri;
 		
 		foreach ($this->delimiters as $delimiter)
 		{
-			$parts = explode($delimiter, $response);
+			$parts = explode($delimiter, $classname);
 
 			foreach ($parts as &$part)
 			{
 				$part = ucfirst($part);
 			}
 
-			$response = implode($delimiter, $parts);
+			$classname = implode($delimiter, $parts);
 		}
 
-		return $response;
+		return $classname;
 	}
 
 	/** Check the uri to see if it matches.

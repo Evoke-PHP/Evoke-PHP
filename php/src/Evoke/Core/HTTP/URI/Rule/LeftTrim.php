@@ -32,11 +32,11 @@ class LeftTrim extends Base
 	/* Public Methods */
 	/******************/
 
-	/** Get the response.
-	 *  @param uri \string The URI to get the response from.
+	/** Get the classname.
+	 *  @param uri \string The URI to get the classname from.
 	 *  @return \string The uri trimmed appropriately.
 	 */
-	public function getResponse($uri)
+	public function getClassname($uri)
 	{
 		return ltrim($uri, $this->characters);
 	}

@@ -1,9 +1,9 @@
 <?php
 namespace Evoke\Core\HTTP\URI\Rule;
 
-/** A rule to map a simple request to a response.
+/** A rule to map a simple request to a classname.
  *  This is for a request that does not have any parameters and only needs to
- *  be mapped to an appropriate Response class.
+ *  be mapped to an appropriate class.
  */
 class SimpleReplace extends Base
 {
@@ -47,11 +47,11 @@ class SimpleReplace extends Base
 	/* Public Methods */
 	/******************/
 
-	/** Get the response.
-	 *  @param uri \string The URI to get the response from.
+	/** Get the classname.
+	 *  @param uri \string The URI to get the classname from.
 	 *  \return \string The uri with the match replaced.
 	 */
-	public function getResponse($uri)
+	public function getClassname($uri)
 	{
 		return preg_replace($this->match, $this->replacement, $uri);
 	}

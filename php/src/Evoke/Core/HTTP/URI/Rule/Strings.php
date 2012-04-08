@@ -1,19 +1,18 @@
 <?php
 namespace Evoke\Core\HTTP\URI\Rule;
 
-/** A rule to change strings from a request so that a response can be formed.
+/** A rule to change strings from a request so that a classname can be formed.
  *  No parameters are matched by this class.
  */
 class Strings extends Base
 {
 	/** @property $subRules
 	 *  \array of string replacements to be performed on the URI to map it to
-	 *  a response.
+	 *  a classname.
 	 */
 	protected $subRules;
 
-	/** Construct the URI to Response rule that uses string replacements to map
-	 *  the URI to the Response class.
+	/** Construct the string replacements rule.
 	 *  @param subRules \array The array of string replacements of the form:
 	 *  \code
 	 *  array('Match'       => 'match_string',
@@ -42,22 +41,22 @@ class Strings extends Base
 	/* Public Methods */
 	/******************/
 
-	/** Get the response.
-	 *  @param uri \string The URI to get the response from.
+	/** Get the classname.
+	 *  @param uri \string The URI to get the classname from.
 	 *  @return \string The uri with the string replacements made.
 	 */
-	public function getResponse($uri)
+	public function getClassname($uri)
 	{
-		$response = $uri;
+		$classname = $uri;
 		
 		foreach ($this->subRules as $subRule)
 		{
-			$response = str_replace($subRule['Match'],
-			                        $subRule['Replacement'],
-			                        $response);
+			$classname = str_replace($subRule['Match'],
+			                         $subRule['Replacement'],
+			                         $classname);
 		}
 
-		return $response;
+		return $classname;
 	}
 	
 	/** Check the uri to see if it matches. Only 1 sub-rule needs to match.
