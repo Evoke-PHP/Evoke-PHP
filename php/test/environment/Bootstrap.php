@@ -10,7 +10,7 @@ class Bootstrap
 		if (php_uname('n') === 'bernie')
 		{
 			$baseDir = '/home/pyoung/Coding/';
-			$evokeDir = $baseDir . 'Evoke-PHP-Framework/php/src/Evoke/';
+			$evokeDir = $baseDir . 'Evoke-PHP/php/src/Evoke/';
 		}
 
 		require_once $evokeDir . 'Core/Iface/InstanceManager.php';
