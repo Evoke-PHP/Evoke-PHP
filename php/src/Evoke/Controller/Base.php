@@ -148,7 +148,7 @@ abstract class Base
 	protected function getXHTMLSetup()
 	{
 		return array('CSS'         => array('/csslib/global.css',
-		                                    'csslib/common.css'),
+		                                    '/csslib/common.css'),
 		             'Description' => 'Description',
 		             'Doc_Type'    => 'HTML5',
 		             'Keywords'    => '',

@@ -4,7 +4,7 @@ namespace Evoke\Core\HTTP\URI\Rule;
 /** A rule to change strings from a request so that a classname can be formed.
  *  No parameters are matched by this class.
  */
-class Strings extends Base
+class StrReplace extends Base
 {
 	/** @property $subRules
 	 *  \array of string replacements to be performed on the URI to map it to
