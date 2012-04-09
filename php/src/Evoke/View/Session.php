@@ -11,25 +11,21 @@ class Session extends Base
 	public function write($data)
 	{
 		$this->Writer->write(
-			array('div',
-			      array('class' => 'Heading'),
-			      array('Text' => 'Session')));
+			array('div', array('class' => 'Heading'), 'Session'));
 
 		$this->Writer->write(
 			array('form',
 			      array('action' => '',
 			            'class'  => 'Clear_Form',
 			            'method' => 'POST'),
-			      array('Children' => array(
-				            array('input',
-				                  array('name'  => 'Clear',
-				                        'type'  => 'submit',
-				                        'value' => 'Clear Session'))))));
-		$this->Writer->write(array('div'));
-		$this->Writer->write(
-			array('p',
-			      array('class' => 'Session_Data'),
-			      array('Text' => var_export($data, true))));
+			      array(array('input',
+			                  array('name'  => 'Clear',
+			                        'type'  => 'submit',
+			                        'value' => 'Clear Session')))));
+
+		$this->Writer->write(array('p',
+		                           array('class' => 'Session_Data'),
+		                           var_export($data, true)));
 	}
 }
 // EOF

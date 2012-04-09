@@ -45,42 +45,21 @@ class Tab_Panel extends \Evoke\Element\Base
 			$contentAttribs['class'] .= $selectedStatus;
 
 			$headingElems[] =
-				$this->buildListItem($tabEntry['Heading'], $headingAttribs);
+				array('li', $headingAttribs, $tabEntry['Heading']);
 			$contentElems[] =
-				$this->buildListItem($tabEntry['Content'], $contentAttribs);
+				array('li', $contentAttribs, $tabEntry['Content']);
 		}
 
 		return parent::set(
 			array('div',
 			      $setup['Attribs'],
-			      array('Children' => array(
-				            array('ul',
-				                  $setup['Heading_List_Attribs'],
-				                  array('Children' => $headingElems)),
-				            array('div',
-				                  $setup['Clear_Attribs']),
-				            array('ul',
-				                  $setup['Content_List_Attribs'],
-				                  array('Children' => $contentElems))))));
-	}
-
-	/*******************/
-	/* Private Methods */
-	/*******************/
-
-	private function buildListItem($entry, $attribs=array())
-	{
-		if (is_string($entry))
-		{
-			return array('li', $attribs, array('Text' => $entry));
-		}
-
-		if (!is_array($entry))
-		{
-			$entry = array($entry);
-		}
-
-		return array('li', $attribs, array('Children' => $entry));
+			      array(array('ul',
+			                  $setup['Heading_List_Attribs'],
+			                  $headingElems),
+			            array('div', $setup['Clear_Attribs']),
+			            array('ul',
+			                  $setup['Content_List_Attribs'],
+			                  $contentElems))));
 	}
 }
 // EOF

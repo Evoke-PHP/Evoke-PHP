@@ -2,23 +2,23 @@
 namespace Evoke\Element\Control\Record_List;
 
 /// Element to display a list of records from a table.
-class Table extends \Base
+class Table extends Base
 { 
 	public function __construct(Array $setup)
 	{
-		$setup +=	array('Data'         => NULL,
-			      'Table_Info'   => NULL);
+		$setup += array('Data'       => NULL,
+		                'Table_Info' => NULL);
 
 		if (!$this->setup['Table_Info'] instanceof \Evoke\Core\DB\Table\Info)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires TableInfo');
+				__METHOD__ . ' requires Table_Info');
 		}
 
 		// Set specific fields in the setup for a table.
-		$setup['Fields'] = $setup['Table_Info']->getFields();
+		$setup['Fields']       = $setup['Table_Info']->getFields();
 		$setup['Primary_Keys'] = $setup['Table_Info']->getPrimaryKeys();
-		$setup['Table_Name'] = $setup['Table_Info']->getTableName();
+		$setup['Table_Name']   = $setup['Table_Info']->getTableName();
 
 		if (!isset($setup['Attribs']))
 		{

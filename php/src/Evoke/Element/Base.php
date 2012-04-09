@@ -90,7 +90,22 @@ class Base implements \Evoke\Core\Iface\Element
 		}
 	}
 
-	/** Set the element from the array values passed in for the element.  The
+	/** Set the element from the array values passed in for the element and
+	 *  return the representation in a plain array.  A value must be returned so
+	 *  that the Element object can be re-used to build more Elements.
+	 *
+	 *  This allows it to be used in a template like this:
+	 *  \code
+	 *  array('div',
+	 *        array('class' => 'example'),
+	 *        array($Element->set($val1),
+	 *              $Element->set($val2)));
+	 *  \endcode
+	 *
+	 *  The Element object was set twice, if it was set before the code val2
+	 *  would appear twice, because the object would have been modified.
+	 *
+	 *  @param element \array The element that we are setting ourselves to.
 	 *  element should be passed in as an array with the numerical keys
 	 *  corresponding to the desired element data.  By default this is:
 	 *  \verbatim
@@ -104,8 +119,10 @@ class Base implements \Evoke\Core\Iface\Element
 	 *  Atrribs passed in are merged with the default attributes from the
 	 *  construction.
 	 *
-	 *  Children are optional and must be passed in as an array.  Strings should
-	 *  be used for text.  Array elements can provide nested Elements.
+	 *  Children are optional.  A single text element child can be passed as a
+	 *  string.  All other children must be passed using an array.  Within the
+	 *  array Strings are used for text elements.  All other items in the array
+	 *  must be array accessible (such as an Element object or plain array).
 	 *
 	 *  Any data with a key outside of this range is ignored.
 	 *
@@ -115,37 +132,40 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	public function set(Array $element)
 	{
-		$tagPos      = $this->pos['Tag'];
-		$attribsPos  = $this->pos['Attribs'];
-		$childrenPos = $this->pos['Children'];
-		
 		// Remove the need for isset calls and default the attribs and children
 		// to empty arrays.
-		$element += array($tagPos      => NULL,
-		                  $attribsPos  => array(),
-		                  $childrenPos => array());
+		$element += array($this->pos['Tag']      => NULL,
+		                  $this->pos['Attribs']  => array(),
+		                  $this->pos['Children'] => array());
 		
-		if (!is_string($element[$tagPos]))
+		if (!is_string($element[$this->pos['Tag']]))
 		{
 			throw new \DomainException(__METHOD__ . ' Tag must be a string.');
 		}
 		
-		if (!is_array($element[$attribsPos]))
+		if (!is_array($element[$this->pos['Attribs']]))
 		{
 			throw new \DomainException(
 				__METHOD__ . ' if attribs are supplied they must be an array');
 		}
 
-		if (!is_array($element[$childrenPos]))
+		if (is_string($element[$this->pos['Children']]))
+		{
+			$element[$this->pos['Children']] =
+				array($element[$this->pos['Children']]);
+		}
+		elseif (!is_array($element[$this->pos['Children']]))
 		{
 			throw new \DomainException(
-				__METHOD__ . ' if children are supplied they must be an array');
+				__METHOD__ . ' children must be supplied as an array or ' .
+				'string (for a single child)');
 		}
 
 		$this->el = array(
-			$tagPos      => $element[$tagPos],
-			$attribsPos  => array_merge($this->attribs, $element[$attribsPos]),
-			$childrenPos => $element[$childrenPos]);
+			$this->pos['Tag']      => $element[$this->pos['Tag']],
+			$this->pos['Attribs']  => array_merge(
+				$this->attribs, $element[$this->pos['Attribs']]),
+			$this->pos['Children'] => $element[$this->pos['Children']]);
 
 		return $this->el;
 	}

@@ -49,11 +49,9 @@ class EntryDialog extends Entry
 			      'name'  => $this->tableName . '_Cancel',
 			      'value' => $this->setup['Translator']->get('Cancel')));
       
-		$this->addElement(
-			array(
-				'div',
-				$this->submitButtonAttribs,
-				array('Children' => $submitButtons)));
+		$this->addElement(array('div',
+		                        $this->submitButtonAttribs,
+		                        $submitButtons));
 	}
 }
 // EOF

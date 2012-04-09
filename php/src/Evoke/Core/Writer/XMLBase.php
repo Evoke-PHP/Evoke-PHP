@@ -4,25 +4,16 @@ namespace Evoke\Core\Writer;
 /// Base class for writing XML elements.
 abstract class XMLBase implements \Evoke\Core\Iface\Writer
 {
-	/** @property $attribsPos
-	 *  \int The position of the attributes in the XML arrays being written.
-	 */
-	protected $attribsPos;
 
 	/** @property $language
 	 *  \string The language of the XML being written.
 	 */
 	protected $language;
-
-	/** @property $optionsPos
-	 *  \int The position of the options in the XML arrays being written.
+	
+	/** @property $pos
+	 *  \array The position of the tag, attribs and children in the element.
 	 */
-	protected $optionsPos;
-
-	/** @property $tagPos
-	 *  \int The position of the tag in the XML arrays being written.
-	 */
-	protected $tagPos;
+	protected $pos;
 
 	/** @property $XMLWriter
 	 *  The XML Writer \object
@@ -34,12 +25,12 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 	 */
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Attribs_Pos'   => 1,
-		                'Indent'        => true,
+		$setup += array('Indent'        => true,
 		                'Indent_String' => '   ',
 		                'Language'      => 'EN',
-		                'Options_Pos'   => 2,
-		                'Tag_Pos'       => 0,
+		                'Pos'           => array('Attribs'  => 1,
+		                                         'Children' => 2,
+		                                         'Tag'      => 0),
 		                'XMLWriter'     => NULL);
 
 		if (!$setup['XMLWriter'] instanceof \XMLWriter)
@@ -48,10 +39,8 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 				__METHOD__ . ' requires XMLWriter');
 		}
 		
-		$this->attribsPos = $setup['Attribs_Pos'];
 		$this->language   = $setup['Language'];
-		$this->optionsPos = $setup['Options_Pos'];
-		$this->tagPos     = $setup['Tag_Pos'];
+		$this->pos        = $setup['Pos'];
 		$this->XMLWriter  = $setup['XMLWriter'];
 
 		$this->XMLWriter->openMemory();
@@ -92,126 +81,81 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 
 	/** Write XML elements into the memory buffer.
 	 *  @param xml \mixed Array accessible value for the xml to be written of the
-	 *  form: array($tag, $attributes, $options)
+	 *  form: array($tag, $attributes, $children)
 	 *
 	 *  An example of this is below with the default values that are used for the
 	 *  options array. Attributes and options are optional.
 	 *  \verbatim
 	 *  array(0 => tag,
 	 *        1 => array('attrib_1' => '1', 'attrib_2' => '2'),
-	 *        2 => array('Children' => array(), // Child elements within the tag.
-	 *                   'Finish'   => true,    // Whether to end the tag.
-	 *                   'Start'    => true,    // Whether to start the tag.
-	 *                   'Text'     => NULL),   // Text within the tag.
+	 *        2 => array($child, 'text', $anotherChild)
 	 *       )
 	 *  \endverbatim
 	 */
 	public function write($xml)
 	{
-		if (!isset($xml[$this->tagPos]))
+		if (empty($xml[$this->pos['Tag']]) ||
+		    !is_string($xml[$this->pos['Tag']]))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' Bad element: ' . var_export($xml, true));
+				__METHOD__ . ' bad tag: ' . var_export($xml, true));
 		}
 
-		$tag = $xml[$this->tagPos];
-		$attribs = array();
-		$options = array('Children' => array(),
-		                 'Finish'   => true,  
-		                 'Start'    => true,
-		                 'Text'     => NULL);
-
-		if (isset($xml[$this->attribsPos]))
+		if (isset($xml[$this->pos['Attribs']]) &&
+		    !is_array($xml[$this->pos['Attribs']]))
 		{
-			$attribs = $xml[$this->attribsPos];
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' bad attributes: ' . var_export($xml, true));
 		}
 
-		if (isset($xml[$this->optionsPos]))
+		if (isset($xml[$this->pos['Children']]))
 		{
-			$options = array_merge($options, $xml[$this->optionsPos]);
+			if (is_string($xml[$this->pos['Children']]))
+			{
+				$xml[$this->pos['Children']]
+					= array($xml[$this->pos['Children']]);
+			}
+			elseif (!is_array($xml[$this->pos['Children']]))
+			{
+				throw new \InvalidArgumentException(
+					__METHOD__ . ' bad children: ' . var_export($xml, true));
+			}
 		}
-      
-		if (!empty($tag) && $options['Start'])
-		{
-			$this->XMLWriter->startElement($tag);
-		}
+			
+		$tag      = $xml[$this->pos['Tag']];
+		$attribs  = isset($xml[$this->pos['Attribs']]) ?
+			$xml[$this->pos['Attribs']] : array();
+		$children = isset($xml[$this->pos['Children']]) ?
+			$xml[$this->pos['Children']] : array();
+
+		$this->XMLWriter->startElement($tag);
 
 		foreach ($attribs as $attrib => $value)
 		{
 			$this->XMLWriter->writeAttribute($attrib, $value);
 		}
 
-		if (isset($options['Text']))
+		foreach ($children as $child)
 		{
-			$text = (string)($options['Text']);
-
-			// If we have children insert a newline to ensure correct indentation.
-			if (!empty($options['Children']))
+			if (is_string($child))
 			{
-				$text .= "\n";
-			}
-	 
-			$this->XMLWriter->text($text);
-		}
-
-		if (!is_array($options['Children']))
-		{
-			throw new \RuntimeException(
-				__METHOD__ . ' Children must be passed as an array not: ' .
-				var_export($options['Children'], true));
-		}
-      
-		foreach ($options['Children'] as $key => $child)
-		{
-			try
-			{
-				$this->write($child); // Recursively write children.
-			}
-			catch (\Exception $e)
-			{
-				$msg = 'Element with Tag: ' . var_export($tag, true);
-
-				if (!empty($attribs))
-				{
-					$msg .= ' Attribs: ' . var_export($attribs, true);
-				}
-
-				if (!empty($options['Text']))
-				{
-					$msg .= ' Text: ' . var_export($options['Text'], true);
-				}
-
-				$msg .= ' contains invalid child at index ' .
-					var_export($key, true) . ': ';
-
-				if (is_object($child))
-				{
-					$msg .= get_class($child);
-				}
-				else
-				{
-					$msg .= var_export($child, true);
-				}
-
-				throw new \RuntimeException(__METHOD__ . $msg, 0, $e);
-			}
-		}
-
-		if (!empty($tag) && $options['Finish'])
-		{
-			$tagStr = strtoupper($tag);
-
-			// Some elements should always have a full end tag <div></div> rather
-			// than <div/>
-			if ($tagStr === 'DIV' || $tagStr === 'LINK' || $tagStr === 'SCRIPT' ||
-			    $tagStr === 'TEXTAREA')
-			{
-				$this->XMLWriter->fullEndElement();
+				$this->XMLWriter->text($child);
 			}
 			else
 			{
-				$this->XMLWriter->endElement();
+				$this->write($child);
 			}
+		}
+
+		// Some elements should always have a full end tag <div></div> rather
+		// than <div/>
+		if (preg_match('(^(div|link|script|textarea)$)i', $tag))
+		{
+			$this->XMLWriter->fullEndElement();
+		}
+		else
+		{
+			$this->XMLWriter->endElement();
 		}
 	}
 

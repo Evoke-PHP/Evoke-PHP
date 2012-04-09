@@ -87,11 +87,9 @@ class Checkboxes extends \Evoke\Element\Base
 			return parent::set(
 				array('div',
 				      array('class' => 'Group_Container'),
-				      array('Children' => array(
-					            array(
-						            'div',
-						            array('class' => 'No_Elements'),
-						            array('Text' => $this->emptyText))))));
+				      array(array('div',
+				                  array('class' => 'No_Elements'),
+				                  $this->emptyText))));
 		}
 
 		$checkboxElems = array();
@@ -119,23 +117,20 @@ class Checkboxes extends \Evoke\Element\Base
 			$checkboxElems[] = array(
 				'div',
 				array('class' => 'Encasing'),
-				array('Children' => array(
-					      array(
-						      'label',
-						      array('for' => $id),
-						      array('Text' => $record[$this->textField])),
-					      array(
-						      'input',
-						      array_merge(array('type' => 'checkbox',
-						                        'id'   => $id,
-						                        'name' => $id),
-						                  $isSelected)))));
+				array(array('label',
+				            array('for' => $id),
+				            $record[$this->textField]),
+				      array('input',
+				            array_merge(array('type' => 'checkbox',
+				                              'id'   => $id,
+				                              'name' => $id),
+				                        $isSelected)))));
 		}
       
 		// Set the fieldset to make the category selections from.
 		return parent::set(array('fieldset',
 		                         $this->fieldsetAttribs,
-		                         array('Children' => $checkboxElems)));
+		                         $checkboxElems));
 	}
 }
 // EOF

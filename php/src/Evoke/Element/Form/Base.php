@@ -32,9 +32,7 @@ abstract class Base extends \Evoke\Element\Base
 
 		$this->buildFormChildren();
 
-		parent::__set(array('form',
-		                    array(),
-		                    array('Children' => $this->elements)));
+		parent::__set(array('form', array(), $this->elements));
 	}
 
 	/*********************/
@@ -61,10 +59,9 @@ abstract class Base extends \Evoke\Element\Base
 	/// Build the buttons that are contained in the form.
 	protected function buildFormButtons()
 	{
-		$this->addElement(
-			array('div',
-			      $this->submitButtonAttribs,
-			      array('Children' => $this->submitButtons)));
+		$this->addElement(array('div',
+		                        $this->submitButtonAttribs,
+		                        $this->submitButtons));
 	}
 
 	/// Build all of the elements that make up the form.
@@ -98,9 +95,7 @@ abstract class Base extends \Evoke\Element\Base
 			return $rowElems;
 		}
 
-		return array($this->encasingTag,
-		             $this->encasingAttribs,
-		             array('Children' => $rowElems));
+		return array($this->encasingTag, $this->encasingAttribs, $rowElems);
 	}
 }
 // EOF

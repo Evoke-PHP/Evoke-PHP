@@ -91,11 +91,9 @@ class Entry extends Base
 				if (isset($this->groupHeadings[$groupName]))
 				{
 					$groupElements = array(
-						array(
-							'h2',
-							array('class' => $this->groupHeadingClass),
-							array('Text' => $this->groupHeadings[$groupName])
-							));
+						array('h2',
+						      array('class' => $this->groupHeadingClass),
+						      $this->groupHeadings[$groupName]));
 				}
 	    
 				foreach($fieldDescription as $field)
@@ -118,11 +116,10 @@ class Entry extends Base
 				}
 	    
 				$this->addElement(
-					array(
-						'div',
-						array('class' => $groupClass,
-						      'id' => $groupName),
-						array('Children' => $groupElements)));
+					array('div',
+					      array('class' => $groupClass,
+					            'id' => $groupName),
+					      $groupElements));
 			}
 			elseif (!in_array($fieldDescription, $this->ignoredFields))
 			{
@@ -170,9 +167,7 @@ class Entry extends Base
 			}
 		}
       
-		return array($this->encasingTag,
-		             $encasingAttribs,
-		             array('Children' => $rowElems));
+		return array($this->encasingTag, $encasingAttribs, $rowElems);
 	}
 
 	protected function getFieldSetup($field)

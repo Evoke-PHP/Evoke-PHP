@@ -47,15 +47,14 @@ class Base extends \Evoke\Element\Base
 
 		if (!empty($data['Buttons']))
 		{
-			$dialogItems[] =
-				array('div',
-				      $this->buttonsAttribs,
-				      array('Children' => $data['Buttons']));
+			$dialogItems[] = array('div',
+			                       $this->buttonsAttribs,
+			                       $data['Buttons']);
 		}
       
 		parent::__construct(array('form',
 		                          $data['Form_Attribs'],
-		                          array('Children' => $dialogItems)));
+		                          $dialogItems));
 	}
 }
 // EOF

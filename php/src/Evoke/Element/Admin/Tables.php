@@ -28,30 +28,28 @@ class Tables extends \Evoke\Element\Base
 				      array('class' => 'Table_Button',
 				            'href' => '/admin/' . strtolower($name) . '.php?' .
 				            $setup['Translator']->getLanguageHTTPQuery()),
-				      array('Text' => $setup['Translator']->get(
-					            'Table_' . $name, __FILE__))));
+				      $setup['Translator']->get('Table_' . $name, __FILE__))));
 	 
 			$description = array(
 				array('div',
 				      array('class' => 'Table_Description'),
-				      array('Text' => $setup['Translator']->get(
-					            'Table_' . $name . '_Description', __FILE__))));
+				      $setup['Translator']->get(
+					      'Table_' . $name . '_Description', __FILE__)));
    
 			$adminTableEntries[] =
 				array('div',
 				      array('class' => 'Admin_Table_Entry'),
-				      array('Children' => array(
-					            array('div',
-					                  array('class' => 'Table_Button_Div'),
-					                  array('Children' => $button)),
-					            array('div',
-					                  array('class' => 'Table_Description_Div'),
-					                  array('Children' => $description)))));
+				      array(array('div',
+				                  array('class' => 'Table_Button_Div'),
+				                  $button),
+				            array('div',
+				                  array('class' => 'Table_Description_Div'),
+				                  $description)));
 		}
       
 		parent::__construct(array('div',
 		                          array('class' => 'Admin_Tables'),
-		                          array('Children' => $adminTableEntries)));
+		                          $adminTableEntries));
 	}
 }
 // EOF

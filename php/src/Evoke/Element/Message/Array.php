@@ -17,10 +17,9 @@ class Array extends Element
 
 	public function set(Array $data)
 	{
-		return parent::set(
-			array('div',
-			      $this->containerAttribs,
-			      array('Children' => $this->buildElems($data))));
+		return parent::set(array('div',
+		                         $this->containerAttribs,
+		                         $this->buildElems($data)));
 	}
    
 	/*******************/
@@ -47,18 +46,17 @@ class Array extends Element
 					'ul',
 					array('class' => $this->elementClass . ' Level_' .
 					      $level),
-					array('Text' => $msg['Title'],
-					      'Children' => $this->buildElems(
-						      $msg['Message'], $childLevel)));
+					array(array_unshift($msg['Title'],
+					                    $this->buildElems(
+						                    $msg['Message'], $childLevel))));
 			}
 		} 
 		else
 		{
 			$msgElems[] = array(
 				'li',
-				array('class' => $this->elementClass . ' Leaf Level_' .
-				      $level),
-				array('Text' => $messageArray));
+				array('class' => $this->elementClass . ' Leaf Level_' . $level),
+				$messageArray);
 		}
 
 		return $msgElems;

@@ -26,17 +26,15 @@ class RequiredField extends \Evoke\Element\Base
 	public function set(Array $data)
 	{
 		return parent::set(
-			array(
-				'div',
-				array('class' => 'Required_Field_Instructions'),
-				array('Children' => array(
-					      array('span',
-					            array('class' => 'Required_Field_Instructions_Text'),
-					            array('Text' => $this->Translator->get(
-						                  'Required_Field_Instructions'))),
-					      array('span',
-					            array('class' => 'Required'),
-					            array('Text' => '*')))));		     
+			array('div',
+			      array('class' => 'Required_Field_Instructions'),
+			      array(array('span',
+			                  array('class' => 'Required_Field_Instructions_Text'),
+			                  $this->Translator->get(
+				                  'Required_Field_Instructions')),
+			            array('span',
+			                  array('class' => 'Required'),
+			                  '*'))));
 			}
 	}
 	// EOF

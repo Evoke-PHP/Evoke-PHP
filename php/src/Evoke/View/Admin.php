@@ -141,13 +141,12 @@ class Admin extends Base
 			      array('class'  => 'Create_New',
 			            'action' => '',
 			            'method' => 'post'),
-			      array('Children' => array(
-				            array('input',
-				                  array('class' => 'Create_New Button Good',
-				                        'name'  => 'Create_New',
-				                        'type'  => 'submit',
-				                        'value' => $this->Translator->get(
-					                        'Create_New')))))));
+			      array(array('input',
+			                  array('class' => 'Create_New Button Good',
+			                        'name'  => 'Create_New',
+			                        'type'  => 'submit',
+			                        'value' => $this->Translator->get(
+				                        'Create_New')))))));
 	}
 
 	/// Write an entry form for the current record.
@@ -216,8 +215,7 @@ class Admin extends Base
 			$this->Writer->write(
 				array('h1',
 				      array('class' => 'Admin_Heading'),
-				      array('Text' => $this->Translator->get(
-					            $this->pageName))));
+				      $this->Translator->get($this->pageName)));
 		}
 	}
 

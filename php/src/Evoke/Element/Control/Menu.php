@@ -36,7 +36,7 @@ class Menu extends \Evoke\Element\Base
 		return parent::set(
 			array('ul',
 			      array(),
-			      array('Children' => $this->buildMenu($menuItems))));
+			      $this->buildMenu($menuItems)));
 	}
    
 	/*******************/
@@ -55,26 +55,22 @@ class Menu extends \Evoke\Element\Base
 				$menu[] = array(
 					'li',
 					array('class' => 'Level_' . $level),
-					array(
-						'Children' => array(
-							array('a',
-							      array('href' => $menuItem['Href']),
-							      array('Text' => $menuItem['Text_' . $lang])),
-							array('ul',
-							      array(),
-							      array('Children' => $this->buildMenu(
-								            $menuItem['Children'], ++$level))))));
+					array(array('a',
+					            array('href' => $menuItem['Href']),
+					            $menuItem['Text_' . $lang]),
+					      array('ul',
+					            array(),
+					            $this->buildMenu(
+						            $menuItem['Children'], ++$level))));
 			}
 			else
 			{
 				$menu[] = array(
 					'li',
 					array('class' => 'Level_' . $level),
-					array(
-						'Children' => array(
-							array('a',
-							      array('href' => $menuItem['Href']),
-							      array('Text' => $menuItem['Text_' . $lang])))));
+					array(array('a',
+					            array('href' => $menuItem['Href']),
+					            $menuItem['Text_' . $lang])));
 			}
 		}
       

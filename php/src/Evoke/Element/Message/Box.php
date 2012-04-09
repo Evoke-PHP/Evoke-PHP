@@ -32,13 +32,12 @@ class Box extends \Evoke\Element\Base
 		return parent::set(
 			array('div',
 			      array(),
-			      array('Children' => array(
-				            array('div',
-				                  array('class' => 'Title'),
-				                  array('Text' => $message['Title'])),
-				            array('div',
-				                  array('class' => 'Description'),
-				                  array('Text' => $message['Description']))))));
+			      array(array('div',
+			                  array('class' => 'Title'),
+			                  $message['Title']),
+			            array('div',
+			                  array('class' => 'Description'),
+			                  $message['Description']))));
 	}
 }
 // EOF

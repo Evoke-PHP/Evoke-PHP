@@ -47,38 +47,29 @@ class Upload extends Base
 		$uploadTitle = array(
 			'div',
 			array('class' => 'Upload_Title'),
-			array('Children' =>
-			      array(
-				      array(
-					      'span',
-					      array('class' => 'Upload_Title_Text'),
-					      array('Text' => $this->uploadSetup['Title_Text'])),
-				      array(
-					      'span',
-					      array('class' => 'Upload_Title_Warning'),
-					      array('Text' => $this->uploadSetup['Title_Warning'])))));
+			array(array('span',
+			            array('class' => 'Upload_Title_Text'),
+			            $this->uploadSetup['Title_Text']),
+			      array('span',
+			            array('class' => 'Upload_Title_Warning'),
+			            $this->uploadSetup['Title_Warning'])));
 
 		$uploadInput = array(
 			'div',
 			array('class' => 'Upload_Input'),
-			array('Children' =>
-			      array(
-				      array(
-					      'input',
-					      array('type' => 'file',
-					            'id'   => $this->uploadSetup['Upload_ID'],
-					            'name' => $this->uploadSetup['Upload_File'],
-					            'size' => $this->uploadSetup['Upload_Field_Size'])),
-				      array(
-					      'input',
-					      array('type' => 'submit',
-					            'value' => $this->uploadSetup['Upload_Button'])))));
+			array(array('input',
+			            array('type' => 'file',
+			                  'id'   => $this->uploadSetup['Upload_ID'],
+			                  'name' => $this->uploadSetup['Upload_File'],
+			                  'size' => $this->uploadSetup['Upload_Field_Size'])),
+			      array('input',
+			            array('type' => 'submit',
+			                  'value' => $this->uploadSetup['Upload_Button']))));
 
 		$upload = array(
 			'div',
 			array('class' => 'Form_Upload'),
-			array('Children' =>
-			      array($uploadTitle, $uploadInput)));
+			array($uploadTitle, $uploadInput));
 
 		$this->addElement($upload);
 	}

@@ -43,20 +43,18 @@ class Dialog extends Base
       
 		if (!empty($this->headingText))
 		{
-			$headingChildren[] = array(
-				'div',
-				$this->headingTextAttribs,
-				array('Text' => $this->headingText));
+			$headingChildren[] = array('div',
+			                           $this->headingTextAttribs,
+			                           $this->headingText);
 		}
 
-		$headingChildren[] = array(
-			'div',
-			$this->headingElementsAttribs,
-			array('Children' => $this->headingElements));
+		$headingChildren[] = array('div',
+		                           $this->headingElementsAttribs,
+		                           $this->headingElements);
       
 		$this->addElement(array('div',
 		                        $this->headingAttribs,
-		                        array('Children' => $headingChildren)));
+		                        $headingChildren));
 	}
 
 	/// Build the content.
@@ -66,21 +64,18 @@ class Dialog extends Base
 
 		if (!empty($this->messageText))
 		{
-			$messageChildren[] = array(
-				'div',
-				$this->messageTextAttribs,
-				array('Text' => $this->messageText));
+			$messageChildren[] = array('div',
+			                           $this->messageTextAttribs,
+			                           $this->messageText);
 		}
 
-		$messageChildren[] = array(
-			'div',
-			$this->messageElementsAttribs,
-			array('Children' => $this->messageElements));
-      
+		$messageChildren[] = array('div',
+		                           $this->messageElementsAttribs,
+		                           $this->messageElements);
       
 		$this->addElement(array('div',
 		                        $this->messageAttribs,
-		                        array('Children' => $messageChildren)));
+		                        $messageChildren));
 	}
 }
 // EOF

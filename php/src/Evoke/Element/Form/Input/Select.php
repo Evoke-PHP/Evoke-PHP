@@ -114,14 +114,10 @@ class Select extends \Evoke\Element\Base
 			}
 	 
 			$optionElements[] =
-				array('option',
-				      $optionAttribs,
-				      array('Text' => $record[$this->textField]));
+				array('option', $optionAttribs, $record[$this->textField]);
 		}
 
-		return parent::set(array('select',
-		                         $this->attribs,
-		                         array('Children' => $optionElements)));
+		return parent::set(array('select', $this->attribs, $optionElements));
 	}
 }
 // EOF

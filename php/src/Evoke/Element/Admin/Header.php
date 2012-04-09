@@ -52,22 +52,19 @@ class Header extends \Evoke\Element\Base
 		return parent::set(
 			array('div',
 			      array('class' => 'Admin_Header'),
-			      array('Children' => array(		     
-				            array(
-					            'a',
-					            array('class' => 'Admin_Home',
-					                  'href' => '/admin/index.php?' .
-					                  $this->Translator->getLanguageHTTPQuery()),
-					            array(
-						            'Children' => array(
-							            array('img',
-							                  array('src' => '/images/admin_home.png',
-							                        'alt' => 'Home')),
-							            array('span',
-							                  array(),
-							                  array('Text' => $this->Translator->get(
-								                        'Admin_Home')))))),
-				            $this->ElementLanguages->set($data)))));
+			      array(array('a',
+			                  array('class' => 'Admin_Home',
+			                        'href' => '/admin/index.php?' .
+			                        $this->Translator->getLanguageHTTPQuery()),
+			                  array(array(
+				                        'img',
+				                        array('src' => '/images/admin_home.png',
+				                              'alt' => 'Home')),
+			                        array('span',
+			                              array(),
+			                              $this->Translator->get(
+				                              'Admin_Home')))),
+			            $this->ElementLanguages->set($data))));
 	}
 }
 // EOF

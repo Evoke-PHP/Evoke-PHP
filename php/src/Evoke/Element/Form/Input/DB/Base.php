@@ -137,7 +137,7 @@ class Base extends \Evoke\Element\Base
 		
 		return parent::set(array($this->setup['Tag'],
 		                         array(),
-		                         array('Children' => $this->getElements())));
+		                         $this->getElements()));
 	}
    
 	/*********************/
@@ -180,7 +180,7 @@ class Base extends \Evoke\Element\Base
 			$text = $field;
 		}
 
-		return array($tag, $attribs, array('Text' => $text));
+		return array($tag, $attribs, $text);
 	}
 
 	/// Build the required indication.
@@ -189,15 +189,15 @@ class Base extends \Evoke\Element\Base
 		if ($required)
 		{
 			$indicationAttribs = array('class' => 'Required');
-			$indicationOptions = array('Text' => '*');
+			$indicationText = array('Text' => '*');
 		}
 		else
 		{
 			$indicationAttribs = array('class' => 'Optional');
-			$indicationOptions = array('Text' => '');
+			$indicationText = array('Text' => '');
 		}
       
-		return array('span', $indicationAttribs, $indicationOptions);
+		return array('span', $indicationAttribs, $indicationText);
 	}
 
 	// Get the input elements for the field
@@ -315,7 +315,7 @@ class Base extends \Evoke\Element\Base
 			                                   'rows' => $textAreaLines,
 			                                   'cols' => 50),
 			                             $attribs),
-			                 array('Text' => $value));
+			                 $value);
 			break;
 
 		case('BOOL'):
@@ -402,13 +402,13 @@ class Base extends \Evoke\Element\Base
 				$optionElements[] =
 					array('option',
 					      array_merge(array('value' => $option), $selectedArr),
-					      array('Text' => $option));
+					      $option);
 			}
 
 			$elems[] = array(
 				'select',
 				array_merge(array('name' => $field), $attribs),
-				array('Children' => $optionElements));
+				$optionElements);
 			break;
 
 		case('SET'):
@@ -422,9 +422,8 @@ class Base extends \Evoke\Element\Base
 					$checkedArr = array('checked' => 'checked');
 				}
 
-				$checkboxElements[] = array('label',
-				                            array('for' => $check),
-				                            array('Text' => $check));
+				$checkboxElements[] =
+					array('label', array('for' => $check), $check);
 	    
 				$checkboxElements[] =
 					array('input',
@@ -434,9 +433,7 @@ class Base extends \Evoke\Element\Base
 					                  $checkedArr));
 			}
 
-			$elems[] = array('fieldset',
-			                 $attribs,
-			                 array('Children' => $checkboxElements));
+			$elems[] = array('fieldset', $attribs, $checkboxElements);
 			break;
 
 		default:

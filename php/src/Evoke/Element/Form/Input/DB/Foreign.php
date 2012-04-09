@@ -44,8 +44,7 @@ class Foreign extends Base
 			$elems[] = array(
 				'span',
 				array('class' => 'Empty_Foreign_Data'),
-				array('Text' => $this->setup['Translator']->get(
-					      'No_Foreign_Table_Data')));
+				$this->setup['Translator']->get('No_Foreign_Table_Data'));
 
 			return $elems;
 		}
@@ -102,10 +101,9 @@ class Foreign extends Base
 			$this->buildLabel($field),
 			$this->buildRequiredIndication(
 				$this->foreignSelector['Required']),
-			array(
-				'select',
-				array_merge($attribArr, array('name' => $field)),
-				array('Children' => $optionElements)));
+			array('select',
+			      array_merge($attribArr, array('name' => $field)),
+			      $optionElements));
 	}
 }
 // EOF

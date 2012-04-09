@@ -149,10 +149,9 @@ class Element_Record_List extends Element
 				$setup['Heading_Setup']);
 		}
       
-		parent::__construct(
-			array('div',
-			      $this->setup['Attribs'],
-			      array('Children' => $this->buildRecordListElems())));
+		parent::__construct(array('div',
+		                          $this->setup['Attribs'],
+		                          $this->buildRecordListElems()));
 	}
 
 	/*********************/
@@ -198,10 +197,9 @@ class Element_Record_List extends Element
 	{
 		if (empty($this->data))
 		{
-			$rowElems = array(
-				array('div',
-				      $this->rowAttribs,
-				      array('Children' => array($this->buildEmptyData()))));
+			$rowElems = array(array('div',
+			                        $this->rowAttribs,
+			                        $this->buildEmptyData()));
 		}
 		else
 		{
@@ -212,15 +210,13 @@ class Element_Record_List extends Element
 				$rowElems[] = array(
 					'div',
 					$this->rowAttribs,
-					array('Children' => array(
-						      $this->buildRowData($fields, $row, $rowData, $headings),
-						      $this->buildRowButtons($row, $rowData))));
+					array($this->buildRowData(
+						      $fields, $row, $rowData, $headings),
+					      $this->buildRowButtons($row, $rowData)));
 			}
 		}
 
-		return array('div',
-		             $this->contentAttribs,
-		             array('Children' => $rowElems));
+		return array('div', $this->contentAttribs, $rowElems);
 	}
 
 	/** Build the element for an empty record list.
@@ -229,10 +225,9 @@ class Element_Record_List extends Element
 	 */
 	protected function buildEmptyData()
 	{
-		return array(
-			'div',
-			$this->emptyDataAttribs,
-			array('Text' => $this->setup['Translator']->get('No_Records_Found')));
+		return array('div',
+		             $this->emptyDataAttribs,
+		             $this->setup['Translator']->get('No_Records_Found'));
 	}
    
 	/** Build the heading row element.
@@ -241,18 +236,14 @@ class Element_Record_List extends Element
 	 */
 	protected function buildHeadingRow($headings)
 	{
-		return array(
-			'div',
-			$this->headingSetup['Row_Attribs'],
-			array('Children' => array(
-				      array(
-					      'div',
-					      $this->dataAttribs,
-					      array('Children' => $headings)),
-				      array(
-					      'div',
-					      $this->headingSetup['Buttons_Attribs'],
-					      array('Children' => $this->getHeadingButtons())))));
+		return array('div',
+		             $this->headingSetup['Row_Attribs'],
+		             array(array('div',
+		                         $this->dataAttribs,
+		                         $headings),
+		                   array('div',
+		                         $this->headingSetup['Buttons_Attribs'],
+		                         $this->getHeadingButtons())));
 	}
 
 	/** Build the element holding the buttons in a row.
@@ -283,7 +274,7 @@ class Element_Record_List extends Element
 		{
 			return array('div',
 			             $this->rowButtonsAttribs,
-			             array('Children' => $this->getRowButtons($row)));
+			             $this->getRowButtons($row));
 		}
 	}
    
@@ -307,13 +298,11 @@ class Element_Record_List extends Element
 					$rowElems[] = array(
 						'div',
 						array('class' => 'Field_Row'),
-						array(
-							'Children' => array(
-								$headings[$field],
-								array(
-									'div',
-									array('class' => 'Data_Item ' . $field . '_Field'),
-									array('Text' => $rowData[$field])))));
+						array($headings[$field],
+						      array('div',
+						            array('class' => 'Data_Item ' . $field .
+						                  '_Field'),
+						            $rowData[$field])));
 				}
 			}
 			else
@@ -323,14 +312,13 @@ class Element_Record_List extends Element
 					$rowElems[] = array(
 						'div',
 						array('class' => 'Data_Item ' . $field . '_Field'),
-						array('Text' => $rowData[$field]));
+						$rowData[$field]);
 				}
 			}
 	 
-			return array(
-				'div',
-				$this->getDataAttribs($row, $rowData),
-				array('Children' => $rowElems));
+			return array('div',
+			             $this->getDataAttribs($row, $rowData),
+			             $rowElems);
 		}
 		catch (Exception $e)
 		{
@@ -409,7 +397,7 @@ class Element_Record_List extends Element
 			$headings[$field] = array(
 				'div',
 				array('class' => 'Heading_Item ' . $field . '_Field'),
-				array('Text' => $headingText));
+				$headingText);
 		}
 
 		return $headings;
