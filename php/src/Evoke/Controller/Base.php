@@ -85,20 +85,27 @@ abstract class Base
 		// Perform any content agnostic initialization of the reponse.
 		$this->initialize();
 
-		// We must respond to the output format (which we routed to).  If we
-		// can't then something is seriously wrong.
+		// Preferably we respond using the method that matches the HTTP Request
+		// method, but we allow a method of ALL to cover unhandled methods.
 		$methodName = strtolower($outputFormat) .
 			strtoupper($this->Request->getMethod());
+		$methodAll = strtolower($outputFormat) . 'ALL';
 		
-		if (!is_callable(array($this, $methodName)))
+		if (is_callable(array($this, $methodName)))
+		{
+			$this->{$methodName}();
+		}
+		elseif (is_callable(array($this, $methodAll)))
+		{
+			$this->{$methodAll}();
+		}
+		else
 		{
 			throw new \DomainException(
-				__METHOD__ . ' output format not handled (' . $methodName .
-				' not defined).');
+				__METHOD__ . ' output format: ' . $outputFormat .
+				' not handled');
 		}
-
-		$this->{$methodName}();
-
+		
 		// Perform any content agnostic finalization of the response.
 		$this->finalize();
 	}
@@ -136,6 +143,13 @@ abstract class Base
 		                           $setup);
 	}
 
+	/** Provide an End the XHTML output.
+	 */
+	protected function endXHTML()
+	{
+		$this->Writer->writeEnd();
+	}
+	
 	/** Perform any finalization of the response that does not relate to a
 	 *  specific content type.  This is called just after the respondWith*
 	 *  methods allowing common content type agnostic processing to be grouped.
@@ -194,5 +208,12 @@ abstract class Base
 
 		return $start;
 	}
+
+	/// Write the XHTML start.
+	protected function startXHTML()
+	{
+		$this->Writer->writeStart($this->getXHTMLSetup());
+	}
+	 
 }
 // EOF
