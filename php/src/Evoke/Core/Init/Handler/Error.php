@@ -194,8 +194,8 @@ class Error implements \Evoke\Core\Iface\Handler
 			$descriptionElems[] = array(
 				'div',
 				array('class' => 'Breakpoint'),
-				array('Text'  => 'PHP [' . $typeStr . '] ' . $str . ' in file ' .
-				      $file . ' at ' . $line));
+				'PHP [' . $typeStr . '] ' . $str . ' in file ' . $file .
+				' at ' . $line);
 
 			$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 			array_shift($trace);
@@ -203,10 +203,7 @@ class Error implements \Evoke\Core\Iface\Handler
 	 
 			foreach ($trace as $level => $info)
 			{
-				$lineElems = array(array('span',
-				                         array('class' => 'Level'),
-				                         array('Text' => $level)));
-	    
+				$lineElems = array(array('span', array('class' => 'Level'), $level));
 				$info += array('file'     => '',
 				               'line'     => '',
 				               'function' => '',
@@ -218,27 +215,17 @@ class Error implements \Evoke\Core\Iface\Handler
 					$info['type'] . $info['function'];
 	    
 				$traceElems[] = array(
-					'div',
-					array('class' => ($level % 2) ? 'Odd' : 'Even'),
-					array('Text'  => $text));
+					'div', array('class' => ($level % 2) ? 'Odd' : 'Even'), $text);
 			}
 
-			$descriptionElems[] = array(
-				'div',
-				array('class' => 'Trace'),
-				array('Children' => $traceElems));
+			$descriptionElems[] = array('div', array('class' => 'Trace'), $traceElems);
 		}
       
 		$this->Writer->write(
 			array('div',
 			      array('class' => 'Error_Handler Message_Box System'),
-			      array('Children' => array(
-				            array('div',
-				                  array('class' => 'Title'),
-				                  array('Text' => $title)),
-				            array('div',
-				                  array('class' => 'Description'),
-				                  array('Children' => $descriptionElems))))));
+			      array(array('div', array('class' => 'Title'),       $title),
+			            array('div', array('class' => 'Description'), $descriptionElems))));
 		$this->Writer->output();
 	}
 }

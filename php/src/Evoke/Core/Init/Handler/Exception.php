@@ -124,19 +124,14 @@ class Exception implements \Evoke\Core\Iface\Handler
 			}
 
 			$message .= "<br>\n<br>\n" .
-				preg_replace('/\n/', '<br>' . "\n", $exceptionMessage); //(string)($uncaughtException));
+				preg_replace('/\n/', '<br>' . "\n", $exceptionMessage);
 		}
 		
 		$this->Writer->write(
 			array('div',
 			      array('class' => 'Exception_Handler Message_Box System'),
-			      array('Children' => array(
-				            array('div',
-				                  array('class' => 'Title'),
-				                  array('Text' => $title)),
-				            array('div',
-				                  array('class' => 'Description'),
-				                  array('Text' => $message))))));
+			      array(array('div', array('class' => 'Title'), $title),
+			            array('div', array('class' => 'Description'), $message))));
 		$this->Writer->output();
 	}
 
