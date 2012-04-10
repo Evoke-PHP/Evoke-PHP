@@ -1,0 +1,151 @@
+/******************/
+/* Messages Boxes */
+/******************/
+.Message_Box
+{
+    display: inline-block;
+    min-width: 500px;
+	max-width: 1200px;
+    vertical-align: top;
+    margin-left: 20px;
+    margin-top: 20px;
+    border-width: 2px;
+    border-style: solid;
+    -moz-border-radius: 10px 10px 0px 0px;
+
+	.Title
+	{
+		padding: 10px;
+		
+		font-size: 1.2em;
+		font-weight: 900;
+		
+		-moz-border-radius: 10px 10px 0px 0px;
+	}
+
+	.Description
+	{
+		padding: 10px;
+	}
+
+	&.Good
+	{
+		border-color: #050;
+	}
+
+	&.Good .Title
+	{
+		color: #FFF;
+		background: #050;
+	}
+
+	&.Good .Description
+	{
+		background: #DFD;
+	}
+
+	/* Info */
+	&.Info
+	{
+		border-color: #005;
+	}
+
+	&.Info .Title
+	{
+		color: #FFF;
+		background: #115;
+	}
+
+	&.Info .Description
+	{
+		background: #DDF;
+	}
+
+	/* Error */
+	&.Error
+	{
+		border-color: #F00;
+	}
+
+	&.Error .Title
+	{
+		color: #FFF;
+		background: #F22;
+	}
+
+	&.Error .Description
+	{
+		background: #FDD;
+	}
+
+	/* System */
+	&.System
+	{
+		background: #FF0;
+		padding: 10px;
+		border: 5px solid #000;
+	}
+
+	&.System .Title
+	{
+		color: #FFF;
+		background: #F00;
+	}
+
+	&.System .Description
+	{
+		background: #FDD;
+	}
+}
+
+
+/***********/
+/* Buttons */
+/***********/
+.Button
+{
+    border: 3px solid #DDD;
+    padding: 10px;
+    color: #FFF;
+    font-size: 1.5em;
+    font-weight: 900;
+    text-decoration: none;
+    -moz-border-radius: 10px;
+
+	&.Small
+	{
+		border: 2px solid #DDD;
+		padding: 2px;
+		font-size: 1em;
+		font-weight: 900;
+		text-decoration: none;
+		vertical-align: top;
+		-moz-border-radius: 5px;
+	}
+
+	.Button:hover
+	{
+		border: 3px solid #FF8;    
+	}
+
+	&.Small:hover
+	{
+		border: 2px solid #FF8;
+	}
+
+	&.Info
+	{
+		background: #005;
+	}
+
+	&.Good
+	{
+		background: #050;
+	}
+
+	&:disabled
+	{
+		background: #BBB;
+	}
+}
+
