@@ -3,11 +3,6 @@ namespace Evoke\Core\HTTP\MediaType\Rule;
 
 abstract class Base implements \Evoke\Core\Iface\HTTP\MediaType\Rule
 {
-	/** @property $match
-	 *  The match for the media type.
-	 */
-	protected $match;
-	
 	/** @property $outputFormat
 	 *  \mixed The output format.
 	 */
@@ -17,9 +12,14 @@ abstract class Base implements \Evoke\Core\Iface\HTTP\MediaType\Rule
 	 *  @param match \array The match for the rule.
 	 *  @param outputFormat \mixed The output format for the rule.
 	 */
-	public function __construct(Array $match, $outputFormat)
+	public function __construct($outputFormat)
 	{
-		$this->match        = $match;
+		if (!is_string($outputFormat))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires outputFormat as string');
+		}
+
 		$this->outputFormat = $outputFormat;
 	}
 	

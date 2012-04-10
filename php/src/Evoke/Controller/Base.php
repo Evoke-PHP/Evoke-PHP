@@ -48,14 +48,6 @@ abstract class Base
 	{
 		$MediaTypeRouter = $this->buildMediaTypeRouter();
 		$outputFormat = $MediaTypeRouter->route();
-		$methodName = 'respondWith' . $outputFormat;
-		
-		if (!is_callable(array($this, $methodName)))
-		{
-			throw new \DomainException(
-				__METHOD__ . ' output format not handled (' . $methodName .
-				' not defined).');
-		}
 
 		switch(strtoupper($outputFormat))
 		{
@@ -92,10 +84,21 @@ abstract class Base
 
 		// Perform any content agnostic initialization of the reponse.
 		$this->initialize();
-		// Normally I hate variable references to methods, but this allows us
-		// to call any response to an output format that could be defined in
-		// subclasses that we are yet to know about.
+
+		// We must respond to the output format (which we routed to).  If we
+		// can't then something is seriously wrong.
+		$methodName = strtolower($outputFormat) .
+			strtoupper($this->Request->getMethod());
+		
+		if (!is_callable(array($this, $methodName)))
+		{
+			throw new \DomainException(
+				__METHOD__ . ' output format not handled (' . $methodName .
+				' not defined).');
+		}
+
 		$this->{$methodName}();
+
 		// Perform any content agnostic finalization of the response.
 		$this->finalize();
 	}
@@ -110,9 +113,9 @@ abstract class Base
 	{
 		$Router = new MediaType\Router($this->Request);
 		$Router->addRule(
-			new MediaType\Rule\Exact(array('Subtype' => '*',
-			                               'Type'    => '*'),
-			                         'HTML5'));
+			new MediaType\Rule\Exact('HTML5',
+			                         array('Subtype' => '*',
+			                               'Type'    => '*')));
 		return $Router;
 	}
 
@@ -158,7 +161,7 @@ abstract class Base
 
 	/** Perform any initialization of the response that does not relate to a
 	 *  specific content type.  This has nothing to do with construction of the
-	 *  response object.  It is called just prior to the respondWith* methods
+	 *  response object.  It is called just prior to the response methods
 	 *  allowing response codes or other shared data to be provided accross all
 	 *  content types.
 	 */
@@ -190,69 +193,6 @@ abstract class Base
 		}
 
 		return $start;
-	}
-
-	/** Respond with XHTML5 which is by default the same as XHTML (just with a
-	 *  different writer (giving a different doctype).
-	 */	
-	protected function respondWithHTML5()
-	{
-		$this->respondWithXHTML();
-	}
-	
-	/// Respond with JSON (Override this to provide JSON).
-	protected function respondWithJSON()
-	{
-		throw new \BadMethodCallException(
-			__METHOD__ . ' output format not handled.');
-	}
-	
-	/// Respond with Text.
-	protected function respondWithText()
-	{
-		throw new \BadMethodCallException(
-			__METHOD__ . ' output format not handled.');
-	}
-
-	/** Respond with XHTML. As XHTML is page based we use this method to split
-	 *  the implementation into Head, Content and End.
-	 */
-	protected function respondWithXHTML()
-	{
-		$this->respondWithXHTMLHead();
-		$this->respondWithXHTMLContent();
-		$this->respondWithXHTMLEnd();
-	}
-	
-	/// Respond with XHTML Content.
-	protected function respondWithXHTMLContent()
-	{
-		throw new \BadMethodCallException(
-			__METHOD__ . ' output format not handled.');
-	}
-
-	/** Respond with the end of the XHTML page.
-	 *  @param setup \array The setup for the XHTML end.
-	 */
-	protected function respondWithXHTMLEnd()
-	{
-		$this->Writer->writeEnd();
-	}
-
-	/** Respond with the XHTML Head.
-	 *  @param setup \array The setup for the XHTML head.
-	 */
-	protected function respondWithXHTMLHead()
-	{
-		$this->Writer->writeStart($this->getXHTMLSetup());
-	}
-
-	/** Respond with XML. XML has a DTD and optionally XSLT before the content.
-	 */
-	protected function respondWithXML()
-	{
-		throw new \BadMethodCallException(
-			__METHOD__ . ' output format not handled.');
 	}
 }
 // EOF

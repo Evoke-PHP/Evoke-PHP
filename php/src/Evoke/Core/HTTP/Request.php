@@ -59,6 +59,19 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
    /* Public Methods */
    /******************/
 
+	/** Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE,
+	 *  POST, PUT or DELETE).
+	 */
+	public function getMethod()
+	{
+		if (!isset($_SERVER['REQUEST_METHOD']))
+		{
+			return 'GET';
+		}
+		
+		return $_SERVER['REQUEST_METHOD'];
+	}
+	
 	/** Get the query parameter.
 	 *  @param param \string The parameter to get.
 	 *  \return \bool The query parameter.

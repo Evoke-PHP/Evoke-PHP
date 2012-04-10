@@ -1,8 +1,28 @@
 <?php
 namespace Evoke\Core\HTTP\MediaType\Rule;
 
-class Equivalent extends Base
+class Equivalent extends Match
 {
+	/** @property $ignoredFields
+	 *  \array Fields that can be ignored in the match.
+	 */
+	protected $ignoredFields;	
+
+	/** Construct the Equivalent rule.
+	 *  @param outputFormat  \string The output format for the rule.
+	 *  @param match         \array  The equivalent match required by the rule.
+	 *  @param ignoredFields \array  Fields that are to be ignored in the match.
+	 */
+	public function __construct(
+		/*s*/ $outputFormat,
+		Array $match,
+		Array $ignoredFields=array('Params', 'Q_Factor'))
+	{
+		parent::__construct($outputFormat, $match);
+		
+		$this->ignoredFields = $ignoredFields;
+	}
+
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -11,15 +31,21 @@ class Equivalent extends Base
 	 *  @param mediaType \array The media type we are checking against.
 	 *  @return \bool Whether the rule matches.
 	 */
-	public function isMatch(Array $mediaType)
+	public function isMatch($mediaType)
 	{
-		// If the match rule we have does not modify the mediaType when it is
-		// merged into it then they are equivalent. This means that there was
-		// nothing in the match rule that differed from the mediaType.
-		$mergedMediaType = array_merge_recursive($mediaType, $this->match);
+		if (!is_array($mediaType))
+		{
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires mediaType as array.');
+		}		
+		
+		foreach ($this->ignoredFields as $ignored)
+		{
+			unset($mediaType[$ignored]);
+		}
 
 		// Only an equivalent test of == is used as we don't care about types.
-		return $mergedMediaType == $mediaType;
+		return $mediaType == $this->match;
 	}
 }
 // EOF
