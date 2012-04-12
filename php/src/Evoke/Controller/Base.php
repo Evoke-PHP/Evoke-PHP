@@ -85,26 +85,8 @@ abstract class Base
 		// Perform any content agnostic initialization of the reponse.
 		$this->initialize();
 
-		// Preferably we respond using the method that matches the HTTP Request
-		// method, but we allow a method of ALL to cover unhandled methods.
-		$methodName = strtolower($outputFormat) .
-			strtoupper($this->Request->getMethod());
-		$methodAll = strtolower($outputFormat) . 'ALL';
-		
-		if (is_callable(array($this, $methodName)))
-		{
-			$this->{$methodName}();
-		}
-		elseif (is_callable(array($this, $methodAll)))
-		{
-			$this->{$methodAll}();
-		}
-		else
-		{
-			throw new \DomainException(
-				__METHOD__ . ' output format: ' . $outputFormat .
-				' not handled');
-		}
+		// Respond to the method in the correct output format.
+		$this->respond($this->Request->getMethod(), $outputFormat);
 		
 		// Perform any content agnostic finalization of the response.
 		$this->finalize();
@@ -209,6 +191,33 @@ abstract class Base
 		return $start;
 	}
 
+	/** Respond to the HTTP method in the correct output format.
+	 *  @param method       \string HTTP method (e.g GET, POST, DELETE)
+	 *  @param outputFormat \string Output format (e.g html5, XHTML, JSON)
+	 */
+	protected function respond($method, $outputFormat)
+	{
+		// Preferably we respond using the method that matches the HTTP Request
+		// method, but we allow a method of ALL to cover unhandled methods.
+		$methodName = strtolower($outputFormat) . strtoupper($method);
+		$methodAll = strtolower($outputFormat) . 'ALL';
+		
+		if (is_callable(array($this, $methodName)))
+		{
+			$this->{$methodName}();
+		}
+		elseif (is_callable(array($this, $methodAll)))
+		{
+			$this->{$methodAll}();
+		}
+		else
+		{
+			throw new \DomainException(
+				__METHOD__ . ' output format: ' . $outputFormat .
+				' not handled');
+		}
+	}
+	
 	/// Write the XHTML start.
 	protected function startXHTML()
 	{

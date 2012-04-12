@@ -1,15 +1,22 @@
 <?php
 namespace Evoke\Model\Session;
 
-class Session extends Evoke\Model\Base;
-{ 
+use Evoke\Core\Iface;
+
+class Session extends \Evoke\Model\Base
+{
+	/** @property $SessionManager
+	 *  Session Manager \object
+	 */
+	protected $SessionManager;
+
 	public function __construct(Array $setup)
 	{
 		$setup += array('Session_Manager' => NULL);
       
 		parent::__construct($setup);
 
-		if (!$this->setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
+		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires SessionManager');

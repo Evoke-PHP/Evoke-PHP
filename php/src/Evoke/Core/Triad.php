@@ -63,8 +63,8 @@ class Triad
 	/******************/
 	
 	/** Execute the Triad.
-	 *  Connect the Process user input, retrieve data from the Model(s)
-	 *  and send it to the View(s).  Disconnect all objects from the Triad.
+	 *  Process all user input, retrieve data from the Model(s) and send it to
+	 *  the View(s).  Disconnect all objects from the Triad.
 	 */   
 	public function execute(/* Var Args */)
 	{
