@@ -58,7 +58,119 @@ class Factory extends InstanceManager implements Iface\Factory
 
 		return $this->build($className, $params, $this, $Request);
 	}
+   
+	/// Get a model.
+	public function buildModel($model, Array $setup=array())
+	{
+		$setup += array('Event_Manager' => $this->getEventManager());
 
+		return $this->build($model, $setup);
+	}
+
+	/// Get a Database model.
+	public function buildModelDB($model, Array $setup)
+	{
+		$setup += array('Event_Manager' => $this->getEventManager(),
+		                'SQL'           => $this->getSQL());
+
+		return $this->build($model, $setup);
+	}
+
+	/// Get Request keys for a Model DB Admin.
+	public function buildModelDBAdminRequestKeys()
+	{
+		return array('',
+		             'Add',
+		             'Cancel',
+		             'Create_New',
+		             'Delete_Cancel',
+		             'Delete_Confirm',
+		             'Delete_Request',
+		             'Edit',
+		             'Modify',
+		             'Update_Current_Record');
+	}
+
+	// Get an Admin model for a joint table.
+	public function buildModelDBJointAdmin(Array $setup)
+	{
+		$setup += array('Failures'      => $this->getMessageArray(),
+		                'Notifications' => $this->getMessageArray(),
+		                'SQL'           => $this->getSQL(),
+		                'Table_Info'    => NULL,
+		                'Table_List_ID' => $this->getTableListID());
+      
+		return $this->buildModel($this->namespace['Model'] . 'DB\JointAdmin',
+		                       $setup);
+	}
+
+	// Get an Admin model for a joint table with linked information.
+	public function buildModelDBJointAdminLinked(Array $setup)
+	{
+		$setup += array('Failures'      => $this->getMessageArray(),
+		                'Notifications' => $this->getMessageArray(),
+		                'SQL'           => $this->getSQL(),
+		                'Table_Info'    => NULL,
+		                'Table_List_ID' => $this->getTableListID());
+      
+		return $this->buildModel($this->namespace['Model'] . 'DB\JointAdminLinked',
+		                       $setup);
+	}
+   
+	/// Get an Admin model for a table.
+	public function buildModelDBTableAdmin(Array $setup)
+	{
+		$setup += array('Event_Manager' => $this->getEventManager(),
+		                'Failures'      => $this->getMessageArray(),
+		                'Info'          => NULL,
+		                'Notifications' => $this->getMessageArray(),
+		                'SQL'           => $this->getSQL(),
+		                'Table_Name'    => NULL);
+
+		if (!isset($setup['Info']) && isset($setup['Table_Name']))
+		{
+			$setup['Info'] = $this->getTableInfo(
+				array('Table_Name' => $setup['Table_Name']));
+		}
+      
+		return $this->get($this->namespace['Model'] . 'DB\TableAdmin', $setup);
+	}
+   
+	/// Get a Model_Table object.
+	public function buildModelDBTable(Array $setup)
+	{
+		return $this->get(
+			$this->namespace['Model'] . 'DB\Table',
+			array_merge(array('Event_Manager' => $this->getEventManager(),
+			                  'Failures'      => $this->getMessageArray(),
+			                  'Notifications' => $this->getMessageArray(),
+			                  'SQL'           => $this->getSQL()),
+			            $setup));
+	}
+
+	/// Get a menu model for the named menu.
+	public function buildModelMenu($menuName)
+	{
+		$setup = array(
+			'Event_Manager'  => $this->getEventManager(),
+			'Failures'      => $this->getMessageArray(),
+			'Joins'         => $this->getJoins(
+				array('Joins' => array(
+					      'List_ID' => array('Child_Field' => 'Menu_ID',
+					                         'Table_Name'  => 'Menu_List')),
+				      'Table_Name' => 'Menu')),
+			'Notifications' => $this->getMessageArray(),
+			'Select'        => array(
+				'Conditions' => array('Menu.Name' => $menuName),
+				'Fields'     => '*',
+				'Order'      => 'Lft ASC',
+				'Limit'      => 0),
+			'SQL'           => $this->getSQL(),
+			'Table_Name'    => 'Menu');			
+
+		return $this->build($this->namespace['Model'] . 'DB\Joint', $setup);
+	}
+	
 	/** Build a View.
 	 *  @param className \string The class of view to create.
 	 *  @param Writer    \object Writer object.
@@ -148,129 +260,7 @@ class Factory extends InstanceManager implements Iface\Factory
 	{
 		return $this->build($this->namespace['Core'] . 'MessageArray');
 	}
-   
-	/// Get a model.
-	public function getModel($model, Array $setup=array())
-	{
-		$setup += array('Event_Manager' => $this->getEventManager());
 
-		return $this->build($model, $setup);
-	}
-
-	/// Get a Database model.
-	public function getModelDB($model, Array $setup)
-	{
-		$setup += array('Event_Manager' => $this->getEventManager(),
-		                'SQL'           => $this->getSQL());
-
-		return $this->build($model, $setup);
-	}
-
-	/// Get Request keys for a Model DB Admin.
-	public function getModelDBAdminRequestKeys()
-	{
-		return array('',
-		             'Add',
-		             'Cancel',
-		             'Create_New',
-		             'Delete_Cancel',
-		             'Delete_Confirm',
-		             'Delete_Request',
-		             'Edit',
-		             'Modify',
-		             'Update_Current_Record');
-	}
-
-	// Get an Admin model for a joint table.
-	public function getModelDBJointAdmin(Array $setup)
-	{
-		$setup += array('Failures'      => $this->getMessageArray(),
-		                'Notifications' => $this->getMessageArray(),
-		                'SQL'           => $this->getSQL(),
-		                'Table_Info'    => NULL,
-		                'Table_List_ID' => $this->getTableListID());
-      
-		return $this->getModel($this->namespace['Model'] . 'DB\JointAdmin',
-		                       $setup);
-	}
-
-	// Get an Admin model for a joint table with linked information.
-	public function getModelDBJointAdminLinked(Array $setup)
-	{
-		$setup += array('Failures'      => $this->getMessageArray(),
-		                'Notifications' => $this->getMessageArray(),
-		                'SQL'           => $this->getSQL(),
-		                'Table_Info'    => NULL,
-		                'Table_List_ID' => $this->getTableListID());
-      
-		return $this->getModel($this->namespace['Model'] . 'DB\JointAdminLinked',
-		                       $setup);
-	}
-   
-	/// Get an Admin model for a table.
-	public function getModelDBTableAdmin(Array $setup)
-	{
-		$setup += array('Event_Manager' => $this->getEventManager(),
-		                'Failures'      => $this->getMessageArray(),
-		                'Info'          => NULL,
-		                'Notifications' => $this->getMessageArray(),
-		                'SQL'           => $this->getSQL(),
-		                'Table_Name'    => NULL);
-
-		if (!isset($setup['Info']) && isset($setup['Table_Name']))
-		{
-			$setup['Info'] = $this->getTableInfo(
-				array('Table_Name' => $setup['Table_Name']));
-		}
-      
-		return $this->get($this->namespace['Model'] . 'DB\TableAdmin', $setup);
-	}
-   
-	/// Get a Model_Table object.
-	public function getModelDBTable(Array $setup)
-	{
-		return $this->get(
-			$this->namespace['Model'] . 'DB\Table',
-			array_merge(array('Event_Manager' => $this->getEventManager(),
-			                  'Failures'      => $this->getMessageArray(),
-			                  'Notifications' => $this->getMessageArray(),
-			                  'SQL'           => $this->getSQL()),
-			            $setup));
-	}
-
-	/// Get a menu model for the named menu.
-	public function getModelMenu($menuName)
-	{
-		$setup = array(
-			'Event_Manager'  => $this->getEventManager(),
-			'Failures'      => $this->getMessageArray(),
-			'Joins'         => $this->getJoins(
-				array('Joins' => array(
-					      'List_ID' => array('Child_Field' => 'Menu_ID',
-					                         'Table_Name'  => 'Menu_List')),
-				      'Table_Name' => 'Menu')),
-			'Notifications' => $this->getMessageArray(),
-			'Select'        => array(
-				'Conditions' => array('Menu.Name' => $menuName),
-				'Fields'     => '*',
-				'Order'      => 'Lft ASC',
-				'Limit'      => 0),
-			'SQL'           => $this->getSQL(),
-			'Table_Name'    => 'Menu');			
-
-		return $this->build($this->namespace['Model'] . 'DB\Joint', $setup);
-	}
-
-	/// Get an XML Page.
-	public function getPageXML($page, Array $setup=array())
-	{
-		$setup += array('Factory'         => $this,
-		                'Translator'      => $this->getTranslator(),
-		                'Writer'          => $this->buildWriterXWR());
-
-		return $this->build($page, $setup);
-	}
-   
 	/** Get a processing object.
 	 *  @param processing \string The class of processing.
 	 *  @param setup \array Setup for the processing class.
