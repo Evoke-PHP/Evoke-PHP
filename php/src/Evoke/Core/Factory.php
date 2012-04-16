@@ -58,20 +58,23 @@ class Factory extends InstanceManager implements Iface\Factory
 
 		return $this->build($className, $params, $this, $Request);
 	}
-   
-	/// Get a model.
-	public function buildModel($model, Array $setup=array())
+	
+	/// Build a MessageTree.
+	public function buildMessageTree()
 	{
-		$setup += array('Event_Manager' => $this->getEventManager());
-
-		return $this->build($model, $setup);
+		return $this->build($this->namespace['Core'] . 'MessageTree');
+	}
+   
+	/// Build a model.
+	public function buildModel(Array $dataPrefix=array())
+	{
+		return $this->build($model, $dataPrefix);
 	}
 
-	/// Get a Database model.
+	/// Build a Database model.
 	public function buildModelDB($model, Array $setup)
 	{
-		$setup += array('Event_Manager' => $this->getEventManager(),
-		                'SQL'           => $this->getSQL());
+		$setup += array('SQL' => $this->getSQL());
 
 		return $this->build($model, $setup);
 	}
@@ -94,8 +97,8 @@ class Factory extends InstanceManager implements Iface\Factory
 	// Get an Admin model for a joint table.
 	public function buildModelDBJointAdmin(Array $setup)
 	{
-		$setup += array('Failures'      => $this->getMessageArray(),
-		                'Notifications' => $this->getMessageArray(),
+		$setup += array('Failures'      => $this->buildMessageTree(),
+		                'Notifications' => $this->buildMessageTree(),
 		                'SQL'           => $this->getSQL(),
 		                'Table_Info'    => NULL,
 		                'Table_List_ID' => $this->getTableListID());
@@ -107,8 +110,8 @@ class Factory extends InstanceManager implements Iface\Factory
 	// Get an Admin model for a joint table with linked information.
 	public function buildModelDBJointAdminLinked(Array $setup)
 	{
-		$setup += array('Failures'      => $this->getMessageArray(),
-		                'Notifications' => $this->getMessageArray(),
+		$setup += array('Failures'      => $this->buildMessageTree(),
+		                'Notifications' => $this->buildMessageTree(),
 		                'SQL'           => $this->getSQL(),
 		                'Table_Info'    => NULL,
 		                'Table_List_ID' => $this->getTableListID());
@@ -121,9 +124,9 @@ class Factory extends InstanceManager implements Iface\Factory
 	public function buildModelDBTableAdmin(Array $setup)
 	{
 		$setup += array('Event_Manager' => $this->getEventManager(),
-		                'Failures'      => $this->getMessageArray(),
+		                'Failures'      => $this->buildMessageTree(),
 		                'Info'          => NULL,
-		                'Notifications' => $this->getMessageArray(),
+		                'Notifications' => $this->buildMessageTree(),
 		                'SQL'           => $this->getSQL(),
 		                'Table_Name'    => NULL);
 
@@ -142,8 +145,8 @@ class Factory extends InstanceManager implements Iface\Factory
 		return $this->get(
 			$this->namespace['Model'] . 'DB\Table',
 			array_merge(array('Event_Manager' => $this->getEventManager(),
-			                  'Failures'      => $this->getMessageArray(),
-			                  'Notifications' => $this->getMessageArray(),
+			                  'Failures'      => $this->buildMessageTree(),
+			                  'Notifications' => $this->buildMessageTree(),
 			                  'SQL'           => $this->getSQL()),
 			            $setup));
 	}
@@ -151,15 +154,27 @@ class Factory extends InstanceManager implements Iface\Factory
 	/// Get a menu model for the named menu.
 	public function buildModelMenu($menuName)
 	{
+		$Provider = $this->build($this->namespace['Core'] . 'Provider');
+		$Provider->define($this->namespace['Model'] . 'DB\Joint',
+		                  array('tableName' => 'Menu',
+		                        'Joins'     => 'Evoke\Core\DB\Table\Joins'));
+			
+		return $Provider->make($this->namespace['Model'] . 'DB\Joint');
+
+		/*
+		return $this->build(
+			$this->namespace['Model'] . 'DB\Joint',
+			
+		
 		$setup = array(
 			'Event_Manager'  => $this->getEventManager(),
-			'Failures'      => $this->getMessageArray(),
+			'Failures'      => $this->buildMessageTree(),
 			'Joins'         => $this->getJoins(
 				array('Joins' => array(
 					      'List_ID' => array('Child_Field' => 'Menu_ID',
 					                         'Table_Name'  => 'Menu_List')),
 				      'Table_Name' => 'Menu')),
-			'Notifications' => $this->getMessageArray(),
+			'Notifications' => $this->buildMessageTree(),
 			'Select'        => array(
 				'Conditions' => array('Menu.Name' => $menuName),
 				'Fields'     => '*',
@@ -169,6 +184,7 @@ class Factory extends InstanceManager implements Iface\Factory
 			'Table_Name'    => 'Menu');			
 
 		return $this->build($this->namespace['Model'] . 'DB\Joint', $setup);
+		*/
 	}
 	
 	/** Build a View.
@@ -255,12 +271,6 @@ class Factory extends InstanceManager implements Iface\Factory
 					      array('Table_Name' => $setup['Table_Name'])))));
 	}
 
-	/// Create a message array.
-	public function getMessageArray()
-	{
-		return $this->build($this->namespace['Core'] . 'MessageArray');
-	}
-
 	/** Get a processing object.
 	 *  @param processing \string The class of processing.
 	 *  @param setup \array Setup for the processing class.
@@ -344,7 +354,7 @@ class Factory extends InstanceManager implements Iface\Factory
 		return $this->get(
 			$this->namespace['Core'] . 'DB\Table\Info',
 			array_merge(array('Failures' => $this->build(
-				                  $this->namespace['Core'] . 'MessageArray'),
+				                  $this->namespace['Core'] . 'MessageTree'),
 			                  'SQL'      => $this->getSQL()),
 			            $setup));
 	}
