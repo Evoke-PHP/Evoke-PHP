@@ -1,8 +1,27 @@
 <?php
 namespace Evoke\Core;
-/** InstanceManager implements the interface to manage instances.  It is used to
- *  create objects and retrieve shared objects in the system.  Using an instance
- *  manager decouples code that would otherwise use the new operator and gives
+/** A dependency injection/provider class (Thanks to rdlowrey see comments).
+ *
+ *  #### History ####
+ *
+ *  The Evoke Provider class is a combination of Evoke's old InstanceManager
+ *  class with Daniel Lowrey's Artax Provider Class.  Code and ideas were used
+ *  with permission from Daniel Lowrey.  Artax is an event-driven Application
+ *  engine.  It can be found here: https://github.com/rdlowrey/Artax-Core
+ * 
+ *  This file takes from the Provider of the Atrax-Core dev branch: 648624a3cb.
+ *  @author Daniel Lowrey <rdlowrey@gmail.com>
+ *
+ *  Modifications made by Paul Young.  The heart of the Provider logic remains
+ *  unchanged from the awesome implementation of rdlowrey.  There have been
+ *  widespread changes to bring the class into the style of Evoke.  A simplified
+ *  interface was also chosen.
+ *
+ *  #### Rationale ####
+ *
+ *  The provider is responsible for creating objects and shared services.  It is
+ *  used to create objects and retrieve shared objects in the system.  Using the
+ *  provider decouples code that would otherwise use the new operator and gives
  *  control for the creation of instances, avoiding nasty singleton type
  *  methods.
  *
@@ -15,118 +34,236 @@ namespace Evoke\Core;
  *
  *  Using this class for all of your objects and shared resources makes it easy
  *  to test your code (you won't need stubs) as you will be able to inject all
- *  of the required objects.
+ *  of the required testing objects at test time.
+ *
+ *  #### Usage Scenarios ####
+ *
+ *  ## Object with Concrete Typehinted Dependencies ##
+ *
+ *  \code
+ *  class Concrete
+ *  {
+ *      // Cement, Water, Sand and Gravel are real (concrete) objects.
+ *      public function __construct(Cement $cement,
+ *                                  Water  $water,
+ *                                  Sand   $sand,
+ *                                  Gravel $greyGravelForMixing) {}
+ *  }
+ *
+ *  // Automatic creation of Concrete Typehinted Dependencies!
+ *  $concrete = $provider->make('Concrete');
+ *
+ *  class DistilledWater extends Water {}
+ *
+ *  $specialWater = $provider->make('DistilledWater');
+ *  $specialGravel = $provider->make('Gravel');
+ *
+ *  // Specialization combined with automatic injection.
+ *  // Note: Pascal is converted to Camel to match the Evoke coding standard.
+ *  $specialConcrete = $provider->make(
+ *      'Concrete',
+ *      array('Grey_Gravel_For_Mixing' => $specialGravel,
+ *            'Water'                  => $specialWater)); 
+ *  \endcode
+ *
+ *  ## Object with Scalars ##
+ *
+ *  \code
+ *  namespace Weight;
+ *
+ *  class Scale
+ *  {
+ *      /// weightLimit is an integer.
+ *      public function __construct($weightLimit) {}
+ *  }
+ *
+ *  // Injection of a scalar value! (This also works in combination with other
+ *  // dependencies).
+ *  $provider->make('\Weight\Scale', array('Weight_Limit' => 50));
+ *  \endcode
+ *
+ *  ## Object with Interfaces ##
+ *
+ *  \code
+ *  class UI
+ *  {
+ *      public function __construct(\Evoke\Iface\User        $user,
+ *                                  \Evoke\Iface\Core\Writer $writer) {}
+ *  }
+ *
+ *  // The interface gets automatically rewritten to a concrete class by
+ *  // replacing \Iface\ with \.  So, \Evoke\User is automatically injected.
+ *  // However the writer interface points to an abstract or otherwise
+ *  // undesirable class which we pass in manually.
+ *  $provider->make(
+ *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
+ *  \endcode
+ *
  */
 class InstanceManager implements Iface\InstanceManager
 {
+	/** @property $reflections
+	 *  The cached class and parameter reflections for classes.
+	 */
+	protected static $reflections = array();
+
+	/** @property $shared
+	 *  The store of shared classes (grouped by class and parameters).  If the
+	 *  same request to make an object of the class is received with the same
+	 *  parameters then the stored shared class shall be returned.
+	 */
 	protected static $shared = array();
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Build an object and return it.
+	/** Make an object and return it.
 	 *
 	 *  This is the standard way to instantiate objects using Evoke.
 	 *  Using this method decouples object creation from your code.  This makes
 	 *  it easy to test your code as it is not tightly bound to the objects that
 	 *  it creates.
 	 *
-	 *  Params:
-	 *  -# Full class name (including full namespace).
-	 *  -  Construction parameters. (As many or few as you want)
+	 *  @param className \string Classname, including namespace.
+	 *  @param params    \array  Construction parameters.  Only the parameters
+	 *  that cannot be lazy loaded (scalars with no default) need to be passed.
 	 *
 	 *  \return The object that has been created.
 	 */
-	public function build(/* Var Args */)
+	public function make($className, Array $params=array())
 	{
-		$numArgs = func_num_args();
-      
-		if ($numArgs === 0)
-		{
-			throw new \BadMethodCallException(
-				__METHOD__ . ' needs at least one argument.');
-		}
-      
-		$args = func_get_args();
-		$className = array_shift($args);
-		--$numArgs;
+		$params = $this->pascalToCamel($params);
 
-		if ($numArgs === 0)
+		// Is this class a shared service.
+		if (isset(self::$shared[$className]))
 		{
-			return new $className();
+			foreach (self::$shared[$className] as $sharedEntry)
+			{
+				if ($sharedEntry['Params'] === $params)
+				{
+					return $sharedEntry['Object'];
+				}
+			}
 		}
-		elseif ($numArgs === 1)
-		{
-			return new $className(reset($args));
-		}
-		else
-		{
-			$object = new \ReflectionClass($className);
-			return $object->newInstanceArgs($args);
-		}
+		
+		// Reflect the class if we haven't already done so.
+		if (!isset(self::$reflections[$className]))
+        {
+	        $this->reflect($className);
+        }
+
+        // If there is no possibility of passing parameters to the code then
+        // just instantiate the object and return it.
+		if (!isset(self::$reflections[$className]['Params']))
+        {            
+	        return new $className;
+        }
+
+        // Use the passed parameters, falling back on the reflected parameters
+		// for automatic lazy injection to create all of the dependencies.
+	    $dependencies = array();
+        
+	    foreach (self::$reflections[$className]['Params'] as $reflectionParam)
+        {
+            if (isset($params[$reflectionParam->name]))
+            {
+	            $dependencies[] = $params[$reflectionParam->name];
+            }
+            elseif ($reflectionParam->isDefaultValueAvailable())
+            {
+                $dependencies[] = $reflectionParam->getDefaultValue();
+            }
+            else
+            {
+	            $depClass = $reflectionParam->getClass();
+
+	            // If we have an interface then try using the default classname
+	            // conversion.
+	            if ($depClass->isInterface())
+	            {
+		            $dependencies[] = $this->make(
+			            str_replace('\Iface\\', '\\', $depClass->getName()));
+	            }
+	            else
+	            {
+		            $dependencies[] = isset($depClass)
+			            ? $this->make($depClass->name)
+			            : NULL;
+	            }
+            }
+        }
+
+	    $object = self::$reflections[$className]['Class']->newInstanceArgs(
+		    $dependencies);
+	    
+	    // If this is a shared class then we are creating it for the first time.
+	    if (isset(self::$shared[$className]))
+	    {
+		    self::$shared[$className][] = array('Object' => $object,
+		                                        'Params' => $params);
+	    }
+	    
+        return $object;
 	}
 
-	/** Get a shared object.  The same object is returned for repeated calls with
-	 *  identical parameters.  This should be used for objects that will be
-	 *  shared throughout the system.  These objects should not rely on any
-	 *  state (otherwise sharing them could cause problems).
-	 *
-	 *  There is a small overhead to find the shared object.  Few objects should
-	 *  be created as shared, so this overhead should remain small.
-	 *
-	 *  Params:
-	 *  -# Full class name (including full namespace).
-	 *  -  Construction parameters. (As many or few as you want)
-	 *
-	 *  \return The shared object that has been retrieved or created (if it
-	 *  didn't exist.)
+	/** Set the specified class to be shared by the InstanceManager.  The make
+	 *  method will return a shared object for this class while the class
+	 *  remains shared.
+	 *  @param className \string  Classname (including namespace).
 	 */
-	public function get(/* Var Args */)
+	public function share($className)
 	{
-		$numArgs = func_num_args();
-      
-		if ($numArgs === 0)
-		{
-			throw new \BadMethodCallException(
-				__METHOD__ . ' needs at least one argument.');
-		}
-      
-		$args = func_get_args();
-		$className = array_shift($args);
-		--$numArgs;
-
 		if (!isset(self::$shared[$className]))
 		{
 			self::$shared[$className] = array();
 		}
-      
-		foreach (self::$shared[$className] as $entry)
+	}
+
+	/** Stop the class from being shared by the InstanceManager, forcing a new
+	 *  object to be created for the class each time it is made using make.
+	 *  @param className \string The classname to unshare.
+	 */
+	public function unshare($className)
+	{
+		unset(self::$shared[$className]);
+	}
+	
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	/** Reflect the class, storing it in the reflections array.
+	 *  @param className \string The full classname (including the namespace).
+	 */
+	protected function reflect($className)
+	{
+		$reflectionClass = new \ReflectionClass($className);
+		$constructor = $reflectionClass->getConstructor();
+		$reflectionParams =
+			(isset($constructor) ? $constructor->getParameters() : NULL);
+		
+		self::$reflections[$className] = array('Class'  => $reflectionClass,
+		                                       'Params' => $reflectionParams);		
+	}
+	
+	/*******************/
+	/* Private Methods */
+	/*******************/
+
+	/** Convert an array of keys in pascal to camelCase.
+	 *  @param pascalArr \array The array to convert.
+	 */
+	private function pascalToCamel(Array $pascalArr)
+	{
+		$camelArr = array();
+		
+		foreach ($pascalArr as $key => $val)
 		{
-			if ($entry['Args'] === $args)
-			{
-				return $entry['Object'];
-			}
+			$camelArr[lcfirst(implode('', explode('_', $key)))] = $val;
 		}
-      
-		// We have not returned yet, it must be the first creation.
-		if ($numArgs === 0)
-		{
-			$object = new $className();
-		}
-		elseif ($numArgs === 1)
-		{
-			$object = new $className(reset($args));
-		}
-		else
-		{
-			$object = new \ReflectionClass($className);
-			$object->newInstanceArgs($args);
-		}
-      
-		self::$shared[$className][] = array('Object' => $object,
-		                                    'Args'   => $args);
-		return $object;
+
+		return $camelArr;
 	}
 }
 // EOF
