@@ -1,6 +1,9 @@
 <?php
 namespace Evoke\Core\Iface;
 
+/** The interface for a DB is virtually the same as the interface to PDO as it
+ *  is very good for interaction with many different databases.
+ */
 interface DB
 {
 	public function beginTransaction();
@@ -10,6 +13,12 @@ interface DB
 	public function exec($statement);
 	public function getAttribute($attribute);
 
+	/** This would be forced to be static by PDO's implementation (u suck PDO)
+	 *  so we don't define this as part of the interface.
+	 *  - public static function getAvailableDrivers();
+	 */
+
+	public function inTransaction();
 	public function lastInsertId($name=NULL);
 	public function prepare($statement, $driverOptions=array());
 
