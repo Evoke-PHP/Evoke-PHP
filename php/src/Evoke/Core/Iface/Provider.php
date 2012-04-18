@@ -1,72 +1,36 @@
 <?php
 namespace Evoke\Core\Iface;
 
-/** The Evoke Provider interface, derived from the Artax Provider interface with
- *  permission from Daniel Lowrey.  Artax is an event-driven Application engine.
- *  It can be found here: https://github.com/rdlowrey/Artax-Core
- * 
- *  Note: This file was forked from the Atrax-Core dev branch: 648624a3cb.
- *
- *  @author Daniel Lowrey <rdlowrey@gmail.com>
- */
 interface Provider
 {
-	/**
-	 * Factory method for auto-injecting dependencies upon instantiation
+	/** Make an object and return it.
 	 *
-	 * @param string $class Class name
-	 * @param mixed $custom An optional array specifying custom instantiation
-	 * parameters for this construction
-	 */
-	public function make($class, array $custom);
-    
-	/**
-	 * Defines custom instantiation parameters for the specified class
+	 *  This is the way to create objects (or retrieve shared services) using
+	 *  Evoke.  Using this method decouples object creation from your code.
+	 *  This makes it easy to test your code as it is not tightly bound to the
+	 *  objects that it depends on.
 	 *
-	 * @param string $class Class name
-	 * @param array $definition An array specifying custom instantiation params
-	 */
-	public function define($class, array $definition);
-    
-	/**
-	 * Defines multiple custom instantiation parameters at once
+	 *  @param className \string Classname, including namespace.
+	 *  @param \array  params    Construction parameters.  Only the parameters
+	 *  that cannot be lazy loaded (scalars with no default or interfaces that
+	 *  have no corresponding concrete object with the mapped classname) need to
+	 *  be passed.
 	 *
-	 * @param mixed $iterable The variable to iterate over: an array, StdClass
-	 * or ArrayAccess instance
+	 *  @return The object that has been created.
 	 */
-	public function defineAll($iterable);
-    
-	/**
-	 * Clear the injection definition for the specified class
-	 *
-	 * @param string $class Class name
+	public function make($className, Array $params=array());
+
+	/** Set the specified class to be shared by the Provider.  The make method
+	 *  will return a shared object for this class while the class remains
+	 *  shared.
+	 *  @param className \string  Classname (including namespace).
 	 */
-	public function remove($class);
-    
-	/**
-	 * Clear all injection definitions from the container
+	public function share($className);
+
+	/** Stop the class from being shared by the Provider, forcing a new object
+	 *  to be created for the class each time it is made using make.
+	 *  @param className \string The classname to unshare.
 	 */
-	public function removeAll();
-    
-	/**
-	 * Forces re-instantiation of a shared class the next time it is requested
-	 *
-	 * @param string $class Class name
-	 */
-	public function refresh($class);
-    
-	/**
-	 * Determines if a shared instance of the specified class is stored
-	 *
-	 * @param string $class Class name
-	 */
-	public function isShared($class);
-    
-	/**
-	 * Determines if an injection definition exists for the specified class
-	 *
-	 * @param string $class Class name
-	 */
-	public function isDefined($class);
+	public function unshare($className);
 }
 // EOF

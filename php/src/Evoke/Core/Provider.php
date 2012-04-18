@@ -1,371 +1,278 @@
 <?php
 namespace Evoke\Core;
-
 /** A dependency injection/provider class (Thanks to rdlowrey see comments).
  *
- *  The Evoke Provider class, derived from the Artax Provider Class File with
- *  permission from Daniel Lowrey.  Artax is an event-driven Application engine.
- *  It can be found here: https://github.com/rdlowrey/Artax-Core
+ *  #### History ####
+ *
+ *  The Evoke Provider class is a combination of Evoke's old InstanceManager
+ *  class with Daniel Lowrey's Artax Provider Class.  Code and ideas were used
+ *  with permission from Daniel Lowrey.  Artax is an event-driven Application
+ *  engine.  It can be found here: https://github.com/rdlowrey/Artax-Core
  * 
- *  Note: This file was forked from the Atrax-Core dev branch: 648624a3cb.
- * 
- *  @author     Daniel Lowrey <rdlowrey@gmail.com>
+ *  This file takes from the Provider of the Atrax-Core dev branch: 648624a3cb.
+ *  @author Daniel Lowrey <rdlowrey@gmail.com>
  *
  *  Modifications made by Paul Young.  The heart of the Provider logic remains
  *  unchanged from the awesome implementation of rdlowrey.  There have been
  *  widespread changes to bring the class into the style of Evoke.  A simplified
  *  interface was also chosen.
  *
- *  The Provider is a dependency injection container for the lazy instantiation
- *  of objects.  The build and get methods `Provider::make` automatically instantiates an instance of the
- *  given class name using reflection to determine the class's constructor
- *  parameters. Non-concrete dependencies
- *  may also be correctly instantiated using custom injection definitions.
- * 
- *  The `Provider::share` method can be used to "recycle" an instance across 
- *  many/all instantiations to allow "Singleton" type access to a resource 
- *  without sacrificing the benefits of dependency injection or using "evil"
- *  static/global references.
- * 
- *  The Provider recursively instantiates dependency objects automatically.
- *  For example, if class A has a dependency on class B and class B depends
- *  on class C, the Provider will first provision an instance of class B
- *  with the necessary dependencies in order to provision class A with an
- *  instance of B.
- * 
- *  ### BASIC PROVISIONING
- * 
- *  ##### No Dependencies
- * 
- *  If a class constructor specifies no dependencies there's absolutely no point
- *  in using the Provider to generate it. However, for the sake of completeness
- *  consider that you can do the following and get equivalent results:
- * 
- *  ```php
- *  $obj1 = new Namespace\MyClass;
- *  $obj2 = $provider->make('Namespace\MyClass');
- *  var_dump($obj1 === $obj2); // true
- *  ```
- * 
- *  ##### Concrete Typehinted Dependencies
- * 
- *  If a class requires only concrete dependencies you can use the Provider to
- *  inject it without specifying any injection definitions. So, for example, in
- *  the following scenario you can use the Provider to automatically provision
- *  `MyClass` with the required `DepClass` instance:
- * 
- *  ```php
- *  class DepClass
+ *  #### Rationale ####
+ *
+ *  The provider is responsible for creating objects and shared services.  It is
+ *  used to create objects and retrieve shared objects in the system.  Using the
+ *  provider decouples code that would otherwise use the new operator and gives
+ *  control for the creation of instances, avoiding nasty singleton type
+ *  methods.
+ *
+ *  Calling `new foo()` or bar::getInstance in code makes that code require a
+ *  foo class or a bar class with a getInstance method.  This is a tight
+ *  coupling that can be avoided by using this class.  By using this class the
+ *  only requirement created in code that creates or gets instances of objects
+ *  is that it is always injected with an object that implements the Provider
+ *  interface.
+ *
+ *  Using this class for all of your objects and shared resources makes it easy
+ *  to test your code (you won't need stubs) as you will be able to inject all
+ *  of the required testing objects at test time.
+ *
+ *  #### Usage Scenarios ####
+ *
+ *  ## Object with Concrete Typehinted Dependencies ##
+ *
+ *  \code
+ *  class Concrete
  *  {
+ *      // Cement, Water, Sand and Gravel are real (concrete) objects.
+ *      public function __construct(Cement $cement,
+ *                                  Water  $water,
+ *                                  Sand   $sand,
+ *                                  Gravel $greyGravelForMixing) {}
  *  }
- * 
- *  class AnotherDep
+ *
+ *  // Automatic creation of Concrete Typehinted Dependencies!
+ *  $concrete = $provider->make('Concrete');
+ *
+ *  class DistilledWater extends Water {}
+ *
+ *  $specialWater = $provider->make('DistilledWater');
+ *  $specialGravel = $provider->make('Gravel');
+ *
+ *  // Specialization combined with automatic injection.
+ *  $specialConcrete = $provider->make(
+ *      'Concrete',
+ *      array('Grey_Gravel_For_Mixing' => $specialGravel,
+ *            'Water'                  => $specialWater)); 
+ *  \endcode
+ *
+ *  Observe how we pass in dependencies using the second argument to make.  The
+ *  Pascal_Case from the array is converted to camelCase to match the name of
+ *  the constructor argument (Grey_Gravel_For_Mixing => greyGravelForMixing).
+ *  This matches the Evoke standard of using Pascal_Case for array indexes and
+ *  camelCase for variables.
+ *
+ *  ## Object with Scalars ##
+ *
+ *  \code
+ *  namespace Weight;
+ *
+ *  class Scale
  *  {
+ *      /// weightLimit is an integer.
+ *      public function __construct($weightLimit) {}
  *  }
- * 
- *  class MyClass
+ *
+ *  // Injection of a scalar value! (This also works in combination with other
+ *  // dependencies).
+ *  $provider->make('\Weight\Scale', array('Weight_Limit' => 50));
+ *  \endcode
+ *
+ *  ## Object with Interfaces ##
+ *
+ *  \code
+ *  class UI
  *  {
- *      public $dep1;
- *      public $dep2;
- *      public function __construct(DepClass $dep1, AnotherDep $dep2)
- *      {
- *          $this->dep1 = $dep1;
- *          $this->dep2 = $dep2;
- *      }
+ *      public function __construct(\Evoke\Iface\User        $user,
+ *                                  \Evoke\Iface\Core\Writer $writer) {}
  *  }
- * 
- *  $myObj = $provider->make('MyClass');
- *  var_dump($myObj->dep1 instanceof DepClass); // true
- *  var_dump($myObj->dep2 instanceof AnotherDep); // true
- *  ```
- *  
- *  This method will scale to any number of typehinted class dependencies
- *  specified in `__construct` methods.
- *  
- *  ###### Scalar Dependencies
- *  
- *  The design decision was explicitly made to disallow the specification of
- *  non-object dependency parameters. Such values are usually a failure to correctly
- *  implement recognized OOP design principles. Further, objects don't really
- *  "depend" on scalar values as they don't expose any functionality. If this
- *  behavior creates a problem in your application it may be worthwhile to
- *  reconsider how you're attacking your current problem.
- *  
- *  ### ADVANCED PROVISIONING
- *  
- *  The provider cannot instantiate a typehinted abstract class or interface without
- *  without a bit of help. This is where injection definitions come in.
- * 
- *  ##### Non-Concrete Dependencies
- *  
- *  The Provider allows you to define the class names it should use to provision
- *  objects with non-concrete method signatures. Consider:
- *  
- *   ```php
- *  interface DepInterface
- *  {
- *      public function doSomething();
- *  }
- *  
- *  class DepClass implements DepInterface
- *  {
- *      public function doSomething()
- *      {
- *      }
- *  }
- *  
- *  class MyClass
- *  {
- *      protected $dep;
- *      public function __construct(DepInterface $dep)
- *      {
- *          $this->dep = $dep;
- *      }
- *  }
- *  
- *  $provider->define('MyClass', ['dep' => 'DepClass']);
- *  $myObj = $provider->make('MyClass');
- *  var_dump($myObj instanceof MyClass); // true
- *  ```
- *  
- *  Custom injection definitions can also be specified using an instance
- *  of the requisite class, so the following would work in the same manner as
- *  above:
- *  
- *  ```php
- *  $provider->define('MyClass', [new DepClass]);
- *  $myObj = $provider->make('MyClass');
- *  var_dump($myObj instanceof MyClass); // true
- *  ```
- *  
- *  @category   Artax
- *  @package    Core
- *  @author     Daniel Lowrey <rdlowrey@gmail.com>
- *  Modifications made by Paul Young.
+ *
+ *  // Injection of interfaces!?! (Using a default conversion to a concrete).
+ *  $provider->make(
+ *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
+ *  \endcode
+ *
+ *  We can even inject interfaces!?!  We have a default conversion that renames
+ *  the interface by replacing \Iface\ with \.  So, \Evoke\User is automatically
+ *  injected.  However the writer interface points to an abstract or otherwise
+ *  undesirable class which we pass in manually.
+ *
  */
 class Provider implements Iface\Provider
 {
-	/** @property $definitions
-	 *  \array of custom class instantiation parameters
+	/** @property $reflections
+	 *  The cached class and parameter reflections for classes.
 	 */
-	protected $definitions = array();
+	protected static $reflections = array();
 
 	/** @property $shared
-	 *  \array of dependencies shared across the lifetime of the container.
+	 *  The store of shared classes (grouped by class and parameters).  If the
+	 *  same request to make an object of the class is received with the same
+	 *  parameters then the stored shared class shall be returned.
 	 */
-	protected $shared = array();
-
-	/** @property $reflectionCache
-	 *  \array of cached reflected classes and constructor parameters.
-	 */
-	protected $reflectionCache;
+	protected static $shared = array();
 
 	/******************/
 	/* Public Methods */
 	/******************/
-	
-	/** Create a new instance, auto-injecting the dependencies where possible.
-     *  @param \string $class  Class name.
-     *  @param \array  $definition Optional array specifying custom
-     *  instantiation parameters for construction.
-     *  @return \object An object created using dependency-injection.
-     */
-    public function build($class, Array $definition=NULL)
-    {
-	    if (!isset($definition) && isset($this->definitions[$class]))
-        {
-	        $definition = $this->definitions[$class];
-        }
-	        
-        return $this->getInjectedInstance($class, $definition);
-    }
 
-    /** Defines custom instantiation parameters for the specified class.
-     * 
-     *  @param \string $class      Class name.
-     *  @param \mixed  $definition An array specifying an ordered list of custom
-     *  class names or an instance of the necessary class.
-     */
-    public function define($class, Array $definition)
-    {
-        $this->definitions[$class] = $definition;
-    }
+	/** Make an object and return it.
+	 *
+	 *  This is the way to create objects (or retrieve shared services) using
+	 *  Evoke.  Using this method decouples object creation from your code.
+	 *  This makes it easy to test your code as it is not tightly bound to the
+	 *  objects that it depends on.
+	 *
+	 *  @param className \string Classname, including namespace.
+	 *  @param \array  params    Construction parameters.  Only the parameters
+	 *  that cannot be lazy loaded (scalars with no default or interfaces that
+	 *  have no corresponding concrete object with the mapped classname) need to
+	 *  be passed.
+	 *
+	 *  @return The object that has been created.
+	 */
+	public function make($className, Array $params=array())
+	{
+		$params = $this->pascalToCamel($params);
 
-    /** Get a shared object using auto-injected dependencies where possible.
-     *  @param \string $class  Class name.
-     *  @param \array  $definition Optional array specifying custom
-     *  instantiation parameters for construction.
-     *  @return \object The shared object for the class and construction
-     *  parameter combination.
-     */
-    public function get($class, Array $definition=NULL)
-    {
-	    if (!isset($definition) && isset($this->definitions[$class]))
+		// Is this class a shared service.
+		if (isset(self::$shared[$className]))
+		{
+			foreach (self::$shared[$className] as $sharedEntry)
+			{
+				if ($sharedEntry['Params'] === $params)
+				{
+					return $sharedEntry['Object'];
+				}
+			}
+		}
+		
+		// Reflect the class if we haven't already done so.
+		if (!isset(self::$reflections[$className]))
         {
-	        $definition = $this->definitions[$class];
+	        $this->reflect($className);
         }
 
-	    // Try to return an already created object with the same definition.
-	    foreach (self::shared[$class] as $sharedEntry)
+        // If there is no possibility of passing parameters to the code then
+        // just instantiate the object and return it.
+		if (!isset(self::$reflections[$className]['Params']))
+        {            
+	        return new $className;
+        }
+
+        // Use the passed parameters, falling back on the reflected parameters
+		// for automatic lazy injection to create all of the dependencies.
+	    $dependencies = array();
+        
+	    foreach (self::$reflections[$className]['Params'] as $reflectionParam)
+        {
+            if (isset($params[$reflectionParam->name]))
+            {
+	            $dependencies[] = $params[$reflectionParam->name];
+            }
+            elseif ($reflectionParam->isDefaultValueAvailable())
+            {
+                $dependencies[] = $reflectionParam->getDefaultValue();
+            }
+            else
+            {
+	            $depClass = $reflectionParam->getClass();
+
+	            // If we have an interface then try using the default classname
+	            // conversion.
+	            if ($depClass->isInterface())
+	            {
+		            $dependencies[] = $this->make(
+			            str_replace('\Iface\\', '\\', $depClass->getName()));
+	            }
+	            else
+	            {
+		            $dependencies[] = isset($depClass)
+			            ? $this->make($depClass->name)
+			            : NULL;
+	            }
+            }
+        }
+
+	    $object = self::$reflections[$className]['Class']->newInstanceArgs(
+		    $dependencies);
+	    
+	    // If this is a shared class then we are creating it for the first time.
+	    if (isset(self::$shared[$className]))
 	    {
-		    if ($sharedEntry['Definition'] === $definition)
-		    {
-			    return $sharedEntry['Object'];
-		    }
+		    self::$shared[$className][] = array('Object' => $object,
+		                                        'Params' => $params);
 	    }
-
-	    // It has not been created yet, so we must create it now.
-        $object = $this->getInjectedInstance($class, $definition);
-        $this->shared[$class] = array('Definition' => $definition,
-                                      'Object'     => $object);
+	    
         return $object;
-    }
-    
+	}
+
+	/** Set the specified class to be shared by the Provider.  The make method
+	 *  will return a shared object for this class while the class remains
+	 *  shared.
+	 *  @param className \string  Classname (including namespace).
+	 */
+	public function share($className)
+	{
+		if (!isset(self::$shared[$className]))
+		{
+			self::$shared[$className] = array();
+		}
+	}
+
+	/** Stop the class from being shared by the Provider, forcing a new object
+	 *  to be created for the class each time it is made using make.
+	 *  @param className \string The classname to unshare.
+	 */
+	public function unshare($className)
+	{
+		unset(self::$shared[$className]);
+	}
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
-    
-    /**
-     * Generate dependencies for a class without an injection definition
-     * 
-     * @param string $class Class name
-     * @param array  $args  An array of ReflectionParameter objects
-     * 
-     * @return array Returns an array of dependency instances to inject
-     * @throws LogicException If a provision attempt is made for a class whose
-     *                        constructor specifies neither a typehint or NULL
-     *                        default value for a parameter.
-     * @used-by Provider::getInjectedInstance
-     */
-    protected function getDepsSansDefinition($class, array $args)
-    {
-	    $deps = array();
-        
-        for ($i=0; $i<count($args); $i++)
-        {
-	        if ($param = $args[$i]->getClass())
-            {
-                $deps[] = $this->make($param->name);
-            }
-	        elseif ($args[$i]->isDefaultValueAvailable()
-	                && NULL === $args[$i]->getDefaultValue())
-	        {
-                $deps[] = NULL;
-            }
-	        else
-	        {
-                throw new LogicException(
-                    "Cannot provision $class::__construct: no typehint ".
-                    'or default NULL value specified at argument ' . ($i+1));
-	        }
-        }
-        
-        return $deps;
-    }    
-    
-    /**
-     * Generate dependencies for a class using an injection definition
-     * 
-     * @param \string $class Class name.
-     * @param \array  $ctorParams  An array of ReflectionParameter objects.
-     * @param \array  $def   An array specifying dependencies required for
-     *                      object instantiation.
-     * 
-     * @return array Returns an array of dependency instances to inject
-     * @throws ProviderDefinitionException If a provisioning attempt is made
-     *                                     using an invalid injection definition
-     * @used-by Provider::getInjectedInstance
-     */
-    protected function getDepsWithDefinition($class, $ctorParams, $def)
-    {
-	    $deps = array();
-        
-        foreach ($ctorParams as $param)
-        {
-            if (isset($def[$param->name]))
-            {
-	            $deps[] = is_string($def[$param->name]) && $param->getClass()
-		            ? $this->make($def[$param->name])
-		            : $def[$param->name];
-            }
-            elseif ($reflCls = $param->getClass())
-            {
-                $deps[] = $this->make($reflCls->name);
-            }
-            elseif ($param->isDefaultValueAvailable())
-            {
-                $deps[] = $param->getDefaultValue();
-            }
-            else
-            {
-                $deps[] = NULL;
-            }
-        }
-        
-        return $deps;
-    }
-    
-    /**
-     * Return an instantiated object subject to user-specified definitions
-     * 
-     * Note that reflected classes and their constructor parameters are 
-     * cached to avoid needlessly reflecting the same classes over and over.
-     * 
-     * @param string $class Class name
-     * @param array  $def   An array specifying dependencies required for
-     *                      object instantiation
-     * 
-     * @return mixed Returns A dependency-injected object
-     * @throws LogicException If the class being provisioned doesn't exist and
-     *                        can't be autoloaded
-     * @uses Provider::getDepsWithDefinition
-     * @uses Provider::getDepsSansDefinition
-     */
-    protected function getInjectedInstance($class, $def)
-    {
-        if (isset($this->reflectionCache[$class]))
-        {
-            $params = $this->reflectionCache[$class]['ctor'];
-            $refl   = $this->reflectionCache[$class]['class'];
-        }
-        else
-        {
-            try
-            {
-                $refl = new ReflectionClass($class);
-                $this->reflectionCache[$class]['class'] = $refl;
-            }
-            catch (ReflectionException $e)
-            {
-                throw new LogicException(
-	                "Provider instantiation failure: `$class` doesn't exist".
-	                ' and cannot be found using the registered autoloaders.');
-            }
-            
-            if ($ctor = $refl->getConstructor())
-            {
-                $params = $ctor->getParameters();
-            }
-            else
-            {
-                $params = NULL;
-            }
-            
-            $this->reflectionCache[$class]['ctor'] = $params;
-        }
-        
-        if (!$params)
-        {            
-	        return new $class;
-        }
-        else
-        {
-            $deps = (NULL === $def)
-                ? $this->getDepsSansDefinition($class, $params)
-                : $this->getDepsWithDefinition($class, $params, $def);
-            
-            return $refl->newInstanceArgs($deps);
-        }
-    }
+
+	/** Reflect the class, storing it in the reflections array.
+	 *  @param className \string The full classname (including the namespace).
+	 */
+	protected function reflect($className)
+	{
+		$reflectionClass = new \ReflectionClass($className);
+		$constructor = $reflectionClass->getConstructor();
+		$reflectionParams =
+			(isset($constructor) ? $constructor->getParameters() : NULL);
+		
+		self::$reflections[$className] = array('Class'  => $reflectionClass,
+		                                       'Params' => $reflectionParams);		
+	}
+	
+	/*******************/
+	/* Private Methods */
+	/*******************/
+
+	/** Convert an array of keys in pascal to camelCase.
+	 *  @param pascalArr \array The array to convert.
+	 */
+	private function pascalToCamel(Array $pascalArr)
+	{
+		$camelArr = array();
+		
+		foreach ($pascalArr as $key => $val)
+		{
+			$camelArr[lcfirst(implode('', explode('_', $key)))] = $val;
+		}
+
+		return $camelArr;
+	}
 }
 // EOF
