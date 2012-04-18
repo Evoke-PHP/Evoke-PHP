@@ -29,8 +29,8 @@ namespace Evoke\Core;
  *  foo class or a bar class with a getInstance method.  This is a tight
  *  coupling that can be avoided by using this class.  By using this class the
  *  only requirement created in code that creates or gets instances of objects
- *  is that it is always injected with an object that implements the
- *  InstanceManager interface.
+ *  is that it is always injected with an object that implements the Provider
+ *  interface.
  *
  *  Using this class for all of your objects and shared resources makes it easy
  *  to test your code (you won't need stubs) as you will be able to inject all
@@ -59,12 +59,17 @@ namespace Evoke\Core;
  *  $specialGravel = $provider->make('Gravel');
  *
  *  // Specialization combined with automatic injection.
- *  // Note: Pascal is converted to Camel to match the Evoke coding standard.
  *  $specialConcrete = $provider->make(
  *      'Concrete',
  *      array('Grey_Gravel_For_Mixing' => $specialGravel,
  *            'Water'                  => $specialWater)); 
  *  \endcode
+ *
+ *  Observe how we pass in dependencies using the second argument to make.  The
+ *  Pascal_Case from the array is converted to camelCase to match the name of
+ *  the constructor argument (Grey_Gravel_For_Mixing => greyGravelForMixing).
+ *  This matches the Evoke standard of using Pascal_Case for array indexes and
+ *  camelCase for variables.
  *
  *  ## Object with Scalars ##
  *
@@ -91,16 +96,18 @@ namespace Evoke\Core;
  *                                  \Evoke\Iface\Core\Writer $writer) {}
  *  }
  *
- *  // The interface gets automatically rewritten to a concrete class by
- *  // replacing \Iface\ with \.  So, \Evoke\User is automatically injected.
- *  // However the writer interface points to an abstract or otherwise
- *  // undesirable class which we pass in manually.
+ *  // Injection of interfaces!?! (Using a default conversion to a concrete).
  *  $provider->make(
  *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
  *  \endcode
  *
+ *  We can even inject interfaces!?!  We have a default conversion that renames
+ *  the interface by replacing \Iface\ with \.  So, \Evoke\User is automatically
+ *  injected.  However the writer interface points to an abstract or otherwise
+ *  undesirable class which we pass in manually.
+ *
  */
-class InstanceManager implements Iface\InstanceManager
+class Provider implements Iface\Provider
 {
 	/** @property $reflections
 	 *  The cached class and parameter reflections for classes.
@@ -120,16 +127,18 @@ class InstanceManager implements Iface\InstanceManager
 
 	/** Make an object and return it.
 	 *
-	 *  This is the standard way to instantiate objects using Evoke.
-	 *  Using this method decouples object creation from your code.  This makes
-	 *  it easy to test your code as it is not tightly bound to the objects that
-	 *  it creates.
+	 *  This is the way to create objects (or retrieve shared services) using
+	 *  Evoke.  Using this method decouples object creation from your code.
+	 *  This makes it easy to test your code as it is not tightly bound to the
+	 *  objects that it depends on.
 	 *
 	 *  @param className \string Classname, including namespace.
-	 *  @param params    \array  Construction parameters.  Only the parameters
-	 *  that cannot be lazy loaded (scalars with no default) need to be passed.
+	 *  @param \array  params    Construction parameters.  Only the parameters
+	 *  that cannot be lazy loaded (scalars with no default or interfaces that
+	 *  have no corresponding concrete object with the mapped classname) need to
+	 *  be passed.
 	 *
-	 *  \return The object that has been created.
+	 *  @return The object that has been created.
 	 */
 	public function make($className, Array $params=array())
 	{
@@ -207,9 +216,9 @@ class InstanceManager implements Iface\InstanceManager
         return $object;
 	}
 
-	/** Set the specified class to be shared by the InstanceManager.  The make
-	 *  method will return a shared object for this class while the class
-	 *  remains shared.
+	/** Set the specified class to be shared by the Provider.  The make method
+	 *  will return a shared object for this class while the class remains
+	 *  shared.
 	 *  @param className \string  Classname (including namespace).
 	 */
 	public function share($className)
@@ -220,8 +229,8 @@ class InstanceManager implements Iface\InstanceManager
 		}
 	}
 
-	/** Stop the class from being shared by the InstanceManager, forcing a new
-	 *  object to be created for the class each time it is made using make.
+	/** Stop the class from being shared by the Provider, forcing a new object
+	 *  to be created for the class each time it is made using make.
 	 *  @param className \string The classname to unshare.
 	 */
 	public function unshare($className)
