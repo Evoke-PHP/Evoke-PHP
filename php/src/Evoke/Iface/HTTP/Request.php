@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Iface\HTTP;
+namespace Evoke\Iface\Core\HTTP;
 
 interface Request
 {

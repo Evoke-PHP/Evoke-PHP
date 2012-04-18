@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Iface\Model;
+namespace Evoke\Iface\Model;
 
-interface Admin extends \Evoke\Core\Iface\Model
+interface Admin extends \Evoke\Iface\Model
 {   
 	/// Add a record.
 	public function add($record);

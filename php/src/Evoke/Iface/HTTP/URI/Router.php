@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Iface\HTTP\URI;
+namespace Evoke\Iface\Core\HTTP\URI;
 
 interface Router
 {

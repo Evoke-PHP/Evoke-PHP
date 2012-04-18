@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Iface;
+namespace Evoke\Iface\Core;
 
 /// The interface to an object that writes (using a buffer).
 interface Writer
