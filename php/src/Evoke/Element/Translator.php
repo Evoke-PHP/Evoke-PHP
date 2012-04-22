@@ -7,21 +7,15 @@ abstract class Translator extends Base
 	/** @property $Translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
-	public function __construct(Array $setup)
+	public function __construct(\Evoke\Iface\Translator $translator,
+	                            Array $attribs=array(),
+	                            Array $pos=array())
 	{
-		$setup += array('Translator');
-
-		if (!$setup['Translator'] instanceof \Evoke\Core\Iface\Translator)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Translator');
-		}
-
-		parent::__construct($setup);
+		parent::__construct($attribs, $pos);
 		
-		$this->Translator = $setup['Translator'];
+		$this->translator = $translator;
 	}
 }
 // EOF

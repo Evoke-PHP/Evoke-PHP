@@ -318,30 +318,6 @@ class Joins
 		return $this->Info->getPrimaryKeys();
 	}
    
-	// Get a row ID that uniquely identifies a row for a table.
-	protected function getRowID($row)
-	{
-		$id = NULL;
-		$primaryKeys = $this->Info->getPrimaryKeys();
-
-		foreach ($primaryKeys as $primaryKey)
-		{
-			if (isset($row[$primaryKey]))
-			{
-				if (empty($id))
-				{
-					$id = $row[$primaryKey];
-				}
-				else
-				{
-					$id .= $this->idSeparator . $row[$primaryKey];
-				}
-			}
-		}
-      
-		return $id;
-	}
-   
 	/// Get the table name that has possibly been aliassed.
 	public function getTableAlias()
 	{
@@ -383,7 +359,35 @@ class Joins
 	{
 		return $this->Info->isValid($fieldset, $ignoredFields);
 	}
-   
+
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	// Get a row ID that uniquely identifies a row for a table.
+	protected function getRowID($row)
+	{
+		$id = NULL;
+		$primaryKeys = $this->Info->getPrimaryKeys();
+
+		foreach ($primaryKeys as $primaryKey)
+		{
+			if (isset($row[$primaryKey]))
+			{
+				if (empty($id))
+				{
+					$id = $row[$primaryKey];
+				}
+				else
+				{
+					$id .= $this->idSeparator . $row[$primaryKey];
+				}
+			}
+		}
+      
+		return $id;
+	}
+      
    /*******************/
    /* Private Methods */
    /*******************/

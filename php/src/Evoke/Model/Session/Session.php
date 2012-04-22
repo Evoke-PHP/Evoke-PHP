@@ -10,17 +10,17 @@ class Session extends \Evoke\Model\Base
 	 */
 	protected $SessionManager;
 
-	public function __construct(Array $setup)
+	/** Construct a Session model.
+	 *  @param SessionManager \object The Session Manager for the part of the
+	 *  session we are modelling.
+	 *  @param dataPrefix \array Models return data at the specified prefix.
+	 */
+	public function __construct(Iface\SessionManager $SessionManager,
+	                            Array                $dataPrefix=array())
 	{
-		$setup += array('Session_Manager' => NULL);
-      
-		parent::__construct($setup);
-
-		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires SessionManager');
-		}
+		parent::__construct($dataPrefix);
+		
+		$this->SessionManager = $SessionManager;
 	}
 
 	/******************/
@@ -30,7 +30,7 @@ class Session extends \Evoke\Model\Base
 	// Get the data from the session.
 	public function getData()
 	{
-		$session = $this->sessionManager->getAccess();
+		$session = $this->SessionManager->getAccess();
 
 		if (!is_array($session))
 		{

@@ -25,29 +25,27 @@ class Autoload implements \Evoke\Core\Iface\Handler
 	 */
 	protected $namespace;
 
-	public function __construct(Array $setup=array())
+	public function __construct(/*s*/ $baseDir,
+	                            /*s*/ $namespace,
+	                            /*b*/ $authoritative=true,
+	                            /*s*/ $extension='.php')
 	{
-		$setup += array('Authoritative' => true,
-		                'Base_Dir'      => \NULL,
-		                'Extension'     => '.php',
-		                'Namespace'     => \NULL);
-		
-		if (!is_string($setup['Base_Dir']))
+		if (!is_string($baseDir))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Base_Dir as string');
+				__METHOD__ . ' requires baseDir as string');
 		}
 
-		if (!is_string($setup['Namespace']))
+		if (!is_string($namespace))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Namespace as string');
+				__METHOD__ . ' requires namespace as string');
 		}
 
-		$this->authoritative = $setup['Authoritative'];
-		$this->baseDir       = $setup['Base_Dir'];
-		$this->extension     = $setup['Extension'];
-		$this->namespace     = $setup['Namespace'];
+		$this->authoritative = $authoritative;
+		$this->baseDir       = $baseDir;
+		$this->extension     = $extension;
+		$this->namespace     = $namespace;
 	}
 
 	/******************/

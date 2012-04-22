@@ -12,9 +12,16 @@ class Table extends Base
 	 *  Table name \string
 	 */
 	protected $tableName;
-	
-	public function __construct($setup=array())
+
+	/** Create a model for a database table.
+	 *  @param tableName  \string The database table that the model represents.
+	 *  @param select     \array  Select statement settings.
+	 *  @param dataPrefix \array  Prefix to the data
+	public function __construct(/*s*/ $tableName,
+	                            Array $select=array(),
+	                            Array $dataPrefix=array())
 	{
+		
 		$setup += array('Select'     => array(
 			                'Fields'     => '*',
 			                'Conditions' => '',
@@ -28,7 +35,7 @@ class Table extends Base
 				__METHOD__ . ' requires Table_Name as string');
 		}
 		
-		parent::__construct($setup);
+		parent::__construct($dataPrefix);
 
 		$this->select    = $setup['Select'];
 		$this->tableName = $setup['Table_Name'];

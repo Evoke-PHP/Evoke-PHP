@@ -3,18 +3,25 @@ namespace Evoke\Data;
 
 class Menu extends Base
 {
+	/** @property $left
+	 *  Left field name @string
+	 */
 	protected $left;
+
+	/** @property $right
+	 *  Right field name @string
+	 */
 	protected $right;
 
-	public function __construct(Array $setup=array())
+	/** Construct the menu data.
+	 *  @param left  @string Left field name.
+	 *  @param right @string Right field name.
+	 */
+	public function __construct(/*s*/ $left='Lft',
+	                            /*s*/ $right='Rgt')
 	{
-		$setup += array('Left_Field'  => 'Lft',
-		                'Right_Field' => 'Rgt');
-
-		parent::__construct($setup);
-
-		$this->left = $setup['Left_Field'];
-		$this->right = $setup['Right_Field'];
+		$this->left  = $left;
+		$this->right = $right;
 	}
 
 	/******************/
@@ -27,9 +34,9 @@ class Menu extends Base
 	{
 		$data = array();
       
-		foreach ($this->List as $MenuItems)
+		foreach ($this->list as $menuItems)
 		{
-			$data[] = $this->getTree($MenuItems);
+			$data[] = $this->getTree($menuItems);
 		}
       
 		return $data;
@@ -41,10 +48,10 @@ class Menu extends Base
    
 	/** Arrange the menu items into a tree.  We assume that the data is arranged
 	 *  by Left order so that we can build from the ROOT item, left to right.
-	 *  @param MenuItems \Object Data object for the menu items.
-	 *  \return \array Menu tree.
+	 *  @param menuItems @object Data object for the menu items.
+	 *  @return @array Menu tree.
 	 */
-	protected function getTree($MenuItems)
+	protected function getTree($menuItems)
 	{      
 		$tree = array();
       
@@ -56,15 +63,14 @@ class Menu extends Base
 		// levels. The last entry in the array is the amount of children at the
 		// current level, second to last = previous level, etc.
 		$childrenToProcess = array();
-      
-		foreach ($MenuItems as $Item)
-		{
-			$numChildren = ($Item[$this->right] - $Item[$this->left] - 1) / 2;
 
-			if ($numChildren > 0)
-			{
-				$menuItem['Children'] = array();
-			}
+
+		/// \todo This needs to be fixed and tested.
+		throw new Exception(__METHOD__ . ' needs implementation to be tested.');
+		
+		foreach ($menuItems as $item)
+		{
+			$numChildren = ($item[$this->right] - $item[$this->left] - 1) / 2;
 	 
 			// Go to the correct depth of the tree and add the item.
 			$ref =& $tree;
@@ -74,7 +80,7 @@ class Menu extends Base
 				$ref =& $ref[count($ref) - 1]['Children'];
 			}
 
-			$ref[] = $Item->getRecord();
+			$ref[] = $item->getRecord();
 
 			// We have processed an item.
 			foreach ($childrenToProcess as &$children)

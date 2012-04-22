@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core;
 
-class Settings implements \ArrayAccess
+class Settings implements Iface\Settings
 {
 	/** @property $frozen
 	 *  \array The settings that have been frozen.  Attempting to modify these
@@ -17,13 +17,11 @@ class Settings implements \ArrayAccess
 	/** Construct the Settings object.
 	 *  @param setup \array The initial Frozen and Variable settings.
 	 */
-	public function __construct(Array $setup=array())
+	public function __construct(Array $frozen=array(),
+	                            Array $variable=array())
 	{
-		$setup += array('Frozen'    => array(),
-		                'Variable'  => array());
-      
-		$this->frozen = $setup['Frozen'];
-		$this->variable = $setup['Variable'];
+		$this->frozen   = $frozen;
+		$this->variable = $variable;
 	}
 
 	/******************/

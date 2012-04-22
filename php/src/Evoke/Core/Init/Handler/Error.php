@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
+use Evoke\Core\Iface;
+
 class Error implements \Evoke\Core\Iface\Handler
 {
 	/** @property $detailedInsecureMessage
@@ -11,39 +13,26 @@ class Error implements \Evoke\Core\Iface\Handler
 	/** @property $EventManager
 	 *  EventManager \object
 	 */
-	protected $EventManager;
+	protected $eventManager;
 
-	/** @property $Writer
+	/** @property $writer
 	 *  Writer \object
 	 */
-	protected $Writer;
+	protected $writer;
 
-	public function __construct(Array $setup)
+	public function __construct(Iface\EventManager $eventManager,
+	                            Iface\Writer       $writer,
+	                            /* Bool */         $detailedInsecureMessage)
 	{
-		$setup += array('Detailed_Insecure_Message' => NULL,
-		                'EventManager'              => NULL,
-		                'Writer'                    => NULL);
-
 		if (!is_bool($setup['Detailed_Insecure_Message']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
 		}
-
-		if (!$setup['EventManager'] instanceof \Evoke\Core\EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
-		}
-
-		if (!$setup['Writer'] instanceof \Evoke\Core\Iface\Writer)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Writer');
-		}
-     
-		$this->detailedInsecureMessage = $setup['Detailed_Insecure_Message'];
-		$this->EventManager            = $setup['EventManager'];
-		$this->Writer                  = $setup['Writer'];
+		
+		$this->detailedInsecureMessage = $detailedInsecureMessage;
+		$this->eventManager            = $eventManager;
+		$this->writer                  = $writer;
 	}
    
 	/******************/
@@ -140,7 +129,7 @@ class Error implements \Evoke\Core\Iface\Handler
 			$message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
 				' in ' . $file . ' on ' . $line;
 
-			$this->EventManager->notify(
+			$this->eventManager->notify(
 				'Log',
 				array('Level'   => LOG_WARNING,
 				      'Message' => $message,
@@ -221,12 +210,12 @@ class Error implements \Evoke\Core\Iface\Handler
 			$descriptionElems[] = array('div', array('class' => 'Trace'), $traceElems);
 		}
       
-		$this->Writer->write(
+		$this->writer->write(
 			array('div',
 			      array('class' => 'Error_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'),       $title),
 			            array('div', array('class' => 'Description'), $descriptionElems))));
-		$this->Writer->output();
+		$this->writer->output();
 	}
 }
 // EOF

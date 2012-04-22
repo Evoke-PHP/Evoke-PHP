@@ -1,20 +1,18 @@
 <?php
 namespace Evoke\Model\DB;
+
+use Evoke\Core\Iface;
+
 /// Model_DB_Joint_Admin provides a CRUD interface to a joint set of data.
 class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 {
-	/** @property $ajaxData
-	 *  AJAX data \array
-	 */
-	protected $ajaxData;
-	
 	/** @property $Failures
-	 *  Failure message array \object
+	 *  Failure MessageTree \object
 	 */
 	protected $Failures;
 
 	/** @property $Notifications
-	 *  Notification message array \object
+	 *  Notification MessageTree \object
 	 */
 	protected $Notifications;
 
@@ -28,46 +26,19 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 */
 	protected $Table_List_ID;
 	
-	public function __construct(Array $setup)
+	public function __construct(Iface\EventManager    $EventManager,
+	                            Iface\SessionManager  $SessionManager,
+	                            Iface\DB\Table\ListID $TableListID,
+	                            /* Bool */            $validate=true,
+	                            Iface\MessageTree     $Failures=NULL,
+	                            Iface\MessageTree     $Notifications=NULL)
 	{
-		$setup += array('Ajax_Data'       => array(),
-		                'Failures'        => NULL,
-		                'Notifications'   => NULL,
-		                'Session_Manager' => NULL,
-		                'Table_List_ID'   => NULL,
-		                'Validate'        => true);
+		parent::__construct($EventManager, );
 
-		if (!$setup['Failures'] instanceof Evoke\Core\MessageArray)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Failures as Evoke\Core\MessageArray');
-		}
-
-		if (!$setup['Notifications'] instanceof Evoke\Core\MessageArray)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Notifications as Evoke\Core\MessageArray');
-		}
-      
-		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires SessionManager');
-		}
-      
-		if (!$setup['Table_List_ID'] instanceof \Evoke\Core\DB\TableListID)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires TableListID');
-		}
-
-		parent::__construct($setup);
-
-		$this->ajaxData       = $setup['Ajax_Data'];
-		$this->Failures       = $setup['Failures'];
-		$this->Notifications  = $setup['Notifications'];
-		$this->SessionManager = $setup['Session_Manager'];
-		$this->TableListID    = $setup['Table_List_ID'];
+		$this->Failures       = $Failures;
+		$this->Notifications  = $Notifications;
+		$this->SessionManager = $SessionManager;
+		$this->TableListID    = $TableListID;
 	}
    
 	/******************/
@@ -239,8 +210,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	public function getData($selectSetup=array())
 	{
 		return $this->offsetData(
-			array('Ajax_Data' => $this->ajaxData,
-			      'Records'   => parent::getData($selectSetup),
+			array('Records'   => parent::getData($selectSetup),
 			      'State'     => array_merge(
 				      array('Failures'      => $this->Failures->get(),
 				            'Notifications' => $this->Notifications->get()),

@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\Model\DB;
 
+use Evoke\Core\Iface;
+
 /** Represent the data for a joint set of tables in a database. This provides
  *  read-only access to the data for the specified table and its related data
  *  obtained through the \ref Joins.
@@ -23,31 +25,34 @@ class Joint extends Base
 	 */
 	protected $tableName;
 
-	public function __construct(Array $setup)
+	/** Construct a Model of a joint set of database tables.
+	 *  @param tableName  \string The table name where joins start from.
+	 *  @param Joins      \object Joins object.
+	 *  @param select     \array  Select statement settings.
+	 *  @param dataPrefix \array  Any prefix to offset the data with.
+	 */
+	public function __construct(/* String */         $tableName,
+	                            Iface\DB\Table\Joins $Joins,
+	                            Array                $select=array(),
+	                            Array                $dataPrefix=array())
 	{
-		$setup += array('Joins'      => NULL,
-		                'Select'     => array('Conditions' => '',
-		                                      'Fields'     => '*',
-		                                      'Order'      => '',
-		                                      'Limit'      => 0),
-		                'Table_Name' => NULL);
-		
-		if (!$setup['Joins'] instanceof \Evoke\Core\DB\Table\Joins)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Joins');
-		}
-
-		if (!isset($setup['Table_Name']))
+	   
+		if (!is_string($tableName))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Table_Name');
+				__METHOD__ . ' requires tableName as string');
 		}
 		
-		parent::__construct($setup);
+		parent::__construct($dataPrefix);
 
-		$this->Joins      = $setup['Joins'];
-		$this->select     = $setup['Select'];
-		$this->tableName = $setup['Table_Name'];
+		$select += array('Conditions' => '',
+		                 'Fields'     => '*',
+		                 'Order'      => '',
+		                 'Limit'      => 0);
+	
+		$this->Joins     = $Joins;
+		$this->select    = $select;
+		$this->tableName = $tableName;
 	}
 
 	/******************/

@@ -11,26 +11,26 @@ class Exception implements \Evoke\Core\Iface\Handler
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $EventManager
+	/** @property $eventManager
 	 *  EventManager \object
 	 */
-	protected $EventManager;
+	protected $eventManager;
 
 	/** @property $maxLengthExceptionMessage
 	 *  \int The maximum length of exception message to display.
 	 */
 	protected $maxLengthExceptionMessage;
 
-	/** @property $Writer
+	/** @property $writer
 	 *  Writer \object
 	 */
-	protected $Writer;
+	protected $writer;
 
 	
 	public function __construct($detailedInsecureMessage,
 	                            $maxLengthExceptionMessage,
-	                            Iface\EventManager $EventManager,
-	                            Iface\Writer $Writer)
+	                            Iface\EventManager $eventManager,
+	                            Iface\Writer $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
 		{
@@ -39,9 +39,9 @@ class Exception implements \Evoke\Core\Iface\Handler
 		}
 
 		$this->detailedInsecureMessage   = $detailedInsecureMessage;
-		$this->EventManager              = $EventManager;
+		$this->eventManager              = $eventManager;
 		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
-		$this->Writer                    = $Writer;
+		$this->writer                    = $writer;
 	}
    
 	/******************/
@@ -63,7 +63,7 @@ class Exception implements \Evoke\Core\Iface\Handler
 				header('HTTP/1.1 500 Internal Server Error');
 			}
 
-			$this->EventManager->notify(
+			$this->eventManager->notify(
 				'Log',
 				array('Level'   => LOG_CRIT,
 				      'Message' => $uncaughtException->getMessage(),
@@ -127,12 +127,12 @@ class Exception implements \Evoke\Core\Iface\Handler
 				preg_replace('/\n/', '<br>' . "\n", $exceptionMessage);
 		}
 		
-		$this->Writer->write(
+		$this->writer->write(
 			array('div',
 			      array('class' => 'Exception_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'), $title),
 			            array('div', array('class' => 'Description'), $message))));
-		$this->Writer->output();
+		$this->writer->output();
 	}
 
 	public function register()

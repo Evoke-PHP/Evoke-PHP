@@ -8,19 +8,9 @@ class Menu extends \Evoke\Element\Base
 	 */
 	protected $Translator;
 
-	public function __construct($setup=array())
+	public function __construct(Evoke\Iface\Translator $translator)
 	{
-		$setup += array('Translator' => NULL);
-
-		if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs Translator');
-		}
-		
-		parent::__construct($setup);
-		
-		$this->Translator = $setup['Translator'];
+		$this->translator = $translator;
 	}
 
 	/******************/

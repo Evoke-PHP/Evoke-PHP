@@ -10,7 +10,7 @@ class NotFound extends Base
 	/// Initialize the controller by setting the response code to 404 Not Found.
 	protected function initialize()
 	{
-		$this->Response->setResponseCode(404);
+		$this->response->setResponseCode(404);
 	}
 
 	protected function html5ALL()
@@ -20,20 +20,20 @@ class NotFound extends Base
 	
 	protected function jsonALL()
 	{
-		$this->Writer->write(array('Code' => '404',
+		$this->writer->write(array('Code' => '404',
 		                           'Text' => 'Not Found'));
 	}
 	
 	protected function textALL()
 	{
-		$this->Writer->write('404 Not Found');
+		$this->writer->write('404 Not Found');
 	}
 	
 	protected function xhtmlALL()
 	{
 		$this->startXHTML();
 		$this->writeMessageBoxXML();
-		$this->Writer->writeEnd();
+		$this->writer->writeEnd();
 	}
 	
 	protected function xmlALL()
@@ -48,15 +48,15 @@ class NotFound extends Base
 	/// Write a Message Box in XML showing the Not Found message.
 	private function writeMessageBoxXML()
 	{
-		$Element = $this->Factory->build(
+		$element = $this->provider->make(
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
-		$Translator = $this->Factory->getTranslator();
+		$translator = $this->provider->make('Evoke\Core\Translator');
 		
-		$this->Writer->write(
-			$Element->set(
-				array('Description' => $Translator->get('Not_Found_Text'),
-				      'Title'       => $Translator->get('Not_Found_Title'))));
+		$this->writer->write(
+			$element->set(
+				array('Description' => $translator->get('Not_Found_Text'),
+				      'Title'       => $translator->get('Not_Found_Title'))));
 	}	
 }
 // EOF

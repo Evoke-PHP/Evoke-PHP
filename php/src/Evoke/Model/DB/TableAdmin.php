@@ -9,7 +9,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	protected $autoFields;
 
 	/** @property $Failures
-	 *  Failure message array \object
+	 *  Failure MessageTree \object
 	 */
 	protected $Failures;
 
@@ -19,7 +19,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	protected $Info;
 
 	/** @property $Notifications
-	 *  Notification message array \object
+	 *  Notification MessageTree \object
 	 */
 	protected $Notifications;
 
@@ -33,47 +33,22 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	 */
 	protected $validate;
 	
-	public function __construct(Array $setup)
+	public function __construct(Iface\DB\Table\Info  $Info,
+	                            Iface\SessionManager $SessionManager,
+	                            Array                $dataPrefix=array(),
+	                            Iface\MessageTree    $Failures=NULL,
+	                            Iface\MessageTree    $Notifications=NULL,
+	                            /* Bool */           $validate=true,
+	                            Array                $autoFields=array('ID'))
 	{
-		$setup += array('Auto_Fields'    => array('ID'),
-		                'Failures'       => NULL,
-		                'Info'           => NULL,
-		                'Notifications'  => NULL,
-		                'Session_Manager' => NULL,
-		                'Validate'       => true);
-
-		if (!$setup['Failures'] instanceof \Evoke\Core\MessageArray)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Failures as Message_Array');
-		}
-
-		if (!$setup['Info'] instanceof \Evoke\Core\DB\Table\Info)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires DB Table Info');
-		}
-
-		if (!$setup['Notifications'] instanceof \Evoke\Core\MessageArray)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Notifications as Message_Array');
-		}
-
-		if (!$setup['Session_Manager'] instanceof \Evoke\Core\SessionManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Session_Manager');
-		}
-
-		parent::__construct($setup);
+		parent::__construct($dataPrefix);
       
-		$this->autoFields     = $setup['Auto_Fields'];
-		$this->Failures       = $setup['Failures'];
-		$this->Info           = $setup['Info'];
-		$this->Notifications  = $setup['Notifications'];
-		$this->SessionManager = $setup['Session_Manager'];
-		$this->validate       = $setup['Validate'];
+		$this->autoFields     = $autoFields;
+		$this->Failures       = $Failures;
+		$this->Info           = $Info;
+		$this->Notifications  = $Notifications;
+		$this->SessionManager = $SessionManager;
+		$this->validate       = $validate;
 	}
 
 	/******************/
@@ -83,7 +58,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	/// Add a record to the table.
 	public function add($record)
 	{
-		$this->Failures->reset();
+		$this->Failures = NULL;
 
 		// Let the database choose the automatic fields.
 		foreach ($this->autoFields as $auto)
@@ -106,7 +81,8 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 				$this->tableName, array_keys($record), $record);
 
 			$this->SessionManager->reset();
-			$this->Notifications->add('Add', 'Successful');
+			$this->Notifications = $this->Notifications->buildNode(
+				'Add', 'Successful');
 			return true;
 		}
 		catch (\Exception $E)
@@ -282,23 +258,5 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 			return false;
 		}
 	}
-   
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	/// Get the event map used for connecting events.
-	protected function getProcessingEventMap()
-	{
-		return array_merge(parent::getProcessingEventMap(),
-		                   array('Add'            => 'add',
-		                         'Cancel'         => 'cancel',
-		                         'Create_New'     => 'createNew',
-		                         'Delete_Cancel'  => 'deleteCancel',
-		                         'Delete_Confirm' => 'deleteConfirm',
-		                         'Delete_Request' => 'deleteRequest',
-		                         'Edit'           => 'edit',
-		                         'Modify'         => 'modify'));
-	}   
 }
 // EOF

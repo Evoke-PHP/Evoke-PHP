@@ -3,21 +3,17 @@ namespace Evoke\Core\Init\Settings;
 
 class Loader
 {
-	/** @property $Settings
+	/** @property $settings
 	 *  Settings \object
 	 */
-	protected $Settings;
+	protected $settings;
 
-	public function __construct(Array $setup)
+	/** Create the settings loader.
+	 *  @param settings \object Settings object for loading the settings into.
+	 */
+	public function __construct(\Evoke\Core\Iface\Settings $settings)
 	{
-		$setup += array('Settings' => NULL);
-
-		if (!$setup['Settings'] instanceof \Evoke\Core\Settings)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Settings');
-		}
-
-		$this->Settings = $setup['Settings'];
+		$this->settings = $settings;
 	}
 
 	/******************/
@@ -33,7 +29,7 @@ class Loader
 		    Development_Servers - List of Development servers (for logging etc.)
 		    \endverbatim
 		*/
-		$this->Settings->set(
+		$this->settings->set(
 			'Constant',
 			array('Default_Language'             => 'EN',
 			      'Development_Servers'          => array(),
@@ -51,7 +47,7 @@ class Loader
 		 \endverbatim
 		 * No database connections by default.
 		 */
-		$this->Settings->set('DB', array());
+		$this->settings->set('DB', array());
 
 		/** Initialize the Dir (directory) constants for the evoke system:
 		    \verbatim
@@ -61,7 +57,7 @@ class Loader
 		    Web_Root      - Website root.
 		    \endverbatim
 		*/
-		$this->Settings->set(
+		$this->settings->set(
 			'Dir',
 			array('DB_Incoming'   => '/srv/db/incoming',
 			      'DB_Storage'    => '/srv/db/storage',
@@ -73,7 +69,7 @@ class Loader
 		    Administrator - Administrator Email
 		    \endverbatim
 		*/
-		$this->Settings->set(
+		$this->settings->set(
 			'Email',
 			array('Administrator' => ''));
 
@@ -83,7 +79,7 @@ class Loader
 		    Translation - Translations File.
 		    \endverbatim
 		*/
-		$this->Settings->set(
+		$this->settings->set(
 			'File',
 			array('Log'         => '/srv/log/log.txt',
 			      'Translation' => '/srv/site_lib/evoke/translations.php'));
@@ -96,7 +92,7 @@ class Loader
 		    No_Photo       - No Photo Image File.
 		    \endverbatim
 		*/
-		$this->Settings->set(
+		$this->settings->set(
 			'Web',
 			array('DB_Incoming'     => '/db/incoming/',
 			      'DB_Storage'     => '/db/storage/',

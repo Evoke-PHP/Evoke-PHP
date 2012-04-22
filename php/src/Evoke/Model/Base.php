@@ -3,53 +3,32 @@ namespace Evoke\Model;
 /// Provides the basic implementation for a model.
 abstract class Base implements \Evoke\Core\Iface\Model
 {
-	/** @property $EventManager
-	 *  EventManager obect.
-	 */
-	protected $EventManager;
-
 	/** @property $dataPrefix
-	 *  \mixed String, array or NULL, specifying the prefix to offset the
-	 *  retrieved data with.
+	 *  \array specifying the prefix to offset the retrieved data with.
 	 */
-	protected $dataPrefix;	
-	
-	/** @property $gotDataEvent
-	 *  \string Event name to call when we have retrieved data.
+	protected $dataPrefix;
+
+	/** Construct the basic functions of a model.
+	 *  @param dataPrefix \array Models return data at the specified prefix.
+	 *  This allows data to be combined between models while allowing for
+	 *  disambiguation based on the offset given to each model.  By default
+	 *  there is no offset and the data is returned as is.
 	 */
-	protected $gotDataEvent;
-	
-	public function __construct(Array $setup)
+	public function __construct(Array $dataPrefix=array())
 	{
-		$setup += array('Data_Prefix'    => NULL, // Can be NULL for no prefix.
-		                'Event_Manager'  => NULL,
-		                'Got_Data_Event' => 'Model.Got_Data');
-
-		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Event_Manager');
-		}
-
-		$this->EventManager = $setup['Event_Manager'];
-		$this->dataPrefix   = $setup['Data_Prefix'];
-		$this->gotDataEvent = $setup['Got_Data_Event'];
+		$this->dataPrefix = $dataPrefix;
 	}
    
 	/******************/
 	/* Public Methods */
 	/******************/
    
-	/// Get the data for the model.
+	/** Get the data for the model.
+	 *  @return \array The data (by default an empty array).
+	 */
 	public function getData()
 	{
 		return $this->offsetData(array());
-	}
-   
-	/// Notify the data that the model has.
-	public function notifyData()
-	{
-		$this->EventManager->notify($this->gotDataEvent, $this->getData());
 	}
    
 	/*********************/
@@ -60,16 +39,11 @@ abstract class Base implements \Evoke\Core\Iface\Model
 	 *  @param data \array The data to retrieve a part from.
 	 *  @param prefix \mixed The offset in the data to return data from.
 	 */
-	protected function getAtPrefix(Array $data, $prefix)
+	protected function getAtPrefix(Array $data, Array $prefix)
 	{
 		if (empty($prefix))
 		{
 			return $data;
-		}
-      
-		if (!is_array($prefix))
-		{
-			$prefix = array($prefix);
 		}
 
 		$ptr =& $data;
@@ -97,42 +71,20 @@ abstract class Base implements \Evoke\Core\Iface\Model
 
 	/** Offset the data to the \ref dataPrefix
 	 *  @param data \array The data to be offset.
+	 *  @return The data offset correctly.
 	 */
-	protected function offsetData(Array $data)
+	protected function offsetData($data)
 	{
-		return $this->offsetToPrefix($data, $this->dataPrefix);
-	}
-
-	/*******************/
-	/* Private Methods */
-	/*******************/
-
-	/** Offset the data to the specified prefix.
-	 *  @param data \array The data to offset.
-	 *  @param prefix \mixed The prefix to use.
-	 *  \return The data offset correctly.
-	 */
-	private function offsetToPrefix(Array $data, $prefix)
-	{
-		if (empty($prefix))
-		{
-			return $data;
-		}
-      
 		$offsetData = array();
 		$offsetPtr =& $offsetData;
-      
-		if (!is_array($prefix))
-		{
-			$prefix = array($prefix);
-		}
 		
-		foreach ($prefix as $offset)
+		foreach ($this->prefix as $offset)
 		{
 			$offsetPtr[$offset] = array();
 			$offsetPtr =& $offsetPtr[$offset];
 		}
 
+		// We have got the correct offset, now set the data at that offset.
 		$offsetPtr = $data;
       
 		return $offsetData;

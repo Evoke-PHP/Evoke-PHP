@@ -16,20 +16,20 @@ class Shutdown implements Iface\Handler
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $Writer
-	 *  Writer \object
+	/** @property $writer
+	 *  writer \object
 	 */
-	protected $Writer;
+	protected $writer;
 
 	/** Construct the System Shutdown handler.
 	 *  @param administratorEmail \string Admin's Email to use as a contact.
 	 *  @param detailedInsecureMessage \bool Whether to show detailed logging
 	 *  information (which is insecure).
-	 *  @param Writer \object The writer object to write the fatal message.
+	 *  @param writer \object The writer object to write the fatal message.
 	 */
 	public function __construct($administratorEmail,
 	                            $detailedInsecureMessage,
-	                            Iface\Writer $Writer)
+	                            Iface\Writer $writer)
 	{
 		if (!is_string($administratorEmail))
 		{
@@ -45,7 +45,7 @@ class Shutdown implements Iface\Handler
 
 		$this->administratorEmail      = $administratorEmail;
 		$this->detailedInsecureMessage = $detailedInsecureMessage;
-		$this->Writer                  = $Writer;
+		$this->writer                  = $writer;
 	}
 
 	/******************/
@@ -100,13 +100,13 @@ class Shutdown implements Iface\Handler
 				' in file ' . $err['file'] . ' at ' . $err['line'];
 		}
 
-		$this->Writer->write(
+		$this->writer->write(
 			array('div',
 			      array('class' => 'Error_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'),       $title),
 			            array('div', array('class' => 'Description'), $message))));
-		$this->Writer->writeEnd();
-		$this->Writer->output();
+		$this->writer->writeEnd();
+		$this->writer->output();
 	}
 
 	/// Register the shutdown handler.

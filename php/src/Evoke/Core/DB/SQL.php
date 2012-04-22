@@ -4,7 +4,8 @@ namespace Evoke\Core\DB;
 use \Evoke\Core\Exception\Base as Exception_Base;
 use \Evoke\Core\Exception\DB as Exception_DB;
 
-/** SQL wrapper class
+/** The SQL class provides an implementation of the SQL interface which extends
+ *  the DB interface in Evoke.
  *
  * Provides simple pass-through wrappers for the DB interface functions.
  *

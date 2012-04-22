@@ -25,7 +25,7 @@ namespace Evoke\Data;
  *  }
  *  \endcode
 */
-class Base implements \Evoke\Core\Iface\Data
+class Base implements \Evoke\Iface\Data
 {
 	/** @property $collisionFreeSetup
 	 *  Due to the way data is accessed from the Data class the number of
@@ -36,21 +36,19 @@ class Base implements \Evoke\Core\Iface\Data
 	 */
 	protected $collisionFreeSetup;
 		
-	public function __construct(Array $setup)
+	public function __construct(Array $joins,
+	                            Array $data=array(),
+	                            /*s*/ $jointKey='Joint_Data')
 	{
-		$setup += array('Data'      => array(),
-		                'Joins'     => NULL,
-		                'Joint_Key' => 'Joint_Data');
-
-		if (!is_array($setup['Joins']))
+		if (!is_array($joins))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Joins as array');
 		}
 		
-		foreach ($setup['Joins'] as $parentField => $dataContainer)
+		foreach ($Joins as $parentField => $dataContainer)
 		{
-			if (!$dataContainer instanceof \Evoke\Core\Iface\Data)
+			if (!$dataContainer instanceof \Evoke\Iface\Data)
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' requires Data for parent field: ' .
@@ -58,7 +56,9 @@ class Base implements \Evoke\Core\Iface\Data
 			}
 		}
 
-		$this->collisionFreeSetup = $setup;
+		$this->collisionFreeSetup = array('Data'      => $data,
+		                                  'Joins'     => $joins,
+		                                  'Joint_Key' => $jointKey);
 	}
 
 	/******************/
@@ -247,7 +247,7 @@ class Base implements \Evoke\Core\Iface\Data
 
 	/** Get the Join name that will be used for accessing the joint data from
 	 *  this object.  The joint data is a Data object and its name should match
-	 *  the standard naming of our objects (Upper Camel Case) and not contain the
+	 *  the standard naming of our objects (lowerCamelCase) and not contain the
 	 *  final ID which is not needed.
 	 *  @param parentField \string The parent field for the joint data.
 	 *  \return \string The reference name.
@@ -270,7 +270,7 @@ class Base implements \Evoke\Core\Iface\Data
 			$name .= ucfirst($part);
 		}
 
-		return $name;
+		return lcfirst($name);
 	}
 }
 // EOF

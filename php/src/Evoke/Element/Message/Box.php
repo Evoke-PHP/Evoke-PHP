@@ -3,11 +3,10 @@ namespace Evoke\Element\Message;
 
 class Box extends \Evoke\Element\Base
 { 
-	public function __construct(Array $setup)
+	public function __construct(Array $attribs=array('class' => 'Message_Box Info'),
+	                            Array $pos=array())
 	{
-		$setup += array('Attribs' => array('class' => 'Message_Box Info'));
-
-		parent::__construct($setup);
+		parent::__construct($attribs, $pos);
 	}
    
 	/******************/

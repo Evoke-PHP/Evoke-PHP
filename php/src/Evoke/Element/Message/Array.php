@@ -3,12 +3,26 @@ namespace Evoke\Element\Message;
 
 class Array extends Element
 {
-	public function __construct(Array $setup)
-	{      
-		$setup += array('Container_Attribs' => array('class' => 'Message_Container'),
-		                'Element_Class'     => 'Message');
+	/** @property $elementClass
+	 *  \string The class for an element of the message array.
+	 */
+	protected $elementClass;
+	
+	public function __construct(
+		/*s*/ $elementClass='Message',
+		Array $attribs=array('class' => 'Message_Container'),
+		Array $pos=array())
+	{
+		if (!is_string($elementClass))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires elementClass as string');
+		}
 
-		parent::__construct($setup);
+		
+		parent::__construct($attribs, $pos);
+
+		$this->elementClass = $elementClass;
 	}
 
 	/******************/
@@ -18,7 +32,7 @@ class Array extends Element
 	public function set(Array $data)
 	{
 		return parent::set(array('div',
-		                         $this->containerAttribs,
+		                         array(),
 		                         $this->buildElems($data)));
 	}
    

@@ -25,17 +25,15 @@ class Base implements \Evoke\Core\Iface\Element
 	 */
 	protected $pos;
    
-	public function __construct(Array $setup=array())
+	public function __construct(Array $attribs=array(),
+	                            Array $pos=array())
 	{
-		$setup += array('Attribs' => array(),
-		                'Pos'     => array('Attribs'  => 1,
+		$this->attribs = $attribs;
+		$this->el      = array();
+		$this->pos     = array_merge($pos,
+		                             array('Attribs'  => 1,
 		                                   'Children' => 2,
 		                                   'Tag'      => 0));
-
-		$this->el = array();
-
-		$this->attribs = $setup['Attribs'];
-		$this->pos     = $setup['Pos'];
 	}
 
 	/******************/
