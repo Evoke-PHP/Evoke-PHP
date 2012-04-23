@@ -36,13 +36,13 @@ class Select extends \Evoke\Element\Base
 		                'Text_Field'     => NULL,
 		                'Value_Field'    => 'ID');
 
-		if (!is_string($setup['Text_Field']))
+		if (!is_string($textField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Text_Field as string');
 		}
 
-		if (!is_string($setup['Value_Field']))
+		if (!is_string($valueField))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Value_Field as string');
@@ -50,11 +50,11 @@ class Select extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->appendData    = $setup['Append_Data'];
-		$this->optionAttribs = $setup['Option_Attribs'];
-		$this->prependData   = $setup['Prepend_Data'];
-		$this->textField     = $setup['Text_Field'];
-		$this->valueField    = $setup['Value_Field'];
+		$this->appendData    = $appendData;
+		$this->optionAttribs = $optionAttribs;
+		$this->prependData   = $prependData;
+		$this->textField     = $textField;
+		$this->valueField    = $valueField;
 	}
       
 	/******************/

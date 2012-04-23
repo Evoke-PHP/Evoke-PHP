@@ -110,34 +110,34 @@ class Element_Record_List extends Element
 		                'Translate_Labels'    => true,
 		                'Translator'          => NULL);
 
-		if (!isset($setup['Data']))
+		if (!isset($data))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Data');
 		}
       
-		if (!isset($setup['Row_Buttons']))
+		if (!isset($rowButtons))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Row_Buttons');
 		}
 
-		if (!isset($setup['Table_Name']))
+		if (!isset($tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name');
 		}
 
-		if (!$setup['Translator'] instanceof Translator)
+		if (!$translator instanceof Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
 		}
 
-		$this->data = $setup['Data'];
+		$this->data = $data;
       
 		// Merge the Heading Setup so that information is added to a blank
 		// heading setup whereas the default is for only a top heading.
-		if (!empty($setup['Heading_Setup']))
+		if (!empty($headingSetup))
 		{
 			$this->headingSetup = array_merge(
 				array('Bottom'          => false,
@@ -146,11 +146,11 @@ class Element_Record_List extends Element
 				      'Inline'          => false,
 				      'Row_Attribs'     => array('class' => 'Heading Row'),
 				      'Top'             => false),
-				$setup['Heading_Setup']);
+				$headingSetup);
 		}
       
 		parent::__construct(array('div',
-		                          $this->setup['Attribs'],
+		                          $this->attribs,
 		                          $this->buildRecordListElems()));
 	}
 
@@ -227,7 +227,7 @@ class Element_Record_List extends Element
 	{
 		return array('div',
 		             $this->emptyDataAttribs,
-		             $this->setup['Translator']->get('No_Records_Found'));
+		             $this->translator->get('No_Records_Found'));
 	}
    
 	/** Build the heading row element.
@@ -257,7 +257,7 @@ class Element_Record_List extends Element
 		{
 			return $this->app->getNew(
 				'Element_Form_Hidden_Input',
-				array('App'            => $this->setup['App'],
+				array('App'            => $this->app,
 				      'Attribs'        => array_merge(
 					      array('action' => '',
 					            'method' => 'post'),
@@ -268,7 +268,7 @@ class Element_Record_List extends Element
 				      'Name_Prefix'    => $this->tableName . '.',
 				      'Primary_Keys'   => $this->getPrimaryKeys(),
 				      'Submit_Buttons' => $this->rowButtons,
-				      'Translator'     => $this->setup['Translator']));
+				      'Translator'     => $this->translator));
 		}
 		else
 		{
@@ -359,7 +359,7 @@ class Element_Record_List extends Element
 	/// Get the fields for display.
 	protected function getFields()
 	{
-		return $this->setup['Fields'];
+		return $this->fields;
 	}
    
 	/// Get the heading buttons that appear with Top or Bottom headings.
@@ -380,13 +380,13 @@ class Element_Record_List extends Element
 		{
 			// Use a different label if one has been specified by the label array
 			// or a translation is required.
-			if (isset($this->setup['Labels'][$field]))
+			if (isset($this->labels[$field]))
 			{
-				$headingText = $this->setup['Labels'][$field];
+				$headingText = $this->labels[$field];
 			}
 			elseif ($this->translateLabels)
 			{
-				$headingText = $this->setup['Translator']->get(
+				$headingText = $this->translator->get(
 					$this->tableName . '_Field_' . $field);
 			}
 			else

@@ -9,14 +9,14 @@ abstract class Base extends \Evoke\Model\Base
 	{
 		$setup += array('SQL' => NULL);
 
-		if (!$setup['SQL'] instanceof \Evoke\Core\DB\SQL)
+		if (!$sQL instanceof \Evoke\Core\DB\SQL)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires SQL');
 		}
 
 		parent::__construct($setup);
  
-		$this->SQL = $setup['SQL'];
+		$this->SQL = $sQL;
 	}
 }
 // EOF

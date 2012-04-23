@@ -25,24 +25,24 @@ class SessionManager
 
 		// Ensure the domain is an array for all of the methods that use it.  When
 		// a string is passed in we should use that as the domain. 
-		if (!is_array($setup['Domain']))
+		if (!is_array($domain))
 		{
-			if (!is_string($setup['Domain']))
+			if (!is_string($domain))
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' requires Domain as array or string.');
 			}
 			
-			$setup['Domain'] = array($setup['Domain']);
+			$domain = array($domain);
 		}
 
-		if (!$setup['Session'] instanceof \Evoke\Core\Iface\Session)
+		if (!$session instanceof \Evoke\Core\Iface\Session)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Session');
 		}
 
-		$this->domain  = $setup['Domain'];
-		$this->Session = $setup['Session'];		
+		$this->domain  = $domain;
+		$this->Session = $session;		
 		
 		$this->ensure();
 	}

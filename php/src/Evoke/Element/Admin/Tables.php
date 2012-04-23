@@ -8,12 +8,12 @@ class Tables extends \Evoke\Element\Base
 		$setup += array('Tables'     => NULL,
 		                'Translator' => NULL);
 
-		if (!isset($setup['Tables']))
+		if (!isset($tables))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Tables');
 		}
 
-		if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
+		if (!$translator instanceof \Evoke\Core\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs Translator');
@@ -21,19 +21,19 @@ class Tables extends \Evoke\Element\Base
       
 		$adminTableEntries = array();
 
-		foreach($setup['Tables'] as $name)
+		foreach($tables as $name)
 		{
 			$button = array(
 				array('a',
 				      array('class' => 'Table_Button',
 				            'href' => '/admin/' . strtolower($name) . '.php?' .
-				            $setup['Translator']->getLanguageHTTPQuery()),
-				      $setup['Translator']->get('Table_' . $name, __FILE__))));
+				            $translator->getLanguageHTTPQuery()),
+				      $translator->get('Table_' . $name, __FILE__))));
 	 
 			$description = array(
 				array('div',
 				      array('class' => 'Table_Description'),
-				      $setup['Translator']->get(
+				      $translator->get(
 					      'Table_' . $name . '_Description', __FILE__)));
    
 			$adminTableEntries[] =

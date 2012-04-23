@@ -33,21 +33,21 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		                                         'Tag'      => 0),
 		                'XMLWriter'     => NULL);
 
-		if (!$setup['XMLWriter'] instanceof \XMLWriter)
+		if (!$xMLWriter instanceof \XMLWriter)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires XMLWriter');
 		}
 		
-		$this->language   = $setup['Language'];
-		$this->pos        = $setup['Pos'];
-		$this->XMLWriter  = $setup['XMLWriter'];
+		$this->language   = $language;
+		$this->pos        = $pos;
+		$this->XMLWriter  = $xMLWriter;
 
 		$this->XMLWriter->openMemory();
 			
-		if ($setup['Indent'])
+		if ($indent)
 		{
-			$this->XMLWriter->setIndentString($setup['Indent_String']);
+			$this->XMLWriter->setIndentString($indentString);
 			$this->XMLWriter->setIndent(true);
 		}
 	}

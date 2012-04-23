@@ -9,21 +9,21 @@ class Table extends Base
 		$setup += array('Data'       => NULL,
 		                'Table_Info' => NULL);
 
-		if (!$this->setup['Table_Info'] instanceof \Evoke\Core\DB\Table\Info)
+		if (!$this->tableInfo instanceof \Evoke\Core\DB\Table\Info)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Info');
 		}
 
 		// Set specific fields in the setup for a table.
-		$setup['Fields']       = $setup['Table_Info']->getFields();
-		$setup['Primary_Keys'] = $setup['Table_Info']->getPrimaryKeys();
-		$setup['Table_Name']   = $setup['Table_Info']->getTableName();
+		$fields       = $tableInfo->getFields();
+		$primaryKeys = $tableInfo->getPrimaryKeys();
+		$tableName   = $tableInfo->getTableName();
 
-		if (!isset($setup['Attribs']))
+		if (!isset($attribs))
 		{
-			$setup['Attribs'] =
-				array('class' => 'Record_List ' . $setup['Table_Name']);
+			$attribs =
+				array('class' => 'Record_List ' . $tableName);
 		}
   
 		parent::__construct($setup);

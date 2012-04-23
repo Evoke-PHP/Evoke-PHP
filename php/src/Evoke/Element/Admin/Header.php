@@ -24,13 +24,13 @@ class Header extends \Evoke\Element\Base
 		                'Languages'        => NULL,
 		                'Translator'       => NULL);
 
-		if (!$setup['Element_Language'] instanceof \Evoke\Core\Iface\Element)
+		if (!$elementLanguage instanceof \Evoke\Core\Iface\Element)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Element_Language');
 		}
 
-		if (!$setup['Translator'] instanceof \Evoke\Core\Iface\Translator)
+		if (!$translator instanceof \Evoke\Core\Iface\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
@@ -38,9 +38,9 @@ class Header extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->ElementLanguage = $setup['Element_Language'];
-		$this->languages       = $setup['Languages'];
-		$this->Translator      = $setup['Translator'];
+		$this->ElementLanguage = $elementLanguage;
+		$this->languages       = $languages;
+		$this->Translator      = $translator;
 	}
 	
    /******************/

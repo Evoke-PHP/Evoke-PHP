@@ -18,9 +18,9 @@ class EntryForeign extends Entry
 		/// \todo Change this. SQL in an element is a bad idea.
 		throw new Exception(__METHOD__ . ' SQL in an element is a bad idea.');
       
-		if (!($setup['SQL'] instanceof \Evoke\DB\SQL))
+		if (!($sQL instanceof \Evoke\DB\SQL))
 		{
-			$setup['SQL'] = new SQL();
+			$sQL = new SQL();
 		}
 
 		parent::__construct($setup);
@@ -77,7 +77,7 @@ class EntryForeign extends Entry
 			'Field'          => $foreignKeys[$field]['Foreign_Field'],
 			'Selector_Field' => $foreignSelector['Field']);
 
-		$foreignKeyData = $this->setup['SQL']->select(
+		$foreignKeyData = $this->sQL->select(
 			$foreignKeys[$field]['Foreign_Table'],
 			$selectedFields,
 			$foreignSelector['Conditions'],

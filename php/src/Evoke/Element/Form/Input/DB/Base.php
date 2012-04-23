@@ -99,27 +99,27 @@ class Base extends \Evoke\Element\Base
 		                'Translate_Prefix'    => '',
 		                'Translator'          => NULL);
 
-		if (!$setup['Translator'] instanceof \Evoke\Core\Iface\Translator)
+		if (!$translator instanceof \Evoke\Core\Iface\Translator)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Translator');
 		}
       
 		parent::__construct($setup);
 
-		$this->attribs      		  = $setup['Attribs'];
-		$this->encasing     		  = $setup['Encasing'];
-		$this->fieldAttribs 		  = $setup['Field_Attribs'];
-		$this->fieldInfo    		  = $setup['Field_Info'];
-		$this->fieldPrefix  		  = $setup['Field_Prefix'];
-		$this->fieldValue   		  = $setup['Field_Value'];
-		$this->hidden       		  = $setup['Hidden'];
-		$this->highlighted  		  = $setup['Highlighted'];
-		$this->id           		  = $setup['ID'];
-		$this->label        		  = $setup['Label'];
-		$this->requiredIndication = $setup['Required_Indication'];
-		$this->translateLabel     = $setup['Translate_Label'];
-		$this->translatePrefix    = $setup['Translate_Prefix'];
-		$this->Translator         = $setup['Translator'];
+		$this->attribs      		  = $attribs;
+		$this->encasing     		  = $encasing;
+		$this->fieldAttribs 		  = $fieldAttribs;
+		$this->fieldInfo    		  = $fieldInfo;
+		$this->fieldPrefix  		  = $fieldPrefix;
+		$this->fieldValue   		  = $fieldValue;
+		$this->hidden       		  = $hidden;
+		$this->highlighted  		  = $highlighted;
+		$this->id           		  = $iD;
+		$this->label        		  = $label;
+		$this->requiredIndication = $requiredIndication;
+		$this->translateLabel     = $translateLabel;
+		$this->translatePrefix    = $translatePrefix;
+		$this->Translator         = $translator;
 	}
 
 	/******************/
@@ -135,7 +135,7 @@ class Base extends \Evoke\Element\Base
 		}
 
 		
-		return parent::set(array($this->setup['Tag'],
+		return parent::set(array($this->tag,
 		                         array(),
 		                         $this->getElements()));
 	}
@@ -166,13 +166,13 @@ class Base extends \Evoke\Element\Base
       
 		// Set the label by a specifically passed label, translate it from the
 		// field name or use the field name as a last resort.
-		if (isset($this->setup['Label']))
+		if (isset($this->label))
 		{
-			$text = $this->setup['Label'];
+			$text = $this->label;
 		}
 		elseif ($this->translateLabel)
 		{
-			$text = $this->setup['Translator']->get(
+			$text = $this->translator->get(
 				$this->translatePrefix . $field);
 		}
 		else
@@ -219,15 +219,15 @@ class Base extends \Evoke\Element\Base
 		// Get the base attributes defaulting the id and name for the inputs.
 		$attribs = array('name' => $this->fieldPrefix . $field);
 
-		if (isset($this->setup['ID']))
+		if (isset($this->iD))
 		{
-			$attribs['id'] = $this->setup['ID'];
+			$attribs['id'] = $this->iD;
 		}
 
 		$attribs = array_merge($attribs, $this->fieldAttribs);
       
 		// Highlight fields that should be.
-		if (isset($this->setup['Highlighted'][$field]))
+		if (isset($this->highlighted[$field]))
 		{
 			if (isset($attribs['class']))
 			{
@@ -271,7 +271,7 @@ class Base extends \Evoke\Element\Base
 		// Add a label element where required.
 		if (!$this->isHidden($fieldInfo))
 		{
-			$elems[] = $this->buildLabel($field, $this->setup['ID'], $type);
+			$elems[] = $this->buildLabel($field, $this->iD, $type);
 	 
 			if ($this->requiredIndication)
 			{
@@ -446,7 +446,7 @@ class Base extends \Evoke\Element\Base
 	/// Hide primary key fields by default.
 	protected function isHidden($fieldInfo)
 	{
-		return ($fieldInfo['Key'] === 'PRI' || $this->setup['Hidden']);
+		return ($fieldInfo['Key'] === 'PRI' || $this->hidden);
 	}
 }
 // EOF

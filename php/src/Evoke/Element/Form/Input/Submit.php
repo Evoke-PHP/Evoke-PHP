@@ -6,7 +6,7 @@ class Submit extends \Evoke\Element\Base
 	public function __construct(Array $setup)
 	{
 		$setup += array('Attribs' => array());
-		$setup['Attribs']['type'] = 'submit';
+		$attribs['type'] = 'submit';
   
 		parent::__construct($setup);
 	}

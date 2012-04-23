@@ -14,13 +14,13 @@ class TableAdminTranslation extends TableAdmin
 		                'Language_Table'  => 'Language',
 		                'Translator_File' => NULL);
       
-		if (!$setup['Filesystem'] instanceof Filesystem)
+		if (!$filesystem instanceof Filesystem)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires File_System');
 		}
 
-		if (!is_string($setup['Translator_File']))
+		if (!is_string($translatorFile))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator_File as string');
@@ -28,10 +28,10 @@ class TableAdminTranslation extends TableAdmin
 
 		parent::__construct($setup);
 		
-		$this->languageTable  = $setup['Language_Table'];
-		$this->translatorFile = $setup['Translator_File'];
+		$this->languageTable  = $languageTable;
+		$this->translatorFile = $translatorFile;
 
-		$this->Filesystem = $setup['Filesystem'];
+		$this->Filesystem = $filesystem;
 	}
 
 	/******************/

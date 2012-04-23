@@ -33,7 +33,7 @@ class EntryDialog extends Entry
 				new Element_Submit(
 					array('class' => 'Dialog_Submit Button Good Small',
 					      'name'  => $this->tableName . '_Add',
-					      'value' => $this->setup['Translator']->get('Add'))));
+					      'value' => $this->translator->get('Add'))));
 		}
 		else
 		{
@@ -41,13 +41,13 @@ class EntryDialog extends Entry
 				new Element_Submit(
 					array('class' => 'Dialog_Submit Button Info Small',
 					      'name'  => $this->tableName . '_Modify',
-					      'value' => $this->setup['Translator']->get('Edit'))));
+					      'value' => $this->translator->get('Edit'))));
 		}
 	    
 		$submitButtons[] = new Element_Submit(
 			array('class' => 'Dialog_Cancel Button Bad Small',
 			      'name'  => $this->tableName . '_Cancel',
-			      'value' => $this->setup['Translator']->get('Cancel')));
+			      'value' => $this->translator->get('Cancel')));
       
 		$this->addElement(array('div',
 		                        $this->submitButtonAttribs,

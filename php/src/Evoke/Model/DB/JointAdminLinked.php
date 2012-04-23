@@ -38,19 +38,19 @@ class JointAdminLinked extends Admin
 		                'Image_Manip' => NULL,
 		                'Links'       => array());
 
-		if (!$setup['Filesystem'] instanceof \Evoke\Core\Filesystem)
+		if (!$filesystem instanceof \Evoke\Core\Filesystem)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Filesystem');
 		}
 
-		if (!$setup['Image_Manip'] instanceof \Evoke\Core\Image\Manip)
+		if (!$imageManip instanceof \Evoke\Core\Image\Manip)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Image_Manip');
 		}
       
-		foreach ($setup['Links'] as $alias => &$link)
+		foreach ($links as $alias => &$link)
 		{
 			if (!is_array($link))
 			{
@@ -73,11 +73,11 @@ class JointAdminLinked extends Admin
 
 		parent::__construct($setup);
 
-		$this->dirMode    = $setup['Dir_Mode'];
-		$this->fileMode   = $setup['File_Mode'];
-		$this->Filesystem = $setup['Filesystem'];
-		$this->ImageManip = $setup['Image_Manip'];
-		$this->links      = $setup['Links'];
+		$this->dirMode    = $dirMode;
+		$this->fileMode   = $fileMode;
+		$this->Filesystem = $filesystem;
+		$this->ImageManip = $imageManip;
+		$this->links      = $links;
 	}
 
 	public function cancel()

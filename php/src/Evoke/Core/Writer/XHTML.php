@@ -30,19 +30,19 @@ class XHTML extends XMLBase
 		                'Title'       => '');
 
 		
-		$this->writeStartDocument($setup['Doc_Type']);
+		$this->writeStartDocument($docType);
       
 		$this->XMLWriter->startElement('head');
-		$this->XMLWriter->writeElement('title', $setup['Title']);
+		$this->XMLWriter->writeElement('title', $title);
 		
-		$this->write(array('meta', array('content' => $setup['Title'],
+		$this->write(array('meta', array('content' => $title,
 		                                 'name'    => 'title')));
-		$this->write(array('meta', array('content' => $setup['Description'],
+		$this->write(array('meta', array('content' => $description,
 		                                 'name'    => 'description')));
-		$this->write(array('meta', array('content' => $setup['Keywords'],
+		$this->write(array('meta', array('content' => $keywords,
 		                                 'name'    => 'keywords')));
-		$this->writeCSS($setup['CSS']);
-		$this->writeJS($setup['JS']);
+		$this->writeCSS($cSS);
+		$this->writeJS($jS);
 		$this->XMLWriter->endElement(); // head
 
 		$this->XMLWriter->startElement('body');

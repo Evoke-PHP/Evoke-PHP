@@ -32,13 +32,13 @@ class Factory extends InstanceManager implements Iface\Factory
 
 		// We are only going to read from the settings, so we only need
 		// ArrayAccess.
-		if (!$setup['Settings'] instanceof \ArrayAccess)
+		if (!$settings instanceof \ArrayAccess)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Settings');
 		}
 
-		$this->namespace = $setup['Namespace'];
-		$this->Settings  = $setup['Settings'];
+		$this->namespace = $namespace;
+		$this->Settings  = $settings;
 	}
    
 	/******************/
@@ -130,10 +130,10 @@ class Factory extends InstanceManager implements Iface\Factory
 		                'SQL'           => $this->getSQL(),
 		                'Table_Name'    => NULL);
 
-		if (!isset($setup['Info']) && isset($setup['Table_Name']))
+		if (!isset($info) && isset($tableName))
 		{
-			$setup['Info'] = $this->getTableInfo(
-				array('Table_Name' => $setup['Table_Name']));
+			$info = $this->getTableInfo(
+				array('Table_Name' => $tableName));
 		}
       
 		return $this->get($this->namespace['Model'] . 'DB\TableAdmin', $setup);
@@ -241,9 +241,9 @@ class Factory extends InstanceManager implements Iface\Factory
 	{
 		$tableJoins = array();
 
-		if (isset($setup['Multi_Joins']))
+		if (isset($multiJoins))
 		{
-			foreach ($setup['Multi_Joins'] as $joins)
+			foreach ($multiJoins as $joins)
 			{
 				foreach ($joins as $parentField => $join)
 				{
@@ -253,9 +253,9 @@ class Factory extends InstanceManager implements Iface\Factory
 			}
 		}
 
-		if (isset($setup['Joins']))
+		if (isset($joins))
 		{
-			foreach ($setup['Joins'] as $parentField => $join)
+			foreach ($joins as $parentField => $join)
 			{
 				$join['Parent_Field'] = $parentField;	 
 				$tableJoins[] = $this->getJoins($join);
@@ -268,7 +268,7 @@ class Factory extends InstanceManager implements Iface\Factory
 				$setup,
 				array('Joins' => $tableJoins,
 				      'Info'  => $this->getTableInfo(
-					      array('Table_Name' => $setup['Table_Name'])))));
+					      array('Table_Name' => $tableName)))));
 	}
 
 	/** Get a processing object.

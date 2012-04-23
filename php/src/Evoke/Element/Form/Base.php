@@ -90,7 +90,7 @@ abstract class Base extends \Evoke\Element\Base
 	 */
 	protected function buildRow(Array $rowElems)
 	{
-		if (!$this->setup['Encasing'])
+		if (!$this->encasing)
 		{
 			return $rowElems;
 		}

@@ -61,24 +61,24 @@ class File
 		                'Filesystem'   => NULL,
 		                'Locking'      => true);
 
-		if (!$setup['EventManager'] instanceof \Evoke\Core\Iface\EventManager)
+		if (!$eventManager instanceof \Evoke\Core\Iface\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 		
-		if (!$setup['Filesystem'] instanceof \Evoke\Core\Filesystem)
+		if (!$filesystem instanceof \Evoke\Core\Filesystem)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Filesystem');
 		}
 
-		$this->append       = $setup['Append'];
-		$this->dirMode      = $setup['Dir_Mode'];
-		$this->filename     = $setup['Filename'];
-		$this->fileMode     = $setup['File_Mode'];
-		$this->EventManager = $setup['EventManager'];
-		$this->Filesystem   = $setup['Filesystem'];
-		$this->locking      = $setup['Locking'];
+		$this->append       = $append;
+		$this->dirMode      = $dirMode;
+		$this->filename     = $filename;
+		$this->fileMode     = $fileMode;
+		$this->EventManager = $eventManager;
+		$this->Filesystem   = $filesystem;
+		$this->locking      = $locking;
 
 		$this->EventManager->connect('Log.Write', array($this, 'write'));
 	}

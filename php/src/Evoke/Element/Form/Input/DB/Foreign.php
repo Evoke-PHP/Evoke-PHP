@@ -44,7 +44,7 @@ class Foreign extends Base
 			$elems[] = array(
 				'span',
 				array('class' => 'Empty_Foreign_Data'),
-				$this->setup['Translator']->get('No_Foreign_Table_Data'));
+				$this->translator->get('No_Foreign_Table_Data'));
 
 			return $elems;
 		}

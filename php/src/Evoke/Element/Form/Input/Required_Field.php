@@ -12,7 +12,7 @@ class RequiredField extends \Evoke\Element\Base
 	{
 		$setup += array('Translator' => NULL);
 
-		if (!$setup['Translator'] instanceof \Evoke\Core\Translator)
+		if (!$translator instanceof \Evoke\Core\Translator)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Translator');
@@ -20,7 +20,7 @@ class RequiredField extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->Translator = $setup['Translator'];
+		$this->Translator = $translator;
 	}
 
 	public function set(Array $data)

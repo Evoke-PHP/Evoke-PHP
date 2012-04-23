@@ -49,24 +49,24 @@ class Info implements \Evoke\Core\Iface\Validity
 		                'SQL'        => NULL,
 		                'Table_Name' => NULL);
 
-		if (!$setup['Failures'] instanceof \Evoke\Core\MessageArray)
+		if (!$failures instanceof \Evoke\Core\MessageArray)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Failures');
 		}
 
-		if (!$setup['SQL'] instanceof \Evoke\Core\DB\SQL)
+		if (!$sQL instanceof \Evoke\Core\DB\SQL)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
 		}
       
-		if (!isset($setup['Table_Name']))
+		if (!isset($tableName))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Table_Name');
 		}
 
-		$this->Failures  = $setup['Failures'];
-		$this->SQL       = $setup['SQL'];
-		$this->tableName = $setup['Table_Name'];
+		$this->Failures  = $failures;
+		$this->SQL       = $sQL;
+		$this->tableName = $tableName;
       
 		$this->createInfo = $this->SQL->getSingleValue(
 			'SHOW CREATE TABLE ' . $this->tableName,

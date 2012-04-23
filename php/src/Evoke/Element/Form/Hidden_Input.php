@@ -16,15 +16,15 @@ class HiddenInput extends Base
 		                'Submit_Buttons' => NULL,
 		                'Translator'     => NULL);
       
-		$setup['App']->needs(
-			array('Instance' => array('Translator' => $setup['Translator']),
+		$app->needs(
+			array('Instance' => array('Translator' => $translator),
 			      'Set'      => array(
-				      'Data'           => $setup['Data'],
-				      'Primary_Keys'   => $setup['Primary_Keys'],
-				      'Submit_Buttons' => $setup['Submit_Buttons'])));
+				      'Data'           => $data,
+				      'Primary_Keys'   => $primaryKeys,
+				      'Submit_Buttons' => $submitButtons)));
       
-		$this->record = $setup['Data'];
-		$this->primaryKeys = $setup['Primary_Keys'];
+		$this->record = $data;
+		$this->primaryKeys = $primaryKeys;
 		parent::__construct($setup);
 	}
 

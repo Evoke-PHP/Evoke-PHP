@@ -29,7 +29,7 @@ class Table extends Base
 			                'Limit'      => 0),
 		                'Table_Name' => NULL);
 
-		if (!is_string($setup['Table_Name']))
+		if (!is_string($tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name as string');
@@ -37,8 +37,8 @@ class Table extends Base
 		
 		parent::__construct($dataPrefix);
 
-		$this->select    = $setup['Select'];
-		$this->tableName = $setup['Table_Name'];
+		$this->select    = $select;
+		$this->tableName = $tableName;
 	}
 
 	/******************/

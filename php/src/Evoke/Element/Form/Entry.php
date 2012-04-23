@@ -30,20 +30,20 @@ class Entry extends Base
 
 		/// \todo Remove dependency on App.
 		throw new Exception(__METHOD__ .' Remove dependency on App');
-		$setup['App']->needs(
-			array('Instance' => array('Table_Info'    => $setup['Table_Info'],
-			                          'Translator'    => $setup['Translator']),
-			      'Set'      => array('Table_Name' => $setup['Table_Name'])));
+		$app->needs(
+			array('Instance' => array('Table_Info'    => $tableInfo,
+			                          'Translator'    => $translator),
+			      'Set'      => array('Table_Name' => $tableName)));
       
-		if (!isset($setup['Translate_Prefix']))
+		if (!isset($translatePrefix))
 		{
-			$setup['Translate_Prefix'] = $setup['Table_Name'] . '_Field_';
+			$translatePrefix = $tableName . '_Field_';
 		}
 
-		if ($setup['Field_Prefix_Table'] === true)
+		if ($fieldPrefixTable === true)
 		{
-			$setup['Field_Prefix'] =
-				$setup['Table_Name'] . $setup['Table_Separator'];
+			$fieldPrefix =
+				$tableName . $tableSeparator;
 		}
 
 		parent::__construct($setup);
@@ -110,7 +110,7 @@ class Entry extends Base
 
 				$groupClass = 'Form_Element_Group';
 
-				if (isset($this->setup['Highlighted'][$groupName]))
+				if (isset($this->highlighted[$groupName]))
 				{
 					$groupClass .= ' Highlighted';
 				}
@@ -130,7 +130,7 @@ class Entry extends Base
 						$this->buildInput(
 							array_merge(array('Field_Info' => $fieldInfo),
 							            $this->getFieldSetup($fieldDescription))),
-						isset($this->setup['Highlighted'][$fieldDescription])));
+						isset($this->highlighted[$fieldDescription])));
 			}
 		}
 	}
@@ -139,16 +139,16 @@ class Entry extends Base
 	protected function buildInput($settings)
 	{
 		return array(
-			$this->setup['App']->get(
+			$this->app->get(
 				'Element_DB_Input',
 				array_merge($settings,
-				            array('Translator' => $this->setup['Translator']))));
+				            array('Translator' => $this->translator))));
 	}
       
 	/// Build the row including any highlighting.
 	protected function buildRow(Array $rowElems, $highlighted=false)
 	{
-		if (!$this->setup['Encasing'])
+		if (!$this->encasing)
 		{
 			return $rowElems;
 		}

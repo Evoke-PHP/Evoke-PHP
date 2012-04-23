@@ -48,24 +48,24 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 		                'Request_Method'  => '',
 		                'Unique_Match'    => true);
       
-		if (!$setup['Event_Manager'] instanceof \Evoke\Core\EventManager)
+		if (!$eventManager instanceof \Evoke\Core\EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Event_Manager');
 		}
 
-		if (!is_string($setup['Event_Prefix']))
+		if (!is_string($eventPrefix))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Event_Prefix as string');
 		}
 
-		$this->EventManager  = $setup['Event_Manager'];
-		$this->eventPrefix   = $setup['Event_Prefix'];
-		$this->matchRequired = $setup['Match_Required'];
-		$this->requestKeys   = $setup['Request_Keys'];
-		$this->requestMethod = $setup['Request_Method'];
-		$this->uniqueMatch   = $setup['Unique_Match'];
+		$this->EventManager  = $eventManager;
+		$this->eventPrefix   = $eventPrefix;
+		$this->matchRequired = $matchRequired;
+		$this->requestKeys   = $requestKeys;
+		$this->requestMethod = $requestMethod;
+		$this->uniqueMatch   = $uniqueMatch;
 		
 		// Duplicate the request key values to the keys for easier diffing.
 		if (!empty($this->requestKeys))

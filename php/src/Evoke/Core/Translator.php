@@ -51,34 +51,34 @@ class Translator implements Iface\Translator
 		                'Session_Manager'       => NULL,
 		                'Translations_Filename' => NULL);
 
-		if (!isset($setup['Default_Language']))
+		if (!isset($defaultLanguage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Default_Language');
 		}
 
-		if (!$setup['Request'] instanceof \Evoke\Core\Iface\HTTP\Request)
+		if (!$request instanceof \Evoke\Core\Iface\HTTP\Request)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
 		}
 
-		if (!$setup['Session_Manager'] instanceof SessionManager)
+		if (!$sessionManager instanceof SessionManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs SessionManager');
 		}
 
-		if (!is_string($setup['Translations_Filename']))
+		if (!is_string($translationsFilename))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Filename');
 		}
 
-		$this->defaultLangauge 		 = $setup['Default_Language'];
-		$this->langKey         		 = $setup['Lang_Key'];
+		$this->defaultLangauge 		 = $defaultLanguage;
+		$this->langKey         		 = $langKey;
 		$this->language             = NULL;
-		$this->Request              = $setup['Request'];
-		$this->SessionManager  		 = $setup['Session_Manager'];
-		$this->translationsFilename = $setup['Translations_Filename'];
+		$this->Request              = $request;
+		$this->SessionManager  		 = $sessionManager;
+		$this->translationsFilename = $translationsFilename;
 
 		// Update the translations and langauges.
 		$this->update();

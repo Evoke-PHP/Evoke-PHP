@@ -127,30 +127,30 @@ class Joins
 		                'Table_Name'      => NULL,
 		                'Table_Separator' => '_T_');
 
-		if (!$setup['Info'] instanceof \Evoke\Core\DB\Table\Info)
+		if (!$info instanceof \Evoke\Core\DB\Table\Info)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Info');
 		}
       
-		if (!isset($setup['Table_Name']))
+		if (!isset($tableName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Name');
 		}
 		
-		$this->adminManaged   = $setup['Admin_Managed'];
-		$this->autoFields     = $setup['Auto_Fields'];
-		$this->childField     = $setup['Child_Field'];
-		$this->compareType    = $setup['Compare_Type'];
-		$this->idSeparator    = $setup['ID_Separator'];
-		$this->Info           = $setup['Info'];
-		$this->joinType       = $setup['Join_Type'];
-		$this->joins          = $setup['Joins'];
-		$this->jointKey       = $setup['Joint_Key'];
-		$this->parentField    = $setup['Parent_Field'];
-		$this->tableAlias     = $setup['Table_Alias'];
-		$this->tableName      = $setup['Table_Name'];
-		$this->tableSeparator = $setup['Table_Separator'];
+		$this->adminManaged   = $adminManaged;
+		$this->autoFields     = $autoFields;
+		$this->childField     = $childField;
+		$this->compareType    = $compareType;
+		$this->idSeparator    = $iDSeparator;
+		$this->Info           = $info;
+		$this->joinType       = $joinType;
+		$this->joins          = $joins;
+		$this->jointKey       = $jointKey;
+		$this->parentField    = $parentField;
+		$this->tableAlias     = $tableAlias;
+		$this->tableName      = $tableName;
+		$this->tableSeparator = $tableSeparator;
 	}
    
 	/******************/

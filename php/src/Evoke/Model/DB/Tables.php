@@ -20,8 +20,8 @@ class Tables extends Base
       
 		parent::__construct($setup);
 
-		$this->extraTables   = $setup['Extra_Tables'];
-		$this->ignoredTables = $setup['Ignored_Tables'];
+		$this->extraTables   = $extraTables;
+		$this->ignoredTables = $ignoredTables;
 	}
 
 	/******************/

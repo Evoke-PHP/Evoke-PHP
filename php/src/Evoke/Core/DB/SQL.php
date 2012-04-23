@@ -29,7 +29,7 @@ class SQL implements \Evoke\Core\Iface\DB
 	{
 		$this->setup = array_merge(array('DB' => NULL), $setup);
 
-		if (!$this->setup['DB'] instanceof \Evoke\Core\Iface\DB)
+		if (!$this->dB instanceof \Evoke\Core\Iface\DB)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs DB');
 		}
@@ -49,7 +49,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		else
 		{
 			$this->inTransaction = true;
-			return $this->setup['DB']->beginTransaction();
+			return $this->dB->beginTransaction();
 		}
 	}
 
@@ -59,7 +59,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		if ($this->inTransaction)
 		{
 			$this->inTransaction = false;
-			return $this->setup['DB']->commit();
+			return $this->dB->commit();
 		}
 		else
 		{
@@ -79,7 +79,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		if ($this->inTransaction)
 		{
 			$this->inTransaction = false;
-			return $this->setup['DB']->rollBack();
+			return $this->dB->rollBack();
 		}
 		else
 		{
@@ -94,37 +94,37 @@ class SQL implements \Evoke\Core\Iface\DB
 	/// Return the SQLSTATE.
 	public function errorCode()
 	{
-		return $this->setup['DB']->errorCode();
+		return $this->dB->errorCode();
 	}
 
 	/// Get the extended error information associated with the last DB operation.
 	public function errorInfo()
 	{
-		return $this->setup['DB']->errorInfo();
+		return $this->dB->errorInfo();
 	}
 
 	/// Execute an SQL statement and return the number of rows affected.
 	public function exec($statement)
 	{
-		return $this->setup['DB']->exec($statement);
+		return $this->dB->exec($statement);
 	}
 
 	/// Get a database connection attribute.
 	public function getAttribute($attribute)
 	{
-		return $this->setup['DB']->getAttribute($attribute);
+		return $this->dB->getAttribute($attribute);
 	}
 
 	/// Get an array of available PDO drivers.
 	public function getAvailableDrivers()
 	{
-		return $this->setup['DB']->getAvailableDrivers();
+		return $this->dB->getAvailableDrivers();
 	}
    
 	/// Get the ID of the last inserted row or sequence value.
 	public function lastInsertId($name=NULL)
 	{
-		return $this->setup['DB']->lastInsertId($name);
+		return $this->dB->lastInsertId($name);
 	}
 
 	/// Prepares a statement for execution and returns a statement object.
@@ -138,11 +138,11 @@ class SQL implements \Evoke\Core\Iface\DB
 				\PDO::ATTR_STATEMENT_CLASS,
 				array('\Evoke\Core\DB\PDOStatement', array($namedPlaceholders)));
 	 
-			return $this->setup['DB']->prepare($statement, $driverOptions);
+			return $this->dB->prepare($statement, $driverOptions);
 		}
 		catch (\Exception $E)
 		{
-			throw new Exception_DB(__METHOD__, '', $this->setup['DB'], $E);
+			throw new Exception_DB(__METHOD__, '', $this->dB, $E);
 		}
 	}
 
@@ -160,24 +160,24 @@ class SQL implements \Evoke\Core\Iface\DB
 
 		if ($fetchMode === 0)
 		{
-			return $this->setup['DB']->query($queryString);
+			return $this->dB->query($queryString);
 		}
 		else
 		{
-			return $this->setup['DB']->query($queryString, $fetchMode, $into);
+			return $this->dB->query($queryString, $fetchMode, $into);
 		}
 	}  
 
 	/// Quotes the input string (if required) and escapes special characters.
 	public function quote($string, $parameterType=\PDO::PARAM_STR)
 	{
-		return $this->setup['DB']->quote($string, $parameterType);
+		return $this->dB->quote($string, $parameterType);
 	}
    
 	/// Sets an attribute on the database
 	public function setAttribute($attribute, $value)
 	{
-		return $this->setup['DB']->setAttribute($attribute, $value);
+		return $this->dB->setAttribute($attribute, $value);
 	}
    
 	/*****************************/
@@ -204,7 +204,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->setup['DB'],
+				$this->dB,
 				$E);
 		}
 	}
@@ -237,7 +237,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->setup['DB'],
+				$this->dB,
 				$E);
 		}
 	}
@@ -271,7 +271,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->setup['DB'],
+				$this->dB,
 				$E);
 		}
 	}
@@ -343,7 +343,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				'Tables: ' . var_export($tables, true) .
 				' Fields: ' .var_export($fields, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->setup['DB'], $E);
+				$this->dB, $E);
 		}	 
 	}
 
@@ -375,7 +375,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				'Table: ' . var_export($table, true) .
 				' Field: ' .var_export($field, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->setup['DB'], $E);
+				$this->dB, $E);
 		}
 	}
 
@@ -407,7 +407,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		}
 		catch (\Exception $E)
 		{
-			throw new Exception_DB(__METHOD__, 'Prepare', $this->setup['DB'], $E);
+			throw new Exception_DB(__METHOD__, 'Prepare', $this->dB, $E);
 		}
 
 		$params = array_merge(array_values($setValues),
@@ -458,7 +458,7 @@ class SQL implements \Evoke\Core\Iface\DB
 			throw new Exception_DB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
 				' conditions: ' . var_export($conditions, true),
-				$this->setup['DB'],
+				$this->dB,
 				$E);
 		}
 	}
@@ -483,7 +483,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				var_export($fields, true);
 	 
 			throw new Exception_DB(
-				__METHOD__, $msg, $this->setup['DB'], $E);
+				__METHOD__, $msg, $this->dB, $E);
 		}
 
 		if (!is_array($valArr))
@@ -507,7 +507,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				throw new Exception_DB(
 					__METHOD__,
 					'Multiple Values: ' . var_export($valArr, true),
-					$this->setup['DB'],
+					$this->dB,
 					$E);
 			}
 		}
@@ -522,7 +522,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				throw new Exception_DB(
 					__METHOD__,
 					'Single Value: ' . var_export($valArr, true),
-					$this->setup['DB'],
+					$this->dB,
 					$E);
 			}
 		}

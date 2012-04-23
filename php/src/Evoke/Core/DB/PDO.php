@@ -12,25 +12,25 @@ class PDO extends \PDO implements \Evoke\Core\Iface\DB
 			'Password' => NULL,
 			'Username' => NULL);
 
-		if (!isset($setup['DSN']))
+		if (!isset($dSN))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires DSN');
 		}
 
-		if (!isset($setup['Password']))
+		if (!isset($password))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Password');
 		}
 
-		if (!isset($setup['Username']))
+		if (!isset($username))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' requires Username');
 		}
 
-		parent::__construct($setup['DSN'],
-		                    $setup['Username'],
-		                    $setup['Password'],
-		                    $setup['Options']);
+		parent::__construct($dSN,
+		                    $username,
+		                    $password,
+		                    $options);
 	}
 }
 // EOF

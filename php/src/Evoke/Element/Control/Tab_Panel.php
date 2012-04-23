@@ -32,13 +32,13 @@ class Tab_Panel extends \Evoke\Element\Base
 
 		foreach ($tabEntries as $tabEntry)
 		{
-			$headingAttribs = $setup['Heading_Attribs'];
-			$contentAttribs = $setup['Content_Attribs'];
-			$selectedStatus = ' ' . $setup['Inactive_Class'];
+			$headingAttribs = $headingAttribs;
+			$contentAttribs = $contentAttribs;
+			$selectedStatus = ' ' . $inactiveClass;
 	 
 			if (isset($tabEntry['Active']) && $tabEntry['Active'] == true)
 			{
-				$selectedStatus = ' ' . $setup['Active_Class'];
+				$selectedStatus = ' ' . $activeClass;
 			}
 
 			$headingAttribs['class'] .= $selectedStatus;
@@ -52,13 +52,13 @@ class Tab_Panel extends \Evoke\Element\Base
 
 		return parent::set(
 			array('div',
-			      $setup['Attribs'],
+			      $attribs,
 			      array(array('ul',
-			                  $setup['Heading_List_Attribs'],
+			                  $headingListAttribs,
 			                  $headingElems),
-			            array('div', $setup['Clear_Attribs']),
+			            array('div', $clearAttribs),
 			            array('ul',
-			                  $setup['Content_List_Attribs'],
+			                  $contentListAttribs,
 			                  $contentElems))));
 	}
 }

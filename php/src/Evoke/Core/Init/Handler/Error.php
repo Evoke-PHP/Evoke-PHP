@@ -24,7 +24,7 @@ class Error implements \Evoke\Core\Iface\Handler
 	                            Iface\Writer       $writer,
 	                            /* Bool */         $detailedInsecureMessage)
 	{
-		if (!is_bool($setup['Detailed_Insecure_Message']))
+		if (!is_bool($detailedInsecureMessage))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');

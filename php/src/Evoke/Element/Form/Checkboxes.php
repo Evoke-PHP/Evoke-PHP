@@ -51,10 +51,10 @@ class Checkboxes extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->emptyText  = $setup['Empty_Text'];
-		$this->prefix     = $setup['Prefix'];
-		$this->textField  = $setup['Text_Field'];
-		$this->valueField = $setup['Value_Field'];
+		$this->emptyText  = $emptyText;
+		$this->prefix     = $prefix;
+		$this->textField  = $textField;
+		$this->valueField = $valueField;
 	}
 
 	/** Set the checkboxes element which is a fieldset of checkbox inputs.

@@ -16,14 +16,14 @@ class List_ID
 		                'SQL'        => NULL,
 		                'Table_Name' => 'List_IDs');
 
-		if (!$setup['SQL'] instanceof \Evoke\Core\DB\SQL)
+		if (!$sQL instanceof \Evoke\Core\DB\SQL)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
 		}
 
-		$this->fields    = $setup['Fields'];
-		$this->tableName = $setup['Table_Name'];
-		$this->SQL       = $setup['SQL'];
+		$this->fields    = $fields;
+		$this->tableName = $tableName;
+		$this->SQL       = $sQL;
 	}
 
 	/******************/

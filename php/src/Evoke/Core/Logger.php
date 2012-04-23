@@ -75,27 +75,27 @@ class Logger
 		                'Mask'              => NULL,
 		                'Time_Format'       => 'Y-M-d@H:i:sP');
 
-		if (!$setup['DateTime'] instanceof \DateTime)
+		if (!$dateTime instanceof \DateTime)
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs DateTime');
 		}
 		
-		if (!$setup['EventManager'] instanceof EventManager)
+		if (!$eventManager instanceof EventManager)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires EventManager');
 		}
 		
-		$this->DateTime         = $setup['DateTime'];
-		$this->defaultLevel     = $setup['Default_Level'];
-		$this->defaultLevelStr  = $setup['Default_Level_Str'];
-		$this->EventManager     = $setup['EventManager'];
-		$this->levels           = $setup['Levels'];
-		$this->loggingMandatory = $setup['Logging_Mandatory'];
+		$this->DateTime         = $dateTime;
+		$this->defaultLevel     = $defaultLevel;
+		$this->defaultLevelStr  = $defaultLevelStr;
+		$this->EventManager     = $eventManager;
+		$this->levels           = $levels;
+		$this->loggingMandatory = $loggingMandatory;
 		// Use the mask provided or allow all logging levels.
-		$this->mask             = $setup['Mask'] ?:
+		$this->mask             = $mask ?:
 			str_repeat('1', count($this->levels));
-		$this->timeFormat       = $setup['Time_Format'];
+		$this->timeFormat       = $timeFormat;
 				
 		// We observe Log events and remain decoupled to the code that calls us.
 		$this->EventManager->connect('Log', array($this, 'log'));

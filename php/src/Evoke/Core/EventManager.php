@@ -26,20 +26,20 @@ class EventManager implements Iface\EventManager
 		$setup += array('Non_Critical_Events' => array(),
 		                'Observers'           => array());
 
-		if (!is_array($setup['Non_Critical_Events']))
+		if (!is_array($nonCriticalEvents))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Non_Critical_Events as array');
 		}
 
-		if (!is_array($setup['Observers']))
+		if (!is_array($observers))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Observers as array');
 		}
     
-		$this->nonCriticalEvents = $setup['Non_Critical_Events'];
-		$this->observers = $setup['Observers'];
+		$this->nonCriticalEvents = $nonCriticalEvents;
+		$this->observers = $observers;
 	}
 
 	/******************/
