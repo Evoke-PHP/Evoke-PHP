@@ -23,15 +23,15 @@ class Translator implements Iface\Translator
 	 */
 	protected $languages;
 
-	/** @property $Request
+	/** @property $request
 	 *  Request \object
 	 */
-	protected $Request;
+	protected $request;
 
-	/** @property $SessionManager
+	/** @property $sessionManager
 	 *  SessionManager \object
 	 */
-	protected $SessionManager;
+	protected $sessionManager;
 
 	/** @property $translationArr
 	 *  \array The array of translations.
@@ -76,8 +76,8 @@ class Translator implements Iface\Translator
 		$this->defaultLangauge 		 = $defaultLanguage;
 		$this->langKey         		 = $langKey;
 		$this->language             = NULL;
-		$this->Request              = $request;
-		$this->SessionManager  		 = $sessionManager;
+		$this->request              = $request;
+		$this->sessionManager  		 = $sessionManager;
 		$this->translationsFilename = $translationsFilename;
 
 		// Update the translations and langauges.
@@ -164,13 +164,13 @@ class Translator implements Iface\Translator
 			}
 			
 			$this->language = $lang;
-			$this->SessionManager->set($this->langKey, $lang);
+			$this->sessionManager->set($this->langKey, $lang);
 			return;
 		}
 
-		if ($this->Request->issetQueryParam($this->langKey))
+		if ($this->request->issetQueryParam($this->langKey))
 		{
-			$lang = $this->Request->getQueryParam($this->langKey);
+			$lang = $this->request->getQueryParam($this->langKey);
 
 			if ($this->isValidLanguage($lang))
 			{
@@ -179,9 +179,9 @@ class Translator implements Iface\Translator
 			}
 		}
 
-		if ($this->SessionManager->issetKey($this->langKey))
+		if ($this->sessionManager->issetKey($this->langKey))
 		{
-			$lang = $this->SessionManager->get($this->langKey);
+			$lang = $this->sessionManager->get($this->langKey);
 
 			if ($this->isValidLanguage($lang))
 			{
@@ -190,7 +190,7 @@ class Translator implements Iface\Translator
 			}
 		}
 
-		$acceptLanguages = $this->Request->parseAcceptLanguage();
+		$acceptLanguages = $this->request->parseAcceptLanguage();
 
 		foreach ($acceptLanguages as $lang)
 		{

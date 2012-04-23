@@ -15,17 +15,17 @@ class JointAdminLinked extends Admin
 	 */
 	protected $fileMode;
 	
-	/** @property $Filesystem
+	/** @property $filesystem
 	 *  Filesystem \object
 	 */
-	protected $Filesystem;
+	protected $filesystem;
 
-	/** @property $ImageManip
+	/** @property $imageManip
 	 *  Image manipulation \object
 	 */
-	protected $ImageManip;
+	protected $imageManip;
 
-	/** @property $Links
+	/** @property $links
 	 *  Array of links.
 	 */
 	protected $links;
@@ -75,17 +75,17 @@ class JointAdminLinked extends Admin
 
 		$this->dirMode    = $dirMode;
 		$this->fileMode   = $fileMode;
-		$this->Filesystem = $filesystem;
-		$this->ImageManip = $imageManip;
+		$this->filesystem = $filesystem;
+		$this->imageManip = $imageManip;
 		$this->links      = $links;
 	}
 
 	public function cancel()
 	{
-		$data = array($this->SessionManager->get('Current_Record'));
+		$data = array($this->sessionManager->get('Current_Record'));
 		$this->recurse(array('Depth_First_Data' => array($this, 'cancelEntries')),
 		               $data,
-		               $this->Joins);
+		               $this->joins);
       
 		parent::cancel();
 	}
@@ -94,10 +94,10 @@ class JointAdminLinked extends Admin
 	{
 		parent::edit($record);
 
-		$data = array($this->SessionManager->get('Edited_Record'));
+		$data = array($this->sessionManager->get('Edited_Record'));
 		$this->recurse(array('Breadth_First_Data' => array($this, 'editEntries')),
 		               $data,
-		               $this->Joins);
+		               $this->joins);
 	}
    
 	/** Upload a file.
@@ -148,7 +148,7 @@ class JointAdminLinked extends Admin
 			$firstRecord = reset($data);
 			$conditions = array($childField => $firstRecord[$childField]);
 
-			$addedData = $this->SQL->select(
+			$addedData = $this->sQL->select(
 				$ref->getTableName(), '*', $conditions);
 	 
 			$this->moveIncomingToStorage($link, $addedData, $ref);
@@ -257,30 +257,30 @@ class JointAdminLinked extends Admin
       
 		try
 		{
-			if (!$this->Filesystem->is_dir($dir))
+			if (!$this->filesystem->is_dir($dir))
 			{
-				$this->Filesystem->mkdir($dir,
+				$this->filesystem->mkdir($dir,
 				                                   $this->dirMode,
 				                                   true);
 			}
 
-			$this->Filesystem->rename($file['Tmp_Name'],
+			$this->filesystem->rename($file['Tmp_Name'],
 			                                    $newName);
-			$this->Filesystem->chmod($newName,
+			$this->filesystem->chmod($newName,
 			                                   $this->fileMode);
 		}
-		catch (\Exception $Ex)
+		catch (\Exception $ex)
 		{
 			$msg = 'Could not move temp file: ' . $file['Tmp_Name']  . ' to: ' .
 				$newName . ' due to exception: ' .
-				$Ex->getMessage();
+				$ex->getMessage();
 	 
 			$this->eventManager->notify(
 				'Log',
 				array('Level'   => LOG_ERR,
 				      'Message' => $msg,
 				      'Method'  => __METHOD__));
-			throw $Ex;
+			throw $ex;
 		}
 
 		if (isset($link['Image_Sizes']))
@@ -298,11 +298,11 @@ class JointAdminLinked extends Admin
 		$srcBase = $link['Storage'] . $firstRecord[$ref->getChildField()];
       
 		// Make sure the destination exists or is created.
-		$destBase = $link['Incoming'] . $this->SessionManager->getID() . '/';
+		$destBase = $link['Incoming'] . $this->sessionManager->getID() . '/';
       
-		if (!$this->Filesystem->is_dir($destBase))
+		if (!$this->filesystem->is_dir($destBase))
 		{
-			$this->Filesystem->mkdir(
+			$this->filesystem->mkdir(
 				$destBase, $this->dirMode, true);
 		}
       
@@ -315,7 +315,7 @@ class JointAdminLinked extends Admin
 				$srcSpecific .= '/' . $record[$field];
 			}
 
-			$this->Filesystem->copy($srcSpecific,
+			$this->filesystem->copy($srcSpecific,
 			                                  $destBase . $fileNum++ . '/',
 			                                  $this->dirMode,
 			                                  $this->fileMode);
@@ -325,11 +325,11 @@ class JointAdminLinked extends Admin
 	/// Delete the incoming directory and reset the session.
 	private function deleteIncoming($link)
 	{
-		$dir = $link['Incoming'] . $this->SessionManager->getID();
+		$dir = $link['Incoming'] . $this->sessionManager->getID();
       
-		if ($this->Filesystem->is_dir($dir))
+		if ($this->filesystem->is_dir($dir))
 		{
-			$this->Filesystem->unlink($dir);
+			$this->filesystem->unlink($dir);
 		}
 	}
 
@@ -337,13 +337,13 @@ class JointAdminLinked extends Admin
 	{
 		$firstRecord = reset($data);
 		$dir = $link['Storage'] . $firstRecord[$ref->getChildField()];
-		$this->Filesystem->unlink($dir);
+		$this->filesystem->unlink($dir);
 	}
 
 	/// Move the incoming files to storage.
 	private function moveIncomingToStorage($link, $data, $ref)
 	{
-		$srcBase = $link['Incoming'] . $this->SessionManager->getID() . '/';
+		$srcBase = $link['Incoming'] . $this->sessionManager->getID() . '/';
 		$destBase = $link['Storage'];
 
 		foreach ($data as $num => $record)
@@ -355,9 +355,9 @@ class JointAdminLinked extends Admin
 				$destSpecific .= $record[$field] . '/';
 			}
 
-			$this->Filesystem->mkdir(
+			$this->filesystem->mkdir(
 				$destSpecific, $this->dirMode, true);
-			$this->Filesystem->rename($srcBase . $num, $destSpecific);
+			$this->filesystem->rename($srcBase . $num, $destSpecific);
 		}
 	}
    
@@ -376,23 +376,23 @@ class JointAdminLinked extends Admin
 			$setup = array_merge($size, array('Dir_Input'  => $dir,
 			                                  'Dir_Output' => $dir));
 
-			$this->ImageManip->setSettings($setup);
+			$this->imageManip->setSettings($setup);
 
 			try
 			{
-				$this->ImageManip->scaleImage($filename);
+				$this->imageManip->scaleImage($filename);
 			}
-			catch (\Exception $Ex)
+			catch (\Exception $ex)
 			{
 				$msg = 'Could not scale Image to ' . $format .
-					' due to exception: ' . $Ex->getMessage();
+					' due to exception: ' . $ex->getMessage();
 
 				$this->eventManager->notify(
 					'Log',
 					array('Level'   => LOG_ERR,
 					      'Message' => $msg,
 					      'Method'  => __METHOD__));
-				throw $Ex;
+				throw $ex;
 			}
 		}
 	}   

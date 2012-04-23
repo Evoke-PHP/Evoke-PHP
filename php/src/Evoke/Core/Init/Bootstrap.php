@@ -34,49 +34,49 @@ class Bootstrap
 		require_once __DIR__ . DIRECTORY_SEPARATOR . 'Handler' .
 			DIRECTORY_SEPARATOR . 'Autoload.php';
 
-		$Autoload = $this->provider->build(
+		$autoload = $this->provider->build(
 			__NAMESPACE__ . '\Handler\Autoload',
 			array('Base_Dir'  => dirname(dirname(dirname(__DIR__))),
 			      'Namespace' => 'Evoke\\'));
-		$Autoload->register();
+		$autoload->register();
 	}
    
 	public function initializeHandlers()
 	{
-		$settings = $InstanceManager->get('\Evoke\Core\Settings');
-		$writer = $InstanceManager->get('\Evoke\Core\Writer\XHTML');
+		$settings = $instanceManager->get('\Evoke\Core\Settings');
+		$writer = $instanceManager->get('\Evoke\Core\Writer\XHTML');
 
 		/* ,
-			array('XMLWriter' => $InstanceManager->get('XMLWriter')));
+			array('XMLWriter' => $instanceManager->get('XMLWriter')));
 		*/
 		
 		$isDevelopmentServer =
-			isset($Settings['Constant']['Development_Servers']) &&
+			isset($settings['Constant']['Development_Servers']) &&
 			in_array(php_uname('n'),
-			         $Settings['Constant']['Development_Servers']);
+			         $settings['Constant']['Development_Servers']);
 
 		// Register the Shutdown, Exception and Error handlers.
-		$ShutdownHandler = $this->provider->build(
+		$shutdownHandler = $this->provider->build(
 			'\Evoke\Core\Init\Handler\Shutdown',
 			array('Administrator_Email'       => $settings['Email'][
 				      'Administrator'],
 			      'Detailed_Insecure_Message' => $isDevelopmentServer,
-			      'Writer'                    => $Writer));
-		$ShutdownHandler->register();
+			      'Writer'                    => $writer));
+		$shutdownHandler->register();
       
-		$ExceptionHandler = $this->provider->build(
+		$exceptionHandler = $this->provider->build(
 			'\Evoke\Core\Init\Handler\Exception',
 			array('Detailed_Insecure_Message'    => $isDevelopmentServer,
-			      'Max_Length_Exception_Message' => $Settings['Constant'][
+			      'Max_Length_Exception_Message' => $settings['Constant'][
 				      'Max_Length_Exception_Message'],
 			      'Writer'                       => $writer);
-		$ExceptionHandler->register();
+		$exceptionHandler->register();
 
-		$ErrorHandler = $this->provider->build(
+		$errorHandler = $this->provider->build(
 			'\Evoke\Core\Init\Handler\Error',
 			array('Detailed_Insecure_Message' => $isDevelopmentServer,
 			      'Writer'                    => $writer));
-		$ErrorHandler->register();
+		$errorHandler->register();
 	}
 
 	public function InitializeProvider()
@@ -96,21 +96,21 @@ class Bootstrap
 	{
 		$this->provider->build('\Evoke\Core\Logger');
 		/* ,
-			array('DateTime'        => $InstanceManager->get('DateTime'),
-			      'EventManager'    => $InstanceManager->get(
+			array('DateTime'        => $instanceManager->get('DateTime'),
+			      'EventManager'    => $instanceManager->get(
 			      '\Evoke\Core\EventManager'))); */
 	}
 
 	public function initializeSettings()
 	{
 		/*
-		$Settings = $this->provider->build('\Evoke\Core\Settings');
-		$Settings->unfreezeAll();
+		$settings = $this->provider->build('\Evoke\Core\Settings');
+		$settings->unfreezeAll();
 		*/
-		$SettingsLoader = $this->provider->build(
+		$settingsLoader = $this->provider->build(
 			'\Evoke\Core\Init\Settings\Loader');
-		$SettingsLoader->load();
-		$Settings->freezeAll();
+		$settingsLoader->load();
+		$settings->freezeAll();
 	}
 
 	

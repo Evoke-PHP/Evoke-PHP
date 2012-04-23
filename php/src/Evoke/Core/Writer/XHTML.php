@@ -13,8 +13,8 @@ class XHTML extends XMLBase
 	/// End the html page and write the output.
 	public function writeEnd()
 	{
-		$this->XMLWriter->endElement(); // body
-		$this->XMLWriter->endElement(); // html
+		$this->xMLWriter->endElement(); // body
+		$this->xMLWriter->endElement(); // html
 	}
 
 	/** Write the DTD, html head and start the body of the document.
@@ -32,8 +32,8 @@ class XHTML extends XMLBase
 		
 		$this->writeStartDocument($docType);
       
-		$this->XMLWriter->startElement('head');
-		$this->XMLWriter->writeElement('title', $title);
+		$this->xMLWriter->startElement('head');
+		$this->xMLWriter->writeElement('title', $title);
 		
 		$this->write(array('meta', array('content' => $title,
 		                                 'name'    => 'title')));
@@ -43,9 +43,9 @@ class XHTML extends XMLBase
 		                                 'name'    => 'keywords')));
 		$this->writeCSS($cSS);
 		$this->writeJS($jS);
-		$this->XMLWriter->endElement(); // head
+		$this->xMLWriter->endElement(); // head
 
-		$this->XMLWriter->startElement('body');
+		$this->xMLWriter->startElement('body');
 	}
 
 	/*******************/

@@ -3,10 +3,10 @@ namespace Evoke\Element\Control;
 
 class Menu extends \Evoke\Element\Base
 {
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
 	public function __construct(Evoke\Iface\Translator $translator)
 	{
@@ -35,7 +35,7 @@ class Menu extends \Evoke\Element\Base
 
 	private function buildMenu($data, $level = 0)
 	{
-		$lang = $this->Translator->getLanguage();
+		$lang = $this->translator->getLanguage();
 		$menu = array();
       
 		foreach ($data as $menuItem)

@@ -4,7 +4,7 @@ namespace Evoke\Element;
 /// The Element Translator class provides an element object with a Translator.
 abstract class Translator extends Base
 {
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
 	protected $translator;

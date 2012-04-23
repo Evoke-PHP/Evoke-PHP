@@ -20,11 +20,11 @@ class TableAdminLanguage extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 	 
 			if (parent::add($record))
 			{
-				$langFields = $this->SQL->select('Language_Fields', '*');
+				$langFields = $this->sQL->select('Language_Fields', '*');
 
 				foreach ($langFields as $langField)
 				{
@@ -38,32 +38,32 @@ class TableAdminLanguage extends TableAdmin
 							$langField['Field_Name'] . '_' . $record['Language'];
 					}
 	       
-					$this->SQL->addColumn($langField['Table_Name'],
+					$this->sQL->addColumn($langField['Table_Name'],
 					                      $newField,
 					                      $langField['Field_Type']);
 				}
 
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure adding language to database due to exception:  ' .
-				$E->getMessage();
+				$e->getMessage();
 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add(
+			$this->failures->add(
 				'Failure Adding Language',
 				'System Administrator has been notified.');
 
-			$this->SQL->rollBack();
+			$this->sQL->rollBack();
 		}
 	}
 
@@ -75,15 +75,15 @@ class TableAdminLanguage extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 
 			// Get the name of the language before we delete it.
-			$result = $this->SQL->select('Language', 'Language', $record);
+			$result = $this->sQL->select('Language', 'Language', $record);
 			$dropLang = $result[0]['Language'];
 	 
 			if (parent::deleteConfirm($record))
 			{
-				$langFields = $this->SQL->select('Language_Fields', '*');
+				$langFields = $this->sQL->select('Language_Fields', '*');
 
 				foreach ($langFields as $langField)
 				{
@@ -96,30 +96,30 @@ class TableAdminLanguage extends TableAdmin
 						$dropField = $langField['Field_Name'] . '_' . $dropLang;
 					}
 	       
-					$this->SQL->dropColumn($langField['Table_Name'], $dropField);
+					$this->sQL->dropColumn($langField['Table_Name'], $dropField);
 				}
 
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure deleting language from database due to exception:  ' .
-				$E->getMessage();
+				$e->getMessage();
 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add(
+			$this->failures->add(
 				'Failure Deleting Language',
 				'System Administrator has been notified.');
 
-			$this->SQL->rollBack();
+			$this->sQL->rollBack();
 		}
 	}
 
@@ -130,10 +130,10 @@ class TableAdminLanguage extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 
 			// Get the name of the language before we modify it.
-			$result = $this->SQL->select(
+			$result = $this->sQL->select(
 				'Language',
 				'Language',
 				$this->sessionManager->get('Edited_Record'));
@@ -146,7 +146,7 @@ class TableAdminLanguage extends TableAdmin
 				if ($oldLang !== $record['Language'])
 				{
 					$langFields =
-						$this->SQL->select('Language_Fields', '*');
+						$this->sQL->select('Language_Fields', '*');
 
 					foreach ($langFields as $langField)
 					{
@@ -162,34 +162,34 @@ class TableAdminLanguage extends TableAdmin
 								$langField['Field_Name'] . '_' . $record['Language'];
 						}
 	       
-						$this->SQL->changeColumn($langField['Table_Name'],
+						$this->sQL->changeColumn($langField['Table_Name'],
 						                         $oldField,
 						                         $newField,
 						                         $langField['Field_Type']);
 					}
 				}
 	    
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure modifying language in database due to exception:  ' .
-				$E->getMessage();
+				$e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add(
+			$this->failures->add(
 				'Failure Modifying Language',
 				'System Administrator has been notified.');
 
-			$this->SQL->rollBack();
+			$this->sQL->rollBack();
 		}
 	}
 }

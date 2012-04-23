@@ -50,9 +50,9 @@ class MessageTree implements Iface\MessageTree
 	/** Append a child message tree object to the tree node.
 	 *  @param Child \object MessageTree to append.
 	 */
-	public function append(Iface\MessageTree $Child)
+	public function append(Iface\MessageTree $child)
 	{
-		$this->children[] = $Child;
+		$this->children[] = $child;
 	}
 
 	public function buildNode($text, $title)

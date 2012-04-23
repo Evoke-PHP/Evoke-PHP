@@ -5,21 +5,21 @@ use \Evoke\Core\Iface;
 
 abstract class Translated extends Base
 {
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
 	/** Construct the View.
 	 *  @param Writer     \object The Writer object.
 	 *  @param Translator \object The Translator object.
 	 */
-	public function __construct(Iface\Writer $Writer,
-	                            Iface\Translator $Translator)
+	public function __construct(Iface\Writer $writer,
+	                            Iface\Translator $translator)
 	{
-		parent::__construct($Writer);
+		parent::__construct($writer);
 		
-		$this->Translator = $Translator;
+		$this->translator = $translator;
 	}
 }
 // EOF

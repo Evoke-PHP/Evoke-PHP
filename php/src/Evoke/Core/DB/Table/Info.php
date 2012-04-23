@@ -13,10 +13,10 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	private $description;
 
-	/** @property $Failures
+	/** @property $failures
 	 *  The failures MessageArray \object
 	 */
-	protected $Failures;
+	protected $failures;
 
 	/** @property $fields
 	 *  The fields \array for the database table.
@@ -33,10 +33,10 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	private $requiredFields;
 
-	/** @property $SQL
+	/** @property $sQL
 	 *  SQL \object
 	 */
-	protected $SQL;
+	protected $sQL;
 
 	/** @property $tableName
 	 *  The table name \string for the table we are retrieving information for.
@@ -64,16 +64,16 @@ class Info implements \Evoke\Core\Iface\Validity
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Table_Name');
 		}
 
-		$this->Failures  = $failures;
-		$this->SQL       = $sQL;
+		$this->failures  = $failures;
+		$this->sQL       = $sQL;
 		$this->tableName = $tableName;
       
-		$this->createInfo = $this->SQL->getSingleValue(
+		$this->createInfo = $this->sQL->getSingleValue(
 			'SHOW CREATE TABLE ' . $this->tableName,
 			array(),
 			1);
       
-		$this->description = $this->SQL->getAssoc('DESCRIBE ' . $this->tableName);
+		$this->description = $this->sQL->getAssoc('DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
 		$this->calculateRequiredFields();
@@ -177,7 +177,7 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	public function getFailures()
 	{
-		return $this->Failures;
+		return $this->failures;
 	}
 
 	/** Check whether a set of fields would be valid for an insert or delete
@@ -191,11 +191,11 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	public function isValid($fieldset, $ignoredFields=array())
 	{
-		$this->Failures->reset();
+		$this->failures->reset();
 
 		if (!is_array($fieldset))
 		{
-			$this->Failures->add('Data', 'Format_Error');
+			$this->failures->add('Data', 'Format_Error');
 			return false;
 		}
 
@@ -205,7 +205,7 @@ class Info implements \Evoke\Core\Iface\Validity
 			if (!in_array($reqField, $ignoredFields) &&
 			    !array_key_exists($reqField, $fieldset))
 			{
-				$this->Failures->add($reqField, 'Required_Field_Error');
+				$this->failures->add($reqField, 'Required_Field_Error');
 			}
 		}
       
@@ -282,11 +282,11 @@ class Info implements \Evoke\Core\Iface\Validity
 				break;
 
 			default:
-				$this->Failures->add($key, 'Unknown_Type_Error');
+				$this->failures->add($key, 'Unknown_Type_Error');
 			}
 		}
 
-		return $this->Failures->isEmpty();
+		return $this->failures->isEmpty();
 	}
    
 	/*********************/
@@ -323,20 +323,20 @@ class Info implements \Evoke\Core\Iface\Validity
 	/// Get the key information from the database and store it in the object.
 	protected function calculateKeyInfo()
 	{
-		$PK_STR = 'PRIMARY KEY';
-		$FK_STR = 'FOREIGN KEY';
+		$pK_STR = 'PRIMARY KEY';
+		$fK_STR = 'FOREIGN KEY';
 
 		// Set the key arrays to blank.
 		$this->primaryKeys = array();
 		$this->foreignKeys = array();
 
 		$createInfoArr = explode("\n", $this->createInfo);
-		$primaryKeyLinesArr = preg_grep("/$PK_STR/", $createInfoArr);
-		$foreignKeyLinesArr = preg_grep("/$FK_STR/", $createInfoArr);
+		$primaryKeyLinesArr = preg_grep("/$pK_STR/", $createInfoArr);
+		$foreignKeyLinesArr = preg_grep("/$fK_STR/", $createInfoArr);
 
 		foreach ($primaryKeyLinesArr as $primaryKeyLine)
 		{
-			preg_match('/.*' . $PK_STR . '\s*\(`([^`]*)`\)/',
+			preg_match('/.*' . $pK_STR . '\s*\(`([^`]*)`\)/',
 			           $primaryKeyLine,
 			           $matches);
 
@@ -352,14 +352,14 @@ class Info implements \Evoke\Core\Iface\Validity
 		foreach ($foreignKeyLinesArr as $foreignKeyLine)
 		{
 			preg_match(
-				'/.*' . $FK_STR . '\s*\(`([^`]*)`\) REFERENCES `([^`]*)` ' .
+				'/.*' . $fK_STR . '\s*\(`([^`]*)`\) REFERENCES `([^`]*)` ' .
 				'\(`([^`]*)`\)/',
 				$foreignKeyLine,
-				$KeyArr);
+				$keyArr);
 	 
-			$this->foreignKeys[$KeyArr[1]]
-				= array('Foreign_Table' => $KeyArr[2],
-				        'Foreign_Field' => $KeyArr[3]);
+			$this->foreignKeys[$keyArr[1]]
+				= array('Foreign_Table' => $keyArr[2],
+				        'Foreign_Field' => $keyArr[3]);
 		}
 	}
 
@@ -371,7 +371,7 @@ class Info implements \Evoke\Core\Iface\Validity
 	{
 		if ($required && empty($val))
 		{
-			$this->Failures->add($key, 'Required_Field_Error');
+			$this->failures->add($key, 'Required_Field_Error');
 			return false;
 		}
 		else
@@ -390,8 +390,8 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (strlen($val) > $subType)
 		{
-			$this->Failures->add($key, 'Overflow_Error');
-			$this->Failures->add($key, 'STRLEN: ' . var_export($val, true) .
+			$this->failures->add($key, 'Overflow_Error');
+			$this->failures->add($key, 'STRLEN: ' . var_export($val, true) .
 			                              ' Allowed: ' . var_export($subType, true));
 			return false;
 		}
@@ -427,7 +427,7 @@ class Info implements \Evoke\Core\Iface\Validity
 
 		if (!preg_match('/^[0-9]' . $repetitions . '$/', $val))
 		{
-			$this->Failures->add($key, 'Overflow_Error');
+			$this->failures->add($key, 'Overflow_Error');
 			return false;
 		}
 		else
@@ -454,7 +454,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		// Any numbers should be able to be handled by the a float type field.
 		if (!is_numeric($val))
 		{
-			$this->Failures->add($key, 'Format_Error');
+			$this->failures->add($key, 'Format_Error');
 			return false;
 		}
 
@@ -475,7 +475,7 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (abs($actualInt) > abs($maxInt))
 		{
-			$this->Failures->add($key, 'Overflow_Error');
+			$this->failures->add($key, 'Overflow_Error');
 			return false;
 		}
 
@@ -500,7 +500,7 @@ class Info implements \Evoke\Core\Iface\Validity
 		// This is a very crude match.
 		if (!preg_match("/[0-9:\.]+/", $val))
 		{
-			$this->Failures->add($key, 'Format_Error');
+			$this->failures->add($key, 'Format_Error');
 			return false;
 		}
 		else
@@ -533,7 +533,7 @@ class Info implements \Evoke\Core\Iface\Validity
       
 		if (!in_array($val, $setArr))
 		{
-			$this->Failures->add($key, 'Range_Error');
+			$this->failures->add($key, 'Range_Error');
 			return false;
 		}
 

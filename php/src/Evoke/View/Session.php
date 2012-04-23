@@ -10,10 +10,10 @@ class Session extends Base
 	/// Write the session so that we can see it.
 	public function write($data)
 	{
-		$this->Writer->write(
+		$this->writer->write(
 			array('div', array('class' => 'Heading'), 'Session'));
 
-		$this->Writer->write(
+		$this->writer->write(
 			array('form',
 			      array('action' => '',
 			            'class'  => 'Clear_Form',
@@ -23,7 +23,7 @@ class Session extends Base
 			                        'type'  => 'submit',
 			                        'value' => 'Clear Session')))));
 
-		$this->Writer->write(array('p',
+		$this->writer->write(array('p',
 		                           array('class' => 'Session_Data'),
 		                           var_export($data, true)));
 	}

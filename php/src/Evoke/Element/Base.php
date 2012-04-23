@@ -96,8 +96,8 @@ class Base implements \Evoke\Core\Iface\Element
 	 *  \code
 	 *  array('div',
 	 *        array('class' => 'example'),
-	 *        array($Element->set($val1),
-	 *              $Element->set($val2)));
+	 *        array($element->set($val1),
+	 *              $element->set($val2)));
 	 *  \endcode
 	 *
 	 *  The Element object was set twice, if it was set before the code val2

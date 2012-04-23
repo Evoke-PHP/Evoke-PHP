@@ -9,7 +9,7 @@ class Clear extends Session
 
 	public function clear()
 	{
-		$this->SessionManager->remove();
+		$this->sessionManager->remove();
 	}
 }
 // EOF

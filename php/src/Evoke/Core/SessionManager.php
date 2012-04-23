@@ -13,10 +13,10 @@ class SessionManager
 	 */
 	protected $domain;
 
-	/** @property $Session
+	/** @property $session
 	 *  Session \object
 	 */
-	protected $Session;
+	protected $session;
    
 	public function __construct($setup=array())
 	{
@@ -42,7 +42,7 @@ class SessionManager
 		}
 
 		$this->domain  = $domain;
-		$this->Session = $session;		
+		$this->session = $session;		
 		
 		$this->ensure();
 	}
@@ -61,7 +61,7 @@ class SessionManager
 	/// Ensure the session is started and the session domain is set or created.
 	public function ensure()
 	{
-		$this->Session->ensure();
+		$this->session->ensure();
       
 		// Make currentDomain a reference to $_SESSION so that when we change it
 		// we are modifying the session.
@@ -110,7 +110,7 @@ class SessionManager
 	/// Return the string of the session ID.
 	public function getID()
 	{
-		return $this->Session->getID();
+		return $this->session->getID();
 	}
 
 	/** Increment the value in the session by the offset.

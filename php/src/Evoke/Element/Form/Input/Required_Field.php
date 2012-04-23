@@ -3,10 +3,10 @@ namespace Evoke\Element\Form\Input;
 
 class RequiredField extends \Evoke\Element\Base
 {
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
 	public function __construct(Array $setup)
 	{
@@ -20,7 +20,7 @@ class RequiredField extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->Translator = $translator;
+		$this->translator = $translator;
 	}
 
 	public function set(Array $data)
@@ -30,7 +30,7 @@ class RequiredField extends \Evoke\Element\Base
 			      array('class' => 'Required_Field_Instructions'),
 			      array(array('span',
 			                  array('class' => 'Required_Field_Instructions_Text'),
-			                  $this->Translator->get(
+			                  $this->translator->get(
 				                  'Required_Field_Instructions')),
 			            array('span',
 			                  array('class' => 'Required'),

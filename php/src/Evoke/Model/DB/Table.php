@@ -51,7 +51,7 @@ class Table extends Base
 
 		$selectSetup = array_merge($this->select, $selectSetup);
       
-		$results = $this->SQL->select($this->tableName,
+		$results = $this->sQL->select($this->tableName,
 		                              $selectSetup['Fields'],
 		                              $selectSetup['Conditions'],
 		                              $selectSetup['Order'],

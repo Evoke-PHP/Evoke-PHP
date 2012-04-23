@@ -6,20 +6,20 @@ use Evoke\Core\Iface;
 /// Receive the request and create the correct response for it.
 class Router implements Iface\HTTP\URI\Router
 {
-	/** @property $Factory
+	/** @property $factory
 	 *  The Factory \object for sending to the response.
 	 */
-	protected $Factory;
+	protected $factory;
 
-	/** @property $Request
+	/** @property $request
 	 *  Request \object
 	 */
-	protected $Request;
+	protected $request;
 
-	/** @property $Reponse
+	/** @property $reponse
 	 *  Response \object
 	 */
-	protected $Reponse;
+	protected $reponse;
 
 	/** @property $rules
 	 *  \array of rules that the router uses to route.
@@ -31,13 +31,13 @@ class Router implements Iface\HTTP\URI\Router
 	 *  @param Request  \object Request object.
 	 *  @param Response \object Response object.
 	 */
-	public function __construct(Iface\Factory       $Factory,
-	                            Iface\HTTP\Request  $Request,
-	                            Iface\HTTP\Response $Response)
+	public function __construct(Iface\Factory       $factory,
+	                            Iface\HTTP\Request  $request,
+	                            Iface\HTTP\Response $response)
 	{
-		$this->Factory       = $Factory;
-		$this->Request       = $Request;
-		$this->Response      = $Response;
+		$this->factory       = $factory;
+		$this->request       = $request;
+		$this->response      = $response;
 		$this->rules         = array();
 	}
 	
@@ -48,9 +48,9 @@ class Router implements Iface\HTTP\URI\Router
 	/** Add a rule to the router.
 	 *  @param rule \object HTTP URI Rule object.
 	 */
-	public function addRule(Iface\HTTP\URI\Rule $Rule)
+	public function addRule(Iface\HTTP\URI\Rule $rule)
 	{
-		$this->rules[] = $Rule;
+		$this->rules[] = $rule;
 	}
 
 	/** Create the object that will respond to the routed URI).
@@ -60,7 +60,7 @@ class Router implements Iface\HTTP\URI\Router
 	{
 		// The classname starts as the request URI and is refined by the mappers
 		// until it is able to create the correct classname.
-		$classname = $this->Request->getURI();
+		$classname = $this->request->getURI();
 		$params = array();
       
 		foreach ($this->rules as $rule)
@@ -81,11 +81,11 @@ class Router implements Iface\HTTP\URI\Router
 		/** An exception will be thrown if an unknown class is atttempted to be
 		 *  built that should be caught at a higher level.
 		 */
-		return $this->Factory->build($classname,
+		return $this->factory->build($classname,
 		                             $params,
-		                             $this->Factory,
-		                             $this->Request,
-		                             $this->Response);
+		                             $this->factory,
+		                             $this->request,
+		                             $this->response);
 	}
 }
 // EOF

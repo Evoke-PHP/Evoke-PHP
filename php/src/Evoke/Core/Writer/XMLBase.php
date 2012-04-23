@@ -15,10 +15,10 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 	 */
 	protected $pos;
 
-	/** @property $XMLWriter
+	/** @property $xMLWriter
 	 *  The XML Writer \object
 	 */
-	protected $XMLWriter;
+	protected $xMLWriter;
 	
 	/** Create an abstract XML Writer.
 	 *  @param setup \array The setup for the XML Writer.
@@ -41,14 +41,14 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		
 		$this->language   = $language;
 		$this->pos        = $pos;
-		$this->XMLWriter  = $xMLWriter;
+		$this->xMLWriter  = $xMLWriter;
 
-		$this->XMLWriter->openMemory();
+		$this->xMLWriter->openMemory();
 			
 		if ($indent)
 		{
-			$this->XMLWriter->setIndentString($indentString);
-			$this->XMLWriter->setIndent(true);
+			$this->xMLWriter->setIndentString($indentString);
+			$this->xMLWriter->setIndent(true);
 		}
 	}
 	
@@ -62,13 +62,13 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 	 */
 	public function __toString()
 	{
-		return $this->XMLWriter->outputMemory(false);
+		return $this->xMLWriter->outputMemory(false);
 	}
    
 	/// Flush the memory buffer containing the XHTML that has been written.
 	public function flush()
 	{
-		$this->XMLWriter->flush();
+		$this->xMLWriter->flush();
 	}
 	
 	/** Output the memory buffer for the XHTML that has been written and reset
@@ -76,7 +76,7 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 	 */
 	public function output()
 	{
-		echo($this->XMLWriter->outputMemory(true));
+		echo($this->xMLWriter->outputMemory(true));
 	}
 
 	/** Write XML elements into the memory buffer.
@@ -128,18 +128,18 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		$children = isset($xml[$this->pos['Children']]) ?
 			$xml[$this->pos['Children']] : array();
 
-		$this->XMLWriter->startElement($tag);
+		$this->xMLWriter->startElement($tag);
 
 		foreach ($attribs as $attrib => $value)
 		{
-			$this->XMLWriter->writeAttribute($attrib, $value);
+			$this->xMLWriter->writeAttribute($attrib, $value);
 		}
 
 		foreach ($children as $child)
 		{
 			if (is_string($child))
 			{
-				$this->XMLWriter->text($child);
+				$this->xMLWriter->text($child);
 			}
 			else
 			{
@@ -151,11 +151,11 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		// than <div/>
 		if (preg_match('(^(div|link|script|textarea)$)i', $tag))
 		{
-			$this->XMLWriter->fullEndElement();
+			$this->xMLWriter->fullEndElement();
 		}
 		else
 		{
-			$this->XMLWriter->endElement();
+			$this->xMLWriter->endElement();
 		}
 	}
 
@@ -171,26 +171,26 @@ abstract class XMLBase implements \Evoke\Core\Iface\Writer
 		switch (strtoupper($type))
 		{
 		case 'XHTML5':
-			$this->XMLWriter->startDTD('html');
-			$this->XMLWriter->endDTD();
+			$this->xMLWriter->startDTD('html');
+			$this->xMLWriter->endDTD();
 			break;
 
 		case 'XML':
-			$this->XMLWriter->startDocument('1.0', 'UTF-8');
+			$this->xMLWriter->startDocument('1.0', 'UTF-8');
 			break;
 				
 		case 'XHTML_1_1':
 		default:
-			$this->XMLWriter->startDTD(
+			$this->xMLWriter->startDTD(
 				'html',
 				'-//W3C//DTD XHTML 1.1//EN',
 				'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
-			$this->XMLWriter->endDTD();
+			$this->xMLWriter->endDTD();
 
-			$this->XMLWriter->startElementNS(
+			$this->xMLWriter->startElementNS(
 				null, 'html', 'http://www.w3.org/1999/xhtml');
-			$this->XMLWriter->writeAttribute('lang', $this->language);
-			$this->XMLWriter->writeAttribute('xml:lang', $this->language);
+			$this->xMLWriter->writeAttribute('lang', $this->language);
+			$this->xMLWriter->writeAttribute('xml:lang', $this->language);
 			break;
 		}
 	}

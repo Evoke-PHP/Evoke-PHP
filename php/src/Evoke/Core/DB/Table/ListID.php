@@ -6,7 +6,7 @@ class List_ID
 	private $fields;
 	private $tableName;
 
-	protected $SQL;
+	protected $sQL;
    
 	public function __construct($setup=array())
 	{
@@ -23,7 +23,7 @@ class List_ID
 
 		$this->fields    = $fields;
 		$this->tableName = $tableName;
-		$this->SQL       = $sQL;
+		$this->sQL       = $sQL;
 	}
 
 	/******************/
@@ -37,7 +37,7 @@ class List_ID
 	 */
 	public function getNew($table, $field)
 	{
-		if (!$this->SQL->inTransaction())
+		if (!$this->sQL->inTransaction())
 		{
 			throw new \LogicException(
 				__METHOD__ . ' we must be in a transaction to get a new List ID.');
@@ -45,7 +45,7 @@ class List_ID
 	 
 		try
 		{
-			$listID = $this->SQL->selectSingleValue(
+			$listID = $this->sQL->selectSingleValue(
 				$this->tableName,
 				$this->fields['Counter'],
 				array($this->fields['DB_Table'] => $table,
@@ -56,18 +56,18 @@ class List_ID
 				return NULL;
 			}
 	 
-			$this->SQL->update($this->tableName,
+			$this->sQL->update($this->tableName,
 			                   array($this->fields['Counter'] => ++$listID),
 			                   array($this->fields['DB_Table'] => $table,
 			                         $this->fields['DB_Field'] => $field));
 
 			return $listID;
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new \Evoke\Core\Exception\DB(
 				__METHOD__, 'Unable to get new list ID for table: ' . $table .
-				' field: ' . $field, $this->SQL, $E);
+				' field: ' . $field, $this->sQL, $e);
 		}
 	}   
 }

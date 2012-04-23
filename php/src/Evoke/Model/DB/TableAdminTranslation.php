@@ -6,7 +6,7 @@ class TableAdminTranslation extends TableAdmin
 	protected $languageTable;
 	protected $translatorFile;
 	
-	protected $Filesystem;
+	protected $filesystem;
 	
 	public function __construct(Array $setup)
 	{
@@ -31,7 +31,7 @@ class TableAdminTranslation extends TableAdmin
 		$this->languageTable  = $languageTable;
 		$this->translatorFile = $translatorFile;
 
-		$this->Filesystem = $filesystem;
+		$this->filesystem = $filesystem;
 	}
 
 	/******************/
@@ -46,29 +46,29 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 	 
 			if (parent::add($record))
 			{
 				$this->updateTranslations();
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure adding translation to database due to exception:  ' .
-				$E->getMessage();
+				$e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add('Failure Adding Language', 'Sys_Admin_Notified');
-			$this->SQL->rollBack();
+			$this->failures->add('Failure Adding Language', 'Sys_Admin_Notified');
+			$this->sQL->rollBack();
 		}
 	}
 
@@ -80,32 +80,32 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 	 
 			if (parent::delete($record))
 			{
 				$this->updateTranslations();
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure deleting translation from database due to ' .
-				'exception: ' . $E->getMessage();
+				'exception: ' . $e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add(
+			$this->failures->add(
 				'Failure Deleting Language',
 				'System Administrator has been notified.');
 
-			$this->SQL->rollBack();
+			$this->sQL->rollBack();
 		}
 	}
 
@@ -116,32 +116,32 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->SQL->beginTransaction();
+			$this->sQL->beginTransaction();
 	 
 			if (parent::modify($record))
 			{
 				$this->updateTranslations();
-				$this->SQL->commit();
+				$this->sQL->commit();
 			}
 			else
 			{
-				$this->SQL->rollBack();
+				$this->sQL->rollBack();
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Failure modifying translation from database due to ' .
-				'exception: ' . $E->getMessage();
+				'exception: ' . $e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 
-			$this->Failures->add(
+			$this->failures->add(
 				'Failure Modifying Language',
 				'System Administrator has been notified.');
 
-			$this->SQL->rollBack();
+			$this->sQL->rollBack();
 		}
 	}
    
@@ -159,7 +159,7 @@ class TableAdminTranslation extends TableAdmin
 	 */
 	protected function updateTranslations()
 	{
-		$languages = $this->SQL->select($this->languageTable, '*');
+		$languages = $this->sQL->select($this->languageTable, '*');
       
 		foreach($languages as $language)
 		{
@@ -172,7 +172,7 @@ class TableAdminTranslation extends TableAdmin
 			$langArr[$lang] = $language;
 		}
       
-		$translations = $this->SQL->select($this->tableName, '*');
+		$translations = $this->sQL->select($this->tableName, '*');
       
 		foreach($translations as $translation)
 		{
@@ -202,7 +202,7 @@ class TableAdminTranslation extends TableAdmin
 		                        'Translations'     => $transArr);
       
 		// Write the translation file.
-		$file = $this->Filesystem->fopen($this->translatorFile, 'w');
+		$file = $this->filesystem->fopen($this->translatorFile, 'w');
 		fwrite($file, 	 '<?php' . "\n" .
 		       '      $translationArr =' . "\n" .
 		       var_export($translationArr, true) . ";\n" .

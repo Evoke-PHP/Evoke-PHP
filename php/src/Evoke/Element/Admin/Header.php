@@ -3,20 +3,20 @@ namespace Evoke\Element\Admin;
 
 class Header extends \Evoke\Element\Base
 {
-	/** @property $ElementLanguage
+	/** @property $elementLanguage
 	 *  Language element
 	 */
-	protected $ElementLanguage;
+	protected $elementLanguage;
 
 	/** @property $languages
 	 *  \array of languages.
 	 */
 	protected $languages;
 
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator object
 	 */
-	protected $Translator;
+	protected $translator;
 	
 	public function __construct(Array $setup)
 	{
@@ -38,9 +38,9 @@ class Header extends \Evoke\Element\Base
 
 		parent::__construct($setup);
 
-		$this->ElementLanguage = $elementLanguage;
+		$this->elementLanguage = $elementLanguage;
 		$this->languages       = $languages;
-		$this->Translator      = $translator;
+		$this->translator      = $translator;
 	}
 	
    /******************/
@@ -55,16 +55,16 @@ class Header extends \Evoke\Element\Base
 			      array(array('a',
 			                  array('class' => 'Admin_Home',
 			                        'href' => '/admin/index.php?' .
-			                        $this->Translator->getLanguageHTTPQuery()),
+			                        $this->translator->getLanguageHTTPQuery()),
 			                  array(array(
 				                        'img',
 				                        array('src' => '/images/admin_home.png',
 				                              'alt' => 'Home')),
 			                        array('span',
 			                              array(),
-			                              $this->Translator->get(
+			                              $this->translator->get(
 				                              'Admin_Home')))),
-			            $this->ElementLanguages->set($data))));
+			            $this->elementLanguages->set($data))));
 	}
 }
 // EOF

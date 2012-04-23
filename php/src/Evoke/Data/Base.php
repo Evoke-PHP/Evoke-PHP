@@ -46,7 +46,7 @@ class Base implements \Evoke\Iface\Data
 				__METHOD__ . ' requires Joins as array');
 		}
 		
-		foreach ($Joins as $parentField => $dataContainer)
+		foreach ($joins as $parentField => $dataContainer)
 		{
 			if (!$dataContainer instanceof \Evoke\Iface\Data)
 			{

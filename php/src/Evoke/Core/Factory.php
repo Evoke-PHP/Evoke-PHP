@@ -11,10 +11,10 @@ class Factory extends InstanceManager implements Iface\Factory
 	 */
 	protected $namespace;
 
-	/** @property $Settings
+	/** @property $settings
 	 *  Settings \object for configuring created and retrieved objects.
 	 */
-	protected $Settings;
+	protected $settings;
 
 	/** @property $sharedInstances
 	 *  \array The instances for shared services that we generally only want to
@@ -38,7 +38,7 @@ class Factory extends InstanceManager implements Iface\Factory
 		}
 
 		$this->namespace = $namespace;
-		$this->Settings  = $settings;
+		$this->settings  = $settings;
 	}
    
 	/******************/
@@ -52,11 +52,11 @@ class Factory extends InstanceManager implements Iface\Factory
 	 */
 	public function buildController(/* String */       $className,
 	                                Array              $params,
-	                                Iface\HTTP\Request $Request=NULL)
+	                                Iface\HTTP\Request $request=NULL)
 	{
-		$Request = $Request ?: $this->getRequest();
+		$request = $request ?: $this->getRequest();
 
-		return $this->build($className, $params, $this, $Request);
+		return $this->build($className, $params, $this, $request);
 	}
 	
 	/// Build a MessageTree.
@@ -154,12 +154,12 @@ class Factory extends InstanceManager implements Iface\Factory
 	/// Get a menu model for the named menu.
 	public function buildModelMenu($menuName)
 	{
-		$Provider = $this->build($this->namespace['Core'] . 'Provider');
-		$Provider->define($this->namespace['Model'] . 'DB\Joint',
+		$provider = $this->build($this->namespace['Core'] . 'Provider');
+		$provider->define($this->namespace['Model'] . 'DB\Joint',
 		                  array('tableName' => 'Menu',
 		                        'Joins'     => 'Evoke\Core\DB\Table\Joins'));
 			
-		return $Provider->make($this->namespace['Model'] . 'DB\Joint');
+		return $provider->make($this->namespace['Model'] . 'DB\Joint');
 
 		/*
 		return $this->build(
@@ -193,10 +193,10 @@ class Factory extends InstanceManager implements Iface\Factory
 	 *  @param setup     \array  Setup parameters for the view.
 	 */
 	public function buildView(/* String */ $className,
-	                          Iface\Writer $Writer,
+	                          Iface\Writer $writer,
 	                          Array        $setup=array())
 	{		
-		return $this->build($className, $Writer, $setup);
+		return $this->build($className, $writer, $setup);
 	}	
 
 	/** Build a View that is translated.
@@ -206,11 +206,11 @@ class Factory extends InstanceManager implements Iface\Factory
 	 *  @param setup      \array  Setup parameters for the view.
 	 */
 	public function buildViewTranslated(/* String */     $className,
-	                                    Iface\Writer     $Writer,
-	                                    Iface\Translator $Translator,
+	                                    Iface\Writer     $writer,
+	                                    Iface\Translator $translator,
 	                                    Array            $setup=array())
 	{
-		return $this->build($className, $Writer, $Translator, $setup);
+		return $this->build($className, $writer, $translator, $setup);
 	}
 	
 	/** Get a data object, specifying any joint data.
@@ -320,7 +320,7 @@ class Factory extends InstanceManager implements Iface\Factory
 	{
 		if ($name === NULL)
 		{
-			if (empty($this->Settings['DB']) || !is_array($this->Settings['DB']))
+			if (empty($this->settings['DB']) || !is_array($this->settings['DB']))
 			{    
 				throw new \UnexpectedValueException(
 					__METHOD__ . ' DB Settings are needed to create an SQL object.');
@@ -328,18 +328,18 @@ class Factory extends InstanceManager implements Iface\Factory
 
 			// We cannot call reset on Settings (as it causes an
 			// 'Indirect modification of overloaded element' notice.
-			$allSettings = $this->Settings['DB'];
+			$allSettings = $this->settings['DB'];
 			$dbSettings = reset($allSettings);
 		}
 		else
 		{
-			if (!isset($this->Settings['DB'][$name]))
+			if (!isset($this->settings['DB'][$name]))
 			{
 				throw new \OutOfBoundsException(
 					__METHOD__ . ' no Settings for DB: ' . $name . ' are defined.');
 			}
 
-			$dbSettings = $this->Settings['DB'][$name];
+			$dbSettings = $this->settings['DB'][$name];
 		}
 
 		return $this->get(
@@ -371,11 +371,11 @@ class Factory extends InstanceManager implements Iface\Factory
 	{
 		return $this->get(
 			$this->namespace['Core'] . 'Translator',
-			array('Default_Language'      => $this->Settings['Constant'][
+			array('Default_Language'      => $this->settings['Constant'][
 				      'Default_Language'],
 			      'Request'               => $this->getRequest(),
 			      'Session_Manager'       => $this->getSessionManager('Lang'),
-			      'Translations_Filename' => $this->Settings['File']['Translation']));
+			      'Translations_Filename' => $this->settings['File']['Translation']));
 	}
 
 	// Get the Triad object.

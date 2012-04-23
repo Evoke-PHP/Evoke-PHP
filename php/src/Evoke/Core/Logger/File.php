@@ -13,10 +13,10 @@ class File
 	 */
 	protected $dirMode;
 
-	/** @property $EventManager
+	/** @property $eventManager
 	 *  Event Manager \object
 	 */
-	protected $EventManager;
+	protected $eventManager;
 
 	/** @property $fileMode
 	 *  The mode for the file \int (octal).
@@ -33,10 +33,10 @@ class File
 	 */
 	private $filePointer;
 
-	/** @property $Filesystem
+	/** @property $filesystem
 	 *  Filesystem \object
 	 */
-	protected $Filesystem;
+	protected $filesystem;
 
 	/** @property $locking
 	 *  Whether the file is locked when writing to the file.
@@ -76,11 +76,11 @@ class File
 		$this->dirMode      = $dirMode;
 		$this->filename     = $filename;
 		$this->fileMode     = $fileMode;
-		$this->EventManager = $eventManager;
-		$this->Filesystem   = $filesystem;
+		$this->eventManager = $eventManager;
+		$this->filesystem   = $filesystem;
 		$this->locking      = $locking;
 
-		$this->EventManager->connect('Log.Write', array($this, 'write'));
+		$this->eventManager->connect('Log.Write', array($this, 'write'));
 	}
    
 	/******************/
@@ -104,13 +104,13 @@ class File
 		// Write to the file, with or without file locking.
 		if ($this->locking)
 		{
-			$this->Filesystem->flock($this->filePointer, LOCK_EX);
-			$this->Filesystem->fwrite($this->filePointer, $entry);
-			$this->Filesystem->flock($this->filePointer, LOCK_UN);
+			$this->filesystem->flock($this->filePointer, LOCK_EX);
+			$this->filesystem->fwrite($this->filePointer, $entry);
+			$this->filesystem->flock($this->filePointer, LOCK_UN);
 		}
 		else
 		{
-			$this->Filesystem->fwrite($this->filePointer, $entry);
+			$this->filesystem->fwrite($this->filePointer, $entry);
 		}
 	}
    
@@ -128,7 +128,7 @@ class File
 
 		if (!is_dir($dir))
 		{
-			$this->Filesystem->mkdir(dirname($dir), $this->dirMode, true);
+			$this->filesystem->mkdir(dirname($dir), $this->dirMode, true);
 		}
             
 		if ($this->append)
@@ -138,8 +138,8 @@ class File
 
 		// Open the log file and ensure it is at the right chmod level.
 		$this->filePointer =
-			$this->Filesystem->fopen($this->filename, $writeMode);
-		$this->Filesystem->chmod($this->filename, $this->fileMode);
+			$this->filesystem->fopen($this->filename, $writeMode);
+		$this->filesystem->chmod($this->filename, $this->fileMode);
 		$this->opened = true;
 	}
 }

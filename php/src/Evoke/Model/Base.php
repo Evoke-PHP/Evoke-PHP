@@ -56,7 +56,7 @@ abstract class Base implements \Evoke\Core\Iface\Model
 					' with desired prefix: ' . var_export($prefix, true) .
 					' at offset: ' . var_export($offset, true);
 				
-				$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+				$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 				                                         'Message' => $msg,
 				                                         'Method'  => __METHOD__));
 

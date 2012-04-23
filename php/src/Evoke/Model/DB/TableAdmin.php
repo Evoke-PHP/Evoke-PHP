@@ -8,46 +8,46 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	 */
 	protected $autoFields;
 
-	/** @property $Failures
+	/** @property $failures
 	 *  Failure MessageTree \object
 	 */
-	protected $Failures;
+	protected $failures;
 
-	/** @property $Info
+	/** @property $info
 	 *  DB Table Information \object
 	 */
-	protected $Info;
+	protected $info;
 
-	/** @property $Notifications
+	/** @property $notifications
 	 *  Notification MessageTree \object
 	 */
-	protected $Notifications;
+	protected $notifications;
 
-	/** @property $SessionManager
+	/** @property $sessionManager
 	 *  Session Manager \object
 	 */
-	protected $SessionManager;
+	protected $sessionManager;
 
 	/** @property $validate
 	 *  \bool Whether to validate the data.
 	 */
 	protected $validate;
 	
-	public function __construct(Iface\DB\Table\Info  $Info,
-	                            Iface\SessionManager $SessionManager,
+	public function __construct(Iface\DB\Table\Info  $info,
+	                            Iface\SessionManager $sessionManager,
 	                            Array                $dataPrefix=array(),
-	                            Iface\MessageTree    $Failures=NULL,
-	                            Iface\MessageTree    $Notifications=NULL,
+	                            Iface\MessageTree    $failures=NULL,
+	                            Iface\MessageTree    $notifications=NULL,
 	                            /* Bool */           $validate=true,
 	                            Array                $autoFields=array('ID'))
 	{
 		parent::__construct($dataPrefix);
       
 		$this->autoFields     = $autoFields;
-		$this->Failures       = $Failures;
-		$this->Info           = $Info;
-		$this->Notifications  = $Notifications;
-		$this->SessionManager = $SessionManager;
+		$this->failures       = $failures;
+		$this->info           = $info;
+		$this->notifications  = $notifications;
+		$this->sessionManager = $sessionManager;
 		$this->validate       = $validate;
 	}
 
@@ -58,7 +58,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	/// Add a record to the table.
 	public function add($record)
 	{
-		$this->Failures = NULL;
+		$this->failures = NULL;
 
 		// Let the database choose the automatic fields.
 		foreach ($this->autoFields as $auto)
@@ -68,33 +68,33 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
 		if ($this->validate)
 		{
-			if (!$this->Info->isValid($record))
+			if (!$this->info->isValid($record))
 			{
-				$this->Failures = $this->Info->getFailures();
+				$this->failures = $this->info->getFailures();
 				return false;
 			}
 		}
       
 		try
 		{
-			$this->SQL->insert(
+			$this->sQL->insert(
 				$this->tableName, array_keys($record), $record);
 
-			$this->SessionManager->reset();
-			$this->Notifications = $this->Notifications->buildNode(
+			$this->sessionManager->reset();
+			$this->notifications = $this->notifications->buildNode(
 				'Add', 'Successful');
 			return true;
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Table: ' . $this->tableName . ' Exception: ' .
-				$E->getMessage();
+				$e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 	 
-			$this->Failures->add(
+			$this->failures->add(
 				'Record could not be added to table: ' . $this->tableName,
 				'System administrator has been notified of error.');
 
@@ -104,35 +104,35 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
 	public function cancel()
 	{
-		$this->SessionManager->reset();
+		$this->sessionManager->reset();
 	}
 
 	/// Begin creating a new record.
 	public function createNew()
 	{
-		$this->SessionManager->set('New_Record', true);
-		$this->SessionManager->set('Current_Record', array());
-		$this->SessionManager->set('Editing_Record', true);
-		$this->SessionManager->set('Edited_Record', array());
+		$this->sessionManager->set('New_Record', true);
+		$this->sessionManager->set('Current_Record', array());
+		$this->sessionManager->set('Editing_Record', true);
+		$this->sessionManager->set('Edited_Record', array());
 	}
 
 	/// Cancel the current delete that was requested.
 	public function deleteCancel()
 	{
-		$this->SessionManager->reset();
+		$this->sessionManager->reset();
 	}
    
 	// Delete a record from the table.
 	public function deleteConfirm(Array $record)
 	{
-		$this->Failures->reset();
+		$this->failures->reset();
       
 		try
 		{
-			$this->SQL->delete($this->tableName, $record);
+			$this->sQL->delete($this->tableName, $record);
 
-			$this->SessionManager->reset();
-			$this->Notifications->add('Delete', 'Successful');
+			$this->sessionManager->reset();
+			$this->notifications->add('Delete', 'Successful');
 			return true;
 		}
 		catch (\Exception $e)
@@ -140,11 +140,11 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 			$msg = 'Table: ' . $this->tableName . ' Exception: ' .
 				$e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 	 
-			$this->Failures->add(
+			$this->failures->add(
 				'Record could not be deleted from table: ' .
 				$this->tableName,
 				'System administrator has been notified of error.');
@@ -155,17 +155,17 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 
 	public function deleteRequest($conditions)
 	{
-		$this->SessionManager->set('Delete_Request', true);
+		$this->sessionManager->set('Delete_Request', true);
 
-		$record = $this->SQL->select(
+		$record = $this->sQL->select(
 			$this->tableName, '*', $conditions);
       
-		$this->SessionManager->set('Delete_Record', $record);
+		$this->sessionManager->set('Delete_Record', $record);
 	}
    
 	public function edit($record)
 	{
-		$result = $this->SQL->select($this->tableName, '*', $record);
+		$result = $this->sQL->select($this->tableName, '*', $record);
 
 		if ($result === false)
 		{
@@ -173,10 +173,10 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 		}
 		else
 		{
-			$this->SessionManager->set('New_Record', false);
-			$this->SessionManager->set('Current_Record', $result[0]);
-			$this->SessionManager->set('Editing_Record', true);
-			$this->SessionManager->set('Edited_Record', $record);
+			$this->sessionManager->set('New_Record', false);
+			$this->sessionManager->set('Current_Record', $result[0]);
+			$this->sessionManager->set('Editing_Record', true);
+			$this->sessionManager->set('Edited_Record', $record);
 			return true;
 		}
 	}
@@ -187,25 +187,25 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	public function getData()
 	{
 		return array('Records' => parent::getData(),
-		             'State'   => $this->SessionManager->getAccess());
+		             'State'   => $this->sessionManager->getAccess());
 	}
    
 	/// Get the currently edited record.
 	public function getCurrentRecord()
 	{
-		return $this->SessionManager->get('Current_Record');      
+		return $this->sessionManager->get('Current_Record');      
 	}
 
 	/// Whether a record is being edited.
 	public function isEditingRecord()
 	{
-		return $this->SessionManager->is('Editing_Record', true);
+		return $this->sessionManager->is('Editing_Record', true);
 	}  
 
 	/// Whether the current record is a new entry.
 	public function isNewRecord()
 	{
-		return $this->SessionManager->is('New_Record', true);
+		return $this->sessionManager->is('New_Record', true);
 	}
 
 	/** Modify a record in the table.
@@ -215,42 +215,42 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	{
 		try
 		{
-			$this->Failures->reset();
+			$this->failures->reset();
 
 			if ($this->validate)
 			{
-				if (!$this->Info->isValid($record))
+				if (!$this->info->isValid($record))
 				{
-					$this->Failures = $this->Info->getFailures();
+					$this->failures = $this->info->getFailures();
 					return false;
 				}
 			}
 
-			if ($this->SessionManager->issetKey('Edited_Record'))
+			if ($this->sessionManager->issetKey('Edited_Record'))
 			{
-				$oldRecord = $this->SessionManager->get('Edited_Record');
-				$this->SQL->update($this->tableName, $record, $oldRecord);
+				$oldRecord = $this->sessionManager->get('Edited_Record');
+				$this->sQL->update($this->tableName, $record, $oldRecord);
 			}
 			else
 			{
-				$this->SQL->insert(
+				$this->sQL->insert(
 					$this->tableName, array_keys($record), $record);
 			}
 
-			$this->Notifications->add('Modify', 'Successful');
-			$this->SessionManager->reset();
+			$this->notifications->add('Modify', 'Successful');
+			$this->sessionManager->reset();
 			return true;
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Table: ' . $this->tableName . ' Exception: ' .
-				$E->getMessage();
+				$e->getMessage();
 	 
-			$this->EventManager->notify('Log', array('Level'   => LOG_ERR,
+			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
 			                                         'Method'  => __METHOD__));
 	 
-			$this->Failures->add(
+			$this->failures->add(
 				'Record could not be modified in table: ' .
 				$this->tableName,
 				'System administrator has been notified of error.');

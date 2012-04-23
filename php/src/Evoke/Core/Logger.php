@@ -17,10 +17,10 @@ namespace Evoke\Core;
 */
 class Logger
 {
-	/** @property $DateTime
+	/** @property $dateTime
 	 *  DateTIme \object
 	 */
-	protected $DateTime;
+	protected $dateTime;
 
 	/** @property $defaultLevel
 	 *  The default level to log to \int (defaults to LOG_INFO).
@@ -32,10 +32,10 @@ class Logger
 	 */
 	protected $defaultLevelStr;
 
-	/** @property $EventManager
+	/** @property $eventManager
 	 *  EventManager \object
 	 */
-	protected $EventManager;
+	protected $eventManager;
 
 	/** @property $levels
 	 *  \array of levels.
@@ -86,10 +86,10 @@ class Logger
 				__METHOD__ . ' requires EventManager');
 		}
 		
-		$this->DateTime         = $dateTime;
+		$this->dateTime         = $dateTime;
 		$this->defaultLevel     = $defaultLevel;
 		$this->defaultLevelStr  = $defaultLevelStr;
-		$this->EventManager     = $eventManager;
+		$this->eventManager     = $eventManager;
 		$this->levels           = $levels;
 		$this->loggingMandatory = $loggingMandatory;
 		// Use the mask provided or allow all logging levels.
@@ -98,11 +98,11 @@ class Logger
 		$this->timeFormat       = $timeFormat;
 				
 		// We observe Log events and remain decoupled to the code that calls us.
-		$this->EventManager->connect('Log', array($this, 'log'));
+		$this->eventManager->connect('Log', array($this, 'log'));
 
 		// Create the Log.Write event as critical when logging is mandatory to
 		// ensure that messages are written.
-		$this->EventManager->create('Log.Write', $this->loggingMandatory);
+		$this->eventManager->create('Log.Write', $this->loggingMandatory);
 	}
    
 	/******************/
@@ -129,14 +129,14 @@ class Logger
 			return;
 		}
 
-		$this->DateTime->setTimestamp(time());
+		$this->dateTime->setTimestamp(time());
 
 		$message += array(
-			'Date_Time'    => $this->DateTime->format($this->timeFormat),
+			'Date_Time'    => $this->dateTime->format($this->timeFormat),
 			'Level_String' => $this->getLevelString($message['Level']));
       
 		// Notify the listeners of the message!
-		$this->EventManager->notify('Log.Write', $message);
+		$this->eventManager->notify('Log.Write', $message);
 	}
 
 	/** Return whether the message has the level to be logged. This is done by

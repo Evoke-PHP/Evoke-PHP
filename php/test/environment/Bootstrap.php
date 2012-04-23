@@ -1,8 +1,8 @@
 <?php
 class Bootstrap
 {
-	protected $EvokeBootstrap;
-	protected $InstanceManager;
+	protected $evokeBootstrap;
+	protected $instanceManager;
    
 	/// Bring up the libraries that we use and the Rosalia autoloader.
 	public function __construct()
@@ -15,10 +15,10 @@ class Bootstrap
 
 		require_once $evokeDir . 'Core/Iface/InstanceManager.php';
 		require_once $evokeDir . 'Core/InstanceManager.php';
-		$this->InstanceManager = new \Evoke\Core\InstanceManager();
+		$this->instanceManager = new \Evoke\Core\InstanceManager();
       
 		require_once $evokeDir . 'Core/Init/Bootstrap.php';
-		$this->EvokeBootstrap = $this->InstanceManager->create(
+		$this->evokeBootstrap = $this->instanceManager->create(
 			'\Evoke\Core\Init\Bootstrap');
 	}
 
@@ -28,29 +28,29 @@ class Bootstrap
 
 	public function initializeAutoload()
 	{
-		$this->EvokeBootstrap->initializeAutoload();
+		$this->evokeBootstrap->initializeAutoload();
 	}
 
 	/*
 	  public function initializeHandlers()
 	  {
-	  $this->EvokeBootstrap->initializeHandlers();
+	  $this->evokeBootstrap->initializeHandlers();
 	  }
 	*/
    
 	public function initializeLogger()
 	{
-		$this->EvokeBootstrap->initializeLogger();
+		$this->evokeBootstrap->initializeLogger();
 	}
    
 	public function initializeSettings()
 	{
-		$this->EvokeBootstrap->initializeSettings();
+		$this->evokeBootstrap->initializeSettings();
 	}
 }
 
-$Bootstrap = new Bootstrap();
-$Bootstrap->initializeAutoload();
-$Bootstrap->initializeSettings();
-$Bootstrap->initializeLogger();
+$bootstrap = new Bootstrap();
+$bootstrap->initializeAutoload();
+$bootstrap->initializeSettings();
+$bootstrap->initializeLogger();
 // EOF

@@ -9,11 +9,11 @@ use Evoke\Core\Iface;
  */
 class Joint extends Base
 {
-	/** @property $Joins
+	/** @property $joins
 	 *  Joins \object which lists the relationships for the data, allowing it to
 	 *  be joint together into a meaningful unit of data.
 	 */
-	protected $Joins;
+	protected $joins;
 	
 	/** @property $select
 	 *  Select \array for the SQL statement.
@@ -32,7 +32,7 @@ class Joint extends Base
 	 *  @param dataPrefix \array  Any prefix to offset the data with.
 	 */
 	public function __construct(/* String */         $tableName,
-	                            Iface\DB\Table\Joins $Joins,
+	                            Iface\DB\Table\Joins $joins,
 	                            Array                $select=array(),
 	                            Array                $dataPrefix=array())
 	{
@@ -50,7 +50,7 @@ class Joint extends Base
 		                 'Order'      => '',
 		                 'Limit'      => 0);
 	
-		$this->Joins     = $Joins;
+		$this->joins     = $joins;
 		$this->select    = $select;
 		$this->tableName = $tableName;
 	}
@@ -65,14 +65,14 @@ class Joint extends Base
 	public function getData(Array $selectSetup=array())
 	{
 		$selectSetup = array_merge($this->select, $selectSetup);
-		$tables = $this->tableName . $this->Joins->getJoinStatement();
+		$tables = $this->tableName . $this->joins->getJoinStatement();
 
 		if ($selectSetup['Fields'] === '*')
 		{
-			$selectSetup['Fields'] = $this->Joins->getAllFields();
+			$selectSetup['Fields'] = $this->joins->getAllFields();
 		}
 
-		$results = $this->SQL->select($tables,
+		$results = $this->sQL->select($tables,
 		                              $selectSetup['Fields'],
 		                              $selectSetup['Conditions'],
 		                              $selectSetup['Order'],
@@ -80,7 +80,7 @@ class Joint extends Base
 
 		return array_merge(
 			parent::getData(),
-			$this->offsetData($this->Joins->arrangeResults($results)));
+			$this->offsetData($this->joins->arrangeResults($results)));
 	}
 }
 // EOF

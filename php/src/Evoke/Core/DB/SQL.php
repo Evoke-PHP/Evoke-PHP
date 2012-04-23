@@ -140,9 +140,9 @@ class SQL implements \Evoke\Core\Iface\DB
 	 
 			return $this->dB->prepare($statement, $driverOptions);
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, '', $this->dB, $E);
+			throw new Exception_DB(__METHOD__, '', $this->dB, $e);
 		}
 	}
 
@@ -192,20 +192,20 @@ class SQL implements \Evoke\Core\Iface\DB
 	{
 		try
 		{
-			$Statement = $this->prepare($queryString);
+			$statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$Statement->execute($params);
+			$statement->execute($params);
 
-			return $Statement->fetchAll(\PDO::FETCH_ASSOC);
+			return $statement->fetchAll(\PDO::FETCH_ASSOC);
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->dB,
-				$E);
+				$e);
 		}
 	}
 
@@ -218,27 +218,27 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$Statement = $this->prepare($queryString);
+			$statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$Statement->execute($params);
-			$result = $Statement->fetch(\PDO::FETCH_ASSOC);
+			$statement->execute($params);
+			$result = $statement->fetch(\PDO::FETCH_ASSOC);
 
 			// Check if there is more than a single row.
-			if ($Statement->fetch(\PDO::FETCH_ASSOC))
+			if ($statement->fetch(\PDO::FETCH_ASSOC))
 			{
 				throw new \Exception('Unexpected Multiple rows received.');
 			}
 	 
 			return $result;
 		}
-		catch (Exception $E)
+		catch (Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->dB,
-				$E);
+				$e);
 		}
 	}
 
@@ -252,27 +252,27 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$Statement = $this->prepare($queryString);
+			$statement = $this->prepare($queryString);
 			$params = is_array($params) ? $params : array($params);
-			$Statement->execute($params);
-			$result = $Statement->fetchColumn($column);
+			$statement->execute($params);
+			$result = $statement->fetchColumn($column);
 
 			// Check if there is more than a single row.
-			if ($Statement->fetchColumn($column))
+			if ($statement->fetchColumn($column))
 			{
 				throw new \Exception('Unexpected multiple rows received.');
 			}
 	 
 			return $result;
 		}
-		catch (Exception $E)
+		catch (Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->dB,
-				$E);
+				$e);
 		}
 	}
    
@@ -316,7 +316,7 @@ class SQL implements \Evoke\Core\Iface\DB
 			}
 
 			// Prepare
-			$Statement = $this->prepare($q);
+			$statement = $this->prepare($q);
 	 
 			if (!is_array($conditions))
 			{
@@ -331,19 +331,19 @@ class SQL implements \Evoke\Core\Iface\DB
 			$params = array_merge($conditions, $order);
 	 
 			// Execute and fetch the results as an associated array.
-			$Statement->execute($params);
-			$assoc = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+			$statement->execute($params);
+			$assoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
 			return $assoc;
 		}
-		catch(\Exception $E)
+		catch(\Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Tables: ' . var_export($tables, true) .
 				' Fields: ' .var_export($fields, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->dB, $E);
+				$this->dB, $e);
 		}	 
 	}
 
@@ -363,19 +363,19 @@ class SQL implements \Evoke\Core\Iface\DB
 				$q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
 			}
 	 
-			$Statement = $this->prepare($q);
-			$Statement->execute($conditions);
+			$statement = $this->prepare($q);
+			$statement->execute($conditions);
 
-			return $Statement->fetchColumn();
+			return $statement->fetchColumn();
 		}
-		catch(\Exception $E)
+		catch(\Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__,
 				'Table: ' . var_export($table, true) .
 				' Field: ' .var_export($field, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->dB, $E);
+				$this->dB, $e);
 		}
 	}
 
@@ -403,20 +403,20 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$Statement = $this->prepare($q);
+			$statement = $this->prepare($q);
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, 'Prepare', $this->dB, $E);
+			throw new Exception_DB(__METHOD__, 'Prepare', $this->dB, $e);
 		}
 
 		$params = array_merge(array_values($setValues),
 		                      array_values($conditions));
 
 		// Execute
-		if ($Statement->execute($params) === false)
+		if ($statement->execute($params) === false)
 		{
-			throw new Exception_DB(__METHOD__, 'Execute', $Statement);
+			throw new Exception_DB(__METHOD__, 'Execute', $statement);
 		}
       
 		return true;
@@ -448,18 +448,18 @@ class SQL implements \Evoke\Core\Iface\DB
       
 		try
 		{
-			$Statement = $this->prepare($q);
-			$Statement->execute($conditions);
+			$statement = $this->prepare($q);
+			$statement->execute($conditions);
 
-			return $Statement->rowCount();
+			return $statement->rowCount();
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new Exception_DB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
 				' conditions: ' . var_export($conditions, true),
 				$this->dB,
-				$E);
+				$e);
 		}
 	}
 
@@ -473,17 +473,17 @@ class SQL implements \Evoke\Core\Iface\DB
 		// Prepare
 		try
 		{
-			$Statement = $this->prepare(
+			$statement = $this->prepare(
 				'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
 				'VALUES (' . $this->placeholders($fields) . ')');
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
 				var_export($fields, true);
 	 
 			throw new Exception_DB(
-				__METHOD__, $msg, $this->dB, $E);
+				__METHOD__, $msg, $this->dB, $e);
 		}
 
 		if (!is_array($valArr))
@@ -499,31 +499,31 @@ class SQL implements \Evoke\Core\Iface\DB
 			{
 				foreach ($valArr as $entryNum => $entry)
 				{
-					$Statement->execute($entry);
+					$statement->execute($entry);
 				}
 			}
-			catch (\Exception $E)
+			catch (\Exception $e)
 			{
 				throw new Exception_DB(
 					__METHOD__,
 					'Multiple Values: ' . var_export($valArr, true),
 					$this->dB,
-					$E);
+					$e);
 			}
 		}
 		else // There should only be one entry to insert.
 		{
 			try
 			{
-				$Statement->execute($valArr);
+				$statement->execute($valArr);
 			}
-			catch (\Exception $E)
+			catch (\Exception $e)
 			{
 				throw new Exception_DB(
 					__METHOD__,
 					'Single Value: ' . var_export($valArr, true),
 					$this->dB,
-					$E);
+					$e);
 			}
 		}
 	}
@@ -589,13 +589,13 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true),
-				$E);
+				$e);
 		}
 	}
 
@@ -635,14 +635,14 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) . ' separator: ' .
 				var_export($separator, true) . ' between: ' .
 				var_export($between, true),
-				$E);
+				$e);
 		}
 	}
 
@@ -717,14 +717,14 @@ class SQL implements \Evoke\Core\Iface\DB
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $E)
+		catch (\Exception $e)
 		{
 			throw new Exception_Base(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true) .
 				' between: ' . var_export($between, true),
-				$E);
+				$e);
 		}
 	}
 }

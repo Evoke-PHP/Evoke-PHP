@@ -6,20 +6,20 @@ use Evoke\Core\HTTP\MediaType;
 
 abstract class Base
 {
-	/** @property $Factory
+	/** @property $factory
 	 *  \object Factory 
 	 */
-	protected $Factory;
+	protected $factory;
 	
 	/** @property $params
 	 *  \array Parameters for the Controller.
 	 */
 	protected $params;
 	
-	/** @property $Request
+	/** @property $request
 	 *  Request \object
 	 */
-	protected $Request;
+	protected $request;
 
 	/** Construct the response.
 	 *  @param params   \array  Parameters for the response.
@@ -28,14 +28,14 @@ abstract class Base
 	 *  @param Response \object Response object.
 	 */
 	public function __construct(Array               $params,
-	                            Iface\Factory       $Factory,
-	                            Iface\HTTP\Request  $Request,
-	                            Iface\HTTP\Response $Response)
+	                            Iface\Factory       $factory,
+	                            Iface\HTTP\Request  $request,
+	                            Iface\HTTP\Response $response)
 	{
-		$this->Factory  = $Factory;
+		$this->factory  = $factory;
 		$this->params   = $params;
-		$this->Request  = $Request;
-		$this->Response = $Response;
+		$this->request  = $request;
+		$this->response = $response;
 	}
 	
 	/******************/
@@ -46,8 +46,8 @@ abstract class Base
 	 */
 	public function execute()
 	{
-		$MediaTypeRouter = $this->buildMediaTypeRouter();
-		$outputFormat = $MediaTypeRouter->route();
+		$mediaTypeRouter = $this->buildMediaTypeRouter();
+		$outputFormat = $mediaTypeRouter->route();
 
 		switch(strtoupper($outputFormat))
 		{
@@ -67,8 +67,8 @@ abstract class Base
 			$contentType = 'application/xml';
 			break;
 		default:
-			$EventManager = $this->Factory->getEventManager();
-			$EventManager->notify(
+			$eventManager = $this->factory->getEventManager();
+			$eventManager->notify(
 				'Log',
 				array('Level'   => LOG_WARNING,
 				      'Message' => 'Unknown output format: ' . $outputFormat,
@@ -79,14 +79,14 @@ abstract class Base
 			$outputFormat = 'XHTML';
 		}
 		
-		$this->Writer = $this->buildWriter($outputFormat);
-		$this->Response->setContentType($contentType);
+		$this->writer = $this->buildWriter($outputFormat);
+		$this->response->setContentType($contentType);
 
 		// Perform any content agnostic initialization of the reponse.
 		$this->initialize();
 
 		// Respond to the method in the correct output format.
-		$this->respond($this->Request->getMethod(), $outputFormat);
+		$this->respond($this->request->getMethod(), $outputFormat);
 		
 		// Perform any content agnostic finalization of the response.
 		$this->finalize();
@@ -100,12 +100,12 @@ abstract class Base
 	 */
 	protected function buildMediaTypeRouter()
 	{
-		$Router = new MediaType\Router($this->Request);
-		$Router->addRule(
+		$router = new MediaType\Router($this->request);
+		$router->addRule(
 			new MediaType\Rule\Exact('HTML5',
 			                         array('Subtype' => '*',
 			                               'Type'    => '*')));
-		return $Router;
+		return $router;
 	}
 
 	/** Build a Writer object.
@@ -118,10 +118,10 @@ abstract class Base
 		    $outputFormat === 'XHTML' ||
 		    $outputFormat === 'XML')
 		{
-			$setup += array('XMLWriter' => $this->Factory->get('XMLWriter'));
+			$setup += array('XMLWriter' => $this->factory->get('XMLWriter'));
 		}
 		
-		return $this->Factory->get('Evoke\Core\Writer\\' . $outputFormat,
+		return $this->factory->get('Evoke\Core\Writer\\' . $outputFormat,
 		                           $setup);
 	}
 
@@ -129,7 +129,7 @@ abstract class Base
 	 */
 	protected function endXHTML()
 	{
-		$this->Writer->writeEnd();
+		$this->writer->writeEnd();
 	}
 	
 	/** Perform any finalization of the response that does not relate to a
@@ -138,7 +138,7 @@ abstract class Base
 	 */
 	protected function finalize()
 	{
-		$this->Writer->output();
+		$this->writer->output();
 	}		
 	
 	/** Get the XHTML setup for the page.
@@ -163,7 +163,7 @@ abstract class Base
 	 */
 	protected function initialize()
 	{
-		$this->Response->setResponseCode(200);
+		$this->response->setResponseCode(200);
 	}
 
 	/** Merge two XHTML setups with the second taking precedence.
@@ -221,7 +221,7 @@ abstract class Base
 	/// Write the XHTML start.
 	protected function startXHTML()
 	{
-		$this->Writer->writeStart($this->getXHTMLSetup());
+		$this->writer->writeStart($this->getXHTMLSetup());
 	}
 	 
 }

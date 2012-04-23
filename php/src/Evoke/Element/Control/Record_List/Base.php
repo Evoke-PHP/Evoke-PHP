@@ -84,10 +84,10 @@ class Element_Record_List extends Element
 	 */
 	protected $translateLabels;
 
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
 	public function __construct(Array $setup)
 	{

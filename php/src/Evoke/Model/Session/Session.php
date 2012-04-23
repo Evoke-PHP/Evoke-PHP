@@ -5,22 +5,22 @@ use Evoke\Core\Iface;
 
 class Session extends \Evoke\Model\Base
 {
-	/** @property $SessionManager
+	/** @property $sessionManager
 	 *  Session Manager \object
 	 */
-	protected $SessionManager;
+	protected $sessionManager;
 
 	/** Construct a Session model.
 	 *  @param SessionManager \object The Session Manager for the part of the
 	 *  session we are modelling.
 	 *  @param dataPrefix \array Models return data at the specified prefix.
 	 */
-	public function __construct(Iface\SessionManager $SessionManager,
+	public function __construct(Iface\SessionManager $sessionManager,
 	                            Array                $dataPrefix=array())
 	{
 		parent::__construct($dataPrefix);
 		
-		$this->SessionManager = $SessionManager;
+		$this->sessionManager = $sessionManager;
 	}
 
 	/******************/
@@ -30,7 +30,7 @@ class Session extends \Evoke\Model\Base
 	// Get the data from the session.
 	public function getData()
 	{
-		$session = $this->SessionManager->getAccess();
+		$session = $this->sessionManager->getAccess();
 
 		if (!is_array($session))
 		{

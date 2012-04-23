@@ -80,8 +80,8 @@ class Admin extends Base
 	{
 		if (!empty($failures))
 		{
-			$this->Writer->write(
-				$this->InstanceManager->create(
+			$this->writer->write(
+				$this->instanceManager->create(
 					'Element_Failures', array('Data' => $failures)));
 		}
 	}
@@ -92,8 +92,8 @@ class Admin extends Base
 	{
 		if (!empty($notifications))
 		{
-			$this->Writer->write(
-				$this->InstanceManager->create(
+			$this->writer->write(
+				$this->instanceManager->create(
 					'Element_Notifications', array('Data' => $notifications)));
 		}
 	}
@@ -113,7 +113,7 @@ class Admin extends Base
 			                      array('class' => 'Add Button Good',
 			                            'name'  => 'Add',
 			                            'type'  => 'submit',
-			                            'value' => $this->Translator->get('Add')));
+			                            'value' => $this->translator->get('Add')));
 		}
 		else
 		{
@@ -121,14 +121,14 @@ class Admin extends Base
 			                      array('class' => 'Modify Button Info',
 			                            'name'  => 'Modify',
 			                            'type'  => 'submit',
-			                            'value' => $this->Translator->get('Modify')));
+			                            'value' => $this->translator->get('Modify')));
 		}
       
 		$buttonsArr[] = array('input',
 		                      array('class' => 'Cancel Button Bad',
 		                            'name'  => 'Cancel',
 		                            'type'  => 'submit',
-		                            'value' => $this->Translator->get('Cancel')));
+		                            'value' => $this->translator->get('Cancel')));
       
 		return $buttonsArr;
 	}
@@ -136,7 +136,7 @@ class Admin extends Base
 	/// Write a Create New button.
 	protected function writeCreateNew()
 	{
-		$this->Writer->write(
+		$this->writer->write(
 			array('form',
 			      array('class'  => 'Create_New',
 			            'action' => '',
@@ -145,40 +145,40 @@ class Admin extends Base
 			                  array('class' => 'Create_New Button Good',
 			                        'name'  => 'Create_New',
 			                        'type'  => 'submit',
-			                        'value' => $this->Translator->get(
+			                        'value' => $this->translator->get(
 				                        'Create_New')))))));
 	}
 
 	/// Write an entry form for the current record.
 	protected function writeCurrentRecord($record, $isNew)
 	{
-		$this->Writer->write(
-			$this->InstanceManager->create(
+		$this->writer->write(
+			$this->instanceManager->create(
 				'Element_Form_Entry',
 				array('Field_Values'   => $record,
 				      'Submit_Buttons' => $this->getSubmitButtons($isNew),
 				      'Table_Info'     => $this->tableInfo,
 				      'Table_Name'     => $this->tableName,
-				      'Translator'     => $this->Translator)));
+				      'Translator'     => $this->translator)));
 	}
 
 	protected function writeDeleteRequest($request)
 	{
-		$this->Writer->write(array('div', array('class' => 'mask')));
+		$this->writer->write(array('div', array('class' => 'mask')));
 
 		$rowButtons = array(
 			array('input',
 			      array('class' => 'Dialog_Submit Button Bad Small',
 			            'name'  => 'Delete_Confirm',
 			            'type'  => 'submit',
-			            'value' => $this->Translator->get('Confirm'))),
+			            'value' => $this->translator->get('Confirm'))),
 			array('input',
 			      array('class' => 'Dialog_Cancel Button Info Small',
 			            'name'  => 'Delete_Cancel',
 			            'type'  => 'submit',
-			            'value' => $this->Translator->get('Cancel'))));
+			            'value' => $this->translator->get('Cancel'))));
       
-		$recordToDelete = $this->InstanceManager->create(
+		$recordToDelete = $this->instanceManager->create(
 			'Element_Record_List_Table',
 			array_merge(array('Attribs'        => array(
 				                  'class' => 'Delete_Request Record_List'),
@@ -187,43 +187,43 @@ class Admin extends Base
 			                  'Row_Buttons'    => $rowButtons,
 			                  'Table_Info'     => $this->tableInfo,
 			                  'Table_Name'     => $this->tableName,
-			                  'Translator'     => $this->Translator)));      
+			                  'Translator'     => $this->translator)));      
 			   
-		$this->Writer->write(
-			$this->InstanceManager->create(
+		$this->writer->write(
+			$this->instanceManager->create(
 				'Element_Form_Dialog',
 				array('Attribs'          => array('class'  => 'Dialog Bad',
 				                                  'action' => '',
 				                                  'method' => 'post'),
-				      'Heading_Text'     => $this->Translator-> get(
+				      'Heading_Text'     => $this->translator-> get(
 					      'Confirm_Delete_Heading'),
 				      'Message_Elements' => array($recordToDelete),
-				      'Message_Text'     => $this->Translator->get('Confirm_Delete_Text'))));
+				      'Message_Text'     => $this->translator->get('Confirm_Delete_Text'))));
 	}
    
 	/// Write a header.
 	protected function writeHeader($header)
 	{
-		$this->Writer->write(
-			$this->InstanceManager->create(
+		$this->writer->write(
+			$this->instanceManager->create(
 				'Element_Admin_Header',
 				array('Languages'  => $header['Languages'],
-				      'Translator' => $this->Translator)));
+				      'Translator' => $this->translator)));
 
 		if (isset($this->pageName))
 		{
-			$this->Writer->write(
+			$this->writer->write(
 				array('h1',
 				      array('class' => 'Admin_Heading'),
-				      $this->Translator->get($this->pageName)));
+				      $this->translator->get($this->pageName)));
 		}
 	}
 
 	/// Write a list of records.
 	protected function writeRecordList($data)
 	{
-		$this->Writer->write(
-			$this->InstanceManager->create(
+		$this->writer->write(
+			$this->instanceManager->create(
 				'Element_Record_List_Table',
 				array_merge(
 					array('Data'           => $data,
@@ -233,17 +233,17 @@ class Admin extends Base
 							      array('class' => 'Dialog_Submit Button Info Small',
 							            'name'  => 'Edit',
 							            'type'  => 'submit',
-							            'value' => $this->Translator->get('Edit'))),
+							            'value' => $this->translator->get('Edit'))),
 						      array(
 							      'input',
 							      array('class' => 'Dialog_Request Button Bad Small',
 							            'name'  => 'Delete_Request',
 							            'type'  => 'submit',
-							            'value' => $this->Translator->get('Delete')))),
+							            'value' => $this->translator->get('Delete')))),
 					      'Row_Buttons_As_Form' => true,
 					      'Table_Info'          => $this->tableInfo,
 					      'Table_Name'          => $this->tableName,
-					      'Translator'          => $this->Translator),
+					      'Translator'          => $this->translator),
 					$this->recordListSetup)));
 	}
 }

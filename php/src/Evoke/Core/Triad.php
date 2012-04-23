@@ -28,9 +28,9 @@ namespace Evoke\Core;
  *
  *  Usage:
  *  \code
- *  $Triad = new \Evoke\Core\Triad($EventManager);
- *  $Triad->execute($Model, $Processing, $View,
- *                  $AnyAmountOfModelViewOrProcessingObjects); 
+ *  $triad = new \Evoke\Core\Triad($eventManager);
+ *  $triad->execute($model, $processing, $view,
+ *                  $anyAmountOfModelViewOrProcessingObjects); 
  *  \endcode
  */
 class Triad
@@ -87,23 +87,23 @@ class Triad
 		}
 
 		// Perform the processing.
-		foreach ($this->connectedProcessing as $Processing)
+		foreach ($this->connectedProcessing as $processing)
 		{
-			$Processing->process();
+			$processing->process();
 		}
 
 		$data = array();
 
 		// Get the data from the models.
-		foreach ($this->connectedModels as $Model)
+		foreach ($this->connectedModels as $model)
 		{
-			$data = array_merge_recursive($data, $Model->getData());
+			$data = array_merge_recursive($data, $model->getData());
 		}
 
 		// Write the data with the views.
-		foreach ($this->connectedViews as $View)
+		foreach ($this->connectedViews as $view)
 		{
-			$View->write($data);
+			$view->write($data);
 		}
 
 		// Disconnect the objects from the Triad.

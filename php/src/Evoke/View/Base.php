@@ -5,17 +5,17 @@ use \Evoke\Core\Iface;
 
 abstract class Base implements Iface\View
 {
-	/** @property $Writer
+	/** @property $writer
 	 *  Writer \object
 	 */
-	protected $Writer;
+	protected $writer;
 
 	/** Construct the View.
 	 *  @param Writer \object The writer object.
 	 */
-	public function __construct(Iface\Writer $Writer)
+	public function __construct(Iface\Writer $writer)
 	{
-		$this->Writer = $Writer;
+		$this->writer = $writer;
 	}
 }
 // EOF

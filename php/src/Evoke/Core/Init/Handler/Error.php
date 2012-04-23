@@ -10,7 +10,7 @@ class Error implements \Evoke\Core\Iface\Handler
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $EventManager
+	/** @property $eventManager
 	 *  EventManager \object
 	 */
 	protected $eventManager;

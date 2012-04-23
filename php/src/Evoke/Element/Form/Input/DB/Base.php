@@ -77,10 +77,10 @@ class Base extends \Evoke\Element\Base
 	 */
 	protected $translatePrefix;
 
-	/** @property $Translator
+	/** @property $translator
 	 *  Translator \object
 	 */
-	protected $Translator;
+	protected $translator;
 
 	public function __construct(Array $setup)
 	{
@@ -119,7 +119,7 @@ class Base extends \Evoke\Element\Base
 		$this->requiredIndication = $requiredIndication;
 		$this->translateLabel     = $translateLabel;
 		$this->translatePrefix    = $translatePrefix;
-		$this->Translator         = $translator;
+		$this->translator         = $translator;
 	}
 
 	/******************/

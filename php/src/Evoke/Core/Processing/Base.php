@@ -14,10 +14,10 @@ namespace Evoke\Core\Processing;
  */
 abstract class Base implements \Evoke\Core\Iface\Processing
 {
-	/** @property $EventManager
+	/** @property $eventManager
 	 *  EventManager \object
 	 */
-	protected $EventManager;
+	protected $eventManager;
 
 	/** @property $eventPrefix
 	 *  \string Prefix to the event notification.
@@ -60,7 +60,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 				__METHOD__ . ' requires Event_Prefix as string');
 		}
 
-		$this->EventManager  = $eventManager;
+		$this->eventManager  = $eventManager;
 		$this->eventPrefix   = $eventPrefix;
 		$this->matchRequired = $matchRequired;
 		$this->requestKeys   = $requestKeys;
@@ -75,7 +75,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 		}
 
 		// By default we are connected for processing.
-		$this->EventManager->connect('Request.Process', array($this, 'process'));
+		$this->eventManager->connect('Request.Process', array($this, 'process'));
 	}
 
 	/******************/
@@ -117,7 +117,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 			unset($data[$key]);
 
 			// Dispatch the processing using the event manager.
-			$this->EventManager->notify($this->eventPrefix . $key, $data);
+			$this->eventManager->notify($this->eventPrefix . $key, $data);
 		}
 	}
 
@@ -135,7 +135,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 				var_export(array_keys($this->requestKeys), true) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->EventManager->notify(
+			$this->eventManager->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));
@@ -148,7 +148,7 @@ abstract class Base implements \Evoke\Core\Iface\Processing
 				var_export(array_keys($this->requestKeys)) .
 				' with request data: ' . var_export($requestData, true);
 
-			$this->EventManager->notify(
+			$this->eventManager->notify(
 				'Log', array('Level'   => LOG_ERR,
 				             'Message' => $msg,
 				             'Method'  => __METHOD__));

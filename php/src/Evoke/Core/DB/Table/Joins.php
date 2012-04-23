@@ -67,10 +67,10 @@ class Joins
 	 */
 	protected $idSeparator;
 
-	/** @property $Info
+	/** @property $info
 	 *  Database Table Info \object
 	 */
-	protected $Info;
+	protected $info;
 	
 	/** @property $joinType
 	 *  \string The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
@@ -143,7 +143,7 @@ class Joins
 		$this->childField     = $childField;
 		$this->compareType    = $compareType;
 		$this->idSeparator    = $iDSeparator;
-		$this->Info           = $info;
+		$this->info           = $info;
 		$this->joinType       = $joinType;
 		$this->joins          = $joins;
 		$this->jointKey       = $jointKey;
@@ -215,7 +215,7 @@ class Joins
 	public function getAllFields()
 	{
 		$fields = array();
-		$tableFields = $this->Info->getFields();
+		$tableFields = $this->info->getFields();
 
 		foreach ($tableFields as $field)
 		{
@@ -269,7 +269,7 @@ class Joins
 	/// Return any failures from validation of data.
 	public function getFailures()
 	{
-		return $this->Info->getFailures();
+		return $this->info->getFailures();
 	}
 	
 	/// Get the joins.
@@ -315,7 +315,7 @@ class Joins
 	/// Get the primary keys for the table (not all primary keys for all referenced tables).
 	public function getPrimaryKeys()
 	{
-		return $this->Info->getPrimaryKeys();
+		return $this->info->getPrimaryKeys();
 	}
    
 	/// Get the table name that has possibly been aliassed.
@@ -357,7 +357,7 @@ class Joins
 
 	public function isValid($fieldset, $ignoredFields=array())
 	{
-		return $this->Info->isValid($fieldset, $ignoredFields);
+		return $this->info->isValid($fieldset, $ignoredFields);
 	}
 
 	/*********************/
@@ -368,7 +368,7 @@ class Joins
 	protected function getRowID($row)
 	{
 		$id = NULL;
-		$primaryKeys = $this->Info->getPrimaryKeys();
+		$primaryKeys = $this->info->getPrimaryKeys();
 
 		foreach ($primaryKeys as $primaryKey)
 		{

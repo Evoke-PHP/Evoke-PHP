@@ -3,7 +3,7 @@ namespace Evoke\Model\DB;
 /// Provides the basic implementation for a database model.
 abstract class Base extends \Evoke\Model\Base
 { 
-	protected $SQL;
+	protected $sQL;
 
 	public function __construct(Array $setup)
 	{
@@ -16,7 +16,7 @@ abstract class Base extends \Evoke\Model\Base
 
 		parent::__construct($setup);
  
-		$this->SQL = $sQL;
+		$this->sQL = $sQL;
 	}
 }
 // EOF
