@@ -1,22 +1,26 @@
 <?php
 namespace Evoke\Model\DB;
+
+use Evoke\Iface;
+
 /// Provides the basic implementation for a database model.
 abstract class Base extends \Evoke\Model\Base
 { 
-	protected $sQL;
+	/** @property $sql
+	 *  SQL \object
+	 */
+	protected $sql;
 
-	public function __construct(Array $setup)
+	/** Construct a Base object.
+	 *  @param sql        \object SQL object.
+	 *  @param dataPrefix \array  Data prefix to offset the data to.
+	 */
+	public function __construct(Iface\Core\DB\SQL $sql,
+	                            Array             $dataPrefix=array())
 	{
-		$setup += array('SQL' => NULL);
+		parent::__construct($dataPrefix);
 
-		if (!$sQL instanceof \Evoke\Core\DB\SQL)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires SQL');
-		}
-
-		parent::__construct($setup);
- 
-		$this->sQL = $sQL;
+		$this->sql = $sql;
 	}
 }
 // EOF

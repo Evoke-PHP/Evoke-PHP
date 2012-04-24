@@ -24,7 +24,11 @@ class Base implements \Evoke\Core\Iface\Element
 	 *  \array The position of the tag, attribs and children in the element.
 	 */
 	protected $pos;
-   
+
+	/** Construct the element.
+	 *  @param attribs @array Default attributes for the element.
+	 *  @param pos     @array Positions for the components of passed in arrays.
+	 */
 	public function __construct(Array $attribs=array(),
 	                            Array $pos=array())
 	{
