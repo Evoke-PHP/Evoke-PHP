@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface;
+namespace Evoke\Iface\Core;
 
 interface Processing
 {
