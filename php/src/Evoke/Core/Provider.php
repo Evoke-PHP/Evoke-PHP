@@ -1,5 +1,8 @@
 <?php
 namespace Evoke\Core;
+
+use Evoke\Iface\Core as ICore;
+
 /** A dependency injection/provider class (Thanks to rdlowrey see comments).
  *
  *  #### History ####
@@ -55,10 +58,9 @@ namespace Evoke\Core;
  *
  *  class DistilledWater extends Water {}
  *
+ *  // Specialization combined with automatic injection.
  *  $specialWater = $provider->make('DistilledWater');
  *  $specialGravel = $provider->make('Gravel');
- *
- *  // Specialization combined with automatic injection.
  *  $specialConcrete = $provider->make(
  *      'Concrete',
  *      array('Grey_Gravel_For_Mixing' => $specialGravel,
@@ -90,13 +92,16 @@ namespace Evoke\Core;
  *  ## Object with Interfaces ##
  *
  *  @code
+ *  // Injection of interfaces!?! (Using the Interface Router!)  An interface
+ *  // router must be passed to the Provider.  This router is responsible for
+ *  // connecting interfaces with concrete classes.  so that the following is
+ *  // possible (given an InterfaceRouter with valid rules for the classes).
  *  class UI
  *  {
  *      public function __construct(\Evoke\Iface\User        $user,
  *                                  \Evoke\Iface\Core\Writer $writer) {}
  *  }
  *
- *  // Injection of interfaces!?! (Using a default conversion to a concrete).
  *  $provider->make(
  *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
  *  @endcode
@@ -107,10 +112,15 @@ namespace Evoke\Core;
  *  undesirable class which we pass in manually.
  *
  */
-class Provider implements \Evoke\Iface\Core\Provider
+class Provider implements \Evoke\ICore\Provider
 {
+	/** @property $interfaceRouter
+	 *  @object interfaceRouter
+	 */
+	protected static $interfaceRouter;
+	
 	/** @property $reflections
-	 *  array The cached class and parameter reflections for classes.
+	 *  @array The cached class and parameter reflections for classes.
 	 */
 	protected static $reflections = array();
 
@@ -121,6 +131,15 @@ class Provider implements \Evoke\Iface\Core\Provider
 	 */
 	protected static $shared = array();
 
+	/** Construct a Provider object.
+	 *  @param $interfaceRouter @object InterfaceRouter
+	 */
+	public function __construct(ICore\Provider\Iface\Router $interfaceRouter)
+	{
+		$this->interfaceRouter = $interfaceRouter;
+	}
+
+	
 	/******************/
 	/* Public Methods */
 	/******************/

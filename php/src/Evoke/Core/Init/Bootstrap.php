@@ -76,17 +76,12 @@ class Bootstrap
 		$this->provider->share('\Evoke\Core\EventManager');
 		$this->provider->share('\Evoke\Core\Logger');
 		$this->provider->share('\Evoke\Core\Settings');
-		$this->provider->share('\Evoke\Core\Writer\XHTML');
 		$this->provider->share('\XMLWriter');
 	}		
 	
 	public function initializeLogger()
 	{
 		$this->provider->make('\Evoke\Core\Logger');
-		/* ,
-			array('DateTime'        => $instanceManager->get('DateTime'),
-			      'EventManager'    => $instanceManager->get(
-			      '\Evoke\Core\EventManager'))); */
 	}
 
 	public function initializeSettings()

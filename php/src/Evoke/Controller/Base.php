@@ -32,8 +32,8 @@ abstract class Base
 	                            ICore\HTTP\Request  $request,
 	                            ICore\HTTP\Response $response)
 	{
-		$this->provider = $provider;
 		$this->params   = $params;
+		$this->provider = $provider;
 		$this->request  = $request;
 		$this->response = $response;
 	}

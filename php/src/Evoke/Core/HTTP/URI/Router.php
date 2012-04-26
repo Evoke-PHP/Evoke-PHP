@@ -16,11 +16,6 @@ class Router implements ICore\HTTP\URI\Router
 	 */
 	protected $request;
 
-	/** @property $reponse
-	 *  @object Response
-	 */
-	protected $reponse;
-
 	/** @property $rules
 	 *  @array of rules that the router uses to route.
 	 */
@@ -29,15 +24,12 @@ class Router implements ICore\HTTP\URI\Router
 	/** Create a HTTP URI Router that routes the request to a response.
 	 *  @param Provider @object Provider for creating the response.
 	 *  @param Request  @object Request object.
-	 *  @param Response @object Response object.
 	 */
 	public function __construct(ICore\Provider      $provider,
-	                            ICore\HTTP\Request  $request,
-	                            ICore\HTTP\Response $response)
+	                            ICore\HTTP\Request  $request)
 	{
 		$this->provider      = $provider;
 		$this->request       = $request;
-		$this->response      = $response;
 	}
 	
 	/******************/
@@ -80,11 +72,7 @@ class Router implements ICore\HTTP\URI\Router
 		/** An exception will be thrown if an unknown class is atttempted to be
 		 *  built that should be caught at a higher level.
 		 */
-		return $this->provider->make($classname,
-		                             $params,
-		                             $this->provider,
-		                             $this->request,
-		                             $this->response);
+		return $this->provider->make($classname, array('Params' => $params));
 	}
 }
 // EOF

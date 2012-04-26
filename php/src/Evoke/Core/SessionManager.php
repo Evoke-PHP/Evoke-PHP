@@ -4,7 +4,7 @@ namespace Evoke\Core;
 use Evoke\Iface\Core as ICore;
 
 /// Session_Manager provide management of a session domain.
-class SessionManager
+class SessionManager implements ICore\SessionManager
 {
 	/** @property $domain
 	 *  @array The domain within the session that we are managing.  This is an

@@ -4,18 +4,18 @@ namespace Evoke\Core;
 class Settings implements \Evoke\Iface\Core\Settings
 {
 	/** @property $frozen
-	 *  \array The settings that have been frozen.  Attempting to modify these
+	 *  @array The settings that have been frozen.  Attempting to modify these
 	 *  will throw an exception.
 	 */
 	protected $frozen;
 
 	/** @property $variable
-	 *  \array The settings that are available for modification.
+	 *  @array The settings that are available for modification.
 	 */
 	protected $variable;
 
 	/** Construct the Settings object.
-	 *  @param setup \array The initial Frozen and Variable settings.
+	 *  @param setup @array The initial Frozen and Variable settings.
 	 */
 	public function __construct(Array $frozen=array(),
 	                            Array $variable=array())
@@ -29,14 +29,14 @@ class Settings implements \Evoke\Iface\Core\Settings
 	/******************/
 
 	/** Freeze the setting at the given offset.
-	 *  \param offset \mixed The offset within the settings as a string (for
+	 *  @param offset @mixed The offset within the settings as a string (for
 	 *  first level only) or an array of levels of the form:
-	 *  \code
+	 *  @code
 	 *  $offset = array('Level_1', 'Level_2', 'Level_3');
 	 *  $this->variable(array('Level_1' => array(
 	 *  	                      'Level_2' => array(
 	 *  		                      'Level_3' => 'val'))));
-	 *  \endcode
+	 *  @endcode
 	 */
 	public function freeze($offset)
 	{
@@ -64,8 +64,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Get the value of the setting at the specified offset.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @return \mixed The value of the setting.
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @return @mixed The value of the setting.
 	 */
 	public function get($offset)
 	{
@@ -73,8 +73,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Whether the setting is frozen.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @return \bool Whether the offset is frozen.
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @return @bool Whether the offset is frozen.
 	 */
 	public function isFrozen($offset)
 	{
@@ -83,8 +83,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Set the setting at the offset with the value.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @param value \mixed The value to set the setting to.
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @param value @mixed The value to set the setting to.
 	 */
 	public function set($offset, $value)
 	{
@@ -92,7 +92,7 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Unfreeze the setting so that it can be modified.
-	 *  @param offset \mixed String or Array for the offset to the setting.
+	 *  @param offset @mixed String or Array for the offset to the setting.
 	 *  @throws OutOfBoundsException if the offset does not exist in the frozen
 	 *  and variable settings (It is okay to unfreeze and already unfrozen
 	 *  setting).
@@ -121,8 +121,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 	/******************************************/
 
 	/** Whether there is a setting (frozen or variable) at the given offset.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @return \bool Whether the offset exists for the (frozen or variable)
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @return @bool Whether the offset exists for the (frozen or variable)
 	 *  setting.
 	 */
 	public function offsetExists($offset)
@@ -134,8 +134,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Get the value at the offset.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @return \mixed The setting at the offset.
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @return @mixed The setting at the offset.
 	 */
 	public function offsetGet($offset)
 	{
@@ -159,8 +159,8 @@ class Settings implements \Evoke\Iface\Core\Settings
 
 	/** Set the setting at the offset with the value.  New settings are created
 	 *  as variable.  They are modifiable until they are frozen.
-	 *  @param offset \mixed String or Array for the offset to the setting.
-	 *  @param value \mixed The value to set the setting to.
+	 *  @param offset @mixed String or Array for the offset to the setting.
+	 *  @param value @mixed The value to set the setting to.
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -187,7 +187,7 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Unset the setting (frozen or variable) at the offset.
-	 *  @param offset \mixed String or Array for the offset to the setting.
+	 *  @param offset @mixed String or Array for the offset to the setting.
 	 */
 	public function offsetUnset($offset)
 	{
@@ -213,7 +213,7 @@ class Settings implements \Evoke\Iface\Core\Settings
 	/*******************/
 
 	/** Get the reference to the frozen setting.
-	 *  @param offset \mixed String or Array for the offset to the setting.
+	 *  @param offset @mixed String or Array for the offset to the setting.
 	 *  @return A reference to the frozen setting value.
 	 */
 	private function &getFrozenReference($offset)
@@ -240,7 +240,7 @@ class Settings implements \Evoke\Iface\Core\Settings
 	}
 
 	/** Get the reference to the variable setting.
-	 *  @param offset \mixed String or Array for the offset to the setting.
+	 *  @param offset @mixed String or Array for the offset to the setting.
 	 *  @return A reference to the variable setting value.
 	 */
 	private function &getVariableReference($offset)
