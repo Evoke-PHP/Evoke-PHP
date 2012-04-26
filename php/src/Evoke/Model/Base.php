@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model;
 /// Provides the basic implementation for a model.
-abstract class Base implements \Evoke\Core\Iface\Model
+abstract class Base implements \Evoke\Iface\Core\Model
 {
 	/** @property $dataPrefix
 	 *  \array specifying the prefix to offset the retrieved data with.
@@ -14,7 +14,7 @@ abstract class Base implements \Evoke\Core\Iface\Model
 	 *  disambiguation based on the offset given to each model.  By default
 	 *  there is no offset and the data is returned as is.
 	 */
-	public function __construct(Array $dataPrefix=array())
+	public function __construct(Array $dataPrefix = array())
 	{
 		$this->dataPrefix = $dataPrefix;
 	}

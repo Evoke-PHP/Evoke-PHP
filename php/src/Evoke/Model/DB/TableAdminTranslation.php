@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\Model\DB;
 
+use Evoke\Iface\Core as ICore;
+
 class TableAdminTranslation extends TableAdmin
 {
 	protected $languageTable;
@@ -8,30 +10,31 @@ class TableAdminTranslation extends TableAdmin
 	
 	protected $filesystem;
 	
-	public function __construct(Array $setup)
+	/** Construct an Administration model for the translation table.
+	 *  @param sql            @object SQL object.
+	 *  @param filesystem     @object Filesystem object.
+	 *  @param translatorFile @string Translations file.
+	 *  @param dataPrefix     @array  Data prefix to offset the data to.
+	 *  @param languageTable  @string Table name for the languages table.
+	 */
+	public function __construct(ICore\DB\SQL     $sql,
+	                            ICore\Filesystem $filesystem,
+	                            /* String */     $translatorFile,
+	                            Array            $dataPrefix    = array(),
+	                            /* String */     $languageTable = 'Language')
 	{
-		$setup += array('Filesystem'      => NULL,
-		                'Language_Table'  => 'Language',
-		                'Translator_File' => NULL);
-      
-		if (!$filesystem instanceof Filesystem)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires File_System');
-		}
-
 		if (!is_string($translatorFile))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Translator_File as string');
+				__METHOD__ . ' requires translatorFile as string');
 		}
 
-		parent::__construct($setup);
+		parent::__construct($sql, $dataPrefix);
 		
+
+		$this->filesystem     = $filesystem;
 		$this->languageTable  = $languageTable;
 		$this->translatorFile = $translatorFile;
-
-		$this->filesystem = $filesystem;
 	}
 
 	/******************/
@@ -46,16 +49,16 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 	 
 			if (parent::add($record))
 			{
 				$this->updateTranslations();
-				$this->sQL->commit();
+				$this->sql->commit();
 			}
 			else
 			{
-				$this->sQL->rollBack();
+				$this->sql->rollBack();
 			}
 		}
 		catch (\Exception $e)
@@ -68,7 +71,7 @@ class TableAdminTranslation extends TableAdmin
 			                                         'Method'  => __METHOD__));
 
 			$this->failures->add('Failure Adding Language', 'Sys_Admin_Notified');
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
 
@@ -80,16 +83,16 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 	 
 			if (parent::delete($record))
 			{
 				$this->updateTranslations();
-				$this->sQL->commit();
+				$this->sql->commit();
 			}
 			else
 			{
-				$this->sQL->rollBack();
+				$this->sql->rollBack();
 			}
 		}
 		catch (\Exception $e)
@@ -105,7 +108,7 @@ class TableAdminTranslation extends TableAdmin
 				'Failure Deleting Language',
 				'System Administrator has been notified.');
 
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
 
@@ -116,16 +119,16 @@ class TableAdminTranslation extends TableAdmin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 	 
 			if (parent::modify($record))
 			{
 				$this->updateTranslations();
-				$this->sQL->commit();
+				$this->sql->commit();
 			}
 			else
 			{
-				$this->sQL->rollBack();
+				$this->sql->rollBack();
 			}
 		}
 		catch (\Exception $e)
@@ -141,7 +144,7 @@ class TableAdminTranslation extends TableAdmin
 				'Failure Modifying Language',
 				'System Administrator has been notified.');
 
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
    
@@ -159,7 +162,7 @@ class TableAdminTranslation extends TableAdmin
 	 */
 	protected function updateTranslations()
 	{
-		$languages = $this->sQL->select($this->languageTable, '*');
+		$languages = $this->sql->select($this->languageTable, '*');
       
 		foreach($languages as $language)
 		{
@@ -172,7 +175,7 @@ class TableAdminTranslation extends TableAdmin
 			$langArr[$lang] = $language;
 		}
       
-		$translations = $this->sQL->select($this->tableName, '*');
+		$translations = $this->sql->select($this->tableName, '*');
       
 		foreach($translations as $translation)
 		{

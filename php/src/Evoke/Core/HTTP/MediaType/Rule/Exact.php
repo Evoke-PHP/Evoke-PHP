@@ -7,7 +7,7 @@ namespace Evoke\Core\HTTP\MediaType\Rule;
 class Exact extends Match
 {
 	/** @property $ignoredFields
-	 *  \array Fields that can be ignored in the match.
+	 *  @array Fields that can be ignored in the match.
 	 */
 	protected $ignoredFields;
 
@@ -17,13 +17,14 @@ class Exact extends Match
 	protected $match;
 
 	/** Construct the Exact rule.
-	 *  @param outputFormat  \string The output format for the rule.
-	 *  @param match         \array Exact match required from the media type.
-	 *  @param ignoredFields \array Fields that are to be ignored in the match.
+	 *  @param outputFormat  @string The output format for the rule.
+	 *  @param match         @array Exact match required from the media type.
+	 *  @param ignoredFields @array Fields that are to be ignored in the match.
 	 */
-	public function __construct(/*s*/ $outputFormat,
-	                            Array $match,	                            
-	                            Array $ignoredFields=array('Params', 'Q_Factor'))
+	public function __construct(
+		/* String */ $outputFormat,
+		Array        $match,	                            
+		Array        $ignoredFields = array('Params', 'Q_Factor'))
 	{
 		parent::__construct($outputFormat, $match);
 
@@ -35,8 +36,8 @@ class Exact extends Match
 	/******************/
 
 	/** Check to see if the rule matches.
-	 *  @param mediaType \array The media type we are checking against.
-	 *  @return \bool Whether the rule matches.
+	 *  @param mediaType @array The media type we are checking against.
+	 *  @return @bool Whether the rule matches.
 	 */
 	public function isMatch($mediaType)
 	{

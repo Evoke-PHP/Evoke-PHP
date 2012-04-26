@@ -3,7 +3,7 @@ namespace Evoke\Core\HTTP\URI\Rule;
 
 /** HTTP URI Rule class for mapping the URI to a controller.
  */
-abstract class Base implements \Evoke\Core\Iface\HTTP\URI\Rule
+abstract class Base implements \Evoke\Iface\Core\HTTP\URI\Rule
 {
 	/** @property $authoritative
 	 *  \bool Whether the rule can definitely give the final route for all URIs
@@ -15,7 +15,7 @@ abstract class Base implements \Evoke\Core\Iface\HTTP\URI\Rule
 	 *  @param authoritative \bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
-	public function __construct($authoritative)
+	public function __construct(/* Bool */ $authoritative)
 	{
 		if (!is_bool($authoritative))
 		{

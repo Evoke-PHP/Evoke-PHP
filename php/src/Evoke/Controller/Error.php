@@ -66,10 +66,10 @@ class Error extends Base
 	/// Write a Message Box in XML showing the Not Found message.
 	private function writeMessageBoxXML()
 	{
-		$element = $this->factory->build(
+		$element = $this->provider->make(
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
-		$translator = $this->factory->getTranslator();
+		$translator = $this->provider->make('Evoke\Core\Translator');
 
 		$description = explode("\n", $this->getMessage());
 		$descriptionWithBreaks = array();

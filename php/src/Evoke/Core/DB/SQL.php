@@ -1,8 +1,9 @@
 <?php
 namespace Evoke\Core\DB;
 
-use \Evoke\Core\Exception\Base as Exception_Base;
-use \Evoke\Core\Exception\DB as Exception_DB;
+use Evoke\Iface\Core as ICore;
+use Evoke\Core\Exception\Base as Exception_Base;
+use Evoke\Core\Exception\DB as Exception_DB;
 
 /** The SQL class provides an implementation of the SQL interface which extends
  *  the DB interface in Evoke.
@@ -18,21 +19,24 @@ use \Evoke\Core\Exception\DB as Exception_DB;
  *   A condition passed in as a string is unchanged and can be used for more
  *   complex comparison operations.
  */
-class SQL implements \Evoke\Core\Iface\DB
+class SQL implements \Evoke\ICore\DB
 {
+	/** @property $db
+	 *  @object Database object.
+	 */
+	protected $db;
+
+	/** @property $inTransaction
+	 *  @bool Whether we are currently in a transaction or not.
+	 */
 	protected $inTransaction = false;
 
-	protected $setup;
-   
-	/// Class constructor
-	public function __construct($setup=array())
+	/** Construct an SQL object.
+	 *  @param db @object DB object to perform the SQL on.
+	 */
+	public function __construct(ICore\DB $db)
 	{
-		$this->setup = array_merge(array('DB' => NULL), $setup);
-
-		if (!$this->dB instanceof \Evoke\Core\Iface\DB)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs DB');
-		}
+		$this->db = $db;
 	}
    
 	/*****************************************/
@@ -49,7 +53,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		else
 		{
 			$this->inTransaction = true;
-			return $this->dB->beginTransaction();
+			return $this->db->beginTransaction();
 		}
 	}
 
@@ -59,7 +63,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		if ($this->inTransaction)
 		{
 			$this->inTransaction = false;
-			return $this->dB->commit();
+			return $this->db->commit();
 		}
 		else
 		{
@@ -79,7 +83,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		if ($this->inTransaction)
 		{
 			$this->inTransaction = false;
-			return $this->dB->rollBack();
+			return $this->db->rollBack();
 		}
 		else
 		{
@@ -94,37 +98,37 @@ class SQL implements \Evoke\Core\Iface\DB
 	/// Return the SQLSTATE.
 	public function errorCode()
 	{
-		return $this->dB->errorCode();
+		return $this->db->errorCode();
 	}
 
 	/// Get the extended error information associated with the last DB operation.
 	public function errorInfo()
 	{
-		return $this->dB->errorInfo();
+		return $this->db->errorInfo();
 	}
 
 	/// Execute an SQL statement and return the number of rows affected.
 	public function exec($statement)
 	{
-		return $this->dB->exec($statement);
+		return $this->db->exec($statement);
 	}
 
 	/// Get a database connection attribute.
 	public function getAttribute($attribute)
 	{
-		return $this->dB->getAttribute($attribute);
+		return $this->db->getAttribute($attribute);
 	}
 
 	/// Get an array of available PDO drivers.
 	public function getAvailableDrivers()
 	{
-		return $this->dB->getAvailableDrivers();
+		return $this->db->getAvailableDrivers();
 	}
    
 	/// Get the ID of the last inserted row or sequence value.
 	public function lastInsertId($name=NULL)
 	{
-		return $this->dB->lastInsertId($name);
+		return $this->db->lastInsertId($name);
 	}
 
 	/// Prepares a statement for execution and returns a statement object.
@@ -138,11 +142,11 @@ class SQL implements \Evoke\Core\Iface\DB
 				\PDO::ATTR_STATEMENT_CLASS,
 				array('\Evoke\Core\DB\PDOStatement', array($namedPlaceholders)));
 	 
-			return $this->dB->prepare($statement, $driverOptions);
+			return $this->db->prepare($statement, $driverOptions);
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, '', $this->dB, $e);
+			throw new Exception_DB(__METHOD__, '', $this->db, $e);
 		}
 	}
 
@@ -160,24 +164,24 @@ class SQL implements \Evoke\Core\Iface\DB
 
 		if ($fetchMode === 0)
 		{
-			return $this->dB->query($queryString);
+			return $this->db->query($queryString);
 		}
 		else
 		{
-			return $this->dB->query($queryString, $fetchMode, $into);
+			return $this->db->query($queryString, $fetchMode, $into);
 		}
 	}  
 
 	/// Quotes the input string (if required) and escapes special characters.
 	public function quote($string, $parameterType=\PDO::PARAM_STR)
 	{
-		return $this->dB->quote($string, $parameterType);
+		return $this->db->quote($string, $parameterType);
 	}
    
 	/// Sets an attribute on the database
 	public function setAttribute($attribute, $value)
 	{
-		return $this->dB->setAttribute($attribute, $value);
+		return $this->db->setAttribute($attribute, $value);
 	}
    
 	/*****************************/
@@ -204,7 +208,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->dB,
+				$this->db,
 				$e);
 		}
 	}
@@ -237,7 +241,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->dB,
+				$this->db,
 				$e);
 		}
 	}
@@ -271,7 +275,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
-				$this->dB,
+				$this->db,
 				$e);
 		}
 	}
@@ -343,7 +347,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				'Tables: ' . var_export($tables, true) .
 				' Fields: ' .var_export($fields, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->dB, $e);
+				$this->db, $e);
 		}	 
 	}
 
@@ -375,7 +379,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				'Table: ' . var_export($table, true) .
 				' Field: ' .var_export($field, true) .
 				' Conditions: ' . var_export($conditions, true),
-				$this->dB, $e);
+				$this->db, $e);
 		}
 	}
 
@@ -407,7 +411,7 @@ class SQL implements \Evoke\Core\Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, 'Prepare', $this->dB, $e);
+			throw new Exception_DB(__METHOD__, 'Prepare', $this->db, $e);
 		}
 
 		$params = array_merge(array_values($setValues),
@@ -458,7 +462,7 @@ class SQL implements \Evoke\Core\Iface\DB
 			throw new Exception_DB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
 				' conditions: ' . var_export($conditions, true),
-				$this->dB,
+				$this->db,
 				$e);
 		}
 	}
@@ -483,7 +487,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				var_export($fields, true);
 	 
 			throw new Exception_DB(
-				__METHOD__, $msg, $this->dB, $e);
+				__METHOD__, $msg, $this->db, $e);
 		}
 
 		if (!is_array($valArr))
@@ -507,7 +511,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				throw new Exception_DB(
 					__METHOD__,
 					'Multiple Values: ' . var_export($valArr, true),
-					$this->dB,
+					$this->db,
 					$e);
 			}
 		}
@@ -522,7 +526,7 @@ class SQL implements \Evoke\Core\Iface\DB
 				throw new Exception_DB(
 					__METHOD__,
 					'Single Value: ' . var_export($valArr, true),
-					$this->dB,
+					$this->db,
 					$e);
 			}
 		}

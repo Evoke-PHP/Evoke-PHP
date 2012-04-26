@@ -10,7 +10,7 @@ class Text extends Base
 	/******************/
 	
 	/** Write text into the buffer.
-	 *  @param text \string The text to write into the buffer.
+	 *  @param text @string The text to write into the buffer.
 	 */
 	public function write($text)
 	{

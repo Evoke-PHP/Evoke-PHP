@@ -14,8 +14,8 @@ class Match extends Base
 	/** Construct the Exact rule.
 	 *  @param match \array The match required from the media type.
 	 */
-	public function __construct(/*s*/ $outputFormat,
-	                            Array $match)
+	public function __construct(/* String */ $outputFormat,
+	                            Array        $match)
 	{
 		parent::__construct($outputFormat, $match);
 

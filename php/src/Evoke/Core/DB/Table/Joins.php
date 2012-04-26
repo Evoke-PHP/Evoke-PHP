@@ -1,5 +1,8 @@
 <?php
 namespace Evoke\Core\DB\Table;
+
+use Evoke\Iface\Core as ICore;
+
 /** The Joins class is used to interact with Relational Databases.
  *  Relational databases have tables of data that are linked to other tables
  *  via Foreign Keys.  By understanding the relationships between data we can
@@ -110,32 +113,31 @@ class Joins
 	 *  The table separator \string to be used between tables.
 	 */
 	protected $tableSeparator;
-	
-	public function __construct(Array $setup=array())
-	{
-		$setup += array('Admin_Managed'   => true,
-		                'Auto_Fields'     => array('ID'),
-		                'Child_Field'     => NULL,
-		                'Compare_Type'    => '=',
-		                'ID_Separator'    => '_',
-		                'Info'            => NULL,
-		                'Join_Type'       => 'LEFT JOIN',
-		                'Joins'           => array(),
-		                'Joint_Key'       => 'Joint_Data',
-		                'Parent_Field'    => NULL,
-		                'Table_Alias'     => NULL,
-		                'Table_Name'      => NULL,
-		                'Table_Separator' => '_T_');
 
-		if (!$info instanceof \Evoke\Core\DB\Table\Info)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Info');
-		}
-      
-		if (!isset($tableName))
+	/** Construct the Joins object.
+	 *  @param joins        @array  Joins from this node.
+	 *  @param info         @object DB Table Info object.
+	 *
+	 */
+	public function __construct(
+		Array               $joins,
+		ICore\DB\Table\Info $info,
+		/* String */        $tableName,
+		/* String */        $parentField,
+		/* String */        $childField,
+		/* Bool   */        $adminManaged   = true,
+		Array               $autoFields     = array('ID'),
+		/* String */        $compareType    = '=,',
+		/* String */        $idSeparator    = '_',
+		/* String */        $joinType       = 'LEFT JOIN',
+		/* String */        $jointKey       = 'Joint_Data',
+		/* Mixed  */        $tableAlias     = NULL,
+		/* String */        $tableSeparator = '_T_')
+	{
+		if (!is_string($tableName))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Table_Name');
+				__METHOD__ . ' requires tableName as string');
 		}
 		
 		$this->adminManaged   = $adminManaged;

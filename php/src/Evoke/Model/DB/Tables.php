@@ -1,5 +1,8 @@
 <?php
 namespace Evoke\Model\DB;
+
+use Evoke\Iface\Core as ICore;
+
 /// Get a list of tables from the database.
 class Tables extends Base
 {
@@ -13,12 +16,18 @@ class Tables extends Base
 	 */
 	protected $ignoredTables;
 
-	public function __construct(Array $setup)
+	/** Construct a model for a list of database tables.
+	 *  @param sql           @object SQL object.
+	 *  @param extraTables   @array  Extra tables to list.
+	 *  @param ignoredTables @array  Tables to ignore for the list.
+	 *  @param dataPrefix    @array  Data prefix to offset the data to.
+	 */
+	public function __construct(ICore\DB\SQL $sql,
+	                            Array        $extraTables   = array(),
+	                            Array        $ignoredTables = array(),
+	                            Array        $dataPrefix    = array())
 	{
-		$setup += array('Extra_Tables'   => array(),
-		                'Ignored_Tables' => array());
-      
-		parent::__construct($setup);
+		parent::__construct($sql, $dataPrefix=array());
 
 		$this->extraTables   = $extraTables;
 		$this->ignoredTables = $ignoredTables;
@@ -37,7 +46,7 @@ class Tables extends Base
 
 		try
 		{
-			$tableResults = $this->sQL->getAssoc('SHOW TABLES');
+			$tableResults = $this->sql->getAssoc('SHOW TABLES');
 		}
 		catch (\Exception $e)
 		{

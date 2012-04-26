@@ -1,17 +1,25 @@
 <?php
 namespace Evoke\Core\Processing;
-/// Handle the processing for something that need no processing.
+
+use Evoke\Iface\Core as ICore;
+
+/// A class for doing no processing.
 class None extends Base
 {
-	final public function __construct($setup)
+	/** Construct a no processing object.
+	 *  @param eventManager  @object Event Manager object.
+	 *  @param requestKeys   @array  The request keys we are processing.
+	 *  @param matchRequired @bool   Whether a match is required.
+	 *  @param uniqueMatch   @bool   Whether a unique match is required.
+	 */
+	final public function __construct(
+		ICore\EventManager $eventManager,
+		Array              $requestKeys   = array(),
+		/* Bool   */       $matchRequired = false,
+		/* Bool   */       $uniqueMatch   = true)
 	{
-		$setup += array('Event_Prefix'   => '',
-		                'Match_Required' => false,
-		                'Request_Keys'   => array(),
-		                'Request_Method' => 'None',
-		                'Unique_Match'   => true);
-      
-		parent::__construct($setup);
+		parent::__construct($eventManager, '', 'None', $requestKeys,
+		                    $matchRequired, $uniqueMatch);
 	}
    
 	/******************/

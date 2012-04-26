@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\Core\Logger;
 
+use Evoke\Iface\Core as ICore;
+
 class File
 {
 	/** @property $append
@@ -48,39 +50,48 @@ class File
 	 */
 	protected $opened = false;
 
-	/** Constructs a new Logger_File object.
-	 *  @param conf  \array   The configuration array.
-	 */
-	public function __construct(Array $setup=array())
-	{
-		$setup += array('Append'       => true,
-		                'Dir_Mode'     => 0700,
-		                'EventManager' => NULL,
-		                'Filename'     => 'php.log',
-		                'File_Mode'    => 0640,
-		                'Filesystem'   => NULL,
-		                'Locking'      => true);
 
-		if (!$eventManager instanceof \Evoke\Core\Iface\EventManager)
+	/** Construct a File Logger object.
+	 *  @param eventManager \object EventManager object
+	 *  @param $filesystem  \object Filesystem object
+	 *  @param append       \bool   Whether to append to the file.
+	 *  @param dirMode      \object The directory mode for the log file.
+	 *  @param filename     \string The filename for the log.
+	 *  @param fileMode     \object Permissions to set the file to
+	 *  @param locking      \bool   Whether to lock the file for writing.
+	 */
+	public function __construct(ICore\EventManager $eventManager,
+	                            Icore\Filesystem   $filesystem,
+	                            /* Bool */         $append=true,
+	                            /* Int (octal) */  $dirMode=0700,
+	                            /* String */       $filename='php.log',
+	                            /* Int (octal) */  $fileMode=0640,
+	                            /* Bool */         $locking=true)
+	{
+		if (!is_bool($append))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
-		}
-		
-		if (!$filesystem instanceof \Evoke\Core\Filesystem)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Filesystem');
+				__METHOD__ . ' requires append as bool');
 		}
 
+		if (!is_string($filename))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires filename as string');
+		}
+
+		if (!is_bool($locking))
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' requires locking as bool');
+		}
+
+		$this->eventManager = $eventManager;
+		$this->filesystem   = $filesystem;
 		$this->append       = $append;
 		$this->dirMode      = $dirMode;
 		$this->filename     = $filename;
 		$this->fileMode     = $fileMode;
-		$this->eventManager = $eventManager;
-		$this->filesystem   = $filesystem;
 		$this->locking      = $locking;
-
-		$this->eventManager->connect('Log.Write', array($this, 'write'));
 	}
    
 	/******************/

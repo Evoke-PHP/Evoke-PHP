@@ -4,7 +4,7 @@ namespace Evoke\Core\HTTP;
 /** HTTP Response class controlling the headers that are returned with the
  *  response.
  */
-class Response implements \Evoke\Core\Iface\HTTP\Response
+class Response implements \Evoke\Iface\Core\HTTP\Response
 {
 	/******************/
 	/* Public Methods */

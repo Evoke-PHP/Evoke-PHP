@@ -1,44 +1,43 @@
 <?php
 namespace Evoke\Core\HTTP\URI;
 
-use Evoke\Core\Iface;
+use Evoke\Iface\Core as ICore;
 
 /// Receive the request and create the correct response for it.
-class Router implements Iface\HTTP\URI\Router
+class Router implements ICore\HTTP\URI\Router
 {
-	/** @property $factory
-	 *  The Factory \object for sending to the response.
+	/** @property $provider
+	 *  @object Provider
 	 */
-	protected $factory;
+	protected $provider;
 
 	/** @property $request
-	 *  Request \object
+	 *  @object Request
 	 */
 	protected $request;
 
 	/** @property $reponse
-	 *  Response \object
+	 *  @object Response
 	 */
 	protected $reponse;
 
 	/** @property $rules
-	 *  \array of rules that the router uses to route.
+	 *  @array of rules that the router uses to route.
 	 */
-	protected $rules;
+	protected $rules = array();
 
 	/** Create a HTTP URI Router that routes the request to a response.
-	 *  @param Factory  \object Factory for creating the response.
-	 *  @param Request  \object Request object.
-	 *  @param Response \object Response object.
+	 *  @param Provider @object Provider for creating the response.
+	 *  @param Request  @object Request object.
+	 *  @param Response @object Response object.
 	 */
-	public function __construct(Iface\Factory       $factory,
-	                            Iface\HTTP\Request  $request,
-	                            Iface\HTTP\Response $response)
+	public function __construct(ICore\Provider      $provider,
+	                            ICore\HTTP\Request  $request,
+	                            ICore\HTTP\Response $response)
 	{
-		$this->factory       = $factory;
+		$this->provider      = $provider;
 		$this->request       = $request;
 		$this->response      = $response;
-		$this->rules         = array();
 	}
 	
 	/******************/
@@ -46,15 +45,15 @@ class Router implements Iface\HTTP\URI\Router
 	/******************/
 
 	/** Add a rule to the router.
-	 *  @param rule \object HTTP URI Rule object.
+	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(Iface\HTTP\URI\Rule $rule)
+	public function addRule(ICore\HTTP\URI\Rule $rule)
 	{
 		$this->rules[] = $rule;
 	}
 
 	/** Create the object that will respond to the routed URI).
-	 *  \return \object The object that will respond (generally a Controller).
+	 *  @return @object The object that will respond (generally a Controller).
 	 */
 	public function route()
 	{
@@ -81,9 +80,9 @@ class Router implements Iface\HTTP\URI\Router
 		/** An exception will be thrown if an unknown class is atttempted to be
 		 *  built that should be caught at a higher level.
 		 */
-		return $this->factory->build($classname,
+		return $this->provider->make($classname,
 		                             $params,
-		                             $this->factory,
+		                             $this->provider,
 		                             $this->request,
 		                             $this->response);
 	}

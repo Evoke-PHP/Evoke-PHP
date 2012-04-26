@@ -1,29 +1,25 @@
 <?php
 namespace Evoke\Core\DB\Table;
 
+use Evoke\Iface\Core as ICore;
+
 class List_ID
 {
 	private $fields;
 	private $tableName;
 
-	protected $sQL;
+	protected $sql;
    
-	public function __construct($setup=array())
+	public function __construct(
+		ICore\DB\SQL $sql,
+		Array        $fields    = array('Counter'  => 'Counter',
+		                                'DB_Table' => 'DB_Table',
+		                                'DB_Field' => 'DB_Field'),
+		/* String */ $tableName = 'List_IDs')
 	{
-		$setup += array('Fields'     => array('Counter'  => 'Counter',
-		                                      'DB_Table' => 'DB_Table',
-		                                      'DB_Field' => 'DB_Field'),
-		                'SQL'        => NULL,
-		                'Table_Name' => 'List_IDs');
-
-		if (!$sQL instanceof \Evoke\Core\DB\SQL)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
-		}
-
 		$this->fields    = $fields;
+		$this->sql       = $sql;
 		$this->tableName = $tableName;
-		$this->sQL       = $sQL;
 	}
 
 	/******************/
@@ -37,7 +33,7 @@ class List_ID
 	 */
 	public function getNew($table, $field)
 	{
-		if (!$this->sQL->inTransaction())
+		if (!$this->sql->inTransaction())
 		{
 			throw new \LogicException(
 				__METHOD__ . ' we must be in a transaction to get a new List ID.');
@@ -45,7 +41,7 @@ class List_ID
 	 
 		try
 		{
-			$listID = $this->sQL->selectSingleValue(
+			$listID = $this->sql->selectSingleValue(
 				$this->tableName,
 				$this->fields['Counter'],
 				array($this->fields['DB_Table'] => $table,
@@ -56,7 +52,7 @@ class List_ID
 				return NULL;
 			}
 	 
-			$this->sQL->update($this->tableName,
+			$this->sql->update($this->tableName,
 			                   array($this->fields['Counter'] => ++$listID),
 			                   array($this->fields['DB_Table'] => $table,
 			                         $this->fields['DB_Field'] => $field));
@@ -67,7 +63,7 @@ class List_ID
 		{
 			throw new \Evoke\Core\Exception\DB(
 				__METHOD__, 'Unable to get new list ID for table: ' . $table .
-				' field: ' . $field, $this->sQL, $e);
+				' field: ' . $field, $this->sql, $e);
 		}
 	}   
 }

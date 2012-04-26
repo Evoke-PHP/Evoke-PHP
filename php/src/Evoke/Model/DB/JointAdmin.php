@@ -1,37 +1,61 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Core\Iface;
+use Evoke\Iface;
+use Evoke\Iface\Core as ICore;
 
-/// Model_DB_Joint_Admin provides a CRUD interface to a joint set of data.
-class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
+/// JointAdmin provides A CRUD interface to a set of joint tables.
+class JointAdmin extends Joint implements Iface\Model\Admin
 {
+	/** @property $eventManager
+	 *  @object EventManager
+	 */
+	protected $eventManager;
+
+
 	/** @property $failures
-	 *  Failure MessageTree \object
+	 *  @object MessageTree of any failures.
 	 */
 	protected $failures;
 
 	/** @property $notifications
-	 *  Notification MessageTree \object
+	 *  @object MessageTree of any notifications.
 	 */
 	protected $notifications;
 
 	/** @property $sessionManager
-	 *  Session Manager \object
+	 *  @object SessionManager
 	 */
 	protected $sessionManager;
 
 	/** @property $table_List_ID
-	 *  List_ID Table \object
+	 *  @object Database List_ID Table
 	 */
 	protected $table_List_ID;
 	
-	public function __construct(Iface\EventManager    $eventManager,
-	                            Iface\SessionManager  $sessionManager,
-	                            Iface\DB\Table\ListID $tableListID,
-	                            /* Bool */            $validate=true,
-	                            Iface\MessageTree     $failures=NULL,
-	                            Iface\MessageTree     $notifications=NULL)
+	/** Construct an Administration Model of a joint set of database tables.
+	 *  @param sql            @object SQL object.   
+	 *  @param tableName      @string The table name where joins start from.
+	 *  @param joins          @object Joins object.
+	 *  @param sessionManager @object SessionManager object.
+	 *  @param tableListID    @object DB List ID Table object.
+	 *  @param failures       @object Failure messages object.
+	 *  @param notifications  @object Notification messages object.
+	 *  @param eventManager   @object EventManager object.
+	 *  @param select         @array  Select statement settings.
+	 *  @param dataPrefix     @array  Any prefix to offset the data with.
+	 *  @param validate       @bool   Whether to validate the data.
+	 */
+	public function __construct(ICore\DB\SQL          $sql,
+	                            /* String */          $tableName,
+	                            ICore\DB\Table\Joins  $joins,
+	                            ICore\SessionManager  $sessionManager,
+	                            ICore\DB\Table\ListID $tableListID,
+	                            ICore\MessageTree     $failures,
+	                            ICore\MessageTree     $notifications,
+	                            ICore\EventManager    $eventManager,
+	                            Array                 $select   = array(),
+	                            /* Bool */            $validate = true)
 	{
 		parent::__construct($eventManager, );
 
@@ -46,7 +70,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	/******************/
 
 	/** Add the joint record to the database.
-	 *  @param record \array Any new data for the record to be added.
+	 *  @param record @array Any new data for the record to be added.
 	 */
 	public function add($record)
 	{
@@ -66,7 +90,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 
 			$this->recurse(
 				array('Depth_First_Data'   => array($this, 'addEntries'),
@@ -74,7 +98,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				$data,
 				$this->joins);
 	 
-			$this->sQL->commit();
+			$this->sql->commit();
 			$this->sessionManager->reset();
 			$this->notifications->add('Add', 'Successful');
 		}
@@ -85,7 +109,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				             'Method'  => __METHOD__,
 				             'Message' => $e->getMessage()));
 			$this->failures->add('Add_Failed', 'Sys_Admin_Notified');	 
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
 
@@ -121,7 +145,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 			$deleteRecord = $this->sessionManager->get('Delete_Record');
 	 
 			$this->recurse(
@@ -130,7 +154,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				$this->joins);
 	 
 			$this->sessionManager->reset();
-			$this->sQL->commit();
+			$this->sql->commit();
 			$this->notifications->add('Delete', 'Successful');
 		}
 		catch (\Exception $e)
@@ -140,7 +164,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				             'Method'  => __METHOD__,
 				             'Message' => $e->getMessage()));
 			$this->failures->add('Delete_Failed', 'Sys_Admin_Notified');
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
 
@@ -239,14 +263,14 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		////////////////////
 		try
 		{
-			$this->sQL->beginTransaction();
+			$this->sql->beginTransaction();
 
-			/// \todo Implement modify.
+			/// @todo Implement modify.
 			throw new \Exception('Modify action not yet implemented.');
 
 			// Recurse and process the modify.
 
-			$this->sQL->commit();
+			$this->sql->commit();
 			$this->sessionManager->reset();
 			$this->notifications->add('Modify', 'Successful');
 		}
@@ -257,12 +281,12 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 				             'Method'  => __METHOD__,
 				             'Message' => $e->getMessage()));
 			$this->failures->add('Modify_Failed', 'Sys_Admin_Notified');
-			$this->sQL->rollBack();
+			$this->sql->rollBack();
 		}
 	}
 
 	/** Update the current record in the sesssion.
-	 *  @param record \array New information to be added to the current record.
+	 *  @param record @array New information to be added to the current record.
 	 */
 	public function updateCurrentRecord($updateRecord)
 	{
@@ -350,7 +374,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 			unset($addRecord[$join->getJointKey()]);
 		}
 
-		$this->sQL->insert($tableName, array_keys(reset($addData)), $addData);
+		$this->sql->insert($tableName, array_keys(reset($addData)), $addData);
       
 		// If the listID was null then this is a one to one relationship with an
 		// ID that we can obtain with lastInsertID.  We set it so that it can be
@@ -368,7 +392,7 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 
 			foreach ($data as &$childRecord)
 			{
-				$childRecord[$childField] = $this->sQL->lastInsertID($childField);
+				$childRecord[$childField] = $this->sql->lastInsertID($childField);
 			}  
 		}
        
@@ -377,15 +401,15 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	}
    
 	/** Delete the records for the current table.
-	 *  @param data \array The records to be deleted.
-	 *  @param Join \obj The Joins object.
+	 *  @param data @array  The records to be deleted.
+	 *  @param join @object The Joins object.
 	 */
 	protected function deleteEntries($data, $join)
 	{
 		foreach ($data as $record)
 		{
 			unset($record[$join->getJointKey()]);
-			$this->sQL->delete($join->getTableName(), $record);
+			$this->sql->delete($join->getTableName(), $record);
 		}
 	}   
 
@@ -393,9 +417,9 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 *  recursion is used to call the callback functions in varying breadth first
 	 *  or depth first manner.
 	 *
-	 *  @param callbacks \array Callbacks to be called recursively on the data of
+	 *  @param callbacks @array Callbacks to be called recursively on the data of
 	 *  the format:
-	 *  \verbatim
+	 *  @verbatim
 	 *  // Supply callbacks as values in this array.
 	 *  // The comments show what the callback will receive.
 	 *  array('Breadth_First_Data'   => NULL, // Data,          Joins.
@@ -404,23 +428,25 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	 *       'Depth_First_Data'     => NULL, // Parent Record, Child Join.
 	 *       'Depth_First_Record'   => NULL, // Record,        Joins.
 	 *       'Depth_First_Parent'   => NULL) // Data,          Joins.
-	 *  \endverbatim
+	 *  @endverbatim
 	 *  For any one bit of data these functions are called in the following order:
-	 *  \verbatim
+	 *  @verbatim
 	 *  1 Breadth_First_Data
 	 *  2 Breadth_First_Record
 	 *  3 Breadth_First_Parent
 	 *  4 Depth_First_parent
 	 *  5 Depth_First_Record
 	 *  6 Depth_First_Data
-	 *  \endverbatim
+	 *  @endverbatim
 	 *  Order is important when callback functions alter the data they receive.
 	 *
-	 *  @param data \array The data to traverse.
-	 *  @param Joins \obj The Joins object to traverse the data with.
-	 *  \return The data after possibly being modified by the callbacks.
+	 *  @param data  @array  The data to traverse.
+	 *  @param joins @object The joins object to traverse the data with.
+	 *  @return The data after possibly being modified by the callbacks.
 	 */
-	protected function recurse(Array $callbacks, Array &$data, $joins)
+	protected function recurse(Array               $callbacks,
+	                           Array               &$data,
+	                           Iface\Core\DB\Joins $joins)
 	{
 		$jointKey = $joins->getJointKey();
 		$childJoins = $joins->getJoins();
@@ -457,8 +483,8 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	}
    
 	/** Feeback the List_ID from the joint child records into the parent record.
-	 *  @param parentRecord \array The parent record.
-	 *  @param Join \object The Join to the child record. 
+	 *  @param parentRecord @array  The parent record.
+	 *  @param join         @object The Join to the child record. 
 	 */
 	protected function feedbackListID(&$parentRecord, $join)
 	{
@@ -500,9 +526,9 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	}
    
 	/** Validate all of the data specified with the Joins.
-	 *  @param data \array The data to validate.
-	 *  @param Joins \obj The Joins object to validate the data with.
-	 *  @return \bool Whether the data is valid or not.
+	 *  @param data  @array The data to validate.
+	 *  @param joins @obj The Joins object to validate the data with.
+	 *  @return      @bool Whether the data is valid or not.
 	 */
 	protected function validate($data, $joins)
 	{
@@ -514,9 +540,12 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 		return $this->failures->isEmpty();
 	}
 
-	/** Validate the data for the table.
+	/** Validate the entries for the table.
+	 *  @param data @array  The data for the table.
+	 *  @param join @object The join for the data.
 	 */
-	protected function validateEntries($data, $join)
+	protected function validateEntries(Array               $data,
+	                                   ICore\DB\Table\Join $join)
 	{
 		if (!$join->isAdminManaged() || empty($data))
 		{
@@ -547,10 +576,10 @@ class JointAdmin extends Joint implements \Evoke\Core\Iface\Model\Admin
 	/*******************/
 
 	/** Helper function to call a callback.
-	 *  @param callbacks \array The array of callbacks that we are calling from.
-	 *  @param cb \string The index for the callback that we want to call.
-	 *  @param data \array The data to pass to the callback by reference.
-	 *  @param Joins \object The Joins object to pass to the callback.
+	 *  @param callbacks @array The array of callbacks that we are calling from.
+	 *  @param cb        @string Index for the callback that we want to call.
+	 *  @param data      @array The data to pass to the callback by reference.
+	 *  @param joins     @object The Joins object to pass to the callback.
 	 */
 	private function call(Array $callbacks, $cb, Array &$data, $joins)
 	{

@@ -8,7 +8,7 @@ namespace Evoke\Core;
 /** File_System Wrapper class to enable exceptions on filesystem actions.
  *  File stream contexts are not dealt with by this wrapper.
  */
-class Filesystem
+class Filesystem implements \Evoke\Iface\Core\Filesystem
 {   
 	/******************/
 	/* Public Methods */

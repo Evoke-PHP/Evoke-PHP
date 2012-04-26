@@ -1,5 +1,8 @@
 <?php
 namespace Evoke\Core;
+
+use Evoke\Iface\Core as ICore;
+
 /** Logger class to control the logging of messages in the system.
  *  PHP has the following predefined constants defined for us which we use to
  *  log our messages. These default Log Levels are as per syslog entries as
@@ -57,35 +60,24 @@ class Logger
 	 */
 	protected $timeFormat;
 	 
-	public function __construct(Array $setup=array())
+	public function __construct(
+		ICore\EventManager $eventManager,
+		\DateTime          $dateTime,
+		/* Integer */      $defaultLevel=LOG_INFO,
+		/* String */       $defaultLevelStr='Level_',
+		Array              $levels=array(LOG_EMERG   => 'Emergency',
+		                                 LOG_ALERT   => 'Alert',
+		                                 LOG_CRIT    => 'Critical',
+		                                 LOG_ERR     => 'Error',
+		                                 LOG_WARNING => 'Warning',
+		                                 LOG_NOTICE  => 'Notice',
+		                                 LOG_INFO    => 'Info',
+		                                 LOG_DEBUG   => 'Debug'),
+		/* Bool */         $loggingMandatory=true,
+		/* Integer */      $mask=11111111,
+		/* String */       $timeFormat='Y-M-d@H:i:sP')
+	                            
 	{
-		$setup += array('DateTime'          => NULL,
-		                'Default_Level'     => LOG_INFO,
-		                'Default_Level_Str' => 'Level_',
-		                'EventManager'      => NULL,
-		                'Levels'            => array(LOG_EMERG   => 'Emergency',
-		                                             LOG_ALERT   => 'Alert',
-		                                             LOG_CRIT    => 'Critical',
-		                                             LOG_ERR     => 'Error',
-		                                             LOG_WARNING => 'Warning',
-		                                             LOG_NOTICE  => 'Notice',
-		                                             LOG_INFO    => 'Info',
-		                                             LOG_DEBUG   => 'Debug'),
-		                'Logging_Mandatory' => true,
-		                'Mask'              => NULL,
-		                'Time_Format'       => 'Y-M-d@H:i:sP');
-
-		if (!$dateTime instanceof \DateTime)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs DateTime');
-		}
-		
-		if (!$eventManager instanceof EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires EventManager');
-		}
-		
 		$this->dateTime         = $dateTime;
 		$this->defaultLevel     = $defaultLevel;
 		$this->defaultLevelStr  = $defaultLevelStr;

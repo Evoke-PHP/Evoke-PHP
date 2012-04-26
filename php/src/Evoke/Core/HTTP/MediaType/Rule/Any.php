@@ -9,7 +9,7 @@ class Any extends Base
 	/******************/
 
 	/** Check to see if the rule matches which it does this matches anything!
-	 *  @return \bool True.
+	 *  @return @bool True.
 	 */
 	public function isMatch($mediaType)
 	{

@@ -15,7 +15,8 @@ class Trim extends Base
 	 *  @param authoritative \bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
-	public function __construct($characters, $authoritative=false)
+	public function __construct(/* String */ $characters,
+	                            /* Bool   */ $authoritative = false)
 	{
 		if (!is_string($characters))
 		{

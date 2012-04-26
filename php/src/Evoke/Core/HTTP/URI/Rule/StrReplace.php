@@ -21,7 +21,8 @@ class StrReplace extends Base
 	 *  @param authoritative \bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
-	public function __construct(Array $subRules, $authoritative=false)
+	public function __construct(Array      $subRules,
+	                            /* Bool */ $authoritative = false)
 	{
 		foreach ($subRules as $subRule)
 		{

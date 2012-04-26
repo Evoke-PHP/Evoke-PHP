@@ -1,46 +1,26 @@
 <?php
 namespace Evoke\Core;
+
+use Evoke\Iface\Core as ICore;
+
 /// Session_Manager provide management of a session domain.
 class SessionManager
 {
 	/** @property $domain
-	 *  \mixed Array or string specfiying the domain within the session that we
-	 *  are managing.  When passed as an array the array is an ordered list of
-	 *  the keys required to reach the domain (i.e  array(Lev_1, Lev_2, Lev_3) is
-	 *  $_SESSION[Lev_1][Lev_2][Lev_3]).
-	 *
-	 *  A string can be used for a single level domain.
+	 *  @array The domain within the session that we are managing.  This is an
+	 *  ordered list of the keys required to reach the domain:
+	 *  `array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']`
 	 */
 	protected $domain;
 
 	/** @property $session
-	 *  Session \object
+	 *  @object Session
 	 */
 	protected $session;
    
-	public function __construct($setup=array())
+	public function __construct(ICore\Session $session,
+	                            Array         $domain)
 	{
-		$setup += array('Domain'  => array(),
-		                'Session' => NULL);
-
-		// Ensure the domain is an array for all of the methods that use it.  When
-		// a string is passed in we should use that as the domain. 
-		if (!is_array($domain))
-		{
-			if (!is_string($domain))
-			{
-				throw new \InvalidArgumentException(
-					__METHOD__ . ' requires Domain as array or string.');
-			}
-			
-			$domain = array($domain);
-		}
-
-		if (!$session instanceof \Evoke\Core\Iface\Session)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Session');
-		}
-
 		$this->domain  = $domain;
 		$this->session = $session;		
 		

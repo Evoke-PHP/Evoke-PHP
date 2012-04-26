@@ -10,7 +10,7 @@ namespace Evoke\Core;
  *
  *  Callbacks are run immediately upon event notification.
  */
-class EventManager implements Iface\EventManager
+class EventManager implements \Evoke\Iface\Core\EventManager
 {
 	/** By default all events are critical, but if there are events that can
 	 *  occur that do not care if even one observer is notified then they should
@@ -21,25 +21,11 @@ class EventManager implements Iface\EventManager
 	/// Observers for events.
 	protected $observers = array();
 
-	public function __construct(Array $setup=array())
+	public function __construct(Array $nonCriticalEvents=array(),
+	                            Array $observers=array())
 	{
-		$setup += array('Non_Critical_Events' => array(),
-		                'Observers'           => array());
-
-		if (!is_array($nonCriticalEvents))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Non_Critical_Events as array');
-		}
-
-		if (!is_array($observers))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Observers as array');
-		}
-    
 		$this->nonCriticalEvents = $nonCriticalEvents;
-		$this->observers = $observers;
+		$this->observers         = $observers;
 	}
 
 	/******************/

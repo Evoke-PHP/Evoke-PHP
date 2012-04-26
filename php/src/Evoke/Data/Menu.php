@@ -17,8 +17,8 @@ class Menu extends Base
 	 *  @param left  @string Left field name.
 	 *  @param right @string Right field name.
 	 */
-	public function __construct(/*s*/ $left='Lft',
-	                            /*s*/ $right='Rgt')
+	public function __construct(/* String */ $left='Lft',
+	                            /* String */ $right='Rgt')
 	{
 		$this->left  = $left;
 		$this->right = $right;

@@ -1,38 +1,59 @@
 <?php
 namespace Evoke\View;
 
+use Evoke\Iface\Core as ICore;
+
 class Admin extends Base
 {
-	public function __construct($setup=array())
+	/** Construct an Admin view.
+	 *  @param info            @object $info
+	 *  @param tableName       @string $tableName
+	 *  @param pageName        @string $pageName
+	 *  @param recordListSetup @array  $recordListSetup
+	 *  @param start           @array  $start
+	 *  @param startBase       @array  $startBase
+	 *  @param editSeparately  @bool   $editSeparately
+	 */
+	public function __construct(
+		ICore\DB\Table\Info $info,
+		/* String */ 		$tableName,
+		/* String */ 		$pageName,
+		Array        		$recordListSetup,
+		Array        		$start,
+		Array        		$startBase      = array(
+			'CSS' => array(
+				'/csslib/global.css',
+				'/csslib/common.css',
+				'/csslib/admin/admin.css',
+				'/csslib/element/language.css',
+				'/csslib/element/admin_header.css',
+				'/csslib/element/error.css')),
+		/* Bool */          $editSeparately = false)
 	{
-		$setup += array(
-			'Edit_Separately'   => false,
-			'Page_Name'         => NULL,
-			'Record_List_Setup' => array(),
-			'Start'             => array(),
-			'Start_Base'        => array(
-				'CSS' => array('/csslib/global.css',
-				               '/csslib/common.css',
-				               '/csslib/admin/admin.css',
-				               '/csslib/element/language.css',
-				               '/csslib/element/admin_header.css',
-				               '/csslib/element/error.css')),
-			'Table_Info'        => NULL,
-			'Table_Name'        => NULL);
-
-		parent::__construct($setup);
-
-		if (!$this->tableInfo instanceof \Evoke\Core\DB\Table_Info)
+		if (!is_string($tableName))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Table_Info');
+				__METHOD__ . ' requires tableName as string');
 		}
 
-		if (!is_string($this->tableName))
+		if (!is_string($pageName))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Table_Name as string');
+				__METHOD__ . ' requires pageName as string');
 		}
+
+		if (!is_bool($editSeparately))
+		{
+			throw new \InvalidArgumentException(__METHOD__ . ' requires editSeparately as bool');
+		}
+
+		$this->info            = $info;
+		$this->tableName       = $tableName;
+		$this->pageName        = $pageName;
+		$this->recordListSetup = $recordListSetup;
+		$this->start           = $start;
+		$this->startBase       = $startBase;
+		$this->editSeparately  = $editSeparately;
 	}
 
 	/******************/

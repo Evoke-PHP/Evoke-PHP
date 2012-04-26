@@ -24,7 +24,8 @@ class MessageTree implements Iface\MessageTree
 	 *  @param title \string Title for the message.
 	 *  @param text  \string Text for the message.
 	 */
-	public function __construct($title, $text)
+	public function __construct(/* String */ $title,
+	                            /* String */ $text)
 	{
 		if (!is_string($title))
 		{

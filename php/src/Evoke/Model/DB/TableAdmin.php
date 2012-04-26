@@ -1,47 +1,63 @@
 <?php
 namespace Evoke\Model\DB;
+
+use Evoke\Iface\Core as ICore;
+
 /// Provide a CRUD interface to a database table.
-class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
+class TableAdmin extends Table implements \Evoke\Iface\Model\Admin
 {
 	/** @property $autoFields
-	 *  Fields \array for fields that are auto_increment.
+	 *  Fields @array for fields that are auto_increment.
 	 */
 	protected $autoFields;
 
 	/** @property $failures
-	 *  Failure MessageTree \object
+	 *  Failure MessageTree @object
 	 */
 	protected $failures;
 
 	/** @property $info
-	 *  DB Table Information \object
+	 *  DB Table Information @object
 	 */
 	protected $info;
 
 	/** @property $notifications
-	 *  Notification MessageTree \object
+	 *  Notification MessageTree @object
 	 */
 	protected $notifications;
 
 	/** @property $sessionManager
-	 *  Session Manager \object
+	 *  Session Manager @object
 	 */
 	protected $sessionManager;
 
 	/** @property $validate
-	 *  \bool Whether to validate the data.
+	 *  @bool Whether to validate the data.
 	 */
 	protected $validate;
-	
-	public function __construct(Iface\DB\Table\Info  $info,
-	                            Iface\SessionManager $sessionManager,
-	                            Array                $dataPrefix=array(),
-	                            Iface\MessageTree    $failures=NULL,
-	                            Iface\MessageTree    $notifications=NULL,
-	                            /* Bool */           $validate=true,
-	                            Array                $autoFields=array('ID'))
+
+	/** Construct the Table Administration Model.
+	 *  @param sql            @object SQL object.
+	 *  @param info           @object Table Info object.
+	 *  @param sessionManager @object Session Manager object.
+	 *  @param dataPrefix     @array  Data prefix for the offset of the model
+	 *                                data.
+	 *  @param failures       @object Failures object.
+	 *  @param notifications  @object Notifications object.
+	 *  @param validate       @bool   Whether to validate the data.
+	 *  @param autoFields     @array  Which fields should be left to get an
+	 *                                automatic value from the database.
+	 */
+	public function __construct(ICore\DB\SQL         $sql,
+	                            ICore\DB\Table\Info  $info,
+	                            ICore\SessionManager $sessionManager,
+	                            ICore\MessageTree    $failures,
+	                            ICore\MessageTree    $notifications,
+	                            Array                $dataPrefix = array(),
+	                            /* Bool */           $validate   = true,
+	                            Array                $autoFields = array('ID'))
 	{
-		parent::__construct($dataPrefix);
+		parent::__construct($sql, $dataPrefix);
       
 		$this->autoFields     = $autoFields;
 		$this->failures       = $failures;
@@ -77,7 +93,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
       
 		try
 		{
-			$this->sQL->insert(
+			$this->sql->insert(
 				$this->tableName, array_keys($record), $record);
 
 			$this->sessionManager->reset();
@@ -129,7 +145,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
       
 		try
 		{
-			$this->sQL->delete($this->tableName, $record);
+			$this->sql->delete($this->tableName, $record);
 
 			$this->sessionManager->reset();
 			$this->notifications->add('Delete', 'Successful');
@@ -157,7 +173,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 	{
 		$this->sessionManager->set('Delete_Request', true);
 
-		$record = $this->sQL->select(
+		$record = $this->sql->select(
 			$this->tableName, '*', $conditions);
       
 		$this->sessionManager->set('Delete_Record', $record);
@@ -165,7 +181,7 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
    
 	public function edit($record)
 	{
-		$result = $this->sQL->select($this->tableName, '*', $record);
+		$result = $this->sql->select($this->tableName, '*', $record);
 
 		if ($result === false)
 		{
@@ -229,11 +245,11 @@ class TableAdmin extends Table implements \Evoke\Core\Iface\Model\Admin
 			if ($this->sessionManager->issetKey('Edited_Record'))
 			{
 				$oldRecord = $this->sessionManager->get('Edited_Record');
-				$this->sQL->update($this->tableName, $record, $oldRecord);
+				$this->sql->update($this->tableName, $record, $oldRecord);
 			}
 			else
 			{
-				$this->sQL->insert(
+				$this->sql->insert(
 					$this->tableName, array_keys($record), $record);
 			}
 

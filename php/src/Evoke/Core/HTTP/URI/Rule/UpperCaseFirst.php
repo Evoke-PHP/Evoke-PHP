@@ -19,14 +19,9 @@ class UpperCaseFirst extends Base
 	 *  @param authoritative \bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
-	public function __construct(Array $delimiters, $authoritative=false)
+	public function __construct(Array      $delimiters,
+	                            /* Bool */ $authoritative=false)
 	{
-		if (!is_array($delimiters))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires delimiters as array');
-		}
-
 		parent::__construct($authoritative);
 
 		$this->delimiters = $delimiters;

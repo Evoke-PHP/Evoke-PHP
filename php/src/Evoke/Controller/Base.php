@@ -1,38 +1,38 @@
 <?php
 namespace Evoke\Controller;
 
-use Evoke\Core\Iface;
+use Evoke\Iface\Core as ICore;
 use Evoke\Core\HTTP\MediaType;
 
 abstract class Base
 {
-	/** @property $factory
-	 *  \object Factory 
+	/** @property $provider
+	 *  @object Provider 
 	 */
-	protected $factory;
+	protected $provider;
 	
 	/** @property $params
-	 *  \array Parameters for the Controller.
+	 *  @array Parameters for the Controller.
 	 */
 	protected $params;
 	
 	/** @property $request
-	 *  Request \object
+	 *  Request @object
 	 */
 	protected $request;
 
 	/** Construct the response.
-	 *  @param params   \array  Parameters for the response.
-	 *  @param Factory  \object Factory object.
-	 *  @param Request  \object Request object.
-	 *  @param Response \object Response object.
+	 *  @param params   @array  Parameters for the response.
+	 *  @param Provider @object Provider object.
+	 *  @param Request  @object Request object.
+	 *  @param Response @object Response object.
 	 */
 	public function __construct(Array               $params,
-	                            Iface\Factory       $factory,
-	                            Iface\HTTP\Request  $request,
-	                            Iface\HTTP\Response $response)
+	                            ICore\Provider      $provider,
+	                            ICore\HTTP\Request  $request,
+	                            ICore\HTTP\Response $response)
 	{
-		$this->factory  = $factory;
+		$this->provider = $provider;
 		$this->params   = $params;
 		$this->request  = $request;
 		$this->response = $response;
@@ -67,7 +67,7 @@ abstract class Base
 			$contentType = 'application/xml';
 			break;
 		default:
-			$eventManager = $this->factory->getEventManager();
+			$eventManager = $this->provider->getEventManager();
 			$eventManager->notify(
 				'Log',
 				array('Level'   => LOG_WARNING,
@@ -78,8 +78,10 @@ abstract class Base
 			$contentType = 'application/xhtml+xml';
 			$outputFormat = 'XHTML';
 		}
+
 		
-		$this->writer = $this->buildWriter($outputFormat);
+		$this->writer = $this->provider->make(
+			'Evoke\Core\Writer\\' . $outputFormat);
 		$this->response->setContentType($contentType);
 
 		// Perform any content agnostic initialization of the reponse.
@@ -99,30 +101,16 @@ abstract class Base
 	/** Build the Media Type router.
 	 */
 	protected function buildMediaTypeRouter()
-	{
-		$router = new MediaType\Router($this->request);
+	{		
+		$router = $this->provider->make('Evoke\Core\HTTP\MediaType\Router',
+		                                array('Request' => $this->request));
 		$router->addRule(
-			new MediaType\Rule\Exact('HTML5',
-			                         array('Subtype' => '*',
-			                               'Type'    => '*')));
+			$this->provider->make(
+				'Evoke\Core\HTTP\MediaType\Rule\Exact',
+				array('Output_Format' => 'HTML5',
+				      'Match'         => array('Subtype' => '*',
+				                               'Type'    => '*'))));
 		return $router;
-	}
-
-	/** Build a Writer object.
-	 *  @param outputFormat \string The type of output the Writer must write.
-	 *  @return \object The writer object.
-	 */
-	protected function buildWriter($outputFormat, $setup=array())
-	{
-		if ($outputFormat === 'HTML5' ||
-		    $outputFormat === 'XHTML' ||
-		    $outputFormat === 'XML')
-		{
-			$setup += array('XMLWriter' => $this->factory->get('XMLWriter'));
-		}
-		
-		return $this->factory->get('Evoke\Core\Writer\\' . $outputFormat,
-		                           $setup);
 	}
 
 	/** Provide an End the XHTML output.
@@ -142,7 +130,7 @@ abstract class Base
 	}		
 	
 	/** Get the XHTML setup for the page.
-	 *  @return \array The XHTML Setup array.
+	 *  @return @array The XHTML Setup array.
 	 */
 	protected function getXHTMLSetup()
 	{
@@ -167,9 +155,9 @@ abstract class Base
 	}
 
 	/** Merge two XHTML setups with the second taking precedence.
-	 *  @param start \array The initial XHTML setup.
-	 *  @param overload \array The array that takes precedence.
-	 *  @return \array The final XHTML setup with sub-arrays being merged by
+	 *  @param start @array The initial XHTML setup.
+	 *  @param overload @array The array that takes precedence.
+	 *  @return @array The final XHTML setup with sub-arrays being merged by
 	 *  value.
 	 */
 	protected function mergeXHTMLSetup($start, $overload)
@@ -192,8 +180,8 @@ abstract class Base
 	}
 
 	/** Respond to the HTTP method in the correct output format.
-	 *  @param method       \string HTTP method (e.g GET, POST, DELETE)
-	 *  @param outputFormat \string Output format (e.g html5, XHTML, JSON)
+	 *  @param method       @string HTTP method (e.g GET, POST, DELETE)
+	 *  @param outputFormat @string Output format (e.g html5, XHTML, JSON)
 	 */
 	protected function respond($method, $outputFormat)
 	{

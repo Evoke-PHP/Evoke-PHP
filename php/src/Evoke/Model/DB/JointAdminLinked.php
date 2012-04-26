@@ -1,55 +1,72 @@
 <?php
 namespace Evoke\Model\DB;
+
+use Evoke\Iface\Core as ICore;
+
 /** Model_DB_Joint_Admin_Linked provides a CRUD interface to a joint set of data
  *  with linked information stored in files referenced from the database.
  */
-class JointAdminLinked extends Admin
+class JointAdminLinked extends JointAdmin
 {
 	/** @property $dirMode
-	 *  The directory mode to create directories at \int (octal).
+	 *  @int (octal) The directory mode to create directories at.
 	 */
 	protected $dirMode;
 
 	/** @property $fileMode
-	 *  The file mode to create linked files with. \int (octal).
+	 *  @int (octal) The file mode to create linked files with.
 	 */
 	protected $fileMode;
 	
 	/** @property $filesystem
-	 *  Filesystem \object
+	 *  @object Filesystem
 	 */
 	protected $filesystem;
 
 	/** @property $imageManip
-	 *  Image manipulation \object
+	 *  @object Image manipulation
 	 */
 	protected $imageManip;
 
 	/** @property $links
-	 *  Array of links.
+	 *  @array links
 	 */
 	protected $links;
 	
-	public function __construct(Array $setup)
+	/** Construct an Administration Model of a joint set of database tables with
+	 *  linked information in the filesystem.
+	 *  @param sql            @object SQL object.   
+	 *  @param tableName      @string The table name where joins start from.
+	 *  @param joins          @object Joins object.
+	 *  @param sessionManager @object SessionManager object.
+	 *  @param tableListID    @object DB List ID Table object.
+	 *  @param failures       @object Failure messages object.
+	 *  @param notifications  @object Notification messages object.
+	 *  @param eventManager   @object EventManager object.
+	 *  @param select         @array  Select statement settings.
+	 *  @param dataPrefix     @array  Any prefix to offset the data with.
+	 *  @param validate       @bool   Whether to validate the data.
+	 */
+	public function __construct(ICore\DB\SQL          $sql,
+	                            /* String */          $tableName,
+	                            ICore\DB\Table\Joins  $joins,
+	                            ICore\SessionManager  $sessionManager,
+	                            ICore\DB\Table\ListID $tableListID,
+	                            ICore\MessageTree     $failures,
+	                            ICore\MessageTree     $notifications,
+	                            ICore\EventManager    $eventManager,
+	                            Icore\Links           $TODO_FIX_ME, ///< \todo FIXME
+	                            Icore\Filesystem      $filesystem,
+	                            Icore\ImageManip      $imageManip,
+	                            /* Integer (Octal) */ $dirMode  = 0770,
+	                            /* Integer (Octal) */ $fileMode = 0660,
+	                            Array                 $select   = array(),
+	                            /* Bool */            $validate = true)
 	{
-		$setup += array('Dir_Mode'    => 0770,
-		                'File_Mode'   => 0660,
-		                'Filesystem'  => NULL,
-		                'Image_Manip' => NULL,
-		                'Links'       => array());
-
-		if (!$filesystem instanceof \Evoke\Core\Filesystem)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Filesystem');
-		}
-
-		if (!$imageManip instanceof \Evoke\Core\Image\Manip)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Image_Manip');
-		}
-      
+		/// \todo Fix to new coding standard.
+		throw new \RuntimeException(
+			__METHOD__ . ' needs implementation to new standard.');
+		
 		foreach ($links as $alias => &$link)
 		{
 			if (!is_array($link))
@@ -382,17 +399,17 @@ class JointAdminLinked extends Admin
 			{
 				$this->imageManip->scaleImage($filename);
 			}
-			catch (\Exception $ex)
+			catch (\Exception $e)
 			{
 				$msg = 'Could not scale Image to ' . $format .
-					' due to exception: ' . $ex->getMessage();
+					' due to exception: ' . $e->getMessage();
 
 				$this->eventManager->notify(
 					'Log',
 					array('Level'   => LOG_ERR,
 					      'Message' => $msg,
 					      'Method'  => __METHOD__));
-				throw $ex;
+				throw $e;
 			}
 		}
 	}   

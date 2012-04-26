@@ -30,10 +30,10 @@ class Regex extends Base
 	 *  @param params        \Array  Regexes replacements for the parameters.
 	 *  @param authoritative \bool   Is this always the final route?
 	 */
-	public function __construct(/*s*/ $match,
-	                            /*s*/ $classname,
-	                            Array $params        = array(),
-	                            /*b*/ $authoritative = false)
+	public function __construct(/* String */ $match,
+	                            /* String */ $classname,
+	                            Array        $params        = array(),
+	                            /* Bool   */ $authoritative = false)
 	{
 		if (!is_string($classname))
 		{

@@ -1,9 +1,9 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
-use Evoke\Core\Iface;
+use Evoke\Iface\Core as ICore;
 
-class Error implements \Evoke\Core\Iface\Handler
+class Error implements ICore\Init\Handler
 {
 	/** @property $detailedInsecureMessage
 	 *  \bool Whether to display a detailed insecure error message.
@@ -20,9 +20,9 @@ class Error implements \Evoke\Core\Iface\Handler
 	 */
 	protected $writer;
 
-	public function __construct(Iface\EventManager $eventManager,
-	                            Iface\Writer       $writer,
-	                            /* Bool */         $detailedInsecureMessage)
+	public function __construct(/* Bool */         $detailedInsecureMessage,
+	                            ICore\EventManager $eventManager,
+	                            ICore\Writer       $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
 		{

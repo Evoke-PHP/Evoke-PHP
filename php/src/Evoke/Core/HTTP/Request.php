@@ -2,7 +2,7 @@
 namespace Evoke\Core\HTTP;
 
 /// Provide details of the request.
-class Request implements \Evoke\Core\Iface\HTTP\Request
+class Request implements \Evoke\Iface\Core\HTTP\Request
 {
 	/** @property $basicPatterns
 	 *  \string Regexp subpatterns to match components of the request header
@@ -19,11 +19,13 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 	 *  \bool Whether to validate the headers before parsing.
 	 */
 	protected $validateHeaders;
-	
-	public function __construct(Array $setup=array())
-	{
-		$setup += array('Validate_Headers' => true);
 
+	/** Construct the request object.
+	 *  @param $validateHeaders @bool Whether to validate against rfc2616 or
+	 *  assume that it is valid and try to pull the data without checking.
+	 */
+	public function __construct($validateHeaders=true)
+	{
 		$this->validateHeaders = $validateHeaders;
 
 		/* Pattern definitions from:
@@ -49,9 +51,11 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 			'(?<QDTEXT>        [\x09\x0a\x0d\x20\x21\x23-\x7e\x80-\xff])' .
 			'(?<QUOTED_PAIR>   \x5c(?&CHAR))' .
 			'(?<QUOTED_STRING> "((?&QDTEXT) | (?&QUOTED_PAIR))*")' .
-			'(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d])' .
+			'(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f' .
+			'\x3a-\x40\x5b-\x5d\x7b\x7d])' .
 			'(?<TOKEN>         (?&TOKEN_CHAR)+)' .
-			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])' .
+			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39' .
+			'\x41-\x5a\x5e-\x7a\x7c\x7e])' .
 			'(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))';
 	}
 
@@ -117,9 +121,9 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 	 *
 	 *  This field specifies the preferred media types for responses.
 	 *
-	 *  \return \array of Accepted media types with their quality factor, ordered
-	 *  by preference according to \ref compareAccept.  Each element is of the
-	 *  form:
+	 *  \return \array of Accepted media types with their quality factor,
+	 *  ordered by preference according to \ref compareAccept.  Each element is
+	 *  of the form:
 	 *  \verbatim
 	 *  array(array('Q_Factor' => 0.5,
 	 *              'Subtype'  => 'html',
@@ -150,7 +154,8 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 				// Accept the ',' separator except  
 				'    (?<ACCEPT>' .
 				'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
-				'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)(?&ACCEPT_PARAMS)?)' .
+				'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)' .
+				'(?&ACCEPT_PARAMS)?)' .
 				'    (?<ACCEPT_PARAMS>' .
 				'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
 				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
@@ -192,8 +197,8 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 				$qFactor = empty($matches['Q_Factor'][$i]) ? 1.0 :
 					$matches['Q_Factor'][$i] + 0.0; // Make it a float.
 
-				// Parse any accept extensions (more extensions makes a difference
-				// for the Accept preference ordering).
+				// Parse any accept extensions (more extensions makes a
+				// difference for the Accept preference ordering).
 				$params = array();
 				
 				if (!empty($matches['Params'][$i]))
@@ -239,7 +244,8 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 			'    (?&ACCEPT_LANGUAGE_ELEMENT)' .
 			'    ((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)' .
 			'(?<ACCEPT_LANGUAGE_ELEMENT>' .
-			'    (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE))?)' .
+			'    (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)' .
+			'    (?&Q_VALUE))?)' .
 			'(?<ALPHA_18>                [[:alpha:]]{1,8})' .
 			'(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))';
 
@@ -251,8 +257,8 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 			if (!preg_match($validationPattern, $acceptLanguageString))
 			{
 				throw new \InvalidArgumentException(
-					__METHOD__ . ' Accept request header: ' . $acceptLanguageString .
-					' is invalid.');
+					__METHOD__ . ' Accept request header: ' .
+					$acceptLanguageString . ' is invalid.');
 			}
 		}
 
@@ -262,7 +268,8 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 			'((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
 
 		$acceptLanguages = array();
-		$numLanguages = preg_match_all($pattern, $acceptLanguageString, $matches);
+		$numLanguages = preg_match_all(
+			$pattern, $acceptLanguageString, $matches);
 
 		for ($i = 0; $i < $numLanguages; $i++)
 		{
@@ -315,9 +322,9 @@ class Request implements \Evoke\Core\Iface\HTTP\Request
 	private function scoreAccept(Array $accept)
 	{
 		// The Q_Factor dominates, followed by Type, Subtype and then number of
-		// parameters. The one unknown is the number of parameters, but we assume
-		// that it is less than 10000, so that the score cannot be overriden by
-		// a lower level.
+		// parameters. The one unknown is the number of parameters, but we
+		// assume that it is less than 10000, so that the score cannot be
+		// overriden by a lower level.
 		return
 			// Normalise to 1                         Multiply by Importance
 			(($accept['Q_Factor'] * 1000)             * 1000000) +

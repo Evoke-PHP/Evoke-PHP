@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
-class Autoload implements \Evoke\Core\Iface\Handler
+class Autoload implements \Evoke\Iface\Core\Init\Handler
 {
 	/** @property $authoritative
 	 *  Whether we have complete authority over the namespace, or we should allow
@@ -25,10 +25,10 @@ class Autoload implements \Evoke\Core\Iface\Handler
 	 */
 	protected $namespace;
 
-	public function __construct(/*s*/ $baseDir,
-	                            /*s*/ $namespace,
-	                            /*b*/ $authoritative=true,
-	                            /*s*/ $extension='.php')
+	public function __construct(/* String */ $baseDir,
+	                            /* String */ $namespace,
+	                            /* Bool   */ $authoritative=true,
+	                            /* String */ $extension='.php')
 	{
 		if (!is_string($baseDir))
 		{

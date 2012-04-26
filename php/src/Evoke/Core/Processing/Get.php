@@ -2,13 +2,20 @@
 namespace Evoke\Core\Processing;
 
 class Get extends Base
-{ 
-	public function __construct(Array $setup)
+{
+	/** Construct a Get processing object.
+	 *  @param eventManager  @object Event Manager object.
+	 *  @param requestKeys   @array  The request keys we are processing.
+	 *  @param matchRequired @bool   Whether a match is required.
+	 *  @param uniqueMatch   @bool   Whether a unique match is required.
+	 */
+	public function __construct(ICore\EventManager $eventManager,
+	                            Array              $requestKeys,
+	                            /* Bool   */       $matchRequired = true,
+	                            /* Bool   */       $uniqueMatch   = true)
 	{
-		$setup += array('Event_Prefix'   => 'Get.',
-		                'Request_Method' => 'GET');
-      
-		parent::__construct($setup);
+		parent::__construct($eventManager, 'Get.', 'GET', $requestKeys,
+		                    $matchRequired, $uniqueMatch);
 	}
 
 	/******************/

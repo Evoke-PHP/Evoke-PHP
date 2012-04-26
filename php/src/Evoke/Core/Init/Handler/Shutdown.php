@@ -1,10 +1,10 @@
 <?php
 namespace Evoke\Core\Init\Handler;
 
-use Evoke\Core\Iface;
+use Evoke\Iface\Core as ICore;
 
 /// The system shutdown handler.
-class Shutdown implements Iface\Handler
+class Shutdown implements ICore\Init\Handler
 {
 	/** @property $administratorEmail
 	 *  \string The administrator's email address.
@@ -27,9 +27,9 @@ class Shutdown implements Iface\Handler
 	 *  information (which is insecure).
 	 *  @param writer \object The writer object to write the fatal message.
 	 */
-	public function __construct($administratorEmail,
-	                            $detailedInsecureMessage,
-	                            Iface\Writer $writer)
+	public function __construct(/* String */ $administratorEmail,
+	                            /* Bool   */ $detailedInsecureMessage,
+	                            ICore\Writer $writer)
 	{
 		if (!is_string($administratorEmail))
 		{

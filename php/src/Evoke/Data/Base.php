@@ -7,7 +7,7 @@ namespace Evoke\Data;
  *  from the Joins passed at construction.
  *
  *  Below is a usage example containing each different type of access:
- *  \code
+ *  @code
  *  $obj = new Data();
  *  $obj->setData($data);
  *
@@ -23,7 +23,7 @@ namespace Evoke\Data;
  *        $y = $listRecord['Joint_Record_Field'];
  *     }
  *  }
- *  \endcode
+ *  @endcode
 */
 class Base implements \Evoke\Iface\Data
 {
@@ -31,14 +31,14 @@ class Base implements \Evoke\Iface\Data
 	 *  Due to the way data is accessed from the Data class the number of
 	 *  properties within the class must be limited to avoid collisions. The name
 	 *  of our one property is also designed to avoid collisions.  This is due to
-	 *  the implementation of the \ref __get method which provides access to
+	 *  the implementation of the @ref __get method which provides access to
 	 *  joint data.
 	 */
 	protected $collisionFreeSetup;
 		
-	public function __construct(Array $joins,
-	                            Array $data=array(),
-	                            /*s*/ $jointKey='Joint_Data')
+	public function __construct(Array        $joins,
+	                            Array        $data     = array(),
+	                            /* String */ $jointKey = 'Joint_Data')
 	{
 		if (!is_array($joins))
 		{
@@ -68,8 +68,8 @@ class Base implements \Evoke\Iface\Data
 	/** Provide access to the joint data.  This allows the object to be used like
 	 *  so:  $object->referencedData (for joint data with a parent field of
 	 *  'Referenced_Data').
-	 *  @param parentField \string The parent field for the joint data.
-	 *  This can be as per the return value of \ref getJoinName.
+	 *  @param parentField @string The parent field for the joint data.
+	 *  This can be as per the return value of @ref getJoinName.
 	 */
 	public function __get($parentField)
 	{
@@ -94,7 +94,7 @@ class Base implements \Evoke\Iface\Data
 	
 	/** Get the current record as a simple array (without iterator or class
 	 *  properties).
-	 *  \return Array The record that we are managing.
+	 *  @return Array The record that we are managing.
 	 */
 	public function getRecord()
 	{
@@ -102,7 +102,7 @@ class Base implements \Evoke\Iface\Data
 	}
 	
 	/** Return whether the data is empty or not.
-	 *  \return \bool Whether the data is empty or not.
+	 *  @return @bool Whether the data is empty or not.
 	 */
 	public function isEmpty()
 	{
@@ -110,7 +110,7 @@ class Base implements \Evoke\Iface\Data
 	}
    
 	/** Set the data that we are managing.
-	 *  @param \array The data we want to manage.
+	 *  @param @array The data we want to manage.
 	 */
 	public function setData(Array $data)
 	{
@@ -165,7 +165,7 @@ class Base implements \Evoke\Iface\Data
 	}
 
 	/** Return whether there are still data records to iterate over.
-	 *  \return \bool Whether the current data record is valid.
+	 *  @return @bool Whether the current data record is valid.
 	 */
 	public function valid()
 	{
@@ -192,7 +192,7 @@ class Base implements \Evoke\Iface\Data
 
 	/** We are required to make these available to complete the interface,
 	 *  but we don't want the element to change, so this should never be called.
-	 *  \return Throws an exception.
+	 *  @return Throws an exception.
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -203,7 +203,7 @@ class Base implements \Evoke\Iface\Data
 
 	/** We are required to make these available to complete the interface,
 	 *  but we don't want the element to change, so this should never be called.
-	 *  \return Throws an exception.
+	 *  @return Throws an exception.
 	 */
 	public function offsetUnset($offset)
 	{
@@ -218,7 +218,7 @@ class Base implements \Evoke\Iface\Data
 
 	/** Get the collision free setup so that inherited classes don't have to
 	 *  refer to $this->collisionFreeSetup.
-	 *  \return \array The value of $this->collisionFreeSetup
+	 *  @return @array The value of $this->collisionFreeSetup
 	 */
 	protected function getSetup()
 	{
@@ -249,8 +249,8 @@ class Base implements \Evoke\Iface\Data
 	 *  this object.  The joint data is a Data object and its name should match
 	 *  the standard naming of our objects (lowerCamelCase) and not contain the
 	 *  final ID which is not needed.
-	 *  @param parentField \string The parent field for the joint data.
-	 *  \return \string The reference name.
+	 *  @param parentField @string The parent field for the joint data.
+	 *  @return @string The reference name.
 	 */
 	private function getJoinName($parentField)
 	{

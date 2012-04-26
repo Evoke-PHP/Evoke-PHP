@@ -2,10 +2,10 @@
 namespace Evoke\Core\Writer;
 
 /// abstract Writer.
-abstract class Base implements \Evoke\Core\Iface\Writer
+abstract class Base implements \Evoke\Iface\Core\Writer
 {
 	/** @property $buffer
-	 *  \string The buffer that holds the text that has been written ready for
+	 *  @string The buffer that holds the text that has been written ready for
 	 *  output.
 	 */
 	protected $buffer;
@@ -40,7 +40,7 @@ abstract class Base implements \Evoke\Core\Iface\Writer
 	}
 	
 	/** Write data into the buffer.
-	 *  @param data \mixed The data to write into the buffer.
+	 *  @param data @mixed The data to write into the buffer.
 	 */
 	abstract public function write($data);
 }

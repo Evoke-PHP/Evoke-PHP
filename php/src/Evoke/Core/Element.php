@@ -8,7 +8,7 @@ namespace Evoke\Element;
  *        2 => Options);
  *  \endverbatim
  */
-class Base implements \Evoke\Core\Iface\Element
+class Base implements \Evoke\Iface\Core\Element
 {
 	/** @property $attribs
 	 *  \array The default attributes for the element.

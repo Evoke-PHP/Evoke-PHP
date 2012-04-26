@@ -40,7 +40,7 @@ namespace Evoke\Core;
  *
  *  ## Object with Concrete Typehinted Dependencies ##
  *
- *  \code
+ *  @code
  *  class Concrete
  *  {
  *      // Cement, Water, Sand and Gravel are real (concrete) objects.
@@ -63,7 +63,7 @@ namespace Evoke\Core;
  *      'Concrete',
  *      array('Grey_Gravel_For_Mixing' => $specialGravel,
  *            'Water'                  => $specialWater)); 
- *  \endcode
+ *  @endcode
  *
  *  Observe how we pass in dependencies using the second argument to make.  The
  *  Pascal_Case from the array is converted to camelCase to match the name of
@@ -73,7 +73,7 @@ namespace Evoke\Core;
  *
  *  ## Object with Scalars ##
  *
- *  \code
+ *  @code
  *  namespace Weight;
  *
  *  class Scale
@@ -85,11 +85,11 @@ namespace Evoke\Core;
  *  // Injection of a scalar value! (This also works in combination with other
  *  // dependencies).
  *  $provider->make('\Weight\Scale', array('Weight_Limit' => 50));
- *  \endcode
+ *  @endcode
  *
  *  ## Object with Interfaces ##
  *
- *  \code
+ *  @code
  *  class UI
  *  {
  *      public function __construct(\Evoke\Iface\User        $user,
@@ -99,7 +99,7 @@ namespace Evoke\Core;
  *  // Injection of interfaces!?! (Using a default conversion to a concrete).
  *  $provider->make(
  *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
- *  \endcode
+ *  @endcode
  *
  *  We can even inject interfaces!?!  We have a default conversion that renames
  *  the interface by replacing \Iface\ with \.  So, \Evoke\User is automatically
@@ -107,17 +107,17 @@ namespace Evoke\Core;
  *  undesirable class which we pass in manually.
  *
  */
-class Provider implements Iface\Provider
+class Provider implements \Evoke\Iface\Core\Provider
 {
 	/** @property $reflections
-	 *  The cached class and parameter reflections for classes.
+	 *  array The cached class and parameter reflections for classes.
 	 */
 	protected static $reflections = array();
 
 	/** @property $shared
-	 *  The store of shared classes (grouped by class and parameters).  If the
-	 *  same request to make an object of the class is received with the same
-	 *  parameters then the stored shared class shall be returned.
+	 *  @array The store of shared classes (grouped by class and parameters).
+	 *  If the same request to make an object of the class is received with the
+	 *  same parameters then the stored shared class shall be returned.
 	 */
 	protected static $shared = array();
 
@@ -132,8 +132,9 @@ class Provider implements Iface\Provider
 	 *  This makes it easy to test your code as it is not tightly bound to the
 	 *  objects that it depends on.
 	 *
-	 *  @param className \string Classname, including namespace.
-	 *  @param \array  params    Construction parameters.  Only the parameters
+	 *  @param className @string Classname, including namespace.
+	 *
+	 *  @param params    @array  Construction parameters.  Only the parameters
 	 *  that cannot be lazy loaded (scalars with no default or interfaces that
 	 *  have no corresponding concrete object with the mapped classname) need to
 	 *  be passed.
@@ -189,7 +190,7 @@ class Provider implements Iface\Provider
 
 	            // If we have an interface then try using the default classname
 	            // conversion.
-	            if ($depClass->isInterface())
+		        if (isset($depClass) && $depClass->isInterface())
 	            {
 		            $dependencies[] = $this->make(
 			            str_replace('\Iface\\', '\\', $depClass->getName()));
@@ -219,7 +220,7 @@ class Provider implements Iface\Provider
 	/** Set the specified class to be shared by the Provider.  The make method
 	 *  will return a shared object for this class while the class remains
 	 *  shared.
-	 *  @param className \string  Classname (including namespace).
+	 *  @param className @string  Classname (including namespace).
 	 */
 	public function share($className)
 	{
@@ -231,7 +232,7 @@ class Provider implements Iface\Provider
 
 	/** Stop the class from being shared by the Provider, forcing a new object
 	 *  to be created for the class each time it is made using make.
-	 *  @param className \string The classname to unshare.
+	 *  @param className @string The classname to unshare.
 	 */
 	public function unshare($className)
 	{
@@ -243,7 +244,7 @@ class Provider implements Iface\Provider
 	/*********************/
 
 	/** Reflect the class, storing it in the reflections array.
-	 *  @param className \string The full classname (including the namespace).
+	 *  @param className @string The full classname (including the namespace).
 	 */
 	protected function reflect($className)
 	{
@@ -260,8 +261,9 @@ class Provider implements Iface\Provider
 	/* Private Methods */
 	/*******************/
 
-	/** Convert an array of keys in pascal to camelCase.
-	 *  @param pascalArr \array The array to convert.
+	/** Convert an array with keys in pascal to the same array, but with the
+	 *  keys in camelCase.
+	 *  @param pascalArr @array The array to convert.
 	 */
 	private function pascalToCamel(Array $pascalArr)
 	{

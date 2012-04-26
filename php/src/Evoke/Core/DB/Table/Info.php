@@ -1,7 +1,10 @@
 <?php
 namespace Evoke\Core\DB\Table;
+
+use Evoke\Iface\Core as ICore;
+
 /// Info provides an interface to gather information about a DB table.
-class Info implements \Evoke\Core\Iface\Validity
+class Info implements \Evoke\ICore\Validity
 { 
 	/** @property $createInfo
 	 *  The create information \string for the database table.
@@ -33,47 +36,36 @@ class Info implements \Evoke\Core\Iface\Validity
 	 */
 	private $requiredFields;
 
-	/** @property $sQL
+	/** @property $sql
 	 *  SQL \object
 	 */
-	protected $sQL;
+	protected $sql;
 
 	/** @property $tableName
 	 *  The table name \string for the table we are retrieving information for.
 	 */
 	protected $tableName;
    
-	public function __construct(Array $setup=array())
+	public function __construct(Icore\DB\SQL      $sql,
+	                            ICore\MessageTree $failures,
+	                            /* String */      $tableName)
 	{
-		$setup += array('Failures'   => NULL,
-		                'SQL'        => NULL,
-		                'Table_Name' => NULL);
-
-		if (!$failures instanceof \Evoke\Core\MessageArray)
+		if (!is_string($tableName))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Failures');
-		}
-
-		if (!$sQL instanceof \Evoke\Core\DB\SQL)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs SQL');
-		}
-      
-		if (!isset($tableName))
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Table_Name');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires tableName as string');
 		}
 
 		$this->failures  = $failures;
-		$this->sQL       = $sQL;
+		$this->sql       = $sql;
 		$this->tableName = $tableName;
       
-		$this->createInfo = $this->sQL->getSingleValue(
+		$this->createInfo = $this->sql->getSingleValue(
 			'SHOW CREATE TABLE ' . $this->tableName,
 			array(),
 			1);
       
-		$this->description = $this->sQL->getAssoc('DESCRIBE ' . $this->tableName);
+		$this->description = $this->sql->getAssoc('DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
 		$this->calculateRequiredFields();

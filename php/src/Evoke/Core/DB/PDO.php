@@ -2,29 +2,31 @@
 namespace Evoke\Core\DB;
 
 /// PDO wrapper class to ensure DB implements the Evoke Core DB interface.
-class PDO extends \PDO implements \Evoke\Core\Iface\DB
+class PDO extends \PDO implements \Evoke\Iface\Core\DB
 {
-	public function __construct(Array $setup)
+	public function __construct(
+		/* String */ $dsn,
+		/* String */ $password,
+		/* String */ $username,
+		Array        $options=array(
+			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION))
 	{
-		$setup += array(
-			'DSN'      => NULL,
-			'Options'  => array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION),
-			'Password' => NULL,
-			'Username' => NULL);
-
-		if (!isset($dSN))
+		if (!is_string($dsn))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires DSN');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires dsn as string');
 		}
 
-		if (!isset($password))
+		if (!is_string($password))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Password');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires password as string');
 		}
 
-		if (!isset($username))
+		if (!is_string($username))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Username');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires username as string');
 		}
 
 		parent::__construct($dSN,

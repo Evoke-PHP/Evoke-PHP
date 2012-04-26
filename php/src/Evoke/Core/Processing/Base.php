@@ -1,8 +1,11 @@
 <?php
 namespace Evoke\Core\Processing;
+
+use Evoke\Iface\Core as ICore;
+
 /** Processing Base Class
  *  This handles the routing of request information to processing callbacks
- *  via \ref Event_Manager::notify.  It is de-coupled from the request by
+ *  via @ref Event_Manager::notify.  It is de-coupled from the request by
  *  the abstract method which gets the request data.  This allows the same
  *  processing to be performed for $_GET, $_POST or other forms of request
  *  that you may receive.
@@ -12,54 +15,60 @@ namespace Evoke\Core\Processing;
  *  correct processing.  The use of request identifiers allows us to match the
  *  keys from the request and notify for the specific processing required.
  */
-abstract class Base implements \Evoke\Core\Iface\Processing
+abstract class Base implements ICore\Processing
 {
 	/** @property $eventManager
-	 *  EventManager \object
+	 *  EventManager @object
 	 */
 	protected $eventManager;
 
 	/** @property $eventPrefix
-	 *  \string Prefix to the event notification.
+	 *  @string Prefix to the event notification.
 	 */
 	protected $eventPrefix;
 
 	/** @property $matchRequired
-	 *  \bool Whether a key is required to match for processing.
+	 *  @bool Whether a key is required to match for processing.
 	 */
 	protected $matchRequired;
 
 	/** @property $requestKeys
-	 *  \array Keys that indicate the type of request received.
+	 *  @array Keys that indicate the type of request received.
 	 */
 	protected $requestKeys;
 
 	/** @property $uniqueMatch
-	 *  \bool Whether only a single request type can be processed at a time.
+	 *  @bool Whether only a single request type can be processed at a time.
 	 */
 	protected $uniqueMatch;
 
-	public function __construct(Array $setup)
+	/** Construct a Processing object.
+	 *  @param eventManager  @object Event Manager object.
+	 *  @param eventPrefix   @string Event prefix for the Event Manager.
+	 *  @param requestMethod @string The request method that we are processing.
+	 *  @param requestKeys   @array  The request keys we are processing.
+	 *  @param matchRequired @bool   Whether a match is required.
+	 *  @param uniqueMatch   @bool   Whether a unique match is required.
+	 */
+	public function __construct(ICore\EventManager $eventManager,
+	                            /* String */       $eventPrefix,
+	                            /* String */       $requestMethod,
+	                            Array              $requestKeys,
+	                            /* Bool   */       $matchRequired = true,
+	                            /* Bool   */       $uniqueMatch   = true)
 	{
-		$setup += array('Event_Manager'   => NULL,
-		                'Event_Prefix'    => NULL,
-		                'Match_Required'  => true,
-		                'Request_Keys'    => array(),
-		                'Request_Method'  => '',
-		                'Unique_Match'    => true);
-      
-		if (!$eventManager instanceof \Evoke\Core\EventManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Event_Manager');
-		}
-
 		if (!is_string($eventPrefix))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Event_Prefix as string');
+				__METHOD__ . ' requires eventPrefix as string');
 		}
 
+		if (!is_string($requestMethod))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires requestMethod as string');
+		}
+		
 		$this->eventManager  = $eventManager;
 		$this->eventPrefix   = $eventPrefix;
 		$this->matchRequired = $matchRequired;

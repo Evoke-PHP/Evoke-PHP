@@ -85,10 +85,10 @@ class RegexTwoLevel extends Base
 	 *  @param authoritative \bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
-	public function __construct(/*s*/ $match,
-	                            Array $classname,
-	                            Array $params,
-	                            /*b*/ $authoritative=false)
+	public function __construct(/* String */ $match,
+	                            Array        $classname,
+	                            Array        $params,
+	                            /* Bool   */ $authoritative = false)
 	{
 		if (!is_string($match))
 		{

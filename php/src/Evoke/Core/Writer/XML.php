@@ -11,7 +11,7 @@ class XML extends XMLBase
 	/******************/
 
 	/** Write the DTD, html head and start the body of the document.
-	 *  @param setup \array The setup for the start of the document.
+	 *  @param setup @array The setup for the start of the document.
 	 */
 	public function writeStart()
 	{

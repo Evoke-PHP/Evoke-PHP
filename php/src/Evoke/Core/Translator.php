@@ -1,7 +1,9 @@
 <?php
 namespace Evoke\Core;
 
-class Translator implements Iface\Translator
+use Evoke\Iface\Core as ICore;
+
+class Translator implements ICore\Translator
 {
 	/** @property $defaultLanguage
 	 *  The default language to use for translations.
@@ -9,75 +11,64 @@ class Translator implements Iface\Translator
 	protected $defaultLanguage;
 
 	/** @property $langKey
-	 *  The key that is used in HTTP queries for the language parameter.
+	 *  @string The key that is used in HTTP queries for the language parameter.
 	 */
 	protected $langKey;
 
 	/** @property $language
-	 *  The current language that the translator is set to.
+	 *  @string The current language that the translator is set to.
 	 */
 	private $language;
 	
 	/** @property $languages
-	 *  The languages that the translator supports.
+	 *  @array The languages that the translator supports.
 	 */
 	protected $languages;
 
 	/** @property $request
-	 *  Request \object
+	 *  @object Request
 	 */
 	protected $request;
 
 	/** @property $sessionManager
-	 *  SessionManager \object
+	 *  @object SessionManager
 	 */
 	protected $sessionManager;
 
 	/** @property $translationArr
-	 *  \array The array of translations.
+	 *  @array The array of translations.
 	 */
 	protected $translations;
 
 	/** @property $translationsFilename
-	 *  \string The filename for the file that holds the translations.
+	 *  @string The filename for the file that holds the translations.
 	 */
 	private $translationsFilename;
 
-	public function __construct(Array $setup=array())
+	public function __construct(
+		ICore\HTTP\Request   $request,
+		ICore\SessionManager $sessionManager,
+		/* String */         $defaultLanguage,
+		/* String */         $translationsFilename,
+		/* String */         $langKey = 'l')
 	{
-		$setup += array('Default_Language'      => NULL,
-		                'Lang_Key'              => 'l',
-		                'Request'               => NULL,
-		                'Session_Manager'       => NULL,
-		                'Translations_Filename' => NULL);
-
-		if (!isset($defaultLanguage))
+		if (!is_string($defaultLanguage))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Default_Language');
-		}
-
-		if (!$request instanceof \Evoke\Core\Iface\HTTP\Request)
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Request');
-		}
-
-		if (!$sessionManager instanceof SessionManager)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs SessionManager');
+				__METHOD__ . ' requires defaultLanguage as string');
 		}
 
 		if (!is_string($translationsFilename))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Filename');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires translationsFilename');
 		}
 
-		$this->defaultLangauge 		 = $defaultLanguage;
-		$this->langKey         		 = $langKey;
+		$this->defaultLangauge 		= $defaultLanguage;
+		$this->langKey         		= $langKey;
 		$this->language             = NULL;
 		$this->request              = $request;
-		$this->sessionManager  		 = $sessionManager;
+		$this->sessionManager  		= $sessionManager;
 		$this->translationsFilename = $translationsFilename;
 
 		// Update the translations and langauges.

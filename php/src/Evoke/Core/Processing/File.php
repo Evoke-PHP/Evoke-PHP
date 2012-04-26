@@ -1,17 +1,41 @@
 <?php
 namespace Evoke\Core\Processing;
 
+use Evoke\Iface\Core as ICore;
+
 class File extends Base
-{ 
-	public function __construct(Array $setup)
+{
+	/** @property $requestPrefix
+	 *  @string Prefix to the file request.
+	 */
+	protected $requestPrefix;
+
+	/** @property $requestSeparator
+	 *  @string Separator between the request prefix and the file specifier.
+	 */
+	protected $requestSeparator;
+
+	/** Construct a File processing object.
+	 *  @param eventManager  	@object Event Manager object.
+	 *  @param requestKeys   	@array  The request keys we are processing.
+	 *  @param requestPrefix 	@string The prefix for the file request.
+	 *  @param requestSeparator @string Separator between the prefix and file.
+	 *  @param matchRequired 	@bool   Whether a match is required.
+	 *  @param uniqueMatch   	@bool   Whether a unique match is required.
+	 */
+	public function __construct(
+		ICore\EventManager $eventManager,
+		Array              $requestKeys,
+		/* String */       $requestPrefix    = 'Input_File',
+		/* String */       $requestSeparator = '_',
+		/* Bool   */       $matchRequired    = true,
+		/* Bool   */       $uniqueMatch      = true)
 	{
-		parent::__construct(
-			array_merge(array('Event_Prefix'      => 'File.',
-			                  'Match_Required'    => false,
-			                  'Request_Method'    => 'FILE',
-			                  'Request_Prefix'    => 'Input_File',
-			                  'Request_Separator' => '_'),
-			            $setup));
+		parent::__construct($eventManager, 'File.', 'FILE', $requestKeys,
+		                    $matchRequired, $uniqueMatch);
+
+		$this->requestPrefix    = $requestPrefix;
+		$this->requestSeparator = $requestSeparator;
 	}
 
 	/******************/
