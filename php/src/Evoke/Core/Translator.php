@@ -30,11 +30,6 @@ class Translator implements ICore\Translator
 	 */
 	protected $request;
 
-	/** @property $sessionManager
-	 *  @object SessionManager
-	 */
-	protected $sessionManager;
-
 	/** @property $translationArr
 	 *  @array The array of translations.
 	 */
@@ -47,7 +42,6 @@ class Translator implements ICore\Translator
 
 	public function __construct(
 		ICore\HTTP\Request   $request,
-		ICore\SessionManager $sessionManager,
 		/* String */         $defaultLanguage,
 		/* String */         $translationsFilename,
 		/* String */         $langKey = 'l')
@@ -68,7 +62,6 @@ class Translator implements ICore\Translator
 		$this->langKey         		= $langKey;
 		$this->language             = NULL;
 		$this->request              = $request;
-		$this->sessionManager  		= $sessionManager;
 		$this->translationsFilename = $translationsFilename;
 
 		// Update the translations and langauges.
@@ -123,14 +116,13 @@ class Translator implements ICore\Translator
 	 *
 	 *  -# The value passed to the function.
 	 *  -# URI Query parameter e.g ?l=EN
-	 *  -# Session containing the previously set language.
 	 *  -# HTTP Request AcceptLanguage header.
 	 *  -# The Default Language the Translator was constructed with.
 	 *  -# The order of the languages that the Translator has translations for.
 	 *
 	 *  These sources have the priority as in the above list for setting the
 	 *  language.  The highest priority source with a language that exists within
-	 *  the translator will be set (and stored in the session for future use).
+	 *  the translator will be set.
 	 *
 	 *  @param lang \string The language to set (defaults to NULL).  If no
 	 *  language is passed then the above sources should be used to determine the
@@ -155,24 +147,12 @@ class Translator implements ICore\Translator
 			}
 			
 			$this->language = $lang;
-			$this->sessionManager->set($this->langKey, $lang);
 			return;
 		}
 
 		if ($this->request->issetQueryParam($this->langKey))
 		{
 			$lang = $this->request->getQueryParam($this->langKey);
-
-			if ($this->isValidLanguage($lang))
-			{
-				$this->language = $lang;
-				return;
-			}
-		}
-
-		if ($this->sessionManager->issetKey($this->langKey))
-		{
-			$lang = $this->sessionManager->get($this->langKey);
 
 			if ($this->isValidLanguage($lang))
 			{
