@@ -23,17 +23,7 @@ class Bootstrap
 
 	public function initializeAutoload()
 	{
-		require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Iface' .
-			DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Init' .
-			DIRECTORY_SEPARATOR . 'Handler.php';
-      
-		require_once __DIR__ . DIRECTORY_SEPARATOR . 'Handler' .
-			DIRECTORY_SEPARATOR . 'Autoload.php';
-
-		$autoload = $this->provider->make(
-			__NAMESPACE__ . '\Handler\Autoload',
-			array('Base_Dir'  => dirname(dirname(dirname(__DIR__))),
-			      'Namespace' => 'Evoke\\'));
+		$autoload = $this->buildAutoload();
 		$autoload->register();
 	}
    
@@ -99,16 +89,38 @@ class Bootstrap
 	/* Protected Methods */
 	/*********************/
 
+	protected function buildAutoload()
+	{
+		$DS = DIRECTORY_SEPARATOR;
+		
+		require_once dirname(dirname(__DIR__)) . $DS . 'Iface' . $DS . 'Core' .
+			$DS . 'Init' . $DS . 'Handler.php';
+		require_once __DIR__ . $DS . 'Handler' . $DS . 'Autoload.php';
+		$autoloadClass = __NAMESPACE__ . '\Handler\Autoload';
+
+		return new $autoloadClass(
+			dirname(dirname(dirname(__DIR__))), // baseDir
+			'Evoke\\');                         // namespace
+	}
+
 	/** Build the Provider for dependency injection.
 	 */
 	protected function buildProvider()
 	{
-		require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Iface' .
-			DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'Provider.php';
-		require_once dirname(__DIR__) . DIRECTORY_SEPARATOR .
-			'Provider.php';
+		$DS = DIRECTORY_SEPARATOR;
 
-		return new \Evoke\Core\Provider;
+		$ICore = dirname(dirname(__DIR__)) . $DS . 'Iface' . $DS . 'Core' . $DS;
+		
+		require_once $ICore . 'Provider.php';
+		require_once $ICore . 'Provider' . $DS . 'Iface' . $DS . 'Router.php';
+		require_once $ICore . 'Provider' . $DS . 'Iface' . $DS . 'Rule.php';
+		
+		require_once dirname(__DIR__) . $DS . 'Provider.php';
+
+		$interfaceRouter = new \Evoke\Core\Provider\Iface\Router;
+		$interfaceRouter->addRule(
+			new \Evoke\Core\Provider\Iface\Rule\StrReplace('\Iface\\', '\\'));
+		return new \Evoke\Core\Provider($interfaceRouter);
 	}
 }
 // EOF

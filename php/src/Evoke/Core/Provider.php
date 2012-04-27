@@ -112,12 +112,12 @@ use Evoke\Iface\Core as ICore;
  *  undesirable class which we pass in manually.
  *
  */
-class Provider implements \Evoke\ICore\Provider
+class Provider implements ICore\Provider
 {
 	/** @property $interfaceRouter
 	 *  @object interfaceRouter
 	 */
-	protected static $interfaceRouter;
+	protected $interfaceRouter;
 	
 	/** @property $reflections
 	 *  @array The cached class and parameter reflections for classes.
@@ -162,7 +162,7 @@ class Provider implements \Evoke\ICore\Provider
 	 */
 	public function make($className, Array $params=array())
 	{
-		$params = $this->pascalToCamel($params);
+		$passedParameters = $this->pascalToCamel($params);
 
 		// Is this class a shared service.
 		if (isset(self::$shared[$className]))
@@ -191,49 +191,23 @@ class Provider implements \Evoke\ICore\Provider
 
         // Use the passed parameters, falling back on the reflected parameters
 		// for automatic lazy injection to create all of the dependencies.
-	    $dependencies = array();
+	    $deps = array();
         
 	    foreach (self::$reflections[$className]['Params'] as $reflectionParam)
         {
-            if (isset($params[$reflectionParam->name]))
-            {
-	            $dependencies[] = $params[$reflectionParam->name];
-            }
-            elseif ($reflectionParam->isDefaultValueAvailable())
-            {
-                $dependencies[] = $reflectionParam->getDefaultValue();
-            }
-            else
-            {
-	            $depClass = $reflectionParam->getClass();
-
-	            // If we have an interface then try using the default classname
-	            // conversion.
-		        if (isset($depClass) && $depClass->isInterface())
-	            {
-		            $dependencies[] = $this->make(
-			            str_replace('\Iface\\', '\\', $depClass->getName()));
-	            }
-	            else
-	            {
-		            $dependencies[] = isset($depClass)
-			            ? $this->make($depClass->name)
-			            : NULL;
-	            }
-            }
+	        $deps[] = $this->getDependency($reflectionParam, $passedParameters);
         }
 
-	    $object = self::$reflections[$className]['Class']->newInstanceArgs(
-		    $dependencies);
+	    $obj = self::$reflections[$className]['Class']->newInstanceArgs($deps);
 	    
 	    // If this is a shared class then we are creating it for the first time.
 	    if (isset(self::$shared[$className]))
 	    {
-		    self::$shared[$className][] = array('Object' => $object,
-		                                        'Params' => $params);
+		    self::$shared[$className][] = array('Object' => $obj,
+		                                        'Params' => $passedParameters);
 	    }
 	    
-        return $object;
+        return $obj;
 	}
 
 	/** Set the specified class to be shared by the Provider.  The make method
@@ -262,6 +236,64 @@ class Provider implements \Evoke\ICore\Provider
 	/* Protected Methods */
 	/*********************/
 
+	/** Get the dependency for the currently refleced parameter.
+	 *  @param reflectedParam   @object The currently reflected parameter.
+	 *  @param passedParameters @array  Hard-coded values supplied by the user
+	 *                                  when calling make.
+	 *  @return @mixed An injected dependency.
+	 */
+	protected function getDependency(\ReflectionParameter $reflectionParam,
+	                                 Array                $passedParameters)
+	{
+		if (isset($passedParameters[$reflectionParam->name]))
+		{
+			// Use what the user passed us.
+			return $passedParameters[$reflectionParam->name];
+		}
+
+		if ($reflectionParam->isDefaultValueAvailable())
+		{
+			// Use a default value.
+			return $reflectionParam->getDefaultValue();
+		}
+
+		$depClass = $reflectionParam->getClass();
+
+		if (!isset($depClass))
+		{
+			// Use NULL for something that we cannot reflect upon to get the
+			// required details to do an automatic injection.
+			return NULL;
+		}
+
+		if ($depClass->isInstantiable())
+		{
+			// Make an instantiable object.
+			return $this->make($depClass->name);
+		}
+
+		// Should we try converting it from an interface to a concrete?
+		if ($depClass->isInterface())
+		{
+			$concreteClass =
+				$this->interfaceRouter->route($depClass->name);
+
+			if ($concreteClass != false)
+			{
+				// Make the concrete class that we were routed to.
+				return $this->make($concreteClass);
+			}
+		}
+
+		/** \todo Investigate, should an exception be thrown here?  It is
+		 *  likely that a required scalar parameter was not passed or an
+		 *  interface without a route to a concrete class was encountered.
+		 */		
+		// Use NULL, why not?  What could possibly go wrong?  I'd be expecting
+		// to catch exceptions from the constructor when we reach here.
+		return NULL;
+	}
+	
 	/** Reflect the class, storing it in the reflections array.
 	 *  @param className @string The full classname (including the namespace).
 	 */
