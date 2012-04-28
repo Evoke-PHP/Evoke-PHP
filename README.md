@@ -4,6 +4,12 @@ _Bring out your best ideas_
 
 _Evoke PHP_ is a library of independent objects that forms a framework for web development.  _Built for developers_, Evoke PHP provides you with useful objects whilst allowing you to control every aspect of your development.
 
+###Status: ALPHA###
+Evoke PHP is usable but still under devlopment.
+Parts of the API are changing.
+No unit testing has been done.
+Please contact me for guidance on using Evoke (see email below).
+
 ## Features
 * PHP 5.3+
 * Pure OO
