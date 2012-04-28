@@ -195,7 +195,7 @@ class Base implements Iface\Data
 
 	/** We are required to make these available to complete the interface,
 	 *  but we don't want the element to change, so this should never be called.
-	 *  @return Throws an exception.
+	 *  @throws RuntimeException *** ALWAYS ***
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -206,7 +206,7 @@ class Base implements Iface\Data
 
 	/** We are required to make these available to complete the interface,
 	 *  but we don't want the element to change, so this should never be called.
-	 *  @return Throws an exception.
+	 *  @throws RuntimeException *** ALWAYS ***
 	 */
 	public function offsetUnset($offset)
 	{

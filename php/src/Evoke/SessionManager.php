@@ -1,8 +1,6 @@
 <?php
 namespace Evoke;
 
-use Evoke\Iface;
-
 /// Session_Manager provide management of a session domain.
 class SessionManager implements Iface\SessionManager
 {
