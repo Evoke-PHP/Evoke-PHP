@@ -113,31 +113,34 @@ namespace Evoke;
 class Provider implements Iface\Provider
 {
 	/** @property $interfaceRouter
-	 *  @object interfaceRouter
+	 *  @object Interface Router
 	 */
 	protected $interfaceRouter;
 	
-	/** @property $reflections
-	 *  @array The cached class and parameter reflections for classes.
+	/** @property $reflectionCache
+	 *  @object  Reflection Cache
 	 */
-	protected static $reflections = array();
+	protected $reflectionCache;
 
-	/** @property $shared
-	 *  @array The store of shared classes (grouped by class and parameters).
-	 *  If the same request to make an object of the class is received with the
-	 *  same parameters then the stored shared class shall be returned.
+	/** @property $services
+	 *  @object Services
 	 */
-	protected static $shared = array();
+	protected $services;
 
 	/** Construct a Provider object.
-	 *  @param $interfaceRouter @object InterfaceRouter
+	 *  @param reflectionCache @object Reflection Cache
+	 *  @param interfaceRouter @object Interface Router
+	 *  @param services        @object Services
 	 */
-	public function __construct(Iface\Provider\Iface\Router $interfaceRouter)
+	public function __construct(Iface\Cache                 $reflectionCache,
+	                            Iface\Provider\Iface\Router $interfaceRouter,
+	                            Iface\Services              $services)
 	{
 		$this->interfaceRouter = $interfaceRouter;
+		$this->reflectionCache = $reflectionCache;
+		$this->services        = $services;
 	}
 
-	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -149,7 +152,7 @@ class Provider implements Iface\Provider
 	 *  This makes it easy to test your code as it is not tightly bound to the
 	 *  objects that it depends on.
 	 *
-	 *  @param className @string Classname, including namespace.
+	 *  @param classname @string Classname, including namespace.
 	 *
 	 *  @param params    @array  Construction parameters.  Only the parameters
 	 *  that cannot be lazy loaded (scalars with no default or interfaces that
@@ -158,76 +161,45 @@ class Provider implements Iface\Provider
 	 *
 	 *  @return The object that has been created.
 	 */
-	public function make($className, Array $params=array())
+	public function make($classname, Array $params=array())
 	{
 		$passedParameters = $this->pascalToCamel($params);
-
-		// Is this class a shared service.
-		if (isset(self::$shared[$className]))
-		{
-			foreach (self::$shared[$className] as $sharedEntry)
-			{
-				if ($sharedEntry['Params'] === $params)
-				{
-					return $sharedEntry['Object'];
-				}
-			}
-		}
+		$isService = $this->services->isService($classname);
 		
-		// Reflect the class if we haven't already done so.
-		if (!isset(self::$reflections[$className]))
-        {
-	        $this->reflect($className);
-        }
+		if ($isService &&
+		    $this->services->exists($classname, $passedParameters))
+		{
+			return $this->services->get($classname, $passedParameters);
+		}
 
+		$reflection = $this->getReflection($classname);
+		
         // If there is no possibility of passing parameters to the code then
         // just instantiate the object and return it.
-		if (!isset(self::$reflections[$className]['Params']))
+		if (!isset($reflection['Params']))
         {            
-	        return new $className;
+	        return new $classname;
         }
 
-        // Use the passed parameters, falling back on the reflected parameters
-		// for automatic lazy injection to create all of the dependencies.
+        // Calculate the dependencies for the object.
 	    $deps = array();
         
-	    foreach (self::$reflections[$className]['Params'] as $reflectionParam)
+	    foreach ($reflection['Params'] as $reflectionParam)
         {
 	        $deps[] = $this->getDependency($reflectionParam, $passedParameters);
         }
 
-	    $obj = self::$reflections[$className]['Class']->newInstanceArgs($deps);
+	    // Create the object.
+	    $object = $reflection['Class']->newInstanceArgs($deps);
 	    
-	    // If this is a shared class then we are creating it for the first time.
-	    if (isset(self::$shared[$className]))
+	    // If this is a service class, then we have just created it for the
+	    // first time.  Set it as the service instance.	    
+	    if ($isService)
 	    {
-		    self::$shared[$className][] = array('Object' => $obj,
-		                                        'Params' => $passedParameters);
+		    $this->services->set($classname, $passedParameters, $object);
 	    }
 	    
-        return $obj;
-	}
-
-	/** Set the specified class to be shared by the Provider.  The make method
-	 *  will return a shared object for this class while the class remains
-	 *  shared.
-	 *  @param className @string  Classname (including namespace).
-	 */
-	public function share($className)
-	{
-		if (!isset(self::$shared[$className]))
-		{
-			self::$shared[$className] = array();
-		}
-	}
-
-	/** Stop the class from being shared by the Provider, forcing a new object
-	 *  to be created for the class each time it is made using make.
-	 *  @param className @string The classname to unshare.
-	 */
-	public function unshare($className)
-	{
-		unset(self::$shared[$className]);
+        return $object;
 	}
 	
 	/*********************/
@@ -259,6 +231,10 @@ class Provider implements Iface\Provider
 
 		if (!isset($depClass))
 		{
+			/** \todo Investiage, should an exception be throw here?  It is
+			 *  likely to be an unset required scalar, so should we bail hard
+			 *  and early?
+			 */
 			// Use NULL for something that we cannot reflect upon to get the
 			// required details to do an automatic injection.
 			return NULL;
@@ -292,18 +268,34 @@ class Provider implements Iface\Provider
 		return NULL;
 	}
 	
-	/** Reflect the class, storing it in the reflections array.
-	 *  @param className @string The full classname (including the namespace).
+	/** Get the reflection for the class.
+	 *  @param classname @string The full classname (including the namespace).
+	 *  @return @mixed NULL if no reflection could be made, or an array of the
+	 *                 format:
+	 *  @code
+	 *  array('Class' =>  $reflectionClass,
+	 *        'Params' => $reflectionParams);
+	 *  @endcode
 	 */
-	protected function reflect($className)
+	protected function getReflection($classname)
 	{
-		$reflectionClass = new \ReflectionClass($className);
+		// Get the reflection using the cache if possible.
+		if ($this->reflectionCache->exists($classname))
+		{
+			return $this->reflectionCache->get($classname);
+		}
+
+		// Build the reflection.
+		$reflectionClass = new \ReflectionClass($classname);
 		$constructor = $reflectionClass->getConstructor();
-		$reflectionParams =
-			(isset($constructor) ? $constructor->getParameters() : NULL);
+		$reflectionParams = isset($constructor) ?
+			$constructor->getParameters() : NULL;
+		$reflection = array('Class'  => $reflectionClass,
+		                    'Params' => $reflectionParams);
 		
-		self::$reflections[$className] = array('Class'  => $reflectionClass,
-		                                       'Params' => $reflectionParams);		
+		$this->reflectionCache->set($classname, $reflection);			
+
+		return $reflection;
 	}
 	
 	/*******************/
