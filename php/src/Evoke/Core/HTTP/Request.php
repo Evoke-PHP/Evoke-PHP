@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\HTTP;
+namespace Evoke\HTTP;
 
 /// Provide details of the request.
-class Request implements \Evoke\Iface\Core\HTTP\Request
+class Request implements \Evoke\Iface\HTTP\Request
 {
 	/** @property $basicPatterns
 	 *  \string Regexp subpatterns to match components of the request header

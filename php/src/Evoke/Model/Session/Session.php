@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Session;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class Session extends \Evoke\Model\Base
 {
@@ -15,7 +15,7 @@ class Session extends \Evoke\Model\Base
 	 *  session we are modelling.
 	 *  @param dataPrefix \array Models return data at the specified prefix.
 	 */
-	public function __construct(ICore\SessionManager $sessionManager,
+	public function __construct(Iface\SessionManager $sessionManager,
 	                            Array                $dataPrefix = array())
 	{
 		parent::__construct($dataPrefix);

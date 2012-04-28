@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\MediaType\Rule;
+namespace Evoke\HTTP\MediaType\Rule;
 
 /// A Media Type rule that matches any media type from the accept header.
 class Any extends Base

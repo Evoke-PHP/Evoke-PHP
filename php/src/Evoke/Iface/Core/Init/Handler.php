@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface\Core\Init;
+namespace Evoke\Iface\Init;
 
 interface Handler
 { 

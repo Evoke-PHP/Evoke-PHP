@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\HTTP\URI;
+namespace Evoke\HTTP\URI;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// Receive the request and create the correct response for it.
-class Router implements ICore\HTTP\URI\Router
+class Router implements Iface\HTTP\URI\Router
 {
 	/** @property $provider
 	 *  @object Provider
@@ -25,8 +25,8 @@ class Router implements ICore\HTTP\URI\Router
 	 *  @param Provider @object Provider for creating the response.
 	 *  @param Request  @object Request object.
 	 */
-	public function __construct(ICore\Provider      $provider,
-	                            ICore\HTTP\Request  $request)
+	public function __construct(Iface\Provider      $provider,
+	                            Iface\HTTP\Request  $request)
 	{
 		$this->provider      = $provider;
 		$this->request       = $request;
@@ -39,7 +39,7 @@ class Router implements ICore\HTTP\URI\Router
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(ICore\HTTP\URI\Rule $rule)
+	public function addRule(Iface\HTTP\URI\Rule $rule)
 	{
 		$this->rules[] = $rule;
 	}

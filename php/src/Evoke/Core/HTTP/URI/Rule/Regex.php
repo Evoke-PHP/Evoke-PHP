@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI\Rule;
 
 /** A regex rule to map the uri classname and parameters.  There is a single
  *  match for the URI, with all replacements being made from this match.  If

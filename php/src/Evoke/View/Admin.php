@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class Admin extends Base
 {
@@ -15,7 +15,7 @@ class Admin extends Base
 	 *  @param editSeparately  @bool   $editSeparately
 	 */
 	public function __construct(
-		ICore\DB\Table\Info $info,
+		Iface\DB\Table\Info $info,
 		/* String */ 		$tableName,
 		/* String */ 		$pageName,
 		Array        		$recordListSetup,

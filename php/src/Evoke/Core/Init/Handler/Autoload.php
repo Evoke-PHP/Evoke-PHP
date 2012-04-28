@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Init\Handler;
+namespace Evoke\Init\Handler;
 
-class Autoload implements \Evoke\Iface\Core\Init\Handler
+class Autoload implements \Evoke\Iface\Init\Handler
 {
 	/** @property $authoritative
 	 *  Whether we have complete authority over the namespace, or we should allow

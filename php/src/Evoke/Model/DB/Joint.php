@@ -32,11 +32,11 @@ class Joint extends Base
 	 *  @param select     @array  Select statement settings.
 	 *  @param dataPrefix @array  Any prefix to offset the data with.
 	 */
-	public function __construct(Iface\Core\DB\SQL         $sql, 
-	                            /* String */              $tableName,
-	                            Iface\Core\DB\Table\Joins $joins,
-	                            Array                     $select     = array(),
-	                            Array                     $dataPrefix = array())
+	public function __construct(Iface\DB\SQL         $sql, 
+	                            /* String */         $tableName,
+	                            Iface\DB\Table\Joins $joins,
+	                            Array                $select     = array(),
+	                            Array                $dataPrefix = array())
 	{
 	   
 		if (!is_string($tableName))

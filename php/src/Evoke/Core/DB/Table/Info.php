@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\DB\Table;
+namespace Evoke\DB\Table;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// Info provides an interface to gather information about a DB table.
-class Info implements \Evoke\ICore\Validity
+class Info implements Iface\Validity
 { 
 	/** @property $createInfo
 	 *  The create information \string for the database table.
@@ -46,8 +46,8 @@ class Info implements \Evoke\ICore\Validity
 	 */
 	protected $tableName;
    
-	public function __construct(Icore\DB\SQL      $sql,
-	                            ICore\MessageTree $failures,
+	public function __construct(Iface\DB\SQL      $sql,
+	                            Iface\MessageTree $failures,
 	                            /* String */      $tableName)
 	{
 		if (!is_string($tableName))

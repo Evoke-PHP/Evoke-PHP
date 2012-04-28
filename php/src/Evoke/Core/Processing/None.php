@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Processing;
+namespace Evoke\Processing;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// A class for doing no processing.
 class None extends Base
@@ -13,7 +13,7 @@ class None extends Base
 	 *  @param uniqueMatch   @bool   Whether a unique match is required.
 	 */
 	final public function __construct(
-		ICore\EventManager $eventManager,
+		Iface\EventManager $eventManager,
 		Array              $requestKeys   = array(),
 		/* Bool   */       $matchRequired = false,
 		/* Bool   */       $uniqueMatch   = true)

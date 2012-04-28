@@ -1,9 +1,9 @@
 <?php
 namespace Evoke\View;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
-abstract class Base implements Evoke\Iface\View
+abstract class Base implements Iface\View
 {
 	/** @property $writer
 	 *  Writer \object
@@ -13,7 +13,7 @@ abstract class Base implements Evoke\Iface\View
 	/** Construct the View.
 	 *  @param Writer \object The writer object.
 	 */
-	public function __construct(ICore\Writer $writer)
+	public function __construct(Iface\Writer $writer)
 	{
 		$this->writer = $writer;
 	}

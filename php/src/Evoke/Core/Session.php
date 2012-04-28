@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
-class Session implements \Evoke\Iface\Core\Session
+class Session implements \Evoke\Iface\Session
 {
 	public function __construct()
 	{

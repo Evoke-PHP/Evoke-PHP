@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Core\Provider\Iface;
+namespace Evoke\Provider\Iface;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
-class Router implements ICore\Provider\Iface\Router
+class Router implements Iface\Provider\Iface\Router
 {
 	/** @property $rules
 	 *  @array of rules that the router uses to route.
@@ -13,7 +13,7 @@ class Router implements ICore\Provider\Iface\Router
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(ICore\Provider\Iface\Rule $rule)
+	public function addRule(Iface\Provider\Iface\Rule $rule)
 	{
 		$this->rules[] = $rule;
 	}

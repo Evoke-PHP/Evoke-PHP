@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\Init\Handler;
+namespace Evoke\Init\Handler;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// The system exception handler.
-class Exception implements ICore\Init\Handler
+class Exception implements Iface\Init\Handler
 {
 	/** @property $detailedInsecureMessage
 	 *  \bool Whether to display a detailed insecure message.
@@ -29,8 +29,8 @@ class Exception implements ICore\Init\Handler
 	
 	public function __construct(/* Bool */         $detailedInsecureMessage,
 	                            /* Int  */         $maxLengthExceptionMessage,
-	                            ICore\EventManager $eventManager,
-	                            ICore\Writer       $writer)
+	                            Iface\EventManager $eventManager,
+	                            Iface\Writer       $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
 		{

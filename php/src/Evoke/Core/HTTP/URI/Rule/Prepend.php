@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI\Rule;
 
 /** A rule to prepend a string to the classname.
  *  No parameters are matched by this class.

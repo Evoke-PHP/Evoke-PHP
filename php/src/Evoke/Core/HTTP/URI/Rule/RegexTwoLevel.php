@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI\Rule;
 
 /** A powerful rule based on regular expressions for refining the URI to a
  *  classname and parameters that will respond (generally a Controller).

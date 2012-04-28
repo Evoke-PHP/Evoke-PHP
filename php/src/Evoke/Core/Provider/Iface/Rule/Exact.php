@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\Provider\Iface\Rule;
+namespace Evoke\Provider\Iface\Rule;
 
 /** A Provider interface routing rule that matches the exact interface name and
  *  converts it to a specific concrete classname.
  */
-class Exact implements \Evoke\Iface\Core\Provider\Iface\Rule
+class Exact implements \Evoke\Iface\Provider\Iface\Rule
 {
 	/** @property $classname
 	 *  @string The exact classname that this rule converts to.

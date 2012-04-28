@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\Writer;
+namespace Evoke\Writer;
 
 /// Base class for writing XML elements.
-abstract class XMLBase implements \Evoke\Iface\Core\Writer
+abstract class XMLBase implements \Evoke\Iface\Writer
 {
 	/** @property $language
 	 *  @string The language of the XML being written.

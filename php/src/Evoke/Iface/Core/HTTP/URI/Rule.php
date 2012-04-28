@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Iface\Core\HTTP\URI;
+namespace Evoke\Iface\HTTP\URI;
 
-interface Rule extends \Evoke\Iface\Core\Rule
+interface Rule extends \Evoke\Iface\Rule
 {
 	/** Get the classname.
 	 *  @param uri \string The URI to get the classname from.

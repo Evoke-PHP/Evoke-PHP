@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// Session_Manager provide management of a session domain.
-class SessionManager implements ICore\SessionManager
+class SessionManager implements Iface\SessionManager
 {
 	/** @property $domain
 	 *  @array The domain within the session that we are managing.  This is an
@@ -18,7 +18,7 @@ class SessionManager implements ICore\SessionManager
 	 */
 	protected $session;
    
-	public function __construct(ICore\Session $session,
+	public function __construct(Iface\Session $session,
 	                            Array         $domain)
 	{
 		$this->domain  = $domain;

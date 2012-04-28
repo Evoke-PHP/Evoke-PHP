@@ -1,8 +1,8 @@
 <?php
 namespace Evoke\Controller;
 
-use Evoke\Iface\Core as ICore;
-use Evoke\Core\HTTP\MediaType;
+use Evoke\Iface;
+use Evoke\HTTP\MediaType;
 
 abstract class Base
 {
@@ -28,9 +28,9 @@ abstract class Base
 	 *  @param Response @object Response object.
 	 */
 	public function __construct(Array               $params,
-	                            ICore\Provider      $provider,
-	                            ICore\HTTP\Request  $request,
-	                            ICore\HTTP\Response $response)
+	                            Iface\Provider      $provider,
+	                            Iface\HTTP\Request  $request,
+	                            Iface\HTTP\Response $response)
 	{
 		$this->params   = $params;
 		$this->provider = $provider;
@@ -81,7 +81,7 @@ abstract class Base
 
 		
 		$this->writer = $this->provider->make(
-			'Evoke\Core\Writer\\' . $outputFormat);
+			'Evoke\Writer\\' . $outputFormat);
 		$this->response->setContentType($contentType);
 
 		// Perform any content agnostic initialization of the reponse.
@@ -102,11 +102,11 @@ abstract class Base
 	 */
 	protected function buildMediaTypeRouter()
 	{		
-		$router = $this->provider->make('Evoke\Core\HTTP\MediaType\Router',
+		$router = $this->provider->make('Evoke\HTTP\MediaType\Router',
 		                                array('Request' => $this->request));
 		$router->addRule(
 			$this->provider->make(
-				'Evoke\Core\HTTP\MediaType\Rule\Exact',
+				'Evoke\HTTP\MediaType\Rule\Exact',
 				array('Output_Format' => 'HTML5',
 				      'Match'         => array('Subtype' => '*',
 				                               'Type'    => '*'))));

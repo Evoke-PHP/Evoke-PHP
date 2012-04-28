@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 /// \todo Create a recursive iterator for using the MessageTree.
 
 /// A MessageTree with title and text at each node.

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Writer;
+namespace Evoke\Writer;
 /** XHTML Writer
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.

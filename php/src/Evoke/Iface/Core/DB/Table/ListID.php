@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface\Core\DB\Table;
+namespace Evoke\Iface\DB\Table;
 
 interface ListID
 {

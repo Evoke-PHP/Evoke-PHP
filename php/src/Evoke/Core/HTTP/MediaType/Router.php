@@ -1,12 +1,12 @@
 <?php
-namespace Evoke\Core\HTTP\MediaType;
+namespace Evoke\HTTP\MediaType;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /** Route the Accepted Media Types from the request to the correct output
  *  format.
  */
-class Router implements ICore\HTTP\MediaType\Router
+class Router implements Iface\HTTP\MediaType\Router
 {
 	/** @property $request
 	 *  Request @object
@@ -22,7 +22,7 @@ class Router implements ICore\HTTP\MediaType\Router
 	 *  the acceptable media types.
 	 *  @param Request @object Request object.
 	 */
-	public function __construct(ICore\HTTP\Request $request)
+	public function __construct(Iface\HTTP\Request $request)
 	{
 		$this->request = $request;
 		$this->rules   = array();
@@ -35,7 +35,7 @@ class Router implements ICore\HTTP\MediaType\Router
 	/** Add a rule to the router.
 	 *  @param Rule @object HTTP MediaType Rule object.
 	 */
-	public function addRule(ICore\HTTP\MediaType\Rule $rule)
+	public function addRule(Iface\HTTP\MediaType\Rule $rule)
 	{
 		$this->rules[] = $rule;
 	}

@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\DB;
 
-use namespace Evoke\Iface\Core as ICore;
+use namespace Evoke\Iface;
 
 /// Provide a read only model to a table of data.
 class Table extends Base
@@ -23,7 +23,7 @@ class Table extends Base
 	 *  @param dataPrefix @array  Prefix to the data
 	 */
 	public function __construct(
-		ICore\DB\SQL $sql,
+		Iface\DB\SQL $sql,
 		/* String */ $tableName,
 		Array        $select     = array('Fields'     => '*',
 		                                 'Conditions' => '',

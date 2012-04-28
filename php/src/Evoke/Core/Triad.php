@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
 /** The Triad groups together Processing, Model and View objects that can work
  *  together to perform the functionality required by the Controllers.
@@ -28,7 +28,7 @@ namespace Evoke\Core;
  *
  *  Usage:
  *  \code
- *  $triad = new \Evoke\Core\Triad($eventManager);
+ *  $triad = new \Evoke\Triad($eventManager);
  *  $triad->execute($model, $processing, $view,
  *                  $anyAmountOfModelViewOrProcessingObjects); 
  *  \endcode

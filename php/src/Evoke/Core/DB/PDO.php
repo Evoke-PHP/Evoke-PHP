@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Core\DB;
+namespace Evoke\DB;
 
 /// PDO wrapper class to ensure DB implements the Evoke Core DB interface.
-class PDO extends \PDO implements \Evoke\Iface\Core\DB
+class PDO extends \PDO implements \Evoke\Iface\DB
 {
 	public function __construct(
 		/* String */ $dsn,

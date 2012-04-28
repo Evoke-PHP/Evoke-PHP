@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Core\HTTP;
+namespace Evoke\HTTP;
 
 /** HTTP Response class controlling the headers that are returned with the
  *  response.
  */
-class Response implements \Evoke\Iface\Core\HTTP\Response
+class Response implements \Evoke\Iface\HTTP\Response
 {
 	/******************/
 	/* Public Methods */

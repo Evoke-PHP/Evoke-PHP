@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface\Core;
+namespace Evoke\Iface;
 
 /** The interface for a DB is virtually the same as the interface to PDO as it
  *  is very good for interaction with many different databases.

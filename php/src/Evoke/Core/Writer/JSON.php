@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Writer;
+namespace Evoke\Writer;
 
 /** Writer for JSON (buffered).
  */

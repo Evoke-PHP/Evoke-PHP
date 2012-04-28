@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface\Core;
+namespace Evoke\Iface;
 
 interface Element extends \ArrayAccess
 {

@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
-class Settings implements \Evoke\Iface\Core\Settings
+class Settings implements \Evoke\Iface\Settings
 {
 	/** @property $frozen
 	 *  @array The settings that have been frozen.  Attempting to modify these

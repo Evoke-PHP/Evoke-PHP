@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Processing;
+namespace Evoke\Processing;
 
 class Get extends Base
 {
@@ -9,7 +9,7 @@ class Get extends Base
 	 *  @param matchRequired @bool   Whether a match is required.
 	 *  @param uniqueMatch   @bool   Whether a unique match is required.
 	 */
-	public function __construct(ICore\EventManager $eventManager,
+	public function __construct(Iface\EventManager $eventManager,
 	                            Array              $requestKeys,
 	                            /* Bool   */       $matchRequired = true,
 	                            /* Bool   */       $uniqueMatch   = true)

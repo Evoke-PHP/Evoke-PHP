@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\DB;
+namespace Evoke\DB;
 
 class PDOStatement extends \PDOStatement
 {
@@ -29,13 +29,13 @@ class PDOStatement extends \PDOStatement
 		}
 		catch (\Exception $e)
 		{
-			throw new \Evoke\Core\Exception\DB(
+			throw new \Evoke\Exception\DB(
 				__METHOD__, 'Exception Raised: ', $this, $e);
 		}
 	 
 		if ($result === false)
 		{
-			throw new \Evoke\Core\Exception\DB(__METHOD__, 'Execute False: ', $this);
+			throw new \Evoke\Exception\DB(__METHOD__, 'Execute False: ', $this);
 		}
 		else
 		{

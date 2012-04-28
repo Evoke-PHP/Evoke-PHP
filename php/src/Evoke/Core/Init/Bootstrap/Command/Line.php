@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Init\Command;
+namespace Evoke\Init\Command;
 // Parse the variables given to a command line script as Query Strings of JSON.
 // Variables can be passed as separate arguments or as part of a query string:
 //    _GET='{ "key1": "val1", "key2": "val2" }' foo='"bar"'

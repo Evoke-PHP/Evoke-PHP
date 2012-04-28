@@ -1,7 +1,5 @@
 <?php
-namespace Evoke\Core;
-
-use Evoke\Iface\Core as ICore;
+namespace Evoke;
 
 /** A dependency injection/provider class (Thanks to rdlowrey see comments).
  *
@@ -103,7 +101,7 @@ use Evoke\Iface\Core as ICore;
  *  }
  *
  *  $provider->make(
- *      'UI', array('Writer' => $provider->make('\Evoke\Core\Writer\XHTML')));
+ *      'UI', array('Writer' => $provider->make('\Evoke\Writer\XHTML')));
  *  @endcode
  *
  *  We can even inject interfaces!?!  We have a default conversion that renames
@@ -112,7 +110,7 @@ use Evoke\Iface\Core as ICore;
  *  undesirable class which we pass in manually.
  *
  */
-class Provider implements ICore\Provider
+class Provider implements Iface\Provider
 {
 	/** @property $interfaceRouter
 	 *  @object interfaceRouter
@@ -134,7 +132,7 @@ class Provider implements ICore\Provider
 	/** Construct a Provider object.
 	 *  @param $interfaceRouter @object InterfaceRouter
 	 */
-	public function __construct(ICore\Provider\Iface\Router $interfaceRouter)
+	public function __construct(Iface\Provider\Iface\Router $interfaceRouter)
 	{
 		$this->interfaceRouter = $interfaceRouter;
 	}

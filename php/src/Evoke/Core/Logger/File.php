@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Logger;
+namespace Evoke\Logger;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class File
 {
@@ -60,8 +60,8 @@ class File
 	 *  @param fileMode     \object Permissions to set the file to
 	 *  @param locking      \bool   Whether to lock the file for writing.
 	 */
-	public function __construct(ICore\EventManager $eventManager,
-	                            Icore\Filesystem   $filesystem,
+	public function __construct(Iface\EventManager $eventManager,
+	                            Iface\Filesystem   $filesystem,
 	                            /* Bool */         $append=true,
 	                            /* Int (octal) */  $dirMode=0700,
 	                            /* String */       $filename='php.log',

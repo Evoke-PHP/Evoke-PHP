@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\MediaType\Rule;
+namespace Evoke\HTTP\MediaType\Rule;
 
 class Equivalent extends Match
 {

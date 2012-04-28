@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 abstract class Translated extends Base
 {
@@ -14,8 +14,8 @@ abstract class Translated extends Base
 	 *  @param Writer     \object The Writer object.
 	 *  @param Translator \object The Translator object.
 	 */
-	public function __construct(ICore\Writer     $writer,
-	                            ICore\Translator $translator)
+	public function __construct(Iface\Writer     $writer,
+	                            Iface\Translator $translator)
 	{
 		parent::__construct($writer);
 		

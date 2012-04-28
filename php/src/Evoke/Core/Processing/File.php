@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Processing;
+namespace Evoke\Processing;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class File extends Base
 {
@@ -24,7 +24,7 @@ class File extends Base
 	 *  @param uniqueMatch   	@bool   Whether a unique match is required.
 	 */
 	public function __construct(
-		ICore\EventManager $eventManager,
+		Iface\EventManager $eventManager,
 		Array              $requestKeys,
 		/* String */       $requestPrefix    = 'Input_File',
 		/* String */       $requestSeparator = '_',

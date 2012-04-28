@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI\Rule;
 
 /** A rule to trim characters from the URI.
  */

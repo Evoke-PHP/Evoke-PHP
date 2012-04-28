@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Iface\Core\Writer;
+namespace Evoke\Iface\Writer;
 
 /// The interface to an object that writes a page (using a buffer).
-interface Page extends \Evoke\Iface\Core\Writer
+interface Page extends \Evoke\Iface\Writer
 {
 	/// Write the end of a page.
 	public function writeEnd();

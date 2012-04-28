@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /** Logger class to control the logging of messages in the system.
  *  PHP has the following predefined constants defined for us which we use to
@@ -61,7 +61,7 @@ class Logger
 	protected $timeFormat;
 	 
 	public function __construct(
-		ICore\EventManager $eventManager,
+		Iface\EventManager $eventManager,
 		\DateTime          $dateTime,
 		/* Integer */      $defaultLevel=LOG_INFO,
 		/* String */       $defaultLevelStr='Level_',

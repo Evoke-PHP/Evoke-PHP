@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// Get a list of tables from the database.
 class Tables extends Base
@@ -22,7 +22,7 @@ class Tables extends Base
 	 *  @param ignoredTables @array  Tables to ignore for the list.
 	 *  @param dataPrefix    @array  Data prefix to offset the data to.
 	 */
-	public function __construct(ICore\DB\SQL $sql,
+	public function __construct(Iface\DB\SQL $sql,
 	                            Array        $extraTables   = array(),
 	                            Array        $ignoredTables = array(),
 	                            Array        $dataPrefix    = array())

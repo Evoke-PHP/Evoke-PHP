@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\DB\Table;
+namespace Evoke\DB\Table;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /** The Joins class is used to interact with Relational Databases.
  *  Relational databases have tables of data that are linked to other tables
@@ -121,7 +121,7 @@ class Joins
 	 */
 	public function __construct(
 		Array               $joins,
-		ICore\DB\Table\Info $info,
+		Iface\DB\Table\Info $info,
 		/* String */        $tableName,
 		/* String */        $parentField,
 		/* String */        $childField,

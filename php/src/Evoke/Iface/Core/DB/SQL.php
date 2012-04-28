@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Iface\Core\DB;
+namespace Evoke\Iface\DB;
 
-interface SQL extends \Evoke\Iface\Core\DB
+interface SQL extends \Evoke\Iface\DB
 {
 	
 	public function getAssoc($queryString, $params=array(););

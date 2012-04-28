@@ -1,9 +1,7 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 
-use Evoke\Iface\Core as ICore;
-
-class Translator implements ICore\Translator
+class Translator implements Iface\Translator
 {
 	/** @property $defaultLanguage
 	 *  The default language to use for translations.
@@ -41,7 +39,7 @@ class Translator implements ICore\Translator
 	private $translationsFilename;
 
 	public function __construct(
-		ICore\HTTP\Request   $request,
+		Iface\HTTP\Request   $request,
 		/* String */         $defaultLanguage,
 		/* String */         $translationsFilename,
 		/* String */         $langKey = 'l')

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\Exception;
+namespace Evoke\Exception;
 
 class Base extends \Exception
 {

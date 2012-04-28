@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /** Model_DB_Joint_Admin_Linked provides a CRUD interface to a joint set of data
  *  with linked information stored in files referenced from the database.
@@ -47,14 +47,14 @@ class JointAdminLinked extends JointAdmin
 	 *  @param dataPrefix     @array  Any prefix to offset the data with.
 	 *  @param validate       @bool   Whether to validate the data.
 	 */
-	public function __construct(ICore\DB\SQL          $sql,
+	public function __construct(Iface\DB\SQL          $sql,
 	                            /* String */          $tableName,
-	                            ICore\DB\Table\Joins  $joins,
-	                            ICore\SessionManager  $sessionManager,
-	                            ICore\DB\Table\ListID $tableListID,
-	                            ICore\MessageTree     $failures,
-	                            ICore\MessageTree     $notifications,
-	                            ICore\EventManager    $eventManager,
+	                            Iface\DB\Table\Joins  $joins,
+	                            Iface\SessionManager  $sessionManager,
+	                            Iface\DB\Table\ListID $tableListID,
+	                            Iface\MessageTree     $failures,
+	                            Iface\MessageTree     $notifications,
+	                            Iface\EventManager    $eventManager,
 	                            Icore\Links           $TODO_FIX_ME, ///< \todo FIXME
 	                            Icore\Filesystem      $filesystem,
 	                            Icore\ImageManip      $imageManip,

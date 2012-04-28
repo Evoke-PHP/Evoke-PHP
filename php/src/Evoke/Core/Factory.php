@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 /** The Factory for the core objects that are commonly used.  The Factory can
  *  be used to create and retrieve shared objects in the system.  It provides
  *  helper methods to aid the creation of frequently used objects.
@@ -25,7 +25,7 @@ class Factory extends InstanceManager implements Iface\Factory
    
 	public function __construct(Array $setup=array())
 	{
-		$setup += array('Namespace' => array('Core'  => '\Evoke\Core\\',
+		$setup += array('Namespace' => array('Core'  => '\Evoke\\',
 		                                     'Data'  => '\Evoke\Data\\',
 		                                     'Model' => '\Evoke\Model\\'),
 		                'Settings'  => NULL);
@@ -157,7 +157,7 @@ class Factory extends InstanceManager implements Iface\Factory
 		$provider = $this->build($this->namespace['Core'] . 'Provider');
 		$provider->define($this->namespace['Model'] . 'DB\Joint',
 		                  array('tableName' => 'Menu',
-		                        'Joins'     => 'Evoke\Core\DB\Table\Joins'));
+		                        'Joins'     => 'Evoke\DB\Table\Joins'));
 			
 		return $provider->make($this->namespace['Model'] . 'DB\Joint');
 

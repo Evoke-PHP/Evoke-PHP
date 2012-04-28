@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI\Rule;
 
 /** A rule to strip unwanted characters from a request so that a classname can
  *  be formed.  No parameters are matched by this class.

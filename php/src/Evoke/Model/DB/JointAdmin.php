@@ -2,7 +2,6 @@
 namespace Evoke\Model\DB;
 
 use Evoke\Iface;
-use Evoke\Iface\Core as ICore;
 
 /// JointAdmin provides A CRUD interface to a set of joint tables.
 class JointAdmin extends Joint implements Iface\Model\Admin
@@ -46,14 +45,14 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	 *  @param dataPrefix     @array  Any prefix to offset the data with.
 	 *  @param validate       @bool   Whether to validate the data.
 	 */
-	public function __construct(ICore\DB\SQL          $sql,
+	public function __construct(Iface\DB\SQL          $sql,
 	                            /* String */          $tableName,
-	                            ICore\DB\Table\Joins  $joins,
-	                            ICore\SessionManager  $sessionManager,
-	                            ICore\DB\Table\ListID $tableListID,
-	                            ICore\MessageTree     $failures,
-	                            ICore\MessageTree     $notifications,
-	                            ICore\EventManager    $eventManager,
+	                            Iface\DB\Table\Joins  $joins,
+	                            Iface\SessionManager  $sessionManager,
+	                            Iface\DB\Table\ListID $tableListID,
+	                            Iface\MessageTree     $failures,
+	                            Iface\MessageTree     $notifications,
+	                            Iface\EventManager    $eventManager,
 	                            Array                 $select   = array(),
 	                            /* Bool */            $validate = true)
 	{
@@ -444,9 +443,9 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	 *  @param joins @object The joins object to traverse the data with.
 	 *  @return The data after possibly being modified by the callbacks.
 	 */
-	protected function recurse(Array               $callbacks,
-	                           Array               &$data,
-	                           Iface\Core\DB\Joins $joins)
+	protected function recurse(Array          $callbacks,
+	                           Array          &$data,
+	                           Iface\DB\Joins $joins)
 	{
 		$jointKey = $joins->getJointKey();
 		$childJoins = $joins->getJoins();
@@ -545,7 +544,7 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	 *  @param join @object The join for the data.
 	 */
 	protected function validateEntries(Array               $data,
-	                                   ICore\DB\Table\Join $join)
+	                                   Iface\DB\Table\Join $join)
 	{
 		if (!$join->isAdminManaged() || empty($data))
 		{

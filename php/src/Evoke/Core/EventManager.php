@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Core;
+namespace Evoke;
 /** \class EventManager
  *  Manage the events for the system.
  *  The Event_Manager decouples method calls between objects.  The observer
@@ -10,7 +10,7 @@ namespace Evoke\Core;
  *
  *  Callbacks are run immediately upon event notification.
  */
-class EventManager implements \Evoke\Iface\Core\EventManager
+class EventManager implements \Evoke\Iface\EventManager
 {
 	/** By default all events are critical, but if there are events that can
 	 *  occur that do not care if even one observer is notified then they should

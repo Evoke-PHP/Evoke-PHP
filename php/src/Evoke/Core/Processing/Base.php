@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\Processing;
+namespace Evoke\Processing;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /** Processing Base Class
  *  This handles the routing of request information to processing callbacks
@@ -15,7 +15,7 @@ use Evoke\Iface\Core as ICore;
  *  correct processing.  The use of request identifiers allows us to match the
  *  keys from the request and notify for the specific processing required.
  */
-abstract class Base implements ICore\Processing
+abstract class Base implements Iface\Processing
 {
 	/** @property $eventManager
 	 *  EventManager @object
@@ -50,7 +50,7 @@ abstract class Base implements ICore\Processing
 	 *  @param matchRequired @bool   Whether a match is required.
 	 *  @param uniqueMatch   @bool   Whether a unique match is required.
 	 */
-	public function __construct(ICore\EventManager $eventManager,
+	public function __construct(Iface\EventManager $eventManager,
 	                            /* String */       $eventPrefix,
 	                            /* String */       $requestMethod,
 	                            Array              $requestKeys,

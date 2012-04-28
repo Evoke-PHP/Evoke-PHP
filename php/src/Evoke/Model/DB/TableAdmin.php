@@ -1,10 +1,10 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 /// Provide a CRUD interface to a database table.
-class TableAdmin extends Table implements \Evoke\Iface\Model\Admin
+class TableAdmin extends Table implements Iface\Model\Admin
 {
 	/** @property $autoFields
 	 *  Fields @array for fields that are auto_increment.
@@ -48,11 +48,11 @@ class TableAdmin extends Table implements \Evoke\Iface\Model\Admin
 	 *  @param autoFields     @array  Which fields should be left to get an
 	 *                                automatic value from the database.
 	 */
-	public function __construct(ICore\DB\SQL         $sql,
-	                            ICore\DB\Table\Info  $info,
-	                            ICore\SessionManager $sessionManager,
-	                            ICore\MessageTree    $failures,
-	                            ICore\MessageTree    $notifications,
+	public function __construct(Iface\DB\SQL         $sql,
+	                            Iface\DB\Table\Info  $info,
+	                            Iface\SessionManager $sessionManager,
+	                            Iface\MessageTree    $failures,
+	                            Iface\MessageTree    $notifications,
 	                            Array                $dataPrefix = array(),
 	                            /* Bool */           $validate   = true,
 	                            Array                $autoFields = array('ID'))

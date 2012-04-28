@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Core\DB\Table;
+namespace Evoke\DB\Table;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class List_ID
 {
@@ -11,7 +11,7 @@ class List_ID
 	protected $sql;
    
 	public function __construct(
-		ICore\DB\SQL $sql,
+		Iface\DB\SQL $sql,
 		Array        $fields    = array('Counter'  => 'Counter',
 		                                'DB_Table' => 'DB_Table',
 		                                'DB_Field' => 'DB_Field'),
@@ -61,7 +61,7 @@ class List_ID
 		}
 		catch (\Exception $e)
 		{
-			throw new \Evoke\Core\Exception\DB(
+			throw new \Evoke\Exception\DB(
 				__METHOD__, 'Unable to get new list ID for table: ' . $table .
 				' field: ' . $field, $this->sql, $e);
 		}

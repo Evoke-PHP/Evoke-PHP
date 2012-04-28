@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Core\DB;
+namespace Evoke\DB;
 
-use Evoke\Iface\Core as ICore;
-use Evoke\Core\Exception\Base as Exception_Base;
-use Evoke\Core\Exception\DB as Exception_DB;
+use Evoke\Iface;
+use Evoke\Exception\Base as Exception_Base;
+use Evoke\Exception\DB as Exception_DB;
 
 /** The SQL class provides an implementation of the SQL interface which extends
  *  the DB interface in Evoke.
@@ -19,7 +19,7 @@ use Evoke\Core\Exception\DB as Exception_DB;
  *   A condition passed in as a string is unchanged and can be used for more
  *   complex comparison operations.
  */
-class SQL implements \Evoke\ICore\DB
+class SQL implements Iface\DB
 {
 	/** @property $db
 	 *  @object Database object.
@@ -34,7 +34,7 @@ class SQL implements \Evoke\ICore\DB
 	/** Construct an SQL object.
 	 *  @param db @object DB object to perform the SQL on.
 	 */
-	public function __construct(ICore\DB $db)
+	public function __construct(Iface\DB $db)
 	{
 		$this->db = $db;
 	}
@@ -140,7 +140,7 @@ class SQL implements \Evoke\ICore\DB
 	 
 			$this->setAttribute(
 				\PDO::ATTR_STATEMENT_CLASS,
-				array('\Evoke\Core\DB\PDOStatement', array($namedPlaceholders)));
+				array('\Evoke\DB\PDOStatement', array($namedPlaceholders)));
 	 
 			return $this->db->prepare($statement, $driverOptions);
 		}
@@ -160,7 +160,7 @@ class SQL implements \Evoke\ICore\DB
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
-			array('\Evoke\Core\DB\PDOStatement', array($namedPlaceholders)));
+			array('\Evoke\DB\PDOStatement', array($namedPlaceholders)));
 
 		if ($fetchMode === 0)
 		{

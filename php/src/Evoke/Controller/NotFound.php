@@ -51,7 +51,7 @@ class NotFound extends Base
 		$element = $this->provider->make(
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
-		$translator = $this->provider->make('Evoke\Core\Translator');
+		$translator = $this->provider->make('Evoke\Translator');
 		
 		$this->writer->write(
 			$element->set(

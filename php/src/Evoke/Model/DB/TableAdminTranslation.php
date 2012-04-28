@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Iface\Core as ICore;
+use Evoke\Iface;
 
 class TableAdminTranslation extends TableAdmin
 {
@@ -17,8 +17,8 @@ class TableAdminTranslation extends TableAdmin
 	 *  @param dataPrefix     @array  Data prefix to offset the data to.
 	 *  @param languageTable  @string Table name for the languages table.
 	 */
-	public function __construct(ICore\DB\SQL     $sql,
-	                            ICore\Filesystem $filesystem,
+	public function __construct(Iface\DB\SQL     $sql,
+	                            Iface\Filesystem $filesystem,
 	                            /* String */     $translatorFile,
 	                            Array            $dataPrefix    = array(),
 	                            /* String */     $languageTable = 'Language')

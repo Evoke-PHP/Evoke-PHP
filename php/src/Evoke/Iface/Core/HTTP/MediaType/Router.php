@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Iface\Core\HTTP\MediaType;
+namespace Evoke\Iface\HTTP\MediaType;
 
 interface Router
 {
