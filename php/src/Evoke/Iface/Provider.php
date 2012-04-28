@@ -19,18 +19,5 @@ interface Provider
 	 *  @return The object that has been created.
 	 */
 	public function make($className, Array $params=array());
-
-	/** Set the specified class to be shared by the Provider.  The make method
-	 *  will return a shared object for this class while the class remains
-	 *  shared.
-	 *  @param className \string  Classname (including namespace).
-	 */
-	public function share($className);
-
-	/** Stop the class from being shared by the Provider, forcing a new object
-	 *  to be created for the class each time it is made using make.
-	 *  @param className \string The classname to unshare.
-	 */
-	public function unshare($className);
 }
 // EOF

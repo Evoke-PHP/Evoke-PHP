@@ -34,7 +34,7 @@ class Cache implements Iface\Cache
 	public function exists($key)
 	{
 		// We can store NULL in the cache, so we must use array_key_exists.
-		return array_key_exists($key, $item);
+		return array_key_exists($key, $this->items);
 	}
 	
 	/** Get an item from the cache (or if none has been defined return NULL).
@@ -46,14 +46,14 @@ class Cache implements Iface\Cache
 	{
 		// We can store (and return) NULL using the cache so we must use
 		// array_key_exists.
-		if (!array_key_exists($key, $item))
+		if (!array_key_exists($key, $this->items))
 		{
 			throw new \DomainException(
 				__METHOD__ . ' key: ' . $key . ' does not exist.  You must ' .
 				'check for values before you get them.');
 		}
 
-		return $item[$key];
+		return $this->items[$key];
 	}
 
 	/** Set an item in the cache.  If the value already exists it will be

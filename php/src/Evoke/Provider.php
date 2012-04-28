@@ -251,7 +251,7 @@ class Provider implements Iface\Provider
 		{
 			$concreteClass =
 				$this->interfaceRouter->route($depClass->name);
-
+			
 			if ($concreteClass != false)
 			{
 				// Make the concrete class that we were routed to.

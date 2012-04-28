@@ -5,11 +5,28 @@ use Evoke\Iface;
 
 class Router implements Iface\Provider\Iface\Router
 {
+	/** @property $reflectionCache
+	 *  @object ReflectionCache
+	 */
+	protected $reflectionCache;
+	
 	/** @property $rules
 	 *  @array of rules that the router uses to route.
 	 */
 	protected $rules = array();
-
+	
+	/** Construct a Router object.
+	 *  @param reflectionCache @object ReflectionCache
+	 */
+	public function __construct(Iface\Cache $reflectionCache)
+	{
+		$this->reflectionCache = $reflectionCache;
+	}
+	
+	/******************/
+	/* Public Methods */
+	/******************/
+	
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
@@ -58,9 +75,14 @@ class Router implements Iface\Provider\Iface\Router
 	 */
 	protected function isInstantiable($classname)
 	{
+		if ($this->reflectionCache->exists($classname))
+		{
+			return true;
+		}
+		
 		try
 		{
-			$reflectionClass = new ReflectionClass($classname);
+			$reflectionClass = new \ReflectionClass($classname);
 			return $reflectionClass->isInstantiable();
 		}
 		catch (\ReflectionException $e)
