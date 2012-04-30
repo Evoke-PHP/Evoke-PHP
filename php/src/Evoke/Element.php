@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Element;
+namespace Evoke;
 /** An XML element.Provide an element container with array access suitable for
  *  a writer:
  *  \verbatim
@@ -8,7 +8,7 @@ namespace Evoke\Element;
  *        2 => Options);
  *  \endverbatim
  */
-class Base implements \Evoke\Iface\Element
+class Element implements \Evoke\Iface\Element
 {
 	/** @property $attribs
 	 *  \array The default attributes for the element.
