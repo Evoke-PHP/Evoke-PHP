@@ -61,19 +61,28 @@ class Logger
 	public function __construct(
 		Iface\EventManager $eventManager,
 		\DateTime          $dateTime,
-		/* Integer */      $defaultLevel=LOG_INFO,
-		/* String */       $defaultLevelStr='Level_',
-		Array              $levels=array(LOG_EMERG   => 'Emergency',
-		                                 LOG_ALERT   => 'Alert',
-		                                 LOG_CRIT    => 'Critical',
-		                                 LOG_ERR     => 'Error',
-		                                 LOG_WARNING => 'Warning',
-		                                 LOG_NOTICE  => 'Notice',
-		                                 LOG_INFO    => 'Info',
-		                                 LOG_DEBUG   => 'Debug'),
-		/* Bool */         $loggingMandatory=true,
-		/* Integer */      $mask=11111111,
-		/* String */       $timeFormat='Y-M-d@H:i:sP')
+		/* Integer */      $defaultLevel     = LOG_INFO,
+		/* String */       $defaultLevelStr  = 'Level_',
+		Array              $levels           = array(
+			LOG_EMERG   => 'Emergency',
+			LOG_ALERT   => 'Alert',
+			LOG_CRIT    => 'Critical',
+			LOG_ERR     => 'Error',
+			LOG_WARNING => 'Warning',
+			LOG_NOTICE  => 'Notice',
+			LOG_INFO    => 'Info',
+			LOG_DEBUG   => 'Debug'),
+		/* Bool */         $loggingMandatory = true,
+		Array              $mask             = array(
+			LOG_EMERG   => true,
+			LOG_ALERT   => true,
+			LOG_CRIT    => true,
+			LOG_ERR     => true,
+			LOG_WARNING => true,
+			LOG_NOTICE  => true,
+			LOG_INFO    => true,
+			LOG_DEBUG   => true),
+		/* String */       $timeFormat       = 'Y-M-d@H:i:sP')
 	                            
 	{
 		$this->dateTime         = $dateTime;
@@ -82,9 +91,7 @@ class Logger
 		$this->eventManager     = $eventManager;
 		$this->levels           = $levels;
 		$this->loggingMandatory = $loggingMandatory;
-		// Use the mask provided or allow all logging levels.
-		$this->mask             = $mask ?:
-			str_repeat('1', count($this->levels));
+		$this->mask             = $mask;
 		$this->timeFormat       = $timeFormat;
 				
 		// We observe Log events and remain decoupled to the code that calls us.
@@ -124,7 +131,7 @@ class Logger
 		$message += array(
 			'Date_Time'    => $this->dateTime->format($this->timeFormat),
 			'Level_String' => $this->getLevelString($message['Level']));
-      
+
 		// Notify the listeners of the message!
 		$this->eventManager->notify('Log.Write', $message);
 	}
@@ -136,7 +143,7 @@ class Logger
 	 */
 	public function loggable($level)
 	{
-		return ($this->mask[$level] == true);
+		return $this->mask[$level];
 	}
    
 	/** Set the logging level to the value.
@@ -144,7 +151,7 @@ class Logger
 	 */
 	public function setLevel($level, $value=true)
 	{
-		$this->mask[$level] = ($value == true);
+		$this->mask[$level] = $value;
 	}
    
 	/*********************/

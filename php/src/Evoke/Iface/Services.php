@@ -17,6 +17,7 @@ interface Services
 	 *  @param name   @string The name of the service (class or interface).
 	 *  @param params @array  The construction parameters of the service.
 	 *  @returns @object The service object.
+	 *
 	 *  @throws DomainException If the service cannot be retrieved.
 	 */
 	public function get($name, $params);
@@ -35,13 +36,14 @@ interface Services
 	/** Set the service object for the named service with the specified
 	 *  parameters.
 	 *  @param name   @string The name of the service (class or interface).
-	 *  @param params @array  The construction parameters of the service.
 	 *  @param object @object The object to be set as the service instance.
+	 *  @param params @array  The construction parameters of the service.
+	 *
+	 *  @throws OverflowException If the service has already been set.
 	 *  @throws DomainException   If the named service is not a registered
 	 *                            service.
-	 *  @throws OverflowException If the service has already been set.
 	 */
-	public function set($name, Array $params, $object);
+	public function set($name, $object, Array $params);
 	
 	/** Unregister the name as a service (clearing all cached service objects
 	 *  for the named service.

@@ -21,10 +21,9 @@ class Exact extends Match
 	 *  @param match         @array Exact match required from the media type.
 	 *  @param ignoredFields @array Fields that are to be ignored in the match.
 	 */
-	public function __construct(
-		/* String */ $outputFormat,
-		Array        $match,	                            
-		Array        $ignoredFields = array('Params', 'Q_Factor'))
+	public function __construct(/* String */ $outputFormat,
+	                            Array        $match,	                            
+	                            Array        $ignoredFields = array('Q_Factor'))
 	{
 		parent::__construct($outputFormat, $match);
 

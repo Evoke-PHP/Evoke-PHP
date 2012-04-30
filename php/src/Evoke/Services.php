@@ -27,6 +27,7 @@ class Services implements Iface\Services
 	 *  and parameter combination.
 	 *  @param name   @string The name of the service (class or interface).
 	 *  @param params @array  The construction parameters of the service.
+	 *
 	 *  @returns @bool Whether the service object exists in the cache.
 	 */
 	public function exists($name, Array $params)
@@ -47,7 +48,9 @@ class Services implements Iface\Services
 	 *  calling this.
 	 *  @param name   @string The name of the service (class or interface).
 	 *  @param params @array  The construction parameters of the service.
+	 *
 	 *  @returns @object The service object.
+	 *
 	 *  @throws DomainException If the service cannot be retrieved.
 	 */
 	public function get($name, $params)
@@ -71,6 +74,7 @@ class Services implements Iface\Services
 
 	/** Check whether the named service has been registered.
 	 *  @param name @string The name of the service (class or interface).
+	 *
 	 *  @returns @bool Whether the name is registered as a service.
 	 */
 	public function isService($name)
@@ -92,13 +96,16 @@ class Services implements Iface\Services
 	/** Set the service object for the named service with the specified
 	 *  parameters.
 	 *  @param name   @string The name of the service (class or interface).
-	 *  @param params @array  The construction parameters of the service.
 	 *  @param object @object The object to be set as the service instance.
+	 *  @param params @array  The construction parameters of the service.
+	 *
+	 *  @throws OverflowException If the service has already been set.
 	 *  @throws DomainException   If the named service is not a registered
 	 *                            service.
-	 *  @throws OverflowException If the service has already been set.
 	 */
-	public function set($name, Array $params, $object)
+	public function set(/* String */ $name,
+	                    /* Object */ $object,
+	                    Array        $params = array())
 	{
 		if (!isset($this->cache[$name]))
 		{

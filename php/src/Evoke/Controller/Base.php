@@ -4,38 +4,67 @@ namespace Evoke\Controller;
 use Evoke\Iface;
 use Evoke\HTTP\MediaType;
 
+/** The Controller is responsible for routing the request to the correct
+ *  controller method and executing this response using objects from the
+ *  processing, model, data and view layers.
+ */
 abstract class Base
 {
-	/** @property $provider
-	 *  @object Provider 
+	/** @property $defaults
+	 *  @array Default values for the controller content type and output format.
 	 */
-	protected $provider;
+	protected $defaults;
+
+	/** @property $mediaTypeRouterFactory
+	 *  @object Media Type Router Factory
+	 */
+	protected $mediaTypeRouterFactory;
 	
 	/** @property $params
 	 *  @array Parameters for the Controller.
 	 */
 	protected $params;
 	
+	/** @property $provider
+	 *  @object Provider 
+	 */
+	protected $provider;
+
+	/** @property $response
+	 *  @object Response
+	 */
+	protected $response;
+
 	/** @property $request
-	 *  Request @object
+	 *  @object Request
 	 */
 	protected $request;
 
 	/** Construct the response.
-	 *  @param params   @array  Parameters for the response.
-	 *  @param Provider @object Provider object.
-	 *  @param Request  @object Request object.
-	 *  @param Response @object Response object.
+	 *  @param params                 @array  Parameters for the response.
+	 *  @param provider               @object Provider object.
+	 *  @param request                @object Request object.
+	 *  @param response               @object Response object.
+	 *  @param mediaTypeRouterFactory @object Media Type Router Factory.
+	 *  @param defaults               @array  Defaults for the content type and
+	 *                                        output format.
 	 */
-	public function __construct(Array               $params,
-	                            Iface\Provider      $provider,
-	                            Iface\HTTP\Request  $request,
-	                            Iface\HTTP\Response $response)
+	public function __construct(
+		Array               		 	   $params,
+		Iface\Provider      		 	   $provider,
+		Iface\HTTP\Request                 $request,
+		Iface\HTTP\Response                $response,
+		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory,
+		Array                              $defaults = array(
+			'Content_Type'  => 'application/xhtml+xml',
+			'Output_Format' => 'XHTML'))
 	{
-		$this->params   = $params;
-		$this->provider = $provider;
-		$this->request  = $request;
-		$this->response = $response;
+		$this->defaults               = $defaults;
+		$this->mediaTypeRouterFactory = $mediaTypeRouterFactory;
+		$this->params                 = $params;
+		$this->provider				  = $provider;
+		$this->request 				  = $request;
+		$this->response				  = $response;
 	}
 	
 	/******************/
@@ -67,31 +96,22 @@ abstract class Base
 			$contentType = 'application/xml';
 			break;
 		default:
-			$eventManager = $this->provider->getEventManager();
-			$eventManager->notify(
-				'Log',
-				array('Level'   => LOG_WARNING,
-				      'Message' => 'Unknown output format: ' . $outputFormat,
-				      'Method'  => __METHOD__));
+			trigger_error(
+				'Output format: ' . $this->outputFormat . ' does not ' .
+				'correspond to a known content type.  The default values of ' .
+				'Output Format: ' . $this->defaults['Output_Format'] . ' and ' .
+				'Content Type: ' . $this->defaults['Content_Type'] .
+				' will be used.');
 
-			// Default to XHTML output.
-			$contentType = 'application/xhtml+xml';
-			$outputFormat = 'XHTML';
+			// Use the defaults.
+			$contentType = $this->defaults['Content_Type'];
+			$outputFormat = $this->defaults['Output_Format'];
 		}
-
 		
-		$this->writer = $this->provider->make(
-			'Evoke\Writer\\' . $outputFormat);
 		$this->response->setContentType($contentType);
 
-		// Perform any content agnostic initialization of the reponse.
-		$this->initialize();
-
-		// Respond to the method in the correct output format.
-		$this->respond($this->request->getMethod(), $outputFormat);
-		
-		// Perform any content agnostic finalization of the response.
-		$this->finalize();
+		// Respond in the correct output format.
+		$this->respond($outputFormat);
 	}
 
 	/*********************/
@@ -99,104 +119,43 @@ abstract class Base
 	/*********************/
 
 	/** Build the Media Type router.
+	 *  @return @object A standard media type router with a fallback to the
+	 *                  default output format.
 	 */
 	protected function buildMediaTypeRouter()
-	{		
-		$router = $this->provider->make('Evoke\HTTP\MediaType\Router',
-		                                array('Request' => $this->request));
-		$router->addRule(
-			$this->provider->make(
-				'Evoke\HTTP\MediaType\Rule\Exact',
-				array('Output_Format' => 'HTML5',
-				      'Match'         => array('Subtype' => '*',
-				                               'Type'    => '*'))));
-		return $router;
+	{
+		return $this->mediaTypeRouterFactory->buildStandard(
+			$this->defaults['Output_Format']);
 	}
 
-	/** Provide an End the XHTML output.
+	/** Build the Writer object that can write the output format.
+	 *  @param outputFormat @string The output format required from the writer.
 	 */
-	protected function endXHTML()
+	protected function buildWriter($outputFormat)
 	{
-		$this->writer->writeEnd();
-	}
-	
-	/** Perform any finalization of the response that does not relate to a
-	 *  specific content type.  This is called just after the respondWith*
-	 *  methods allowing common content type agnostic processing to be grouped.
-	 */
-	protected function finalize()
-	{
-		$this->writer->output();
-	}		
-	
-	/** Get the XHTML setup for the page.
-	 *  @return @array The XHTML Setup array.
-	 */
-	protected function getXHTMLSetup()
-	{
-		return array('CSS'         => array('/csslib/global.css',
-		                                    '/csslib/common.css'),
-		             'Description' => 'Description',
-		             'Doc_Type'    => 'HTML5',
-		             'Keywords'    => '',
-		             'JS'          => array(),
-		             'Title'       => '');
-	}
-
-	/** Perform any initialization of the response that does not relate to a
-	 *  specific content type.  This has nothing to do with construction of the
-	 *  response object.  It is called just prior to the response methods
-	 *  allowing response codes or other shared data to be provided accross all
-	 *  content types.
-	 */
-	protected function initialize()
-	{
-		$this->response->setResponseCode(200);
-	}
-
-	/** Merge two XHTML setups with the second taking precedence.
-	 *  @param start @array The initial XHTML setup.
-	 *  @param overload @array The array that takes precedence.
-	 *  @return @array The final XHTML setup with sub-arrays being merged by
-	 *  value.
-	 */
-	protected function mergeXHTMLSetup($start, $overload)
-	{
-		foreach ($overload as $key => $entry)
-		{
-			// Arrays should be appended to with only the new elements.
-			if (isset($start[$key]) && is_array($start[$key]))
-			{
-				$start[$key] = array_merge($start[$key],
-				                           array_diff($entry, $start[$key]));
-			}
-			else
-			{
-				$start[$key] = $entry;
-			}
-		}
-
-		return $start;
+		return $this->provider->make('Evoke\Writer\\' . $outputFormat);
 	}
 
 	/** Respond to the HTTP method in the correct output format.
-	 *  @param method       @string HTTP method (e.g GET, POST, DELETE)
 	 *  @param outputFormat @string Output format (e.g html5, XHTML, JSON)
 	 */
-	protected function respond($method, $outputFormat)
+	protected function respond($outputFormat)
 	{
+		$writer = $this->buildWriter($outputFormat);
+		
 		// Preferably we respond using the method that matches the HTTP Request
 		// method, but we allow a method of ALL to cover unhandled methods.
-		$methodName = strtolower($outputFormat) . strtoupper($method);
+		$methodName = strtolower($outputFormat) .
+			strtoupper($this->request->getMethod());
 		$methodAll = strtolower($outputFormat) . 'ALL';
 		
 		if (is_callable(array($this, $methodName)))
 		{
-			$this->{$methodName}();
+			$this->{$methodName}($writer);
 		}
 		elseif (is_callable(array($this, $methodAll)))
 		{
-			$this->{$methodAll}();
+			$this->{$methodAll}($writer);
 		}
 		else
 		{
@@ -205,12 +164,5 @@ abstract class Base
 				' not handled');
 		}
 	}
-	
-	/// Write the XHTML start.
-	protected function startXHTML()
-	{
-		$this->writer->writeStart($this->getXHTMLSetup());
-	}
-	 
 }
 // EOF

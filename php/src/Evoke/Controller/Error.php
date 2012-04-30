@@ -1,86 +1,79 @@
 <?php
 namespace Evoke\Controller;
 
+use Evoke\Iface;
+
 class Error extends Base
 {
+	/** Construct the Error response.
+	 *  @param provider @object Provider
+	 *  @param request  @object Request
+	 *  @param response @object Response
+	 */
+	public function __construct(
+		Iface\Provider      		  	   $provider,
+		Iface\HTTP\Request  		  	   $request,
+		Iface\HTTP\Response 		  	   $response,
+		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory)
+	{
+		// Error has no parameters, so use an empty array for it.
+		parent::__construct(array(), $provider, $request, $response,
+		                    $mediaTypeRouterFactory);
+	}
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
-
-	/// Initialize the controller by setting the response code to 404 Not Found.
-	protected function initialize()
+	
+	protected function html5ALL(Iface\Writer\Page $writer)
+	{
+		$this->xhtmlALL($writer);
+	}
+	
+	protected function jsonALL(Iface\Writer $writer)
+	{
+		$writer->write(array('Code'    => '500',
+		                     'Title'   => 'Internal Server Error'));
+	}
+	
+	/** Respond with the error code first.
+	 *  @param outputFormat @string The output format to use.
+	 */
+	protected function respond($outputFormat)
 	{
 		$this->response->setResponseCode(500);
+		parent::respond($outputFormat);
 	}
 
-	protected function html5ALL()
+	protected function textALL(Iface\Writer $writer)
 	{
-		$this->xhtmlALL();
+		$writer->write('500 Internal Server Error');
 	}
 	
-	protected function jsonALL()
+	protected function xhtmlALL(Iface\Writer\Page $writer)
 	{
-		$this->writer->write(array('Code'    => '500',
-		                           'Message' => $this->getMessage(),
-		                           'Title'   => 'Internal Server Error'));
+		$writer->writeStart(array('CSS'         => array(),
+		                          'Description' => 'Internal Server Error',
+		                          'Title'       => 'Internal Server Error'));
+		$this->writeMessageBoxXML($writer);
+		$writer->writeEnd();
 	}
 	
-	protected function textALL()
+	protected function xmlALL(Iface\Writer $writer)
 	{
-		$this->writer->write(
-			rtrim('500 Internal Server Error ' . $this->getMessage()));
-	}
-	
-	protected function xhtmlALL()
-	{
-		$this->startXHTML();
-		$this->writeMessageBoxXML();
-		$this->endXHTML();
-	}
-	
-	protected function xmlALL()
-	{
-		$this->writeMessageBoxXML();
+		$this->writeMessageBoxXML($writer);
 	}
 
 	/*******************/
 	/* Private Methods */
 	/*******************/
-
-	// Get the description of the error.
-	private function getMessage()
-	{
-		$translator = $this->factory->getTranslator();
-
-		$description = $translator->get('Error_Text');
-
-		if (isset($this->params['Exception']) &&
-		    $this->params['Exception'] instanceof \Exception)
-		{
-			$description .= "\n" . $this->params['Exception']->getMessage();
-		}
-
-		return $description;
-	}
 	
 	/// Write a Message Box in XML showing the Not Found message.
-	private function writeMessageBoxXML()
+	private function writeMessageBoxXML(Iface\Writer $writer)
 	{
 		$element = $this->provider->make(
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
-		$translator = $this->provider->make('Evoke\Translator');
-
-		$description = explode("\n", $this->getMessage());
-		$descriptionWithBreaks = array();
-
-		foreach ($description as $entry)
-		{
-			$descriptionWithBreaks[] = $entry;
-			$descriptionWithBreaks[] = array('br');
-		}
-
-		array_pop($descriptionWithBreaks);
 
 		$this->writer->write(
 			array('div',

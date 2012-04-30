@@ -8,45 +8,44 @@ namespace Evoke\HTTP\URI\Rule;
  */
 class Regex extends Base
 {
-	/** @property $classname
-	 *  Regex replacement \string for the classname.
-	 */
-	protected $classname;
-
 	/** @property $match
-	 *  Regex match \string for the URI.
+	 *  Regex match @string for the URI.
 	 */
 	protected $match;
 
 	/** @property $params
-	 *  \Array of parameter key and value replacement regex for the URI.
+	 *  @array of parameter key and value replacement regex for the URI.
 	 */
 	protected $params;
 
+	/** @property $replacement
+	 *  Regex replacement @string Replacement for the classname.
+	 */
+	protected $replacement;
 
 	/** Construct the SimpleReplace Rule.
-	 *  @param match         \string The Regex to match the URI with.
-	 *  @param classname     \string The classname regex replacement string.
-	 *  @param params        \Array  Regexes replacements for the parameters.
-	 *  @param authoritative \bool   Is this always the final route?
+	 *  @param match         @string The Regex to match the URI with.
+	 *  @param replacement   @string The classname regex replacement string.
+	 *  @param params        @Array  Regexes replacements for the parameters.
+	 *  @param authoritative @bool   Is this always the final route?
 	 */
 	public function __construct(/* String */ $match,
-	                            /* String */ $classname,
+	                            /* String */ $replacement,
 	                            Array        $params        = array(),
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($classname))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires classname as string');
-		}
-		
 		if (!is_string($match))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires match as string');
 		}
 
+		if (!is_string($replacement))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires replacement as string');
+		}
+		
 		foreach ($params as $index => $paramSpec)
 		{
 			// Set the keys to remove need for isset checks.
@@ -69,9 +68,9 @@ class Regex extends Base
 		
 		parent::__construct($authoritative);
 
-		$this->classname = $classname;
-		$this->match     = $match;
-		$this->params    = $params;
+		$this->match       = $match;
+		$this->params      = $params;
+		$this->replacement = $replacement;
 	}
    
 	/******************/
@@ -79,17 +78,17 @@ class Regex extends Base
 	/******************/
 
 	/** Get the classname.
-	 *  @param uri \string The URI to get the classname from.
-	 *  \return \string The uri with the match replaced.
+	 *  @param uri @string The URI to get the classname from.
+	 *  @return @string The uri with the match replaced.
 	 */
 	public function getClassname($uri)
 	{
-		return preg_replace($this->match, $this->classname, $uri);
+		return preg_replace($this->match, $this->replacement, $uri);
 	}
 
 	/** Get any parameters.
-	 *  @param uri \string The URI to get the parameters from.
-	 *  @return \array Parameters from the URI.
+	 *  @param uri @string The URI to get the parameters from.
+	 *  @return @array Parameters from the URI.
 	 */
 	public function getParams($uri)
 	{
@@ -105,7 +104,7 @@ class Regex extends Base
 	}
 	
 	/** Check the uri to see if it matches.
-	 *  \return \bool Whether the uri is matched.
+	 *  @return @bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

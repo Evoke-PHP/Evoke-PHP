@@ -196,7 +196,7 @@ class Provider implements Iface\Provider
 	    // first time.  Set it as the service instance.	    
 	    if ($isService)
 	    {
-		    $this->services->set($classname, $passedParameters, $object);
+		    $this->services->set($classname, $object, $passedParameters);
 	    }
 	    
         return $object;

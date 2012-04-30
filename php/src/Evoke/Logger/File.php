@@ -15,11 +15,6 @@ class File
 	 */
 	protected $dirMode;
 
-	/** @property $eventManager
-	 *  Event Manager \object
-	 */
-	protected $eventManager;
-
 	/** @property $fileMode
 	 *  The mode for the file \int (octal).
 	 */
@@ -52,7 +47,6 @@ class File
 
 
 	/** Construct a File Logger object.
-	 *  @param eventManager \object EventManager object
 	 *  @param $filesystem  \object Filesystem object
 	 *  @param append       \bool   Whether to append to the file.
 	 *  @param dirMode      \object The directory mode for the log file.
@@ -60,8 +54,7 @@ class File
 	 *  @param fileMode     \object Permissions to set the file to
 	 *  @param locking      \bool   Whether to lock the file for writing.
 	 */
-	public function __construct(Iface\EventManager $eventManager,
-	                            Iface\Filesystem   $filesystem,
+	public function __construct(Iface\Filesystem   $filesystem,
 	                            /* Bool */         $append=true,
 	                            /* Int (octal) */  $dirMode=0700,
 	                            /* String */       $filename='php.log',
@@ -85,7 +78,6 @@ class File
 			throw new \InvalidArgumentException(__METHOD__ . ' requires locking as bool');
 		}
 
-		$this->eventManager = $eventManager;
 		$this->filesystem   = $filesystem;
 		$this->append       = $append;
 		$this->dirMode      = $dirMode;

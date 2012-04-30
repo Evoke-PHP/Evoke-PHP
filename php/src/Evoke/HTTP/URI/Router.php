@@ -6,11 +6,6 @@ use Evoke\Iface;
 /// Receive the request and create the correct response for it.
 class Router implements Iface\HTTP\URI\Router
 {
-	/** @property $provider
-	 *  @object Provider
-	 */
-	protected $provider;
-
 	/** @property $request
 	 *  @object Request
 	 */
@@ -25,11 +20,9 @@ class Router implements Iface\HTTP\URI\Router
 	 *  @param Provider @object Provider for creating the response.
 	 *  @param Request  @object Request object.
 	 */
-	public function __construct(Iface\Provider      $provider,
-	                            Iface\HTTP\Request  $request)
+	public function __construct(Iface\HTTP\Request  $request)
 	{
-		$this->provider      = $provider;
-		$this->request       = $request;
+		$this->request = $request;
 	}
 	
 	/******************/
@@ -44,8 +37,9 @@ class Router implements Iface\HTTP\URI\Router
 		$this->rules[] = $rule;
 	}
 
-	/** Create the object that will respond to the routed URI).
-	 *  @return @object The object that will respond (generally a Controller).
+	/** Route the URI to the class and parameters that should respond to it.
+	 *  @return @array The class and parameters that should respond to the URI
+	 *                 (generally this should be a Controller class).
 	 */
 	public function route()
 	{
@@ -69,10 +63,8 @@ class Router implements Iface\HTTP\URI\Router
 			}
 		}
 
-		/** An exception will be thrown if an unknown class is atttempted to be
-		 *  built that should be caught at a higher level.
-		 */
-		return $this->provider->make($classname, array('Params' => $params));
+		return array('Class'  => $classname,
+		             'Params' => $params);
 	}
 }
 // EOF

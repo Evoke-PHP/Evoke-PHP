@@ -123,15 +123,26 @@ class Exception implements Iface\Init\Handler
 					mb_substr($exceptionMessage, -$halfMessage);
 			}
 
-			$message .= "<br>\n<br>\n" .
-				preg_replace('/\n/', '<br>' . "\n", $exceptionMessage);
+			$message .= "\n\n" . $exceptionMessage;
+			$messageElements = explode("\n", $message);
+			$messageChildren = array();
+			
+			foreach ($messageElements as $text)
+			{
+				$messageChildren[] =
+					array('div', array('class' => 'Line'), $text);
+			}
+
+			$message = array(
+				array('div', array('class' => 'Message'), $messageChildren));
 		}
 		
 		$this->writer->write(
 			array('div',
 			      array('class' => 'Exception_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'), $title),
-			            array('div', array('class' => 'Description'), $message))));
+			            array('div', array('class' => 'Description'), $message))
+				));
 		$this->writer->output();
 	}
 

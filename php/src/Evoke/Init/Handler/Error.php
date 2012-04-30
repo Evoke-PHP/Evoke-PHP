@@ -134,6 +134,7 @@ class Error implements Iface\Init\Handler
 				array('Level'   => LOG_WARNING,
 				      'Message' => $message,
 				      'Method'  => __METHOD__));
+
 			$loggedError = true;
 		}
 		catch (\Exception $e)

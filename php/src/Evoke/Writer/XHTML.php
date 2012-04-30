@@ -4,7 +4,7 @@ namespace Evoke\Writer;
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.
  */
-class XHTML extends XMLBase
+class XHTML extends XMLBase implements \Evoke\Iface\Writer\Page
 {
 	/******************/
 	/* Public Methods */
@@ -28,9 +28,8 @@ class XHTML extends XMLBase
 		                'Keywords'    => '',
 		                'JS'          => array(),
 		                'Title'       => '');
-
 		
-		$this->writeStartDocument($docType);
+		$this->writeStartDocument($setup['Doc_Type']);
       
 		$this->xmlWriter->startElement('head');
 		$this->xmlWriter->writeElement('title', $setup['Title']);
