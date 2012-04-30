@@ -20,6 +20,11 @@ abstract class Base
 	 */
 	protected $mediaTypeRouterFactory;
 	
+	/** @property $pageSetup
+	 *  @array Setup for the page based output formats (XHTML, HTML5).
+	 */
+	protected $pageSetup;
+
 	/** @property $params
 	 *  @array Parameters for the Controller.
 	 */
@@ -48,6 +53,8 @@ abstract class Base
 	 *  @param mediaTypeRouterFactory @object Media Type Router Factory.
 	 *  @param defaults               @array  Defaults for the content type and
 	 *                                        output format.
+	 *  @param pageSetup              @array  Setup for page based output
+	 *                                        formats.
 	 */
 	public function __construct(
 		Array               		 	   $params,
@@ -55,13 +62,15 @@ abstract class Base
 		Iface\HTTP\Request                 $request,
 		Iface\HTTP\Response                $response,
 		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory,
-		Array                              $defaults = array(
+		Array                              $defaults  = array(
 			'Content_Type'  => 'application/xhtml+xml',
-			'Output_Format' => 'XHTML'))
+			'Output_Format' => 'XHTML'),
+		Array                              $pageSetup = array())
 	{
 		$this->defaults               = $defaults;
 		$this->mediaTypeRouterFactory = $mediaTypeRouterFactory;
 		$this->params                 = $params;
+		$this->pageSetup              = $pageSetup;
 		$this->provider				  = $provider;
 		$this->request 				  = $request;
 		$this->response				  = $response;
@@ -163,6 +172,8 @@ abstract class Base
 				__METHOD__ . ' output format: ' . $outputFormat .
 				' not handled');
 		}
+
+		$writer->output();
 	}
 }
 // EOF

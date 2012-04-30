@@ -9,16 +9,25 @@ class NotFound extends Base
 	 *  @param provider @object Provider
 	 *  @param request  @object Request
 	 *  @param response @object Response
+	 *  @param mediaTypeRouterFactory @object Media Type Router Factory.
+	 *  @param defaults               @array  Defaults for the content type and
+	 *                                        output format.
+	 *  @param pageSetup              @array  Setup for page based output
+	 *                                        formats.
 	 */
 	public function __construct(
 		Iface\Provider      		  	   $provider,
 		Iface\HTTP\Request  		  	   $request,
 		Iface\HTTP\Response 		  	   $response,
-		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory)
+		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory
+		Array                              $defaults  = array(
+			'Content_Type'  => 'application/xhtml+xml',
+			'Output_Format' => 'XHTML'),
+		Array                              $pageSetup = array())
 	{
 		// Not Found has no parameters, so use an empty array for it.
 		parent::__construct(array(), $provider, $request, $response,
-		                    $mediaTypeRouterFactory);
+		                    $mediaTypeRouterFactory, $defaults, $pageSetup);
 	}
 
 	/*********************/
@@ -53,9 +62,11 @@ class NotFound extends Base
 	
 	protected function xhtmlALL(Iface\Writer\Page $writer)
 	{
-		$writer->writeStart(array('CSS'         => array(),
-		                          'Description' => 'Not Found',
-		                          'Title'       => 'Page Not Found'));
+		
+		$writer->writeStart(
+			array_merge($this->pageSetup,
+			            array('Description' => 'Not Found',
+			                  'Title'       => 'Page Not Found')));
 		$this->writeMessageBoxXML($writer);
 		$writer->writeEnd();
 	}
