@@ -2,7 +2,7 @@
 namespace Evoke\Element;
 
 /// Element to represent a list of records.
-class Element_Record_List extends Element
+class RecordList extends \Evoke\Element
 {
 	/** @property $contentAttribs
 	 *  Attributes \array for the content.
@@ -322,7 +322,7 @@ class Element_Record_List extends Element
 		}
 		catch (Exception $e)
 		{
-			throw new Exception_Base(
+			throw new \Evoke\Exception(
 				__METHOD__,
 				' Caught exception processing row data: ' .
 				var_export($rowData, true),

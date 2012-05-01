@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Input\DB;
 
-class Foreign extends Base
+class Foreign extends \Evoke\Element\Input\DB
 {
 	public function __construct(Array $setup)
 	{

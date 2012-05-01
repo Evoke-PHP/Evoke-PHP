@@ -4,7 +4,7 @@ namespace Evoke\Processing;
 use Evoke\Iface;
 
 /// A class for doing no processing.
-class None extends Base
+class None extends \Evoke\Processing
 {
 	/** Construct a no processing object.
 	 *  @param eventManager  @object Event Manager object.

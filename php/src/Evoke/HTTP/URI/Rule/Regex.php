@@ -6,7 +6,7 @@ namespace Evoke\HTTP\URI\Rule;
  *  there are more complex requirements such as optional parameters then the
  *  RegexTwoLevel rule should be used.
  */
-class Regex extends Base
+class Regex extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $match
 	 *  Regex match @string for the URI.

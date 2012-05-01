@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Element\Input\DB;
+namespace Evoke\Element\Input;
 /** Element_DB_Input provide elements for input to the database.
  * Make an element from the database describe table information.
  * @param fieldInfo \array A single row from the describe table information.
@@ -15,7 +15,7 @@ namespace Evoke\Element\Input\DB;
  +-------+--------------+------+-----+---------+----------------+
  \endverbatim
 */
-class Base extends \Evoke\Element\Base
+class DB extends \Evoke\Element
 {
 	/** @property $encasing
 	 *  \bool Whether the input is to be encased within a div element.

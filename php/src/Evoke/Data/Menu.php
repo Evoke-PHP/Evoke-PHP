@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Data;
 
-class Menu extends Base
+class Menu extends \Evoke\Data
 {
 	/** @property $left
 	 *  Left field name @string

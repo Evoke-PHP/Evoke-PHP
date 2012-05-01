@@ -1,14 +1,13 @@
 <?php
-namespace Evoke\Controller;
+namespace Evoke;
 
-use Evoke\Iface;
 use Evoke\HTTP\MediaType;
 
 /** The Controller is responsible for routing the request to the correct
  *  controller method and executing this response using objects from the
  *  processing, model, data and view layers.
  */
-abstract class Base
+abstract class Controller
 {
 	/** @property $defaults
 	 *  @array Default values for the controller content type and output format.

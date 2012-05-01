@@ -2,7 +2,7 @@
 namespace Evoke\HTTP\MediaType\Rule;
 
 /// A Media Type rule that matches any media type from the accept header.
-class Any extends Base
+class Any extends \Evoke\HTTP\MediaType\Rule
 {
 	/******************/
 	/* Public Methods */

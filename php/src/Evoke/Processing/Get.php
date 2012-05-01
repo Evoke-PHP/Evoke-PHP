@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Processing;
 
-class Get extends Base
+class Get extends \Evoke\Processing
 {
 	/** Construct a Get processing object.
 	 *  @param eventManager  @object Event Manager object.

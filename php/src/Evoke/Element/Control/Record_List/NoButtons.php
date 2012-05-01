@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Control\Record_List;
+namespace Evoke\Element\Control\RecordList;
 
-class NoButtons extends Base
+class NoButtons extends \Evoke\Element\Control\RecordList
 { 
 	/*********************/
 	/* Protected Methods */

@@ -1,7 +1,5 @@
 <?php
-namespace Evoke\Data;
-
-use Evoke\Iface;
+namespace Evoke;
 
 /** Provide access to data.  Related data is handled through the Joins. An
  *  iterator is supplied to traverse the array of records that make up the data.
@@ -28,7 +26,7 @@ use Evoke\Iface;
  *  }
  *  @endcode
 */
-class Base implements Iface\Data
+class Data implements Iface\Data
 {
 	/** @property $collisionFreeSetup
 	 *  Due to the way data is accessed from the Data class the number of

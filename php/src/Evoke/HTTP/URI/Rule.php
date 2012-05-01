@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\HTTP\URI;
 
 /** HTTP URI Rule class for mapping the URI to a controller.
  */
-abstract class Base implements \Evoke\Iface\HTTP\URI\Rule
+abstract class Rule implements \Evoke\Iface\HTTP\URI\Rule
 {
 	/** @property $authoritative
 	 *  \bool Whether the rule can definitely give the final route for all URIs

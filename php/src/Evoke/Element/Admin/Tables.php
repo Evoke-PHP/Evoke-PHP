@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Admin;
 
-class Tables extends \Evoke\Element\Base
+class Tables extends \Evoke\Element\Admin
 { 
 	public function __construct(Array $setup)
 	{

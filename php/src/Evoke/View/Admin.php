@@ -3,7 +3,7 @@ namespace Evoke\View;
 
 use Evoke\Iface;
 
-class Admin extends Base
+class Admin extends \Evoke\View
 {
 	/** Construct an Admin view.
 	 *  @param info            @object $info

@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\HTTP\MediaType\Rule;
+namespace Evoke\HTTP\MediaType;
 
-abstract class Base implements \Evoke\Iface\HTTP\MediaType\Rule
+abstract class Rule implements \Evoke\Iface\HTTP\MediaType\Rule
 {
 	/** @property $outputFormat
 	 *  \mixed The output format.

@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Control;
 
-class Menu extends \Evoke\Element\Base
+class Menu extends \Evoke\Element\Control
 {
 	/** @property $translator
 	 *  Translator \object

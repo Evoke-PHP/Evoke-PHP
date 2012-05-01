@@ -4,7 +4,7 @@ namespace Evoke\HTTP\MediaType\Rule;
 /** A Media Type rule that matches exactly the media type from the accept
  *  header
  */
-class Match extends Base
+class Match extends \Evoke\HTTP\MediaType\Rule
 {
 	/** @property $match
 	 *  The match for the media type.

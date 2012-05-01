@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Admin;
 
-class Header extends \Evoke\Element\Base
+class Header extends \Evoke\Element\Admin
 {
 	/** @property $elementLanguage
 	 *  Language element

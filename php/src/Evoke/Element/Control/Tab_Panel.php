@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Control;
 
-class Tab_Panel extends \Evoke\Element\Base
+class Tab_Panel extends \Evoke\Element\Control
 { 
 	public function __construct($setup=array())
 	{

@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Processing;
+namespace Evoke;
 
 use Evoke\Iface;
 
-/** Processing Base Class
+/** Processing Class
  *  This handles the routing of request information to processing callbacks
  *  via @ref Event_Manager::notify.  It is de-coupled from the request by
  *  the abstract method which gets the request data.  This allows the same
@@ -15,7 +15,7 @@ use Evoke\Iface;
  *  correct processing.  The use of request identifiers allows us to match the
  *  keys from the request and notify for the specific processing required.
  */
-abstract class Base implements Iface\Processing
+abstract class Processing implements Iface\Processing
 {
 	/** @property $eventManager
 	 *  EventManager @object

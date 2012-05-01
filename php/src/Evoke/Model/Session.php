@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Model\Session;
+namespace Evoke\Model;
 
 use Evoke\Iface;
 
-class Session extends \Evoke\Model\Base
+class Session extends \Evoke\Model
 {
 	/** @property $sessionManager
 	 *  Session Manager \object

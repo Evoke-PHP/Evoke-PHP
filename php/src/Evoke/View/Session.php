@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View;
 
-class Session extends Base
+class Session extends \Evoke\View\Session
 { 
 	/******************/
 	/* Public Methods */

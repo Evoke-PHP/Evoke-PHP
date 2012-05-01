@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Form\Input;
 
-class Select extends \Evoke\Element\Base
+class Select extends \Evoke\Element
 {
 	/** @property $appendData
 	 *  \array Data to be appended to the options available for selection.  

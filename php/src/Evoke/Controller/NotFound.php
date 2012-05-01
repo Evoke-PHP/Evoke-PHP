@@ -3,7 +3,7 @@ namespace Evoke\Controller;
 
 use Evoke\Iface;
 
-class NotFound extends Base
+class NotFound extends \Evoke\Controller
 {
 	/** Construct the Not Found response.
 	 *  @param provider @object Provider
@@ -19,7 +19,7 @@ class NotFound extends Base
 		Iface\Provider      		  	   $provider,
 		Iface\HTTP\Request  		  	   $request,
 		Iface\HTTP\Response 		  	   $response,
-		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory
+		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory,
 		Array                              $defaults  = array(
 			'Content_Type'  => 'application/xhtml+xml',
 			'Output_Format' => 'XHTML'),

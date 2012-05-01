@@ -7,7 +7,7 @@ use Evoke\Iface;
  *  read-only access to the data for the specified table and its related data
  *  obtained through the @ref Joins.
  */
-class Joint extends Base
+class Joint extends \Evoke\Model\DB
 {
 	/** @property $joins
 	 *  Joins @object which lists the relationships for the data, allowing it to

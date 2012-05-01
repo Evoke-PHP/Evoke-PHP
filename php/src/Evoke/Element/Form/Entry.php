@@ -3,7 +3,7 @@ namespace Evoke\Element\Form;
 /** Entry form for a databse record.
  *  Provide a form to show and allow modification to database tables.
  */
-class Entry extends Base
+class Entry extends \Evoke\Element\Form
 {
 	/// Construct the entry form with the table information.
 	public function __construct(Array $setup)

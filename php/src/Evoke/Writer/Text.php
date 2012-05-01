@@ -3,7 +3,7 @@ namespace Evoke\Writer;
 
 /** Writer for Text (buffered).
  */
-class Text extends Base
+class Text extends \Evoke\Writer
 {
 	/******************/
 	/* Public Methods */

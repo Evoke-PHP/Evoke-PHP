@@ -4,7 +4,7 @@ namespace Evoke\Model\DB;
 use namespace Evoke\Iface;
 
 /// Provide a read only model to a table of data.
-class Table extends Base
+class Table extends \Evoke\Model\DB
 {
 	/** @property $select
 	 *  @array Settings for the selection of records.

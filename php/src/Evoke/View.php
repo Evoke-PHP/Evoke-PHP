@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\View;
+namespace Evoke;
 
 use Evoke\Iface;
 
-abstract class Base implements Iface\View
+abstract class View implements Iface\View
 {
 	/** @property $writer
 	 *  Writer \object

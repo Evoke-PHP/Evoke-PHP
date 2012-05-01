@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Session;
 
-class Clear extends Session
+class Clear extends \Evoke\Model\Session
 {
 	/******************/
 	/* Public Methods */

@@ -4,7 +4,7 @@ namespace Evoke\HTTP\URI\Rule;
 /** A powerful rule based on regular expressions for refining the URI to a
  *  classname and parameters that will respond (generally a Controller).
  */
-class RegexTwoLevel extends Base
+class RegexTwoLevel extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $match
 	 *  The regex match to determine whether this object matches the URI. 

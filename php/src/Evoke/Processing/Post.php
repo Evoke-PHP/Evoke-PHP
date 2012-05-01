@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Processing;
 
-class Post extends Base
+class Post extends \Evoke\Processing
 { 
 	/** Construct a Post processing object.
 	 *  @param eventManager  @object Event Manager object.

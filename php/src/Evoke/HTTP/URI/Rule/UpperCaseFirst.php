@@ -4,7 +4,7 @@ namespace Evoke\HTTP\URI\Rule;
 /** A rule to strip unwanted characters from a request so that a classname can
  *  be formed.  No parameters are matched by this class.
  */
-class UpperCaseFirst extends Base
+class UpperCaseFirst extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $delimiters
 	 *  \array of delimiters that specify where a new word begins that should

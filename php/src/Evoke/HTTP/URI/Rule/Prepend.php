@@ -4,7 +4,7 @@ namespace Evoke\HTTP\URI\Rule;
 /** A rule to prepend a string to the classname.
  *  No parameters are matched by this class.
  */
-class Prepend extends Base
+class Prepend extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $str
 	 *  \string String to prepend to the classname.

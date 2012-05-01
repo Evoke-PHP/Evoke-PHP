@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Form\Input;
 
-class RequiredField extends \Evoke\Element\Base
+class RequiredField extends \Evoke\Element
 {
 	/** @property $translator
 	 *  Translator \object

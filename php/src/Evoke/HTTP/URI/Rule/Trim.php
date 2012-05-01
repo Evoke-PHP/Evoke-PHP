@@ -3,7 +3,7 @@ namespace Evoke\HTTP\URI\Rule;
 
 /** A rule to trim characters from the URI.
  */
-class Trim extends Base
+class Trim extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $characters
 	 *  \string of characters to trim from the the URI

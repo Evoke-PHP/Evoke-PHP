@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Dialog;
+namespace Evoke\Element;
 
-class Base extends \Evoke\Element
+class Dialog extends \Evoke\Element
 {
 	public function __construct(Array $setup)
 	{

@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Element\Form\Input;
 
-class Submit extends \Evoke\Element\Base
+class Submit extends \Evoke\Element
 { 
 	public function __construct(Array $setup)
 	{

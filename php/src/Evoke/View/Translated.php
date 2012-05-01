@@ -3,7 +3,7 @@ namespace Evoke\View;
 
 use Evoke\Iface;
 
-abstract class Translated extends Base
+abstract class Translated extends \Evoke\View
 {
 	/** @property $translator
 	 *  Translator \object

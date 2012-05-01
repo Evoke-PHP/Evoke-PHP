@@ -1,15 +1,15 @@
 <?php
-namespace Evoke\Element\Control\Record_List;
+namespace Evoke\Element\Control\RecordList;
 
 /// Element to display a list of records from a table.
-class Table extends Base
+class Table extends \Evoke\Element\Control\RecordList
 { 
 	public function __construct(Array $setup)
 	{
 		$setup += array('Data'       => NULL,
 		                'Table_Info' => NULL);
 
-		if (!$this->tableInfo instanceof \Evoke\Core\DB\Table\Info)
+		if (!$this->tableInfo instanceof \Evoke\DB\Table\Info)
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Table_Info');

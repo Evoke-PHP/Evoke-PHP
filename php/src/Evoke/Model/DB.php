@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model;
 
 use Evoke\Iface;
 
 /// Provides the basic implementation for a database model.
-abstract class Base extends \Evoke\Model\Base
+abstract class DB extends \Evoke\Model
 { 
 	/** @property $sql
 	 *  @object SQL

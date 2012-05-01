@@ -3,7 +3,7 @@ namespace Evoke\Processing;
 
 use Evoke\Iface;
 
-class File extends Base
+class File extends \Evoke\Processing
 {
 	/** @property $requestPrefix
 	 *  @string Prefix to the file request.

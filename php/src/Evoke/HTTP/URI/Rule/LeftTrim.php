@@ -3,7 +3,7 @@ namespace Evoke\HTTP\URI\Rule;
 
 /** A rule to trim characters from the left side of the URI.
  */
-class LeftTrim extends Base
+class LeftTrim extends \Evoke\HTTP\URI\Rule
 {
 	/** @property $characters
 	 *  Characters to trim from the left side of the URI as a \string

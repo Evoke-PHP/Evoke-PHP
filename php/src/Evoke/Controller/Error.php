@@ -3,7 +3,7 @@ namespace Evoke\Controller;
 
 use Evoke\Iface;
 
-class Error extends Base
+class Error extends \Evoke\Controller
 {
 	/** Construct the Error response.
 	 *  @param provider @object Provider

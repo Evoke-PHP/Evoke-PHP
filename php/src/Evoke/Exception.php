@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Exception;
+namespace Evoke;
 
-class Base extends \Exception
+class Exception extends \Exception
 {
 	private $detailed = false;
    

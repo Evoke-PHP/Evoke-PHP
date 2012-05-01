@@ -4,7 +4,7 @@ namespace Evoke\Model\DB;
 use Evoke\Iface;
 
 /// Get a list of tables from the database.
-class Tables extends Base
+class Tables extends \Evoke\Model\DB
 {
 	/** @property $extraTables
 	 *  \array Extra tables to include in the data.

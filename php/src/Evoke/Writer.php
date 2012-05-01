@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Writer;
+namespace Evoke;
 
 /// abstract Writer.
-abstract class Base implements \Evoke\Iface\Writer
+abstract class Writer implements \Evoke\Iface\Writer
 {
 	/** @property $buffer
 	 *  @string The buffer that holds the text that has been written ready for

@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Exception;
 
-class DB extends Base
+class DB extends \Evoke\Exception
 { 
 	/** Create a Database exception class that captures the errorCode and
 	 *  errorInfo from the database that has thrown an exception.

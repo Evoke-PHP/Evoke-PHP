@@ -2,8 +2,7 @@
 namespace Evoke\DB;
 
 use Evoke\Iface;
-use Evoke\Exception\Base as Exception_Base;
-use Evoke\Exception\DB as Exception_DB;
+use Evoke\Exception\DB as ExceptionDB;
 
 /** The SQL class provides an implementation of the SQL interface which extends
  *  the DB interface in Evoke.
@@ -48,7 +47,7 @@ class SQL implements Iface\DB
 	{
 		if ($this->inTransaction)
 		{
-			throw new Exception_DB(__METHOD__, 'Already in a transaction.');
+			throw new ExceptionDB(__METHOD__, 'Already in a transaction.');
 		}
 		else
 		{
@@ -67,7 +66,7 @@ class SQL implements Iface\DB
 		}
 		else
 		{
-			throw new Exception_DB(__METHOD__, 'Not in a transaction.');
+			throw new ExceptionDB(__METHOD__, 'Not in a transaction.');
 		}
 	}
 
@@ -87,7 +86,7 @@ class SQL implements Iface\DB
 		}
 		else
 		{
-			throw new Exception_DB(__METHOD__, 'Not in a transaction.');
+			throw new ExceptionDB(__METHOD__, 'Not in a transaction.');
 		}
 	}
    
@@ -146,7 +145,7 @@ class SQL implements Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, '', $this->db, $e);
+			throw new ExceptionDB(__METHOD__, '', $this->db, $e);
 		}
 	}
 
@@ -204,7 +203,7 @@ class SQL implements Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
@@ -237,7 +236,7 @@ class SQL implements Iface\DB
 		}
 		catch (Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
@@ -271,7 +270,7 @@ class SQL implements Iface\DB
 		}
 		catch (Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__,
 				'Exception Raised for query: ' . var_export($queryString, true) .
 				' params: ' . var_export($params, true),
@@ -342,7 +341,7 @@ class SQL implements Iface\DB
 		}
 		catch(\Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__,
 				'Tables: ' . var_export($tables, true) .
 				' Fields: ' .var_export($fields, true) .
@@ -374,7 +373,7 @@ class SQL implements Iface\DB
 		}
 		catch(\Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__,
 				'Table: ' . var_export($table, true) .
 				' Field: ' .var_export($field, true) .
@@ -411,7 +410,7 @@ class SQL implements Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(__METHOD__, 'Prepare', $this->db, $e);
+			throw new ExceptionDB(__METHOD__, 'Prepare', $this->db, $e);
 		}
 
 		$params = array_merge(array_values($setValues),
@@ -420,7 +419,7 @@ class SQL implements Iface\DB
 		// Execute
 		if ($statement->execute($params) === false)
 		{
-			throw new Exception_DB(__METHOD__, 'Execute', $statement);
+			throw new ExceptionDB(__METHOD__, 'Execute', $statement);
 		}
       
 		return true;
@@ -459,7 +458,7 @@ class SQL implements Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
 				' conditions: ' . var_export($conditions, true),
 				$this->db,
@@ -486,7 +485,7 @@ class SQL implements Iface\DB
 			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
 				var_export($fields, true);
 	 
-			throw new Exception_DB(
+			throw new ExceptionDB(
 				__METHOD__, $msg, $this->db, $e);
 		}
 
@@ -508,7 +507,7 @@ class SQL implements Iface\DB
 			}
 			catch (\Exception $e)
 			{
-				throw new Exception_DB(
+				throw new ExceptionDB(
 					__METHOD__,
 					'Multiple Values: ' . var_export($valArr, true),
 					$this->db,
@@ -523,7 +522,7 @@ class SQL implements Iface\DB
 			}
 			catch (\Exception $e)
 			{
-				throw new Exception_DB(
+				throw new ExceptionDB(
 					__METHOD__,
 					'Single Value: ' . var_export($valArr, true),
 					$this->db,
@@ -723,7 +722,7 @@ class SQL implements Iface\DB
 		}
 		catch (\Exception $e)
 		{
-			throw new Exception_Base(
+			throw new \Evoke\Exception(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true) .

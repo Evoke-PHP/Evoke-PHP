@@ -3,7 +3,7 @@ namespace Evoke\Element\Form;
 /** XHTML entry form for a databse record.
  *  Provide an XHTML form to show and allow modification to database tables.
  */
-class Upload extends Base
+class Upload extends \Evoke\Element\Form
 {
 	private $uploadSetup =
 		array('Title_Text' => 'File Upload',
