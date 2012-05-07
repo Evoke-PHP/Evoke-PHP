@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Model;
+namespace Evoke\Model\Mapper;
 
 use Evoke\Iface;
 
-/// Provides the basic implementation for a database model.
-abstract class DB extends \Evoke\Model
+/// Provides the basic implementation for a database based data mapper.
+abstract class DB implements Iface\Model\Mapper
 { 
 	/** @property $sql
 	 *  @object SQL
@@ -15,11 +15,8 @@ abstract class DB extends \Evoke\Model
 	 *  @param sql        @object SQL object.
 	 *  @param dataPrefix @array  Data prefix to offset the data to.
 	 */
-	public function __construct(Iface\DB\SQL $sql,
-	                            Array        $dataPrefix = array())
+	public function __construct(Iface\DB\SQL $sql)
 	{
-		parent::__construct($dataPrefix);
-
 		$this->sql = $sql;
 	}
 }

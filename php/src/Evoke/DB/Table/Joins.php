@@ -39,7 +39,7 @@ use Evoke\Iface;
  *  and Joins array which contains references to further Joins objects.  The
  *  methods within the class are used to process the joins tree.
  */
-class Joins
+class Joins implements Iface\DB\Table\Joins
 {
 	/** @property $adminManaged
 	 *  \bool Whether the current join is administatively managed (for the
@@ -120,14 +120,14 @@ class Joins
 	 *
 	 */
 	public function __construct(
-		Array               $joins,
 		Iface\DB\Table\Info $info,
 		/* String */        $tableName,
-		/* String */        $parentField,
-		/* String */        $childField,
+		/* String */        $parentField    = NULL,
+		/* String */        $childField     = NULL,
+		Array               $joins          = array(),
 		/* Bool   */        $adminManaged   = true,
 		Array               $autoFields     = array('ID'),
-		/* String */        $compareType    = '=,',
+		/* String */        $compareType    = '=',
 		/* String */        $idSeparator    = '_',
 		/* String */        $joinType       = 'LEFT JOIN',
 		/* String */        $jointKey       = 'Joint_Data',
@@ -144,7 +144,7 @@ class Joins
 		$this->autoFields     = $autoFields;
 		$this->childField     = $childField;
 		$this->compareType    = $compareType;
-		$this->idSeparator    = $iDSeparator;
+		$this->idSeparator    = $idSeparator;
 		$this->info           = $info;
 		$this->joinType       = $joinType;
 		$this->joins          = $joins;

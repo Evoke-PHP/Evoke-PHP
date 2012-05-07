@@ -40,10 +40,10 @@ class Loader
 		 *  array of connection settings.  Each item in the array should be of the
 		 *  form:       
 		 \verbatim
-		 DSN      - Data Source Name.
-		 Options  - Options for passing to PDO.
-		 Password - Password.
-		 Username - Username.
+		 Data_Source_Name - Data Source Name.
+		 Options          - Options for passing to PDO.
+		 Password         - Password.
+		 Username         - Username.
 		 \endverbatim
 		 * No database connections by default.
 		 */

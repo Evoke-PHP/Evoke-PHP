@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Data;
+namespace Evoke\Model\Data;
 
-class Menu extends \Evoke\Data
+class Menu extends \Evoke\Model\Data
 {
 	/** @property $left
 	 *  Left field name @string
@@ -17,9 +17,14 @@ class Menu extends \Evoke\Data
 	 *  @param left  @string Left field name.
 	 *  @param right @string Right field name.
 	 */
-	public function __construct(/* String */ $left='Lft',
-	                            /* String */ $right='Rgt')
+	public function __construct(Array        $data     = array(),
+	                            Array        $joins    = array(),
+	                            /* String */ $jointKey = 'Joint_Data',
+	                            /* String */ $left     = 'Lft',
+	                            /* String */ $right    = 'Rgt')
 	{
+		parent::__construct($data, $joins, $jointKey);
+		
 		$this->left  = $left;
 		$this->right = $right;
 	}
@@ -66,7 +71,7 @@ class Menu extends \Evoke\Data
 
 
 		/// \todo This needs to be fixed and tested.
-		throw new Exception(__METHOD__ . ' needs implementation to be tested.');
+		throw new \Exception(__METHOD__ . ' needs implementation to be tested.');
 		
 		foreach ($menuItems as $item)
 		{

@@ -5,13 +5,13 @@ namespace Evoke\DB;
 class PDO extends \PDO implements \Evoke\Iface\DB
 {
 	public function __construct(
-		/* String */ $dsn,
+		/* String */ $dataSourceName,
 		/* String */ $password,
 		/* String */ $username,
 		Array        $options=array(
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION))
 	{
-		if (!is_string($dsn))
+		if (!is_string($dataSourceName))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires dsn as string');
@@ -29,7 +29,7 @@ class PDO extends \PDO implements \Evoke\Iface\DB
 				__METHOD__ . ' requires username as string');
 		}
 
-		parent::__construct($dSN,
+		parent::__construct($dataSourceName,
 		                    $username,
 		                    $password,
 		                    $options);

@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Iface;
+namespace Evoke\Iface\Model;
 
 interface Data extends \ArrayAccess, \Iterator
 {
-	public function setData(Array $data);
+
 }
 // EOF

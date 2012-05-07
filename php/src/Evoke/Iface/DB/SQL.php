@@ -4,9 +4,9 @@ namespace Evoke\Iface\DB;
 interface SQL extends \Evoke\Iface\DB
 {
 	
-	public function getAssoc($queryString, $params=array(););
-	public function getSingleRow($queryString, $params=array(););
-	public function getSingleValue($queryString, $params=array();, $column=0);
+	public function getAssoc($queryString, $params=array());
+	public function getSingleRow($queryString, $params=array());
+	public function getSingleValue($queryString, $params=array(), $column=0);
 	public function select($tables, $fields, $conditions='', $order='', $limit=0, $distinct=false);
 	public function selectSingleValue($table, $field, $conditions);
 	public function update($tables, $setValues, $conditions='', $limit=0);

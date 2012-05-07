@@ -18,7 +18,7 @@ use Evoke\Exception\DB as ExceptionDB;
  *   A condition passed in as a string is unchanged and can be used for more
  *   complex comparison operations.
  */
-class SQL implements Iface\DB
+class SQL implements Iface\DB\SQL
 {
 	/** @property $db
 	 *  @object Database object.
@@ -31,11 +31,11 @@ class SQL implements Iface\DB
 	protected $inTransaction = false;
 
 	/** Construct an SQL object.
-	 *  @param db @object DB object to perform the SQL on.
+	 *  @param database @object Database object to perform the SQL on.
 	 */
-	public function __construct(Iface\DB $db)
+	public function __construct(Iface\DB $database)
 	{
-		$this->db = $db;
+		$this->db = $database;
 	}
    
 	/*****************************************/

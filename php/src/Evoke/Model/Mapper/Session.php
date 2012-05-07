@@ -3,7 +3,7 @@ namespace Evoke\Model;
 
 use Evoke\Iface;
 
-class Session extends \Evoke\Model
+class Session extends \Evoke\Model\Base
 {
 	/** @property $sessionManager
 	 *  Session Manager \object

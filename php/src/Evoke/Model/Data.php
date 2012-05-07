@@ -1,5 +1,7 @@
 <?php
-namespace Evoke;
+namespace Evoke\Model;
+
+use Evoke\Iface;
 
 /** Provide access to data.  Related data is handled through the Joins. An
  *  iterator is supplied to traverse the array of records that make up the data.
@@ -26,7 +28,7 @@ namespace Evoke;
  *  }
  *  @endcode
 */
-class Data implements Iface\Data
+class Data implements Iface\Model\Data
 {
 	/** @property $collisionFreeSetup
 	 *  Due to the way data is accessed from the Data class the number of
@@ -37,8 +39,8 @@ class Data implements Iface\Data
 	 */
 	protected $collisionFreeSetup;
 		
-	public function __construct(Array        $joins,
-	                            Array        $data     = array(),
+	public function __construct(Array        $data     = array(),
+	                            Array        $joins    = array(),
 	                            /* String */ $jointKey = 'Joint_Data')
 	{
 		if (!is_array($joins))
@@ -47,13 +49,13 @@ class Data implements Iface\Data
 				__METHOD__ . ' requires Joins as array');
 		}
 		
-		foreach ($joins as $parentField => $dataContainer)
+		foreach ($joins as $dataContainer)
 		{
-			if (!$dataContainer instanceof Iface\Data)
+			if (!$dataContainer instanceof Iface\Model\Data)
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' requires Data for parent field: ' .
-					$parentField);
+					$dataContainer['Parent_Field']);
 			}
 		}
 

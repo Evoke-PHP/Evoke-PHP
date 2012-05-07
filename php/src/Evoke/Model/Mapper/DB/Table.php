@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
-use namespace Evoke\Iface;
+use Evoke\Iface;
 
 /// Provide a read only model to a table of data.
-class Table extends \Evoke\Model\DB
+class Table extends \Evoke\Model\Mapper\DB
 {
 	/** @property $select
 	 *  @array Settings for the selection of records.
@@ -20,7 +20,6 @@ class Table extends \Evoke\Model\DB
 	 *  @param sql        @object SQL.
 	 *  @param tableName  @string The database table that the model represents.
 	 *  @param select     @array  Select statement settings.
-	 *  @param dataPrefix @array  Prefix to the data
 	 */
 	public function __construct(
 		Iface\DB\SQL $sql,
@@ -28,8 +27,7 @@ class Table extends \Evoke\Model\DB
 		Array        $select     = array('Fields'     => '*',
 		                                 'Conditions' => '',
 		                                 'Order'      => '',
-		                                 'Limit'      => 0),
-		Array        $dataPrefix = array())
+		                                 'Limit'      => 0))
 	{
 		if (!is_string($tableName))
 		{
@@ -37,7 +35,7 @@ class Table extends \Evoke\Model\DB
 				__METHOD__ . ' requires tableName as string');
 		}
 		
-		parent::__construct($sql, $dataPrefix);
+		parent::__construct($sql);
 
 		$this->select    = $select;
 		$this->tableName = $tableName;
@@ -47,19 +45,15 @@ class Table extends \Evoke\Model\DB
 	/* Public Methods */
 	/******************/
 
-	public function getData(Array $selectSetup=array())
+	public function fetch(Array $selectSetup=array())
 	{
-		parent::getData();
-
 		$selectSetup = array_merge($this->select, $selectSetup);
       
-		$results = $this->sql->select($this->tableName,
-		                              $selectSetup['Fields'],
-		                              $selectSetup['Conditions'],
-		                              $selectSetup['Order'],
-		                              $selectSetup['Limit']);
-
-		return $this->offsetData($results);
+		return $this->sql->select($this->tableName,
+		                          $selectSetup['Fields'],
+		                          $selectSetup['Conditions'],
+		                          $selectSetup['Order'],
+		                          $selectSetup['Limit']);
 	}
 }
 // EOF

@@ -69,7 +69,6 @@ class Exception extends \Exception
 	 */
 	private function detailedString()
 	{
-		echo 'DET';
 		$str = '';
       
 		$stack = $this->getTrace();

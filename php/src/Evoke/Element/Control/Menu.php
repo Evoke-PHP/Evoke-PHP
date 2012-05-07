@@ -1,18 +1,8 @@
 <?php
 namespace Evoke\Element\Control;
 
-class Menu extends \Evoke\Element\Control
+class Menu extends \Evoke\Element\Translator
 {
-	/** @property $translator
-	 *  Translator \object
-	 */
-	protected $translator;
-
-	public function __construct(Evoke\Iface\Translator $translator)
-	{
-		$this->translator = $translator;
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/

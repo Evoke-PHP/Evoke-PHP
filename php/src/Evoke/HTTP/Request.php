@@ -135,8 +135,10 @@ class Request implements \Evoke\Iface\HTTP\Request
 	{
 		if (!isset($_SERVER['HTTP_ACCEPT']))
 		{
-			throw new \OutOfBoundsException(
-				__METHOD__ . ' HTTP_ACCEPT is not set.');
+			trigger_error(__METHOD__ . ' HTTP_ACCEPT is not set.',
+			              E_USER_ERROR);
+
+			return array();
 		}
 
 		$acceptString = $_SERVER['HTTP_ACCEPT'];
@@ -163,9 +165,9 @@ class Request implements \Evoke\Iface\HTTP\Request
 				
 			if (!preg_match($validationPattern, $acceptString))
 			{
-				throw new \InvalidArgumentException(
-					__METHOD__ . ' Accept request header: ' . $acceptString .
-					' is invalid.');
+				trigger_error(__METHOD__ . ' Accept request header: ' .
+				              $acceptString . ' is invalid.', E_USER_ERROR);
+				return array();
 			}
 		}
 
@@ -234,8 +236,9 @@ class Request implements \Evoke\Iface\HTTP\Request
 	{
 		if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			throw new \OutOfBoundsException(
-				__METHOD__ . ' HTTP_ACCEPT_LANGUAGE is not set.');
+			trigger_error(__METHOD__ . ' HTTP_ACCEPT_LANGUAGE is not set.',
+			              E_USER_ERROR);
+			return array();
 		}
 
 		$acceptLanguageString = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
@@ -256,9 +259,10 @@ class Request implements \Evoke\Iface\HTTP\Request
 				
 			if (!preg_match($validationPattern, $acceptLanguageString))
 			{
-				throw new \InvalidArgumentException(
-					__METHOD__ . ' Accept request header: ' .
-					$acceptLanguageString . ' is invalid.');
+				trigger_error(__METHOD__ . ' Accept request header: ' .
+				              $acceptLanguageString . ' is invalid.',
+				              E_USER_ERROR);
+				return array();
 			}
 		}
 

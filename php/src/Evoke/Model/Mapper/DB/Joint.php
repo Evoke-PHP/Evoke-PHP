@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Iface;
 
@@ -7,7 +7,7 @@ use Evoke\Iface;
  *  read-only access to the data for the specified table and its related data
  *  obtained through the @ref Joins.
  */
-class Joint extends \Evoke\Model\DB
+class Joint extends \Evoke\Model\Mapper\DB
 {
 	/** @property $joins
 	 *  Joins @object which lists the relationships for the data, allowing it to
@@ -30,13 +30,11 @@ class Joint extends \Evoke\Model\DB
 	 *  @param tableName  @string The table name where joins start from.
 	 *  @param joins      @object Joins object.
 	 *  @param select     @array  Select statement settings.
-	 *  @param dataPrefix @array  Any prefix to offset the data with.
 	 */
 	public function __construct(Iface\DB\SQL         $sql, 
 	                            /* String */         $tableName,
 	                            Iface\DB\Table\Joins $joins,
-	                            Array                $select     = array(),
-	                            Array                $dataPrefix = array())
+	                            Array                $select = array())
 	{
 	   
 		if (!is_string($tableName))
@@ -45,7 +43,7 @@ class Joint extends \Evoke\Model\DB
 				__METHOD__ . ' requires tableName as string');
 		}
 		
-		parent::__construct($sql, $dataPrefix);
+		parent::__construct($sql);
 
 		$select += array('Conditions' => '',
 		                 'Fields'     => '*',
@@ -61,28 +59,35 @@ class Joint extends \Evoke\Model\DB
 	/* Public Methods */
 	/******************/
 
-	/** Get the data for the model.
-	 *  @param selectSetup \array Optional SQL select settings (default is all).
+	/** Fetch some data from the mapper (specified by params).
+	 *  @param params \array The conditions to match in the mapped data.
 	 */
-	public function getData(Array $selectSetup=array())
+	public function fetch(Array $params)
 	{
-		$selectSetup = array_merge($this->select, $selectSetup);
+		$params += array('Conditions' => '',
+		                 'Fields'     => '*',
+		                 'Order'      => '',
+		                 'Limit'      => 0);
+
 		$tables = $this->tableName . $this->joins->getJoinStatement();
 
-		if ($selectSetup['Fields'] === '*')
+		if ($params['Fields'] === '*')
 		{
-			$selectSetup['Fields'] = $this->joins->getAllFields();
+			$params['Fields'] = $this->joins->getAllFields();
 		}
 
-		$results = $this->sql->select($tables,
-		                              $selectSetup['Fields'],
-		                              $selectSetup['Conditions'],
-		                              $selectSetup['Order'],
-		                              $selectSetup['Limit']);
+		return $this->sql->select($tables,
+		                          $params['Fields'],
+		                          $params['Conditions'],
+		                          $params['Order'],
+		                          $params['Limit']);
+	}
 
-		return array_merge(
-			parent::getData(),
-			$this->offsetData($this->joins->arrangeResults($results)));
+	public function fetchAll()
+	{
+		return $this->sql->select(
+			$this->tableName . $this->joins->getJoinStatement(),
+			$this->joins->getAllFields());
 	}
 }
 // EOF

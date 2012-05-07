@@ -5,31 +5,6 @@ use Evoke\Iface;
 
 class Error extends \Evoke\Controller
 {
-	/** Construct the Error response.
-	 *  @param provider @object Provider
-	 *  @param request  @object Request
-	 *  @param response @object Response
-	 *  @param mediaTypeRouterFactory @object Media Type Router Factory.
-	 *  @param defaults               @array  Defaults for the content type and
-	 *                                        output format.
-	 *  @param pageSetup              @array  Setup for page based output
-	 *                                        formats.
-	 */
-	public function __construct(
-		Iface\Provider      		  	   $provider,
-		Iface\HTTP\Request  		  	   $request,
-		Iface\HTTP\Response 		  	   $response,
-		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory,
-		Array                              $defaults  = array(
-			'Content_Type'  => 'application/xhtml+xml',
-			'Output_Format' => 'XHTML'),
-		Array                              $pageSetup = array())
-	{
-		// Error has no parameters, so use an empty array for it.
-		parent::__construct(array(), $provider, $request, $response,
-		                    $mediaTypeRouterFactory, $defaults, $pageSetup);
-	}
-	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
@@ -50,7 +25,11 @@ class Error extends \Evoke\Controller
 	 */
 	protected function respond($outputFormat)
 	{
-		$this->response->setResponseCode(500);
+		if (!headers_sent())
+		{
+			$this->response->setResponseCode(500);
+		}
+
 		parent::respond($outputFormat);
 	}
 
@@ -85,6 +64,25 @@ class Error extends \Evoke\Controller
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
 
+		$detailedDescription = array();
+
+		if (isset($this->params['Exception']) &&
+		    $this->params['Exception'] instanceof \Exception)
+		{
+			$eParts = explode("\n",
+			                  $this->params['Exception']->getMessage() . "\n" .
+			                  $this->params['Exception']->getTraceAsString());
+			
+			foreach ($eParts as $part)
+			{
+				$detailedDescription[] = $part;
+				$detailedDescription[] = array('br');
+			}
+
+			array_pop($detailedDescription);
+		}
+
+
 		$writer->write(
 			array('div',
 			      array('class' => 'Message_Box System'),
@@ -94,7 +92,10 @@ class Error extends \Evoke\Controller
 			            array('div',
 			                  array('class' => 'Description'),
 			                  'An error has occurred. We have been notified.' .
-			                  '  We will fix this as soon as possible.'))));
+			                  '  We will fix this as soon as possible.'),
+			            array('div',
+			                  array('class' => 'Detailed Description'),
+			                  $detailedDescription))));
 	}	
 }
 // EOF

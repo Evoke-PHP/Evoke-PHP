@@ -86,6 +86,9 @@ class Autoload implements \Evoke\Iface\Init\Handler
 		}
 		elseif ($this->authoritative)
 		{
+			trigger_error(
+				__METHOD__ . ' Authoritative autoloader can\'t load: ' .
+				$filename);
 			// We are the authoritative autoloader for the namespace - If we can't
 			// find it no-one can.
 			throw new \RuntimeException(

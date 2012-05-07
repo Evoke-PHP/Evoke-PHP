@@ -1,7 +1,7 @@
 <?php
 namespace Evoke;
 /// Provides the basic implementation for a model.
-abstract class Model implements \Evoke\Iface\Model
+abstract class Base implements \Evoke\Iface\Model
 {
 	/** @property $dataPrefix
 	 *  \array specifying the prefix to offset the retrieved data with.
