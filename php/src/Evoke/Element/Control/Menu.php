@@ -11,12 +11,12 @@ class Menu extends \Evoke\Element\Translator
 	 *  @param menuItems \array The menu items.
 	 *  \return \array The menu element data.
 	 */
-	public function set(Array $menuItems)
+	public function set(Array $menu)
 	{
 		return parent::set(
 			array('ul',
-			      array(),
-			      $this->buildMenu($menuItems)));
+			      array('class' => 'Menu ' . $menu['Name']),
+			      $this->buildMenu($menu['Items'][0]['Children'])));
 	}
    
 	/*******************/
@@ -27,10 +27,10 @@ class Menu extends \Evoke\Element\Translator
 	{
 		$lang = $this->translator->getLanguage();
 		$menu = array();
-      
+
 		foreach ($data as $menuItem)
 		{
-			if (isset($menuItem['Children']))
+			if (!empty($menuItem['Children']))
 			{
 				$menu[] = array(
 					'li',

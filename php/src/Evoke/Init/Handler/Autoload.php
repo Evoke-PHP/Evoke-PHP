@@ -6,7 +6,9 @@ class Autoload implements \Evoke\Iface\Init\Handler
 	/** @property $authoritative
 	 *  Whether we have complete authority over the namespace, or we should allow
 	 *  other autoloaders a chance to load the classes for our domain (if we are
-	 *  not able to).
+	 *  not able to).  This gives us the opportunity to throw an exception and
+	 *  avoid the __fatal error__ that is *almost* sure to follow an unloaded
+	 *  class.
 	 */
 	protected $authoritative;
 
@@ -99,11 +101,7 @@ class Autoload implements \Evoke\Iface\Init\Handler
    
 	public function register()
 	{
-		if (!spl_autoload_register(array($this, 'handler')))
-		{
-			throw new \RuntimeException(
-				__METHOD__ . ' spl_autoload_register failed.');
-		}
+		spl_autoload_register(array($this, 'handler'), true);
 	}
 
 	public function unregister()

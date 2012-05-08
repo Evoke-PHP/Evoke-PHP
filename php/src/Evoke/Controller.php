@@ -44,7 +44,7 @@ abstract class Controller
 	 */
 	protected $request;
 
-	/** Construct the response.
+	/** Construct the Controller.
 	 *  @param params                 @array  Parameters for the response.
 	 *  @param provider               @object Provider object.
 	 *  @param request                @object Request object.
