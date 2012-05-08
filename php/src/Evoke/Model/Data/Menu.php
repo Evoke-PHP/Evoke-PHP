@@ -17,13 +17,13 @@ class Menu extends \Evoke\Model\Data
 	 *  @param left  @string Left field name.
 	 *  @param right @string Right field name.
 	 */
-	public function __construct(Array        $data     = array(),
-	                            Array        $joins    = array(),
-	                            /* String */ $jointKey = 'Joint_Data',
-	                            /* String */ $left     = 'Lft',
-	                            /* String */ $right    = 'Rgt')
+	public function __construct(Array        $data      = array(),
+	                            Array        $dataJoins = array(),
+	                            /* String */ $jointKey  = 'Joint_Data',
+	                            /* String */ $left      = 'Lft',
+	                            /* String */ $right     = 'Rgt')
 	{
-		parent::__construct($data, $joins, $jointKey);
+		parent::__construct($data, $dataJoins, $jointKey);
 		
 		$this->left  = $left;
 		$this->right = $right;
@@ -39,9 +39,11 @@ class Menu extends \Evoke\Model\Data
 	{
 		$data = array();
       
-		foreach ($this->list as $menuItems)
+		foreach ($this as $menuItems)
 		{
-			$data[] = $this->getTree($menuItems);
+			$menuDetails = $menuItems->getRecord();
+			$data[] = array('Name' => $menuDetails['Name'],
+			                'Items' => $this->getTree($menuItems));
 		}
       
 		return $data;
@@ -69,23 +71,20 @@ class Menu extends \Evoke\Model\Data
 		// current level, second to last = previous level, etc.
 		$childrenToProcess = array();
 
-
-		/// \todo This needs to be fixed and tested.
-		throw new \Exception(__METHOD__ . ' needs implementation to be tested.');
-		
-		foreach ($menuItems as $item)
+		foreach ($menuItems->list as $item)
 		{
 			$numChildren = ($item[$this->right] - $item[$this->left] - 1) / 2;
 	 
 			// Go to the correct depth of the tree and add the item.
-			$ref =& $tree;
+			$join =& $tree;
 	 
 			for ($depth = 0; $depth < $levelsDeep; $depth++)
 			{
-				$ref =& $ref[count($ref) - 1]['Children'];
+				$join =& $join[count($join) - 1]['Children'];
 			}
 
-			$ref[] = $item->getRecord();
+			$join[] = array_merge(array('Children' => array()),
+			                      $item->getRecord());
 
 			// We have processed an item.
 			foreach ($childrenToProcess as &$children)
@@ -105,7 +104,7 @@ class Menu extends \Evoke\Model\Data
 			}
 		}
 
-		return $tree[0];
+		return $tree;
 	}
 }
 // EOF

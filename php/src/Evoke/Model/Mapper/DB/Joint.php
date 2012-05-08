@@ -76,18 +76,25 @@ class Joint extends \Evoke\Model\Mapper\DB
 			$params['Fields'] = $this->joins->getAllFields();
 		}
 
-		return $this->sql->select($tables,
-		                          $params['Fields'],
-		                          $params['Conditions'],
-		                          $params['Order'],
-		                          $params['Limit']);
+		return $this->joins->arrangeResults(
+			$this->sql->select($tables,
+			                   $params['Fields'],
+			                   $params['Conditions'],
+			                   $params['Order'],
+			                   $params['Limit']));
 	}
 
 	public function fetchAll()
 	{
-		return $this->sql->select(
-			$this->tableName . $this->joins->getJoinStatement(),
-			$this->joins->getAllFields());
+		$results = 	$this->sql->select(
+				$this->tableName . $this->joins->getJoinStatement(),
+				$this->joins->getAllFields(),
+				$this->select['Conditions'],
+				$this->select['Order'],
+				$this->select['Limit']);
+			
+		return $this->joins->arrangeResults($results
+		);
 	}
 }
 // EOF

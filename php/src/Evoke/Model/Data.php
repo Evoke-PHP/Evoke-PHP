@@ -39,38 +39,39 @@ class Data implements Iface\Model\Data
 	 */
 	protected $collisionFreeSetup;
 		
-	public function __construct(Array        $data     = array(),
-	                            Array        $joins    = array(),
-	                            /* String */ $jointKey = 'Joint_Data')
+	public function __construct(Array        $data      = array(),
+	                            Array        $dataJoins = array(),
+	                            /* String */ $jointKey  = 'Joint_Data')
 	{
-		if (!is_array($joins))
+		if (!is_array($dataJoins))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Joins as array');
+				__METHOD__ . ' requires dataJoins as array');
 		}
 		
-		foreach ($joins as $dataContainer)
+		foreach ($dataJoins as $parentField => $dataContainer)
 		{
 			if (!$dataContainer instanceof Iface\Model\Data)
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' requires Data for parent field: ' .
-					$dataContainer['Parent_Field']);
+					$parentField);
 			}
 		}
 
 		$this->collisionFreeSetup = array('Data'      => $data,
-		                                  'Joins'     => $joins,
+		                                  'Joins'     => $dataJoins,
 		                                  'Joint_Key' => $jointKey);
+		$this->rewind();
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Provide access to the joint data.  This allows the object to be used like
-	 *  so:  $object->referencedData (for joint data with a parent field of
-	 *  'Referenced_Data').
+	/** Provide access to the joint data as though it is a property of the
+	 *  object.  For joint data with a parent field of Linked_Data the property
+	 *  would be: `$object->linkedData;`.
 	 *  @param parentField @string The parent field for the joint data.
 	 *  This can be as per the return value of @ref getJoinName.
 	 */
@@ -90,7 +91,7 @@ class Data implements Iface\Model\Data
 		}
       
 		throw new \OutOfBoundsException(
-			__METHOD__ . ' record does not refer to: ' .
+			__METHOD__ . ' record does not have a data container for: ' .
 			var_export($parentField, true) . ' joins are: ' .
 			var_export($this->collisionFreeSetup['Joins'], true));
 	}

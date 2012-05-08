@@ -43,7 +43,7 @@ class Factory implements Iface\Model\Factory
 			      'Select'     => array(
 				      'Conditions' => array('Menu.Name' => $menuName),
 				      'Fields'     => '*',
-				      'Order'      => 'Lft ASC',
+				      'Order'      => 'Menu_List_T_Lft ASC',
 				      'Limit'      => 0),
 			      'Table_Name' => 'Menu'));
 	}
