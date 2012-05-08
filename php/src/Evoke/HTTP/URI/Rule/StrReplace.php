@@ -6,36 +6,42 @@ namespace Evoke\HTTP\URI\Rule;
  */
 class StrReplace extends \Evoke\HTTP\URI\Rule
 {
-	/** @property $subRules
-	 *  \array of string replacements to be performed on the URI to map it to
-	 *  a classname.
+	/** @property $match
+	 *  @string The string to match on.
 	 */
-	protected $subRules;
+	protected $match;
+
+	/** @property $replacement
+	 *  @string The string to use as a replacement.
+	 */
+	protected $replacement;
 
 	/** Construct the string replacements rule.
-	 *  @param subRules \array The array of string replacements of the form:
-	 *  \code
-	 *  array('Match'       => 'match_string',
-	 *        'Replacement' => 'replacement_string')
-	 *  \endcode
-	 *  @param authoritative \bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	 *  @param match         @string The string to match on.
+	 *  @param replacment    @string The string to use as a replacement.
+	 *  @param authoritative @bool   Whether the rule can definitely give the
+	 *                               final route for all URIs that it matches.
 	 */
-	public function __construct(Array      $subRules,
-	                            /* Bool */ $authoritative = false)
+	public function __construct(/* String */ $match,
+	                            /* String */ $replacement,
+	                            /* Bool   */ $authoritative = false)
 	{
-		foreach ($subRules as $subRule)
+		if (!is_string($match))
 		{
-			if (!isset($subRule['Match'], $subRule['Replacement']))
-			{
-				throw new \InvalidArgumentException(
-					__METHOD__ . ' all rules need a Match and Replacement.');
-			}
-		}	    
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires match as string');
+		}
+
+		if (!is_string($replacement))
+		{
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires replacement as string');
+		}
       
 		parent::__construct($authoritative);
 
-		$this->subRules = $subRules;
+		$this->match       = $match;
+		$this->replacement = $replacement;
 	}
    
 	/******************/
@@ -43,37 +49,20 @@ class StrReplace extends \Evoke\HTTP\URI\Rule
 	/******************/
 
 	/** Get the classname.
-	 *  @param uri \string The URI to get the classname from.
-	 *  @return \string The uri with the string replacements made.
+	 *  @param uri @string The URI to get the classname from.
+	 *  @return @string The uri with the string replacements made.
 	 */
 	public function getClassname($uri)
 	{
-		$classname = $uri;
-		
-		foreach ($this->subRules as $subRule)
-		{
-			$classname = str_replace($subRule['Match'],
-			                         $subRule['Replacement'],
-			                         $classname);
-		}
-
-		return $classname;
+		return str_replace($this->match, $this->replacement, $uri);
 	}
 	
 	/** Check the uri to see if it matches. Only 1 sub-rule needs to match.
-	 *  @return \bool Whether the uri is matched.
+	 *  @return @bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{
-		foreach ($this->subRules as $subRule)
-		{
-			if (strpos($uri, $subRule['Match']) !== false)
-			{
-				return true;
-			}
-		}
-      
-		return false;
+		return strpos($uri, $this->match) !== false;
 	}
 }
 // EOF
