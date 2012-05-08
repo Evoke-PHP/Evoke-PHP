@@ -3,41 +3,54 @@ namespace Evoke\DB\Table;
 
 use Evoke\Iface;
 
-/** The Joins class is used to interact with Relational Databases.
+/** The JoinTree class is used to interact with Relational Databases.
  *  Relational databases have tables of data that are linked to other tables
- *  via Foreign Keys.  By understanding the relationships between data we can
- *  deal with data in real world units.
- *
- *  To match the relational model in code we need to represent a Tree of
- *  relations from the table of data.  The Joins object is thus a node in a Tree
- *  of Joins. Recursive methods to process the tree of joins enable the data to
- *  be joint together and used. 
+ *  via Foreign Keys.  The JoinTree provides a way or representing these
+ *  relationships so that data can be managed in real world units (with related
+ *  data joint by the appropriate relationship).
  *
  *  Example:
  *     List of products, each of a particular size with a set of related images.
  *  
- *  SQL structure:
- *     Product:    ID, Name, Image_List_ID, Size_ID
- *                 (Foreign Keys: Image_List_ID -> Image_List.List_ID,
- *                                Size_ID       -> Size.ID)
- *     Image_List: ID, List_ID, Image_ID
-                   (Foreign Keys: Image_ID -> Image.ID)
- *     Image:      ID, Filename
- *     Size:       ID, Name
+ *  SQL structure (PK = Primary Key, FK = Foreign Key):
+ *  @verbatim
+ *    +====================+     
+ *    | Product            |     +===============+
+ *    +--------------------+     | Image_List    |
+ *    | PK | ID            |     +---------------+     +===============+
+ *    |    | Name          |     | PK | ID       |     | Image         |
+ *    | FK | Image_List_ID |---->|    | List_ID  |     +---------------+
+ *    | FK | Size_ID       |-.   | FK | Image_ID |---->| PK | ID       |
+ *    +====================+ |   +===============+     |    | Filename |
+ *                           |                         +===============+
+ *                           |   +===========+
+ *                    	     |   | Size      |
+ *                    	     |   +-----------+
+ *                    	     `-->| PK | ID   |
+ *                    	         |    | Name |
+ *                    	         +===========+
+ *  @endverbatim
  *
  *  Joins:
- *     Image_List_ID -> Child_Field => List_ID,
- *                      Table_Name  => Image_List,
- *                      Joins       => 
- *                         Image_ID -> Child_Field => ID,
- *                                     Table_Name  => Image,
- *     Size_ID       -> Child_Field => ID,
- *                      Table_Name  => Size
+ *  @verbatim
+ *  array(Table_Name => Product,
+ *        Joins => array(
+ *	          array(Child_Field  => List_ID,
+ *	                Parent_Field => Image_List_ID,
+ *	                Table_Name   => Image_List,
+ *	                Joins        => array(
+ *	                    array(Child_Field => ID,
+ *	                          Parent_Field => Image_ID,
+ *	                          Table_Name  => Image))),
+ *	          array(Child_Field  => ID,
+ *	                Parent_Field => Size_ID,
+ *	                Table_Name   => Size)));
+ *  @endverbatim
  *
  *  The above is an abstract representation of the Joins tree that would
- *  represent the data.  The Joins class models the above with its properties
- *  and Joins array which contains references to further Joins objects.  The
- *  methods within the class are used to process the joins tree.
+ *  represent the data.  The JoinTree class models the above with its properties
+ *  and Joins array which contains references to further JoinTree objects.  The
+ *  methods within the class are used to process the JoinTree.
  */
 class Joins implements Iface\DB\Table\Joins
 {
