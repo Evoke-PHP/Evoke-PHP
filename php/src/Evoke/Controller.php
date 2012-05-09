@@ -44,6 +44,11 @@ abstract class Controller
 	 */
 	protected $request;
 
+	/** @property $writer
+	 *  @object Writer
+	 */
+	protected $writer;
+	
 	/** Construct the Controller.
 	 *  @param params                 @array  Parameters for the response.
 	 *  @param provider               @object Provider object.
@@ -85,6 +90,7 @@ abstract class Controller
 	{
 		$mediaTypeRouter = $this->buildMediaTypeRouter();
 		$outputFormat = $mediaTypeRouter->route();
+		$this->writer = $this->buildWriter($outputFormat);
 
 		switch(strtoupper($outputFormat))
 		{
@@ -149,8 +155,6 @@ abstract class Controller
 	 */
 	protected function respond($outputFormat)
 	{
-		$writer = $this->buildWriter($outputFormat);
-		
 		// Preferably we respond using the method that matches the HTTP Request
 		// method, but we allow a method of ALL to cover unhandled methods.
 		$methodName = strtolower($outputFormat) .
@@ -159,11 +163,11 @@ abstract class Controller
 		
 		if (is_callable(array($this, $methodName)))
 		{
-			$this->{$methodName}($writer);
+			$this->{$methodName}();
 		}
 		elseif (is_callable(array($this, $methodAll)))
 		{
-			$this->{$methodAll}($writer);
+			$this->{$methodAll}();
 		}
 		else
 		{
@@ -172,7 +176,7 @@ abstract class Controller
 				' not handled');
 		}
 
-		$writer->output();
+		$this->writer->output();
 	}
 }
 // EOF

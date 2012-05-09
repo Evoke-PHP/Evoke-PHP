@@ -64,11 +64,6 @@ class Factory implements Iface\Model\Factory
 	/* Protected Methods */
 	/*********************/
 
-	protected function buildData(Array $joins)
-	{
-
-	}
-
 	protected function buildInfo(Array $params)
 	{
 		if (!isset($params['Sql']))

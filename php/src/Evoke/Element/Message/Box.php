@@ -2,7 +2,10 @@
 namespace Evoke\Element\Message;
 
 class Box extends \Evoke\Element
-{ 
+{
+	/** Construct a Message Box Element.
+	 *  @param attribs @array Attributes for the message box.
+	 */
 	public function __construct(
 		Array $attribs = array('class' => 'Message_Box Info'),
 		Array $pos     = array())
@@ -16,9 +19,6 @@ class Box extends \Evoke\Element
 
 	public function set(Array $message)
 	{
-		$message += array('Description' => NULL,
-		                  'Title'       => NULL);
-
 		if (!isset($message['Description']))
 		{
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Description');

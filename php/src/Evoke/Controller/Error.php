@@ -9,15 +9,15 @@ class Error extends \Evoke\Controller
 	/* Protected Methods */
 	/*********************/
 	
-	protected function html5ALL(Iface\Writer\Page $writer)
+	protected function html5ALL()
 	{
-		$this->xhtmlALL($writer);
+		$this->xhtmlALL();
 	}
 	
-	protected function jsonALL(Iface\Writer $writer)
+	protected function jsonALL()
 	{
-		$writer->write(array('Code'    => '500',
-		                     'Title'   => 'Internal Server Error'));
+		$this->writer->write(array('Code'    => '500',
+		                           'Title'   => 'Internal Server Error'));
 	}
 	
 	/** Respond with the error code first.
@@ -33,69 +33,43 @@ class Error extends \Evoke\Controller
 		parent::respond($outputFormat);
 	}
 
-	protected function textALL(Iface\Writer $writer)
+	protected function textALL()
 	{
-		$writer->write('500 Internal Server Error');
+		$this->writer->write('500 Internal Server Error');
 	}
 	
-	protected function xhtmlALL(Iface\Writer\Page $writer)
+	protected function xhtmlALL()
 	{
-		$writer->writeStart(
+		$this->writer->writeStart(
 			array_merge($this->pageSetup,
 			            array('Description' => 'Internal Server Error',
 			                  'Title'       => 'Internal Server Error')));
-		$this->writeMessageBoxXML($writer);
-		$writer->writeEnd();
+		$this->writeXMLError();
+		$this->writer->writeEnd();
 	}
 	
-	protected function xmlALL(Iface\Writer $writer)
+	protected function xmlALL()
 	{
-		$this->writeMessageBoxXML($writer);
+		$this->writeXMLError();
 	}
 
 	/*******************/
 	/* Private Methods */
 	/*******************/
 	
-	/// Write a Message Box in XML showing the Not Found message.
-	private function writeMessageBoxXML(Iface\Writer $writer)
+	/// Write the error in XML.
+	private function writeXMLError()
 	{
 		$element = $this->provider->make(
 			'Evoke\Element\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
 
-		$detailedDescription = array();
-
-		if (isset($this->params['Exception']) &&
-		    $this->params['Exception'] instanceof \Exception)
-		{
-			$eParts = explode("\n",
-			                  $this->params['Exception']->getMessage() . "\n" .
-			                  $this->params['Exception']->getTraceAsString());
-			
-			foreach ($eParts as $part)
-			{
-				$detailedDescription[] = $part;
-				$detailedDescription[] = array('br');
-			}
-
-			array_pop($detailedDescription);
-		}
-
-
-		$writer->write(
-			array('div',
-			      array('class' => 'Message_Box System'),
-			      array(array('div',
-			                  array('class' => 'Title'),
-			                  'System Error'),
-			            array('div',
-			                  array('class' => 'Description'),
-			                  'An error has occurred. We have been notified.' .
-			                  '  We will fix this as soon as possible.'),
-			            array('div',
-			                  array('class' => 'Detailed Description'),
-			                  $detailedDescription))));
+		$this->params += array(
+			'Description' => 'An error has occurred.  We have been notified.' .
+			'  We will fix this as soon as possible.',
+			'Title'       => 'System Error');
+		
+		$this->writer->write($element->set($this->params));		
 	}	
 }
 // EOF
