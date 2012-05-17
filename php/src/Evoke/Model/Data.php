@@ -30,25 +30,31 @@ use Evoke\Iface;
 */
 class Data implements Iface\Model\Data
 {
-	/** @property $collisionFreeSetup
-	 *  Due to the way data is accessed from the Data class the number of
-	 *  properties within the class must be limited to avoid collisions. The name
-	 *  of our one property is also designed to avoid collisions.  This is due to
-	 *  the implementation of the @ref __get method which provides access to
-	 *  joint data.
+	/** @property $data
+	 *  @array Data in the raw joint array.
 	 */
-	protected $collisionFreeSetup;
-		
+	protected $data;
+
+	/** @property $dataJoins
+	 *  @array Array of joint data objects.
+	 */
+	protected $dataJoins;
+
+	/** @property $jointKey
+	 *  @string The key that is used for joint data within the raw joint data.
+	 */
+	protected $jointKey;
+
+	/** Construct a Data model.
+	 *  @param data      @array  Raw joint data that we are modelling.
+	 *  @param dataJoins @array  Data objects to use for modelling the data that
+	 *                           is joint with this data.
+	 *  @param jointKey  @string The key to use for joint data.
+	 */
 	public function __construct(Array        $data      = array(),
 	                            Array        $dataJoins = array(),
 	                            /* String */ $jointKey  = 'Joint_Data')
 	{
-		if (!is_array($dataJoins))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires dataJoins as array');
-		}
-		
 		foreach ($dataJoins as $parentField => $dataContainer)
 		{
 			if (!$dataContainer instanceof Iface\Model\Data)
@@ -59,9 +65,9 @@ class Data implements Iface\Model\Data
 			}
 		}
 
-		$this->collisionFreeSetup = array('Data'      => $data,
-		                                  'Joins'     => $dataJoins,
-		                                  'Joint_Key' => $jointKey);
+		$this->data      = $data;
+		$this->dataJoins = $dataJoins;
+		$this->jointKey  = $jointKey;
 		$this->rewind();
 	}
 
@@ -77,23 +83,23 @@ class Data implements Iface\Model\Data
 	 */
 	public function __get($parentField)
 	{
-		if (isset($this->collisionFreeSetup['Joins'][$parentField]))
+		if (isset($this->dataJoins[$parentField]))
 		{
-			return $this->collisionFreeSetup['Joins'][$parentField];
+			return $this->dataJoins[$parentField];
 		}
       
-		foreach ($this->collisionFreeSetup['Joins'] as $pField => $dataContainer)
+		foreach ($this->dataJoins as $pField => $dataContainer)
 		{
 			if ($parentField === $this->getJoinName($pField))
 			{
 				return $dataContainer;
 			}
 		}
-      
+		
 		throw new \OutOfBoundsException(
 			__METHOD__ . ' record does not have a data container for: ' .
 			var_export($parentField, true) . ' joins are: ' .
-			var_export($this->collisionFreeSetup['Joins'], true));
+			implode(', ', array_keys($this->dataJoins)));
 	}
 	
 	/** Get the current record as a simple array (without iterator or class
@@ -102,7 +108,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function getRecord()
 	{
-		return current($this->collisionFreeSetup['Data']);
+		return current($this->data);
 	}
 	
 	/** Return whether the data is empty or not.
@@ -110,7 +116,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function isEmpty()
 	{
-		return empty($this->collisionFreeSetup['Data']);
+		return empty($this->data);
 	}
    
 	/** Set the data that we are managing.
@@ -118,7 +124,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function setData(Array $data)
 	{
-		$this->collisionFreeSetup['Data'] = $data;
+		$this->data = $data;
 		$this->rewind();
 	}   
    
@@ -138,7 +144,7 @@ class Data implements Iface\Model\Data
 	/// Return the key of the current data item.
 	public function key()
 	{
-		return key($this->collisionFreeSetup['Data']);
+		return key($this->data);
 	}
 
 	/** Get the next record of data. Set the next record within the Data object
@@ -146,7 +152,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function next()
 	{
-		$nextItem = next($this->collisionFreeSetup['Data']);
+		$nextItem = next($this->data);
 
 		if ($nextItem === false)
 		{
@@ -160,7 +166,7 @@ class Data implements Iface\Model\Data
 	/// Rewind to the first record of data.
 	public function rewind()
 	{
-		$first = reset($this->collisionFreeSetup['Data']);
+		$first = reset($this->data);
 
 		if ($first !== false)
 		{
@@ -173,7 +179,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function valid()
 	{
-		return (current($this->collisionFreeSetup['Data']) !== false);
+		return (current($this->data) !== false);
 	}
 
 	/**************************/
@@ -183,14 +189,14 @@ class Data implements Iface\Model\Data
 	/// Provide the array isset operator.
 	public function offsetExists($offset)
 	{
-		$record = current($this->collisionFreeSetup['Data']);
+		$record = current($this->data);
 		return isset($record[$offset]);
 	}
 
 	/// Provide the array access operator.
 	public function offsetGet($offset)
 	{
-		$record = current($this->collisionFreeSetup['Data']);
+		$record = current($this->data);
 		return $record[$offset];
 	}
 
@@ -220,27 +226,16 @@ class Data implements Iface\Model\Data
 	/* Protected Methods */
 	/*********************/
 
-	/** Get the collision free setup so that inherited classes don't have to
-	 *  refer to $this->collisionFreeSetup.
-	 *  @return @array The value of $this->collisionFreeSetup
-	 */
-	protected function getSetup()
-	{
-		return $this->collisionFreeSetup;
-	}
-	
 	/** Set all of the Joint Data from the current record into the data
 	 *  containers supplied by the references given at construction.
 	 */
 	protected function setRecord($record)
 	{
-		foreach ($this->collisionFreeSetup['Joins'] as $parentField => $data)
+		foreach ($this->dataJoins as $parentField => $data)
 		{
-			if (isset($record[
-				          $this->collisionFreeSetup['Joint_Key']][$parentField]))
+			if (isset($record[$this->jointKey][$parentField]))
 			{
-				$data->setData(
-					$record[$this->collisionFreeSetup['Joint_Key']][$parentField]);
+				$data->setData($record[$this->jointKey][$parentField]);
 			}
 		}
 	}
