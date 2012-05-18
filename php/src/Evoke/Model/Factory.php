@@ -36,10 +36,7 @@ class Factory implements Iface\Model\Factory
 	public function buildMapperDBMenu(/* String */ $menuName)
 	{
 		return $this->buildMapperDBJoint(
-			array('Joins'      => array(
-				      array('Child_Field'  => 'Menu_ID',
-				            'Parent_Field' => 'List_ID',
-				            'Table_Name'   => 'Menu_List')),
+			array('Joins'      => array('Menu' => 'List_ID=Menu_List.Menu_ID'),
 			      'Select'     => array(
 				      'Conditions' => array('Menu.Name' => $menuName),
 				      'Fields'     => '*',
@@ -50,14 +47,29 @@ class Factory implements Iface\Model\Factory
 
 	public function buildMapperDBJoint(Array $params)
 	{
-		if (!isset($params['Sql']))
+		$params += array('Sql' => $this->sql);
+
+		// Build the joins.
+		if (!empty($params['Joins']) && isset($params['Table_Name']))
 		{
-			$params['Sql'] = $this->sql;
+			$params['Joins'] = $this->provider->make(
+				'Evoke\DB\Table\Joins',
+				array('Info'       => $this->buildInfo(
+					      array('Table_Name' => $params['Table_Name'])),
+				      'Joins'      => $this->buildJoins(
+					      $params['Joins'], $params['Table_Name']),
+				      'Table_Name' => $params['Table_Name']));
+				
 		}
 
-		$params['Joins'] = $this->buildJoins($params);
-
 		return $this->provider->make('Evoke\Model\Mapper\DB\Joint', $params);
+	}
+
+	public function buildMapperDBTable(Array $params)
+	{
+		$params += array('Sql' => $this->sql);
+
+		return $this->provider->make('Evoke\Model\Mapper\DB\Table', $params);
 	}
 	
 	/*********************/
@@ -73,8 +85,12 @@ class Factory implements Iface\Model\Factory
 
 		return $this->provider->make('Evoke\DB\Table\Info', $params);
 	}
-	
-	protected function buildJoins(Array $params)
+
+	/** Build a complex tree of joins.  This method provides full configuration
+	 *  of the table joins.  The simpler: \ref buildJoinsSimple can be used in
+	 *  most cases to build the table joins.
+	 */
+	protected function buildJoinsComplex(Array $params)
 	{
 		if (!empty($params['Joins']))
 		{
@@ -91,6 +107,54 @@ class Factory implements Iface\Model\Factory
 		}
 		
 		return $this->provider->make('Evoke\DB\Table\Joins', $params);
+	}
+
+	/** Build all of the joins using an associative array of table joins.  The
+	 *  keys of the array represent the table names.  The value for each table
+	 *  is a string that specifies the joins from the table as a string using
+	 *  the following grammar:
+	 *  \code
+	 *  // <Parent_Field>  Parent field name for the Join.
+	 *  // <Child_Field>   Child field name for the join.
+	 *  // <Child_Table>   Table name for the child field that is being joint.
+	 *  <Join>        <Parent_Field>=<Child_Table>.<Child_Field>
+	 *  <Table_Joins> <Join>(,<Join>)*
+	 */
+	protected function buildJoins(Array $joins, $tableName)
+	{
+		if (!isset($joins[$tableName]))
+		{
+			return array();
+		}
+
+		$tableJoins = explode(',', $joins[$tableName]);
+		$builtJoins = array();
+
+		foreach ($tableJoins as $index => $tableJoin)
+		{
+			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
+			{
+				throw new \DomainException(
+					__METHOD__ . var_export($tableJoin, true) .
+					' join for table: ' . $tableName . ' at index: ' . $index .
+					' is not valid.');
+			}
+			else
+			{
+				$childTable = $matches[2];
+				$builtJoins[] = $this->provider->make(
+					'Evoke\DB\Table\Joins',
+					array('Child_Field'  => $matches[3],
+					      'Info'         => $this->buildInfo(
+						      array('Table_Name' => $childTable)),
+					      'Joins'        => $this->buildJoins(
+						      $joins, $childTable),
+					      'Parent_Field' => $matches[1],
+					      'Table_Name'   => $childTable));
+			}
+		}
+
+		return $builtJoins;
 	}
 	
 	protected function buildMapper($name, $params)

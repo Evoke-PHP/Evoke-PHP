@@ -24,10 +24,7 @@ class Table extends \Evoke\Model\Mapper\DB
 	public function __construct(
 		Iface\DB\SQL $sql,
 		/* String */ $tableName,
-		Array        $select     = array('Fields'     => '*',
-		                                 'Conditions' => '',
-		                                 'Order'      => '',
-		                                 'Limit'      => 0))
+		Array        $select = array())
 	{
 		if (!is_string($tableName))
 		{
@@ -37,7 +34,11 @@ class Table extends \Evoke\Model\Mapper\DB
 		
 		parent::__construct($sql);
 
-		$this->select    = $select;
+		$this->select    = array_merge($select,
+		                               array('Fields'     => '*',
+		                                     'Conditions' => '',
+		                                     'Order'      => '',
+		                                     'Limit'      => 0));
 		$this->tableName = $tableName;
 	}
 
@@ -45,15 +46,33 @@ class Table extends \Evoke\Model\Mapper\DB
 	/* Public Methods */
 	/******************/
 
-	public function fetch(Array $selectSetup=array())
+	/** Fetch some data from the mapper (specified by params).
+	 *  @param params \array The conditions to match in the mapped data.
+	 */
+	public function fetch(Array $params)
 	{
-		$selectSetup = array_merge($this->select, $selectSetup);
-      
+		$params = array_merge(
+			$this->select,
+			array('Conditions' => '',
+			      'Fields'     => '*',
+			      'Order'      => '',
+			      'Limit'      => 0),
+			$params);
+
 		return $this->sql->select($this->tableName,
-		                          $selectSetup['Fields'],
-		                          $selectSetup['Conditions'],
-		                          $selectSetup['Order'],
-		                          $selectSetup['Limit']);
+		                          $params['Fields'],
+		                          $params['Conditions'],
+		                          $params['Order'],
+		                          $params['Limit']);
+	}
+
+	public function fetchAll()
+	{
+		return $this->sql->select($this->tableName,
+		                          $this->select['Fields'],
+		                          $this->select['Conditions'],
+		                          $this->select['Order'],
+		                          $this->select['Limit']);
 	}
 }
 // EOF

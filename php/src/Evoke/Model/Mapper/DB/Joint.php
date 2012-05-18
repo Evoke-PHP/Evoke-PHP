@@ -64,10 +64,13 @@ class Joint extends \Evoke\Model\Mapper\DB
 	 */
 	public function fetch(Array $params)
 	{
-		$params += array('Conditions' => '',
-		                 'Fields'     => '*',
-		                 'Order'      => '',
-		                 'Limit'      => 0);
+		$params = array_merge(
+			$this->select,
+			array('Conditions' => '',
+			      'Fields'     => '*',
+			      'Order'      => '',
+			      'Limit'      => 0),
+			$params);
 
 		$tables = $this->tableName . $this->joins->getJoinStatement();
 
@@ -86,15 +89,13 @@ class Joint extends \Evoke\Model\Mapper\DB
 
 	public function fetchAll()
 	{
-		$results = 	$this->sql->select(
+		return $this->joins->arrangeResults(
+			$this->sql->select(
 				$this->tableName . $this->joins->getJoinStatement(),
 				$this->joins->getAllFields(),
 				$this->select['Conditions'],
 				$this->select['Order'],
-				$this->select['Limit']);
-			
-		return $this->joins->arrangeResults($results
-		);
+				$this->select['Limit']));
 	}
 }
 // EOF
