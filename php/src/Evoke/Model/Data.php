@@ -11,7 +11,10 @@ use Evoke\Iface;
  *
  *  Below is a usage example containing each different type of access:
  *  @code
- *  $obj = new Data();
+ *  $obj = new Data(array(),
+ *                  array('List_ID' => $dataObjectForList));
+ *  // Setting the data of the parent sets the data for the joint lists (and
+ *  // their joint lists etc.).
  *  $obj->setData($data);
  *
  *  // Traverse over each record in the data.
@@ -21,6 +24,8 @@ use Evoke\Iface;
  *     $x = $record['Field'];
  *
  *     // Access joint data (with ->).  The joint data is itself a data object.
+ *     // The name used after -> is the lowerCamelCase (_ID is removed
+ *     // automatically).
  *     foreach ($record->list as $listRecord)
  *     {
  *        $y = $listRecord['Joint_Record_Field'];
@@ -71,10 +76,6 @@ class Data implements Iface\Model\Data
 		$this->rewind();
 	}
 
-	/******************/
-	/* Public Methods */
-	/******************/
-
 	/** Provide access to the joint data as though it is a property of the
 	 *  object.  For joint data with a parent field of Linked_Data the property
 	 *  would be: `$object->linkedData;`.
@@ -101,7 +102,11 @@ class Data implements Iface\Model\Data
 			var_export($parentField, true) . ' joins are: ' .
 			implode(', ', array_keys($this->dataJoins)));
 	}
-	
+
+	/******************/
+	/* Public Methods */
+	/******************/
+
 	/** Get the current record as a simple array (without iterator or class
 	 *  properties).
 	 *  @return Array The record that we are managing.

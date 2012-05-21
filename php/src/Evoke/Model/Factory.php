@@ -33,6 +33,65 @@ class Factory implements Iface\Model\Factory
 	/* Public Methods */
 	/******************/
 
+	/** Build all of the data models using an associative array of table joins
+	 *  and an array of object types for the data models.  The associative array
+	 *  used in this method is shared with the buildMapperDBJoint method.  This
+	 *  method does not set the data.  A separate call must be made to set the
+	 *  data.
+	 *
+	 *  @param dataJoins @array The keys of the array represent the table names.
+	 *  The value for each table is a string that specifies the joins from the
+	 *  table as a string using the following grammar:
+	 *  @code
+	 *  // <Parent_Field>  Parent field name for the Join.
+	 *  // <Child_Field>   Child field name for the join.
+	 *  // <Child_Table>   Table name for the child field that is being joint.
+	 *  <Join>        <Parent_Field>=<Child_Table>.<Child_Field>
+	 *  <Table_Joins> <Join>(,<Join>)*
+	 *  @endcode
+	 *
+	 *  @param premadeObjects @array A list of the non-standard data objects by
+	 *  their table name.
+	 */
+
+	public function buildData(/* String */ $tableName      = '',
+	                          Array        $dataJoins      = array(),
+	                          Array        $premadeObjects = array())
+	{
+		if (isset($premadeObjects[$tableName]))
+		{
+			return $premadeObjects[$tableName];
+		}
+		elseif (!isset($dataJoins[$tableName]))
+		{
+			return $this->provider->make('Evoke\Model\Data');
+		}
+
+		$tableJoins = explode(',', $dataJoins[$tableName]);
+		$builtData = array();
+
+		foreach ($tableJoins as $index => $tableJoin)
+		{
+			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
+			{
+				throw new \DomainException(
+					__METHOD__ . var_export($tableJoin, true) .
+					' join for table: ' . $tableName . ' at index: ' . $index .
+					' is not valid.');
+			}
+			else
+			{
+				// Build the data model for the child table (match 2) from the
+				// joint field match 1.
+				$builtData[$matches[1]] =
+					$this->buildData($matches[2], $dataJoins, $premadeObjects);
+			}
+		}
+
+		return $this->provider->make('Evoke\Model\Data',
+		                             array('Data_Joins' => $builtData));
+	}
+	
 	public function buildMapperDBMenu(/* String */ $menuName)
 	{
 		return $this->buildMapperDBJoint(

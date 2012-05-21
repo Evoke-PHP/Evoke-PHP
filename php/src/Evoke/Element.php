@@ -33,7 +33,7 @@ class Element implements \Evoke\Iface\Element
 	                            Array $pos=array())
 	{
 		$this->attribs = $attribs;
-		$this->el      = array();
+		$this->el      = array('div', $attribs);
 		$this->pos     = array_merge($pos,
 		                             array('Attribs'  => 1,
 		                                   'Children' => 2,
@@ -45,7 +45,7 @@ class Element implements \Evoke\Iface\Element
 	/******************/
 
 	/** Add a class to the element.
-	 *  @param c \string The class to be added to the element.
+	 *  @param c @string The class to be added to the element.
 	 */
 	public function addClass($c)
 	{
@@ -70,8 +70,8 @@ class Element implements \Evoke\Iface\Element
 	}
 
 	/** Add a class to the element.
-	 *  @param attrib \string The attribute to be appended to.
-	 *  @param value \string The value to be appended to the attribute.
+	 *  @param attrib @string The attribute to be appended to.
+	 *  @param value  @string The value to be appended to the attribute.
 	 */
 	public function appendAttrib($attrib, $value)
 	{
@@ -97,12 +97,12 @@ class Element implements \Evoke\Iface\Element
 	 *  that the Element object can be re-used to build more Elements.
 	 *
 	 *  This allows it to be used in a template like this:
-	 *  \code
+	 *  @code
 	 *  array('div',
 	 *        array('class' => 'example'),
 	 *        array($element->set($val1),
 	 *              $element->set($val2)));
-	 *  \endcode
+	 *  @endcode
 	 *
 	 *  The Element object was set twice, if it was set before the code val2
 	 *  would appear twice, because the object would have been modified.
@@ -110,11 +110,11 @@ class Element implements \Evoke\Iface\Element
 	 *  @param element \array The element that we are setting ourselves to.
 	 *  element should be passed in as an array with the numerical keys
 	 *  corresponding to the desired element data.  By default this is:
-	 *  \verbatim
+	 *  @verbatim
 	 *  0 => Tag
 	 *  1 => Attribs
 	 *  2 => Children
-	 *  \endverbatim
+	 *  @endverbatim
 	 *
 	 *  A Tag is required to be passed in as a string.
 	 *
@@ -128,9 +128,9 @@ class Element implements \Evoke\Iface\Element
 	 *
 	 *  Any data with a key outside of this range is ignored.
 	 *
-	 *  @param element \mixed The element data to set ourselves to must be array
+	 *  @param element @mixed The element data to set ourselves to must be array
 	 *  accessible.
-	 *  \return \array Return the data that has been set.
+	 *  @return @array Return the data that has been set.
 	 */
 	public function set(Array $element)
 	{

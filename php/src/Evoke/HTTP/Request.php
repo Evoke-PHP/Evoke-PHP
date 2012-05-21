@@ -162,7 +162,7 @@ class Request implements \Evoke\Iface\HTTP\Request
 				'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
 				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
 				')^(?&ACCEPT)$/x';
-				
+
 			if (!preg_match($validationPattern, $acceptString))
 			{
 				trigger_error(__METHOD__ . ' Accept request header: ' .

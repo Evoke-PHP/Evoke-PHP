@@ -3,53 +3,59 @@ namespace Evoke\Element\Form\Input;
 
 class Select extends \Evoke\Element
 {
-	/** @property $appendData
-	 *  \array Data to be appended to the options available for selection.  
+	/** @property appendData
+	 *  @array Data to be appended to the options available for selection.
 	 */
 	protected $appendData;
 
-	/** @property $optionAttribs
-	 *  \array Attributes for each select option.
+	/** @property optionAttribs
+	 *  @array Attributes for each select option.
 	 */
 	protected $optionAttribs;
 
-	/** @property $prependData
-	 *  Data to be prepended to the options available for selection.
+	/** @property prependData
+	 *  @array Data to be prepended to the options available for selection.
 	 */
 	protected $prependData;
 
 	/** @property $textField
-	 *  \string The field to use from the data for the option text.
+	 *  @string The field to use from the data for the option text.
 	 */
 	protected $textField;
 
 	/** @property $valueField
-	 *  \string The field to use for the value of the options.
+	 *  @string The field to use for the value of the options.
 	 */
 	protected $valueField;
 
-	public function __construct(Array $setup)
+	/** Construct a Select object.
+	 *  @param textField     @string Field from the data for the option text.
+	 *  @param valueField    @string Field from the data for the option value.
+	 *  @param attribs       @array  Attributes for the select element.
+	 *  @param appendData    @array  Appended data for adding options.
+	 *  @param optionAttribs @array  Attributes for the option elements.
+	 *  @param prependData   @array  Prepended data for adding options.
+	 */
+	public function __construct(/* String */ $textField,
+	                            /* String */ $valueField    = 'ID',
+	                            Array        $attribs       = array(),
+	                            Array        $appendData    = array(),
+	                            Array        $optionAttribs = array(),
+	                            Array        $prependData   = array())
 	{
-		$setup += array('Append_Data'    => array(),
-		                'Option_Attribs' => array(),
-		                'Prepend_Data'   => array(),
-		                'Text_Field'     => NULL,
-		                'Value_Field'    => 'ID');
-
 		if (!is_string($textField))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Text_Field as string');
+				__METHOD__ . ' requires textField as string');
 		}
 
 		if (!is_string($valueField))
 		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Value_Field as string');
+			throw new \InvalidArgumentException(__METHOD__ . ' requires valueField as string');
 		}
 
-		parent::__construct($setup);
-
+		parent::__construct($attribs);
+		
 		$this->appendData    = $appendData;
 		$this->optionAttribs = $optionAttribs;
 		$this->prependData   = $prependData;
@@ -62,11 +68,11 @@ class Select extends \Evoke\Element
 	/******************/
 
 	/** Set the select element.
-	 *  @param data \array The select data in the form:
-	 *  \verbatim
+	 *  @param data @array The select data in the form:
+	 *  @code
 	 *  array('Records'  => \array records, // Records for the select
 	 *        'Selected' => \scalar value); // The value that is selected.
-	 *  \endverbatim
+	 *  @endcode
 	 */    
 	public function set(Array $data)
 	{
@@ -117,7 +123,7 @@ class Select extends \Evoke\Element
 				array('option', $optionAttribs, $record[$this->textField]);
 		}
 
-		return parent::set(array('select', $this->attribs, $optionElements));
+		return parent::set(array('select', array(), $optionElements));
 	}
 }
 // EOF
