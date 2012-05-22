@@ -3,22 +3,12 @@ namespace Evoke;
 
 use Evoke\HTTP\MediaType;
 
-/** The Controller is responsible for routing the request to the correct
- *  controller method and executing this response using objects from the
- *  processing, model, data and view layers.
+/** The Controller is responsible for providing and using the correct objects
+ *  from the processing, model and view layers to execute the desired request
+ *  from the user.
  */
 abstract class Controller
 {
-	/** @property $defaults
-	 *  @array Default values for the controller content type and output format.
-	 */
-	protected $defaults;
-
-	/** @property $mediaTypeRouterFactory
-	 *  @object Media Type Router Factory
-	 */
-	protected $mediaTypeRouterFactory;
-	
 	/** @property $pageSetup
 	 *  @array Setup for the page based output formats (XHTML, HTML5).
 	 */
@@ -34,15 +24,15 @@ abstract class Controller
 	 */
 	protected $provider;
 
-	/** @property $response
-	 *  @object Response
-	 */
-	protected $response;
-
 	/** @property $request
 	 *  @object Request
 	 */
 	protected $request;
+
+	/** @property $response
+	 *  @object Response
+	 */
+	protected $response;
 
 	/** @property $writer
 	 *  @object Writer
@@ -50,116 +40,49 @@ abstract class Controller
 	protected $writer;
 	
 	/** Construct the Controller.
-	 *  @param params                 @array  Parameters for the response.
-	 *  @param provider               @object Provider object.
-	 *  @param request                @object Request object.
-	 *  @param response               @object Response object.
-	 *  @param mediaTypeRouterFactory @object Media Type Router Factory.
-	 *  @param defaults               @array  Defaults for the content type and
-	 *                                        output format.
-	 *  @param pageSetup              @array  Setup for page based output
-	 *                                        formats.
+	 *  @param provider  @object Provider object.
+	 *  @param request   @object Request object.
+	 *  @param response  @object Response object.
+	 *  @param writer    @object Writer object.
+	 *  @param params    @array  Parameters.
+	 *  @param pageSetup @array  Setup for page based output formats.
 	 */
-	public function __construct(
-		Array               		 	   $params,
-		Iface\Provider      		 	   $provider,
-		Iface\HTTP\Request                 $request,
-		Iface\HTTP\Response                $response,
-		Iface\HTTP\MediaType\RouterFactory $mediaTypeRouterFactory,
-		Array                              $defaults  = array(
-			'Content_Type'  => 'application/xhtml+xml',
-			'Output_Format' => 'XHTML'),
-		Array                              $pageSetup = array())
+	public function __construct(Iface\Provider      $provider,
+	                            Iface\HTTP\Request  $request,
+	                            Iface\HTTP\Response $response,
+	                            Iface\Writer        $writer,
+	                            Array               $params,
+	                            Array               $pageSetup = array())
 	{
-		$this->defaults               = $defaults;
-		$this->mediaTypeRouterFactory = $mediaTypeRouterFactory;
-		$this->params                 = $params;
-		$this->pageSetup              = $pageSetup;
-		$this->provider				  = $provider;
-		$this->request 				  = $request;
-		$this->response				  = $response;
+		$this->pageSetup = $pageSetup;
+		$this->params    = $params;
+		$this->provider	 = $provider;
+		$this->request 	 = $request;
+		$this->response	 = $response;
+		$this->writer    = $writer;
 	}
 	
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Execute the reponse to the given request.
+	/** Execute the controller responding to the request method in the correct
+	 *  output format.  The response method is calculate using the format:
+	 *  @verbatim
+	 *  <outputFormat in lowercase><method with first letter uppercase>
+	 *  @endverbatim
+	 *
+	 *  This matches our lowerCamelCase used elsewhere for naming functions.
+	 *
+	 *  @param method       @string The Request method.
+	 *  @param outputFormat @string The output format to use.
 	 */
-	public function execute()
-	{
-		$mediaTypeRouter = $this->buildMediaTypeRouter();
-		$outputFormat = $mediaTypeRouter->route();
-		$this->writer = $this->buildWriter($outputFormat);
-
-		switch(strtoupper($outputFormat))
-		{
-		case 'HTML5':
-			$contentType = 'text/html';
-			break;
-		case 'JSON':
-			$contentType = 'application/json';
-			break;
-		case 'TEXT':
-			$contentType = 'text/plain';
-			break;
-		case 'XHTML':
-			$contentType = 'application/xhtml+xml';
-			break;
-		case 'XML':
-			$contentType = 'application/xml';
-			break;
-		default:
-			trigger_error(
-				'Output format: ' . $this->outputFormat . ' does not ' .
-				'correspond to a known content type.  The default values of ' .
-				'Output Format: ' . $this->defaults['Output_Format'] . ' and ' .
-				'Content Type: ' . $this->defaults['Content_Type'] .
-				' will be used.');
-
-			// Use the defaults.
-			$contentType = $this->defaults['Content_Type'];
-			$outputFormat = $this->defaults['Output_Format'];
-		}
-		
-		$this->response->setContentType($contentType);
-
-		// Respond in the correct output format.
-		$this->respond($outputFormat);
-	}
-
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	/** Build the Media Type router.
-	 *  @return @object A standard media type router with a fallback to the
-	 *                  default output format.
-	 */
-	protected function buildMediaTypeRouter()
-	{
-		return $this->mediaTypeRouterFactory->buildStandard(
-			$this->defaults['Output_Format']);
-	}
-
-	/** Build the Writer object that can write the output format.
-	 *  @param outputFormat @string The output format required from the writer.
-	 */
-	protected function buildWriter($outputFormat)
-	{
-		return $this->provider->make('Evoke\Writer\\' . $outputFormat);
-	}
-
-	/** Respond to the HTTP method in the correct output format.
-	 *  @param outputFormat @string Output format (e.g html5, XHTML, JSON)
-	 */
-	protected function respond($outputFormat)
+	public function execute($method, $outputFormat)
 	{
 		// Preferably we respond using the method that matches the HTTP Request
-		// method, but we allow a method of ALL to cover unhandled methods.
-		$methodName = strtolower($outputFormat) .
-			strtoupper($this->request->getMethod());
-		$methodAll = strtolower($outputFormat) . 'ALL';
+		// method, but we allow a method of All to cover unhandled methods.
+		$methodName = strtolower($outputFormat) . ucfirst(strtolower($method));
+		$methodAll = strtolower($outputFormat) . 'All';
 		
 		if (is_callable(array($this, $methodName)))
 		{

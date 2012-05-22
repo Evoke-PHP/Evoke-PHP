@@ -17,10 +17,9 @@ class Router implements Iface\HTTP\URI\Router
 	protected $rules = array();
 
 	/** Create a HTTP URI Router that routes the request to a response.
-	 *  @param Provider @object Provider for creating the response.
 	 *  @param Request  @object Request object.
 	 */
-	public function __construct(Iface\HTTP\Request  $request)
+	public function __construct(Iface\HTTP\Request $request)
 	{
 		$this->request = $request;
 	}

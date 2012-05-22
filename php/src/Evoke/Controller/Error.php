@@ -1,44 +1,44 @@
 <?php
 namespace Evoke\Controller;
 
-use Evoke\Iface;
-
 class Error extends \Evoke\Controller
 {
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-	
-	protected function html5ALL()
-	{
-		$this->xhtmlALL();
-	}
-	
-	protected function jsonALL()
-	{
-		$this->writer->write(array('Code'    => '500',
-		                           'Title'   => 'Internal Server Error'));
-	}
-	
-	/** Respond with the error code first.
+	/** Execute the controller responding to the request method in the correct
+	 *  output format.
+	 *  @param method       @string The Request method.
 	 *  @param outputFormat @string The output format to use.
 	 */
-	protected function respond($outputFormat)
+	public function execute($method, $outputFormat)
 	{
 		if (!headers_sent())
 		{
 			$this->response->setResponseCode(500);
 		}
-
-		parent::respond($outputFormat);
+		
+		parent::execute($method, $outputFormat);
 	}
 
-	protected function textALL()
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+	
+	protected function html5All()
+	{
+		$this->xhtmlAll();
+	}
+	
+	protected function jsonAll()
+	{
+		$this->writer->write(array('Code'    => '500',
+		                           'Title'   => 'Internal Server Error'));
+	}
+	
+	protected function textAll()
 	{
 		$this->writer->write('500 Internal Server Error');
 	}
 	
-	protected function xhtmlALL()
+	protected function xhtmlAll()
 	{
 		$this->writer->writeStart(
 			array_merge($this->pageSetup,
@@ -48,7 +48,7 @@ class Error extends \Evoke\Controller
 		$this->writer->writeEnd();
 	}
 	
-	protected function xmlALL()
+	protected function xmlAll()
 	{
 		$this->writeXMLError();
 	}

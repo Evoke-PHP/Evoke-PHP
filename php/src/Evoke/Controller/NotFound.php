@@ -1,44 +1,44 @@
 <?php
 namespace Evoke\Controller;
 
-use Evoke\Iface;
-
 class NotFound extends \Evoke\Controller
 {
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	protected function html5ALL()
-	{
-		$this->xhtmlALL();
-	}
-	
-	protected function jsonALL()
-	{
-		$this->writer->write(array('Code' => '404',
-		                           'Text' => 'Not Found'));
-	}
-	
-	/** Respond with the error code first.
+	/** Execute the controller responding to the request method in the correct
+	 *  output format.
+	 *  @param method       @string The Request method.
 	 *  @param outputFormat @string The output format to use.
 	 */
-	protected function respond($outputFormat)
+	public function execute($method, $outputFormat)
 	{
 		if (!headers_sent())
 		{
 			$this->response->setResponseCode(404);
 		}
 		
-		parent::respond($outputFormat);
+		parent::execute($method, $outputFormat);
 	}
 
-	protected function textALL()
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	protected function html5All()
+	{
+		$this->xhtmlAll();
+	}
+	
+	protected function jsonAll()
+	{
+		$this->writer->write(array('Code' => '404',
+		                           'Text' => 'Not Found'));
+	}
+	
+	protected function textAll()
 	{
 		$this->writer->write('404 Not Found');
 	}
 	
-	protected function xhtmlALL()
+	protected function xhtmlAll()
 	{
 		
 		$this->writer->writeStart(
@@ -49,7 +49,7 @@ class NotFound extends \Evoke\Controller
 		$this->writer->writeEnd();
 	}
 	
-	protected function xmlALL()
+	protected function xmlAll()
 	{
 		$this->writeXMLNotFound();
 	}
