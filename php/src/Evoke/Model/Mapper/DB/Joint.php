@@ -62,16 +62,9 @@ class Joint extends \Evoke\Model\Mapper\DB
 	/** Fetch some data from the mapper (specified by params).
 	 *  @param params \array The conditions to match in the mapped data.
 	 */
-	public function fetch(Array $params)
+	public function fetch(Array $params = array())
 	{
-		$params = array_merge(
-			$this->select,
-			array('Conditions' => '',
-			      'Fields'     => '*',
-			      'Order'      => '',
-			      'Limit'      => 0),
-			$params);
-
+		$params += $this->select;
 		$tables = $this->tableName . $this->joins->getJoinStatement();
 
 		if ($params['Fields'] === '*')
@@ -85,17 +78,6 @@ class Joint extends \Evoke\Model\Mapper\DB
 			                   $params['Conditions'],
 			                   $params['Order'],
 			                   $params['Limit']));
-	}
-
-	public function fetchAll()
-	{
-		return $this->joins->arrangeResults(
-			$this->sql->select(
-				$this->tableName . $this->joins->getJoinStatement(),
-				$this->joins->getAllFields(),
-				$this->select['Conditions'],
-				$this->select['Order'],
-				$this->select['Limit']));
 	}
 }
 // EOF

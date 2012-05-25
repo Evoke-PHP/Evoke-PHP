@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Model;
+namespace Evoke\Model\Mapper;
 
 use Evoke\Iface;
 
-class Session extends \Evoke\Model\Base
+class Session implements Iface\Model\Mapper
 {
 	/** @property $sessionManager
 	 *  Session Manager \object
@@ -13,12 +13,10 @@ class Session extends \Evoke\Model\Base
 	/** Construct a Session model.
 	 *  @param SessionManager \object The Session Manager for the part of the
 	 *  session we are modelling.
-	 *  @param dataPrefix \array Models return data at the specified prefix.
 	 */
-	public function __construct(Iface\SessionManager $sessionManager,
-	                            Array                $dataPrefix = array())
+	public function __construct(Iface\SessionManager $sessionManager)
 	{
-		parent::__construct($dataPrefix);
+		parent::__construct();
 		
 		$this->sessionManager = $sessionManager;
 	}
@@ -27,17 +25,19 @@ class Session extends \Evoke\Model\Base
 	/* Public Methods */
 	/******************/
 
-	// Get the data from the session.
-	public function getData()
+	/** Get the data from the session.
+	 *  @params The offset in the data to fetch.
+	 */
+	public function fetch(Array $params=array())
 	{
 		$session = $this->sessionManager->getAccess();
 
-		if (!is_array($session))
+		foreach ($params as $sessionOffset)
 		{
-			return $this->offsetData(parent::getData());
+			$session =& $session[$sessionOffset];
 		}
-      
-		return $this->offsetData(array_merge(parent::getData(), $session));
+
+		return is_array($session) ? $session : NULL;
 	}
 }
 // EOF

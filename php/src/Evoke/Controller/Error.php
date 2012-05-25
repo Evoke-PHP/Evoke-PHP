@@ -14,6 +14,16 @@ class Error extends \Evoke\Controller
 		{
 			$this->response->setResponseCode(500);
 		}
+
+		$currentBuffer = (string)($this->writer);
+
+		if (!empty($currentBuffer))
+		{
+			trigger_error(
+				'Buffer needs to be flushed for clean error page, was: ' .
+				$currentBuffer, E_USER_WARNING);
+			$this->writer->flush();
+		}
 		
 		parent::execute($method, $outputFormat);
 	}
@@ -39,7 +49,7 @@ class Error extends \Evoke\Controller
 	}
 	
 	protected function xhtmlAll()
-	{
+	{		
 		$this->writer->writeStart(
 			array_merge($this->pageSetup,
 			            array('Description' => 'Internal Server Error',

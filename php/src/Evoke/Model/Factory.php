@@ -124,11 +124,46 @@ class Factory implements Iface\Model\Factory
 		return $this->provider->make('Evoke\Model\Mapper\DB\Joint', $params);
 	}
 
-	public function buildMapperDBTable(Array $params)
+	/** Build a mapper for a database table.
+	 *  @param tableName @string The database table to map.
+	 *  @param select    @array  SQL select settings for the table.
+	 */
+	public function buildMapperDBTable(/* String */ $tableName,
+	                                   Array        $select = array())
 	{
-		$params += array('Sql' => $this->sql);
+		return $this->provider->make(
+			'Evoke\Model\Mapper\DB\Table',
+			array('Select'     => $select,
+			      'Sql'        => $this->sql,
+			      'Table_Name' => $tableName));
+	}
 
-		return $this->provider->make('Evoke\Model\Mapper\DB\Table', $params);
+	/** Build an administrative mapper for a database table.
+	 *  @param tableName @string The database table to map.
+	 *  @param select    @array  SQL select settings for the table.
+	 */
+	public function buildMapperDBTableAdmin(/* String */ $tableName,
+	                                        Array        $select = array())
+	{
+		return $this->provider->make(
+			'Evoke\Model\Mapper\DB\TableAdmin',
+			array('Select'     => $select,
+			      'Sql'        => $this->sql,
+			      'Table_Name' => $tableName));
+	}
+	
+	/** Build a mapper for a database tables list.
+	 *  @param extraTables   @array Extra tables to list.
+	 *  @param ignoredTables @array Tables to ignore.
+	 */
+	public function buildMapperDBTables(Array $extraTables   = array(),
+	                                    Array $ignoredTables = array())
+	{
+		return $this->provider->make(
+			'Evoke\Model\Mapper\DB\Tables',
+			array('Extra_Tables'   => $extraTables,
+			      'Ignored_Tables' => $ignoredTables,
+			      'Sql'            => $this->sql));
 	}
 	
 	/*********************/

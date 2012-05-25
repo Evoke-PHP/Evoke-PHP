@@ -42,7 +42,6 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	 *  @param notifications  @object Notification messages object.
 	 *  @param eventManager   @object EventManager object.
 	 *  @param select         @array  Select statement settings.
-	 *  @param dataPrefix     @array  Any prefix to offset the data with.
 	 *  @param validate       @bool   Whether to validate the data.
 	 */
 	public function __construct(Iface\DB\SQL          $sql,
@@ -232,12 +231,11 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	/// Get the data for the model.
 	public function getData($selectSetup=array())
 	{
-		return $this->offsetData(
-			array('Records'   => parent::getData($selectSetup),
-			      'State'     => array_merge(
-				      array('Failures'      => $this->failures->get(),
-				            'Notifications' => $this->notifications->get()),
-				      $this->sessionManager->getAccess())));
+		return array('Records'   => parent::getData($selectSetup),
+		             'State'     => array_merge(
+			             array('Failures'      => $this->failures->get(),
+			                   'Notifications' => $this->notifications->get()),
+			             $this->sessionManager->getAccess()));
 	}
 
 	/// Modify a record in the database.

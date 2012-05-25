@@ -49,30 +49,15 @@ class Table extends \Evoke\Model\Mapper\DB
 	/** Fetch some data from the mapper (specified by params).
 	 *  @param params \array The conditions to match in the mapped data.
 	 */
-	public function fetch(Array $params)
+	public function fetch(Array $params = array())
 	{
-		$params = array_merge(
-			$this->select,
-			array('Conditions' => '',
-			      'Fields'     => '*',
-			      'Order'      => '',
-			      'Limit'      => 0),
-			$params);
+		$params = array_merge($this->select, $params);
 
 		return $this->sql->select($this->tableName,
 		                          $params['Fields'],
 		                          $params['Conditions'],
 		                          $params['Order'],
 		                          $params['Limit']);
-	}
-
-	public function fetchAll()
-	{
-		return $this->sql->select($this->tableName,
-		                          $this->select['Fields'],
-		                          $this->select['Conditions'],
-		                          $this->select['Order'],
-		                          $this->select['Limit']);
 	}
 }
 // EOF
