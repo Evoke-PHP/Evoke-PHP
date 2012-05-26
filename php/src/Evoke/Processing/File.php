@@ -1,8 +1,6 @@
 <?php
 namespace Evoke\Processing;
 
-use Evoke\Iface;
-
 class File extends \Evoke\Processing
 {
 	/** @property $requestPrefix
@@ -16,7 +14,6 @@ class File extends \Evoke\Processing
 	protected $requestSeparator;
 
 	/** Construct a File processing object.
-	 *  @param eventManager  	@object Event Manager object.
 	 *  @param requestKeys   	@array  The request keys we are processing.
 	 *  @param requestPrefix 	@string The prefix for the file request.
 	 *  @param requestSeparator @string Separator between the prefix and file.
@@ -24,15 +21,13 @@ class File extends \Evoke\Processing
 	 *  @param uniqueMatch   	@bool   Whether a unique match is required.
 	 */
 	public function __construct(
-		Iface\EventManager $eventManager,
 		Array              $requestKeys,
 		/* String */       $requestPrefix    = 'Input_File',
 		/* String */       $requestSeparator = '_',
 		/* Bool   */       $matchRequired    = true,
 		/* Bool   */       $uniqueMatch      = true)
 	{
-		parent::__construct($eventManager, 'File.', 'FILE', $requestKeys,
-		                    $matchRequired, $uniqueMatch);
+		parent::__construct('FILE', $requestKeys, $matchRequired, $uniqueMatch);
 
 		$this->requestPrefix    = $requestPrefix;
 		$this->requestSeparator = $requestSeparator;
@@ -100,7 +95,6 @@ class File extends \Evoke\Processing
 				}
 	    
 				$entry['Table_Alias'] = substr($key, $fullPrefixLength);
-
 				$matches[$this->requestPrefix] = $entry;
 			}
 		}

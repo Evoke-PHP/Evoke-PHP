@@ -2,20 +2,17 @@
 namespace Evoke\Processing;
 
 class Post extends \Evoke\Processing
-{ 
-	/** Construct a Post processing object.
-	 *  @param eventManager  @object Event Manager object.
-	 *  @param requestKeys   @array  The request keys we are processing.
-	 *  @param matchRequired @bool   Whether a match is required.
-	 *  @param uniqueMatch   @bool   Whether a unique match is required.
+{
+	/** Construct a Post Processing object.
+	 *  @param requestKeys   @array RequestKeys.
+	 *  @param matchRequired @bool  MatchRequired.
+	 *  @param uniqueMatch   @bool  UniqueMatch.
 	 */
-	public function __construct(Iface\EventManager $eventManager,
-	                            Array              $requestKeys,
-	                            /* Bool   */       $matchRequired = true,
-	                            /* Bool   */       $uniqueMatch   = true)
+	public function __construct(Array      $requestKeys,
+	                            /* Bool */ $matchRequired = true,
+	                            /* Bool */ $uniqueMatch   = true)
 	{
-		parent::__construct($eventManager, 'Post.', 'POST', $requestKeys,
-		                    $matchRequired, $uniqueMatch);
+		parent::__construct('POST', $requestKeys, $matchRequired, $uniqueMatch);
 	}
 
 	/******************/

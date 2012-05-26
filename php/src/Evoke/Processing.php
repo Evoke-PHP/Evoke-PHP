@@ -1,8 +1,6 @@
 <?php
 namespace Evoke;
 
-use Evoke\Iface;
-
 /** Processing Class
  *  This handles the routing of request information to processing callbacks
  *  via @ref Event_Manager::notify.  It is de-coupled from the request by
@@ -17,16 +15,6 @@ use Evoke\Iface;
  */
 abstract class Processing implements Iface\Processing
 {
-	/** @property $eventManager
-	 *  EventManager @object
-	 */
-	protected $eventManager;
-
-	/** @property $eventPrefix
-	 *  @string Prefix to the event notification.
-	 */
-	protected $eventPrefix;
-
 	/** @property $matchRequired
 	 *  @bool Whether a key is required to match for processing.
 	 */
@@ -50,18 +38,11 @@ abstract class Processing implements Iface\Processing
 	 *  @param matchRequired @bool   Whether a match is required.
 	 *  @param uniqueMatch   @bool   Whether a unique match is required.
 	 */
-	public function __construct(Iface\EventManager $eventManager,
-	                            /* String */       $eventPrefix,
-	                            /* String */       $requestMethod,
+	public function __construct(/* String */       $requestMethod,
 	                            Array              $requestKeys,
 	                            /* Bool   */       $matchRequired = true,
 	                            /* Bool   */       $uniqueMatch   = true)
 	{
-		if (!is_string($eventPrefix))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires eventPrefix as string');
-		}
 
 		if (!is_string($requestMethod))
 		{
@@ -69,8 +50,6 @@ abstract class Processing implements Iface\Processing
 				__METHOD__ . ' requires requestMethod as string');
 		}
 		
-		$this->eventManager  = $eventManager;
-		$this->eventPrefix   = $eventPrefix;
 		$this->matchRequired = $matchRequired;
 		$this->requestKeys   = $requestKeys;
 		$this->requestMethod = $requestMethod;
@@ -82,9 +61,6 @@ abstract class Processing implements Iface\Processing
 			$this->requestKeys =
 				array_combine($this->requestKeys, $this->requestKeys);
 		}
-
-		// By default we are connected for processing.
-		$this->eventManager->connect('Request.Process', array($this, 'process'));
 	}
 
 	/******************/
@@ -94,16 +70,16 @@ abstract class Processing implements Iface\Processing
 	/// Process the request.
 	public function process()
 	{
-		if ($this->getRequestMethod() !== mb_strtoupper($this->requestMethod))
+		if ($this->getRequestMethod() !== strtoupper($this->requestMethod))
 		{
 			return;
 		}
       
 		$requestData = $this->getRequest();
 		$requestKeyMatches = $this->getRequestMatches($requestData);
-		$this->checkMatches($requestKeyMatches, $requestData);
 
-		if (!empty($requestKeyMatches))
+		if ($this->checkMatches($requestKeyMatches, $requestData) &&
+		    !empty($requestKeyMatches))
 		{
 			$this->callRequests($requestKeyMatches, $requestData);
 		}
@@ -134,36 +110,31 @@ abstract class Processing implements Iface\Processing
 	 *  uniqueness and optionality.
 	 *  @param matches \array The matches found in the request data.
 	 *  @param requestData \mixed The request data.
+	 *  @return @bool Whether the matches were as expected.
 	 */
 	protected function checkMatches(Array $matches, $requestData)
 	{
 		if ($this->matchRequired && (count($matches) === 0))
 		{
-			$msg = 'Match_Required for Event_Prefix: ' .
+			trigger_error(
+				'Match_Required for Event_Prefix: ' .
 				var_export($this->eventPrefix, true) . ' Request_Keys: ' .
 				var_export(array_keys($this->requestKeys), true) .
-				' with request data: ' . var_export($requestData, true);
-
-			$this->eventManager->notify(
-				'Log', array('Level'   => LOG_ERR,
-				             'Message' => $msg,
-				             'Method'  => __METHOD__));
-	 
-			throw new \RuntimeException(__METHOD__ . ' ' . $msg);
+				' with request data: ' . var_export($requestData, true),
+				E_USER_WARNING);
+			return false;
 		}
 		elseif ($this->uniqueMatch && count($matches) > 1)
 		{
-			$msg = 'Unique_Match required for Request_Keys: ' .
+			trigger_error(
+				'Unique_Match required for Request_Keys: ' .
 				var_export(array_keys($this->requestKeys)) .
-				' with request data: ' . var_export($requestData, true);
-
-			$this->eventManager->notify(
-				'Log', array('Level'   => LOG_ERR,
-				             'Message' => $msg,
-				             'Method'  => __METHOD__));
-		       
-			throw new \RuntimeException(__METHOD__ . ' ' . $msg);
+				' with request data: ' . var_export($requestData, true),
+				E_USER_WARNING);
+			return false;
 		}
+
+		return true;
 	}
 
 	/** Get the request keys that match the request data.
@@ -178,7 +149,7 @@ abstract class Processing implements Iface\Processing
 	 */
 	protected function getRequestMethod()
 	{
-		return mb_strtoupper($_SERVER['REQUEST_METHOD']);
+		return strtoupper($_SERVER['REQUEST_METHOD']);
 	}
 }
 // EOF
