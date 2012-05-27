@@ -16,7 +16,7 @@ class Table extends \Evoke\Element\Control\RecordList
 		}
 
 		// Set specific fields in the setup for a table.
-		$fields       = $tableInfo->getFields();
+		$fields      = $tableInfo->getFields();
 		$primaryKeys = $tableInfo->getPrimaryKeys();
 		$tableName   = $tableInfo->getTableName();
 

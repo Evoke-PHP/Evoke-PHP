@@ -147,7 +147,7 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 
 		// Some elements should always have a full end tag <div></div> rather
 		// than <div/>
-		if (preg_match('(^(div|link|script|textarea)$)i', $tag))
+		if (preg_match('(^(div|script|textarea)$)i', $tag))
 		{
 			$this->xmlWriter->fullEndElement();
 		}

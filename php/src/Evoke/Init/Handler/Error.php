@@ -5,34 +5,14 @@ use Evoke\Iface;
 
 class Error implements Iface\Init\Handler
 {
-	/** @property $detailedInsecureMessage
-	 *  \bool Whether to display a detailed insecure error message.
-	 */
-	protected $detailedInsecureMessage;
-
 	/** @property $eventManager
 	 *  EventManager \object
 	 */
 	protected $eventManager;
 
-	/** @property $writer
-	 *  Writer \object
-	 */
-	protected $writer;
-
-	public function __construct(/* Bool */         $detailedInsecureMessage,
-	                            Iface\EventManager $eventManager,
-	                            Iface\Writer       $writer)
+	public function __construct(Iface\EventManager $eventManager)
 	{
-		if (!is_bool($detailedInsecureMessage))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Detailed_Insecure_Message to be boolean');
-		}
-		
-		$this->detailedInsecureMessage = $detailedInsecureMessage;
-		$this->eventManager            = $eventManager;
-		$this->writer                  = $writer;
+		$this->eventManager = $eventManager;
 	}
    
 	/******************/
@@ -124,99 +104,41 @@ class Error implements Iface\Init\Handler
 
 	private function writeError($typeStr, $str, $file, $line)
 	{
-		try
+		$message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
+			' in ' . $file . ' on ' . $line;
+		
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		array_shift($trace);
+		$traceElems = array();
+		
+		foreach ($trace as $level => $info)
 		{
-			$message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
-				' in ' . $file . ' on ' . $line;
+			$info += array('file'     => '',
+			               'line'     => '',
+			               'function' => '',
+			               'class'    => '',
+			               'type'     => '');
+			
+			$message .= '   #' . $level . ' ';
 
-			$this->eventManager->notify(
-				'Log',
-				array('Level'   => LOG_WARNING,
-				      'Message' => $message,
-				      'Method'  => __METHOD__));
-
-			$loggedError = true;
-		}
-		catch (\Exception $e)
-		{
-			$loggedError = false;
-		}
-            
-		if (isset($_GET['l']) && ($_GET['l'] === 'ES'))
-		{
-			$title = 'Error de Programa';
-
-			if ($loggedError)
+			if (empty($info['file']) && empty($info['line']))
 			{
-				$message = 'El administrador ha estado notificado del error.  ' .
-					'Perdon, vamos a arreglarlo.';
+				$message .= '<internal>';
 			}
 			else
 			{
-				$message =
-					'No pudimos notificar el administrador de esta problema.  ' .
-					'Por favor llamanos, queremos arreglarlo.';
+				$message .= $info['file'] . '(' . $info['line'] . ')';
 			}
+
+			$message .= ': ' . $info['class'] . $info['type'] .
+				$info['function'] . "\n";
 		}
-		else
-		{
-			$title = 'Program Error';
-
-			if ($loggedError)
-			{
-				$message = 'The administrator has been notified of this error.  ' .
-					'Sorry, we will fix this.';
-			}
-			else
-			{
-				$message =
-					'The administrator could not be notified of this error.  ' .
-					'Please call us, we want to fix this error.';
-			}
-		}
-
-		$descriptionElems = array(array('div',
-		                                array('class' => 'Message'),
-		                                array('Text' => $message)));
-
-		if ($this->detailedInsecureMessage)
-		{
-			$descriptionElems[] = array(
-				'div',
-				array('class' => 'Breakpoint'),
-				'PHP [' . $typeStr . '] ' . $str . ' in file ' . $file .
-				' at ' . $line);
-
-			$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-			array_shift($trace);
-			$traceElems = array();
-	 
-			foreach ($trace as $level => $info)
-			{
-				$lineElems = array(array('span', array('class' => 'Level'), $level));
-				$info += array('file'     => '',
-				               'line'     => '',
-				               'function' => '',
-				               'class'    => '',
-				               'type'     => '');
-	    
-				$text = '#' . $level . ' ' . $info['file'] . '(' .
-					$info['line'] . '): ' . $info['class'] .
-					$info['type'] . $info['function'];
-	    
-				$traceElems[] = array(
-					'div', array('class' => ($level % 2) ? 'Odd' : 'Even'), $text);
-			}
-
-			$descriptionElems[] = array('div', array('class' => 'Trace'), $traceElems);
-		}
-      
-		$this->writer->write(
-			array('div',
-			      array('class' => 'Error_Handler Message_Box System'),
-			      array(array('div', array('class' => 'Title'),       $title),
-			            array('div', array('class' => 'Description'), $descriptionElems))));
-		$this->writer->output();
+		
+		$this->eventManager->notify(
+			'Log',
+			array('Level'   => LOG_WARNING,
+			      'Message' => $message,
+			      'Method'  => __METHOD__));
 	}
 }
 // EOF

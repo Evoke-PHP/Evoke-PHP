@@ -43,6 +43,12 @@ class Admin
 		var_export($requestData);
 	}
 
+	public function getState()
+	{
+		return array('Failures'      => 'NONE',
+		             'Notifications' => 'ALL');
+	}
+	
 	public function update($requestData)
 	{
 		var_export($requestData);

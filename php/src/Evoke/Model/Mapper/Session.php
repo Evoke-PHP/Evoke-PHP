@@ -16,8 +16,6 @@ class Session implements Iface\Model\Mapper
 	 */
 	public function __construct(Iface\SessionManager $sessionManager)
 	{
-		parent::__construct();
-		
 		$this->sessionManager = $sessionManager;
 	}
 

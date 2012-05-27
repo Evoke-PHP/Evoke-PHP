@@ -91,6 +91,16 @@ class Factory implements Iface\Model\Factory
 		return $this->provider->make('Evoke\Model\Data',
 		                             array('Data_Joins' => $builtData));
 	}
+
+	public function buildInfo(Array $params)
+	{
+		if (!isset($params['Sql']))
+		{
+			$params['Sql'] = $this->sql;
+		}
+
+		return $this->provider->make('Evoke\DB\Table\Info', $params);
+	}
 	
 	public function buildMapperDBMenu(/* String */ $menuName)
 	{
@@ -118,7 +128,6 @@ class Factory implements Iface\Model\Factory
 				      'Joins'      => $this->buildJoins(
 					      $params['Joins'], $params['Table_Name']),
 				      'Table_Name' => $params['Table_Name']));
-				
 		}
 
 		return $this->provider->make('Evoke\Model\Mapper\DB\Joint', $params);
@@ -170,39 +179,6 @@ class Factory implements Iface\Model\Factory
 	/* Protected Methods */
 	/*********************/
 
-	protected function buildInfo(Array $params)
-	{
-		if (!isset($params['Sql']))
-		{
-			$params['Sql'] = $this->sql;
-		}
-
-		return $this->provider->make('Evoke\DB\Table\Info', $params);
-	}
-
-	/** Build a complex tree of joins.  This method provides full configuration
-	 *  of the table joins.  The simpler: \ref buildJoinsSimple can be used in
-	 *  most cases to build the table joins.
-	 */
-	protected function buildJoinsComplex(Array $params)
-	{
-		if (!empty($params['Joins']))
-		{
-			foreach ($params['Joins'] as &$join)
-			{
-				$join = $this->buildjoins($join);
-			}
-		}
-
-		if (!isset($params['Info']))
-		{
-			$params['Info'] = $this->buildInfo(
-				array('Table_Name' => $params['Table_Name']));
-		}
-		
-		return $this->provider->make('Evoke\DB\Table\Joins', $params);
-	}
-
 	/** Build all of the joins using an associative array of table joins.  The
 	 *  keys of the array represent the table names.  The value for each table
 	 *  is a string that specifies the joins from the table as a string using
@@ -249,11 +225,6 @@ class Factory implements Iface\Model\Factory
 		}
 
 		return $builtJoins;
-	}
-	
-	protected function buildMapper($name, $params)
-	{
-		
 	}
 }
 // EOF

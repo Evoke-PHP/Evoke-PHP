@@ -1,32 +1,22 @@
 <?php
 namespace Evoke\Iface\Model;
 
-interface Admin extends \Evoke\Iface\Model
+interface Admin
 {   
-	/// Add a record.
-	public function add($record);
-
-	/// Cancel any currently edited record.
-	public function cancel();
-
-	/// Begin creating a new record.
-	public function createNew();
-
-	/// Cancel the currently requested deletion.
-	public function deleteCancel();
-   
-	/// Delete a record (normally after confirmation from the user).
-	public function deleteConfirm(Array $record);
-
-	/** Request that a record should be deleted, but only after confirmation
-	 *  from the user.
+	/** Add a record.
+	 *  @param record @array The record to add.
 	 */
-	public function deleteRequest($record);   
-   
-	/// Set a record for editing.
-	public function edit($record);
-
-	/// Modify a record.
-	public function modify($record);
+	public function add(Array $record);
+	
+	/** Delete a record.
+	 *  @param record @array The record to delete.
+	 */
+	public function delete(Array $record);
+			
+	/** Modify a record.
+	 *  @param oldRecord @array The record to modify.
+	 *  @param newRecord @array The value to set the record to.
+	 */
+	public function modify(Array $oldRecord, Array $newRecord);
 }
 // EOF

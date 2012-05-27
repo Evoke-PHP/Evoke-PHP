@@ -1,36 +1,41 @@
 <?php
-namespace Evoke\Element;
+namespace Evoke\View;
 
 /// Element to represent a list of records.
-class RecordList extends \Evoke\Element\Translator
+class RecordList extends \Evoke\View\Translated
 {
 	/** @property $contentAttribs
-	 *  Attributes \array for the content.
+	 *  Attributes @array for the content.
 	 */
 	protected $contentAttribs;
 
 	/** @property $data
-	 *  \array The data for the record list.
+	 *  @array The data for the record list.
 	 */
 	protected $data;
 
 	/** @property $dataAttribs
-	 *  Attributes \array for the data.
+	 *  Attributes @array for the data.
 	 */
 	protected $dataAttribs;
 
+	/** @property $elementRowButtons
+	 *  @object Element for the row buttons.
+	 */
+	protected $elementRowButtons;
+	
 	/** @property $editedRecord
-	 *  \array The edited record from the record list.
+	 *  @array The edited record from the record list.
 	 */
 	protected $editedRecord;
 
 	/** @property $emptyDataAttribs
-	 *  Attributes \array for an empty record list.
+	 *  Attributes @array for an empty record list.
 	 */
 	protected $emptyDataAttribs;
 
 	/** @property $fields
-	 *  \array of fields in the record list.
+	 *  @array of fields in the record list.
 	 */
 	protected $fields;
 
@@ -40,164 +45,126 @@ class RecordList extends \Evoke\Element\Translator
 	protected $headingSetup;
 
 	/** @property $ignoredFields
-	 *  \array Fields to be ignored in the record list.
+	 *  @array Fields to be ignored in the record list.
 	 */
 	protected $ignoredFields;
 
 	/** @property $labels
-	 *  \array Labels.
+	 *  @array Labels.
 	 */
 	protected $labels;
 
 	/** @property $primaryKeys
-	 *  \array The primary keys for the record list.
+	 *  @array The primary keys for the record list.
 	 */
 	protected $primaryKeys;
 
 	/** @property $rowAttribs
-	 *  \array Attributes for the record list rows.
+	 *  @array Attributes for the record list rows.
 	 */
 	protected $rowAttribs;
 
-	/** @property $rowButtons
-	 *  \array Buttons for each row.
-	 */
-	protected $rowButtons;
-
-	/** @property $rowButtonsAsForm
-	 *  \bool Whether the row buttons should be in a form.
-	 */
-	protected $rowButtonsAsForm;
-
-	/** @property $rowButtonsAttribs
-	 *  \array Attributes for the row buttons.
-	 */
-	protected $rowButtonsAttribs;
-
 	/** @property $tableName
-	 *  \string The table name for the record data.
+	 *  @string The table name for the record data.
 	 */
 	protected $tableName;
 
 	/** @property $translateLabels
-	 *  \bool Whether to translate the labels for the fields.
+	 *  @bool Whether to translate the labels for the fields.
 	 */
 	protected $translateLabels;
 
-
-	
-	
-	public function __construct(Array $setup)
+	/** Construct a RecordList object.
+	 *  @param translator      @object Translator.
+	 *  @param data            @object Data.
+	 *  @param elementButtons  @object ElementButtons.
+	 *  @param elementRecord   @object ElementRecord.
+	 *  @param fields          @array  Data fields to be displayed.
+	 *  @param attribs         @array  Attributes for the record list.
+	 *  @param contentAttribs  @array  Attributes for the content.
+	 *  @param dataAttribs     @array  DataAttribs.
+	 *  @param ignoredFields   @array  IgnoredFields.
+	 *  @param labels          @array  Labels.
+	 *  @param rowAttribs      @array  RowAttribs.
+	 *  @param translateLabels @bool   TranslateLabels.
+	 */
+	public function __construct(
+		Iface\Translator $translator,
+		Iface\Model\Data $data,
+		Iface\Element    $elementButtons,
+		Iface\Element    $elementRecord,
+		Array            $fields,
+		Array            $attribs        = array('class' => 'Record_List'),
+		Array            $contentAttribs = array('class' => 'Content'),
+		Array            $dataAttribs    = array('class' => 'Data'),
+		Array            $headings       = array(),			
+		Array            $ignoredFields  = array(),
+		Array            $rowAttribs     = array('class' => 'Row'))
 	{
-		$setup += array('Content_Attribs'     => array('class' => 'Content'),
-		                'Data'                => NULL,
-		                'Data_Attribs'        => array('class' => 'Data'),
-		                'Default_Attribs'     => array('class' => 'Record_List'),
-		                'Edited_Record'       => array(),
-		                'Empty_Data_Attribs'  => array('class' => 'Empty Data'),
-		                'Fields'              => array(),
-		                'Heading_Setup'       => NULL,	    
-		                'Ignored_Fields'      => array('Joint_Data'),
-		                'Labels'              => array(),
-		                'Primary_Keys'        => array(),
-		                'Row_Attribs'         => array('class' => 'Row'),
-		                'Row_Buttons'         => NULL,
-		                'Row_Buttons_As_Form' => true,
-		                'Row_Buttons_Attribs' => array('class' => 'Row_Buttons'),
-		                'Table_Name'          => NULL,
-		                'Translate_Labels'    => true,
-		                'Translator'          => NULL);
-
-		if (!isset($data))
-		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Data');
-		}
-      
-		if (!isset($rowButtons))
+		if (!is_bool($translateLabels))
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Row_Buttons');
+				__METHOD__ . ' requires translateLabels as bool');
 		}
 
-		if (!isset($tableName))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Table_Name');
-		}
+		parent::__construct($translator);
 
-		if (!$translator instanceof Translator)
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Translator');
-		}
-
-		$this->data = $data;
-      
-		// Merge the Heading Setup so that information is added to a blank
-		// heading setup whereas the default is for only a top heading.
-		if (!empty($headingSetup))
-		{
-			$this->headingSetup = array_merge(
-				array('Bottom'          => false,
-				      'Buttons'         => array(),
-				      'Buttons_Attribs' => array('class' => 'Heading_Buttons'),
-				      'Inline'          => false,
-				      'Row_Attribs'     => array('class' => 'Heading Row'),
-				      'Top'             => false),
-				$headingSetup);
-		}
-      
-		parent::__construct(array('div',
-		                          $this->attribs,
-		                          $this->buildRecordListElems()));
+		$this->contentAttribs  = $contentAttribs;
+		$this->data            = $data;
+		$this->dataAttribs     = $dataAttribs;
+		$this->elementButtons  = $elementButtons;
+		$this->elementRecord   = $elementRecord;
+		$this->fields          = $fields;
+		$this->headings        = array_merge(array('Bottom' => false,
+		                                           'Every'  => -1,
+		                                           'Inline' => false,
+		                                           'Top'    => false),
+		                                     $headings);
+		$this->ignoredFields   = $ignoredFields;
+		$this->rowAttribs      = $rowAttribs;
 	}
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
+	/******************/
+	/* Public Methods */
+	/******************/
 
-	/// Build the elements for the record list.
-	protected function buildRecordListElems()
+	public function write()
 	{
-		$fields = $this->getFields();
-
-		// Remove the ignored fields.
-		foreach ($this->ignoredFields as $ignored)
-		{
-			unset($fields[$ignored]);
-		}
-      
-		$headings = $this->getHeadings($fields);
-		$headingRow = $this->buildHeadingRow($headings);
 		$recordListElems = array();
+		$fields = array_diff($this->fields, $this->ignoredFields);
+		$headingElements = $this->getHeadings($fields);
+		$headingRow = $this->buildHeadingRow($headings);
 
 		if ($this->headingSetup['Top'])
 		{
 			$recordListElems[] = $headingRow;
 		}
 
-		$recordListElems[] = $this->buildContent($fields, $headings);
+		$recordListElems[] = $this->buildContent($fields, $headingElements);
 
 		if ($this->headingSetup['Bottom'])
 		{
 			$recordListElems[] = $headingRow;
 		}
 
-		return $recordListElems;
+		$this->writer->write(array('div', $this->attribs, $recordListElems));
 	}
+	
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
 	/** Build the content of the record list including any inline headings,
 	 *  data and data buttons. (Not the top or bottom headings).
-	 *  @param headings \array Array of headings for use in inline headings.
-	 *  \return Return the element containing the content of the record list.
+	 *  @param headings @array Array of headings for use in inline headings.
+	 *  @return Return the element containing the content of the record list.
 	 */
 	protected function buildContent($fields, $headings)
 	{
-		if (empty($this->data))
+		if ($this->data->isEmpty()))
 		{
-			$rowElems = array(array('div',
-			                        $this->rowAttribs,
-			                        $this->buildEmptyData()));
+			$rowElems = array(
+				array('div', $this->rowAttribs, $this->buildEmptyData()));
 		}
 		else
 		{
@@ -218,8 +185,8 @@ class RecordList extends \Evoke\Element\Translator
 	}
 
 	/** Build the element for an empty record list.
-	 *  @param headingElem \object The heading element that may be used.
-	 *  \return \array Array of elements for an empty record list.
+	 *  @param headingElem @object The heading element that may be used.
+	 *  @return @array Array of elements for an empty record list.
 	 */
 	protected function buildEmptyData()
 	{
@@ -229,8 +196,8 @@ class RecordList extends \Evoke\Element\Translator
 	}
    
 	/** Build the heading row element.
-	 *  @param headings \array Array of heading row elements.
-	 *  \return \object The heading row element.
+	 *  @param headings @array Array of heading row elements.
+	 *  @return @object The heading row element.
 	 */
 	protected function buildHeadingRow($headings)
 	{
@@ -245,9 +212,9 @@ class RecordList extends \Evoke\Element\Translator
 	}
 
 	/** Build the element holding the buttons in a row.
-	 *  @param row \mixed The key for the row.
-	 *  @param rowData \array The data for the row.
-	 *  \return \array Array of elements that make up the buttons.
+	 *  @param row @mixed The key for the row.
+	 *  @param rowData @array The data for the row.
+	 *  @return @array Array of elements that make up the buttons.
 	 */
 	protected function buildRowButtons($row, $rowData)
 	{
@@ -277,10 +244,10 @@ class RecordList extends \Evoke\Element\Translator
 	}
    
 	/** Build the element holding the data in a row.
-	 *  @param fields  \array The fields for the row.
-	 *  @param row     \mixed The key for the row.
-	 *  @param rowData \array The data for the row.
-	 *  \return \array Array of elements that make up the data.
+	 *  @param fields  @array The fields for the row.
+	 *  @param row     @mixed The key for the row.
+	 *  @param rowData @array The data for the row.
+	 *  @return @array Array of elements that make up the data.
 	 */
 	protected function buildRowData($fields, $row, $rowData, $headings)
 	{
@@ -329,8 +296,8 @@ class RecordList extends \Evoke\Element\Translator
 	}
 
 	/** Get the data attributes for the row.
-	 *  @param row \mixed The key of the row.
-	 *  @param rowData \array The data for the row.
+	 *  @param row @mixed The key of the row.
+	 *  @param rowData @array The data for the row.
 	 */
 	protected function getDataAttribs($row, $rowData)
 	{
@@ -352,12 +319,6 @@ class RecordList extends \Evoke\Element\Translator
 		}
 
 		return $dataAttribs;
-	}   
-
-	/// Get the fields for display.
-	protected function getFields()
-	{
-		return $this->fields;
 	}
    
 	/// Get the heading buttons that appear with Top or Bottom headings.
@@ -367,8 +328,8 @@ class RecordList extends \Evoke\Element\Translator
 	}
    
 	/** Build the headings for each field.
-	 *  @param fields \array Array of fields.
-	 *  \return \array Associative array of the heading elements keyed by field.
+	 *  @param fields @array Array of fields.
+	 *  @return @array Associative array of the heading elements keyed by field.
 	 */
 	protected function getHeadings($fields)
 	{
@@ -409,7 +370,7 @@ class RecordList extends \Evoke\Element\Translator
 
    
 	/** Get the buttons for the row.
-	 *  @param row \string The key of the row.
+	 *  @param row @string The key of the row.
 	 *  @return An array of button elements for the row.
 	 */
 	protected function getRowButtons($row)
@@ -428,8 +389,8 @@ class RecordList extends \Evoke\Element\Translator
 	}
    
 	/** Determine if the row data is from the currently edited record.
-	 *  @param rowData \array The data for the row.
-	 *  \return \bool Whether the row is the currently edited record.
+	 *  @param rowData @array The data for the row.
+	 *  @return @bool Whether the row is the currently edited record.
 	 */
 	protected function isEditedRecord($rowData)
 	{

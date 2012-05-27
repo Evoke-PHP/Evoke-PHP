@@ -102,7 +102,7 @@ class Shutdown implements Iface\Init\Handler
 
 		$this->writer->write(
 			array('div',
-			      array('class' => 'Error_Handler Message_Box System'),
+			      array('class' => 'Shutdown_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'),       $title),
 			            array('div', array('class' => 'Description'), $message))));
 		$this->writer->writeEnd();
