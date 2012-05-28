@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Element\Form;
+namespace Evoke\View\Form;
 
 class EntryDialog extends Entry
 {
@@ -17,7 +17,7 @@ class EntryDialog extends Entry
 		parent::__construct($setup);
 
 		/// \todo Fix this class.
-		throw new Exception(__METHOD__ . ' needs update to new element class');
+		throw new Exception(__METHOD__ . ' needs update to new view class');
 	}
    
 	/*********************/
@@ -30,7 +30,7 @@ class EntryDialog extends Entry
 		if (empty($this->fieldValues))
 		{
 			$submitButtons = array(
-				new Element_Submit(
+				new View_Submit(
 					array('class' => 'Dialog_Submit Button Good Small',
 					      'name'  => $this->tableName . '_Add',
 					      'value' => $this->translator->get('Add'))));
@@ -38,18 +38,18 @@ class EntryDialog extends Entry
 		else
 		{
 			$submitButtons = array(
-				new Element_Submit(
+				new View_Submit(
 					array('class' => 'Dialog_Submit Button Info Small',
 					      'name'  => $this->tableName . '_Modify',
 					      'value' => $this->translator->get('Edit'))));
 		}
 	    
-		$submitButtons[] = new Element_Submit(
+		$submitButtons[] = new View_Submit(
 			array('class' => 'Dialog_Cancel Button Bad Small',
 			      'name'  => $this->tableName . '_Cancel',
 			      'value' => $this->translator->get('Cancel')));
       
-		$this->addElement(array('div',
+		$this->addView(array('div',
 		                        $this->submitButtonAttribs,
 		                        $submitButtons));
 	}

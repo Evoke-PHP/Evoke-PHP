@@ -136,7 +136,7 @@ class Exception implements Iface\Init\Handler
 			$message = array(
 				array('div', array('class' => 'Message'), $messageChildren));
 		}
-		
+
 		$this->writer->write(
 			array('div',
 			      array('class' => 'Exception_Handler Message_Box System'),

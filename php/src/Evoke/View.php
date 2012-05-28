@@ -5,17 +5,17 @@ use Evoke\Iface;
 
 abstract class View implements Iface\View
 {
-	/** @property $writer
-	 *  Writer \object
+	/** @property $translator
+	 *  @object Translator
 	 */
-	protected $writer;
+	protected $translator;
 
 	/** Construct the View.
-	 *  @param Writer \object The writer object.
+	 *  @param Translator @object Translator.
 	 */
-	public function __construct(Iface\Writer $writer)
+	public function __construct(Iface\Translator $translator)
 	{
-		$this->writer = $writer;
+		$this->translator = $translator;
 	}
 }
 // EOF

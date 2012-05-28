@@ -25,9 +25,9 @@ class Admin extends \Evoke\View
 				'/csslib/global.css',
 				'/csslib/common.css',
 				'/csslib/admin/admin.css',
-				'/csslib/element/language.css',
-				'/csslib/element/admin_header.css',
-				'/csslib/element/error.css')),
+				'/csslib/view/language.css',
+				'/csslib/view/admin_header.css',
+				'/csslib/view/error.css')),
 		/* Bool */          $editSeparately = false)
 	{
 		if (!is_string($tableName))
@@ -103,7 +103,7 @@ class Admin extends \Evoke\View
 		{
 			$this->writer->write(
 				$this->instanceManager->create(
-					'Element_Failures', array('Data' => $failures)));
+					'View_Failures', array('Data' => $failures)));
 		}
 	}
 
@@ -115,7 +115,7 @@ class Admin extends \Evoke\View
 		{
 			$this->writer->write(
 				$this->instanceManager->create(
-					'Element_Notifications', array('Data' => $notifications)));
+					'View_Notifications', array('Data' => $notifications)));
 		}
 	}
 
@@ -175,7 +175,7 @@ class Admin extends \Evoke\View
 	{
 		$this->writer->write(
 			$this->instanceManager->create(
-				'Element_Form_Entry',
+				'View_Form_Entry',
 				array('Field_Values'   => $record,
 				      'Submit_Buttons' => $this->getSubmitButtons($isNew),
 				      'Table_Info'     => $this->tableInfo,
@@ -200,7 +200,7 @@ class Admin extends \Evoke\View
 			            'value' => $this->translator->get('Cancel'))));
       
 		$recordToDelete = $this->instanceManager->create(
-			'Element_Record_List_Table',
+			'View_Record_List_Table',
 			array_merge(array('Attribs'        => array(
 				                  'class' => 'Delete_Request Record_List'),
 			                  'Data'           => $request,
@@ -212,13 +212,13 @@ class Admin extends \Evoke\View
 			   
 		$this->writer->write(
 			$this->instanceManager->create(
-				'Element_Form_Dialog',
+				'View_Form_Dialog',
 				array('Attribs'          => array('class'  => 'Dialog Bad',
 				                                  'action' => '',
 				                                  'method' => 'post'),
 				      'Heading_Text'     => $this->translator-> get(
 					      'Confirm_Delete_Heading'),
-				      'Message_Elements' => array($recordToDelete),
+				      'Message_Views' => array($recordToDelete),
 				      'Message_Text'     => $this->translator->get('Confirm_Delete_Text'))));
 	}
    
@@ -227,7 +227,7 @@ class Admin extends \Evoke\View
 	{
 		$this->writer->write(
 			$this->instanceManager->create(
-				'Element_Admin_Header',
+				'View_Admin_Header',
 				array('Languages'  => $header['Languages'],
 				      'Translator' => $this->translator)));
 
@@ -245,7 +245,7 @@ class Admin extends \Evoke\View
 	{
 		$this->writer->write(
 			$this->instanceManager->create(
-				'Element_Record_List_Table',
+				'View_Record_List_Table',
 				array_merge(
 					array('Data'           => $data,
 					      'Row_Buttons'    => array(

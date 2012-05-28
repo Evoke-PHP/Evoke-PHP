@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Form\Input;
+namespace Evoke\View\Form\Input;
 
-class File extends \Evoke\Element
+class File extends \Evoke\View
 { 
 	/** Construct a button/input that will enable styling to be done on the ugly
 	 *  file input.  With our CSS we can control the behaviour by overlapping the

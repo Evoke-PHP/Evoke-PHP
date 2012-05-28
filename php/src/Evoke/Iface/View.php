@@ -3,9 +3,9 @@ namespace Evoke\Iface;
 
 interface View
 {
-	/** Write the view.
-	 *  @param params @array Parameters for the writing of the view.
+	/** Get the view (of the data) to be written.
+	 *  @param params @array Parameters for retrieving the view.
 	 */
-	public function write(Array $params = array());
+	public function get(Array $params = array());
 }
 // EOF

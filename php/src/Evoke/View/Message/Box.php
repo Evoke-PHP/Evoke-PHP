@@ -1,27 +1,38 @@
 <?php
-namespace Evoke\Element\Message;
+namespace Evoke\View\Message;
 
-class Box extends \Evoke\Element
+use Evoke\Iface;
+
+class Box extends \Evoke\View
 {
-	/** Construct a Message Box Element.
-	 *  @param attribs @array Attributes for the message box.
+	/** @property attribs
+	 *  @array Message Box attributes.
+	 */
+	protected $attribs;
+
+	/** Construct a Box object.
+	 *  @param translator @object Translator.
+	 *  @param attribs    @array  Message Box attributes.
 	 */
 	public function __construct(
-		Array $attribs = array('class' => 'Message_Box Info'),
-		Array $pos     = array())
+		Iface\Translator $translator,
+		Array            $attribs = array('class' => 'Message_Box Info'))
 	{
-		parent::__construct($attribs, $pos);
+		parent::__construct($translator);
+		
+		$this->attribs = $attribs;
 	}
-   
+
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	public function set(Array $message)
+	public function get(Array $message=array())
 	{
 		if (!isset($message['Description']))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Description');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' needs Description');
 		}
 
 		if (!isset($message['Title']))
@@ -29,15 +40,15 @@ class Box extends \Evoke\Element
 			throw new \InvalidArgumentException(__METHOD__ . ' needs Title');
 		}
       
-		return parent::set(
-			array('div',
-			      array(),
-			      array(array('div',
-			                  array('class' => 'Title'),
-			                  $message['Title']),
-			            array('div',
-			                  array('class' => 'Description'),
-			                  $message['Description']))));
+		return array(
+			'div',
+			$this->attribs,
+			array(array('div',
+			            array('class' => 'Title'),
+			            $message['Title']),
+			      array('div',
+			            array('class' => 'Description'),
+			            $message['Description'])));
 	}
 }
 // EOF

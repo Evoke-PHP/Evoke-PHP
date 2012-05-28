@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Form\Input;
+namespace Evoke\View\Form\Input;
 
-class RequiredField extends \Evoke\Element
+class RequiredField extends \Evoke\View
 {
 	/** @property $translator
 	 *  Translator \object
@@ -23,7 +23,7 @@ class RequiredField extends \Evoke\Element
 		$this->translator = $translator;
 	}
 
-	public function set(Array $data)
+	public function get(Array $data)
 	{
 		return parent::set(
 			array('div',

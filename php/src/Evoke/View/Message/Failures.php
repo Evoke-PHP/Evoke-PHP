@@ -1,14 +1,19 @@
 <?php
-namespace Evoke\Element\Message;
+namespace Evoke\View\Message;
 
 class Failures extends Array
 { 
+	/** Construct a Failures Message view.
+	 *  @param translator  @object Translator.
+	 *  @param messageTree @object MessageTree.
+	 *  @param attribs     @array  Attribs.
+	 */
 	public function __construct(
-		/* String */ $elementClass = 'Failure',
-		Array        $attribs      = array('class' => 'Failure_Container'),
-		Array        $pos          = array())
+		Iface\Translator  $translator,
+		Iface\MessageTree $messageTree,
+		Array             $attribs = array('class' => 'Message Failure'))
 	{
-		parent::__construct($elementClass, $attribs, $pos);
+		parent::__construct($translator, $messageTree, $attribs);
 	}
 }
 // EOF

@@ -139,6 +139,9 @@ class Error implements Iface\Init\Handler
 			array('Level'   => LOG_WARNING,
 			      'Message' => $message,
 			      'Method'  => __METHOD__));
+
+		// Let PHP log it into the webserver error log too.
+		return false;
 	}
 }
 // EOF

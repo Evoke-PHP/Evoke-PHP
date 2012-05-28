@@ -1,8 +1,15 @@
 <?php
-namespace Evoke\Element\Form\Input;
+namespace Evoke\View\Form\Input;
 
-class Select extends \Evoke\Element
+use Evoke\Iface;
+
+class Select implements Iface\View
 {
+	/** @property $attribs
+	 *  @array Attributes for the select element.
+	 */
+	protected $attribs;
+	
 	/** @property appendData
 	 *  @array Data to be appended to the options available for selection.
 	 */
@@ -54,8 +61,7 @@ class Select extends \Evoke\Element
 			throw new \InvalidArgumentException(__METHOD__ . ' requires valueField as string');
 		}
 
-		parent::__construct($attribs);
-		
+		$this->attribs       = $attribs;
 		$this->appendData    = $appendData;
 		$this->optionAttribs = $optionAttribs;
 		$this->prependData   = $prependData;
@@ -68,25 +74,25 @@ class Select extends \Evoke\Element
 	/******************/
 
 	/** Set the select element.
-	 *  @param data @array The select data in the form:
+	 *  @param params @array The select data in the form:
 	 *  @code
 	 *  array('Records'  => \array records, // Records for the select
 	 *        'Selected' => \scalar value); // The value that is selected.
 	 *  @endcode
 	 */    
-	public function set(Array $data)
+	public function get(Array $params = array())
 	{
-		$data += array('Records'  => NULL,
+		$params += array('Records'  => NULL,
 		               'Selected' => NULL);
 
-		if (!is_array($data['Records']))
+		if (!is_array($params['Records']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' requires Records as array');
 		}
 
 		$fullData = array_merge($this->prependData,
-		                        $data['Records'],
+		                        $params['Records'],
 		                        $this->appendData);
 
 		if (empty($fullData))
@@ -114,7 +120,7 @@ class Select extends \Evoke\Element
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
-			if (isset($data['Selected']) && $value == $data['Selected'])
+			if (isset($params['Selected']) && $value == $params['Selected'])
 			{
 				$optionAttribs['selected'] = 'selected';
 			}
@@ -123,7 +129,7 @@ class Select extends \Evoke\Element
 				array('option', $optionAttribs, $record[$this->textField]);
 		}
 
-		return parent::set(array('select', array(), $optionElements));
+		return array('select', $this->attribs, $optionElements);
 	}
 }
 // EOF

@@ -1,64 +1,71 @@
 <?php
-namespace Evoke\Element\Message;
+namespace Evoke\View\Message;
 
-class Array extends \Evoke\Element
+class Array extends \Evoke\View
 {
-	/** @property $elementClass
-	 *  \string The class for an element of the message array.
+	/** @property attribs
+	 *  @array Attribs
 	 */
-	protected $elementClass;
-	
-	public function __construct(
-		/* String */ $elementClass = 'Message',
-		Array        $attribs      = array('class' => 'Message_Container'),
-		Array        $pos          = array())
-	{
-		if (!is_string($elementClass))
-		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires elementClass as string');
-		}
-		
-		parent::__construct($attribs, $pos);
+	protected $attribs;
 
-		$this->elementClass = $elementClass;
+	/** @property messageTree
+	 *  @object MessageTree
+	 */
+	protected $messageTree;
+
+	/** Construct a Message Array view.
+	 *  @param translator  @object Translator.
+	 *  @param messageTree @object MessageTree.
+	 *  @param attribs     @array  Attribs.
+	 */
+	public function __construct(
+		Iface\Translator  $translator,
+		Iface\MessageTree $messageTree,
+		Array             $attribs = array('class' => 'Message'))
+	{
+		parent::__construct($translator);
+		
+		$this->attribs     = $attribs;
+		$this->messageTree = $messageTree;
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	public function set(Array $data)
+	public function get(Array $params = array())
 	{
-		return parent::set(array('div',
-		                         array(),
-		                         $this->buildElems($data)));
+		$params += array('Start_Level' => 0);
+		
+		return array('div',
+		             $this->attribs,
+		             $this->buildElems($this->messageTree,
+		                               $params['Start_Level']));
 	}
    
-	/*******************/
-	/* Private Methods */
-	/*******************/
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
-	/// Build our message array elements recursively.
-	private function buildElems($messageArray, $level=0)
+	/// Build the view of the MessageTree recursively.
+	protected function buildElems(Iface\MessageTree $messageTree, $level)
 	{
-		if ($messageArray instanceof Array)
+		if ($messageTree instanceof Array)
 		{
-			return $this->buildElems($messageArray->get(), $level);
+			return $this->buildElems($messageTree->get(), $level);
 		}
       
 		$msgElems = array();
 
-		if (is_array($messageArray))
+		if (is_array($messageTree))
 		{
 			$childLevel = $level + 1;
 	 
-			foreach ($messageArray as $msg)
+			foreach ($messageTree as $msg)
 			{
 				$msgElems[] = array(
 					'ul',
-					array('class' => $this->elementClass . ' Level_' .
-					      $level),
+					array('class' => ' Level_' . $level),
 					array(array_unshift($msg['Title'],
 					                    $this->buildElems(
 						                    $msg['Message'], $childLevel))));
@@ -68,8 +75,8 @@ class Array extends \Evoke\Element
 		{
 			$msgElems[] = array(
 				'li',
-				array('class' => $this->elementClass . ' Leaf Level_' . $level),
-				$messageArray);
+				array('class' => ' Leaf Level_' . $level),
+				$messageTree);
 		}
 
 		return $msgElems;

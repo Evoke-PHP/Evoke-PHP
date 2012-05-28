@@ -1,9 +1,9 @@
 <?php
-namespace Evoke\Element\Form;
+namespace Evoke\View\Form;
 /** Entry form for a databse record.
  *  Provide a form to show and allow modification to database tables.
  */
-class Entry extends \Evoke\Element\Form
+class Entry extends \Evoke\View\Form
 {
 	/// Construct the entry form with the table information.
 	public function __construct(Array $setup)

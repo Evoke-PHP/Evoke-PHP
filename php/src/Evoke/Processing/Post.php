@@ -4,15 +4,15 @@ namespace Evoke\Processing;
 class Post extends \Evoke\Processing
 {
 	/** Construct a Post Processing object.
-	 *  @param requestKeys   @array RequestKeys.
+	 *  @param callbacks     @array Callbacks.
 	 *  @param matchRequired @bool  MatchRequired.
 	 *  @param uniqueMatch   @bool  UniqueMatch.
 	 */
-	public function __construct(Array      $requestKeys,
+	public function __construct(Array      $callbacks,
 	                            /* Bool */ $matchRequired = true,
 	                            /* Bool */ $uniqueMatch   = true)
 	{
-		parent::__construct('POST', $requestKeys, $matchRequired, $uniqueMatch);
+		parent::__construct('POST', $callbacks, $matchRequired, $uniqueMatch);
 	}
 
 	/******************/

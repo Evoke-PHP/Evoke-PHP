@@ -14,20 +14,20 @@ class File extends \Evoke\Processing
 	protected $requestSeparator;
 
 	/** Construct a File processing object.
-	 *  @param requestKeys   	@array  The request keys we are processing.
+	 *  @param callbacks   	    @array  The processing callbacks.
 	 *  @param requestPrefix 	@string The prefix for the file request.
 	 *  @param requestSeparator @string Separator between the prefix and file.
 	 *  @param matchRequired 	@bool   Whether a match is required.
 	 *  @param uniqueMatch   	@bool   Whether a unique match is required.
 	 */
 	public function __construct(
-		Array              $requestKeys,
+		Array              $callbacks,
 		/* String */       $requestPrefix    = 'Input_File',
 		/* String */       $requestSeparator = '_',
 		/* Bool   */       $matchRequired    = true,
 		/* Bool   */       $uniqueMatch      = true)
 	{
-		parent::__construct('FILE', $requestKeys, $matchRequired, $uniqueMatch);
+		parent::__construct('FILE', $callbacks, $matchRequired, $uniqueMatch);
 
 		$this->requestPrefix    = $requestPrefix;
 		$this->requestSeparator = $requestSeparator;
@@ -55,13 +55,15 @@ class File extends \Evoke\Processing
 	/*********************/
 
 	/** Notify the matches which should now be processed.
-	 *  @param requestKeys \array The requests that should be notified.
-	 *  @param requestData \array The data for the requests.
+	 *  @param callbacks   @array The callbacks that should be called.
+	 *  @param requestData @array The data for the requests.
 	 */
-	protected function callRequests(Array $requestKeys, Array $requestData)
+	protected function callRequests(Array $callbacks, Array $requestData)
 	{
+		/// @todo Fix this code.
+		throw new RuntimeException(__METHOD__ . ' fix this.');
 		// The request keys have already been formatted for us.
-		foreach ($requestKeys as $requestKey => $data)
+		foreach ($callbacks as $requestKey => $callback)
 		{
 			// Dispatch the processing using the event manager.
 			$this->eventManager->notify(
@@ -71,13 +73,12 @@ class File extends \Evoke\Processing
 	}
    
 	/** Get the request keys that match the request data.
-	 *  @param data \array The request data.
+	 *  @param data @array The request data.
 	 */
 	protected function getRequestMatches($data)
 	{
-		$fullRequestPrefix = $this->requestPrefix .
-			$this->requestSeparator;
-		$fullPrefixLength = strlen($fullRequestPrefix);
+		/// @todo Fix this code.
+		throw new RuntimeException(__METHOD__ . ' fix this.');
 		$matches = array();
       
 		foreach ($data as $key => $val)

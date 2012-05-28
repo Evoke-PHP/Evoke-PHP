@@ -1,8 +1,28 @@
 <?php
-namespace Evoke\Element\Control;
+namespace Evoke\View\Control;
 
-class Menu extends \Evoke\Element\Translator
+use Evoke\Iface;
+
+class Menu extends \Evoke\View
 {
+	/** @property data
+	 *  @object Data
+	 */
+	protected $data;
+
+	/** Construct a Menu object.
+	 *  @param translator @object Translator.
+	 *  @param data       @object Data.
+	 */
+	public function __construct(Iface\Translator      $translator,
+	                            Iface\Model\Data\Menu $data)
+	{
+		parent::__construct($translator);
+		
+		$this->data = $data;
+	}
+
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -11,12 +31,22 @@ class Menu extends \Evoke\Element\Translator
 	 *  @param menuItems \array The menu items.
 	 *  \return \array The menu element data.
 	 */
-	public function set(Array $menu)
+	public function get(Array $params = array())
 	{
-		return parent::set(
-			array('ul',
-			      array('class' => 'Menu ' . $menu['Name']),
-			      $this->buildMenu($menu['Items'][0]['Children'])));
+		$menus = $this->data->getMenu();
+		$menusElements = array();
+		
+		foreach ($menus as $menu)
+		{
+			$menusElements[] = array(
+				'ul',
+				array('class' => 'Menu ' . $menu['Name']),
+				$this->buildMenu($menu['Items'][0]['Children']));
+		}
+
+		return (count($menusElements) > 1) ?
+			array('div', array('class' => 'Menus'), $menusElements) :
+			reset($menusElements);
 	}
    
 	/*******************/

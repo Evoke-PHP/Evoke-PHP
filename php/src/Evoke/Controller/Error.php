@@ -24,7 +24,7 @@ class Error extends \Evoke\Controller
 				$currentBuffer, E_USER_WARNING);
 			$this->writer->flush();
 		}
-		
+
 		parent::execute($method, $outputFormat);
 	}
 
@@ -70,8 +70,8 @@ class Error extends \Evoke\Controller
 	/// Write the error in XML.
 	private function writeXMLError()
 	{
-		$element = $this->provider->make(
-			'Evoke\Element\Message\Box',
+		$view = $this->provider->make(
+			'Evoke\View\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
 
 		$this->params += array(
@@ -79,7 +79,7 @@ class Error extends \Evoke\Controller
 			'  We will fix this as soon as possible.',
 			'Title'       => 'System Error');
 		
-		$this->writer->write($element->set($this->params));		
+		$this->writer->write($view->get($this->params));
 	}	
 }
 // EOF

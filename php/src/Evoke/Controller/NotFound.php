@@ -61,15 +61,15 @@ class NotFound extends \Evoke\Controller
 	/// Write a Message Box in XML showing the Not Found message.
 	private function writeXMLNotFound()
 	{
-		$element = $this->provider->make(
-			'Evoke\Element\Message\Box',
+		$view = $this->provider->make(
+			'Evoke\View\Message\Box',
 			array('Attribs' => array('class' => 'Message_Box System')));
 
 		$this->params += array(
 			'Description' => 'The requested page could not be found.',
 			'Title'       => 'Not Found');
 		
-		$this->writer->write($element->set($this->params));
+		$this->writer->write($view->get($this->params));
 	}	
 }
 // EOF

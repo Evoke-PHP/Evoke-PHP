@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Element\Form;
+namespace Evoke\View\Form;
 /** Entry form for a databse record using foreign table inputs.
  *  Provide a form to show and allow modification to database tables.
  */
@@ -15,8 +15,8 @@ class EntryForeign extends Entry
 			      'SQL'                   => NULL),
 			$setup);
 
-		/// \todo Change this. SQL in an element is a bad idea.
-		throw new Exception(__METHOD__ . ' SQL in an element is a bad idea.');
+		/// \todo Change this. SQL in an view is a bad idea.
+		throw new Exception(__METHOD__ . ' SQL in an view is a bad idea.');
       
 		if (!($sQL instanceof \Evoke\DB\SQL))
 		{
@@ -84,7 +84,7 @@ class EntryForeign extends Entry
 			$foreignSelector['Order_By']);
 
 		return array(
-			new Element_DB_Input_Foreign(
+			new View_DB_Input_Foreign(
 				$foreignKeyData,
 				array_merge(
 					$fieldSetup,

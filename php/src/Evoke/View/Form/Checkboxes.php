@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Form;
+namespace Evoke\View\Form;
 
-class Checkboxes extends \Evoke\Element\Form
+class Checkboxes extends \Evoke\View\Form
 {
 	/** @property $emptyText
 	 *  The text \string if there are no checkboxes.

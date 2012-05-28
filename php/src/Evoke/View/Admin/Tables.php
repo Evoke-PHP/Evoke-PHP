@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Admin;
+namespace Evoke\View\Admin;
 
-class Tables extends \Evoke\Element\Admin
+class Tables extends \Evoke\View\Admin
 { 
 	public function __construct(Array $setup)
 	{

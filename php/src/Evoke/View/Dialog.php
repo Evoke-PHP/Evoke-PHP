@@ -1,11 +1,11 @@
 <?php
-namespace Evoke\Element;
+namespace Evoke\View;
 
-class Dialog extends \Evoke\Element
+class Dialog extends \Evoke\View
 {
 	public function __construct(Array $setup)
 	{
-		/// \todo Fix this to the new element interface.
+		/// \todo Fix this to the new view interface.
 		throw new \RuntimeException(__METHOD__ . ' todo fix implementation.');
 		
 		$setup += array('Buttons'         => array(),
@@ -23,7 +23,7 @@ class Dialog extends \Evoke\Element
 	/* Public Methods */
 	/******************/
 
-	public function set(Array $data)
+	public function get(Array $data)
 	{
 		$data += array('Buttons'      => array(),
 		               'Content'      => NULL,

@@ -1,12 +1,12 @@
 <?php
-namespace Evoke\Element\Admin;
+namespace Evoke\View\Admin;
 
-class Header extends \Evoke\Element\Admin
+class Header extends \Evoke\View\Admin
 {
-	/** @property $elementLanguage
-	 *  Language element
+	/** @property $viewLanguage
+	 *  Language view
 	 */
-	protected $elementLanguage;
+	protected $viewLanguage;
 
 	/** @property $languages
 	 *  \array of languages.
@@ -20,14 +20,14 @@ class Header extends \Evoke\Element\Admin
 	
 	public function __construct(Array $setup)
 	{
-		$setup += array('Element_Language' => NULL,
+		$setup += array('View_Language' => NULL,
 		                'Languages'        => NULL,
 		                'Translator'       => NULL);
 
-		if (!$elementLanguage instanceof \Evoke\Core\Iface\Element)
+		if (!$viewLanguage instanceof \Evoke\Core\Iface\View)
 		{
 			throw new \InvalidArgumentException(
-				__METHOD__ . ' requires Element_Language');
+				__METHOD__ . ' requires View_Language');
 		}
 
 		if (!$translator instanceof \Evoke\Core\Iface\Translator)
@@ -38,7 +38,7 @@ class Header extends \Evoke\Element\Admin
 
 		parent::__construct($setup);
 
-		$this->elementLanguage = $elementLanguage;
+		$this->viewLanguage = $viewLanguage;
 		$this->languages       = $languages;
 		$this->translator      = $translator;
 	}
@@ -64,7 +64,7 @@ class Header extends \Evoke\Element\Admin
 			                              array(),
 			                              $this->translator->get(
 				                              'Admin_Home')))),
-			            $this->elementLanguages->set($data))));
+			            $this->viewLanguages->set($data))));
 	}
 }
 // EOF

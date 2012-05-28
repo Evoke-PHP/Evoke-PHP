@@ -1,11 +1,11 @@
 <?php
-namespace Evoke\Element;
+namespace Evoke\View;
 /** \abstract form class providing a generic interface to write a form.
  *  Elements are added to the Form using the \ref setElements method which
  *  must be defined by derived classes.  The form is written using the
  *  \ref write method.
  */
-abstract class Form extends \Evoke\Element
+abstract class Form extends \Evoke\View
 {
 	/** The elements that should be written to make the form. These must be
 	 *  added to using the \ref addElement method.

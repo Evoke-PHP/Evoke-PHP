@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Element\Form;
+namespace Evoke\View\Form;
 
-class HiddenInput extends \Evoke\Element\Form
+class HiddenInput extends \Evoke\View\Form
 {
 	protected $record;
 	protected $primaryKeys;

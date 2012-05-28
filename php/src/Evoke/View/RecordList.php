@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View;
 
-/// Element to represent a list of records.
+/// View to represent a list of records.
 class RecordList extends \Evoke\View\Translated
 {
 	/** @property $contentAttribs
@@ -19,10 +19,10 @@ class RecordList extends \Evoke\View\Translated
 	 */
 	protected $dataAttribs;
 
-	/** @property $elementRowButtons
-	 *  @object Element for the row buttons.
+	/** @property $viewRowButtons
+	 *  @object View for the row buttons.
 	 */
-	protected $elementRowButtons;
+	protected $viewRowButtons;
 	
 	/** @property $editedRecord
 	 *  @array The edited record from the record list.
@@ -77,8 +77,8 @@ class RecordList extends \Evoke\View\Translated
 	/** Construct a RecordList object.
 	 *  @param translator      @object Translator.
 	 *  @param data            @object Data.
-	 *  @param elementButtons  @object ElementButtons.
-	 *  @param elementRecord   @object ElementRecord.
+	 *  @param viewButtons     @object ViewButtons.
+	 *  @param viewRecord      @object ViewRecord.
 	 *  @param fields          @array  Data fields to be displayed.
 	 *  @param attribs         @array  Attributes for the record list.
 	 *  @param contentAttribs  @array  Attributes for the content.
@@ -91,8 +91,8 @@ class RecordList extends \Evoke\View\Translated
 	public function __construct(
 		Iface\Translator $translator,
 		Iface\Model\Data $data,
-		Iface\Element    $elementButtons,
-		Iface\Element    $elementRecord,
+		Iface\View       $viewButtons,
+		Iface\View       $viewRecord,
 		Array            $fields,
 		Array            $attribs        = array('class' => 'Record_List'),
 		Array            $contentAttribs = array('class' => 'Content'),
@@ -109,26 +109,26 @@ class RecordList extends \Evoke\View\Translated
 
 		parent::__construct($translator);
 
-		$this->contentAttribs  = $contentAttribs;
-		$this->data            = $data;
-		$this->dataAttribs     = $dataAttribs;
-		$this->elementButtons  = $elementButtons;
-		$this->elementRecord   = $elementRecord;
-		$this->fields          = $fields;
-		$this->headings        = array_merge(array('Bottom' => false,
-		                                           'Every'  => -1,
-		                                           'Inline' => false,
-		                                           'Top'    => false),
-		                                     $headings);
-		$this->ignoredFields   = $ignoredFields;
-		$this->rowAttribs      = $rowAttribs;
+		$this->contentAttribs = $contentAttribs;
+		$this->data           = $data;
+		$this->dataAttribs    = $dataAttribs;
+		$this->viewButtons    = $viewButtons;
+		$this->viewRecord     = $viewRecord;
+		$this->fields         = $fields;
+		$this->headings       = array_merge(array('Bottom' => false,
+		                                          'Every'  => -1,
+		                                          'Inline' => false,
+		                                          'Top'    => false),
+		                                    $headings);
+		$this->ignoredFields  = $ignoredFields;
+		$this->rowAttribs     = $rowAttribs;
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	public function write()
+	public function get()
 	{
 		$recordListElems = array();
 		$fields = array_diff($this->fields, $this->ignoredFields);
@@ -221,7 +221,7 @@ class RecordList extends \Evoke\View\Translated
 		if ($this->rowButtonsAsForm)
 		{
 			return $this->app->getNew(
-				'Element_Form_Hidden_Input',
+				'View_Form_Hidden_Input',
 				array('App'            => $this->app,
 				      'Attribs'        => array_merge(
 					      array('action' => '',

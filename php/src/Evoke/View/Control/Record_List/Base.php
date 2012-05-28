@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Element;
+namespace Evoke\View;
 
-/// Element to represent a list of records.
-class RecordList extends \Evoke\Element\Translator
+/// View to represent a list of records.
+class RecordList extends \Evoke\View\Translator
 {
 	/** @property $contentAttribs
 	 *  Attributes \array for the content.
