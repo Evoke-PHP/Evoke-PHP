@@ -89,6 +89,9 @@ class RecordList extends \Evoke\View\Translator
 	
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$setup += array('Content_Attribs'     => array('class' => 'Content'),
 		                'Data'                => NULL,
 		                'Data_Attribs'        => array('class' => 'Data'),

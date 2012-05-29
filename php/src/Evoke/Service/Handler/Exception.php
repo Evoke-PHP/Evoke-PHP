@@ -1,45 +1,48 @@
 <?php
-namespace Evoke\Init\Handler;
+namespace Evoke\Service\Init\Handler;
 
-use Evoke\Iface;
+use Evoke\Service\LoggerIface,
+	Evoke\Writer\WriterIface,
+	Exception,
+	InvalidArgumentException;
 
 /// The system exception handler.
-class Exception implements Iface\Init\Handler
+class Exception implements HandlerIface
 {
 	/** @property $detailedInsecureMessage
-	 *  \bool Whether to display a detailed insecure message.
+	 *  @bool Whether to display a detailed insecure message.
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $eventManager
-	 *  EventManager \object
+	/** @property $logger
+	 *  @object Logger.
 	 */
-	protected $eventManager;
+	protected $logger;
 
 	/** @property $maxLengthExceptionMessage
-	 *  \int The maximum length of exception message to display.
+	 *  @int The maximum length of exception message to display.
 	 */
 	protected $maxLengthExceptionMessage;
 
 	/** @property $writer
-	 *  Writer \object
+	 *  @object Writer 
 	 */
 	protected $writer;
 
 	
-	public function __construct(/* Bool */         $detailedInsecureMessage,
-	                            /* Int  */         $maxLengthExceptionMessage,
-	                            Iface\EventManager $eventManager,
-	                            Iface\Writer       $writer)
+	public function __construct(/* Bool */  $detailedInsecureMessage,
+	                            /* Int  */  $maxLengthExceptionMessage,
+	                            LoggerIface $logger,
+	                            WriterIface $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
 		}
 
 		$this->detailedInsecureMessage   = $detailedInsecureMessage;
-		$this->eventManager              = $eventManager;
+		$this->logger                    = $logger;
 		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
 		$this->writer                    = $writer;
 	}
@@ -70,7 +73,7 @@ class Exception implements Iface\Init\Handler
 				      'Method'  => __METHOD__));
 			$loggedError = true;
 		}
-		catch (\Exception $raisedException)
+		catch (Exception $raisedException)
 		{
 			$loggedError = false;
 		}

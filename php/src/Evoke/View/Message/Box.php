@@ -1,7 +1,8 @@
 <?php
 namespace Evoke\View\Message;
 
-use Evoke\Iface;
+use Evoke\Service\TranslatorIface,
+	InvalidArgumentException;
 
 class Box extends \Evoke\View
 {
@@ -15,8 +16,8 @@ class Box extends \Evoke\View
 	 *  @param attribs    @array  Message Box attributes.
 	 */
 	public function __construct(
-		Iface\Translator $translator,
-		Array            $attribs = array('class' => 'Message_Box Info'))
+		TranslatorIface $translator,
+		Array           $attribs = array('class' => 'Message_Box Info'))
 	{
 		parent::__construct($translator);
 		
@@ -31,13 +32,13 @@ class Box extends \Evoke\View
 	{
 		if (!isset($message['Description']))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' needs Description');
 		}
 
 		if (!isset($message['Title']))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Title');
+			throw new InvalidArgumentException(__METHOD__ . ' needs Title');
 		}
       
 		return array(

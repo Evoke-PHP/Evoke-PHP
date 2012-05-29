@@ -1,5 +1,5 @@
 <?php
-namespace Evoke;
+namespace Evoke\View;
 
 interface ViewIface
 {

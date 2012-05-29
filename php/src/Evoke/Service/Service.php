@@ -1,9 +1,12 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
 
-/** Control of service objects.
+use DomainException,
+	OverflowException;
+
+/** Control of the service objects.
  */
-class Services implements Iface\Services
+class Service implements ServiceIface
 {
 	/** @property $cache
 	 *  @array The cache for the shared services.  The cache stores the entries
@@ -57,7 +60,7 @@ class Services implements Iface\Services
 	{
 		if (!isset($this->cache[$name]))
 		{
-			throw new \DomainException(
+			throw new DomainException(
 				__METHOD__ . ' service: ' . $name . ' is not registered.');
 		}
 
@@ -69,7 +72,7 @@ class Services implements Iface\Services
 			}
 		}
 
-		throw new \DomainException(__METHOD__ . ' service has not been set.');
+		throw new DomainException(__METHOD__ . ' service has not been set.');
 	}
 
 	/** Check whether the named service has been registered.
@@ -109,13 +112,13 @@ class Services implements Iface\Services
 	{
 		if (!isset($this->cache[$name]))
 		{
-			throw new \DomainException(
+			throw new DomainException(
 				__METHOD__ . $name . ' is not a service.');
 		}
 		
 		if ($this->exists($name, $params))
 		{
-			throw new \OverflowException(
+			throw new OverflowException(
 				__METHOD__ . ' service: ' . $name . ' already exists.');
 		}
 

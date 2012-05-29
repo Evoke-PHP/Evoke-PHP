@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\HTTP\MediaType\Rule;
 
+use InvalidArgumentException;
+
 class Equivalent extends Match
 {
 	/** @property $ignoredFields
@@ -35,7 +37,7 @@ class Equivalent extends Match
 	{
 		if (!is_array($mediaType))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires mediaType as array.');
 		}		
 		

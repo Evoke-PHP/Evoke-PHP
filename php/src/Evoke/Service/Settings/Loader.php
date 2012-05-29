@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Init\Settings;
+namespace Evoke\Service\Settings;
 
 class Loader
 {
@@ -11,7 +11,7 @@ class Loader
 	/** Create the settings loader.
 	 *  @param settings \object Settings object for loading the settings into.
 	 */
-	public function __construct(\Evoke\Iface\Settings $settings)
+	public function __construct(SettingsIface $settings)
 	{
 		$this->settings = $settings;
 	}

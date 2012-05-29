@@ -1,17 +1,18 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
+use Evoke\Message\TreeIface,
+	Evoke\Model\AdminIface,
+	Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistance\DB\Table\JoinsIface,
+	Evoke\Persistance\DB\Table\ListIDIface,
+	Evoke\Persistance\SessionManagerIface,
+	Exception,
+	RuntimeException;
 
 /// JointAdmin provides A CRUD interface to a set of joint tables.
-class JointAdmin extends Joint implements Iface\Model\Admin
+class JointAdmin extends Joint implements AdminIface;
 {
-	/** @property $eventManager
-	 *  @object EventManager
-	 */
-	protected $eventManager;
-
-
 	/** @property $failures
 	 *  @object MessageTree of any failures.
 	 */
@@ -40,22 +41,20 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	 *  @param tableListID    @object DB List ID Table object.
 	 *  @param failures       @object Failure messages object.
 	 *  @param notifications  @object Notification messages object.
-	 *  @param eventManager   @object EventManager object.
 	 *  @param select         @array  Select statement settings.
 	 *  @param validate       @bool   Whether to validate the data.
 	 */
-	public function __construct(Iface\DB\SQL          $sql,
-	                            /* String */          $tableName,
-	                            Iface\DB\Table\Joins  $joins,
-	                            Iface\SessionManager  $sessionManager,
-	                            Iface\DB\Table\ListID $tableListID,
-	                            Iface\MessageTree     $failures,
-	                            Iface\MessageTree     $notifications,
-	                            Iface\EventManager    $eventManager,
-	                            Array                 $select   = array(),
-	                            /* Bool */            $validate = true)
+	public function __construct(SQLIface            $sql,
+	                            /* String */        $tableName,
+	                            JoinsIface          $joins,
+	                            SessionManagerIface $sessionManager,
+	                            ListIDIface         $tableListID,
+	                            TreeIface           $failures,
+	                            TreeIface           $notifications,
+	                            Array               $select   = array(),
+	                            /* Bool */          $validate = true)
 	{
-		parent::__construct($eventManager, );
+		parent::__construct($sql, $tableName, $joins, $select);
 
 		$this->failures       = $failures;
 		$this->notifications  = $notifications;
@@ -100,12 +99,9 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 			$this->sessionManager->reset();
 			$this->notifications->add('Add', 'Successful');
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$this->eventManager->notify(
-				'Log', array('Level'   => LOG_ERR,
-				             'Method'  => __METHOD__,
-				             'Message' => $e->getMessage()));
+			trigger_error($e->getMessage(), E_USER_WARNING);
 			$this->failures->add('Add_Failed', 'Sys_Admin_Notified');	 
 			$this->sql->rollBack();
 		}
@@ -155,12 +151,9 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 			$this->sql->commit();
 			$this->notifications->add('Delete', 'Successful');
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$this->eventManager->notify(
-				'Log', array('Level'   => LOG_ERR,
-				             'Method'  => __METHOD__,
-				             'Message' => $e->getMessage()));
+			trigger_error($e->message(), E_USER_WARNING);
 			$this->failures->add('Delete_Failed', 'Sys_Admin_Notified');
 			$this->sql->rollBack();
 		}
@@ -208,14 +201,9 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 		// We edit a single record at a time.
 		if (count($data) !== 1)
 		{
-			$this->eventManager->notify(
-				'Log',
-				array('Level'   => LOG_ERR,
-				      'Method'  => __METHOD__,
-				      'Message' => 'multiple records received.'));
-	 
+			trigger_error(
+				'Cannot edit multiple records at once.', E_USER_WARNING);	 
 			$this->failures->add('Edit_Failed', 'Sys_Admin_Notified');
-
 			return;
 		}
 
@@ -263,7 +251,7 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 			$this->sql->beginTransaction();
 
 			/// @todo Implement modify.
-			throw new \Exception('Modify action not yet implemented.');
+			throw new Exception('Modify action not yet implemented.');
 
 			// Recurse and process the modify.
 
@@ -271,12 +259,9 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 			$this->sessionManager->reset();
 			$this->notifications->add('Modify', 'Successful');
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$this->eventManager->notify(
-				'Log', array('Level'   => LOG_ERR,
-				             'Method'  => __METHOD__,
-				             'Message' => $e->getMessage()));
+			trigger_error($e->getMessage(), E_USER_WARNING);
 			$this->failures->add('Modify_Failed', 'Sys_Admin_Notified');
 			$this->sql->rollBack();
 		}
@@ -289,7 +274,7 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 	{
 		if (!$this->sessionManager->issetKey('Current_Record'))
 		{
-			throw new \RuntimeException(
+			throw new RuntimeException(
 				__METHOD__ . ' Current_Record is not set for update.');
 		}
 
@@ -381,7 +366,7 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 			// If it is not a 1 to 1 relationship then we are in trouble.
 			if (count($addData) !== 1)
 			{
-				throw new \RuntimeException(
+				throw new RuntimeException(
 					__METHOD__ . ' child field not set for Child Field: ' .
 					var_export($childField, true) . ' in table: ' .
 					var_export($tableName, true));
@@ -504,22 +489,6 @@ class JointAdmin extends Joint implements Iface\Model\Admin
 				$parentRecord[$parentField] = $firstChildRecord[$childField];
 			}
 		}
-	}
-   
-	/// Get the event map used for connecting events.
-	protected function getProcessingEventMap()
-	{
-		return array_merge(
-			parent::getProcessingEventMap(),
-			array('Add'           	       => 'add',
-			      'Cancel'        	       => 'cancel',
-			      'Create_New'    	       => 'createNew',
-			      'Delete_Cancel' 	       => 'deleteCancel',
-			      'Delete_Confirm'	       => 'deleteConfirm',
-			      'Delete_Request'	       => 'deleteRequest',
-			      'Edit'          	       => 'edit',
-			      'Modify'        	       => 'modify',
-			      'Update_Current_Record' => 'updateCurrentRecord'));
 	}
    
 	/** Validate all of the data specified with the Joins.

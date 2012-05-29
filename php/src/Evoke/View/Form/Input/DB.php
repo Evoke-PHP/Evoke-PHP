@@ -15,7 +15,7 @@ namespace Evoke\View\Input;
  +-------+--------------+------+-----+---------+----------------+
  \endverbatim
 */
-class DB extends \Evoke\View
+class DB extends \Evoke\View\ViewIface
 {
 	/** @property $encasing
 	 *  \bool Whether the input is to be encased within a div element.
@@ -84,6 +84,9 @@ class DB extends \Evoke\View
 
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');		
+		
 		$setup += array('Attribs'             => array('class' => 'DB_Input'),
 		                'Encasing'            => true,
 		                'Field_Attribs'       => array(),

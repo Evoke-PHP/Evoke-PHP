@@ -1,18 +1,20 @@
 <?php
-namespace Evoke\Init\Handler;
+namespace Evoke\Service\Handler;
 
-use Evoke\Iface;
+use ErrorException,
+	Evoke\Service\LoggerIface,
+	OutOfBoundsException;
 
-class Error implements Iface\Init\Handler
+class Error implements HandlerIface
 {
-	/** @property $eventManager
-	 *  EventManager \object
+	/** @property $logger
+	 *  @object Logger
 	 */
-	protected $eventManager;
+	protected $logger;
 
-	public function __construct(Iface\EventManager $eventManager)
+	public function __construct(LoggerIface $logger)
 	{
-		$this->eventManager = $eventManager;
+		$this->logger = $logger;
 	}
    
 	/******************/
@@ -61,7 +63,7 @@ class Error implements Iface\Init\Handler
 		case E_CORE_WARNING:
 		case E_ERROR:
 		case E_PARSE:
-			throw new \OutOfBoundsException(
+			throw new OutOfBoundsException(
 				__METHOD__ . ' Unexpected error type: [' . $errTypeStr . '] ' .
 				$errStr . ' in file ' . $errFile . ' at ' . $errLine .
 				' received. The PHP Manual for set_error_handler states that ' .
@@ -84,7 +86,7 @@ class Error implements Iface\Init\Handler
 
 		if ($errNo === E_RECOVERABLE_ERROR)
 		{
-			throw new \ErrorException($errStr, 0, $errNo, $errFile, $errLine);
+			throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
 		}
 		
 		// Allow PHP to perform its normal reporting of errors.  We have
@@ -139,8 +141,7 @@ class Error implements Iface\Init\Handler
 				$info['function'] . "\n";
 		}
 		
-		$this->eventManager->notify(
-			'Log',
+		$this->logger->log(
 			array('Level'   => LOG_WARNING,
 			      'Message' => $message,
 			      'Method'  => __METHOD__));

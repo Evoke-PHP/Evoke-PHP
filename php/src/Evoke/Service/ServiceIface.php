@@ -1,7 +1,7 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
 
-interface ServicesIface
+interface ServiceIface
 {
 	/** Check whether there is a service object cached for the specified class
 	 *  and parameter combination.

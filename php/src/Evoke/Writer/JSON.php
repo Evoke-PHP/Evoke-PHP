@@ -3,7 +3,7 @@ namespace Evoke\Writer;
 
 /** Writer for JSON (buffered).
  */
-class JSON extends \Evoke\Writer
+class JSON extends Writer
 {	
 	/******************/
 	/* Public Methods */

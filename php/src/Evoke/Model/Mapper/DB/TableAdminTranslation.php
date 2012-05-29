@@ -1,7 +1,10 @@
 <?php
 namespace Evoke\Model\DB;
 
-use Evoke\Iface;
+use Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistance\FilesystemIface,
+	Exception,
+	InvalidArgumentException;
 
 class TableAdminTranslation extends TableAdmin
 {
@@ -17,20 +20,19 @@ class TableAdminTranslation extends TableAdmin
 	 *  @param dataPrefix     @array  Data prefix to offset the data to.
 	 *  @param languageTable  @string Table name for the languages table.
 	 */
-	public function __construct(Iface\DB\SQL     $sql,
-	                            Iface\Filesystem $filesystem,
-	                            /* String */     $translatorFile,
-	                            Array            $dataPrefix    = array(),
-	                            /* String */     $languageTable = 'Language')
+	public function __construct(SQLIface        $sql,
+	                            FilesystemIface $filesystem,
+	                            /* String */    $translatorFile,
+	                            Array           $dataPrefix    = array(),
+	                            /* String */    $languageTable = 'Language')
 	{
 		if (!is_string($translatorFile))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires translatorFile as string');
 		}
 
 		parent::__construct($sql, $dataPrefix);
-		
 
 		$this->filesystem     = $filesystem;
 		$this->languageTable  = $languageTable;
@@ -61,15 +63,11 @@ class TableAdminTranslation extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$msg = 'Failure adding translation to database due to exception:  ' .
-				$e->getMessage();
-	 
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
+			trigger_error(
+				'Failure adding translation to database due to exception:  ' .
+				$e->getMessage(), E_USER_WARNING);	 
 			$this->failures->add('Failure Adding Language', 'Sys_Admin_Notified');
 			$this->sql->rollBack();
 		}
@@ -95,19 +93,14 @@ class TableAdminTranslation extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$msg = 'Failure deleting translation from database due to ' .
-				'exception: ' . $e->getMessage();
-	 
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
+			trigger_error(
+				'Failure deleting translation from database due to ' .
+				'exception: ' . $e->getMessage(), E_USER_WARNING);
 			$this->failures->add(
 				'Failure Deleting Language',
 				'System Administrator has been notified.');
-
 			$this->sql->rollBack();
 		}
 	}
@@ -131,19 +124,14 @@ class TableAdminTranslation extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			$msg = 'Failure modifying translation from database due to ' .
-				'exception: ' . $e->getMessage();
-	 
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
+			trigger_error(
+				'Failure modifying translation from database due to ' .
+				'exception: ' . $e->getMessage(), E_USER_WARNING);
 			$this->failures->add(
 				'Failure Modifying Language',
 				'System Administrator has been notified.');
-
 			$this->sql->rollBack();
 		}
 	}

@@ -25,6 +25,9 @@ class Checkboxes extends \Evoke\View\Form
 
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$setup += array('Attribs'     => array('class' => 'Checkbox_Group'),
 		                'Empty_Text'  => NULL,
 		                'Prefix'      => '',

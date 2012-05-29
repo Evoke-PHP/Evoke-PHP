@@ -8,9 +8,9 @@ class NoButtons extends \Evoke\View\Control\RecordList
 	/*********************/
 
 	/** Build the element holding the buttons in a row (No Buttons).
-	 *  @param row \mixed The key for the row.
-	 *  @param rowData \array The data for the row.
-	 *  \return \array Array of elements that make up the buttons.
+	 *  @param row @mixed The key for the row.
+	 *  @param rowData @array The data for the row.
+	 *  @return @array Array of elements that make up the buttons.
 	 */    
 	protected function buildRowButtons($row, $rowData)
 	{

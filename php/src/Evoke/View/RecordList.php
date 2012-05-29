@@ -1,7 +1,11 @@
 <?php
 namespace Evoke\View;
 
-use Evoke\Iface;
+use Evoke\Model\DataIface,
+	Evoke\Service\TranslatorIface,
+	Exception,
+	InvalidArgumentException,
+	RuntimeException;
 
 /// View to represent a list of records.
 class RecordList extends \Evoke\View
@@ -91,20 +95,20 @@ class RecordList extends \Evoke\View
 	 *  @param translateLabels @bool   TranslateLabels.
 	 */
 	public function __construct(
-		Iface\Translator $translator,
-		Iface\Model\Data $data,
-		Iface\View       $viewRecord,
-		Array            $fields,
-		Array            $attribs        = array('class' => 'Record_List'),
-		Array            $contentAttribs = array('class' => 'Content'),
-		Array            $dataAttribs    = array('class' => 'Data'),
-		Array            $headings       = array(),			
-		Array            $ignoredFields  = array(),
-		Array            $rowAttribs     = array('class' => 'Row'))
+	    TranslatorIface $translator,
+		DataIface       $data,
+		ViewIface       $viewRecord,
+		Array           $fields,
+		Array           $attribs        = array('class' => 'Record_List'),
+		Array           $contentAttribs = array('class' => 'Content'),
+		Array           $dataAttribs    = array('class' => 'Data'),
+		Array           $headings       = array(),			
+		Array           $ignoredFields  = array(),
+		Array           $rowAttribs     = array('class' => 'Row'))
 	{
 		if (!is_bool($translateLabels))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires translateLabels as bool');
 		}
 
@@ -288,7 +292,7 @@ class RecordList extends \Evoke\View
 		}
 		catch (Exception $e)
 		{
-			throw new \Evoke\Exception(
+			throw new RuntimeException(
 				__METHOD__,
 				' Caught exception processing row data: ' .
 				var_export($rowData, true),

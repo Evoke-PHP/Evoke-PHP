@@ -1,45 +1,47 @@
 <?php
-namespace Evoke\Init\Handler;
+namespace Evoke\Service\Handler;
 
-use Evoke\Iface;
+use BadMethodCallException,
+	Evoke\Writer\WriterIface,
+	InvalidArgumentException;
 
 /// The system shutdown handler.
-class Shutdown implements Iface\Init\Handler
+class Shutdown implements HandlerIface
 {
 	/** @property $administratorEmail
-	 *  \string The administrator's email address.
+	 *  @string The administrator's email address.
 	 */
 	protected $administratorEmail;
 
 	/** @property $detailedInsecureMessage
-	 *  \bool Whether to display a detailed insecure message.
+	 *  @bool Whether to display a detailed insecure message.
 	 */
 	protected $detailedInsecureMessage;
 
 	/** @property $writer
-	 *  writer \object
+	 *  @object writer
 	 */
 	protected $writer;
 
 	/** Construct the System Shutdown handler.
-	 *  @param administratorEmail \string Admin's Email to use as a contact.
-	 *  @param detailedInsecureMessage \bool Whether to show detailed logging
+	 *  @param administratorEmail @string Admin's Email to use as a contact.
+	 *  @param detailedInsecureMessage @bool Whether to show detailed logging
 	 *  information (which is insecure).
-	 *  @param writer \object The writer object to write the fatal message.
+	 *  @param writer @object The writer object to write the fatal message.
 	 */
 	public function __construct(/* String */ $administratorEmail,
 	                            /* Bool   */ $detailedInsecureMessage,
-	                            Iface\Writer $writer)
+	                            WriterIface  $writer)
 	{
 		if (!is_string($administratorEmail))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires administratorEmail to be a string');
 		}
       
 		if (!is_bool($detailedInsecureMessage))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
 		}
 
@@ -118,7 +120,7 @@ class Shutdown implements Iface\Init\Handler
 	/// Unregister the shutdown handler (which is not currently possible).
 	public function unregister()
 	{
-		throw new \BadMethodCallException(
+		throw new BadMethodCallException(
 			__METHOD__ . ' PHP does not have an unregister_shutdown_function.');
 	}
 }

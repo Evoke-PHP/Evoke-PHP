@@ -1,45 +1,47 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
+use Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistance\DB\Table\JoinsIface,
+	InvalidArgumentException;
 
 /** Represent the data for a joint set of tables in a database. This provides
  *  read-only access to the data for the specified table and its related data
- *  obtained through the @ref Joins.
+ *  obtained through the SQL interface using the Joins.
  */
-class Joint extends \Evoke\Model\Mapper\DB
+class Joint extends DB
 {
 	/** @property $joins
-	 *  Joins @object which lists the relationships for the data, allowing it to
+	 *  @object Joins which lists the relationships for the data, allowing it to
 	 *  be joint together into a meaningful unit of data.
 	 */
 	protected $joins;
 	
 	/** @property $select
-	 *  Select @array for the SQL statement.
+	 *  @array Select for the SQL statement.
 	 */
 	protected $select;
 	
 	/** @property $tableName
-	 * Table name for the data.
+	 *  @string Table name for the data.
 	 */
 	protected $tableName;
 
 	/** Construct a Model of a joint set of database tables.
-	 *  @param sql        @object SQL object.   
-	 *  @param tableName  @string The table name where joins start from.
-	 *  @param joins      @object Joins object.
-	 *  @param select     @array  Select statement settings.
+	 *  @param sql       @object SQL object.
+	 *  @param tableName @string The table name where joins start from.
+	 *  @param joins     @object Joins object.
+	 *  @param select    @array  Select statement settings.
 	 */
-	public function __construct(Iface\DB\SQL         $sql, 
-	                            /* String */         $tableName,
-	                            Iface\DB\Table\Joins $joins,
-	                            Array                $select = array())
+	public function __construct(SQLIface     $sql, 
+	                            /* String */ $tableName,
+	                            JoinsIface   $joins,
+	                            Array        $select = array())
 	{
 	   
 		if (!is_string($tableName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires tableName as string');
 		}
 		
@@ -60,7 +62,7 @@ class Joint extends \Evoke\Model\Mapper\DB
 	/******************/
 
 	/** Fetch some data from the mapper (specified by params).
-	 *  @param params \array The conditions to match in the mapped data.
+	 *  @param params @array The conditions to match in the mapped data.
 	 */
 	public function fetch(Array $params = array())
 	{

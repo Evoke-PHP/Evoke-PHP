@@ -5,8 +5,8 @@ class Foreign extends \Evoke\View\Input\DB
 {
 	public function __construct(Array $setup)
 	{
-		/// \todo Fix this due to Monumental
-		throw new \Exception('Fix this after monumental changes.');
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
       
 		$setup = array_merge(
 			array('Data'             => NULL,

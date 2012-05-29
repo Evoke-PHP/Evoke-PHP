@@ -8,6 +8,9 @@ class Entry extends \Evoke\View\Form
 	/// Construct the entry form with the table information.
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$setup += array('App'                 => NULL,
 		                'Field_Attribs'       => array(),
 		                'Field_Encasing'      => false,
@@ -28,8 +31,6 @@ class Entry extends \Evoke\View\Form
 		                'Translate_Labels'    => array(),
 		                'Translator'          => NULL);
 
-		/// \todo Remove dependency on App.
-		throw new Exception(__METHOD__ .' Remove dependency on App');
 		$app->needs(
 			array('Instance' => array('Table_Info'    => $tableInfo,
 			                          'Translator'    => $translator),

@@ -1,20 +1,20 @@
 <?php
 namespace Evoke\Model\Mapper;
 
-use Evoke\Iface;
+use Evoke\Persistance\SessionManagerIface;
 
-class Session implements Iface\Model\Mapper
+class Session implements Mapper
 {
 	/** @property $sessionManager
-	 *  Session Manager \object
+	 *  @object Session Manager
 	 */
 	protected $sessionManager;
 
 	/** Construct a Session model.
-	 *  @param SessionManager \object The Session Manager for the part of the
+	 *  @param SessionManager @object The Session Manager for the part of the
 	 *  session we are modelling.
 	 */
-	public function __construct(Iface\SessionManager $sessionManager)
+	public function __construct(SessionManagerIface $sessionManager)
 	{
 		$this->sessionManager = $sessionManager;
 	}
@@ -26,7 +26,7 @@ class Session implements Iface\Model\Mapper
 	/** Get the data from the session.
 	 *  @params The offset in the data to fetch.
 	 */
-	public function fetch(Array $params=array())
+	public function fetch(Array $params = array())
 	{
 		$session = $this->sessionManager->getAccess();
 

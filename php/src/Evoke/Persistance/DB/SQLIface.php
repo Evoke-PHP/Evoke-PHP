@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\DB;
+namespace Evoke\Persistance\DB;
 
-interface SQLIface extends \Evoke\DBIface
+interface SQLIface extends DBIface
 {
 	
 	public function getAssoc($queryString, $params=array());

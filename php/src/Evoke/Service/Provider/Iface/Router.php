@@ -1,7 +1,10 @@
 <?php
-namespace Evoke\Provider\Iface;
+namespace Evoke\Service\Provider\Iface;
 
-use Evoke\Iface;
+use Evoke\Service\CacheIface,
+	InvalidArgumentException,
+	ReflectionClass,
+	ReflectionException;
 
 class Router implements Iface\Provider\Iface\Router
 {
@@ -18,7 +21,7 @@ class Router implements Iface\Provider\Iface\Router
 	/** Construct a Router object.
 	 *  @param reflectionCache @object ReflectionCache
 	 */
-	public function __construct(Iface\Cache $reflectionCache)
+	public function __construct(CacheIface $reflectionCache)
 	{
 		$this->reflectionCache = $reflectionCache;
 	}
@@ -30,7 +33,7 @@ class Router implements Iface\Provider\Iface\Router
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(Iface\Provider\Iface\Rule $rule)
+	public function addRule(RuleIface $rule)
 	{
 		$this->rules[] = $rule;
 	}
@@ -43,7 +46,7 @@ class Router implements Iface\Provider\Iface\Router
 	{
 		if (!is_string($interfaceName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires interfaceName as string');
 		}
       
@@ -82,10 +85,10 @@ class Router implements Iface\Provider\Iface\Router
 		
 		try
 		{
-			$reflectionClass = new \ReflectionClass($classname);
+			$reflectionClass = new ReflectionClass($classname);
 			return $reflectionClass->isInstantiable();
 		}
-		catch (\ReflectionException $e)
+		catch (ReflectionException $e)
 		{
 			return false;
 		}

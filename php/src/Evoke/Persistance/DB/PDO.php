@@ -1,8 +1,10 @@
 <?php
-namespace Evoke\DB;
+namespace Evoke\Persistance\DB;
+
+use InvalidArgumentException;
 
 /// PDO wrapper class to ensure DB implements the Evoke Core DB interface.
-class PDO extends \PDO implements \Evoke\Iface\DB
+class PDO extends \PDO implements DB
 {
 	public function __construct(
 		/* String */ $dataSourceName,
@@ -14,19 +16,19 @@ class PDO extends \PDO implements \Evoke\Iface\DB
 	{
 		if (!is_string($dataSourceName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires dsn as string');
 		}
 
 		if (!is_string($password))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires password as string');
 		}
 
 		if (!is_string($username))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires username as string');
 		}
 

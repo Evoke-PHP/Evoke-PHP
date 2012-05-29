@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Processing;
 
-class Get extends \Evoke\Processing
+class Get extends Processing
 {
 	/** Construct a Get Processing object.
 	 *  @param callbacks     @array Callbacks.

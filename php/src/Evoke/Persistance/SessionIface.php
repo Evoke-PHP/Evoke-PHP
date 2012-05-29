@@ -1,7 +1,7 @@
 <?php
-namespace Evoke;
+namespace Evoke\Persistance;
 
-interface Session
+interface SessionIface
 {
 	/// Ensure the session is started.
 	public function ensure();

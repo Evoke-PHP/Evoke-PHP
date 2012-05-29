@@ -1,7 +1,8 @@
 <?php
 namespace Evoke\Model\Composite;
 
-use Evoke\Iface;
+use Evoke\Model\DataIface,
+	Evoke\Model\MapperIface;
 
 /** An administrative model using mappers from the model layer to acheive the
  *  processing required for typical administration.
@@ -22,8 +23,8 @@ class Admin
 	 *  @param currentData @object CurrentData.
 	 *  @param mapper      @object Mapper.
 	 */
-	public function __construct(Iface\Model\Data   $currentData,
-	                            Iface\Model\Mapper $mapper)
+	public function __construct(DataIface   $currentData,
+	                            MapperIface $mapper)
 	{
 		$this->currentData = $currentData;
 		$this->mapper      = $mapper;
@@ -54,5 +55,4 @@ class Admin
 		var_export($requestData);
 	}
 }
-
 // EOF

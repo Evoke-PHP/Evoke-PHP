@@ -1,7 +1,8 @@
 <?php
 namespace Evoke\View\Control;
 
-use Evoke\Iface;
+use Evoke\Model\Data\Menu,
+	Evoke\Service\TranslatorIface;
 
 class Menu extends \Evoke\View
 {
@@ -12,24 +13,23 @@ class Menu extends \Evoke\View
 
 	/** Construct a Menu object.
 	 *  @param translator @object Translator.
-	 *  @param data       @object Data.
+	 *  @param data       @object Data for the menu.
 	 */
-	public function __construct(Iface\Translator      $translator,
-	                            Iface\Model\Data\Menu $data)
+	public function __construct(TranslatorIface $translator,
+	                            Menu            $data)
 	{
 		parent::__construct($translator);
 		
 		$this->data = $data;
 	}
-
 	
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Set the menu with the menu items.
-	 *  @param menuItems \array The menu items.
-	 *  \return \array The menu element data.
+	/** Get the menu represented by the data.
+	 *  @param menuItems @array The menu items.
+	 *  @return @array The menu element data.
 	 */
 	public function get(Array $params = array())
 	{

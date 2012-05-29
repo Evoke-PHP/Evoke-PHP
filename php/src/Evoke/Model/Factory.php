@@ -1,9 +1,11 @@
 <?php
 namespace Evoke\Model;
 
-use Evoke\Iface;
+use DomainException,
+	Evoke\Persistance\DBIface,
+	Evoke\Service\ProviderIface;
 
-class Factory implements Iface\Model\Factory
+class Factory implements FactoryIface
 {
 	/** @property $db
 	 *  @object DB
@@ -20,13 +22,13 @@ class Factory implements Iface\Model\Factory
 	 */
 	protected $sql;
 	
-	public function __construct(Iface\DB       $database,
-	                            Iface\Provider $provider)
+	public function __construct(DBIface       $database,
+	                            ProviderIface $provider)
 	{
 		$this->db       = $database;
 		$this->provider = $provider;
 		$this->sql      = $provider->make(
-			'Evoke\DB\SQL',	array('Database' => $database));
+			'Evoke\Persistance\DB\SQL',	array('Database' => $database));
 	}
 
 	/******************/
@@ -74,7 +76,7 @@ class Factory implements Iface\Model\Factory
 		{
 			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
 			{
-				throw new \DomainException(
+				throw new DomainException(
 					__METHOD__ . var_export($tableJoin, true) .
 					' join for table: ' . $tableName . ' at index: ' . $index .
 					' is not valid.');
@@ -204,7 +206,7 @@ class Factory implements Iface\Model\Factory
 		{
 			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
 			{
-				throw new \DomainException(
+				throw new DomainException(
 					__METHOD__ . var_export($tableJoin, true) .
 					' join for table: ' . $tableName . ' at index: ' . $index .
 					' is not valid.');

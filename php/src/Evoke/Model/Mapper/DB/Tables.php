@@ -1,18 +1,18 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
+use Evoke\Persistance\DB\SQLIface;
 
 /// Get a list of tables from the database.
-class Tables extends \Evoke\Model\Mapper\DB
+class Tables extends DB
 {
 	/** @property $extraTables
-	 *  \array Extra tables to include in the data.
+	 *  @array Extra tables to include in the data.
 	 */
 	protected $extraTables;
 
 	/** @property $ignoredTables
-	 *  \array Table to ignore in the data.
+	 *  @array Table to ignore in the data.
 	 */
 	protected $ignoredTables;
 
@@ -21,9 +21,9 @@ class Tables extends \Evoke\Model\Mapper\DB
 	 *  @param extraTables   @array  Extra tables to list.
 	 *  @param ignoredTables @array  Tables to ignore for the list.
 	 */
-	public function __construct(Iface\DB\SQL $sql,
-	                            Array        $extraTables   = array(),
-	                            Array        $ignoredTables = array())
+	public function __construct(SQLIface $sql,
+	                            Array    $extraTables   = array(),
+	                            Array    $ignoredTables = array())
 	{
 		parent::__construct($sql);
 
@@ -41,7 +41,7 @@ class Tables extends \Evoke\Model\Mapper\DB
 	 *  parameters are passed then it is assumed that all matching tables should
 	 *  be returned, otherwise the passed parameters are returned if they match.
 	 */
-	public function fetch(Array $params=array())
+	public function fetch(Array $params = array())
 	{
 		$tableResults = $this->sql->getAssoc('SHOW TABLES');
 		$allTables = array();

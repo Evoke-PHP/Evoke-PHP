@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Processing;
 
-class File extends \Evoke\Processing
+class File extends Processing
 {
 	/** @property $requestPrefix
 	 *  @string Prefix to the file request.
@@ -61,7 +61,7 @@ class File extends \Evoke\Processing
 	protected function callRequests(Array $callbacks, Array $requestData)
 	{
 		/// @todo Fix this code.
-		throw new RuntimeException(__METHOD__ . ' fix this.');
+		throw new \RuntimeException(__METHOD__ . ' fix this.');
 		// The request keys have already been formatted for us.
 		foreach ($callbacks as $requestKey => $callback)
 		{
@@ -78,7 +78,7 @@ class File extends \Evoke\Processing
 	protected function getRequestMatches($data)
 	{
 		/// @todo Fix this code.
-		throw new RuntimeException(__METHOD__ . ' fix this.');
+		throw new \RuntimeException(__METHOD__ . ' fix this.');
 		$matches = array();
       
 		foreach ($data as $key => $val)

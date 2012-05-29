@@ -1,8 +1,8 @@
 <?php
-namespace Evoke;
+namespace Evoke\Persistance;
 
 /// Session_Manager provide management of a session domain.
-class SessionManager implements Iface\SessionManager
+class SessionManager implements SessionManagerIface
 {
 	/** @property $domain
 	 *  @array The domain within the session that we are managing.  This is an
@@ -16,8 +16,8 @@ class SessionManager implements Iface\SessionManager
 	 */
 	protected $session;
    
-	public function __construct(Iface\Session $session,
-	                            Array         $domain)
+	public function __construct(SessionIface $session,
+	                            Array        $domain)
 	{
 		$this->domain  = $domain;
 		$this->session = $session;		
@@ -92,8 +92,8 @@ class SessionManager implements Iface\SessionManager
 	}
 
 	/** Increment the value in the session by the offset.
-	 *  @param key \string The session key to increment.
-	 *  @param offset \int The amount to increment the value.
+	 *  @param key @string The session key to increment.
+	 *  @param offset @int The amount to increment the value.
 	 */
 	public function increment($key, $offset=1)
 	{
@@ -165,7 +165,7 @@ class SessionManager implements Iface\SessionManager
 	}
 
 	/** Replace the session with the passed value.
-	 *  @param newValue \mixed The new value(s) for the session.
+	 *  @param newValue @mixed The new value(s) for the session.
 	 */
 	public function replaceWith($newValue)
 	{

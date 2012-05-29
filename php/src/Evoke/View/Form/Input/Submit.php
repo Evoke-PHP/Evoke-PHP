@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View\Form\Input;
 
-class Submit implements \Evoke\Iface\View
+class Submit implements \Evoke\View\ViewIface
 {
 	/** @property $attribs
 	 *  @array Attributes for the submit (type is set to submit regardless).

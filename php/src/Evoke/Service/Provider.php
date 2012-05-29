@@ -1,5 +1,8 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
+
+use ReflectionClass,
+	ReflectionParameter;
 
 /** A dependency injection/provider class (Thanks to rdlowrey see comments).
  *
@@ -110,7 +113,7 @@ namespace Evoke;
  *  undesirable class which we pass in manually.
  *
  */
-class Provider implements Iface\Provider
+class Provider implements ProviderIface
 {
 	/** @property $interfaceRouter
 	 *  @object Interface Router
@@ -122,23 +125,23 @@ class Provider implements Iface\Provider
 	 */
 	protected $reflectionCache;
 
-	/** @property $services
-	 *  @object Services
+	/** @property $service
+	 *  @object Service
 	 */
-	protected $services;
+	protected $service;
 
 	/** Construct a Provider object.
 	 *  @param reflectionCache @object Reflection Cache
 	 *  @param interfaceRouter @object Interface Router
-	 *  @param services        @object Services
+	 *  @param service         @object Service
 	 */
-	public function __construct(Iface\Cache                 $reflectionCache,
-	                            Iface\Provider\Iface\Router $interfaceRouter,
-	                            Iface\Services              $services)
+	public function __construct(CacheIface            $reflectionCache,
+	                            Provider\Iface\Router $interfaceRouter,
+	                            ServiceIface          $service)
 	{
 		$this->interfaceRouter = $interfaceRouter;
 		$this->reflectionCache = $reflectionCache;
-		$this->services        = $services;
+		$this->service         = $service;
 	}
 
 	/******************/
@@ -164,12 +167,12 @@ class Provider implements Iface\Provider
 	public function make($classname, Array $params=array())
 	{
 		$passedParameters = $this->pascalToCamel($params);
-		$isService = $this->services->isService($classname);
+		$isService = $this->service->isService($classname);
 		
 		if ($isService &&
-		    $this->services->exists($classname, $passedParameters))
+		    $this->service->exists($classname, $passedParameters))
 		{
-			return $this->services->get($classname, $passedParameters);
+			return $this->service->get($classname, $passedParameters);
 		}
 
 		$reflection = $this->getReflection($classname);
@@ -196,7 +199,7 @@ class Provider implements Iface\Provider
 	    // first time.  Set it as the service instance.	    
 	    if ($isService)
 	    {
-		    $this->services->set($classname, $object, $passedParameters);
+		    $this->service->set($classname, $object, $passedParameters);
 	    }
 	    
         return $object;
@@ -212,8 +215,8 @@ class Provider implements Iface\Provider
 	 *                                  when calling make.
 	 *  @return @mixed An injected dependency.
 	 */
-	protected function getDependency(\ReflectionParameter $reflectionParam,
-	                                 Array                $passedParameters)
+	protected function getDependency(ReflectionParameter $reflectionParam,
+	                                 Array               $passedParameters)
 	{
 		if (isset($passedParameters[$reflectionParam->name]))
 		{
@@ -286,7 +289,7 @@ class Provider implements Iface\Provider
 		}
 
 		// Build the reflection.
-		$reflectionClass = new \ReflectionClass($classname);
+		$reflectionClass = new ReflectionClass($classname);
 		$constructor = $reflectionClass->getConstructor();
 		$reflectionParams = isset($constructor) ?
 			$constructor->getParameters() : NULL;

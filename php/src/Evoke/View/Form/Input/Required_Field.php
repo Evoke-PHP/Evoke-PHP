@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View\Form\Input;
 
-class RequiredField extends \Evoke\View
+class RequiredField extends \Evoke\View\ViewIface
 {
 	/** @property $translator
 	 *  Translator \object
@@ -10,6 +10,9 @@ class RequiredField extends \Evoke\View
 
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$setup += array('Translator' => NULL);
 
 		if (!$translator instanceof \Evoke\Core\Translator)

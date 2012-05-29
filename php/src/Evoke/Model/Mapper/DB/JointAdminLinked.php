@@ -1,8 +1,12 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
-
+use Evoke\Message\TreeIface,
+	Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistance\DB\Table\JoinsIface,
+	Evoke\Persistance\DB\Table\ListIDIface,
+	Evoke\Persistance\SessionManagerIface;
+	
 /** Model_DB_Joint_Admin_Linked provides a CRUD interface to a joint set of data
  *  with linked information stored in files referenced from the database.
  */

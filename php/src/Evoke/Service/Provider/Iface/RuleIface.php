@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Provider\Iface;
+namespace Evoke\Service\Provider\Iface;
 
 interface RuleIface
 {

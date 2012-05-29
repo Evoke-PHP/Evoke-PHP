@@ -1,5 +1,8 @@
 <?php
-namespace Evoke\DB;
+namespace Evoke\Persistance\DB;
+
+use Evoke\Message\Exception\DB as ExceptionDB,
+	Exception;
 
 class PDOStatement extends \PDOStatement
 {
@@ -27,15 +30,14 @@ class PDOStatement extends \PDOStatement
 				$result = parent::execute(array_values($inputParameters));
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			throw new \Evoke\Exception\DB(
-				__METHOD__, 'Exception Raised: ', $this, $e);
+			throw new ExceptionDB(__METHOD__, 'Exception Raised: ', $this, $e);
 		}
 	 
 		if ($result === false)
 		{
-			throw new \Evoke\Exception\DB(__METHOD__, 'Execute False: ', $this);
+			throw new ExceptionDB(__METHOD__, 'Execute False: ', $this);
 		}
 		else
 		{

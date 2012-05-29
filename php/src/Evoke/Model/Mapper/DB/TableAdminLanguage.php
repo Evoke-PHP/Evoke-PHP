@@ -1,6 +1,9 @@
 <?php
 namespace Evoke\Model\DB;
-/** \todo PDO transactions get auto-committed by MYSQL and other DB's when
+
+use Exception;
+
+/** @todo PDO transactions get auto-committed by MYSQL and other DB's when
  *  structure changes are made (such as DROP COLUMN, ADD COLUMN etc.).  We
  *  need to take this into account for the transactions.
  */
@@ -50,7 +53,7 @@ class TableAdminLanguage extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$msg = 'Failure adding language to database due to exception:  ' .
 				$e->getMessage();
@@ -106,7 +109,7 @@ class TableAdminLanguage extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$msg = 'Failure deleting language from database due to exception:  ' .
 				$e->getMessage();
@@ -176,7 +179,7 @@ class TableAdminLanguage extends TableAdmin
 				$this->sql->rollBack();
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$msg = 'Failure modifying language in database due to exception:  ' .
 				$e->getMessage();

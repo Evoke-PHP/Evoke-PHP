@@ -1,7 +1,10 @@
 <?php
-namespace Evoke\Init\Handler;
+namespace Evoke\Service\Handler;
 
-class Autoload implements \Evoke\Iface\Init\Handler
+use InvalidArgumentException,
+	RuntimeException;
+
+class Autoload implements HandlerIface
 {
 	/** @property $authoritative
 	 *  Whether we have complete authority over the namespace, or we should allow
@@ -34,13 +37,13 @@ class Autoload implements \Evoke\Iface\Init\Handler
 	{
 		if (!is_string($baseDir))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires baseDir as string');
 		}
 
 		if (!is_string($namespace))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires namespace as string');
 		}
 
@@ -93,7 +96,7 @@ class Autoload implements \Evoke\Iface\Init\Handler
 				$filename);
 			// We are the authoritative autoloader for the namespace - If we can't
 			// find it no-one can.
-			throw new \RuntimeException(
+			throw new RuntimeException(
 				__METHOD__ . ' filename: ' . $filename . ' does not exist for ' .
 				'authoritative autoloader.');
 		}
@@ -108,7 +111,7 @@ class Autoload implements \Evoke\Iface\Init\Handler
 	{
 		if (!spl_autoload_unregister())
 		{
-			throw new \RuntimeException(
+			throw new RuntimeException(
 				__METHOD__ . ' spl_autoload_unregister failed.');
 		}
 	}

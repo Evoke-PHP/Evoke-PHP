@@ -1,8 +1,11 @@
 <?php
 namespace Evoke\Writer;
 
+use InvalidArgumentException,
+	XMLWriter;
+
 /// Base class for writing XML elements.
-abstract class XMLBase implements \Evoke\Iface\Writer
+abstract class XMLBase implements WriterIface
 {
 	/** @property $language
 	 *  @string The language of the XML being written.
@@ -29,7 +32,7 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 	 *                              XML.
 	 */
 	public function __construct(
-		\XMLWriter   $xmlWriter,
+		XMLWriter   $xmlWriter,
 		/* Bool */   $indent       = true,
 		/* String */ $indentString = '   ',
 		/* String */ $language     = 'EN',
@@ -56,7 +59,7 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 
 	/** Get the XHTML that has been written into the memory buffer (without
 	 *  resetting it).
-	 *  \return A string of the XHTML.
+	 *  @return A string of the XHTML.
 	 */
 	public function __toString()
 	{
@@ -78,31 +81,31 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 	}
 
 	/** Write XML elements into the memory buffer.
-	 *  @param xml \mixed Array accessible value for the xml to be written of the
+	 *  @param xml @mixed Array accessible value for the xml to be written of the
 	 *  form: array($tag, $attributes, $children)
 	 *
 	 *  An example of this is below with the default values that are used for the
 	 *  options array. Attributes and options are optional.
-	 *  \verbatim
+	 *  @verbatim
 	 *  array(0 => tag,
 	 *        1 => array('attrib_1' => '1', 'attrib_2' => '2'),
 	 *        2 => array($child, 'text', $anotherChild)
 	 *       )
-	 *  \endverbatim
+	 *  @endverbatim
 	 */
 	public function write($xml)
 	{
 		if (empty($xml[$this->pos['Tag']]) ||
 		    !is_string($xml[$this->pos['Tag']]))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' bad tag: ' . var_export($xml, true));
 		}
 
 		if (isset($xml[$this->pos['Attribs']]) &&
 		    !is_array($xml[$this->pos['Attribs']]))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' bad attributes: ' . var_export($xml, true));
 		}
 
@@ -115,7 +118,7 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 			}
 			elseif (!is_array($xml[$this->pos['Children']]))
 			{
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					__METHOD__ . ' bad children: ' . var_export($xml, true));
 			}
 		}
@@ -162,7 +165,7 @@ abstract class XMLBase implements \Evoke\Iface\Writer
 	/*********************/
 	
 	/** Write the start of the document based on the type.
-	 *  @param type \string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
+	 *  @param type @string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
 	 */
 	protected function writeStartDocument($type)
 	{

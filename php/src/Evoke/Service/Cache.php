@@ -1,7 +1,9 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
 
-class Cache implements Iface\Cache
+use DomainException;
+
+class Cache implements CacheIface
 {
 	/** @property $items
 	 *  @array Collection of cache entries.
@@ -48,7 +50,7 @@ class Cache implements Iface\Cache
 		// array_key_exists.
 		if (!array_key_exists($key, $this->items))
 		{
-			throw new \DomainException(
+			throw new DomainException(
 				__METHOD__ . ' key: ' . $key . ' does not exist.  You must ' .
 				'check for values before you get them.');
 		}

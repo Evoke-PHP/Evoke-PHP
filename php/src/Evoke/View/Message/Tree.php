@@ -1,7 +1,10 @@
 <?php
 namespace Evoke\View\Message;
 
-class Array extends \Evoke\View
+use Evoke\Message\TreeIface,
+	Evoke\Service\TranslatorIface;
+
+class Tree extends \Evoke\View
 {
 	/** @property attribs
 	 *  @array Attribs
@@ -19,9 +22,9 @@ class Array extends \Evoke\View
 	 *  @param attribs     @array  Attribs.
 	 */
 	public function __construct(
-		Iface\Translator  $translator,
-		Iface\MessageTree $messageTree,
-		Array             $attribs = array('class' => 'Message'))
+		TranslatorIface $translator,
+		TreeIface       $messageTree,
+		Array           $attribs = array('class' => 'Message'))
 	{
 		parent::__construct($translator);
 		
@@ -48,7 +51,7 @@ class Array extends \Evoke\View
 	/*********************/
 
 	/// Build the view of the MessageTree recursively.
-	protected function buildElems(Iface\MessageTree $messageTree, $level)
+	protected function buildElems(TreeIface $messageTree, $level)
 	{
 		if ($messageTree instanceof Array)
 		{

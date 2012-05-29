@@ -30,6 +30,9 @@ class File extends \Evoke\View
 	 */
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		/// The default setup assumes setup 1 as above in the construct comment.
 		$setup += array(
 			'Button_Attribs'    => array('class' => 'Input_File Button Good',

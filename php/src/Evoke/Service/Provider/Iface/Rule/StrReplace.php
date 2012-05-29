@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\Provider\Iface\Rule;
+namespace Evoke\Service\Provider\Iface\Rule;
 
 /** A rule to change strings from a request so that a classname can be formed.
  *  No parameters are matched by this class.
  */
-class StrReplace implements \Evoke\Iface\Provider\Iface\Rule
+class StrReplace implements RuleIface
 {
 	/** Construct the string replacements rule.
 	 *  @param match       @string The string to match.

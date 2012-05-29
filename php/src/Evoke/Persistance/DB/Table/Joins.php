@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\DB\Table;
+namespace Evoke\Persistance\DB\Table;
 
-use Evoke\Iface;
+use InvalidArgumentException;
 
 /** The JoinTree class is used to interact with Relational Databases.
  *  Relational databases have tables of data that are linked to other tables
@@ -52,104 +52,104 @@ use Evoke\Iface;
  *  and Joins array which contains references to further JoinTree objects.  The
  *  methods within the class are used to process the JoinTree.
  */
-class Joins implements Iface\DB\Table\Joins
+class Joins implements JoinsIface
 {
 	/** @property $adminManaged
-	 *  \bool Whether the current join is administatively managed (for the
+	 *  @bool Whether the current join is administatively managed (for the
 	 *  purposes of adding, editing or deleting data).
 	 */
 	protected $adminManaged;
 
 	/** @property $autoFields
-	 *  Fields \array that are handled automatically by the database.
+	 *  @array Fields that are handled automatically by the database.
 	 */
 	protected $autoFields;
 
 	/** @property $childField
-	 *  The child field \string of the join.  This is the name of the field in
+	 *  @string The child field of the join.  This is the name of the field in
 	 *  the table that this join points to.
 	 */
 	protected $childField;
 
 	/** @property $compareType
-	 *  \string How a match should be determined between the parent field and
+	 *  @string How a match should be determined between the parent field and
 	 *  child field.
 	 */
 	protected $compareType;
 
 	/** @property $idSeparator
-	 *  \string Separator string to use between IDs in a table with multiple
+	 *  @string Separator string to use between IDs in a table with multiple
 	 *  keys.
 	 */
 	protected $idSeparator;
 
 	/** @property $info
-	 *  Database Table Info \object
+	 *  @object Database Table Info
 	 */
 	protected $info;
 	
 	/** @property $joinType
-	 *  \string The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
+	 *  @string The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
 	 */
 	protected $joinType;
 
 	/** @property $joins
-	 *  \array of Join objects from this node to other Join objects in the join
+	 *  @array of Join objects from this node to other Join objects in the join
 	 *  tree.
 	 */
 	protected $joins;
 
 	/** @property $jointKey
-	 *  \string The field used to join records together.
+	 *  @string The field used to join records together.
 	 */
 	protected $jointKey;
 
 	/** @property $parentField
-	 *  The parent field for the current join.  The parent field is related to
-	 *  the Join object that is the current node's parent.  It is the field in
-	 *  that node's Table.
+	 *  @string The parent field for the current join.  The parent field is
+	 *  related to the Join object that is the current node's parent.  It is the
+	 *  field in that node's Table.
 	 */
 	protected $parentField;
 
 	/** @property $tableAlias
-	 *  The table name \string to be used for the current table (Aliases can be
+	 *  @string The table name to be used for the current table (Aliases can be
 	 *  used to disambiguate data).
 	 */
 	protected $tableAlias;
 
 	/** @property $tableName
-	 *  The table name \string of the current table.
+	 *  @string The table name of the current table.
 	 */
 	protected $tableName;
 
 	/** @property $tableSeparator
-	 *  The table separator \string to be used between tables.
+	 *  @string The table separator to be used between tables.
 	 */
 	protected $tableSeparator;
 
 	/** Construct the Joins object.
-	 *  @param joins        @array  Joins from this node.
 	 *  @param info         @object DB Table Info object.
+	 *  @param joins        @array  Joins from this node.
 	 *
 	 */
 	public function __construct(
-		Iface\DB\Table\Info $info,
-		/* String */        $tableName,
-		/* String */        $parentField    = NULL,
-		/* String */        $childField     = NULL,
-		Array               $joins          = array(),
-		/* Bool   */        $adminManaged   = true,
-		Array               $autoFields     = array('ID'),
-		/* String */        $compareType    = '=',
-		/* String */        $idSeparator    = '_',
-		/* String */        $joinType       = 'LEFT JOIN',
-		/* String */        $jointKey       = 'Joint_Data',
-		/* Mixed  */        $tableAlias     = NULL,
-		/* String */        $tableSeparator = '_T_')
+		InfoIface    $info,
+		/* String */ $tableName,
+		/* String */ $parentField    = NULL,
+		/* String */ $childField     = NULL,
+		Array        $joins          = array(),
+		/* Bool   */ $adminManaged   = true,
+		Array        $autoFields     = array('ID'),
+		/* String */ $compareType    = '=',
+		/* String */ $idSeparator    = '_',
+		/* String */ $joinType       = 'LEFT JOIN',
+		/* String */ $jointKey       = 'Joint_Data',
+		/* Mixed  */ $tableAlias     = NULL,
+		/* String */ $tableSeparator = '_T_')
 	{
 		if (!is_string($tableName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires tableName as string');
 		}
 		
@@ -173,9 +173,9 @@ class Joins implements Iface\DB\Table\Joins
 	/******************/
 
 	/** Arrange a set of results for the database that match the Join tree.
-	 *  @param results \array The results from the database.
-	 *  @param data \array The data already processed from the results.
-	 *  \return \array The data that was arranged from the results.
+	 *  @param results @array The results from the database.
+	 *  @param data @array The data already processed from the results.
+	 *  @return @array The data that was arranged from the results.
 	 */
 	public function arrangeResults(Array $results, Array $data=array())
 	{

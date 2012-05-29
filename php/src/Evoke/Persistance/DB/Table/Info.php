@@ -1,59 +1,61 @@
 <?php
-namespace Evoke\DB\Table;
+namespace Evoke\Persistance\DB\Table;
 
-use Evoke\Iface;
+use Evoke\Message\TreeIface,
+	Evoke\Persistance\DB\SQL,
+	InvalidArgumentException,
+	OutOfRangeException;
 
 /// Info provides an interface to gather information about a DB table.
-class Info implements Iface\DB\Table\Info
+class Info implements InfoIface
 { 
 	/** @property $createInfo
-	 *  The create information \string for the database table.
+	 *  @string The create information for the database table.
 	 */
 	private $createInfo;
 
 	/** @property $description
-	 *  The description information \string for the database table.
+	 *  @string The description information for the database table.
 	 */
 	private $description;
 
 	/** @property $failures
-	 *  The failures MessageArray \object
+	 *  @object The failures
 	 */
 	protected $failures;
 
 	/** @property $fields
-	 *  The fields \array for the database table.
+	 *  @array The fields for the database table.
 	 */
 	private $fields;
 
 	/** @property $primaryKeys
-	 *  The primary keys \array for the database table.
+	 *  @array The primary keys for the database table.
 	 */
 	private $primaryKeys;
 
 	/** @property $requiredFields
-	 *  The required fields \array for the database table.
+	 *  @array The required fields for the database table.
 	 */
 	private $requiredFields;
 
 	/** @property $sql
-	 *  SQL \object
+	 *  @object SQL 
 	 */
 	protected $sql;
 
 	/** @property $tableName
-	 *  The table name \string for the table we are retrieving information for.
+	 *  @string The table name for the table we are retrieving information for.
 	 */
 	protected $tableName;
    
-	public function __construct(Iface\DB\SQL      $sql,
-	                            /* String */      $tableName,
-	                            /// \todo Fix MessageTree dependency.
-	                            Iface\MessageTree $failures = NULL)
+	public function __construct(SQLIface     $sql,
+	                            /* String */ $tableName,
+	                            Tree         $failures = NULL)
 	{
 		if (!is_string($tableName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires tableName as string');
 		}
 
@@ -118,7 +120,7 @@ class Info implements Iface\DB\Table\Info
 	{
 		if (!in_array($field, $this->fields))
 		{
-			throw new \OutOfRangeException(
+			throw new OutOfRangeException(
 				__METHOD__ . 'Unknown field: ' . $field . ' for table: ' .
 				$this->tableName);
 		}
@@ -155,7 +157,7 @@ class Info implements Iface\DB\Table\Info
 	{
 		if (!in_array($field, $this->fields))
 		{
-			throw new \OutOfRangeException(
+			throw new OutOfRangeException(
 				__METHOD__ . 'Unknown field: ' . $field . ' for table: ' .
 				$this->tableName);
 		}
@@ -166,7 +168,7 @@ class Info implements Iface\DB\Table\Info
    
 	/** Get a copy of the failure array object showing the last failures from an
 	 *  action.
-	 *  \return The failure array object.
+	 *  @return The failure array object.
 	 */
 	public function getFailures()
 	{
@@ -175,11 +177,11 @@ class Info implements Iface\DB\Table\Info
 
 	/** Check whether a set of fields would be valid for an insert or delete
 	 *  statement.  
-	 *  @param fieldset \array The set of fields to check.
-	 *  @param ignoredFields \array Any fields that should be ignored in the
+	 *  @param fieldset @array The set of fields to check.
+	 *  @param ignoredFields @array Any fields that should be ignored in the
 	 *  calculation of the validity.
-	 *  \return A \bool of whether the fieldset is valid for an insert or
-	 *  delete statement. If the return is false \ref getFailures can be used
+	 *  @return A @bool of whether the fieldset is valid for an insert or
+	 *  delete statement. If the return is false @ref getFailures can be used
 	 *  to retrieve the errors.
 	 */
 	public function isValid($fieldset, $ignoredFields=array())
@@ -225,7 +227,7 @@ class Info implements Iface\DB\Table\Info
 			// 1 is removed later as it is used to store the text or blob.
 			$textBlobLength = 1;
 	 
-			/// \todo range checking for numeric types.
+			/// @todo range checking for numeric types.
 			switch($type)
 			{
 			case('LONGTEXT'):
@@ -358,7 +360,7 @@ class Info implements Iface\DB\Table\Info
 
 	/** Generic validity checking for a database field.
 	 *  Check that required values are present.
-	 *  \returns Whether the field is valid.
+	 *  @returns Whether the field is valid.
 	 */
 	protected function isValidGeneric($key, $val, $required)
 	{
@@ -394,7 +396,7 @@ class Info implements Iface\DB\Table\Info
 		}
 	}
 
-	/// \todo Range checking.
+	/// @todo Range checking.
 	/// Check that the value is an integer within the required bounds.
 	protected function isValidInt($key, $val, $required, $subType)
 	{
@@ -429,7 +431,7 @@ class Info implements Iface\DB\Table\Info
 		}
 	}
    
-	/// \todo range checking.
+	/// @todo range checking.
 	/// Check that the value is a float within the required bounds.
 	protected function isValidFloat($key, $val, $required, $subType)
 	{
@@ -475,7 +477,7 @@ class Info implements Iface\DB\Table\Info
 		return true;
 	}
 
-	/// \todo Improve the check.
+	/// @todo Improve the check.
 	/// Do a crude check on the date to ensure it is valid.
 	protected function isValidDate($key, $val, $required, $type, $subType)
 	{

@@ -1,8 +1,6 @@
 <?php
 namespace Evoke\View;
 
-use Evoke\Iface;
-
 class Admin extends \Evoke\View
 {
 	/** Construct an Admin view.
@@ -30,6 +28,9 @@ class Admin extends \Evoke\View
 				'/csslib/view/error.css')),
 		/* Bool */          $editSeparately = false)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		if (!is_string($tableName))
 		{
 			throw new \InvalidArgumentException(

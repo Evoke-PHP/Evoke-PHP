@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View\Message;
 
-class Failures extends Array
+class Failures extends Tree
 { 
 	/** Construct a Failures Message view.
 	 *  @param translator  @object Translator.

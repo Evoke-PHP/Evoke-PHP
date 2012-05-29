@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Controller;
 
-class NotFound extends \Evoke\Controller
+class NotFound extends Controller
 {
 	/** Execute the controller responding to the request method in the correct
 	 *  output format.

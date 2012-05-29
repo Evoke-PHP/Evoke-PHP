@@ -5,6 +5,9 @@ class Tab_Panel extends \Evoke\View\Control
 { 
 	public function __construct($setup=array())
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+		
 		$setup += array(
 			'Active_Class'         => 'Active',
 			'Attribs'              => array('class' => 'Tab_Panel'),

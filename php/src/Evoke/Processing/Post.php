@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Processing;
 
-class Post extends \Evoke\Processing
+class Post extends Processing
 {
 	/** Construct a Post Processing object.
 	 *  @param callbacks     @array Callbacks.

@@ -1,27 +1,28 @@
 <?php
-namespace Evoke\Logger;
+namespace Evoke\Service\Logger;
 
-use Evoke\Iface;
+use Evoke\Persistance\FilesystemIface,
+	InvalidArgumentException;
 
 class File
 {
 	/** @property $append
-	 *  Whether the file should be appended to.
+	 *  @bool Whether the file should be appended to.
 	 */
 	protected $append;
 
 	/** @property $dirMode
-	 *  The mode for any created directories \int (octal).
+	 *  @int (octal) The mode for any created directories.
 	 */
 	protected $dirMode;
 
 	/** @property $fileMode
-	 *  The mode for the file \int (octal).
+	 *  @int (octal) The mode for the file.
 	 */
 	protected $fileMode;
 
 	/** @property $filename
-	 *  The filename \string to log to.
+	 *  @string The filename to log to.
 	 */
 	protected $filename;
 	
@@ -45,7 +46,6 @@ class File
 	 */
 	protected $opened = false;
 
-
 	/** Construct a File Logger object.
 	 *  @param $filesystem  \object Filesystem object
 	 *  @param append       \bool   Whether to append to the file.
@@ -54,28 +54,28 @@ class File
 	 *  @param fileMode     \object Permissions to set the file to
 	 *  @param locking      \bool   Whether to lock the file for writing.
 	 */
-	public function __construct(Iface\Filesystem   $filesystem,
-	                            /* Bool */         $append=true,
-	                            /* Int (octal) */  $dirMode=0700,
-	                            /* String */       $filename='php.log',
-	                            /* Int (octal) */  $fileMode=0640,
-	                            /* Bool */         $locking=true)
+	public function __construct(FilesystemIface   $filesystem,
+	                            /* Bool */        $append=true,
+	                            /* Int (octal) */ $dirMode=0700,
+	                            /* String */      $filename='php.log',
+	                            /* Int (octal) */ $fileMode=0640,
+	                            /* Bool */        $locking=true)
 	{
 		if (!is_bool($append))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires append as bool');
 		}
 
 		if (!is_string($filename))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires filename as string');
 		}
 
 		if (!is_bool($locking))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires locking as bool');
+			throw new InvalidArgumentException(__METHOD__ . ' requires locking as bool');
 		}
 
 		$this->filesystem   = $filesystem;

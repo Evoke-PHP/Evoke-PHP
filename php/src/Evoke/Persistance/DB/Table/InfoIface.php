@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\DB\Table;
+namespace Evoke\Persistance\DB\Table;
 
-interface InfoIface extends \Evoke\Iface\Validity
+interface InfoIface extends \Evoke\Service\Validition
 {
 	/// Get the description of the database table.
 	public function getDescription();
@@ -32,17 +32,17 @@ interface InfoIface extends \Evoke\Iface\Validity
    
 	/** Get a copy of the failure array object showing the last failures from an
 	 *  action.
-	 *  \return The failure array object.
+	 *  @return The failure array object.
 	 */
 	public function getFailures();
 
 	/** Check whether a set of fields would be valid for an insert or delete
 	 *  statement.  
-	 *  @param fieldset \array The set of fields to check.
-	 *  @param ignoredFields \array Any fields that should be ignored in the
+	 *  @param fieldset @array The set of fields to check.
+	 *  @param ignoredFields @array Any fields that should be ignored in the
 	 *  calculation of the validity.
-	 *  \return A \bool of whether the fieldset is valid for an insert or
-	 *  delete statement. If the return is false \ref getFailures can be used
+	 *  @return A @bool of whether the fieldset is valid for an insert or
+	 *  delete statement. If the return is false @ref getFailures can be used
 	 *  to retrieve the errors.
 	 */
 	public function isValid($fieldset, $ignoredFields=array());

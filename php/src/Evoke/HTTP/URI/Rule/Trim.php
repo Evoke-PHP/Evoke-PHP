@@ -1,9 +1,11 @@
 <?php
 namespace Evoke\HTTP\URI\Rule;
 
+use InvalidArgumentException;
+
 /** A rule to trim characters from the URI.
  */
-class Trim extends \Evoke\HTTP\URI\Rule
+class Trim extends Rule
 {
 	/** @property $characters
 	 *  \string of characters to trim from the the URI
@@ -20,7 +22,7 @@ class Trim extends \Evoke\HTTP\URI\Rule
 	{
 		if (!is_string($characters))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires characters as string');
 		}
       

@@ -1,10 +1,12 @@
 <?php
 namespace Evoke\HTTP\URI\Rule;
 
+use InvalidArgumentException;
+
 /** A rule to change strings from a request so that a classname can be formed.
  *  No parameters are matched by this class.
  */
-class StrReplace extends \Evoke\HTTP\URI\Rule
+class StrReplace extends Rule
 {
 	/** @property $match
 	 *  @string The string to match on.
@@ -28,13 +30,13 @@ class StrReplace extends \Evoke\HTTP\URI\Rule
 	{
 		if (!is_string($match))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires match as string');
 		}
 
 		if (!is_string($replacement))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires replacement as string');
 		}
       

@@ -1,9 +1,11 @@
 <?php
 namespace Evoke\Writer;
 
+use InvalidArgumentException;
+
 /** Writer for Text (buffered).
  */
-class Text extends \Evoke\Writer
+class Text extends Writer
 {
 	/******************/
 	/* Public Methods */
@@ -16,7 +18,7 @@ class Text extends \Evoke\Writer
 	{
 		if (!is_string($text))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' text must be a string.');
 		}
 		

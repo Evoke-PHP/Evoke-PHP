@@ -5,6 +5,9 @@ class EntryDialog extends Entry
 {
 	public function __construct($setup=array())
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		// By default, dialogs are wrapped by their own form element.
 		$setup = array_merge(
 			array('Attribs' => array('class'  => 'Entry Dialog Info',
@@ -15,9 +18,6 @@ class EntryDialog extends Entry
 			$setup);
       
 		parent::__construct($setup);
-
-		/// \todo Fix this class.
-		throw new Exception(__METHOD__ . ' needs update to new view class');
 	}
    
 	/*********************/

@@ -1,12 +1,12 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
+use Evoke\Model\AdminIface;
 
 /** Provide an Admin (CRUD) interface to a database table.
  *  (CRUD - Create=Add, Read=Fetch, Update=Modify, Delete=Delete).
  */
-class TableAdmin extends Table implements Iface\Model\Admin
+class TableAdmin extends Table implements AdminIface
 {
 	/******************/
 	/* Public Methods */

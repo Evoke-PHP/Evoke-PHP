@@ -1,9 +1,9 @@
 <?php
-namespace Evoke;
+namespace Evoke\View;
 
-use Evoke\Iface;
+use Evoke\Service\TranslatorIface;
 
-abstract class View implements Iface\View
+abstract class View implements ViewIface
 {
 	/** @property $translator
 	 *  @object Translator
@@ -13,7 +13,7 @@ abstract class View implements Iface\View
 	/** Construct the View.
 	 *  @param Translator @object Translator.
 	 */
-	public function __construct(Iface\Translator $translator)
+	public function __construct(TranslatorIface $translator)
 	{
 		$this->translator = $translator;
 	}

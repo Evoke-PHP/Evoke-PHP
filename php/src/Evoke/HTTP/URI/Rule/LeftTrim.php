@@ -1,9 +1,11 @@
 <?php
 namespace Evoke\HTTP\URI\Rule;
 
+use InvalidArgumentException;
+
 /** A rule to trim characters from the left side of the URI.
  */
-class LeftTrim extends \Evoke\HTTP\URI\Rule
+class LeftTrim extends Rule
 {
 	/** @property $characters
 	 *  Characters to trim from the left side of the URI as a \string
@@ -20,7 +22,7 @@ class LeftTrim extends \Evoke\HTTP\URI\Rule
 	{
 		if (!is_string($characters))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires characters as string');
 		}
       
@@ -34,8 +36,8 @@ class LeftTrim extends \Evoke\HTTP\URI\Rule
 	/******************/
 
 	/** Get the classname.
-	 *  @param uri \string The URI to get the classname from.
-	 *  @return \string The uri trimmed appropriately.
+	 *  @param uri @string The URI to get the classname from.
+	 *  @return @string The uri trimmed appropriately.
 	 */
 	public function getClassname($uri)
 	{
@@ -43,7 +45,7 @@ class LeftTrim extends \Evoke\HTTP\URI\Rule
 	}
 	
 	/** Check the uri to see if it matches.
-	 *  \return \bool Whether the uri is matched.
+	 *  @return @bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

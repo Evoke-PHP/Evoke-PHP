@@ -1,8 +1,12 @@
 <?php
-namespace Evoke;
+namespace Evoke\Controller;
 
-use Evoke\HTTP\MediaType;
-
+use DomainException,
+	Evoke\HTTP\RequestIface,
+	Evoke\HTTP\ResponseIface,
+	Evoke\Service\ProviderIface,
+	Evoke\Writer\WriterIface;
+	
 /** The Controller is responsible for providing and using the correct objects
  *  from the processing, model and view layers to execute the desired request
  *  from the user.
@@ -47,12 +51,12 @@ abstract class Controller
 	 *  @param params    @array  Parameters.
 	 *  @param pageSetup @array  Setup for page based output formats.
 	 */
-	public function __construct(Iface\Provider      $provider,
-	                            Iface\HTTP\Request  $request,
-	                            Iface\HTTP\Response $response,
-	                            Iface\Writer        $writer,
-	                            Array               $params,
-	                            Array               $pageSetup = array())
+	public function __construct(ProviderIface $provider,
+	                            RequestIface  $request,
+	                            ResponseIface $response,
+	                            WriterIface   $writer,
+	                            Array         $params,
+	                            Array         $pageSetup = array())
 	{
 		$this->pageSetup = $pageSetup;
 		$this->params    = $params;
@@ -94,7 +98,7 @@ abstract class Controller
 		}
 		else
 		{
-			throw new \DomainException(
+			throw new DomainException(
 				__METHOD__ . ' output format: ' . $outputFormat .
 				' not handled');
 		}

@@ -4,19 +4,19 @@ namespace Evoke\HTTP\URI\Rule;
 /** A rule to strip unwanted characters from a request so that a classname can
  *  be formed.  No parameters are matched by this class.
  */
-class UpperCaseFirst extends \Evoke\HTTP\URI\Rule
+class UpperCaseFirst extends Rule
 {
 	/** @property $delimiters
-	 *  \array of delimiters that specify where a new word begins that should
+	 *  @array of delimiters that specify where a new word begins that should
 	 *  have its first letter made upper case.
 	 */
 	protected $delimiters;
 
 	/** Construct the UpperCaseFirst Rule.
-	 *  @param delimiters \array An array of delimiter characters, which signify
+	 *  @param delimiters @array An array of delimiter characters, which signify
 	 *  that the following character is the start of a word that should be
 	 *  upper cased.
-	 *  @param authoritative \bool Whether the rule can definitely give the
+	 *  @param authoritative @bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
 	public function __construct(Array      $delimiters,
@@ -33,7 +33,7 @@ class UpperCaseFirst extends \Evoke\HTTP\URI\Rule
 
 	/** Split the string by the delimiters make the first letter uppercase and
 	 *  then rejoin the string with the delimiters.
-	 *  @return \string The string representing the Classname.
+	 *  @return @string The string representing the Classname.
 	 */
 	public function getClassname($uri)
 	{
@@ -55,7 +55,7 @@ class UpperCaseFirst extends \Evoke\HTTP\URI\Rule
 	}
 
 	/** Check the uri to see if it matches.
-	 *  \return \bool Whether the uri is matched.
+	 *  @return @bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

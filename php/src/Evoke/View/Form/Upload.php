@@ -17,6 +17,8 @@ class Upload extends \Evoke\View\Form
 	public function __construct($uploadSetup = array(),
 	                            $formSetup = array())
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
 		parent::__construct();
 
 		// Merge giving preference to values specified in the constructor.

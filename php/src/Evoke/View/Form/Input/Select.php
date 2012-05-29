@@ -1,9 +1,10 @@
 <?php
 namespace Evoke\View\Form\Input;
 
-use Evoke\Iface;
+use InvalidArgumentException,
+	RuntimeException;
 
-class Select implements Iface\View
+class Select implements Evoke\View\ViewIface
 {
 	/** @property $attribs
 	 *  @array Attributes for the select element.
@@ -52,13 +53,13 @@ class Select implements Iface\View
 	{
 		if (!is_string($textField))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires textField as string');
 		}
 
 		if (!is_string($valueField))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires valueField as string');
+			throw new InvalidArgumentException(__METHOD__ . ' requires valueField as string');
 		}
 
 		$this->attribs       = $attribs;
@@ -87,7 +88,7 @@ class Select implements Iface\View
 
 		if (!is_array($params['Records']))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires Records as array');
 		}
 
@@ -97,7 +98,7 @@ class Select implements Iface\View
 
 		if (empty($fullData))
 		{
-			throw new \RuntimeException(
+			throw new RuntimeException(
 				__METHOD__ . ' cannot set select element without having options ' .
 				'to select from (The XHTML would be invalid).');
 		}
@@ -109,7 +110,7 @@ class Select implements Iface\View
 			if (!isset($record[$this->textField]) ||
 			    !isset($record[$this->valueField]))
 			{
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					__METHOD__ . ' Record: ' . var_export($record, true) .
 					' at key: ' . $key . ' does not contain the required fields ' .
 					'Text_Field: ' . $this->textField .

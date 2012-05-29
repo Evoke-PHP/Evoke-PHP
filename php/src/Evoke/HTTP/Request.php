@@ -1,22 +1,24 @@
 <?php
 namespace Evoke\HTTP;
 
+use LogicException;
+
 /// Provide details of the request.
-class Request implements \Evoke\Iface\HTTP\Request
+class Request implements RequestIface
 {
 	/** @property $basicPatterns
-	 *  \string Regexp subpatterns to match components of the request header
+	 *  @string Regexp subpatterns to match components of the request header
 	 *  values.
 	 */
 	private $basicPatterns;
 
 	/** @property $params
-	 *  \array of parameters for the request ($_GET, $_POST etc.)
+	 *  @array of parameters for the request ($_GET, $_POST etc.)
 	 */
 	protected $params;
 	
 	/** @property $validateHeaders
-	 *  \bool Whether to validate the headers before parsing.
+	 *  @bool Whether to validate the headers before parsing.
 	 */
 	protected $validateHeaders;
 
@@ -77,14 +79,14 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 	
 	/** Get the query parameter.
-	 *  @param param \string The parameter to get.
-	 *  \return \bool The query parameter.
+	 *  @param param @string The parameter to get.
+	 *  @return @bool The query parameter.
 	 */
 	public function getQueryParam($param)
 	{
 		if (!isset($_REQUEST[$param]))
 		{
-			throw new \LogicException(
+			throw new LogicException(
 				__METHOD__ . ' should only be called if the parameter is set.');
 		}
 
@@ -92,7 +94,7 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 
 	/** Get the query parameters.
-	 *  \return The query parameters as an array.
+	 *  @return The query parameters as an array.
 	 */
 	public function getQueryParams()
 	{
@@ -100,7 +102,7 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 	
 	/** Get the URI of the request (without the query string).
-	 *  \return The URI of the request.
+	 *  @return The URI of the request.
 	 */
 	public function getURI()
 	{
@@ -108,8 +110,8 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 
 	/** Whether the query parameter is set.
-	 *  @param param \string The parameter to check.
-	 *  \return \bool Whether the query parameter is set.
+	 *  @param param @string The parameter to check.
+	 *  @return @bool Whether the query parameter is set.
 	 */
 	public function issetQueryParam($param)
 	{
@@ -121,15 +123,15 @@ class Request implements \Evoke\Iface\HTTP\Request
 	 *
 	 *  This field specifies the preferred media types for responses.
 	 *
-	 *  \return \array of Accepted media types with their quality factor,
-	 *  ordered by preference according to \ref compareAccept.  Each element is
+	 *  @return @array of Accepted media types with their quality factor,
+	 *  ordered by preference according to @ref compareAccept.  Each element is
 	 *  of the form:
-	 *  \verbatim
+	 *  @verbatim
 	 *  array(array('Q_Factor' => 0.5,
 	 *              'Subtype'  => 'html',
 	 *              'Type'     => 'text'),
 	 *        etc.
-	 *  \endverbatim
+	 *  @endverbatim
 	 */
 	public function parseAccept()
 	{
@@ -295,9 +297,9 @@ class Request implements \Evoke\Iface\HTTP\Request
    /*********************/
 
 	/** Compare two accept media types so that they can be sorted via usort.
-	 *  @param a \array The first accepted media type.
-	 *  @param b \array The second accepted media type.
-	 *  \return \int as required by usort.
+	 *  @param a @array The first accepted media type.
+	 *  @param b @array The second accepted media type.
+	 *  @return @int as required by usort.
 	 */
 	protected function compareAccept(Array $a, Array $b)
 	{
@@ -305,9 +307,9 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 
 	/** Compare two accept languages so that they can be sorted via usort.
-	 *  @param a \array The first accept language.
-	 *  @param b \array The second accept language.
-	 *  \return \int as required by usort.
+	 *  @param a @array The first accept language.
+	 *  @param b @array The second accept language.
+	 *  @return @int as required by usort.
 	 */
 	protected function compareAcceptLanguage(Array $a, Array $b)
 	{
@@ -320,8 +322,8 @@ class Request implements \Evoke\Iface\HTTP\Request
    /*******************/
 			                    
 	/** Score an accept media type so that they can be compared.
-	 *  @param accept \array The accept media type array.
-	 *  \return \int The score of the accept array for comparison.
+	 *  @param accept @array The accept media type array.
+	 *  @return @int The score of the accept array for comparison.
 	 */
 	private function scoreAccept(Array $accept)
 	{
@@ -338,8 +340,8 @@ class Request implements \Evoke\Iface\HTTP\Request
 	}
 
 	/** Score an accept language so that they can be compared.
-	 *  @param accept \array The accept language array.
-	 *  \return \int The score of the accept language array for comparison.
+	 *  @param accept @array The accept language array.
+	 *  @return @int The score of the accept language array for comparison.
 	 */
 	private function scoreAcceptLanguage(Array $acceptLanguage)
 	{

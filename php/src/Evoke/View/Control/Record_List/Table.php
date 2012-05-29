@@ -6,6 +6,9 @@ class Table extends \Evoke\View\Control\RecordList
 { 
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$setup += array('Data'       => NULL,
 		                'Table_Info' => NULL);
 

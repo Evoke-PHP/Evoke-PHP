@@ -1,10 +1,11 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Iface;
+use Evoke\Persistance\DB\SQLIface,
+	InvalidArgumentException;
 
 /// Provide a read only model to a table of data.
-class Table extends \Evoke\Model\Mapper\DB
+class Table extends DB
 {
 	/** @property $select
 	 *  @array Settings for the selection of records.
@@ -22,13 +23,13 @@ class Table extends \Evoke\Model\Mapper\DB
 	 *  @param select     @array  Select statement settings.
 	 */
 	public function __construct(
-		Iface\DB\SQL $sql,
+		SQLIface     $sql,
 		/* String */ $tableName,
 		Array        $select = array())
 	{
 		if (!is_string($tableName))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires tableName as string');
 		}
 		
@@ -47,7 +48,7 @@ class Table extends \Evoke\Model\Mapper\DB
 	/******************/
 
 	/** Fetch some data from the mapper (specified by params).
-	 *  @param params \array The conditions to match in the mapped data.
+	 *  @param params @array The conditions to match in the mapped data.
 	 */
 	public function fetch(Array $params = array())
 	{

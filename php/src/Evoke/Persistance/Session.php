@@ -1,7 +1,9 @@
 <?php
-namespace Evoke;
+namespace Evoke\Persistance;
 
-class Session implements \Evoke\Iface\Session
+use RuntimeException;
+
+class Session implements SessionIface
 {
 	public function __construct()
 	{
@@ -26,13 +28,13 @@ class Session implements \Evoke\Iface\Session
 			{
 				if (!session_start())
 				{
-					throw new \RuntimeException(
+					throw new RuntimeException(
 						__METHOD__ . ' session_start failed.');
 				}
 			}
 			else
 			{
-				throw new \RuntimeException(
+				throw new RuntimeException(
 					__METHOD__ . ' Session started after headers sent.');
 			}
 		}

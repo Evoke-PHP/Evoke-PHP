@@ -4,7 +4,7 @@ namespace Evoke\Writer;
  *  Provide an interface to the XML Writer to write page content and methods to
  *  write the DTD, head and end of a webpage.
  */
-class XHTML extends XMLBase implements \Evoke\Iface\Writer\Page
+class XHTML extends XMLBase implements PageIface
 {
 	/******************/
 	/* Public Methods */

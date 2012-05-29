@@ -1,25 +1,27 @@
 <?php
 namespace Evoke\HTTP\URI;
 
+use InvalidArgumentException;
+
 /** HTTP URI Rule class for mapping the URI to a controller.
  */
-abstract class Rule implements \Evoke\Iface\HTTP\URI\Rule
+abstract class Rule implements RuleIface
 {
 	/** @property $authoritative
-	 *  \bool Whether the rule can definitely give the final route for all URIs
+	 *  @bool Whether the rule can definitely give the final route for all URIs
 	 *  that it matches.
 	 */
 	protected $authoritative;
 
 	/** Construct the URI Rule.
-	 *  @param authoritative \bool Whether the rule can definitely give the
+	 *  @param authoritative @bool Whether the rule can definitely give the
 	 *  final route for all URIs that it matches.
 	 */
 	public function __construct(/* Bool */ $authoritative)
 	{
 		if (!is_bool($authoritative))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires authoritative as a bool');
 		}
 
@@ -31,8 +33,8 @@ abstract class Rule implements \Evoke\Iface\HTTP\URI\Rule
 	/******************/
 
 	/** Return the parameters for the URI.
-	 *  @param uri \string The URI.
-	 *  @return \array Empty Array. (By default no parameters are captured)
+	 *  @param uri @string The URI.
+	 *  @return @array Empty Array. (By default no parameters are captured)
 	 */	
 	public function getParams($uri)
 	{
@@ -40,7 +42,7 @@ abstract class Rule implements \Evoke\Iface\HTTP\URI\Rule
 	}
 
 	/** Check whether the rule is authoritative.
-	 *  @return \bool Whether the rule can definitely give the final route for
+	 *  @return @bool Whether the rule can definitely give the final route for
 	 *  all URIs that it matches.
 	 */
 	public function isAuthoritative()

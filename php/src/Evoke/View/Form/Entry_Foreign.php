@@ -15,7 +15,9 @@ class EntryForeign extends Entry
 			      'SQL'                   => NULL),
 			$setup);
 
-		/// \todo Change this. SQL in an view is a bad idea.
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+		/// @todo Change this. SQL in an view is a bad idea.
 		throw new Exception(__METHOD__ . ' SQL in an view is a bad idea.');
       
 		if (!($sQL instanceof \Evoke\DB\SQL))

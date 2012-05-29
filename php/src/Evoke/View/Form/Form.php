@@ -18,6 +18,9 @@ abstract class Form extends \Evoke\View
 	/// Construct the Form object.
 	public function __construct(Array $setup)
 	{
+		/// @todo Fix to new View interface.
+		throw new \RuntimeException('Fix to new view interface.');
+
 		$this->setup = array_merge(
 			array('Append_Elements'       => array(),
 			      'Attribs'               => array('action' => '',

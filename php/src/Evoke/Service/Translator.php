@@ -1,10 +1,15 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
 
-class Translator implements Iface\Translator
+use DomainException,
+	Evoke\HTTP\RequestIface,
+	InvalidArgumentException,
+	LogicException;
+
+class Translator implements TranslatorIface
 {
 	/** @property $defaultLanguage
-	 *  The default language to use for translations.
+	 *  @string The default language to use for translations.
 	 */
 	protected $defaultLanguage;
 
@@ -39,20 +44,20 @@ class Translator implements Iface\Translator
 	private $translationsFilename;
 
 	public function __construct(
-		Iface\HTTP\Request   $request,
-		/* String */         $defaultLanguage,
-		/* String */         $translationsFilename,
-		/* String */         $langKey = 'l')
+		RequestIface $request,
+		/* String */ $defaultLanguage,
+		/* String */ $translationsFilename,
+		/* String */ $langKey = 'l')
 	{
 		if (!is_string($defaultLanguage))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires defaultLanguage as string');
 		}
 
 		if (!is_string($translationsFilename))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires translationsFilename');
 		}
 
@@ -89,7 +94,7 @@ class Translator implements Iface\Translator
 
 	/** Get the language HTTP Query for the end of a URL (e.g 'l=EN' or 'l=ES').
 	 *  @param lang The language to use or left empty for the current language.
-	 *  \returns \string The HTTP Query parameter for the language.
+	 *  @returns @string The HTTP Query parameter for the language.
 	 */
 	public function getLanguageHTTPQuery($lang='')
 	{
@@ -122,7 +127,7 @@ class Translator implements Iface\Translator
 	 *  language.  The highest priority source with a language that exists within
 	 *  the translator will be set.
 	 *
-	 *  @param lang \string The language to set (defaults to NULL).  If no
+	 *  @param lang @string The language to set (defaults to NULL).  If no
 	 *  language is passed then the above sources should be used to determine the
 	 *  correct language.
 	 */
@@ -139,7 +144,7 @@ class Translator implements Iface\Translator
 		{
 			if (!$this->isValidLanguage($lang))
 			{
-				throw new \DomainException(
+				throw new DomainException(
 					__METHOD__ . ' Language must be valid for the translator. ' .
 					'Unknown language: ' . var_export($lang, true));
 			}
@@ -217,9 +222,9 @@ class Translator implements Iface\Translator
 	}
 
 	/** Get the translation for the current language.
-	 *  @param trKey \string The translation key.
-	 *  @param page \string The page to get the translation for.
-	 *  \return \string The translation for the translation key.
+	 *  @param trKey @string The translation key.
+	 *  @param page @string The page to get the translation for.
+	 *  @return @string The translation for the translation key.
 	 */
 	public function get($trKey, $page='default')
 	{
@@ -262,9 +267,9 @@ class Translator implements Iface\Translator
    
 	/** Get all translations in the current language that match the key and
 	 *  have been set to a valid value.
-	 *  @param trKey \string The regexp for the translation key.
-	 *  @param page \string The page to get the translation for.
-	 *  \return \array The translation matches for the translation key.
+	 *  @param trKey @string The regexp for the translation key.
+	 *  @param page @string The page to get the translation for.
+	 *  @return @array The translation matches for the translation key.
 	 */
 	public function getAll($trKey, $page='default')
 	{
@@ -303,8 +308,8 @@ class Translator implements Iface\Translator
 	/** Get an array of translations in the current language for the specified
 	 *  match.
 	 *  @param keyMatch The translation key regexp to match.
-	 *  @param page \string The page to get the translation for.
-	 *  \return \array The translations that match the key regexp.
+	 *  @param page @string The page to get the translation for.
+	 *  @return @array The translations that match the key regexp.
 	 */
 	public function getTranslations($keyMatch, $page='default')
 	{

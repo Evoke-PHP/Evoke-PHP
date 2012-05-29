@@ -1,7 +1,11 @@
 <?php
-namespace Evoke;
+namespace Evoke\Service;
 
-class Settings implements \Evoke\Iface\Settings
+use OutOfBoundsException,
+	OutOfRangeException,
+	RuntimeException;	
+
+class Settings implements SettingsIface
 {
 	/** @property $frozen
 	 *  @array The settings that have been frozen.  Attempting to modify these
@@ -50,7 +54,7 @@ class Settings implements \Evoke\Iface\Settings
 		}
 		elseif (!isset($this->frozenReference))
 		{
-			throw new \OutOfRangeException(
+			throw new OutOfRangeException(
 				__METHOD__ . ' offset: ' . var_export($offset, true) .
 				' does not exist to be frozen.');
 		}
@@ -101,7 +105,7 @@ class Settings implements \Evoke\Iface\Settings
 	{
 		if (!$this->offsetSet($offset))
 		{
-			throw new \OutOfBoundsException(
+			throw new OutOfBoundsException(
 				__METHOD__ . ' offset: ' . var_export($offset, true) .
 				' does not exist to be unfrozen.');
 		}
@@ -153,7 +157,7 @@ class Settings implements \Evoke\Iface\Settings
 			return $variableValue;
 		}
       
-		throw new \RuntimeException(
+		throw new RuntimeException(
 			__METHOD__ . ' offset: ' . var_export($offset, true) . ' not set.');
 	}
 
@@ -168,7 +172,7 @@ class Settings implements \Evoke\Iface\Settings
       
 		if (isset($frozenValue))
 		{
-			throw new \RuntimeException(
+			throw new RuntimeException(
 				__METHOD__ . ' offset: ' . var_export($offset, true) .
 				' is already frozen and cannot be set.');
 		}

@@ -1,12 +1,12 @@
 <?php
-namespace Evoke\DB\Table;
+namespace Evoke\Persistance\DB\Table;
 
 interface JoinsIface
 {
 	/** Arrange a set of results for the database that match the Join tree.
-	 *  @param results \array The results from the database.
-	 *  @param data \array The data already processed from the results.
-	 *  \return \array The data that was arranged from the results.
+	 *  @param results @array The results from the database.
+	 *  @param data @array The data already processed from the results.
+	 *  @return @array The data that was arranged from the results.
 	 */
 	public function arrangeResults(Array $results, Array $data=array());
    

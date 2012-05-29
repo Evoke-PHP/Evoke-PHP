@@ -1,12 +1,14 @@
 <?php
 namespace Evoke\HTTP\URI\Rule;
 
+use InvalidArgumentException;
+
 /** A regex rule to map the uri classname and parameters.  There is a single
  *  match for the URI, with all replacements being made from this match.  If
  *  there are more complex requirements such as optional parameters then the
  *  RegexTwoLevel rule should be used.
  */
-class Regex extends \Evoke\HTTP\URI\Rule
+class Regex extends Rule
 {
 	/** @property $match
 	 *  Regex match @string for the URI.
@@ -36,13 +38,13 @@ class Regex extends \Evoke\HTTP\URI\Rule
 	{
 		if (!is_string($match))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires match as string');
 		}
 
 		if (!is_string($replacement))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires replacement as string');
 		}
 		
@@ -53,14 +55,14 @@ class Regex extends \Evoke\HTTP\URI\Rule
 
 			if (!is_string($paramSpec['Key']))
 			{
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					__METHOD__ . ' param spec at index: ' . $index .
 					' requires Key as string.');
 			}
 
 			if (!is_string($paramSpec['Value']))
 			{
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					__METHOD__ . ' param spec at index: ' . $index .
 					' requires Value as string.');
 			}

@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Controller;
 
-class Error extends \Evoke\Controller
+class Error extends Controller
 {
 	/** Execute the controller responding to the request method in the correct
 	 *  output format.

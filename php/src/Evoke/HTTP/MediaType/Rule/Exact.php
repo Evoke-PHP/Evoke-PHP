@@ -1,6 +1,8 @@
 <?php
 namespace Evoke\HTTP\MediaType\Rule;
 
+use InvalidArgumentException;
+
 /** A Media Type rule that matches exactly the media type from the accept
  *  header
  */

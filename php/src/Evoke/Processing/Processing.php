@@ -1,5 +1,7 @@
 <?php
-namespace Evoke;
+namespace Evoke\Processing;
+
+use InvalidArgumentException;
 
 /** The processing class handles the processing of request data ($_GET, $_POST,
  *  $_FILE, etc.) using callbacks.
@@ -7,7 +9,7 @@ namespace Evoke;
  *  Each request is received as an array.  We match the keys of the request to
  *  the callback array to determine the processing that should be done.
  */
-abstract class Processing implements Iface\Processing
+abstract class Processing implements ProcessingIface
 {
 	/** @property $callbacks
 	 *  @array Associative array of request IDs to processing callback.
@@ -44,7 +46,7 @@ abstract class Processing implements Iface\Processing
 
 		if (!is_string($requestMethod))
 		{
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				__METHOD__ . ' requires requestMethod as string');
 		}
 		
@@ -126,7 +128,7 @@ abstract class Processing implements Iface\Processing
 	}
 
 	/** Get the request keys that match the request data.
-	 *  @param data \array The request data.
+	 *  @param data @array The request data.
 	 */
 	protected function getRequestMatches($data)
 	{

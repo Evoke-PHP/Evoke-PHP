@@ -1,7 +1,9 @@
 <?php
 namespace Evoke\Model;
 
-use Evoke\Iface;
+use InvalidArgumentException,
+	OutOfBoundsException,
+	RuntimeException;
 
 /** Provide access to data.  Related data is handled through the Joins. An
  *  iterator is supplied to traverse the array of records that make up the data.
@@ -33,7 +35,7 @@ use Evoke\Iface;
  *  }
  *  @endcode
 */
-class Data implements Iface\Model\Data
+class Data implements DataIface
 {
 	/** @property $data
 	 *  @array Data in the raw joint array.
@@ -62,9 +64,9 @@ class Data implements Iface\Model\Data
 	{
 		foreach ($dataJoins as $parentField => $dataContainer)
 		{
-			if (!$dataContainer instanceof Iface\Model\Data)
+			if (!$dataContainer instanceof DataIface)
 			{
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					__METHOD__ . ' requires Data for parent field: ' .
 					$parentField);
 			}
@@ -97,7 +99,7 @@ class Data implements Iface\Model\Data
 			}
 		}
 		
-		throw new \OutOfBoundsException(
+		throw new OutOfBoundsException(
 			__METHOD__ . ' record does not have a data container for: ' .
 			var_export($parentField, true) . ' joins are: ' .
 			implode(', ', array_keys($this->dataJoins)));
@@ -211,7 +213,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function offsetSet($offset, $value)
 	{
-		throw new \RuntimeException(
+		throw new RuntimeException(
 			__METHOD__ . ' should never be called - data is only transferrable ' .
 			'it is not to be modified.');
 	}
@@ -222,7 +224,7 @@ class Data implements Iface\Model\Data
 	 */
 	public function offsetUnset($offset)
 	{
-		throw new \RuntimeException(
+		throw new RuntimeException(
 			__METHOD__ . ' should never be called - data is only transferrable ' .
 			'it is not to be modified.');
 	}

@@ -1,12 +1,13 @@
 <?php
 namespace Evoke\HTTP\MediaType;
 
-use Evoke\Iface;
+use Evoke\HTTP\RequestIface,
+	OutOfBoundsException;
 
 /** Route the Accepted Media Types from the request to the correct output
  *  format.
  */
-class Router implements Iface\HTTP\MediaType\Router
+class Router implements RouterIface
 {
 	/** @property $request
 	 *  Request @object
@@ -22,7 +23,7 @@ class Router implements Iface\HTTP\MediaType\Router
 	 *  the acceptable media types.
 	 *  @param Request @object Request object.
 	 */
-	public function __construct(Iface\HTTP\Request $request)
+	public function __construct(RequestIface $request)
 	{
 		$this->request = $request;
 		$this->rules   = array();
@@ -35,7 +36,7 @@ class Router implements Iface\HTTP\MediaType\Router
 	/** Add a rule to the router.
 	 *  @param Rule @object HTTP MediaType Rule object.
 	 */
-	public function addRule(Iface\HTTP\MediaType\Rule $rule)
+	public function addRule(Rule\RuleIface $rule)
 	{
 		$this->rules[] = $rule;
 	}
@@ -60,7 +61,7 @@ class Router implements Iface\HTTP\MediaType\Router
 			}
 		}
 
-		throw new \OutOfBoundsException(
+		throw new OutOfBoundsException(
 			__METHOD__ . ' no output formats match the Accepted Media Types.');
 	}
 }

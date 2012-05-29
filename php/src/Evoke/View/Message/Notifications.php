@@ -1,17 +1,20 @@
 <?php
 namespace Evoke\View\Message;
 
-class Notifications extends Array
+use Evoke\Message\TreeIface,
+	Evoke\Service\TranslatorIface;
+
+class Notifications extends Tree
 {
 	/** Construct a Notifications view.
 	 *  @param translator  @object Translator.
-	 *  @param messageTree @object MessageTree.
+	 *  @param messageTree @object Message Tree.
 	 *  @param attribs     @array  Attribs.
 	 */
 	public function __construct(
-		Iface\Translator  $translator,
-		Iface\MessageTree $messageTree,
-		Array             $attribs = array('class' => 'Message Notification'))
+		TranslatorIface $translator,
+		TreeIface       $messageTree,
+		Array           $attribs = array('class' => 'Message Notification'))
 	{
 		parent::__construct($translator, $messageTree, $attribs);
 	}

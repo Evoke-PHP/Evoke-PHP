@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\DB;
+namespace Evoke\Persistance\DB;
 
-use Evoke\Iface;
-use Evoke\Exception\DB as ExceptionDB;
+use Evoke\Message\Exception\DB as ExceptionDB,
+	Exception;
 
 /** The SQL class provides an implementation of the SQL interface which extends
  *  the DB interface in Evoke.
@@ -18,7 +18,7 @@ use Evoke\Exception\DB as ExceptionDB;
  *   A condition passed in as a string is unchanged and can be used for more
  *   complex comparison operations.
  */
-class SQL implements Iface\DB\SQL
+class SQL implements SQLIface
 {
 	/** @property $db
 	 *  @object Database object.
@@ -33,7 +33,7 @@ class SQL implements Iface\DB\SQL
 	/** Construct an SQL object.
 	 *  @param database @object Database object to perform the SQL on.
 	 */
-	public function __construct(Iface\DB $database)
+	public function __construct(DBIface $database)
 	{
 		$this->db = $database;
 	}
@@ -143,7 +143,7 @@ class SQL implements Iface\DB\SQL
 	 
 			return $this->db->prepare($statement, $driverOptions);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			throw new ExceptionDB(__METHOD__, '', $this->db, $e);
 		}
@@ -159,7 +159,7 @@ class SQL implements Iface\DB\SQL
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
-			array('\Evoke\DB\PDOStatement', array($namedPlaceholders)));
+			array('\Evoke\Persistance\DB\PDOStatement', array($namedPlaceholders)));
 
 		if ($fetchMode === 0)
 		{
@@ -201,7 +201,7 @@ class SQL implements Iface\DB\SQL
 
 			return $statement->fetchAll(\PDO::FETCH_ASSOC);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			throw new ExceptionDB(
 				__METHOD__,
@@ -229,7 +229,7 @@ class SQL implements Iface\DB\SQL
 			// Check if there is more than a single row.
 			if ($statement->fetch(\PDO::FETCH_ASSOC))
 			{
-				throw new \Exception('Unexpected Multiple rows received.');
+				throw new Exception('Unexpected Multiple rows received.');
 			}
 	 
 			return $result;
@@ -263,7 +263,7 @@ class SQL implements Iface\DB\SQL
 			// Check if there is more than a single row.
 			if ($statement->fetchColumn($column))
 			{
-				throw new \Exception('Unexpected multiple rows received.');
+				throw new Exception('Unexpected multiple rows received.');
 			}
 	 
 			return $result;
@@ -339,7 +339,7 @@ class SQL implements Iface\DB\SQL
 
 			return $assoc;
 		}
-		catch(\Exception $e)
+		catch(Exception $e)
 		{
 			throw new ExceptionDB(
 				__METHOD__,
@@ -371,7 +371,7 @@ class SQL implements Iface\DB\SQL
 
 			return $statement->fetchColumn();
 		}
-		catch(\Exception $e)
+		catch(Exception $e)
 		{
 			throw new ExceptionDB(
 				__METHOD__,
@@ -408,7 +408,7 @@ class SQL implements Iface\DB\SQL
 		{
 			$statement = $this->prepare($q);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			throw new ExceptionDB(__METHOD__, 'Prepare', $this->db, $e);
 		}
@@ -456,7 +456,7 @@ class SQL implements Iface\DB\SQL
 
 			return $statement->rowCount();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			throw new ExceptionDB(
 				__METHOD__ . ' query: ' . var_export($q, true) .
@@ -480,7 +480,7 @@ class SQL implements Iface\DB\SQL
 				'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
 				'VALUES (' . $this->placeholders($fields) . ')');
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
 				var_export($fields, true);
@@ -505,7 +505,7 @@ class SQL implements Iface\DB\SQL
 					$statement->execute($entry);
 				}
 			}
-			catch (\Exception $e)
+			catch (Exception $e)
 			{
 				throw new ExceptionDB(
 					__METHOD__,
@@ -520,7 +520,7 @@ class SQL implements Iface\DB\SQL
 			{
 				$statement->execute($valArr);
 			}
-			catch (\Exception $e)
+			catch (Exception $e)
 			{
 				throw new ExceptionDB(
 					__METHOD__,
@@ -592,9 +592,9 @@ class SQL implements Iface\DB\SQL
 				return (string)$arg;
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			throw new Exception_Base(
+			throw new Exception(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true),
@@ -638,9 +638,9 @@ class SQL implements Iface\DB\SQL
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			throw new Exception_Base(
+			throw new Exception(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) . ' separator: ' .
 				var_export($separator, true) . ' between: ' .
@@ -720,9 +720,9 @@ class SQL implements Iface\DB\SQL
 				return (string)$arg;
 			}      
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			throw new \Evoke\Exception(
+			throw new Exception(
 				__METHOD__,
 				'arg: ' . var_export($arg, true) .
 				' separator: ' . var_export($separator, true) .
