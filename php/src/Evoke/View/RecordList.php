@@ -1,8 +1,10 @@
 <?php
 namespace Evoke\View;
 
+use Evoke\Iface;
+
 /// View to represent a list of records.
-class RecordList extends \Evoke\View\Translated
+class RecordList extends \Evoke\View
 {
 	/** @property $contentAttribs
 	 *  Attributes @array for the content.
@@ -20,9 +22,9 @@ class RecordList extends \Evoke\View\Translated
 	protected $dataAttribs;
 
 	/** @property $viewRowButtons
-	 *  @object View for the row buttons.
+	 *  @array Buttons for each row (text => attributes).
 	 */
-	protected $viewRowButtons;
+	protected $rowButtons;
 	
 	/** @property $editedRecord
 	 *  @array The edited record from the record list.
@@ -91,7 +93,6 @@ class RecordList extends \Evoke\View\Translated
 	public function __construct(
 		Iface\Translator $translator,
 		Iface\Model\Data $data,
-		Iface\View       $viewButtons,
 		Iface\View       $viewRecord,
 		Array            $fields,
 		Array            $attribs        = array('class' => 'Record_List'),
@@ -128,7 +129,7 @@ class RecordList extends \Evoke\View\Translated
 	/* Public Methods */
 	/******************/
 
-	public function get()
+	public function get(Array $params = array())
 	{
 		$recordListElems = array();
 		$fields = array_diff($this->fields, $this->ignoredFields);
@@ -161,7 +162,7 @@ class RecordList extends \Evoke\View\Translated
 	 */
 	protected function buildContent($fields, $headings)
 	{
-		if ($this->data->isEmpty()))
+		if ($this->data->isEmpty())
 		{
 			$rowElems = array(
 				array('div', $this->rowAttribs, $this->buildEmptyData()));
@@ -377,12 +378,10 @@ class RecordList extends \Evoke\View\Translated
 	{
 		$buttons = array();
 
-		foreach ($this->rowButtons as $button)
+		foreach ($this->rowButtons as $attribs)
 		{
-			$buttonElem = $this->app->getNew('Element', $button);
-			$buttonElem->appendAttrib('name', '_' . $row);
-
-			$buttons[] = $buttonElem;
+			$attribs['name'] = '[' . $row . ']';
+			$buttons[] = array('input', $attribs);
 		}
 
 		return $buttons;
