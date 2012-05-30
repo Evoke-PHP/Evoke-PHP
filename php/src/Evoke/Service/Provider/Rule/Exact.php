@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Service\Provider\Iface\Rule;
+namespace Evoke\Service\Provider\Rule;
 
 /** A Provider interface routing rule that matches the exact interface name and
  *  converts it to a specific concrete classname.

@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\Service\Settings;
+namespace Evoke\Service;
 
-class Loader
+class SettingsLoader
 {
 	/** @property $settings
 	 *  Settings \object

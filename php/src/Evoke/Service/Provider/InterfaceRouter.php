@@ -1,12 +1,12 @@
 <?php
-namespace Evoke\Service\Provider\Iface;
+namespace Evoke\Service\Provider;
 
 use Evoke\Service\CacheIface,
 	InvalidArgumentException,
 	ReflectionClass,
 	ReflectionException;
 
-class Router implements Iface\Provider\Iface\Router
+class InterfaceRouter implements InterfaceRouterIface
 {
 	/** @property $reflectionCache
 	 *  @object ReflectionCache
@@ -18,7 +18,7 @@ class Router implements Iface\Provider\Iface\Router
 	 */
 	protected $rules = array();
 	
-	/** Construct a Router object.
+	/** Construct an Interface Router object.
 	 *  @param reflectionCache @object ReflectionCache
 	 */
 	public function __construct(CacheIface $reflectionCache)
@@ -33,7 +33,7 @@ class Router implements Iface\Provider\Iface\Router
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(RuleIface $rule)
+	public function addRule(Rule\RuleIface $rule)
 	{
 		$this->rules[] = $rule;
 	}

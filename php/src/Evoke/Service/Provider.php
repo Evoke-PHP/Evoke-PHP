@@ -135,9 +135,9 @@ class Provider implements ProviderIface
 	 *  @param interfaceRouter @object Interface Router
 	 *  @param service         @object Service
 	 */
-	public function __construct(CacheIface            $reflectionCache,
-	                            Provider\Iface\Router $interfaceRouter,
-	                            ServiceIface          $service)
+	public function __construct(CacheIface               $reflectionCache,
+	                            Provider\InterfaceRouter $interfaceRouter,
+	                            ServiceIface             $service)
 	{
 		$this->interfaceRouter = $interfaceRouter;
 		$this->reflectionCache = $reflectionCache;

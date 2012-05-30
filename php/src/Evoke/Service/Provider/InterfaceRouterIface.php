@@ -1,12 +1,12 @@
 <?php
-namespace Evoke\Service\Provider\Iface;
+namespace Evoke\Service\Provider;
 
-interface RouterIface
+interface InterfaceRouterIface
 {
 	/** Add a rule to the router.
 	 *  @param rule @object HTTP URI Rule object.
 	 */
-	public function addRule(RuleIface $rule);
+	public function addRule(Rule\RuleIface $rule);
 
 	/** Route the Interface to a concrete class.
 	 *  @param interfaceName @string The interface name to route.
