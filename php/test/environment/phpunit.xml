@@ -1,0 +1,33 @@
+<phpunit backupGlobals                      = "false"
+		 backupStaticAttributes             = "false"
+		 bootstrap                          = "Bootstrap.php"
+		 colors                             = "true"
+         convertErrorsToExceptions          = "false"
+		 convertNoticesToExceptions         = "false"
+		 convertWarningsToExceptions        = "false"
+		 forceCoversAnnotation              = "true"
+		 mapTestClassNameToCoveredClassName = "true"
+		 syntaxCheck                        = "false"
+		 strict   	                        = "true"
+         verbose                            = "true">
+  <filter>
+	<whitelist addUncoveredFilesFromWhitelist="true">
+	  <directory suffix=".php">../../src</directory>
+	</whitelist>
+  </filter>
+  
+  <testsuites>
+	<testsuite name="Evoke">
+	  <directory>../unit</directory>
+	</testsuite>
+  </testsuites>
+	  
+  <logging>
+	<log charset            = "UTF-8"
+		 highlight          = "true"
+		 showUncoveredFiles = "true"
+		 type               = "coverage-html"
+		 target             = "../coverage"
+		 yui                = "true"/>
+  </logging>
+</phpunit>
