@@ -21,32 +21,32 @@
  </target>
 
  <target name="clean" description="Cleanup build artifacts">
-  <delete dir="build/api"/>
-  <delete dir="build/code-browser"/>
-  <delete dir="build/coverage"/>
-  <delete dir="build/logs"/>
-  <delete dir="build/pdepend"/>
+  <delete dir="${basedir}/build/api"/>
+  <delete dir="${basedir}/build/code-browser"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
-  <mkdir dir="build/api"/>
-  <mkdir dir="build/code-browser"/>
-  <mkdir dir="build/coverage"/>
-  <mkdir dir="build/logs"/>
-  <mkdir dir="build/pdepend"/>
-  <mkdir dir="build/phpdox"/>
+  <mkdir dir="${basedir}/build/api"/>
+  <mkdir dir="${basedir}/build/code-browser"/>
+  <mkdir dir="${basedir}/build/coverage"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/pdepend"/>
+  <mkdir dir="${basedir}/build/phpdox"/>
  </target>
 
  <target name="lint" description="Perform syntax check of sourcecode files">
   <apply executable="php" failonerror="true">
    <arg value="-l" />
 
-   <fileset dir="php/src">
+   <fileset dir="${basedir}/php/src">
     <include name="**/*.php" />
     <modified />
    </fileset>
 
-   <fileset dir="php/test">
+   <fileset dir="${basedir}/php/test">
     <include name="**/*.php" />
     <modified />
    </fileset>
@@ -56,61 +56,61 @@
  <target name="phploc" description="Measure project size using PHPLOC">
   <exec executable="phploc">
    <arg value="--log-csv" />
-   <arg value="build/logs/phploc.csv" />
-   <arg path="php/src" />
+   <arg value="${basedir}/build/logs/phploc.csv" />
+   <arg path="${basedir}/php/src" />
   </exec>
  </target>
 
  <target name="pdepend" description="Calculate software metrics using PHP_Depend">
   <exec executable="pdepend">
-   <arg value="--jdepend-xml=build/logs/jdepend.xml" />
-   <arg value="--jdepend-chart=build/pdepend/dependencies.svg" />
-   <arg value="--overview-pyramid=build/pdepend/overview-pyramid.svg" />
-   <arg path="php/src" />
+   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg path="${basedir}/php/src" />
   </exec>
  </target>
 
  <target name="phpmd"
          description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
   <exec executable="phpmd">
-   <arg path="php/src" />
+   <arg path="${basedir}/php/src" />
    <arg value="text" />
-   <arg value="build/phpmd.xml" />
+   <arg value="${basedir}/build/phpmd.xml" />
   </exec>
  </target>
 
  <target name="phpmd-ci" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
   <exec executable="phpmd">
-   <arg path="php/src" />
+   <arg path="${basedir}/php/src" />
    <arg value="xml" />
-   <arg value="build/phpmd.xml" />
+   <arg value="${basedir}/build/phpmd.xml" />
    <arg value="--reportfile" />
-   <arg value="build/logs/pmd.xml" />
+   <arg value="${basedir}/build/logs/pmd.xml" />
   </exec>
  </target>
 
  <target name="phpcs"
          description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
   <exec executable="phpcs">
-   <arg value="--standard=build/phpcs.xml" />
-   <arg path="php/src" />
+   <arg value="--standard=${basedir}/build/phpcs.xml" />
+   <arg path="${basedir}/php/src" />
   </exec>
  </target>
 
  <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
   <exec executable="phpcs" output="/dev/null">
    <arg value="--report=checkstyle" />
-   <arg value="--report-file=build/logs/checkstyle.xml" />
-   <arg value="--standard=build/phpcs.xml" />
-   <arg path="php/src" />
+   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+   <arg value="--standard=${basedir}/build/phpcs.xml" />
+   <arg path="${basedir}/php/src" />
   </exec>
  </target>
 
  <target name="phpcpd" description="Find duplicate code using PHPCPD">
   <exec executable="phpcpd">
    <arg value="--log-pmd" />
-   <arg value="build/logs/pmd-cpd.xml" />
-   <arg path="php/src" />
+   <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg path="${basedir}/php/src" />
   </exec>
  </target>
 
@@ -126,11 +126,11 @@
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
   <exec executable="phpcb">
    <arg value="--log" />
-   <arg path="build/logs" />
+   <arg path="${basedir}/build/logs" />
    <arg value="--source" />
-   <arg path="php/src" />
+   <arg path="${basedir}/php/src" />
    <arg value="--output" />
-   <arg path="build/code-browser" />
+   <arg path="${basedir}/build/code-browser" />
   </exec>
  </target>
 </project>
