@@ -1,7 +1,9 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
-class Session extends \Evoke\View
+use Evoke\View\ViewIface;
+
+class Session implements ViewIface
 {
 	/******************/
 	/* Public Methods */

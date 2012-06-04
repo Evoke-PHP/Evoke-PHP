@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\HTTP\URI;
+namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 

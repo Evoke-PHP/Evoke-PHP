@@ -2,7 +2,7 @@
 namespace Evoke\Persistance\DB\Table;
 
 use Evoke\Message\TreeIface,
-	Evoke\Persistance\DB\SQL,
+	Evoke\Persistance\DB\SQLIface,
 	InvalidArgumentException,
 	OutOfRangeException;
 
@@ -51,7 +51,7 @@ class Info implements InfoIface
    
 	public function __construct(SQLIface     $sql,
 	                            /* String */ $tableName,
-	                            Tree         $failures = NULL)
+	                            TreeIface    $failures = NULL)
 	{
 		if (!is_string($tableName))
 		{

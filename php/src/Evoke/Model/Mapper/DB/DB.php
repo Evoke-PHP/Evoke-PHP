@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Model\MapperIface,
+use Evoke\Model\Mapper\MapperIface,
 	Evoke\Persistance\DB\SQLIface;
 
 /// Provides the basic implementation for a database based data mapper.

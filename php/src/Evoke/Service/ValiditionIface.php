@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Service;
 
-interface ValidityIface
+interface ValiditionIface
 {
 	public function isValid($fieldset);
 	public function getFailures();   

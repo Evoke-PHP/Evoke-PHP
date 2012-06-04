@@ -11,7 +11,7 @@ use Evoke\Message\TreeIface,
 	RuntimeException;
 
 /// JointAdmin provides A CRUD interface to a set of joint tables.
-class JointAdmin extends Joint implements AdminIface;
+class JointAdmin extends Joint implements AdminIface
 {
 	/** @property $failures
 	 *  @object MessageTree of any failures.
@@ -54,6 +54,9 @@ class JointAdmin extends Joint implements AdminIface;
 	                            Array               $select   = array(),
 	                            /* Bool */          $validate = true)
 	{
+		/// @todo This class is broken, needs fixing.
+		throw new RuntimeException('Fix this class, call by ref was altered.');
+		
 		parent::__construct($sql, $tableName, $joins, $select);
 
 		$this->failures       = $failures;
@@ -69,7 +72,7 @@ class JointAdmin extends Joint implements AdminIface;
 	/** Add the joint record to the database.
 	 *  @param record @array Any new data for the record to be added.
 	 */
-	public function add($record)
+	public function add(Array $record)
 	{
 		$this->failures->reset();
 
@@ -122,7 +125,12 @@ class JointAdmin extends Joint implements AdminIface;
 		$this->sessionManager->set('Editing_Record', true);
 		$this->sessionManager->set('Edited_Record', array());
 	}
-   
+
+	public function delete(Array $record)
+	{
+
+	}
+	
 	/// Cancel the currently requested deletion.
 	public function deleteCancel()
 	{
@@ -227,7 +235,7 @@ class JointAdmin extends Joint implements AdminIface;
 	}
 
 	/// Modify a record in the database.
-	public function modify($updates)
+	public function modify(Array $oldRecord, Array $newRecord)
 	{
 		$this->updateCurrentRecord($updates);
 		$addRecord = $this->sessionManager->get('Current_Record');
@@ -433,13 +441,13 @@ class JointAdmin extends Joint implements AdminIface;
 		$jointKey = $joins->getJointKey();
 		$childJoins = $joins->getJoins();
       
-		$this->call($callbacks, 'Breadth_First_Data', &$data, $joins);
+		$this->call($callbacks, 'Breadth_First_Data', $data, $joins);
       
 		// Loop through the data record by record, recursing downwards through the
 		// joint data referenced by the joins.
 		foreach ($data as &$record)
 		{
-			$this->call($callbacks, 'Breadth_First_Record', &$record, $joins);
+			$this->call($callbacks, 'Breadth_First_Record', $record, $joins);
       
 			foreach ($childJoins as $join)
 			{	    
@@ -447,19 +455,19 @@ class JointAdmin extends Joint implements AdminIface;
 	    
 				if (isset($record[$jointKey][$parentField]))
 				{
-					$this->call($callbacks, 'Breadth_First_Parent', &$record, $join);
+					$this->call($callbacks, 'Breadth_First_Parent', $record, $join);
 	       
 					$record[$jointKey][$parentField] = $this->recurse(
 						$callbacks, $record[$jointKey][$parentField], $join);
 	       
-					$this->call($callbacks, 'Depth_First_Parent', &$record, $join);
+					$this->call($callbacks, 'Depth_First_Parent', $record, $join);
 				}
 			}
 	 
-			$this->call($callbacks, 'Depth_First_Record', &$record, $joins);
+			$this->call($callbacks, 'Depth_First_Record', $record, $joins);
 		}
       
-		$this->call($callbacks, 'Depth_First_Data', &$data, $joins);
+		$this->call($callbacks, 'Depth_First_Data', $data, $joins);
       
 		return $data;
 	}
@@ -551,7 +559,7 @@ class JointAdmin extends Joint implements AdminIface;
 	{
 		if (isset($callbacks[$cb]))
 		{
-			call_user_func($callbacks[$cb], &$data, $joins);
+			call_user_func($callbacks[$cb], $data, $joins);
 		}
 	}
 }

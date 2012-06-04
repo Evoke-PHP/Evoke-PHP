@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Persistance\DB\Table;
 
-interface InfoIface extends \Evoke\Service\Validition
+interface InfoIface extends \Evoke\Service\ValiditionIface
 {
 	/// Get the description of the database table.
 	public function getDescription();

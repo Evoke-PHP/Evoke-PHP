@@ -6,7 +6,7 @@ use InvalidArgumentException;
 /** A rule to prepend a string to the classname.
  *  No parameters are matched by this class.
  */
-class Prepend extends \Evoke\HTTP\URI\Rule
+class Prepend extends Rule
 {
 	/** @property $str
 	 *  @string String to prepend to the classname.

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model;
+namespace Evoke\Model\Data;
 
 interface DataIface extends \ArrayAccess, \Iterator
 {

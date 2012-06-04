@@ -1,10 +1,10 @@
 <?php
 namespace Evoke\View\Control;
 
-use Evoke\Model\Data\Menu,
+use Evoke\Model\Data\Menu as DataMenu,
 	Evoke\Service\TranslatorIface;
 
-class Menu extends \Evoke\View
+class Menu extends \Evoke\View\View
 {
 	/** @property data
 	 *  @object Data
@@ -16,7 +16,7 @@ class Menu extends \Evoke\View
 	 *  @param data       @object Data for the menu.
 	 */
 	public function __construct(TranslatorIface $translator,
-	                            Menu            $data)
+	                            DataMenu        $data)
 	{
 		parent::__construct($translator);
 		

@@ -14,8 +14,8 @@ class DB extends \Exception
 		{
 			$message .= ' Error: ' . implode(' ', $db->errorInfo());
 		}
-
-		parent::__construct($method, $message, $previous, $code);
+			
+		parent::__construct($method . $message, $code, $previous);
 	}
 }
 // EOF

@@ -1,9 +1,10 @@
 <?php
-namespace Evoke\Model\Mapper;
+namespace Evoke\Model\Mapper\Session;
 
-use Evoke\Persistance\SessionManagerIface;
+use Evoke\Model\Mapper\MapperIface,
+	Evoke\Persistance\SessionManagerIface;
 
-class Session implements Mapper
+class Session implements MapperIface
 {
 	/** @property $sessionManager
 	 *  @object Session Manager

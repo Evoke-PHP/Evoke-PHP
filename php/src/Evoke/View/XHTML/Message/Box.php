@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\View\Message;
+namespace Evoke\View\XHTML\Message;
 
-use Evoke\Service\TranslatorIface,
+use Evoke\View\ViewIface,
 	InvalidArgumentException;
 
-class Box extends \Evoke\View
+class Box implements ViewIface
 {
 	/** @property attribs
 	 *  @array Message Box attributes.
@@ -12,15 +12,11 @@ class Box extends \Evoke\View
 	protected $attribs;
 
 	/** Construct a Box object.
-	 *  @param translator @object Translator.
-	 *  @param attribs    @array  Message Box attributes.
+	 *  @param attribs @array Message Box attributes.
 	 */
 	public function __construct(
-		TranslatorIface $translator,
-		Array           $attribs = array('class' => 'Message_Box Info'))
+		Array $attribs = array('class' => 'Message_Box Info'))
 	{
-		parent::__construct($translator);
-		
 		$this->attribs = $attribs;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\HTTP\URI;
+namespace Evoke\HTTP\URI\Rule;
 
 interface RuleIface extends \Evoke\HTTP\RuleIface
 {

@@ -3,8 +3,8 @@ namespace Evoke\Persistance\DB;
 
 use InvalidArgumentException;
 
-/// PDO wrapper class to ensure DB implements the Evoke Core DB interface.
-class PDO extends \PDO implements DB
+/// PDO wrapper class to ensure DB implements the Evoke DB interface.
+class PDO extends \PDO implements DBIface
 {
 	public function __construct(
 		/* String */ $dataSourceName,

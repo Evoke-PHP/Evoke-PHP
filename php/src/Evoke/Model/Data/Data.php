@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model;
+namespace Evoke\Model\Data;
 
 use InvalidArgumentException,
 	OutOfBoundsException,
@@ -72,10 +72,10 @@ class Data implements DataIface
 			}
 		}
 
-		$this->data      = $data;
 		$this->dataJoins = $dataJoins;
 		$this->jointKey  = $jointKey;
-		$this->rewind();
+
+		$this->setData($data);
 	}
 
 	/** Provide access to the joint data as though it is a property of the
@@ -127,7 +127,7 @@ class Data implements DataIface
 	}
    
 	/** Set the data that we are managing.
-	 *  @param @array The data we want to manage.
+	 *  @param data @array The data we want to manage.
 	 */
 	public function setData(Array $data)
 	{

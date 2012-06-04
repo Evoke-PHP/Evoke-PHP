@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\HTTP\MediaType;
+namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 

@@ -1,10 +1,11 @@
 <?php
-namespace Evoke\Service\Logger;
+namespace Evoke\Service\Log;
 
-use Evoke\Persistance\FilesystemIface,
+use DateTime,
+	Evoke\Persistance\FilesystemIface,
 	InvalidArgumentException;
 
-class File
+class File implements LoggerIface
 {
 	/** @property $append
 	 *  @bool Whether the file should be appended to.
@@ -27,32 +28,32 @@ class File
 	protected $filename;
 	
 	/** @property $filePointer
-	 *  File pointer to the log file.
+	 *  @resource File pointer to the log file.
 	 */
 	private $filePointer;
 
 	/** @property $filesystem
-	 *  Filesystem \object
+	 *  @object Filesystem
 	 */
 	protected $filesystem;
 
 	/** @property $locking
-	 *  Whether the file is locked when writing to the file.
+	 *  @bool Whether the file is locked when writing to the file.
 	 */
 	protected $locking;
 	
 	/** @property $opened
-	 *  \bool Indicates whether or not the resource has been opened.
+	 *  @bool Indicates whether or not the resource has been opened.
 	 */
 	protected $opened = false;
 
 	/** Construct a File Logger object.
-	 *  @param $filesystem  \object Filesystem object
-	 *  @param append       \bool   Whether to append to the file.
-	 *  @param dirMode      \object The directory mode for the log file.
-	 *  @param filename     \string The filename for the log.
-	 *  @param fileMode     \object Permissions to set the file to
-	 *  @param locking      \bool   Whether to lock the file for writing.
+	 *  @param $filesystem  @object Filesystem object
+	 *  @param append       @bool   Whether to append to the file.
+	 *  @param dirMode      @object The directory mode for the log file.
+	 *  @param filename     @string The filename for the log.
+	 *  @param fileMode     @object Permissions to set the file to
+	 *  @param locking      @bool   Whether to lock the file for writing.
 	 */
 	public function __construct(FilesystemIface   $filesystem,
 	                            /* Bool */        $append=true,
@@ -78,12 +79,12 @@ class File
 			throw new InvalidArgumentException(__METHOD__ . ' requires locking as bool');
 		}
 
-		$this->filesystem   = $filesystem;
-		$this->append       = $append;
-		$this->dirMode      = $dirMode;
-		$this->filename     = $filename;
-		$this->fileMode     = $fileMode;
-		$this->locking      = $locking;
+		$this->append     = $append;
+		$this->dirMode    = $dirMode;
+		$this->filename   = $filename;
+		$this->filesystem = $filesystem;
+		$this->fileMode   = $fileMode;
+		$this->locking    = $locking;
 	}
    
 	/******************/
@@ -91,9 +92,11 @@ class File
 	/******************/
 
 	/** Logs a message to the file.
-	 *  @param message \array The message to log as created by \ref Logger::log.
+	 *  @param date    @object The DateTime for the log message.
+	 *  @param message @array  The message to log.
+	 *  @param level   @int    The level of the message.
 	 */
-	public function write(Array $message)
+	public function log(DateTime $date, $message, $level)
 	{
 		if (!$this->opened)
 		{
@@ -101,8 +104,7 @@ class File
 		}
       
 		// Ensure the message is a string.
-		$entry = $message['Date_Time'] . ' ' . $message['Method'] . ' [' .
-			$message['Level_String'] . '] ' . $message['Message'] . "\n";
+		$entry = $date->format('Y-M-d@H:i:sP') . ' [' . $level . '] ' . $message . "\n";
 
 		// Write to the file, with or without file locking.
 		if ($this->locking)
@@ -146,4 +148,4 @@ class File
 		$this->opened = true;
 	}
 }
-// EOF
+// EOF 

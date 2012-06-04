@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Data;
 
-class Menu extends \Evoke\Model\Data implements \Evoke\Model\Data\MenuIface
+class Menu extends Data implements MenuIface
 {
 	/** @property $left
 	 *  Left field name @string

@@ -1,8 +1,11 @@
 <?php
 namespace Evoke\View;
 
+use Evoke\View\Text\TranslatorIface,
+	Evoke\View\ViewIface;
+
 /// View to represent a list of records.
-class RecordList extends \Evoke\View\Translator
+class RecordList extends ViewIface
 {
 	/** @property $contentAttribs
 	 *  Attributes \array for the content.
@@ -84,8 +87,10 @@ class RecordList extends \Evoke\View\Translator
 	 */
 	protected $translateLabels;
 
-
-	
+	/** @property $translator
+	 *  @object Translator
+	 */
+	protected $translator;
 	
 	public function __construct(Array $setup)
 	{

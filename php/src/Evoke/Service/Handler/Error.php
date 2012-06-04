@@ -2,19 +2,19 @@
 namespace Evoke\Service\Handler;
 
 use ErrorException,
-	Evoke\Service\LoggerIface,
+	Evoke\Service\Log\LogIface,
 	OutOfBoundsException;
 
 class Error implements HandlerIface
 {
-	/** @property $logger
-	 *  @object Logger
+	/** @property $log
+	 *  @object Log
 	 */
-	protected $logger;
+	protected $log;
 
-	public function __construct(LoggerIface $logger)
+	public function __construct(LogIface $log)
 	{
-		$this->logger = $logger;
+		$this->log = $log;
 	}
    
 	/******************/
@@ -47,43 +47,17 @@ class Error implements HandlerIface
 		                  E_USER_DEPRECATED   => 'User Deprecated',
 		                  E_RECOVERABLE_ERROR => 'Recoverable Error');
 
-		if (isset($errType[$errNo]))
-		{
-			$errTypeStr = $errType[$errNo];
-		}
-		else
-		{
-			$errTypeStr = 'Unknown ' . $errNo;
-		}
-      
-		switch ($errNo)
-		{
-		case E_COMPILE_ERROR:
-		case E_CORE_ERROR:
-		case E_CORE_WARNING:
-		case E_ERROR:
-		case E_PARSE:
-			throw new OutOfBoundsException(
-				__METHOD__ . ' Unexpected error type: [' . $errTypeStr . '] ' .
-				$errStr . ' in file ' . $errFile . ' at ' . $errLine .
-				' received. The PHP Manual for set_error_handler states that ' .
-				'errors of this type should not be received.');
-			break;
+		$errTypeStr = isset($errType[$errNo]) ?
+			$errType[$errNo] : 'Unknown ' . $errNo;
 
-		case E_NOTICE:
-		case E_RECOVERABLE_ERROR:
-		case E_STRICT:
-		case E_USER_ERROR:
-		case E_USER_NOTICE:
-		case E_USER_WARNING:
-		case E_WARNING:
-			$this->writeError($errTypeStr, $errStr, $errFile, $errLine);
-			break;
-	 
-		default:
-			break;
-		}
+		$message = 'Error handler [' . $errTypeStr . '] ' . $errStr .
+			' in ' . $errFile . ' on ' . $errLine;
 
+		$this->log->log($message, $errNo);
+
+		// The easiest way to recover from a recoverable error is by handling an
+		// exception.  This ensure the problem is addressed before any related
+		// code fails horribly due to unexpected values.
 		if ($errNo === E_RECOVERABLE_ERROR)
 		{
 			throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
@@ -103,51 +77,6 @@ class Error implements HandlerIface
 	public function unregister()
 	{
 		return restore_error_handler();
-	}
-   
-	/*******************/
-	/* Private Methods */
-	/*******************/
-
-	private function writeError($typeStr, $str, $file, $line)
-	{
-		$message = 'Bootstrap Error handling [' . $typeStr . '] ' . $str .
-			' in ' . $file . ' on ' . $line;
-		
-		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		array_shift($trace);
-		$traceElems = array();
-		
-		foreach ($trace as $level => $info)
-		{
-			$info += array('file'     => '',
-			               'line'     => '',
-			               'function' => '',
-			               'class'    => '',
-			               'type'     => '');
-			
-			$message .= '   #' . $level . ' ';
-
-			if (empty($info['file']) && empty($info['line']))
-			{
-				$message .= '<internal>';
-			}
-			else
-			{
-				$message .= $info['file'] . '(' . $info['line'] . ')';
-			}
-
-			$message .= ': ' . $info['class'] . $info['type'] .
-				$info['function'] . "\n";
-		}
-		
-		$this->logger->log(
-			array('Level'   => LOG_WARNING,
-			      'Message' => $message,
-			      'Method'  => __METHOD__));
-
-		// Let PHP log it into the webserver error log too.
-		return false;
 	}
 }
 // EOF

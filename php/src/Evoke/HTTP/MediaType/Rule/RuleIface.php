@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\HTTP\MediaType;
+namespace Evoke\HTTP\MediaType\Rule;
 
-interface RuleIface extends \Evoke\HTTP\Rule
+interface RuleIface extends \Evoke\HTTP\RuleIface
 {
 	/** Get the output format for the media type.
 	 *  @param mediaType \array The media type.

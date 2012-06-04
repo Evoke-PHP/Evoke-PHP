@@ -3,7 +3,6 @@ namespace Evoke\Persistance\DB;
 
 interface SQLIface extends DBIface
 {
-	
 	public function getAssoc($queryString, $params=array());
 	public function getSingleRow($queryString, $params=array());
 	public function getSingleValue($queryString, $params=array(), $column=0);

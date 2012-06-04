@@ -1,9 +1,8 @@
 <?php
-namespace Evoke\Service\Init\Handler;
+namespace Evoke\Service\Handler;
 
-use Evoke\Service\LoggerIface,
+use Evoke\Service\Log\LogIface,
 	Evoke\Writer\WriterIface,
-	Exception,
 	InvalidArgumentException;
 
 /// The system exception handler.
@@ -14,10 +13,10 @@ class Exception implements HandlerIface
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $logger
-	 *  @object Logger.
+	/** @property $log
+	 *  @object Log.
 	 */
-	protected $logger;
+	protected $log;
 
 	/** @property $maxLengthExceptionMessage
 	 *  @int The maximum length of exception message to display.
@@ -32,7 +31,7 @@ class Exception implements HandlerIface
 	
 	public function __construct(/* Bool */  $detailedInsecureMessage,
 	                            /* Int  */  $maxLengthExceptionMessage,
-	                            LoggerIface $logger,
+	                            LogIface $log,
 	                            WriterIface $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
@@ -42,7 +41,7 @@ class Exception implements HandlerIface
 		}
 
 		$this->detailedInsecureMessage   = $detailedInsecureMessage;
-		$this->logger                    = $logger;
+		$this->log                       = $log;
 		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
 		$this->writer                    = $writer;
 	}
@@ -66,18 +65,25 @@ class Exception implements HandlerIface
 				header('HTTP/1.1 500 Internal Server Error');
 			}
 
-			$this->eventManager->notify(
-				'Log',
-				array('Level'   => LOG_CRIT,
-				      'Message' => $uncaughtException->getMessage(),
-				      'Method'  => __METHOD__));
+			$this->log->log($uncaughtException->getMessage(), E_USER_ERROR);
 			$loggedError = true;
+
+			$currentBuffer = (string)($this->writer);
+
+			if (!empty($currentBuffer))
+			{
+				$this->log->log(
+					'Buffer needs to be flushed in exception handler for ' .
+					'clean error page.  Buffer was: ' .	$currentBuffer,
+					E_USER_WARNING);
+				$this->writer->flush();
+			}
 		}
-		catch (Exception $raisedException)
+		catch (\Exception $raisedException)
 		{
 			$loggedError = false;
 		}
-
+		
 		if (isset($_GET['l']) && ($_GET['l'] === 'ES'))
 		{
 			$title = 'Error de Sistema';
@@ -140,12 +146,16 @@ class Exception implements HandlerIface
 				array('div', array('class' => 'Message'), $messageChildren));
 		}
 
+		$this->writer->writeStart(
+			array('CSS'   => array('/csslib/global.css'),
+			      'Title' => '500 Internal Server Error'));
 		$this->writer->write(
 			array('div',
 			      array('class' => 'Exception_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'), $title),
 			            array('div', array('class' => 'Description'), $message))
 				));
+		$this->writer->writeEnd();
 		$this->writer->output();
 	}
 

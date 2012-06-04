@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
 class Dialog extends \Evoke\View
 {

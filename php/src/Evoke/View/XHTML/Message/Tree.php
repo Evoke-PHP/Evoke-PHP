@@ -1,10 +1,10 @@
 <?php
-namespace Evoke\View\Message;
+namespace Evoke\View\XHTML\Message;
 
 use Evoke\Message\TreeIface,
-	Evoke\Service\TranslatorIface;
+	Evoke\View\ViewIface;
 
-class Tree extends \Evoke\View
+class Tree implements ViewIface
 {
 	/** @property attribs
 	 *  @array Attribs
@@ -17,17 +17,13 @@ class Tree extends \Evoke\View
 	protected $messageTree;
 
 	/** Construct a Message Array view.
-	 *  @param translator  @object Translator.
 	 *  @param messageTree @object MessageTree.
 	 *  @param attribs     @array  Attribs.
 	 */
 	public function __construct(
-		TranslatorIface $translator,
-		TreeIface       $messageTree,
-		Array           $attribs = array('class' => 'Message'))
+		TreeIface $messageTree,
+		Array     $attribs = array('class' => 'Message'))
 	{
-		parent::__construct($translator);
-		
 		$this->attribs     = $attribs;
 		$this->messageTree = $messageTree;
 	}

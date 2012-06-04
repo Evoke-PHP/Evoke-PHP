@@ -2,16 +2,11 @@
 namespace Evoke\Model;
 
 use DomainException,
-	Evoke\Persistance\DBIface,
+	Evoke\Persistance\DB\SQLIface,
 	Evoke\Service\ProviderIface;
 
 class Factory implements FactoryIface
 {
-	/** @property $db
-	 *  @object DB
-	 */
-	protected $db;
-
 	/** @property $provider
 	 *  @object Provider
 	 */
@@ -22,13 +17,11 @@ class Factory implements FactoryIface
 	 */
 	protected $sql;
 	
-	public function __construct(DBIface       $database,
-	                            ProviderIface $provider)
+	public function __construct(ProviderIface $provider,
+	                            SQLIface      $sql)
 	{
-		$this->db       = $database;
 		$this->provider = $provider;
-		$this->sql      = $provider->make(
-			'Evoke\Persistance\DB\SQL',	array('Database' => $database));
+		$this->sql      = $sql;
 	}
 
 	/******************/
@@ -101,7 +94,8 @@ class Factory implements FactoryIface
 			$params['Sql'] = $this->sql;
 		}
 
-		return $this->provider->make('Evoke\DB\Table\Info', $params);
+		return $this->provider->make(
+			'Evoke\Persistance\DB\Table\Info', $params);
 	}
 	
 	public function buildMapperDBMenu(/* String */ $menuName)
@@ -124,7 +118,7 @@ class Factory implements FactoryIface
 		if (!empty($params['Joins']) && isset($params['Table_Name']))
 		{
 			$params['Joins'] = $this->provider->make(
-				'Evoke\DB\Table\Joins',
+				'Evoke\Persistance\DB\Table\Joins',
 				array('Info'       => $this->buildInfo(
 					      array('Table_Name' => $params['Table_Name'])),
 				      'Joins'      => $this->buildJoins(
@@ -215,7 +209,7 @@ class Factory implements FactoryIface
 			{
 				$childTable = $matches[2];
 				$builtJoins[] = $this->provider->make(
-					'Evoke\DB\Table\Joins',
+					'Evoke\Persistance\DB\Table\Joins',
 					array('Child_Field'  => $matches[3],
 					      'Info'         => $this->buildInfo(
 						      array('Table_Name' => $childTable)),

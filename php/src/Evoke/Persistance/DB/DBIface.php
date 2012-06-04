@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance;
+namespace Evoke\Persistance\DB;
 
 /** The interface for a DB is virtually the same as the interface to PDO as it
  *  is very good for interaction with many different databases.

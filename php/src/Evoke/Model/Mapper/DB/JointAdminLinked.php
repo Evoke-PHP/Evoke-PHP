@@ -155,7 +155,7 @@ class JointAdminLinked extends JointAdmin
 	 */
 	protected function addEntries(&$data, $ref)
 	{
-		parent::addEntries(&$data, $ref);
+		parent::addEntries($data, $ref);
       
 		$link = $this->getLink($ref->getTableAlias());
 

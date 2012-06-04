@@ -30,12 +30,20 @@ class SQL implements SQLIface
 	 */
 	protected $inTransaction = false;
 
+	/** @property $statementClass
+	 *  @string The classname to use for special PDOStatement processing.
+	 */
+	protected $statementClass;
+	
 	/** Construct an SQL object.
 	 *  @param database @object Database object to perform the SQL on.
 	 */
-	public function __construct(DBIface $database)
+	public function __construct(
+		DBIface      $database,
+		/* String */ $statementClass = 'Evoke\Persistance\DB\PDOStatement')
 	{
-		$this->db = $database;
+		$this->db             = $database;
+		$this->statementClass = $statementClass;
 	}
    
 	/*****************************************/
@@ -139,7 +147,7 @@ class SQL implements SQLIface
 	 
 			$this->setAttribute(
 				\PDO::ATTR_STATEMENT_CLASS,
-				array('\Evoke\DB\PDOStatement', array($namedPlaceholders)));
+				array($this->statementClass, array($namedPlaceholders)));
 	 
 			return $this->db->prepare($statement, $driverOptions);
 		}
@@ -159,7 +167,7 @@ class SQL implements SQLIface
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
-			array('\Evoke\Persistance\DB\PDOStatement', array($namedPlaceholders)));
+			array($this->statement, array($namedPlaceholders)));
 
 		if ($fetchMode === 0)
 		{
