@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
 use Exception;
 

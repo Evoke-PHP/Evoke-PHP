@@ -1,56 +1,12 @@
 <?php
-class Bootstrap
-{
-	protected $evokeBootstrap;
-	protected $instanceManager;
-   
-	/// Bring up the libraries that we use and the Rosalia autoloader.
-	public function __construct()
-	{
-		if (php_uname('n') === 'bernie')
-		{
-			$baseDir = '/home/pyoung/Coding/';
-			$evokeDir = $baseDir . 'Evoke-PHP/php/src/Evoke/';
-		}
+$baseDir = dirname(dirname(dirname(__DIR__)));
+$evokeDir = $baseDir . '/php/src/';
 
-		require_once $evokeDir . 'Core/Iface/InstanceManager.php';
-		require_once $evokeDir . 'Core/InstanceManager.php';
-		$this->instanceManager = new \Evoke\Core\InstanceManager();
-      
-		require_once $evokeDir . 'Core/Init/Bootstrap.php';
-		$this->evokeBootstrap = $this->instanceManager->create(
-			'\Evoke\Core\Init\Bootstrap');
-	}
+// Initialize the autoloader.
+require $evokeDir . 'Evoke/Service/Handler/HandlerIface.php';
+require $evokeDir . 'Evoke/Service/Handler/Autoload.php';
 
-	/******************/
-	/* Public Methods */
-	/******************/
+$evokeAutoload = new \Evoke\Service\Handler\Autoload($evokeDir, 'Evoke\\');
+$evokeAutoload->register();
 
-	public function initializeAutoload()
-	{
-		$this->evokeBootstrap->initializeAutoload();
-	}
-
-	/*
-	  public function initializeHandlers()
-	  {
-	  $this->evokeBootstrap->initializeHandlers();
-	  }
-	*/
-   
-	public function initializeLogger()
-	{
-		$this->evokeBootstrap->initializeLogger();
-	}
-   
-	public function initializeSettings()
-	{
-		$this->evokeBootstrap->initializeSettings();
-	}
-}
-
-$bootstrap = new Bootstrap();
-$bootstrap->initializeAutoload();
-$bootstrap->initializeSettings();
-$bootstrap->initializeLogger();
 // EOF

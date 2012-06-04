@@ -1,4 +1,5 @@
 .directory
+build
 docs/doxygen/html/*
 */test/coverage
 /php/src/nbproject/private/

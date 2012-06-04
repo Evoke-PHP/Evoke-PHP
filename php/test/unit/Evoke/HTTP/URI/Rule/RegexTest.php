@@ -1,72 +1,100 @@
 <?php
-use \Evoke\Core\HTTP\URI\Mapper as Mapper;
+use Evoke\HTTP\URI\Rule\Regex;
 
+/**
+ *  @covers Evoke\HTTP\URI\Rule\Regex
+ */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
-	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::__construct
+	/** Test that invalid arguments to the constructor raise IAE.
+	 *  @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 *  @expectedException InvalidArgumentException
+	 *  @dataProvider      provider__constructInvalidArguments
 	 */
-	public function test__construct()
+	public function test__constructInvalidArguments(
+		$match, $replacement, Array $params = array(), $authoritative = false)
 	{
-		$testMethod = 'Evoke\Core\HTTP\URI\Mapper\Regex::__construct';
-		$requirements = array('Match'    => ' requires Match as string',
-		                      'Params'   => ' requires Params as array',
-		                      'Response' => ' requires Response as array');
+		// Ensure that the first two parameters are strings.  They should throw
+		// an InvalidArgumentException if they aren't supplied correctly.
+		new Evoke\HTTP\URI\Rule\Regex(
+			$match, $replacement, $params, $authoritative);
 
-		$tests = array(
-			'Empty Setup' => array(
-				'Exception_Expected' => true,
-				'Exception_Message'  =>  $testMethod . $requirements['Match'],
-				'Setup'              => array()),
-			'Bad Match' => array(
-				'Exception_Expected' => true,
-				'Exception_Message'  => $testMethod . $requirements['Match'],
-				'Setup'              => array('Match' => 129)),
-			'Bad Params' => array(
-				'Exception_Expected' => true,
-				'Exception_Message'  => $testMethod . $requirements['Params'],
-				'Setup'              => array('Match'    => '/.*/',
-				                              'Params'   => 'bad',
-				                              'Response' => '')),
-			'Bad Response' => array(
-				'Exception_Expected' => true,
-				'Exception_Message'  => $testMethod . $requirements['Response'],
-				'Setup'              => array('Match'    => '/good/',
-				                              'Params'   => array('good'),
-				                              'Response' => 'bad')),
-			'Good' => array(
-				'Exception_Expected' => false,
-				'Setup'              => array(
-					'Authoritative' => true,
-					'Match'         => '/good/',
-					'Params'        => array('good'),
-					'Response'      => array('good'))));
-
-		foreach ($tests as $name => $test)
+		// $reflectionClass = new ReflectionClass('Evoke\HTTP\URI\Rule\Regex');
+		// $reflectionClass->newInstanceArgs($args);
+				
+		
+		/*
+		foreach ($invalidArgumentsTests as $args)
 		{
-			if ($test['Exception_Expected'])
+			try
 			{
-				try
-				{
-					$obj = new Mapper\Regex($test['Setup']);
-				}
-				catch (Exception $e)
-				{
-					$this->assertEquals($test['Exception_Message'],
-					                    $e->getMessage(),
-					                    $name . 'No exception as expected.');
-				}
+				$obj = new Evoke\HTTP\URI\Rule\Regex($args[0], $args[1]);
+				$this->fail('InvalidArgumentException should be raised.');
 			}
-			else
+			catch (InvalidArgumentException $e)
 			{
-				$obj = new Mapper\Regex($test['Setup']);
-				$this->assertTrue($obj instanceof Mapper\Regex,
-				                  $name . 'Object created as Regex.');
+				continue;
+			}
+			catch (Exception $e)
+			{
+				$this->fail(
+					'Invalid argument should have been raised for arguments: ' .
+					var_export($args, true) . ' received exception: ' .
+					$e->getMessage());
 			}
 		}
+		*/
 	}
 
+	public function test__constructInvalidParamSpec()
+	{
+		// Ensure that passed parameters match the param spec:
+		// array('Key' => 'xxx', 'Value' => 'yyy')
+		$invalidParamSpecArgs = array(
+			array('One1', 'One2', array(array())),
+			array('Two1', 'Two2', array(array('Key'   => 'Good',
+			                                  'Value' => false))),
+			array('Tri1', 'Tri2', array(array('Key'   => false,
+			                                  'Value' => 'Good'))));
+		$reflectionClass = new ReflectionClass('Evoke\HTTP\URI\Rule\Regex');
 
-	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::matches
+		foreach ($invalidParamSpecArgs as $args)
+		{
+			try
+			{
+				$reflectionClass->newInstanceArgs($args);
+				$this->fail('InvalidArgumentException should be raised.');
+			}
+			catch (InvalidArgumentException $e)
+			{
+				continue;
+			}
+			catch (Exception $e)
+			{
+				$this->fail(
+					'Invalid argument should have been raised for bad param ' .
+					' spec in arguments: ' . var_export($args, true) .
+					' received exception: ' . $e->getMessage());
+			}
+		}
+		
+		$this->assertTrue(
+			true, 'Invalid arguments result in an InvalidArgumentException');
+	}
+
+	/** Test that the constructor builds the expected object.
+	 *  @covers \Evoke\HTTP\URI\Rule\Regex::__construct
+	 */
+	public function test__constructGood()
+	{
+		$obj = new Evoke\HTTP\URI\Rule\Regex('str', 'str', array(), true);
+		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
+		
+	}
+		
+	/** Test the matches for the regex.
+	 *  @depends test__constructGood
+	 *  @covers  Evoke\HTTP\URI\Rule\Regex::matches
 	 */
 	public function testMatches()
 	{
@@ -98,7 +126,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new Mapper\Regex(
+			$obj = new Regex(
 				array_merge(array('Authoritative' => true),
 				            $test['Setup']));
 
@@ -110,7 +138,9 @@ class RegexTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
-	/** @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getParams
+	/**
+	 *  @depends test__constructGood	   
+	 *  @covers Evoke\HTTP\URI\Rule\Regex::getParams
 	 */
 	public function testGetParams()
 	{
@@ -170,7 +200,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new Mapper\Regex(array_merge(array('Authoritative' => true),
+			$obj = new Regex(array_merge(array('Authoritative' => true),
 			                                       $test['Setup']));
 			try
 			{
@@ -190,9 +220,9 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	}
 
 	/** Test getResponse and the private method getMappedValue.
-	 *
-	 *  @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getResponse
-	 *  @covers \Evoke\Core\HTTP\URI\Mapper\Regex::getMappedValue
+	 *  @depends test__constructGood
+	 *  @covers  Evoke\HTTP\URI\Rule\Regex::getResponse
+	 *  @covers  Evoke\HTTP\URI\Rule\Regex::getMappedValue
 	 */
 	public function testGetResponse()
 	{
@@ -239,7 +269,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 
 		foreach ($tests as $name => $test)
 		{
-			$obj = new Mapper\Regex(array_merge(array('Authoritative' => true),
+			$obj = new Regex(array_merge(array('Authoritative' => true),
 			                                       $test['Setup']));
 
 			try
@@ -257,6 +287,20 @@ class RegexTest extends PHPUnit_Framework_TestCase
 				                  $name . ' should not throw exception.');
 			}
 		}
+	}
+
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	public function provider__constructInvalidArguments()
+	{
+		return array(
+			array(array('Both Bad'), 12),
+			array('Only 1 Good', new stdClass()),
+			array('Good', array('Bad')),
+			array(NULL, 'Second one good.'),
+			array(true, 'First was bad.'));
 	}
 }
 // EOF
