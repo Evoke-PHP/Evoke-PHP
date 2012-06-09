@@ -49,7 +49,10 @@ class Tree implements ViewIface
 	/// Build the view of the MessageTree recursively.
 	protected function buildElems(TreeIface $messageTree, $level)
 	{
-		if ($messageTree instanceof Array)
+		/// @todo Fix the is_array check to something appropriate.
+		throw new RuntimeException('FIX the TODO.');
+		
+		if (is_array($messageTree))
 		{
 			return $this->buildElems($messageTree->get(), $level);
 		}

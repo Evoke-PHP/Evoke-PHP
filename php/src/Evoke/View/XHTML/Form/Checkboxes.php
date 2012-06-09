@@ -127,7 +127,7 @@ class Checkboxes extends \Evoke\View\Form
 				            array_merge(array('type' => 'checkbox',
 				                              'id'   => $id,
 				                              'name' => $id),
-				                        $isSelected)))));
+				                        $isSelected))));
 		}
       
 		// Set the fieldset to make the category selections from.

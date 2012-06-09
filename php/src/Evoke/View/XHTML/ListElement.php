@@ -3,7 +3,7 @@ namespace Evoke\View\XHTML;
 
 use Evoke\Model\DataIface;
 
-class List extends XHTML
+class ListElement extends XHTML
 { 
 	/** @property data
 	 *  @object Data
@@ -27,7 +27,7 @@ class List extends XHTML
 	 */
 	public function __construct(DataIface $data,
 	                            Array     $attribs,
-	                            ViewIface $listItemView
+	                            ViewIface $listItemView,
 	                            Array     $liAttribs = array('class' => 'Row')
 	                            )
 	{

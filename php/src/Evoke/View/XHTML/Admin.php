@@ -168,7 +168,7 @@ class Admin extends \Evoke\View
 			                        'name'  => 'Create_New',
 			                        'type'  => 'submit',
 			                        'value' => $this->translator->get(
-				                        'Create_New')))))));
+				                        'Create_New'))))));
 	}
 
 	/// Write an entry form for the current record.

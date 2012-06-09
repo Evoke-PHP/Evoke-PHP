@@ -61,9 +61,9 @@ class Request implements RequestIface
 			'(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))';
 	}
 
-   /******************/
-   /* Public Methods */
-   /******************/
+	/******************/
+	/* Public Methods */
+	/******************/
 
 	/** Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE,
 	 *  POST, PUT or DELETE).
@@ -292,9 +292,9 @@ class Request implements RequestIface
 		return $acceptLanguages;
 	}
 	
-   /*********************/
-   /* Protected Methods */
-   /*********************/
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
 	/** Compare two accept media types so that they can be sorted via usort.
 	 *  @param a @array The first accepted media type.
@@ -317,9 +317,9 @@ class Request implements RequestIface
 	}
 
 	
-   /*******************/
-   /* Private Methods */
-   /*******************/
+	/*******************/
+	/* Private Methods */
+	/*******************/
 			                    
 	/** Score an accept media type so that they can be compared.
 	 *  @param accept @array The accept media type array.

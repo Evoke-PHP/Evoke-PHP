@@ -24,15 +24,6 @@ class Backtrace extends View
 		$this->attribs         = $attribs;
 	}
 
-	/** Construct a Backtrace object.
-	 *  @param data @object Data.
-	 */
-	public function __construct(DataIface $data)
-	{
-		$this->data = $data;
-	}
-
-
 	/******************/
 	/* Public Methods */
 	/******************/
