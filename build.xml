@@ -50,7 +50,6 @@
 
   <target name        = "clean"
 		  description = "Remove all of the build artefacts.">
-	<delete dir = "${project.build}/phpdoc"/>
 	<delete dir = "${project.reports}"/>
   </target>
 
@@ -75,7 +74,7 @@
   <target name        = "prepare"
 		  description = "Prepare the build directory to receive reports etc."
 		  depends     = "clean">
-	<mkdir dir = "${project.reports}/php/depend"/>
+	<mkdir dir = "${project.reports}/php"/>
   </target>
   
   <!-- Sub Target definitions -->
@@ -155,7 +154,7 @@
 	  <arg value = "-d"/>
 	  <arg path  = "${project.php_source}"/>
 	  <arg value = "-t"/>
-	  <arg path  = "${project.build}/phpdoc2"/>
+	  <arg path  = "${project.reports}/php/doc"/>
 	</exec>
   </target>
   
@@ -181,7 +180,7 @@
 		  depends     = "prepare"
 		  description = "Measure project size using PHPLOC">
 	<PHPLoc reportType      = "csv"
-			reportName      = "phploc"
+			reportName      = "loc"
 			reportDirectory = "${project.reports}/php">
 	  <fileset refid = "php_src"/>
 	  <fileset refid = "php_test"/>
