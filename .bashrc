@@ -6,5 +6,6 @@ export EVOKE_TEST=$EVOKE/php/test
 
 alias cde='cd $EVOKE_SRC'
 alias cdt='cd $EVOKE_TEST'
+alias pe='phing -f $EVOKE/build.xml'
 alias phpcse='phpcs --tab-width=4 --standard="$EVOKE/php/src/phpcs.xml"'
 alias te='phpunit -c "$EVOKE_TEST/environment/phpunit.xml"'

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Evoke-PHP" tests="10" assertions="7" failures="0" errors="3" time="0.025607">
+    <testsuite name="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" tests="10" assertions="7" failures="0" errors="3" time="0.025607">
+      <testsuite name="RegexTest::test__constructInvalidArguments" tests="5" assertions="5" failures="0" errors="0" time="0.015368">
+        <testcase name="test__constructInvalidArguments with data set #0" assertions="1" time="0.007811"/>
+        <testcase name="test__constructInvalidArguments with data set #1" assertions="1" time="0.001880"/>
+        <testcase name="test__constructInvalidArguments with data set #2" assertions="1" time="0.002011"/>
+        <testcase name="test__constructInvalidArguments with data set #3" assertions="1" time="0.001784"/>
+        <testcase name="test__constructInvalidArguments with data set #4" assertions="1" time="0.001882"/>
+      </testsuite>
+      <testcase name="test__constructInvalidParamSpec" class="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" line="49" assertions="1" time="0.002608"/>
+      <testcase name="test__constructGood" class="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" line="88" assertions="1" time="0.002252"/>
+      <testcase name="testMatches" class="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" line="99" assertions="0" time="0.001668">
+        <error type="InvalidArgumentException">RegexTest::testMatches
+InvalidArgumentException: Evoke\HTTP\URI\Rule\Regex::__construct requires match as string
+
+/home/pyoung/Coding/Evoke-PHP/php/src/Evoke/HTTP/URI/Rule/Regex.php:41
+/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php:131
+</error>
+      </testcase>
+      <testcase name="testGetParams" class="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" line="145" assertions="0" time="0.001893">
+        <error type="InvalidArgumentException">RegexTest::testGetParams
+InvalidArgumentException: Evoke\HTTP\URI\Rule\Regex::__construct requires match as string
+
+/home/pyoung/Coding/Evoke-PHP/php/src/Evoke/HTTP/URI/Rule/Regex.php:41
+/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php:204
+</error>
+      </testcase>
+      <testcase name="testGetResponse" class="RegexTest" file="/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php" line="227" assertions="0" time="0.001819">
+        <error type="InvalidArgumentException">RegexTest::testGetResponse
+InvalidArgumentException: Evoke\HTTP\URI\Rule\Regex::__construct requires match as string
+
+/home/pyoung/Coding/Evoke-PHP/php/src/Evoke/HTTP/URI/Rule/Regex.php:41
+/home/pyoung/Coding/Evoke-PHP/php/test/unit/Evoke/HTTP/URI/Rule/RegexTest.php:273
+</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="/usr/share/php5/PEAR/data/phing/etc/phing-grammar.rng" 
+            type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0" ?>
+
+<!-- The build file for command line building of Evoke-PHP. -->
+<project name="Evoke-PHP" default="build">
+
+  <!-- Build properties. -->
+  <property name        = "project.build"
+			description = "The direcotry for the build information."
+			value       = "${project.basedir}/build"/>
+
+  <property name        = "project.config"
+			description = "The directory for build configuration."
+			value       = "${project.build}/config"/>
+
+  <property name        = "project.php_source"
+			description = "The directory for the PHP source files."
+			value       = "${project.basedir}/php/src"/>
+
+  <property name        = "project.php_test"
+			description = "The directory for the PHP test files."
+			value       = "${project.basedir}/php/test/unit"/>
+
+  <property name        = "project.reports"
+			description = "Build report directory"
+			value       = "${project.build}/reports"/>
+
+  <!-- File sets used in targets. -->
+  <fileset id = "php_src" dir = "${project.php_source}">
+	<include name="**/*.php"/>
+  </fileset>
+
+  <fileset id = "php_test" dir = "${project.php_test}">
+	<include name="**/*.php"/>
+  </fileset>
+
+  <!-- Main Target definitions -->
+  <target name        = "build"
+		  description = "Check for code quality, package the code and produce
+						 reports on the built code."
+		  depends     = "check-build-sanity,
+						 package-code,
+						 create-reports"/>
+
+  <target name        = "check-build-sanity"
+		  description = "Check to see whether a build can be made."
+		  depends     = "php-lint"/>
+
+  <target name        = "clean"
+		  description = "Remove all of the build artefacts.">
+	<delete dir = "${project.build}/phpdoc"/>
+	<delete dir = "${project.reports}"/>
+  </target>
+
+  <target name        = "create-reports"
+		  description = "Create reports on the build."
+		  depends     = "php-loc,
+						 php-code-sniffer,
+						 php-copy-paste-detector,
+						 php-depend,
+						 php-documentor,
+						 php-mess-detector,
+						 php-unit,
+						 php-code-browser"/>
+
+  <target name        = "package-code"
+		  description = "Perform any processing required to create the build.">
+	<!-- Compile the less to css.  This should be a new phing task (when I get
+		 the time to write it). -->
+	<exec executable="plessc_all"/>
+  </target>
+
+  <target name        = "prepare"
+		  description = "Prepare the build directory to receive reports etc."
+		  depends     = "clean">
+	<mkdir dir = "${project.reports}/php/depend"/>
+  </target>
+  
+  <!-- Sub Target definitions -->
+  <target name        = "php-code-browser"
+		  depends     = "prepare,
+						 php-copy-paste-detector,
+						 php-mess-detector,
+						 php-unit"
+		  description = "Aggregate tool output with PHP_CodeBrowser">
+	<exec executable="phpcb" passthru="true">
+	  <arg value="--log" />
+	  <arg path="${project.reports}/php" />
+	  <arg value="--source" />
+	  <arg path="${project.php_source}" />
+	  <arg value="--output" />
+	  <arg path="${project.reports}/php/code-browser" />
+	</exec>
+  </target>
+
+  <target name="php-code-sniffer"
+		  description="Detect coding standard violations.  Output to the Command line.">
+	<exec executable = "phpcs" passthru = "true">
+	  <arg value = "--report-checkstyle=${project.reports}/php/code-sniffer-checkstyle.xml"/>
+	  <arg value = "--standard=${project.config}/php-code-sniffer.xml"/>
+	  <arg value = "--tab-width=4"/>
+	  <arg value = "-p"/>
+	  <arg path  = "${project.php_source}"/>
+	</exec>
+  </target>
+
+  <target name = "php-copy-paste-detector">
+	<phpcpd>
+	  <fileset refid = "php_src"/>
+	  <formatter type= "pmd" outfile = "${project.reports}/php/copy-paste-detector.xml"/>
+	</phpcpd>
+  </target>
+  
+  <target name        = "phpcpd-ci"
+		  description = "PHP Copy/Paste Detection for continuous integration">
+	<phpcpd>
+	  <fileset refid = "php_src"/>
+	  <formatter type= "pmd" outfile = "${project.reports}/php/copy-paste-detector.xml"/>
+	</phpcpd>
+  </target>
+
+  <target name        = "php-depend"
+		  depends     = "prepare"
+          description = "Calculate software metrics using PHP_Depend">
+	<phpdepend>
+	  <fileset refid = "php_src"/>
+
+	  <logger type    = "jdepend-chart"
+			  outfile = "${project.reports}/php/depend-chart"/>
+	  <logger type    = "jdepend-xml"
+			  outfile = "${project.reports}/php/depend.xml"/>
+	  <logger type    = "overview-pyramid"
+			  outfile = "${project.reports}/php/depend-overview-pyramid"/>
+	  <logger type    = "phpunit-xml"
+			  outfile = "${project.reports}/php/depend-phpunit.xml"/>
+	  <logger type    = "summary-xml"
+			  outfile = "${project.reports}/php/depend-summary.xml"/>
+	</phpdepend>
+  </target>
+
+  <target name        = "php-documentor"
+		  depends     = "prepare"
+		  description = "Generate API documentation using phpDocumentor">
+	<!-- This comment should work, but fails miserably due to a bad phpdoc2 task
+		 implementation or my current configuration.
+		 <phpdoc2 destdir = "dox">
+		   <fileset refid = "php_src"/>
+		 </phpdoc2>
+	-->
+	<exec executable="phpdoc" passthru="true">
+	  <arg value = "run"/>
+	  <arg value = "--template=evoke"/>
+	  <arg value = "-d"/>
+	  <arg path  = "${project.php_source}"/>
+	  <arg value = "-t"/>
+	  <arg path  = "${project.build}/phpdoc2"/>
+	</exec>
+  </target>
+  
+  <target name        = "php-lint"
+		  depends     = "php-lint-src, php-lint-test"
+		  description = "Syntax check the source and test files."/>
+
+  <target name        = "php-lint-src"
+		  description = "Syntax check the php source files">
+	<phplint deprecatedAsError = "true">
+	  <fileset refid = "php_src"/>
+	</phplint>
+  </target>
+	
+  <target name        = "php-lint-test"
+		  description = "Syntax check the php test files.">
+	<phplint deprecatedAsError = "true">
+	  <fileset refid = "php_test"/>
+	</phplint>
+  </target>
+
+  <target name        = "php-loc"
+		  depends     = "prepare"
+		  description = "Measure project size using PHPLOC">
+	<PHPLoc reportType      = "csv"
+			reportName      = "phploc"
+			reportDirectory = "${project.reports}/php">
+	  <fileset refid = "php_src"/>
+	  <fileset refid = "php_test"/>
+	</PHPLoc>	
+  </target>
+
+  <target name        = "php-mess-detector"
+		  depends     = "prepare"
+		  description = "Perform project mess detection using PHPMD and print
+						 human readable output. Intended for usage on the
+						 command line before committing.">
+
+	<phpmd rulesets="codesize,controversial,design,naming,unusedcode">
+	  <fileset refid = "php_src"/>
+	  <formatter type="xml" outfile="${project.reports}/php/mess-detector.xml"/>
+	</phpmd>
+  </target>
+
+  <target name        = "php-unit"
+		  depends     = "prepare"
+		  description = "Run unit tests with PHPUnit">
+
+
+	<exec executable = "phpunit" passthru = "true">
+	  <arg value = "-c"/>
+	  <arg file  = "${project.config}/php-unit.xml"/>
+	  <arg value = "--bootstrap"/>
+	  <arg file  = "${project.php_test}/../environment/Bootstrap.php"/>
+	</exec>
+  </target>
+</project>
