@@ -16,7 +16,7 @@ class TableAdminLanguage extends TableAdmin
 	/** Add a language to the database, updating all tables that have a language
 	 *  field with the newly defined language.  Updating a table definition
 	 */
-	public function add($record)
+	public function add(Array $record)
 	{
 		////////////////////
 		// DB Transaction //
@@ -126,7 +126,7 @@ class TableAdminLanguage extends TableAdmin
 		}
 	}
 
-	public function modify($record)
+	public function modify(Array $oldRecord, Array $newRecord)
 	{
 		////////////////////
 		// DB Transaction //

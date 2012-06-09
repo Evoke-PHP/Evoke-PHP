@@ -1,7 +1,9 @@
 <?php
-namespace Evoke\View\Form\Input;
+namespace Evoke\View\XHTML\Form\Input;
 
-class File extends \Evoke\View
+use Evoke\View\ViewIface;
+
+class File implements ViewIface
 { 
 	/** Construct a button/input that will enable styling to be done on the ugly
 	 *  file input.  With our CSS we can control the behaviour by overlapping the
@@ -67,13 +69,19 @@ class File extends \Evoke\View
 					$this->requestSeparator . $this->requestAlias;
 			}
 		}
-      
-		parent::set(
-			array('div',
-			      array(),
-			      array('Children' => array(
-				            array('input', $this->buttonAttribs),
-				            array('input', $this->inputAttribs)))));
+	}
+
+	/******************/
+	/* Public Methods */
+	/******************/
+
+	public function get(Array $params = array())
+	{
+		return array('div',
+		             array(),
+		             array('Children' => array(
+			                   array('input', $this->buttonAttribs),
+			                   array('input', $this->inputAttribs))));
 	}
 }
 // EOF

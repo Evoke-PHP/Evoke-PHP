@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\View\Input\DB;
+namespace Evoke\View\XHTML\Input;
 
-class Foreign extends \Evoke\View\Input\DB
+class Foreign extends DB
 {
 	public function __construct(Array $setup)
 	{
@@ -22,7 +22,7 @@ class Foreign extends \Evoke\View\Input\DB
       
 		parent::__construct($setup);
 	}
-   
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/

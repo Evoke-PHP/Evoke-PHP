@@ -1,14 +1,15 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
-use Evoke\Model\DataIface,
-	Evoke\Service\TranslatorIface,
+use Evoke\Model\Data\DataIface,
+	Evoke\View\Text\TranslatorIface,
+	Evoke\View\ViewIface,
 	Exception,
 	InvalidArgumentException,
 	RuntimeException;
 
 /// View to represent a list of records.
-class RecordList extends \Evoke\View
+class RecordList implements ViewIface
 {
 	/** @property $contentAttribs
 	 *  Attributes @array for the content.

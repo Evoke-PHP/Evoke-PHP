@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\Form;
+namespace Evoke\View\XHTML\Form;
 
 class EntryDialog extends Entry
 {

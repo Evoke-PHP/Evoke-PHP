@@ -1,11 +1,11 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML\Control\RecordList;
 
 use Evoke\View\Text\TranslatorIface,
 	Evoke\View\ViewIface;
 
 /// View to represent a list of records.
-class RecordList extends ViewIface
+class RecordList implements ViewIface
 {
 	/** @property $contentAttribs
 	 *  Attributes \array for the content.
@@ -164,6 +164,13 @@ class RecordList extends ViewIface
 	/* Protected Methods */
 	/*********************/
 
+	public function get(Array $params = array())
+	{
+		/** @todo Implement get.
+		 */
+		throw new \RuntimeException(__METHOD__ .  ' not yet implemented.');
+	}
+	
 	/// Build the elements for the record list.
 	protected function buildRecordListElems()
 	{

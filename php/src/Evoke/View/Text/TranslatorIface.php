@@ -8,9 +8,7 @@ interface TranslatorIface extends ViewIface
 	public function getLanguage();
 	
 	public function getLanguages();
-	
-	public function setLanguage($setLang='');
 
-	public function tr($trKey, $page='default');
+	public function tr($trKey);
 }
 // EOF

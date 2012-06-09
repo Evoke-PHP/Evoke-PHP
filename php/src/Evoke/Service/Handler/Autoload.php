@@ -48,7 +48,7 @@ class Autoload implements HandlerIface
 		}
 
 		$this->authoritative = $authoritative;
-		$this->baseDir       = $baseDir;
+		$this->baseDir       = rtrim($baseDir, DIRECTORY_SEPARATOR);
 		$this->extension     = $extension;
 		$this->namespace     = $namespace;
 	}

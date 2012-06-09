@@ -1,7 +1,9 @@
 <?php
-namespace Evoke\View\Control;
+namespace Evoke\View\XHTML\Control;
 
-class Tab_Panel extends \Evoke\View\Control
+use Evoke\View\ViewIface;
+
+class TabPanel implements ViewIface
 { 
 	public function __construct($setup=array())
 	{
@@ -28,7 +30,7 @@ class Tab_Panel extends \Evoke\View\Control
 	/** Set the Tab panel entries.
 	 *  @param tabEntries \array The tab panel entries for the view.
 	 */
-	public function get(Array $tabEntries)
+	public function get(Array $tabEntries = array())
 	{
 		$headingElems = array();
 		$contentElems = array(); 

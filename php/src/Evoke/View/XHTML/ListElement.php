@@ -1,9 +1,10 @@
 <?php
 namespace Evoke\View\XHTML;
 
-use Evoke\Model\DataIface;
+use Evoke\Model\Data\DataIface,
+	Evoke\View\ViewIface;
 
-class ListElement extends XHTML
+class ListElement implements ViewIface
 { 
 	/** @property data
 	 *  @object Data

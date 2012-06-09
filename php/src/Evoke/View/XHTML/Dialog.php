@@ -1,7 +1,9 @@
 <?php
 namespace Evoke\View\XHTML;
 
-class Dialog extends \Evoke\View
+use Evoke\View\ViewIface;
+
+class Dialog implements ViewIface
 {
 	public function __construct(Array $setup)
 	{
@@ -23,7 +25,7 @@ class Dialog extends \Evoke\View
 	/* Public Methods */
 	/******************/
 
-	public function get(Array $data)
+	public function get(Array $data = array())
 	{
 		$data += array('Buttons'      => array(),
 		               'Content'      => NULL,

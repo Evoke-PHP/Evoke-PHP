@@ -1,7 +1,9 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
-class Admin extends \Evoke\View
+use Evoke\View\ViewIface;
+
+class Admin implements ViewIface
 {
 	/** Construct an Admin view.
 	 *  @param info            @object $info
@@ -61,8 +63,10 @@ class Admin extends \Evoke\View
 	/* Public Methods */
 	/******************/
 
-	public function writeContent($data)
+	public function get(Array $params = array())
 	{
+		/** @todo Fix this view to the new interface.
+		 */
 		$state = array_merge(array('Current_Record' => array(),
 		                           'Delete_Record'  => array(),
 		                           'Delete_Request' => false,

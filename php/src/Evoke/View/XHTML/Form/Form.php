@@ -1,11 +1,14 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML\Form;
+
+use Evoke\View\ViewIface;
+
 /** \abstract form class providing a generic interface to write a form.
  *  Elements are added to the Form using the \ref setElements method which
  *  must be defined by derived classes.  The form is written using the
  *  \ref write method.
  */
-abstract class Form extends \Evoke\View
+abstract class Form implements ViewIface
 {
 	/** The elements that should be written to make the form. These must be
 	 *  added to using the \ref addElement method.
@@ -38,6 +41,17 @@ abstract class Form extends \Evoke\View
 		parent::__set(array('form', array(), $this->elements));
 	}
 
+	/******************/
+	/* Public Methods */
+	/******************/
+
+	public function get(Array $params = array())
+	{
+		/** @todo Implement this method.
+		 */
+		throw new \RuntimeException(__METHOD__ . ' not yet implemented.');
+	}
+		
 	/*********************/
 	/* Protected Methods */
 	/*********************/
@@ -76,8 +90,10 @@ abstract class Form extends \Evoke\View
 		$this->buildFormButtons();
 	}
 
+	/** @todo Remove buildFormElements and replace with View::get.
+	 */
 	/// \abstract function to build the non button elements of the form.
-	abstract protected function buildFormElements();
+	/// abstract protected function buildFormElements();
 
 	/// Build elements at the start of the form.
 	protected function buildPrependElements()

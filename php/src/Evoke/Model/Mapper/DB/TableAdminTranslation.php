@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model\DB;
+namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Persistance\DB\SQLIface,
 	Evoke\Persistance\FilesystemIface,
@@ -44,7 +44,7 @@ class TableAdminTranslation extends TableAdmin
 	/******************/
 
 	// Add a translation.
-	public function add($record)
+	public function add(Array $record)
 	{
 		////////////////////
 		// DB Transaction //
@@ -74,7 +74,7 @@ class TableAdminTranslation extends TableAdmin
 	}
 
 	/// Execute a delete that has been confirmed.
-	public function delete($record)
+	public function delete(Array $record)
 	{
 		////////////////////
 		// DB Transaction //
@@ -105,7 +105,7 @@ class TableAdminTranslation extends TableAdmin
 		}
 	}
 
-	public function modify($record)
+	public function modify(Array $oldRecord, Array $newRecord)
 	{
 		////////////////////
 		// DB Transaction //

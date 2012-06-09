@@ -1,5 +1,6 @@
 <?php
-namespace Evoke\View\Form;
+namespace Evoke\View\XHTML\Form;
+
 /** Entry form for a databse record using foreign table inputs.
  *  Provide a form to show and allow modification to database tables.
  */
@@ -36,8 +37,12 @@ class EntryForeign extends Entry
 	 *  Determine whether the row should be processed as a foreign input or as
 	 *  a standard database element.
 	 */
-	protected function buildInput($description, $fieldSetup)
+	protected function buildInput($settings) // $description, $fieldSetup)
 	{
+		/** @todo Fix this.
+		 */
+		throw new RuntimeException(__METHOD__ . ' signature changed. FIXME.');
+		
 		$field = $description['Field'];
 		$foreignKeys = $this->tableInfo->getForeignKeys();
 	    

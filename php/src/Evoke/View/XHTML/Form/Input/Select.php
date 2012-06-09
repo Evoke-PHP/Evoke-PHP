@@ -1,10 +1,11 @@
 <?php
-namespace Evoke\View\Form\Input;
+namespace Evoke\View\XHTML\Form\Input;
 
-use InvalidArgumentException,
+use Evoke\View\ViewIface,
+	InvalidArgumentException,
 	RuntimeException;
 
-class Select implements Evoke\View\ViewIface
+class Select implements ViewIface
 {
 	/** @property $attribs
 	 *  @array Attributes for the select element.

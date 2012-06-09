@@ -1,5 +1,8 @@
 <?php
-namespace Evoke\View\Input;
+namespace Evoke\View\XHTML\Input;
+
+use Evoke\View\ViewIface;
+
 /** View_DB_Input provide elements for input to the database.
  * Make an element from the database describe table information.
  * @param fieldInfo \array A single row from the describe table information.
@@ -15,7 +18,7 @@ namespace Evoke\View\Input;
  +-------+--------------+------+-----+---------+----------------+
  \endverbatim
 */
-class DB extends \Evoke\View\ViewIface
+class DB implements ViewIface
 {
 	/** @property $encasing
 	 *  \bool Whether the input is to be encased within a div element.
@@ -129,18 +132,15 @@ class DB extends \Evoke\View\ViewIface
 	/* Public Methods */
 	/******************/
 
-	public function set(Array $data)
+	public function get(Array $params = array())
 	{
-		if (!isset($data['Field_Info']))
+		if (!isset($params['Field_Info']))
 		{
 			throw new \InvalidArgumentException(
 				__METHOD__ . ' needs Field_Info');
 		}
-
 		
-		return parent::set(array($this->tag,
-		                         array(),
-		                         $this->getElements()));
+		return array($this->tag, array(), $this->getElements());
 	}
    
 	/*********************/

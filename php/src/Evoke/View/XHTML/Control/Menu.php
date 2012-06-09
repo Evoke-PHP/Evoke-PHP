@@ -1,10 +1,11 @@
 <?php
-namespace Evoke\View\Control;
+namespace Evoke\View\XHTML\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
-	Evoke\Service\TranslatorIface;
+	Evoke\Service\TranslatorIface,
+	Evoke\View\ViewIface;
 
-class Menu extends \Evoke\View\View
+class Menu implements ViewIface
 {
 	/** @property data
 	 *  @object Data

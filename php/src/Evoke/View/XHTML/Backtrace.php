@@ -1,7 +1,10 @@
 <?php
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
-class Backtrace extends View
+use Evoke\Model\Data\DataIface,
+	Evoke\View\ViewIface;
+
+class Backtrace implements ViewIface
 { 
 	/** @property data
 	 *  @object Data

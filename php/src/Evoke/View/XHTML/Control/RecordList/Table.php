@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\View\Control\RecordList;
+namespace Evoke\View\XHTML\Control\RecordList;
 
 /// View to display a list of records from a table.
-class Table extends \Evoke\View\Control\RecordList
+class Table extends RecordList
 { 
 	public function __construct(Array $setup)
 	{

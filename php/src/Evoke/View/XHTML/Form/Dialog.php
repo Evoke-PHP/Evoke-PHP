@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\View\Form;
+namespace Evoke\View\XHTML\Form;
 
-class Dialog extends \Evoke\View\Form
+class Dialog extends Form
 {
 	public function __construct(Array $setup)
 	{

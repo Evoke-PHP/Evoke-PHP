@@ -1,7 +1,7 @@
 <?php
-namespace Evoke\View\Form;
+namespace Evoke\View\XHTML\Form;
 
-class Checkboxes extends \Evoke\View\Form
+class Checkboxes extends Form
 {
 	/** @property $emptyText
 	 *  The text \string if there are no checkboxes.
@@ -134,6 +134,13 @@ class Checkboxes extends \Evoke\View\Form
 		return parent::set(array('fieldset',
 		                         $this->fieldsetAttribs,
 		                         $checkboxElems));
+	}
+
+	protected function buildFormElements()
+	{
+		/** @todo Implement this method.
+		 */
+		throw new \RuntimeException(__METHOD__ . ' not yet implemented.');
 	}
 }
 // EOF
