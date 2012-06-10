@@ -18,32 +18,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 		// an InvalidArgumentException if they aren't supplied correctly.
 		new Evoke\HTTP\URI\Rule\Regex(
 			$match, $replacement, $params, $authoritative);
-
-		// $reflectionClass = new ReflectionClass('Evoke\HTTP\URI\Rule\Regex');
-		// $reflectionClass->newInstanceArgs($args);
-				
-		
-		/*
-		foreach ($invalidArgumentsTests as $args)
-		{
-			try
-			{
-				$obj = new Evoke\HTTP\URI\Rule\Regex($args[0], $args[1]);
-				$this->fail('InvalidArgumentException should be raised.');
-			}
-			catch (InvalidArgumentException $e)
-			{
-				continue;
-			}
-			catch (Exception $e)
-			{
-				$this->fail(
-					'Invalid argument should have been raised for arguments: ' .
-					var_export($args, true) . ' received exception: ' .
-					$e->getMessage());
-			}
-		}
-		*/
 	}
 
 	public function test__constructInvalidParamSpec()

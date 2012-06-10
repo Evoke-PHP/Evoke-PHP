@@ -35,39 +35,34 @@ class JointAdminLinked extends JointAdmin
 	 */
 	protected $filesystem;
 
-	/** @property $imageManip
-	 *  @object Image manipulation
+	/** @var ImageManip
 	 */
 	protected $imageManip;
 
-	/** @property $links
-	 *  @array links
+	/** 
+	 *  @var array links
 	 */
 	protected $links;
 	
 	/** Construct an Administration Model of a joint set of database tables with
 	 *  linked information in the filesystem.
-	 *  @param sql            @object SQL object.   
-	 *  @param tableName      @string The table name where joins start from.
-	 *  @param joins          @object Joins object.
-	 *  @param sessionManager @object SessionManager object.
-	 *  @param tableListID    @object DB List ID Table object.
-	 *  @param failures       @object Failure messages object.
-	 *  @param notifications  @object Notification messages object.
-	 *  @param eventManager   @object EventManager object.
-	 *  @param select         @array  Select statement settings.
-	 *  @param dataPrefix     @array  Any prefix to offset the data with.
-	 *  @param validate       @bool   Whether to validate the data.
+	 *  @param SQLIface            sql            SQL object.   
+	 *  @param string              tableName      Table name where joins start from.
+	 *  @param JoinsIface          joins          Joins object.
+	 *  @param SessionManagerIface sessionManager SessionManager object.
+	 *  @param ListID              tableListID    DB List ID Table object.
+	 *  @param TreeIface           failures       Failure messages object.
+	 *  @param TreeIface           notifications  Notification messages object.
+	 *  @param Array               select         Select statement settings.
+	 *  @param bool                validate       Whether to validate the data.
 	 */
-	public function __construct(Iface\DB\SQL          $sql,
-	                            /* String */          $tableName,
-	                            Iface\DB\Table\Joins  $joins,
-	                            Iface\SessionManager  $sessionManager,
-	                            Iface\DB\Table\ListID $tableListID,
-	                            Iface\MessageTree     $failures,
-	                            Iface\MessageTree     $notifications,
-	                            Iface\EventManager    $eventManager,
-	                            Icore\Links           $FIX_ME, ///< \todo FIXME
+	public function __construct(SQLIface            $sql,
+	                            /* String */        $tableName,
+	                            JoinsIface          $joins,
+	                            SessionManagerIface $sessionManager,
+	                            ListIDIface         $tableListID,
+	                            TreeIface           $failures,
+	                            TreeIface           $notifications,
 	                            Icore\Filesystem      $filesystem,
 	                            Icore\ImageManip      $imageManip,
 	                            /* Integer (Octal) */ $dirMode  = 0770,
@@ -75,7 +70,9 @@ class JointAdminLinked extends JointAdmin
 	                            Array                 $select   = array(),
 	                            /* Bool */            $validate = true)
 	{
-		/// \todo Fix to new coding standard.
+		/**
+		 * @todo Fix to new coding standard.
+		 */
 		throw new \RuntimeException(
 			__METHOD__ . ' needs implementation to new standard.');
 		

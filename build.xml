@@ -121,7 +121,7 @@
   </target>
 
   <target name        = "php-depend"
-		  depends     = "prepare"
+		  depends     = "prepare, php-unit"
           description = "Calculate software metrics using PHP_Depend">
 	<phpdepend>
 	  <fileset refid = "php_src"/>
