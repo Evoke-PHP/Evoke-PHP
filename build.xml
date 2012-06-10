@@ -155,6 +155,11 @@
 	  <arg path  = "${project.php_source}"/>
 	  <arg value = "-t"/>
 	  <arg path  = "${project.reports}/php/doc"/>
+	  <arg value = "--title"/>
+	  <arg value = "Evoke-PHP"/>
+	  <arg value = "--defaultpackagename"/>
+	  <arg value = "Evoke"/>
+	  <arg value = "--sourcecode"/>
 	</exec>
   </target>
   

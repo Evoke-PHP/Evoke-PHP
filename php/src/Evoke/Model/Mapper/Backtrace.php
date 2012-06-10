@@ -1,6 +1,9 @@
 <?php
 namespace Evoke\Model\Mapper;
 
+use InvalidArgumentException,
+	RuntimeException;
+
 class Backtrace implements MapperIface
 { 
 	/** @property levelsToRetrace
@@ -15,7 +18,8 @@ class Backtrace implements MapperIface
 	{
 		if (!is_int($levelsToRetrace))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires levelsToRetrace as int');
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires levelsToRetrace as int');
 		}
 
 		$this->levelsToRetrace = $levelsToRetrace;
@@ -59,5 +63,4 @@ class Backtrace implements MapperIface
 		return $pascalCasedTrace;
 	}
 }
-
 // EOF

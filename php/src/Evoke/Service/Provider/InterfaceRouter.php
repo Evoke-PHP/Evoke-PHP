@@ -40,7 +40,8 @@ class InterfaceRouter implements InterfaceRouterIface
 
 	/** Route the Interface to a concrete class.
 	 *  @param interfaceName @string The interface name to route.
-	 *  @return @mixed The classname (or false if no concrete class could be found).
+	 *  @return @mixed The classname (or false if no concrete class could be
+	 *  found).
 	 */
 	public function route($interfaceName)
 	{

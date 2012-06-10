@@ -6,24 +6,32 @@ use Evoke\Message\TreeIface,
 	Evoke\Persistance\DB\Table\JoinsIface,
 	Evoke\Persistance\DB\Table\ListIDIface,
 	Evoke\Persistance\SessionManagerIface;
-	
-/** Model_DB_Joint_Admin_Linked provides a CRUD interface to a joint set of data
- *  with linked information stored in files referenced from the database.
+/**
+ * JointAdminLinked
+ *
+ * JointAdminLinked provides a CRUD interface to a joint set of data with linked
+ * information stored in files referenced from the database.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
  */
 class JointAdminLinked extends JointAdmin
 {
-	/** @property $dirMode
-	 *  @int (octal) The directory mode to create directories at.
+	/**
+	 * The directory mode in octal to create directories at.
+	 * @var int
 	 */
 	protected $dirMode;
 
-	/** @property $fileMode
-	 *  @int (octal) The file mode to create linked files with.
+	/**
+	 * @var int (octal) The file mode to create linked files with.
 	 */
 	protected $fileMode;
 	
-	/** @property $filesystem
-	 *  @object Filesystem
+	/**
+	 * @var Filesystem
 	 */
 	protected $filesystem;
 
@@ -59,7 +67,7 @@ class JointAdminLinked extends JointAdmin
 	                            Iface\MessageTree     $failures,
 	                            Iface\MessageTree     $notifications,
 	                            Iface\EventManager    $eventManager,
-	                            Icore\Links           $TODO_FIX_ME, ///< \todo FIXME
+	                            Icore\Links           $FIX_ME, ///< \todo FIXME
 	                            Icore\Filesystem      $filesystem,
 	                            Icore\ImageManip      $imageManip,
 	                            /* Integer (Octal) */ $dirMode  = 0770,
@@ -104,9 +112,10 @@ class JointAdminLinked extends JointAdmin
 	public function cancel()
 	{
 		$data = array($this->sessionManager->get('Current_Record'));
-		$this->recurse(array('Depth_First_Data' => array($this, 'cancelEntries')),
-		               $data,
-		               $this->joins);
+		$this->recurse(
+			array('Depth_First_Data' => array($this, 'cancelEntries')),
+			$data,
+			$this->joins);
       
 		parent::cancel();
 	}
@@ -116,9 +125,10 @@ class JointAdminLinked extends JointAdmin
 		parent::edit($record);
 
 		$data = array($this->sessionManager->get('Edited_Record'));
-		$this->recurse(array('Breadth_First_Data' => array($this, 'editEntries')),
-		               $data,
-		               $this->joins);
+		$this->recurse(
+			array('Breadth_First_Data' => array($this, 'editEntries')),
+			$data,
+			$this->joins);
 	}
    
 	/** Upload a file.
@@ -162,9 +172,9 @@ class JointAdminLinked extends JointAdmin
 		if ($link !== false)
 		{
 			// The data has been added to the database, but would not have been
-			// updated with the ID's that were added.  As this information is used
-			// when linking the data we should get the full data that was added
-			// now.
+			// updated with the ID's that were added.  As this information is
+			// used when linking the data we should get the full data that was
+			// added now.
 			$childField = $ref->getChildField();
 			$firstRecord = reset($data);
 			$conditions = array($childField => $firstRecord[$childField]);

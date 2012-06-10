@@ -12,6 +12,11 @@ class Menu implements ViewIface
 	 */
 	protected $data;
 
+	/** @property $translator
+	 *  @object Translator.
+	 */
+	protected $translator;
+	
 	/** Construct a Menu object.
 	 *  @param translator @object Translator.
 	 *  @param data       @object Data for the menu.
@@ -19,9 +24,8 @@ class Menu implements ViewIface
 	public function __construct(TranslatorIface $translator,
 	                            DataMenu        $data)
 	{
-		parent::__construct($translator);
-		
-		$this->data = $data;
+		$this->data       = $data;
+		$this->translator = $translator;
 	}
 	
 	/******************/

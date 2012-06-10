@@ -214,8 +214,8 @@ class Data implements DataIface
 	public function offsetSet($offset, $value)
 	{
 		throw new RuntimeException(
-			__METHOD__ . ' should never be called - data is only transferrable ' .
-			'it is not to be modified.');
+			__METHOD__ . ' should never be called - data is only ' .
+			'transferrable it is not to be modified.');
 	}
 
 	/** We are required to make these available to complete the interface,
@@ -225,8 +225,8 @@ class Data implements DataIface
 	public function offsetUnset($offset)
 	{
 		throw new RuntimeException(
-			__METHOD__ . ' should never be called - data is only transferrable ' .
-			'it is not to be modified.');
+			__METHOD__ . ' should never be called - data is only ' .
+			'transferrable it is not to be modified.');
 	}
 
 	/*********************/
