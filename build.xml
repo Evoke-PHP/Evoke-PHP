@@ -111,14 +111,6 @@
 	  <formatter type= "pmd" outfile = "${project.reports}/php/copy-paste-detector.xml"/>
 	</phpcpd>
   </target>
-  
-  <target name        = "phpcpd-ci"
-		  description = "PHP Copy/Paste Detection for continuous integration">
-	<phpcpd>
-	  <fileset refid = "php_src"/>
-	  <formatter type= "pmd" outfile = "${project.reports}/php/copy-paste-detector.xml"/>
-	</phpcpd>
-  </target>
 
   <target name        = "php-depend"
 		  depends     = "prepare, php-unit"
@@ -214,6 +206,12 @@
 	  <arg file  = "${project.config}/php-unit.xml"/>
 	  <arg value = "--bootstrap"/>
 	  <arg file  = "${project.php_test}/../environment/Bootstrap.php"/>
+	  <arg value = "--log-junit"/>
+	  <arg value = "${project.reports}/php/unit-junit.xml"/>
+	  <arg value = "--coverage-html"/>
+	  <arg value = "${project.reports}/php/unit-coverage"/>
+	  <arg value = "--coverage-clover"/>
+	  <arg value = "${project.reports}/php/unit-clover.xml"/>
 	</exec>
   </target>
 </project>
