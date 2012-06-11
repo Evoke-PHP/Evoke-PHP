@@ -6,275 +6,211 @@ use Evoke\HTTP\URI\Rule\Regex;
  */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
-	/** Test that invalid arguments to the constructor raise IAE.
-	 *  @covers            Evoke\HTTP\URI\Rule\Regex::__construct
-	 *  @expectedException InvalidArgumentException
-	 *  @dataProvider      provider__constructInvalidArguments
+	/**
+	 * Test that invalid arguments to the constructor raise IAE.
+	 *
+	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @expectedException InvalidArgumentException
+	 * @dataProvider      provider__constructInvalidArguments
 	 */
 	public function test__constructInvalidArguments(
 		$match, $replacement, Array $params = array(), $authoritative = false)
 	{
-		// Ensure that the first two parameters are strings.  They should throw
-		// an InvalidArgumentException if they aren't supplied correctly.
 		new Evoke\HTTP\URI\Rule\Regex(
 			$match, $replacement, $params, $authoritative);
 	}
 
-	public function test__constructInvalidParamSpec()
+	/**
+	 * Test that Invalid Param specs to the constructor raise IAE.
+	 *
+	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @expectedException InvalidArgumentException
+	 * @dataProvider      provider__constructInvalidParamSpec
+	 */
+	public function test__constructInvalidParamSpec(
+		$match, $replacement, Array $paramSpec, $authoritative = false)
 	{
-		// Ensure that passed parameters match the param spec:
-		// array('Key' => 'xxx', 'Value' => 'yyy')
-		$invalidParamSpecArgs = array(
-			array('One1', 'One2', array(array())),
-			array('Two1', 'Two2', array(array('Key'   => 'Good',
-			                                  'Value' => false))),
-			array('Tri1', 'Tri2', array(array('Key'   => false,
-			                                  'Value' => 'Good'))));
-		$reflectionClass = new ReflectionClass('Evoke\HTTP\URI\Rule\Regex');
-
-		foreach ($invalidParamSpecArgs as $args)
-		{
-			try
-			{
-				$reflectionClass->newInstanceArgs($args);
-				$this->fail('InvalidArgumentException should be raised.');
-			}
-			catch (InvalidArgumentException $e)
-			{
-				continue;
-			}
-			catch (Exception $e)
-			{
-				$this->fail(
-					'Invalid argument should have been raised for bad param ' .
-					' spec in arguments: ' . var_export($args, true) .
-					' received exception: ' . $e->getMessage());
-			}
-		}
-		
-		$this->assertTrue(
-			true, 'Invalid arguments result in an InvalidArgumentException');
+		new Evoke\HTTP\URI\Rule\Regex(
+			$match, $replacement, $paramSpec, $authoritative);
 	}
 
-	/** Test that the constructor builds the expected object.
-	 *  @covers \Evoke\HTTP\URI\Rule\Regex::__construct
+	/**
+	 * Test that the constructor builds the expected object.
+	 *
+	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
 	 */
 	public function test__constructGood()
 	{
 		$obj = new Evoke\HTTP\URI\Rule\Regex('str', 'str', array(), true);
 		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
-		
 	}
 		
-	/** Test the matches for the regex.
-	 *  @depends test__constructGood
-	 *  @covers  Evoke\HTTP\URI\Rule\Regex::matches
+	/** Test getResponse and the private method getMappedValue.
+	 *  @depends      test__constructGood
+	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getClassname
 	 */
-	public function testMatches()
+	public function testGetClassname()
 	{
-		$tests = array(
-			'Empty_URI_No_Match'  => array(
-				'Expected_Return' => false,
-				'Setup'           => array('Match'    => '/bad/',
-				                           'Params'   => array(),
-				                           'Response' => array()),
-				'URI'             => ''),
-			'Empty_URI_Match'     => array(
-				'Expected_Return' => true,
-				'Setup'           => array('Match'    => '//',
-				                           'Params'   => array(),
-				                           'Response' => array()),
-				'URI'             => ''),
-			'Filled_URI_No_Match' => array(
-				'Expected_Return' => false,
-				'Setup'           => array('Match'    => '/Prod.*bad$/',
-				                           'Params'   => array(),
-				                           'Response' => array()),
-				'URI'             => 'Products/HotSella'),
-			'Filled_URI_Match'    => array(
-				'Expected_Return' => true,
-				'Setup'           => array('Match' => '/^Prod.*Sella$/',
-				                           'Params' => array(),
-				                           'Response' => array()),
-				'URI'             => 'Products/HotSella'));
-
-		foreach ($tests as $name => $test)
-		{
-			$obj = new Regex(
-				array_merge(array('Authoritative' => true),
-				            $test['Setup']));
-
-			$this->assertEquals(
-				$test['Expected_Return'],
-				$obj->matches($test['URI']),
-				$name . ' does not return expected boolean for presence of ' .
-				'match.');
-		}
+		$obj = new Evoke\HTTP\URI\Rule\Regex('/foo/', 'bar');
+		$this->assertSame('this/bar/isFobar',
+		                  $obj->getClassname('this/foo/isFofoo'));
 	}
 
 	/**
-	 *  @depends test__constructGood	   
-	 *  @covers Evoke\HTTP\URI\Rule\Regex::getParams
+	 * @depends      test__constructGood	   
+	 * @covers       Evoke\HTTP\URI\Rule\Regex::getParams
+	 * @dataProvider providerGetParams 
 	 */
-	public function testGetParams()
+	public function testGetParams(
+		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$tests = array(
-			'Domain_Exception_For_Bad_Second_Level'      => array(
-				'Expected_Return'  => array(),
-				'Setup'            => array(
-					'Match'    => '/(.*)/',
-					'Params'   => array(array('BAD_SECOND_LEVEL')),
-					'Response' => array()),
-				'Throws_Exception' => true,
-				'URI'              => ''),
-			'Match_All_Named_Params_Separator_By_Equals' => array(
-				'Expected_Return'  => array('Product' => 'Banana',
-				                            'Size'    => 'Big'),
-				'Setup'            => array(
-					'Match'    => '/^\/Product\/(Product)=(.*)&(Size=.*)$/',
-					'Params'   => array(
-						array('Name'     => array(
-							      'Pattern'         => '//',
-							      'Replacement'     => '',
-							      'URI_Replacement' => '\1'),
-						      'Required' => false,
-						      'Value'    => array(
-							      'Pattern'         => '//',
-							      'Replacement'     => '',
-							      'URI_Replacement' => '\2')),
-						array('Name'     => array(
-							      'Pattern'         => '/(.*)=(.*)$/',
-							      'Replacement'     => '\1',
-							      'URI_Replacement' => '\3'),
-						      'Required' => false,
-						      'Value'    => array(
-							      'Pattern'         => '/(.*)=(.*)$/',
-							      'Replacement'     => '\2',
-							      'URI_Replacement' => '\3'))),
-					'Response' => array()),
-				'Throws_Exception' => false,
-				'URI'              => '/Product/Product=Banana&Size=Big'),
-			'Missing_Required_Param'                     => array(
-				'Expected_Return'  => NULL,
-				'Setup'            => array(
-					'Match'    => '/^\/(Product)=(.*)$/',
-					'Params'   => array(
-						array('Name'     => array(
-							      'Pattern'         => '/NO_MATCH/',
-							      'Replacement'     => '',
-							      'URI_Replacement' => '\1'),
-						      'Required' => true,
-						      'Value'    => array(
-							      'Pattern'         => '//',
-							      'Replacement'     => '',
-							      'URI_Replacement' => '\2'))),
-					'Response' => array()),
-				'Throws_Exception' => true,
-				'URI'              => '/Product='));
-
-		foreach ($tests as $name => $test)
-		{
-			$obj = new Regex(array_merge(array('Authoritative' => true),
-			                                       $test['Setup']));
-			try
-			{
-				$params = $obj->getParams($test['URI']);
-
-				$this->assertSame($test['Expected_Return'],
-				                  $params,
-				                  $name . ' does not return params as ' .
-				                  'expected.');
-			}
-			catch (Exception $e)
-			{
-				$this->assertTrue($test['Throws_Exception'],
-				                  $name . ' should not throw exception.');
-			}
-		}
+		$obj = new Evoke\HTTP\URI\Rule\Regex(
+			$match, $replacement, $params, $authoritative);
+		$this->assertSame(
+			$expected, $obj->getParams($uri), 'unexpected value.');
 	}
 
-	/** Test getResponse and the private method getMappedValue.
-	 *  @depends test__constructGood
-	 *  @covers  Evoke\HTTP\URI\Rule\Regex::getResponse
-	 *  @covers  Evoke\HTTP\URI\Rule\Regex::getMappedValue
+	/**
+	 * Test the matches for the regex.
+	 *
+	 * @depends      test__constructGood
+	 * @covers       Evoke\HTTP\URI\Rule\Regex::isMatch
+	 * @dataProvider providerIsMatch
 	 */
-	public function testGetResponse()
+	public function testIsMatch(
+		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$tests = array(
-			'No_Match'              => array(
-				'Expected_Return'  => NULL,
-				'Setup'            => array(
-					'Match'    => '/NO_MATCH/',
-					'Params'   => array(),
-					'Response' => array('Pattern'         => '//',
-					                    'Replacement'     => '',
-					                    'URI_Replacement' => '')),
-				'Throws_Exception' => true,
-				'URI'              => '/This_URI_IS_UNEXPECTED'),
-			'Domain_Exception'      => array(
-				'Expected_Return'  => NULL,
-				'Setup'            => array(
-					'Match'    => '/MATCHES/',
-					'Params'   => array(),
-					'Response' => array()),
-				'Throws_Exception' => true,
-				'URI'              => 'MATCHES'),
-			'Basic_Check'           => array(
-				'Expected_Return'  => 'MappedURI',
-				'Setup'            => array(
-					'Match'    => '/IGN(.*)ORE/',
-					'Params'   => array(),
-					'Response' => array('Pattern'         => '/_/',
-					                    'Replacement'     => '',
-					                    'URI_Replacement' => '\1')),
-				'Throws_Exception' => false,
-				'URI'              => 'IGN_Map_ped_URI_ORE'),
-			'Second_Level_No_Match' => array(
-				'Expected_Return'  => NULL,
-				'Setup'            => array(
-					'Match'         => '/.*/',
-					'Params'        => array(),
-					'Response'      => array(
-						'Pattern'         => '/SECOND_LEVEL_BAD/',
-						'Replacement'     => 'blah',
-						'URI_Replacement' => '\1')),
-				'Throws_Exception'      => true,
-				'URI' => 'NO_ME_CARE_BUT_NO_SECOND_LEVEL_MATCH'));
-
-		foreach ($tests as $name => $test)
-		{
-			$obj = new Regex(array_merge(array('Authoritative' => true),
-			                                       $test['Setup']));
-
-			try
-			{
-				$response = $obj->getResponse($test['URI']);
-
-				$this->assertEquals($test['Expected_Return'],
-				                    $response,
-				                    $name . ' does not return Response as ' .
-				                    'expected.');
-			}
-			catch (Exception $e)
-			{
-				$this->assertTrue($test['Throws_Exception'],
-				                  $name . ' should not throw exception.');
-			}
-		}
+		$obj = new Evoke\HTTP\URI\Rule\Regex(
+			$match, $replacement, $params, $authoritative);
+		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
 	}
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
+	/******************/
+	/* Data Providers */
+	/******************/
 
+	/**
+	 *  Data provider that provides Invalid Arguments to the constructor.
+	 *
+	 *  The first two parameters should be strings to be valid.
+	 */
 	public function provider__constructInvalidArguments()
 	{
 		return array(
-			array(array('Both Bad'), 12),
-			array('Only 1 Good', new stdClass()),
-			array('Good', array('Bad')),
-			array(NULL, 'Second one good.'),
-			array(true, 'First was bad.'));
+			'Both_Bad'   =>
+			array('Match'       => array('Both Bad'),
+			      'Replacement' => 12),
+			'Match_Good_Replacement_Bad(Object)' =>
+			array('Match'       => 'Only 1 Good',
+			      'Replacement' => new stdClass()),
+			'Match_Good_Replacement_Bad(Array)' =>
+			array('Match'       => 'Good',
+			      'Replacement' => array('Bad')),
+			'Match_Bad(NULL)_Replacement_Good' =>
+			array('Match'       => NULL,
+			      'Replacement' => 'Replacement one good.'),
+			'Match_Bad(Bool)_Replacement_Good' =>
+			array('Match'       => true,
+			      'Replacement' => 'Match was bad.'));
+	}
+
+	/**
+	 * Data provider that provides invalid param specs to the constructor.
+	 *
+	 * The first two parameters are match and replacement which are passed
+	 * correctly as a string.
+	 * The third parameter is the param spec which should be an array of
+	 * elements each with keys of 'Key' and 'Value' that have string values.
+	 * i.e: <pre><code>array('Key' => 'xxx', 'Value' => 'yyy')</code></pre>
+	 */
+	public function provider__constructInvalidParamSpec()
+	{
+		return array(
+			'Bad_Empty_Param_Spec' =>
+			array('Match'       => 'One1',
+			      'Replacement' => 'One2',
+			      'Params'  => array(array())),
+			'Param_Spec_Value_Bad(Bool)' =>
+			array('Match'       => 'Two1',
+			      'Replacement' => 'Two2',
+			      'Params'  => array(array('Key'   => 'Good',
+			                               'Value' => false))),
+			'Param_Spec_Key_Bad(Bool)' =>
+			array('Match'       => 'Tri1',
+			      'Replacement' => 'Tri2',
+			      'Params'  => array(array('Key'   => false,
+			                               'Value' => 'Good'))));
+	}
+
+	/**
+	 * Data provider for testGetParams.
+	 */
+	public function providerGetParams()
+	{
+		return array(
+			'Empty_Param_Spec' =>
+			array('Match'         => '/myUri/',
+			      'Replacement'   => 'replacement',
+			      'Params'        => array(),
+			      'Authoritative' => false,
+			      'Uri'           => 'myUri/',
+			      'Expected'      => array()),
+			'Match_Parameters_From_URI' =>
+			array('Match'         => '/\/Product\/(\w+)\/(\w+)\/(\w+)\/(\d+)/',
+			      'Replacement'   => 'replacement',
+			      'Params'        => array(
+				      array('Key'   => 'Type',
+				            'Value' => '\1'),
+				      array('Key'   => 'Size',
+				            'Value' => '\2'),
+				      array('Key'   => '\3',
+				            'Value' => '\3'),
+				      array('Key'   => 'ID',
+				            'Value' => '\4')),
+			      'Authoritative' => false,
+			      'Uri'           => '/Product/Banana/Big/Yellow/123',
+			      'Expected'      => array(
+				      'Type'   => 'Banana',
+				      'Size'   => 'Big',
+				      'Yellow' => 'Yellow', // Test key can be regexed too.
+				      'ID'     => '123')),
+			);
+	}
+	
+	/**
+	 * Data provider for providing to the isMatch method.
+	 */
+	public function providerIsMatch()
+	{
+		return array(
+			'Match_Empty_Matches_Empty_Uri' =>
+			array('Match'         => '/^$/',
+			      'Replacement'   => 'any',
+			      'Params'        => array(),
+			      'Authoritative' => false,
+			      'Uri'           => '',
+			      'Expected'      => true),
+			'Match_Something_Does_Not_Match_Empty_Uri' =>
+			array('Match'         => '/something/',
+			      'Replacement'   => 'good',
+			      'Params'        => array(),
+			      'Authoritative' => false,
+			      'Uri'           => '',
+			      'Expected'      => false),
+			'Match_Different_From_Uri' =>
+			array('Match'         => '/bad/',
+			      'Replacement'   => 'good',
+			      'Params'        => array(),
+			      'Authoritative' => false,
+			      'Uri'           => 'uri',
+			      'Expected'      => false),
+			'Match_Does_Match_Uri' =>
+			array('Match'         => '/good/',
+			      'Replacement'   => 'bad',
+			      'Params'        => array(),
+			      'Authoritative' => false,
+			      'Uri'           => 'hello/goodday',
+			      'Expected'      => true));
 	}
 }
 // EOF
