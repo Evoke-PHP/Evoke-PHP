@@ -1,11 +1,26 @@
 <?php
-use Evoke\HTTP\URI\Rule\Regex;
+namespace Evoke_Test\HTTP\URI\Rule\Regex;
+
+use Evoke\HTTP\URI\Rule\Regex,
+	PHPUnit_Framework_TestCase,
+	stdClass;
 
 /**
  *  @covers Evoke\HTTP\URI\Rule\Regex
  */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * Test that the constructor builds the expected object.
+	 *
+	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
+	 */
+	public function test__constructGood()
+	{
+		$obj = new Regex('str', 'str', array(), true);
+		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
+	}
+
 	/**
 	 * Test that invalid arguments to the constructor raise IAE.
 	 *
@@ -16,8 +31,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	public function test__constructInvalidArguments(
 		$match, $replacement, Array $params = array(), $authoritative = false)
 	{
-		new Evoke\HTTP\URI\Rule\Regex(
-			$match, $replacement, $params, $authoritative);
+		new Regex($match, $replacement, $params, $authoritative);
 	}
 
 	/**
@@ -30,19 +44,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	public function test__constructInvalidParamSpec(
 		$match, $replacement, Array $paramSpec, $authoritative = false)
 	{
-		new Evoke\HTTP\URI\Rule\Regex(
-			$match, $replacement, $paramSpec, $authoritative);
-	}
-
-	/**
-	 * Test that the constructor builds the expected object.
-	 *
-	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
-	 */
-	public function test__constructGood()
-	{
-		$obj = new Evoke\HTTP\URI\Rule\Regex('str', 'str', array(), true);
-		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
+		new Regex($match, $replacement, $paramSpec, $authoritative);
 	}
 		
 	/** Test getResponse and the private method getMappedValue.
@@ -51,7 +53,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetClassname()
 	{
-		$obj = new Evoke\HTTP\URI\Rule\Regex('/foo/', 'bar');
+		$obj = new Regex('/foo/', 'bar');
 		$this->assertSame('this/bar/isFobar',
 		                  $obj->getClassname('this/foo/isFofoo'));
 	}
@@ -64,8 +66,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	public function testGetParams(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$obj = new Evoke\HTTP\URI\Rule\Regex(
-			$match, $replacement, $params, $authoritative);
+		$obj = new Regex($match, $replacement, $params, $authoritative);
 		$this->assertSame(
 			$expected, $obj->getParams($uri), 'unexpected value.');
 	}
@@ -80,8 +81,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	public function testIsMatch(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$obj = new Evoke\HTTP\URI\Rule\Regex(
-			$match, $replacement, $params, $authoritative);
+		$obj = new Regex($match, $replacement, $params, $authoritative);
 		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
 	}
 

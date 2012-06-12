@@ -5,63 +5,74 @@ use InvalidArgumentException,
 	OutOfBoundsException,
 	RuntimeException;
 
-/** Provide access to data.  Related data is handled through the Joins. An
- *  iterator is supplied to traverse the array of records that make up the data.
- *  Fields from the array can be accessed as per standard Array access.  Whilst
- *  Joint_Data is retrieved via class properties that are automatically created
- *  from the Joins passed at construction.
+/**
+ * Data
  *
- *  Below is a usage example containing each different type of access:
- *  @code
- *  $obj = new Data(array(),
- *                  array('List_ID' => $dataObjectForList));
- *  // Setting the data of the parent sets the data for the joint lists (and
- *  // their joint lists etc.).
- *  $obj->setData($data);
+ * Provide access to data.  Related data is allowed by defining Joins. An
+ * iterator is supplied to traverse the array of records that make up the data.
+ * Fields from the array can be accessed as per standard Array access.  Whilst
+ * Joint Data is retrieved via class properties that are automatically created
+ * from the Joins passed at construction.
  *
- *  // Traverse over each record in the data.
- *  foreach ($obj as $key => $record)
- *  {
- *     // Access a field as though it is an array.
- *     $x = $record['Field'];
+ * Below is a usage example containing each different type of access:
  *
- *     // Access joint data (with ->).  The joint data is itself a data object.
- *     // The name used after -> is the lowerCamelCase (_ID is removed
- *     // automatically).
- *     foreach ($record->list as $listRecord)
- *     {
- *        $y = $listRecord['Joint_Record_Field'];
+ * 	   $data = new Data($dataFromMapperOrOtherSource,
+ * 	                   array('List_ID' => $dataObjectForList));
+ *
+ * 	   // Traverse over each record in the data.
+ * 	   foreach ($data as $key => $record)
+ * 	   {
+ * 	      // Access a field as though it is an array.
+ * 	      $x = $record['Field'];
+ *
+ * 	      // Access joint data (with ->).  The joint data is itself a data object.
+ * 	      // The name used after -> is the lowerCamelCase (_ID is removed
+ * 	      // automatically).
+ * 	      foreach ($record->list as $listRecord)
+ * 	      {
+ * 	         $y = $listRecord['Joint_Record_Field'];
+ * 	      }
  *     }
- *  }
- *  @endcode
-*/
-class Data implements DataIface
+ * 
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
+class Data extends DataAbstract
 {
-	/** @property $data
-	 *  @array Data in the raw joint array.
+	/**
+	 * @var array Raw data that we are modeling.
 	 */
 	protected $data;
 
-	/** @property $dataJoins
-	 *  @array Array of joint data objects.
+	/** @var array Joint data objects.
 	 */
 	protected $dataJoins;
 
-	/** @property $jointKey
-	 *  @string The key that is used for joint data within the raw joint data.
+	/**
+	 * @var string The key that is used for joint data within the raw data.
 	 */
 	protected $jointKey;
 
-	/** Construct a Data model.
-	 *  @param data      @array  Raw joint data that we are modelling.
-	 *  @param dataJoins @array  Data objects to use for modelling the data that
-	 *                           is joint with this data.
-	 *  @param jointKey  @string The key to use for joint data.
+	/**
+	 * Construct a Data model.
+	 *
+	 * @param Array[]     $data      Raw joint data that we are modelling.
+	 * @param DataIface[] $dataJoins Data objects to use for modelling the data
+	 *                               that is joint with this data.
+	 * @param string      $jointKey  The key to use for joint data.
 	 */
 	public function __construct(Array        $data      = array(),
 	                            Array        $dataJoins = array(),
 	                            /* String */ $jointKey  = 'Joint_Data')
 	{
+		if (!is_string($jointKey))
+		{
+			throw new InvalidArgumentException(
+				'jointKey can only be a string.');
+		}
+		
 		foreach ($dataJoins as $parentField => $dataContainer)
 		{
 			if (!$dataContainer instanceof DataIface)
@@ -75,14 +86,24 @@ class Data implements DataIface
 		$this->dataJoins = $dataJoins;
 		$this->jointKey  = $jointKey;
 
-		$this->setData($data);
+		parent::__construct($data);
 	}
 
-	/** Provide access to the joint data as though it is a property of the
-	 *  object.  For joint data with a parent field of Linked_Data the property
-	 *  would be: `$object->linkedData;`.
-	 *  @param parentField @string The parent field for the joint data.
-	 *  This can be as per the return value of @ref getJoinName.
+	/**
+	 * Provide access to the joint data as though it is a property of the
+	 * object.
+	 *
+	 * For joint data with a parent field of Link_ID the property would be
+	 * either:
+	 *     $object->linkId;
+	 *     // OR
+	 *     $object->link;
+	 *
+	 * This is because we convert the name from Upper_Pascal_Case and optionally
+	 * remove 'ID' from the end of the parent field.
+	 *
+	 * @param string $parentField The parent field for the joint data.  This can
+	 *                            be as per the return value of getJoinName.
 	 */
 	public function __get($parentField)
 	{
@@ -108,135 +129,29 @@ class Data implements DataIface
 	/******************/
 	/* Public Methods */
 	/******************/
-
-	/** Get the current record as a simple array (without iterator or class
-	 *  properties).
-	 *  @return Array The record that we are managing.
-	 */
-	public function getRecord()
-	{
-		return current($this->data);
-	}
-	
-	/** Return whether the data is empty or not.
-	 *  @return @bool Whether the data is empty or not.
-	 */
-	public function isEmpty()
-	{
-		return empty($this->data);
-	}
    
-	/** Set the data that we are managing.
-	 *  @param data @array The data we want to manage.
+	/**
+	 * Set the data that we are managing.
+	 *
+	 * @param Array[] $data The data we want to manage.
 	 */
 	public function setData(Array $data)
 	{
 		$this->data = $data;
 		$this->rewind();
 	}   
-   
-	/***********************/
-	/* Implements Iterator */
-	/***********************/
-
-	/** Return the current record of data (as a Data object with iterator and
-	 *  reference access).  This is just the object as the object implements the
-	 *  iterator and references.
-	 */
-	public function current()
-	{
-		return $this;
-	}
-
-	/// Return the key of the current data item.
-	public function key()
-	{
-		return key($this->data);
-	}
-
-	/** Get the next record of data. Set the next record within the Data object
-	 *  and return the object.
-	 */
-	public function next()
-	{
-		$nextItem = next($this->data);
-
-		if ($nextItem === false)
-		{
-			return false;
-		}
-
-		$this->setRecord($nextItem);
-		return $this;
-	}
-
-	/// Rewind to the first record of data.
-	public function rewind()
-	{
-		$first = reset($this->data);
-
-		if ($first !== false)
-		{
-			$this->setRecord($first);
-		}
-	}
-
-	/** Return whether there are still data records to iterate over.
-	 *  @return @bool Whether the current data record is valid.
-	 */
-	public function valid()
-	{
-		return (current($this->data) !== false);
-	}
-
-	/**************************/
-	/* Implements ArrayAccess */
-	/**************************/
-   
-	/// Provide the array isset operator.
-	public function offsetExists($offset)
-	{
-		$record = current($this->data);
-		return isset($record[$offset]);
-	}
-
-	/// Provide the array access operator.
-	public function offsetGet($offset)
-	{
-		$record = current($this->data);
-		return $record[$offset];
-	}
-
-	/** We are required to make these available to complete the interface,
-	 *  but we don't want the element to change, so this should never be called.
-	 *  @throws RuntimeException *** ALWAYS ***
-	 */
-	public function offsetSet($offset, $value)
-	{
-		throw new RuntimeException(
-			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.');
-	}
-
-	/** We are required to make these available to complete the interface,
-	 *  but we don't want the element to change, so this should never be called.
-	 *  @throws RuntimeException *** ALWAYS ***
-	 */
-	public function offsetUnset($offset)
-	{
-		throw new RuntimeException(
-			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.');
-	}
 
 	/*********************/
 	/* Protected Methods */
 	/*********************/
 
-	/** Set all of the Joint Data from the current record into the data
-	 *  containers supplied by the references given at construction.
+	/**
+	 * Set all of the Joint Data from the current record into the data
+	 * containers supplied by the references given at construction.
+	 *
+	 * @param mixed[] $record The current record to set the joint data with.
 	 */
-	protected function setRecord($record)
+	protected function setRecord(Array $record)
 	{
 		foreach ($this->dataJoins as $parentField => $data)
 		{
@@ -246,17 +161,19 @@ class Data implements DataIface
 			}
 		}
 	}
-     
+
 	/*******************/
 	/* Private Methods */
 	/*******************/
 
-	/** Get the Join name that will be used for accessing the joint data from
-	 *  this object.  The joint data is a Data object and its name should match
-	 *  the standard naming of our objects (lowerCamelCase) and not contain the
-	 *  final ID which is not needed.
-	 *  @param parentField @string The parent field for the joint data.
-	 *  @return @string The reference name.
+	/**
+	 * Get the Join name that will be used for accessing the joint data from
+	 * this object.  The joint data is a Data object and its name should match
+	 * the standard naming of our objects (lowerCamelCase) and not contain the
+	 * final ID which is not needed.
+	 *
+	 * @param string $parentField The parent field for the joint data.
+	 * @return string The reference name.
 	 */
 	private function getJoinName($parentField)
 	{
@@ -277,6 +194,6 @@ class Data implements DataIface
 		}
 
 		return lcfirst($name);
-	}
+	}	
 }
 // EOF

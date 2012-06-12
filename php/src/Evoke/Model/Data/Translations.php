@@ -4,7 +4,7 @@ namespace Evoke\Model\Data;
 use Evoke\HTTP\RequestIface,
 	InvalidArgumentException;
 
-class Translations extends Data
+class Translations extends DataAbstract
 {
 	/** @property $currentLanguage
 	 *  @string The current language that the translations data is representing.
@@ -46,11 +46,11 @@ class Translations extends Data
 				__METHOD__ . ' requires page as string');
 		}
 
+		$this->page = $page;
+
 		// Constructing the parent sets the data providing the inital conditions
 		// for the data and languages properties.
 		parent::__construct($data);
-
-		$this->page = $page;
 	}
 
 	/******************/
@@ -100,7 +100,7 @@ class Translations extends Data
 		$this->rewind();
 
 		// Calculate the languages within the translations.
-		$record = first($this->data);
+		$record = reset($this->data);
 		unset($record['ID']);
 		unset($record['Name']);
 		$this->languages = array_keys($record);
@@ -183,6 +183,15 @@ class Translations extends Data
 		}
 
 		$this->language = reset($this->languages);
+	}
+
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	protected function setRecord(Array $record)
+	{
+		// By default nothing is required for the translations.
 	}
 }
 // EOF
