@@ -65,8 +65,9 @@ class Request implements RequestIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE,
-	 *  POST, PUT or DELETE).
+	/**
+	 * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST,
+	 * PUT or DELETE).
 	 */
 	public function getMethod()
 	{
@@ -78,9 +79,11 @@ class Request implements RequestIface
 		return $_SERVER['REQUEST_METHOD'];
 	}
 	
-	/** Get the query parameter.
-	 *  @param param @string The parameter to get.
-	 *  @return @bool The query parameter.
+	/**
+	 * Get the query parameter.
+	 *
+	 * @param string The parameter to get.
+	 * @return bool The query parameter.
 	 */
 	public function getQueryParam($param)
 	{
@@ -93,45 +96,48 @@ class Request implements RequestIface
 		return $_REQUEST[$param];
 	}
 
-	/** Get the query parameters.
-	 *  @return The query parameters as an array.
+	/**
+	 * Get the query parameters.
+	 *
+	 * @return [] The query parameters.
 	 */
 	public function getQueryParams()
 	{
 		return $_REQUEST;
 	}
 	
-	/** Get the URI of the request (without the query string).
-	 *  @return The URI of the request.
+	/**
+	 * Get the URI of the request (without the query string).
+	 *
+	 * @return string The URI of the request.
 	 */
 	public function getURI()
 	{
 		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 	}
 
-	/** Whether the query parameter is set.
-	 *  @param param @string The parameter to check.
-	 *  @return @bool Whether the query parameter is set.
+	/**
+	 * Whether the query parameter is set.
+	 *
+	 * @param string param The parameter to check.
+	 * @return bool Whether the query parameter is set.
 	 */
 	public function issetQueryParam($param)
 	{
 		return isset($_REQUEST[$param]);
 	}
 	
-	/** Parse the Accept header field from the request according to:
-	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	/**
+	 * Parse the Accept header field from the request according to RFC-2616.
 	 *
-	 *  This field specifies the preferred media types for responses.
+	 * This field specifies the preferred media types for responses.
 	 *
-	 *  @return @array of Accepted media types with their quality factor,
-	 *  ordered by preference according to @ref compareAccept.  Each element is
-	 *  of the form:
-	 *  @verbatim
-	 *  array(array('Q_Factor' => 0.5,
-	 *              'Subtype'  => 'html',
-	 *              'Type'     => 'text'),
-	 *        etc.
-	 *  @endverbatim
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	 *
+	 * @return Array[] Accepted media types with their quality factor, ordered
+	 *                 by preference according to compareAccept.  Each element
+	 *                 of the array has keys defining the Params, Q_Factor,
+	 *                 Subtype and Type.
 	 */
 	public function parseAccept()
 	{
@@ -228,11 +234,16 @@ class Request implements RequestIface
 		return $accepted;
 	}
 
-	/** Parse the Accept-Language header from the request according to:
-	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10
-	 *  http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
+	/**
+	 * Parse the Accept-Language header from the request according to:
+	 * - http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10
+	 * - http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
 	 *
-	 *  This field specifies the preferred languages for responses.
+	 * This header field specifies the preferred languages for responses.
+	 *
+	 * @return Array[] The accepted languages from the request in order of
+	 *                 quality from highest to lowest.  Each element of the
+	 *                 array has keys defining the Language and Q_Factor.
 	 */
 	public function parseAcceptLanguage()
 	{
@@ -284,7 +295,7 @@ class Request implements RequestIface
 				empty($matches['Q_Factor'][$i]) ? 1 : $matches['Q_Factor'][$i];
 			
 			$acceptLanguages[] = array('Language' => $matches['Language'][$i],
-			                             'Q_Factor' => $qFactor);
+			                           'Q_Factor' => $qFactor);
 		}
 
 		usort($acceptLanguages, array($this, 'compareAcceptLanguage'));
@@ -296,34 +307,39 @@ class Request implements RequestIface
 	/* Protected Methods */
 	/*********************/
 
-	/** Compare two accept media types so that they can be sorted via usort.
-	 *  @param a @array The first accepted media type.
-	 *  @param b @array The second accepted media type.
-	 *  @return @int as required by usort.
+	/**
+	 * Compare two accept media types so that they can be sorted via usort.
+	 *
+	 * @param [] The first accepted media type.
+	 * @param [] The second accepted media type.
+	 * @return int As required by usort.
 	 */
 	protected function compareAccept(Array $a, Array $b)
 	{
 		return $this->scoreAccept($b) - $this->scoreAccept($a);
 	}
 
-	/** Compare two accept languages so that they can be sorted via usort.
-	 *  @param a @array The first accept language.
-	 *  @param b @array The second accept language.
-	 *  @return @int as required by usort.
+	/**
+	 * Compare two accept languages so that they can be sorted via usort.
+	 *
+	 *  @param [] The first accept language.
+	 *  @param [] The second accept language.
+	 *  @return int as required by usort.
 	 */
 	protected function compareAcceptLanguage(Array $a, Array $b)
 	{
 		return $this->scoreAcceptLanguage($b) - $this->scoreAcceptLanguage($a);
 	}
 
-	
 	/*******************/
 	/* Private Methods */
 	/*******************/
 			                    
-	/** Score an accept media type so that they can be compared.
-	 *  @param accept @array The accept media type array.
-	 *  @return @int The score of the accept array for comparison.
+	/**
+	 * Score an accept media type so that they can be compared.
+	 *
+	 * @param [] The accept media type array.
+	 * @return int The score of the accept array for comparison.
 	 */
 	private function scoreAccept(Array $accept)
 	{
@@ -339,9 +355,11 @@ class Request implements RequestIface
 			((count($accept['Params']))               *       1);
 	}
 
-	/** Score an accept language so that they can be compared.
-	 *  @param accept @array The accept language array.
-	 *  @return @int The score of the accept language array for comparison.
+	/**
+	 * Score an accept language so that they can be compared.
+	 *
+	 * @param [] The accept language array.
+	 * @return int The score of the accept language array for comparison.
 	 */
 	private function scoreAcceptLanguage(Array $acceptLanguage)
 	{

@@ -208,6 +208,9 @@ abstract class DataAbstract implements DataIface
 	 *
 	 * @param Array $record The current record that we are setting.
 	 */
-	abstract protected function setRecord(Array $record);
+	protected function setRecord(Array $record)
+	{
+		// By default nothing extra needs to be done.
+	}
 }
 // EOF

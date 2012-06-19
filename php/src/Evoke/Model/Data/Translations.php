@@ -1,165 +1,241 @@
 <?php
 namespace Evoke\Model\Data;
 
-use Evoke\HTTP\RequestIface,
+use DomainException,
+	Evoke\HTTP\RequestIface,
 	InvalidArgumentException;
 
+/**
+ * Translations Data
+ *
+ * Model the translations data, respecting the languages that we are requested
+ * to use, and the languages that we have translations for.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Translations extends DataAbstract
 {
-	/** @property $currentLanguage
-	 *  @string The current language that the translations data is representing.
+	/**
+	 * The current language that the translations data is representing.
+	 * @var string 
 	 */
-	protected $currentLanguage = NULL;
+	protected $currentLanguage;
 
-	/** @property $defaultLanguage
-	 *  @string The default language to use for translations.
+	/**
+	 * The currentPage that the translations are for.
+	 * @var string
+	 */
+	protected $currentPage;
+
+	/**
+	 * The default language to use for translations.
+	 * @var string 
 	 */
 	protected $defaultLanguage;
 
-	/** @property $languages
-	 *  @array The languages that the translations cover.
+	/**
+	 * The language key used to define the desired language in GET requests.
+	 * @var string
 	 */
-	protected $languages;
+	protected $langKey;
 	
-	/** @property page
-	 *  @string Page
+	/**
+	 * The field that identifies the translation.
+	 * @var string
 	 */
-	protected $page;
+	protected $nameField;
 
-	/** @property $request
-	 *  @object Request
+	/**
+	 * The fields in the translations that are not language translations.
+	 * (Note: The Name field does not need to be specified in this array).
+	 * @var array
+	 */
+	protected $nonLanguageFields;	
+	
+	/**
+	 * The field that identifies the page that the translation is for.
+	 * @var string
+	 */
+	protected $pageField;
+	
+	/**
+	 * The Request object for determining the Accept-Language.
+	 * @var Request
 	 */
 	protected $request;
+
+	/**
+	 * The raw translations before any filtering by page and language.
+	 * @var Array[]
+	 */
+	protected $translations;
 	
-	/** Construct a Translations object that modifies the iteration over the
-	 *  data to be page aware.
-	 *  @param page @string Page.
-	 *  @param data @array  Data.
+	/**
+	 * Construct a Translations object that modifies the iteration over the
+	 * data to be page aware.
+	 *
+	 * @param Evoke\HTTP\RequestIface The request object.
+	 * @param Array[]  Raw translations data.
+	 * @param string   The currentPage that we want the translations for.
+	 * @param string   The language query key used in GET requests to specify
+	 *                 the desired language of translations.
+	 * @param string   The name field for the translations.
+	 * @param string[] The fields in the data that don't represent translations
+	 *                 in a language.
+	 * @param string   The page field for the translations.
 	 */
 	public function __construct(RequestIface $request,
-	                            /* String */ $page,
-	                            Array        $data = array())
+	                            Array        $translations      = array(),
+	                            /* String */ $currentPage       = '',
+	                            /* String */ $defaultLanguage   = 'EN',
+	                            /* String */ $langKey           = 'l',
+	                            /* String */ $nameField         = 'Name',
+	                            Array        $nonLanguageFields = array('ID'),
+	                            /* String */ $pageField         = 'Page')
 	{
-		if (!is_string($page))
+		if (!is_string($currentPage))
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' requires page as string');
+				__METHOD__ . ' requires currentPage as string');
 		}
 
-		$this->page = $page;
+		$this->currentPage       = $currentPage;
+		$this->defaultLanguage   = $defaultLanguage;
+		$this->langKey           = $langKey;
+		$this->nameField         = $nameField;
+		$this->nonLanguageFields = $nonLanguageFields;
+		$this->pageField         = $pageField;
+		$this->request           = $request;
+		$this->translations      = $translations;
 
 		// Constructing the parent sets the data providing the inital conditions
 		// for the data and languages properties.
-		parent::__construct($data);
+		parent::__construct($translations);
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/** Get the current language that the translator is translating to.
-	 *  @return @string The current language.
+	/**
+	 * Get the current language that the translator is translating to.
+	 *
+	 * @return string The current language.
 	 */
 	public function getLanguage()
 	{
+		// If the current language has not already been set then the current
+		// value is obtained with an empty call to the set language method so
+		// that the correct language priorities can be analyzed to determine
+		// the current language.
+		if (!isset($this->currentLanguage))
+		{
+			$this->setLanguage();
+		}
 
+		return $this->currentLanguage;
 	}
 
-	/** Get all of the languages that the translations are provided in.
-	 *  @return @array The languages that we have translations for.
+	/**
+	 * Get all of the languages that the translations are provided in for the
+	 * current record.
+	 *
+	 * @return string[] The languages that we have translations for.
 	 */
 	public function getLanguages()
 	{
+		$currentRecord = current($this->data);
+		
+		if ($currentRecord === false)
+		{
+			return array();
+		}
 
+		unset($currentRecord[$this->nameField]);
+		unset($currentRecord[$this->pageField]);
+		
+		return array_keys(
+			array_diff_key($currentRecord,
+			               array_flip($this->nonLanguageFields)));
+	}
+
+	/**
+	 * Return whether the language is modelled by the translations.
+	 *
+	 * @param string The language to check.
+	 * @return bool Whether the language is modelled by the translations.
+	 */
+	public function hasLanguage($language)
+	{
+		$currentRecord = current($this->data);
+
+		return isset($currentRecord[$language]);		
 	}
 	
-	/** Set the data for the translations, using the page specific value if it
-	 *  is set.
-	 *  @param data @array The translations.
+	/**
+	 * Set the data for the translations, using the page specific value if it
+	 * is set.
+	 *
+	 * @param Array[] The raw data for the translations.
 	 */
 	public function setData(Array $data)
 	{
-		$translations = array();
-		
-		foreach ($data as $record)
-		{
-			if (empty($record['Page']))
-			{
-				if (!isset($translations[$record['Name']]))
-				{
-					$translations[$record['Name']] = $record;
-				}
-			}
-			elseif ($record['Page'] === $this->page)
-			{
-				$translations[$record['Name']] = $record;
-			}
-		}
-
-		$this->data = $translations;
+		$this->translations = $data;
+		$this->data = $this->filterTranslations();
 		$this->rewind();
-
-		// Calculate the languages within the translations.
-		$record = reset($this->data);
-		unset($record['ID']);
-		unset($record['Name']);
-		$this->languages = array_keys($record);
 	}
 
-	/** Set the language that the translations are retrieved in.
+	/**
+	 * Set the language that the translations are retrieved in.
 	 *
-	 *  There are a number of sources that determine the language that should be
-	 *  used for the translations:
+	 * There are a number of sources that determine the language that should be
+	 * used for the translations:
 	 *
-	 *  -# The value passed to this method.
-	 *  -# URI Query parameter e.g ?l=EN
-	 *  -# HTTP Request AcceptLanguage header.
-	 *  -# The Default Language the Translator was constructed with.
-	 *  -# The order of the languages as they appear in the data.
+	 * - The value passed to this method.
+	 * - URI Query parameter e.g ?l=EN
+	 * - HTTP Request AcceptLanguage header.
+	 * - The Default Language the Translator was constructed with.
+	 * - The order of the languages as they appear in the first translation.
 	 *
-	 *  These sources have the priority as in the above list for setting the
-	 *  language.  The highest priority source with a language that exists within
-	 *  the translator will be set.
+	 * These sources have the priority as in the above list for setting the
+	 * language.  The highest priority source with a language that exists within
+	 * the first translation will be set.
 	 *
-	 *  @param lang @string The language to set (defaults to NULL).  If no
-	 *  language is passed then the above sources should be used to determine the
-	 *  correct language.
+	 * @param string lang The language to set.  If no language is passed then
+	 *                    the above sources should be used to determine the
+	 *                    correct language.
 	 */
 	public function setLanguage($lang = NULL)
 	{
-		if (empty($this->languages))
-		{
-			throw new LogicException(
-				__METHOD__ . ' no languages exist in the translator to allow ' .
-				'setting of the language.');
-		}
-		
 		if (isset($lang))
 		{
-			if (!$this->isValidLanguage($lang))
+			if (!$this->hasLanguage($lang))
 			{
 				throw new DomainException(
 					__METHOD__ . ' Language must be valid for the translator. ' .
 					'Unknown language: ' . var_export($lang, true));
 			}
 			
-			$this->language = $lang;
+			$this->currentLanguage = $lang;
 			return;
 		}
-
+	
 		if ($this->request->issetQueryParam($this->langKey))
 		{
 			$lang = $this->request->getQueryParam($this->langKey);
 
-			if ($this->isValidLanguage($lang))
+			if ($this->hasLanguage($lang))
 			{
-				$this->language = $lang;
+				$this->currentLanguage = $lang;
 				return;
 			}
 		}
 
 		$acceptLanguages = $this->request->parseAcceptLanguage();
-
+		
 		foreach ($acceptLanguages as $lang)
 		{
 			// The accept langauges are ordered by preference, so the first one
@@ -169,29 +245,53 @@ class Translations extends DataAbstract
 			$l = strtoupper(
 				preg_replace('/^([[:alpha:]]+)-?.*/', '\1', $lang['Language']));
 
-			if ($this->isValidLanguage($l))
+			if ($this->hasLanguage($l))
 			{
-				$this->language = $l;
+				$this->currentLanguage = $l;
 				return;
 			}
 		}
 			
-		if ($this->isValidLanguage($this->defaultLanguage))
+		if ($this->hasLanguage($this->defaultLanguage))
 		{
-			$this->language = $this->defaultLanguage;
+			$this->currentLanguage = $this->defaultLanguage;
 			return;
 		}
 
-		$this->language = reset($this->languages);
+		$currentLanguages = $this->getLanguages();
+		$this->currentLanguage = reset($currentLanguages);
 	}
 
 	/*********************/
 	/* Protected Methods */
 	/*********************/
 
-	protected function setRecord(Array $record)
+	/**
+	 * Filter the translations using the correct page.
+	 *
+	 * @returns Array[] The translations for the current page.
+	 */
+	protected function filterTranslations()
 	{
-		// By default nothing is required for the translations.
+		$filteredData = array();
+		
+		foreach ($this->translations as $record)
+		{
+			if (empty($record[$this->pageField]))
+			{
+				if (!isset($filteredData[$record[$this->nameField]]))
+				{
+					$filteredData[$record[$this->nameField]] = $record;
+				}
+			}
+			elseif ($record[$this->pageField] === $this->currentPage)
+			{
+				$filteredData[$record[$this->nameField]] = $record;
+			}
+		}
+
+		return $filteredData;
+
 	}
 }
 // EOF
