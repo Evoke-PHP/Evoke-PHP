@@ -1,6 +1,14 @@
 <?php
 namespace Evoke\HTTP;
 
+/**
+ * RequestIface
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
+ */
 interface RequestIface
 {
 	/**
@@ -13,7 +21,7 @@ interface RequestIface
 	 * Get the query parameter.
 	 *
 	 * @param string The parameter to get.
-	 * @return bool The query parameter.
+	 * @return mixed The query parameter.
 	 */
 	public function getQueryParam($param);
 

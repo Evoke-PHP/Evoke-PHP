@@ -1,12 +1,22 @@
 <?php
 namespace Evoke\Controller;
 
+/**
+ * Error Controller
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Controller
+ */
 class Error extends Controller
 {
-	/** Execute the controller responding to the request method in the correct
-	 *  output format.
-	 *  @param method       @string The Request method.
-	 *  @param outputFormat @string The output format to use.
+	/**
+	 * Execute the controller responding to the request method in the correct
+	 * output format.
+	 *
+	 * @param string The Request method (POST, GET, PUT, DELETE, etc.)
+	 * @param string The output format to use in uppercase.
 	 */
 	public function execute($method, $outputFormat)
 	{
@@ -25,49 +35,35 @@ class Error extends Controller
 			$this->writer->flush();
 		}
 
-		parent::execute($method, $outputFormat);
-	}
+		switch ($outputFormat)
+		{
+		case JSON:
+			$this->writer->write(array('Code'    => '500',
+			                           'Title'   => 'Internal Server Error'));
+			break;
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-	
-	protected function html5All()
-	{
-		$this->xhtmlAll();
-	}
-	
-	protected function jsonAll()
-	{
-		$this->writer->write(array('Code'    => '500',
-		                           'Title'   => 'Internal Server Error'));
-	}
-	
-	protected function textAll()
-	{
-		$this->writer->write('500 Internal Server Error');
-	}
-	
-	protected function xhtmlAll()
-	{		
-		$this->writer->writeStart(
-			array_merge($this->pageSetup,
-			            array('Description' => 'Internal Server Error',
-			                  'Title'       => 'Internal Server Error')));
-		$this->writeXMLError();
-		$this->writer->writeEnd();
-	}
-	
-	protected function xmlAll()
-	{
-		$this->writeXMLError();
+		case TEXT:
+			$this->writer->write('500 Internal Server Error');
+			break;
+			
+		case HTML5:
+		case XHTML:
+		case XHML:
+		default:
+			$this->writeXMLError();
+			break;
+		}
+		
+		$this->writer->output();
 	}
 
 	/*******************/
 	/* Private Methods */
 	/*******************/
 	
-	/// Write the error in XML.
+	/**
+	 * Write the error in XML.
+	 */
 	private function writeXMLError()
 	{
 		$view = $this->provider->make(

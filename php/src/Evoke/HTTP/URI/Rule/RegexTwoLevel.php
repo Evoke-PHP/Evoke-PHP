@@ -6,89 +6,102 @@ use DomainException,
 	RuntimeException,
 	UnexpectedValueException;
 
-/** A powerful rule based on regular expressions for refining the URI to a
- *  classname and parameters that will respond (generally a Controller).
+/**
+ * RegexTwoLevel
+ *
+ * A powerful rule based on regular expressions for refining the URI to a
+ * classname and parameters that will respond (generally a Controller).
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class RegexTwoLevel extends Rule
 {
-	/** @property $match
-	 *  The regex match to determine whether this object matches the URI. 
+	/**
+	 * The regex match to determine whether this object matches the URI.
+	 * @var string
 	 */
 	protected $match;
 
-	/** @property $params
-	 *  @array The parameters to calculate from the URI (see __construct).
+	/**
+	 * The parameters to calculate from the URI (see __construct).
+	 * @var mixed[]
 	 */
 	protected $params;
 
-	/** @property $classname
-	 *  The classname to calculate from the URI (see __construct);
+	/**
+	 * The classname to calculate from the URI (see __construct);
+	 * @var $classname
 	 */
 	protected $classname;
 	
-	/** Create a Regex URI Rule.
+	/**
+	 * Create a Regex URI Rule.
 	 *
-	 *  The Regex rule is very powerful.  There are two levels of Regex used
-	 *  within each rule.
+	 * The Regex rule is very powerful.  There are two levels of Regex used
+	 * within each rule.
 	 *
-	 *  The first level of Regex is set with the match argument and is used to:
-	 *  -# Check whether the rule matches the URI.
-	 *  -# Capture the subpatterns within the URI that are used at the second
-	 *     level.
+	 * The first level of Regex is set with the match argument and is used to:
 	 *
-	 *  Before the second level Regex's are applied its subject is calculated
-	 *  using the matched subpatterns from the first level.  This is done using
-	 *  the Match_Part in the classname and params arguments.
+	 * - Check whether the rule matches the URI.
+	 * - Capture the subpatterns within the URI that are used at the second
+	 *   level.
 	 *
-	 *  The second level Regex's are defined in the classname and params
-	 *  arguments with their Pattern and Replacement.
+	 * Before the second level Regex's are applied its subject is calculated
+	 * using the matched subpatterns from the first level.  This is done using
+	 * the Match_Part in the classname and params arguments.
 	 *
-	 *  @param match @string The first level regex of the form:
-	 *  @code
-	 *  '/regex_(goes_)?here/'
-	 *  @endcode
-	 *   used to:
-	 *  -# Check that the URI is matched by the rule.
-	 *  -# Provide the capture subpatterns used by the second level Regex for
-	 *     the classname and params.
+	 * The second level Regex's are defined in the classname and params
+	 * arguments with their Pattern and Replacement.
 	 *
-	 *  @param classname @array The second level regex for calculating the
-	 *  classname for the URI.  The classname array is of the form:
-	 *  @code
-	 *  array('Pattern'     => '//',
-	 *        'Replacement' => '//',
-	 *        'Match_Part'  => '//')
-	 *  @endcode
-	 *  It is used to calculate the name of the class that will be instantiated
-	 *  to respond to the URI.  The calculation is done in two levels:
-	 *  -# The first level uses the match property as the pattern, and the
-	 *     Match_Part as the replacement.
-	 *  -# The second level uses the Pattern and Replacement from the classname
-	 *     array against the subject calculated from the first level
-	 *     replacement.
+	 * @param string   The first level regex for the match.
+	 *                 This is used to:
+	 *                 -# Check that the URI is matched by the rule.
+	 *                 -# Provide the capture subpatterns used by the second
+	 *                    level Regex for the classname and params.
 	 *
-	 *  @param params @array The second level regex for capturing the parameters
-	 *  for the class.  The parameters are are specified in the form:
-	 *  @code
-	 *  array(array('Name'     => array('Match_Part'  => '//',
-	 *                                  'Pattern'     => '//',
-	 *                                  'Replacement' => '//'),
-	 *              'Required' => true,
-	 *              'Value'    => array('Match_Part'  => '//',
-	 *                                  'Pattern'     => '//',
-	 *                                  'Replacement' => '//')),
-	 *        etc.)
-	 *  @endcode
-	 *  This builds an array of parameters from the URI.  Each parameter has its
-	 *  Name and Value calculated by two levels of Regex (using the Name or
-	 *  Value subarray):
-	 *  -# The first level uses the match property as the pattern, and the
-	 *     Match_Part as the replacement.
-	 *  -# The second level uses the Pattern and Replacement from the subarray
-	 *     against the subject calculated from the first level replacement.
+	 * @param string[] The second level regex for calculating the classname for
+	 *                 the URI.  The classname array is of the form:
+	 * <pre><code>
+	 * array('Pattern'     => '//',
+	 *       'Replacement' => '//',
+	 *       'Match_Part'  => '//')
+	 * </code></pre>
 	 *
-	 *  @param authoritative @bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	 * It is used to calculate the name of the class that will be instantiated
+	 * to respond to the URI.  The calculation is done in two levels:
+	 *
+	 * - The first level uses the match property as the pattern, and the
+	 *   Match_Part as the replacement.
+	 * - The second level uses the Pattern and Replacement from the classname
+	 *   array against the subject calculated from the first level
+	 *   replacement.
+	 *
+	 * @param mixed[]  The second level regex for capturing the parameters for
+	 *                 the class.  The parameters are specified in the form:
+	 * <pre><code>
+	 * array(array('Name'     => array('Match_Part'  => '//',
+	 *                                 'Pattern'     => '//',
+	 *                                 'Replacement' => '//'),
+	 *             'Required' => true,
+	 *             'Value'    => array('Match_Part'  => '//',
+	 *                                 'Pattern'     => '//',
+	 *                                 'Replacement' => '//')),
+	 *       etc.)
+	 * </code></pre>
+	 *
+	 * This builds an array of parameters from the URI.  Each parameter has its
+	 * Name and Value calculated by two levels of Regex (using the Name or
+	 * Value subarray):
+	 * - The first level uses the match property as the pattern, and the
+	 *   Match_Part as the replacement.
+	 * - The second level uses the Pattern and Replacement from the subarray
+	 *   against the subject calculated from the first level replacement.
+	 *
+	 * @param bool     Whether the rule can definitely give the final route for
+	 *                 all URIs that it matches.
 	 */
 	public function __construct(/* String */ $match,
 	                            Array        $classname,
@@ -132,19 +145,24 @@ class RegexTwoLevel extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Get the classname.
-	 *  @param uri @string The URI to get the classname from.
-	 *  @return @string The uri with the classname regex applied.
+	/**
+	 * Get the classname.
+	 *
+	 * @param string The URI to get the classname from.
+	 * @return string The uri with the classname regex applied.
 	 */
 	public function getClassname($uri)
 	{
 		return $this->getMappedValue($this->classname, $uri);
 	}
 
-	/** Get the parameters for the URI.  An exception will be thrown for URIs
-	 *  that aren't matched.  If you want to avoid this then you should call
-	 *  matches first to check that the URI is matched by this Rule.
-	 *  @return @array The parameters from the URI.
+	/**
+	 * Get the parameters for the URI.
+	 *
+	 * @param string The URI.
+	 * @throw DomainException For a non-matching URI.  Avoid this by using
+	 *                        isMatch.
+	 * @return mixed[] The parameters from the URI.
 	 */
 	public function getParams($uri)
 	{
@@ -180,9 +198,11 @@ class RegexTwoLevel extends Rule
 		return $params;
 	}
 
-	/** Determine whether the rule matches the given URI.
-	 *  @param uri @string The URI to check for a match.
-	 *  @return @bool Whether the URI is matched by this rule.
+	/**
+	 * Determine whether the rule matches the given URI.
+	 *
+	 * @param string The URI to check for a match.
+	 * @return bool Whether the URI is matched by this rule.
 	 */
 	public function isMatch($uri)
 	{
@@ -198,8 +218,12 @@ class RegexTwoLevel extends Rule
 	/* Private Methods */
 	/*******************/
 
-	/** Ensure the second level regexp is defined correctly.
-	 *  @throws DomainException if it is not defined correctly.
+	/**
+	 * Ensure the second level regexp is defined correctly.
+	 *
+	 * @param mixed[] The second level regexp to check.
+	 *
+	 * @throw DomainException If it is not defined correctly.
 	 */
 	private function ensureSecondLevelRegexp($secondLevel)
 	{
@@ -225,10 +249,12 @@ class RegexTwoLevel extends Rule
 		}		
 	}
 	
-	/** Perform the two level regular expression on the URI.
-	 *  @param secondLevelRegex @array The second level regex.
-	 *  @param uri @string The URI.
-	 *  @return @string The value obtained from the two level regex.
+	/**
+	 * Perform the two level regular expression on the URI.
+	 *
+	 * @param mixed[] The second level regex.
+	 * @param string The URI.
+	 * @return string The value obtained from the two level regex.
 	 */
 	private function getMappedValue($secondLevelRegex, $uri)
 	{

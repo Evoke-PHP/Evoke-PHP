@@ -4,23 +4,36 @@ namespace Evoke\Model\Mapper\DB;
 use Evoke\Persistance\DB\SQLIface,
 	InvalidArgumentException;
 
-/// Provide a read only model to a table of data.
+/**
+ * Table
+ *
+ * Provide a read only model to a table of data.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Table extends DB
 {
-	/** @property $select
-	 *  @array Settings for the selection of records.
+	/** 
+	 * Settings for the selection of records.
+	 * @var mixed[]
 	 */
 	protected $select;
 
-	/** @property $tableName
-	 *  @string Table name.
+	/**
+	 * Table name.
+	 * @var string
 	 */
 	protected $tableName;
 
-	/** Create a model for a database table.
-	 *  @param sql        @object SQL.
-	 *  @param tableName  @string The database table that the model represents.
-	 *  @param select     @array  Select statement settings.
+	/** Construct a mapper for a database table.
+	 *
+	 *  @param Evoke\Persistance\DB\SQLIface
+	 *                 SQL object.
+	 *  @param string  The database table that the model represents.
+	 *  @param mixed[] Select statement settings.
 	 */
 	public function __construct(
 		SQLIface     $sql,
@@ -47,8 +60,10 @@ class Table extends DB
 	/* Public Methods */
 	/******************/
 
-	/** Fetch some data from the mapper (specified by params).
-	 *  @param params @array The conditions to match in the mapped data.
+	/**
+	 * Fetch some data from the mapper (specified by params).
+	 *
+	 * @param mixed[] The conditions to match in the mapped data.
 	 */
 	public function fetch(Array $params = array())
 	{

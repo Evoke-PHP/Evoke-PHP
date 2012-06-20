@@ -3,19 +3,30 @@ namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
-/** A rule to trim characters from the URI.
+/**
+ * Trim
+ *
+ * A rule to trim characters from the URI.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class Trim extends Rule
 {
-	/** @property $characters
-	 *  \string of characters to trim from the the URI
+	/**
+	 * Characters to trim from the the URI@
+	 * @var string
 	 */
 	protected $characters;
 
-	/** Construct the Trim Rule.
-	 *  @param characters \string The characters to trim from the URI.
-	 *  @param authoritative \bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	/**
+	 * Construct the Trim Rule.
+	 *
+	 * @param string The characters to trim from the URI.
+	 * @param bool   Whether the rule can definitely give the final route for
+	 *               all URIs that it matches.
 	 */
 	public function __construct(/* String */ $characters,
 	                            /* Bool   */ $authoritative = false)
@@ -35,17 +46,21 @@ class Trim extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Get the classname.
-	 *  @param uri \string The URI to get the classname from.
-	 *  \return \string The uri trimmed appropriately.
+	/**
+	 * Get the classname.
+	 *
+	 * @param string The URI to get the classname from.
+	 * @return string The uri trimmed appropriately.
 	 */
 	public function getClassname($uri)
 	{
 		return trim($uri, $this->characters);
 	}
 
-	/** Check the uri to see if it matches.
-	 *  @return \bool Whether the uri is matched.
+	/**
+	 * Check the uri to see if it matches.
+	 *
+	 * @return bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

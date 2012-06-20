@@ -7,49 +7,65 @@ use DomainException,
 	Evoke\Service\ProviderIface,
 	Evoke\Writer\WriterIface;
 	
-/** The Controller is responsible for providing and using the correct objects
- *  from the processing, model and view layers to execute the desired request
- *  from the user.
+/**
+ * Abstract Controller
+ *
+ * Controllers are responsible for providing and using the correct objects
+ * from the processing, model and view layers to execute the desired request
+ * from the user.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Controller
  */
 abstract class Controller
 {
-	/** @property $pageSetup
-	 *  @array Setup for the page based output formats (XHTML, HTML5).
+	/** 
+	 * Setup for the page based output formats (XHTML, HTML5).
+	 * @var mixed[]
 	 */
 	protected $pageSetup;
 
-	/** @property $params
-	 *  @array Parameters for the Controller.
+	/**
+	 * Parameters for the Controller.
+	 * @var mixed[]
 	 */
 	protected $params;
 	
-	/** @property $provider
-	 *  @object Provider 
+	/**
+	 * Provider Object.
+	 * @var Evoke\Service\ProviderIface
 	 */
 	protected $provider;
 
-	/** @property $request
-	 *  @object Request
+	/**
+	 * Request Object.
+	 * @var Evoke\HTTP\RequestIface
 	 */
 	protected $request;
 
-	/** @property $response
-	 *  @object Response
+	/**
+	 * Response Object
+	 * @var Evoke\HTTP\ResponseIface
 	 */
 	protected $response;
 
-	/** @property $writer
-	 *  @object Writer
+	/**
+	 * Writer Object
+	 * @var Evoke\Writer\WriterIface
 	 */
 	protected $writer;
 	
-	/** Construct the Controller.
-	 *  @param provider  @object Provider object.
-	 *  @param request   @object Request object.
-	 *  @param response  @object Response object.
-	 *  @param writer    @object Writer object.
-	 *  @param params    @array  Parameters.
-	 *  @param pageSetup @array  Setup for page based output formats.
+	/**
+	 * Construct the Controller.
+	 *
+	 * @param Evoke\Service\ProviderIface Provider object.
+	 * @param Evoke\HTTP\RequestIface     Request object.
+	 * @param Evoke\HTTP\ResponseIface 	  Response object.
+	 * @param Evoke\Writer\WriterIface 	  Writer object.
+	 * @param mixed[]					  Parameters.
+	 * @param mixed[]					  Setup for page based output formats.
 	 */
 	public function __construct(ProviderIface $provider,
 	                            RequestIface  $request,
@@ -70,40 +86,13 @@ abstract class Controller
 	/* Public Methods */
 	/******************/
 
-	/** Execute the controller responding to the request method in the correct
-	 *  output format.  The response method is calculate using the format:
-	 *  @verbatim
-	 *  <outputFormat in lowercase><method with first letter uppercase>
-	 *  @endverbatim
+	/**
+	 * Execute the controller responding to the request method in the correct
+	 * output format.
 	 *
-	 *  This matches our lowerCamelCase used elsewhere for naming functions.
-	 *
-	 *  @param method       @string The Request method.
-	 *  @param outputFormat @string The output format to use.
+	 * @param string The Request method (POST, GET, PUT, DELETE, etc.)
+	 * @param string The output format to use in uppercase.
 	 */
-	public function execute($method, $outputFormat)
-	{
-		// Preferably we respond using the method that matches the HTTP Request
-		// method, but we allow a method of All to cover unhandled methods.
-		$methodName = strtolower($outputFormat) . ucfirst(strtolower($method));
-		$methodAll = strtolower($outputFormat) . 'All';
-		
-		if (is_callable(array($this, $methodName)))
-		{
-			$this->{$methodName}();
-		}
-		elseif (is_callable(array($this, $methodAll)))
-		{
-			$this->{$methodAll}();
-		}
-		else
-		{
-			throw new DomainException(
-				__METHOD__ . ' output format: ' . $outputFormat .
-				' not handled');
-		}
-
-		$this->writer->output();
-	}
+	abstract public function execute($method, $outputFormat);
 }
 // EOF

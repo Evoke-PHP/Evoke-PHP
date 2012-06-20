@@ -3,9 +3,19 @@ namespace Evoke\Model\Mapper\DB;
 
 use Exception;
 
-/** @todo PDO transactions get auto-committed by MYSQL and other DB's when
- *  structure changes are made (such as DROP COLUMN, ADD COLUMN etc.).  We
- *  need to take this into account for the transactions.
+/**
+ * @todo PDO transactions get auto-committed by MYSQL and other DB's when
+ * structure changes are made (such as DROP COLUMN, ADD COLUMN etc.).  We
+ * need to take this into account for the transactions.
+ */
+
+/**
+ * TableAdminLanguage
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
  */
 class TableAdminLanguage extends TableAdmin
 {
@@ -13,8 +23,11 @@ class TableAdminLanguage extends TableAdmin
 	/* Public Methods */
 	/******************/
 
-	/** Add a language to the database, updating all tables that have a language
-	 *  field with the newly defined language.  Updating a table definition
+	/**
+	 * Add a language to the database, updating all tables that have a language
+	 * field with the newly defined language.  Updating a table definition
+	 *
+	 * @var mixed[] The record to add.
 	 */
 	public function add(Array $record)
 	{
@@ -70,7 +83,11 @@ class TableAdminLanguage extends TableAdmin
 		}
 	}
 
-	/// Execute a delete that has been confirmed.
+	/**
+	 * Delete a language record.
+	 *
+	 * @param mixed[] The record to delete.
+	 */
 	public function deleteConfirm(Array $record)
 	{
 		////////////////////
@@ -126,6 +143,12 @@ class TableAdminLanguage extends TableAdmin
 		}
 	}
 
+	/**
+	 * Modify a language record.
+	 *
+	 * @param mixed[] The record to modify.
+	 * @param mixed[] The new values for the record.
+	 */
 	public function modify(Array $oldRecord, Array $newRecord)
 	{
 		////////////////////

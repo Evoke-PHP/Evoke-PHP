@@ -46,15 +46,21 @@ class JointAdminLinked extends JointAdmin
 	
 	/** Construct an Administration Model of a joint set of database tables with
 	 *  linked information in the filesystem.
-	 *  @param SQLIface            sql            SQL object.   
-	 *  @param string              tableName      Table name where joins start from.
-	 *  @param JoinsIface          joins          Joins object.
-	 *  @param SessionManagerIface sessionManager SessionManager object.
-	 *  @param ListID              tableListID    DB List ID Table object.
-	 *  @param TreeIface           failures       Failure messages object.
-	 *  @param TreeIface           notifications  Notification messages object.
-	 *  @param Array               select         Select statement settings.
-	 *  @param bool                validate       Whether to validate the data.
+	 *  @param Evoke\Persistance\DB\SQLIface
+	 *                 SQL object.   
+	 *  @param string  Table name where joins start from.
+	 *  @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                 Joins object.
+	 *  @param Evoke\Persistance\SessionManagerIface
+	 *                 SessionManager object.
+	 *  @param Evoke\Persistance\DB\Table\ListIDIface
+	 *                 DB List ID Table object.
+	 *  @param Evoke\Message\TreeIface
+	 *                 Failure messages object.
+	 *  @param Evoke\Message\TreeIface
+	 *                 Notification messages object.
+	 *  @param mixed[] Select statement settings.
+	 *  @param bool                Whether to validate the data.
 	 */
 	public function __construct(SQLIface            $sql,
 	                            /* String */        $tableName,

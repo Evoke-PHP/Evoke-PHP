@@ -5,33 +5,49 @@ use Evoke\Persistance\DB\SQLIface,
 	Evoke\Persistance\DB\Table\JoinsIface,
 	InvalidArgumentException;
 
-/** Represent the data for a joint set of tables in a database. This provides
- *  read-only access to the data for the specified table and its related data
- *  obtained through the SQL interface using the Joins.
+/**
+ * Joint
+ *
+ * Represent the data for a joint set of tables in a database. This provides
+ * read-only access to the data for the specified table and its related data
+ * obtained through the SQL interface using the Joins.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
  */
 class Joint extends DB
 {
-	/** @property $joins
-	 *  @object Joins which lists the relationships for the data, allowing it to
-	 *  be joint together into a meaningful unit of data.
+	/**
+	 * The joins provide the relationships of the data, allowing it to be joint
+	 * together into a meaningful unit of data.
+	 *
+	 * @var Evoke\Persistance\DB\Table\JoinsIface
 	 */
 	protected $joins;
 	
-	/** @property $select
-	 *  @array Select for the SQL statement.
+	/**
+	 * Select for the SQL statement.
+	 * @var mixed[]
 	 */
 	protected $select;
 	
-	/** @property $tableName
-	 *  @string Table name for the data.
+	/**
+	 * Table name for the data.
+	 * @var string
 	 */
 	protected $tableName;
 
-	/** Construct a Model of a joint set of database tables.
-	 *  @param sql       @object SQL object.
-	 *  @param tableName @string The table name where joins start from.
-	 *  @param joins     @object Joins object.
-	 *  @param select    @array  Select statement settings.
+	/**
+	 * Construct a Mapper for of a joint set of database tables.
+	 *
+	 * @param Evoke\Persistance\DB\SQLIface
+	 *                SQL object.
+	 * @param string  The table name where joins start from.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                Joins object.
+	 * @param mixed[] Select statement settings.
 	 */
 	public function __construct(SQLIface     $sql, 
 	                            /* String */ $tableName,
@@ -61,8 +77,10 @@ class Joint extends DB
 	/* Public Methods */
 	/******************/
 
-	/** Fetch some data from the mapper (specified by params).
-	 *  @param params @array The conditions to match in the mapped data.
+	/**
+	 * Fetch some data from the mapper (specified by params).
+	 *
+	 * @param mixed[] The conditions to match in the mapped data.
 	 */
 	public function fetch(Array $params = array())
 	{

@@ -3,16 +3,26 @@ namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
+/**
+ * Media Type Rule
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
+ */
 abstract class Rule implements RuleIface
 {
-	/** @property $outputFormat
-	 *  @mixed The output format.
+	/**
+	 * The output format.
+	 * @var string
 	 */
 	protected $outputFormat;
 	
-	/** Construct the Equivalent Rule.
-	 *  @param match @array The match for the rule.
-	 *  @param outputFormat @mixed The output format for the rule.
+	/**
+	 * Construct the Rule.
+	 *
+	 * @param string The output format for the rule.
 	 */
 	public function __construct($outputFormat)
 	{
@@ -29,8 +39,10 @@ abstract class Rule implements RuleIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the output format for the media type.
-	 *  @param mediaType @array The media type.
+	/**
+	 * Get the output format for the media type.
+	 *
+	 * @param mixed[] The media type.
 	 */
 	public function getOutputFormat(Array $mediaType)
 	{

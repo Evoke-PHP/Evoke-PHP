@@ -3,19 +3,30 @@ namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
-/** HTTP URI Rule class for mapping the URI to a controller.
+/**
+ * Rule
+ *
+ * Map the URI to a class and parameters (probably a controller).
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 abstract class Rule implements RuleIface
 {
-	/** @property $authoritative
-	 *  @bool Whether the rule can definitely give the final route for all URIs
-	 *  that it matches.
+	/**
+	 * Whether the rule can definitely give the final route for all URIs that
+	 * it matches.
+	 * @var bool
 	 */
 	protected $authoritative;
 
-	/** Construct the URI Rule.
-	 *  @param authoritative @bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	/**
+	 * Construct the URI Rule.
+	 *
+	 * @param bool Whether the rule can definitely give the final route for all
+	 *             URIs that it matches.
 	 */
 	public function __construct(/* Bool */ $authoritative)
 	{
@@ -32,18 +43,22 @@ abstract class Rule implements RuleIface
 	/* Public Methods */
 	/******************/
 
-	/** Return the parameters for the URI.
-	 *  @param uri @string The URI.
-	 *  @return @array Empty Array. (By default no parameters are captured)
+	/**
+	 * Get the parameters for the URI.
+	 *
+	 * @param string The URI.
+	 * @return [] Empty Array. (By default no parameters are captured)
 	 */	
 	public function getParams($uri)
 	{
 		return array();
 	}
 
-	/** Check whether the rule is authoritative.
-	 *  @return @bool Whether the rule can definitely give the final route for
-	 *  all URIs that it matches.
+	/**
+	 * Check whether the rule is authoritative.
+	 *
+	 * @return bool Whether the rule can definitely give the final route for all
+	 *              URIs that it matches.
 	 */
 	public function isAuthoritative()
 	{

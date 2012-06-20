@@ -4,27 +4,41 @@ namespace Evoke\Message;
 
 use InvalidArgumentException;
 
-/// Tree with title and text at each node.
+/**
+ * Tree
+ *
+ * Message Tree with a title and text at each node.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Message
+ */
 class Tree implements TreeIface
 {
-	/** @property $children
-	 *  @array Children of the Message Tree node.
+	/**
+	 * Children of the Message Tree node.
+	 * @var mixed[]
 	 */
 	protected $children;
 	
-	/** @property $text
-	 *  @string The text for the message.
+	/**
+	 * The text for the message.
+	 * @var string
 	 */
 	protected $text;
 
-	/** @property $title
-	 *  @string The title of the message.
+	/**
+	 * The title of the message.
+	 * @var string
 	 */
 	protected $title;
 
-	/** Construct a message tree node.
-	 *  @param title @string Title for the message.
-	 *  @param text  @string Text for the message.
+	/**
+	 * Construct a message tree node.
+	 *
+	 * @param string Title for the message.
+	 * @param string Text for the message.
 	 */
 	public function __construct(/* String */ $title,
 	                            /* String */ $text)
@@ -50,8 +64,10 @@ class Tree implements TreeIface
 	/* Public Methods */
 	/******************/
 
-	/** Append a child message tree object to the tree node.
-	 *  @param Child @object MessageTree to append.
+	/**
+	 * Append a child message tree object to the tree node.
+	 *
+	 * @param Evoke\Message\TreeIface MessageTree to append.
 	 */
 	public function append(TreeIface $child)
 	{
@@ -68,22 +84,31 @@ class Tree implements TreeIface
 		return $this->children;
 	}
 	
-	/** Get the text of the message node.
-	 *  @return @string The text for the message node.
+	/**
+	 * Get the text of the message node.
+	 *
+	 * @return string The text for the message node.
 	 */
 	public function getText()
 	{
 		return $this->text;
 	}
 	
-	/** Get the title of the message node.
-	 *  @return @string The title of the message node.
+	/**
+	 * Get the title of the message node.
+	 *
+	 * @return string The title of the message node.
 	 */
 	public function getTitle()
 	{
 		return $this->title;
 	}
 
+	/**
+	 * Whether the node has children.
+	 *
+	 * @return bool Whether the node has children.
+	 */
 	public function hasChildren()
 	{
 		return !empty($this->children);

@@ -10,39 +10,59 @@ use Evoke\Message\TreeIface,
 	Exception,
 	RuntimeException;
 
-/// JointAdmin provides A CRUD interface to a set of joint tables.
+/**
+ * JointAdmin
+ *
+ * JointAdmin provides A CRUD interface to a set of joint tables.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class JointAdmin extends Joint implements AdminIface
 {
-	/** @property $failures
-	 *  @object MessageTree of any failures.
+	/** 
+	 * MessageTree of any failures.
+	 * @var Evoke\Message\TreeIface
 	 */
 	protected $failures;
 
-	/** @property $notifications
-	 *  @object MessageTree of any notifications.
+	/**
+	 * MessageTree of any notifications.
+	 * @var Evoke\Message\TreeIface
 	 */
 	protected $notifications;
 
-	/** @property $sessionManager
-	 *  @object SessionManager
+	/**
+	 * Session Manager
+	 * @var Evoke\Persistance\SessionManagerIface
 	 */
 	protected $sessionManager;
 
-	/** @property $table_List_ID
-	 *  @object Database List_ID Table
+	/**
+	 * Database List ID management
+	 * @var Evoke\Persistance\DB\Table\ListIDIface
 	 */
-	protected $table_List_ID;
+	protected $tableListID;
 	
-	/** Construct an Administration Model of a joint set of database tables.
-	 *  @param sql            @object SQL object.   
-	 *  @param tableName      @string The table name where joins start from.
-	 *  @param joins          @object Joins object.
-	 *  @param sessionManager @object SessionManager object.
-	 *  @param tableListID    @object DB List ID Table object.
-	 *  @param failures       @object Failure messages object.
-	 *  @param notifications  @object Notification messages object.
-	 *  @param select         @array  Select statement settings.
-	 *  @param validate       @bool   Whether to validate the data.
+	/**
+	 * Construct an Administration Model of a joint set of database tables.
+	 *
+	 * @param Evoke\Persistance\DB\SQLIface
+	 *                SQL object.   
+	 * @param string  The table name where joins start from.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                Joins object.
+	 * @param Evoke\Persistance\SessionManagerIface SessionManager object.
+	 * @param Evoke\Persistance\DB\Table\ListIDIface
+	 *                DB List ID Table object.
+	 * @param Evoke\Message\TreeIface
+	 *                Failure messages object.
+	 * @param Evoke\Message\TreeIface
+	 *                Notification messages object.
+	 * @param mixed[] Select statement settings.
+	 * @param bool    Whether to validate the data.
 	 */
 	public function __construct(SQLIface            $sql,
 	                            /* String */        $tableName,
@@ -69,8 +89,10 @@ class JointAdmin extends Joint implements AdminIface
 	/* Public Methods */
 	/******************/
 
-	/** Add the joint record to the database.
-	 *  @param record @array Any new data for the record to be added.
+	/**
+	 * Add the joint record to the database.
+	 *
+	 * @param mixed[] Any new data for the record to be added.
 	 */
 	public function add(Array $record)
 	{
@@ -110,13 +132,17 @@ class JointAdmin extends Joint implements AdminIface
 		}
 	}
 
-	/// Cancel the editing of the record.
+	/**
+	 * Cancel the editing of the record.
+	 */
 	public function cancel()
 	{
 		$this->sessionManager->reset();
 	}
 
-	/// Begin creating a new record.
+	/**
+	 * Begin creating a new record.
+	 */
 	public function createNew()
 	{
 		$currentRecord = $this->joins->getEmpty();
@@ -126,18 +152,29 @@ class JointAdmin extends Joint implements AdminIface
 		$this->sessionManager->set('Edited_Record', array());
 	}
 
+	/**
+	 * Delete a record.
+	 *
+	 * @param mixed[] The record to delete.
+	 */
 	public function delete(Array $record)
 	{
 
 	}
 	
-	/// Cancel the currently requested deletion.
+	/**
+	 * Cancel the currently requested deletion.
+	 */
 	public function deleteCancel()
 	{
 		$this->sessionManager->reset();
 	}
 
-	/// Delete the specified record.
+	/**
+	 * Delete the specified record.
+	 *
+	 * @param mixed[] The record to delete.
+	 */	 
 	public function deleteConfirm(Array $record)
 	{
 		$this->failures->reset();
@@ -167,8 +204,11 @@ class JointAdmin extends Joint implements AdminIface
 		}
 	}
 
-	/** Request that a record should be deleted, but only after confirmation
-	 *  from the user.
+	/**
+	 * Request that a record should be deleted, but only after confirmation from
+	 * the user.
+	 *
+	 * @param mixed[] The record that should be requested to be deleted.
 	 */
 	public function deleteRequest($record)
 	{
@@ -190,8 +230,10 @@ class JointAdmin extends Joint implements AdminIface
 		$this->sessionManager->set('Delete_Record', $record);
 	}
 
-	/** Edit a record.
-	 *  @param record The post data.
+	/**
+	 * Edit a record.
+	 *
+	 * @param mixed[] The record that should be edited.
 	 */
 	public function edit($record)
 	{
@@ -224,7 +266,9 @@ class JointAdmin extends Joint implements AdminIface
 		$this->sessionManager->set('Edited_Record', $record);
 	}
    
-	/// Get the data for the model.
+	/**
+	 * Get the data for the model.
+	 */
 	public function getData($selectSetup=array())
 	{
 		return array('Records'   => parent::getData($selectSetup),
@@ -234,7 +278,12 @@ class JointAdmin extends Joint implements AdminIface
 			             $this->sessionManager->getAccess()));
 	}
 
-	/// Modify a record in the database.
+	/**
+	 * Modify a record in the database.
+	 *
+	 * @param mixed[] The record that is to be modified.
+	 * @param mixed[] The new values for the record.
+	 */
 	public function modify(Array $oldRecord, Array $newRecord)
 	{
 		$this->updateCurrentRecord($updates);
@@ -275,8 +324,10 @@ class JointAdmin extends Joint implements AdminIface
 		}
 	}
 
-	/** Update the current record in the sesssion.
-	 *  @param record @array New information to be added to the current record.
+	/**
+	 * Update the current record in the sesssion.
+	 *
+	 * @param mixed[] New information to be added to the current record.
 	 */
 	public function updateCurrentRecord($updateRecord)
 	{
@@ -333,6 +384,10 @@ class JointAdmin extends Joint implements AdminIface
 	/* Protected Methods */
 	/*********************/
    
+	/**
+	 * Add the entries for the joint data.
+	 *
+	 */
 	protected function addEntries(&$data, $join)
 	{
 		if (!$join->isAdminManaged() || empty($data))
@@ -390,9 +445,11 @@ class JointAdmin extends Joint implements AdminIface
 		return $data;
 	}
    
-	/** Delete the records for the current table.
-	 *  @param data @array  The records to be deleted.
-	 *  @param join @object The Joins object.
+	/**
+	 * Delete the records for the current table.
+	 *
+	 *  @param mixed[]                               The records to be deleted.
+	 *  @param Evoke\Persistance\DB\Table\JoinsIface The Joins object.
 	 */
 	protected function deleteEntries($data, $join)
 	{
@@ -403,40 +460,45 @@ class JointAdmin extends Joint implements AdminIface
 		}
 	}   
 
-	/** Recurse the data and Joins calling the appropriate callbacks.  This
-	 *  recursion is used to call the callback functions in varying breadth first
-	 *  or depth first manner.
+	/**
+	 * Recurse the data and Joins calling the appropriate callbacks.  This
+	 * recursion is used to call the callback functions in varying breadth first
+	 * or depth first manner.
 	 *
-	 *  @param callbacks @array Callbacks to be called recursively on the data of
-	 *  the format:
-	 *  @verbatim
-	 *  // Supply callbacks as values in this array.
-	 *  // The comments show what the callback will receive.
-	 *  array('Breadth_First_Data'   => NULL, // Data,          Joins.
-	 *       'Breadth_First_Record' => NULL, // Record,        Joins.
-	 *       'Breadth_First_Parent' => NULL, // Parent Record, Child Join.
-	 *       'Depth_First_Data'     => NULL, // Parent Record, Child Join.
-	 *       'Depth_First_Record'   => NULL, // Record,        Joins.
-	 *       'Depth_First_Parent'   => NULL) // Data,          Joins.
-	 *  @endverbatim
-	 *  For any one bit of data these functions are called in the following order:
-	 *  @verbatim
-	 *  1 Breadth_First_Data
-	 *  2 Breadth_First_Record
-	 *  3 Breadth_First_Parent
-	 *  4 Depth_First_parent
-	 *  5 Depth_First_Record
-	 *  6 Depth_First_Data
-	 *  @endverbatim
-	 *  Order is important when callback functions alter the data they receive.
+	 * @param mixed[] Callbacks to be called recursively on the data.
 	 *
-	 *  @param data  @array  The data to traverse.
-	 *  @param joins @object The joins object to traverse the data with.
-	 *  @return The data after possibly being modified by the callbacks.
+	 * <pre><code>
+	 * // Supply callbacks as values in this array.
+	 * // The comments show what the callback will receive.
+	 * array('Breadth_First_Data'   => NULL, // Data,          Joins.
+	 *      'Breadth_First_Record' => NULL, // Record,        Joins.
+	 *      'Breadth_First_Parent' => NULL, // Parent Record, Child Join.
+	 *      'Depth_First_Data'     => NULL, // Parent Record, Child Join.
+	 *      'Depth_First_Record'   => NULL, // Record,        Joins.
+	 *      'Depth_First_Parent'   => NULL) // Data,          Joins.
+	 * </code></pre>
+	 *
+	 * For any one bit of data these functions are called in the following order:
+	 *
+	 * <ol>
+	 *	  <li>Breadth_First_Data</li>
+	 *    <li>Breadth_First_Record</li>
+	 *    <li>Breadth_First_Parent</li>
+	 *    <li>Depth_First_parent</li>
+	 *    <li>Depth_First_Record</li>
+	 *    <li>Depth_First_Data</li>
+	 * </ol>
+	 *
+	 * Order is important when callback functions alter the data they receive.
+	 *
+	 * @param mixed[]  The data to traverse.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                 The joins object to traverse the data with.
+	 * @return mixed[] The data after possibly being modified by the callbacks.
 	 */
-	protected function recurse(Array          $callbacks,
-	                           Array          &$data,
-	                           Iface\DB\Joins $joins)
+	protected function recurse(Array      $callbacks,
+	                           Array      &$data,
+	                           JoinsIface $joins)
 	{
 		$jointKey = $joins->getJointKey();
 		$childJoins = $joins->getJoins();
@@ -472,9 +534,12 @@ class JointAdmin extends Joint implements AdminIface
 		return $data;
 	}
    
-	/** Feeback the List_ID from the joint child records into the parent record.
-	 *  @param parentRecord @array  The parent record.
-	 *  @param join         @object The Join to the child record. 
+	/**
+	 * Feeback the List_ID from the joint child records into the parent record.
+	 *
+	 * @param mixed[] The parent record.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                The Join to the child record.
 	 */
 	protected function feedbackListID(&$parentRecord, $join)
 	{
@@ -499,12 +564,15 @@ class JointAdmin extends Joint implements AdminIface
 		}
 	}
    
-	/** Validate all of the data specified with the Joins.
-	 *  @param data  @array The data to validate.
-	 *  @param joins @obj The Joins object to validate the data with.
-	 *  @return      @bool Whether the data is valid or not.
+	/**
+	 * Validate all of the data specified with the Joins.
+	 *
+	 * @param  mixed[] The data to validate.
+	 * @param  Evoke\Persistance\DB\Table\JoinsIface
+	 *                 The Joins object to validate the data with.
+	 * @return bool Whether the data is valid or not.
 	 */
-	protected function validate($data, $joins)
+	protected function validate($data, JoinsIface $joins)
 	{
 		$this->recurse(
 			array('Depth_First_Data' => array($this, 'validateEntries')),
@@ -514,12 +582,14 @@ class JointAdmin extends Joint implements AdminIface
 		return $this->failures->isEmpty();
 	}
 
-	/** Validate the entries for the table.
-	 *  @param data @array  The data for the table.
-	 *  @param join @object The join for the data.
+	/**
+	 * Validate the entries for the table.
+	 *
+	 * @param mixed[]                               The data for the table.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface The join for the data.
 	 */
-	protected function validateEntries(Array               $data,
-	                                   Iface\DB\Table\Join $join)
+	protected function validateEntries(Array      $data,
+	                                   JoinsIface $join)
 	{
 		if (!$join->isAdminManaged() || empty($data))
 		{
@@ -549,11 +619,14 @@ class JointAdmin extends Joint implements AdminIface
 	/* Private Methods */
 	/*******************/
 
-	/** Helper function to call a callback.
-	 *  @param callbacks @array The array of callbacks that we are calling from.
-	 *  @param cb        @string Index for the callback that we want to call.
-	 *  @param data      @array The data to pass to the callback by reference.
-	 *  @param joins     @object The Joins object to pass to the callback.
+	/**
+	 * Helper function to call a callback.
+	 *
+	 * @param mixed[] The array of callbacks that we are calling from.
+	 * @param string  Index for the callback that we want to call.
+	 * @param mixed[] The data to pass to the callback by reference.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *                The Joins object to pass to the callback.
 	 */
 	private function call(Array $callbacks, $cb, Array &$data, $joins)
 	{

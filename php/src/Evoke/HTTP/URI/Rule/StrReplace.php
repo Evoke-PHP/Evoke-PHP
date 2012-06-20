@@ -3,26 +3,38 @@ namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
-/** A rule to change strings from a request so that a classname can be formed.
- *  No parameters are matched by this class.
+/**
+ * StrReplace
+ *
+ * A rule to change strings from the URI so that a classname can be formed.
+ * No parameters are matched by this class.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class StrReplace extends Rule
 {
-	/** @property $match
-	 *  @string The string to match on.
+	/**
+	 * The string to match on.
+	 * @var string
 	 */
 	protected $match;
 
-	/** @property $replacement
-	 *  @string The string to use as a replacement.
+	/** 
+	 * The string to use as a replacement.
+	 * @var string
 	 */
 	protected $replacement;
 
-	/** Construct the string replacements rule.
-	 *  @param match         @string The string to match on.
-	 *  @param replacment    @string The string to use as a replacement.
-	 *  @param authoritative @bool   Whether the rule can definitely give the
-	 *                               final route for all URIs that it matches.
+	/**
+	 * Construct the string replacements rule.
+	 *
+	 * @param string The string to match on.
+	 * @param string The string to use as a replacement.
+	 * @param bool   Whether the rule can definitely give the final route for
+	 *               all URIs that it matches.
 	 */
 	public function __construct(/* String */ $match,
 	                            /* String */ $replacement,
@@ -50,17 +62,22 @@ class StrReplace extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Get the classname.
-	 *  @param uri @string The URI to get the classname from.
-	 *  @return @string The uri with the string replacements made.
+	/**
+	 * Get the classname.
+	 *
+	 * @param string The URI to get the classname from.
+	 * @return string The uri with the string replacements made.
 	 */
 	public function getClassname($uri)
 	{
 		return str_replace($this->match, $this->replacement, $uri);
 	}
 	
-	/** Check the uri to see if it matches. Only 1 sub-rule needs to match.
-	 *  @return @bool Whether the uri is matched.
+	/**
+	 * Check the uri to see if it matches. Only 1 sub-rule needs to match.
+	 *
+	 * @param string The URI.
+	 * @return bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

@@ -1,23 +1,31 @@
 <?php
 namespace Evoke\HTTP\URI\Rule;
 
-/** A rule to strip unwanted characters from a request so that a classname can
- *  be formed.  No parameters are matched by this class.
+/**
+ * UpperCaseFirst
+ *
+ * A rule to convert the first letter of each word to upper case.
+ * No parameters are matched by this class.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class UpperCaseFirst extends Rule
 {
-	/** @property $delimiters
-	 *  @array of delimiters that specify where a new word begins that should
-	 *  have its first letter made upper case.
+	/**
+	 * The delimiters define the boundary of words.
+	 * @var string[]
 	 */
 	protected $delimiters;
 
-	/** Construct the UpperCaseFirst Rule.
-	 *  @param delimiters @array An array of delimiter characters, which signify
-	 *  that the following character is the start of a word that should be
-	 *  upper cased.
-	 *  @param authoritative @bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	/**
+	 * Construct the UpperCaseFirst Rule.
+	 *
+	 * @param string[] Delimiter strings that show the boundary of words.
+	 * @param bool     Whether the rule can definitely give the final route for
+	 *                 all URIs that it matches.
 	 */
 	public function __construct(Array      $delimiters,
 	                            /* Bool */ $authoritative=false)
@@ -31,9 +39,11 @@ class UpperCaseFirst extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Split the string by the delimiters make the first letter uppercase and
-	 *  then rejoin the string with the delimiters.
-	 *  @return @string The string representing the Classname.
+	/**
+	 * Get the classname with each word starting in upper case.
+	 *
+	 * @param string The URI.
+	 * @return string The string representing the Classname.
 	 */
 	public function getClassname($uri)
 	{
@@ -54,8 +64,11 @@ class UpperCaseFirst extends Rule
 		return $classname;
 	}
 
-	/** Check the uri to see if it matches.
-	 *  @return @bool Whether the uri is matched.
+	/**
+	 * Check the uri to see if it matches.
+	 *
+	 * @param string The URI.
+	 * @return bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{

@@ -15,7 +15,8 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test the construction of a good object.
 	 *
-	 * @covers       Evoke\Model\Data\Translations::__construct
+	 * @covers Evoke\Model\Data\Translations::__construct
+	 * @covers Evoke\Model\Data\TranslationsIface
 	 */
 	public function test__constructGood()
 	{

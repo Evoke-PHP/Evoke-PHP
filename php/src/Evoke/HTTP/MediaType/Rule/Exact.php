@@ -3,25 +3,36 @@ namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
-/** A Media Type rule that matches exactly the media type from the accept
- *  header
+/**
+ * Exact
+ *
+ * A Media Type rule that matches exactly the media type from the accept header.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class Exact extends Match
 {
-	/** @property $ignoredFields
-	 *  @array Fields that can be ignored in the match.
+	/**
+	 * Fields that can be ignored in the match.
+	 * @var string[]
 	 */
 	protected $ignoredFields;
 
-	/** @property $match
-	 *  The match for the media type.
+	/**
+	 * The match for the media type.
+	 * @var mixed[]
 	 */
 	protected $match;
 
-	/** Construct the Exact rule.
-	 *  @param outputFormat  @string The output format for the rule.
-	 *  @param match         @array Exact match required from the media type.
-	 *  @param ignoredFields @array Fields that are to be ignored in the match.
+	/**
+	 * Construct the Exact rule.
+	 * 
+	 * @param string   The output format for the rule.
+	 * @param mixed[]  Exact match required from the media type.
+	 * @param string[] Fields that are to be ignored in the match.
 	 */
 	public function __construct(/* String */ $outputFormat,
 	                            Array        $match,	                            
@@ -36,9 +47,11 @@ class Exact extends Match
 	/* Public Methods */
 	/******************/
 
-	/** Check to see if the rule matches.
-	 *  @param mediaType @array The media type we are checking against.
-	 *  @return @bool Whether the rule matches.
+	/**
+	 * Check to see if the rule matches.
+	 *
+	 * @param mixed[] The media type we are checking against.
+	 * @return bool Whether the rule matches.
 	 */
 	public function isMatch($mediaType)
 	{

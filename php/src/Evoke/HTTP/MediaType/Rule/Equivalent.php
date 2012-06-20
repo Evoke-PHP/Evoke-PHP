@@ -3,17 +3,30 @@ namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
+/**
+ * Equivalent
+ *
+ * A rule that matches equivalent media types.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
+ */
 class Equivalent extends Match
 {
-	/** @property $ignoredFields
-	 *  @array Fields that can be ignored in the match.
+	/**
+	 * Fields that can be ignored in the match.
+	 * @var string[]
 	 */
 	protected $ignoredFields;	
 
-	/** Construct the Equivalent rule.
-	 *  @param outputFormat  @string The output format for the rule.
-	 *  @param match         @array  The equivalent match required by the rule.
-	 *  @param ignoredFields @array  Fields that are to be ignored in the match.
+	/**
+	 * Construct the Equivalent rule.
+	 *
+	 * @param string   The output format for the rule.
+	 * @param mixed[]  The equivalent match required by the rule.
+	 * @param string[] Fields that are to be ignored in the match.
 	 */
 	public function __construct(
 		/* String */ $outputFormat,
@@ -29,9 +42,11 @@ class Equivalent extends Match
 	/* Public Methods */
 	/******************/
 
-	/** Check to see if the rule matches.
-	 *  @param mediaType @array The media type we are checking against.
-	 *  @return @bool Whether the rule matches.
+	/**
+	 * Check to see if the rule matches.
+	 *
+	 * @param mixed[] The media type we are checking against.
+	 * @return bool Whether the rule matches.
 	 */
 	public function isMatch($mediaType)
 	{

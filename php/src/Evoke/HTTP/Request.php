@@ -3,28 +3,33 @@ namespace Evoke\HTTP;
 
 use LogicException;
 
-/// Provide details of the request.
+/**
+ * Request
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
+ */
 class Request implements RequestIface
 {
-	/** @property $basicPatterns
-	 *  @string Regexp subpatterns to match components of the request header
-	 *  values.
+	/**
+	 * Regexp subpatterns to match components of the request header values.
+	 * @var string
 	 */
 	private $basicPatterns;
-
-	/** @property $params
-	 *  @array of parameters for the request ($_GET, $_POST etc.)
-	 */
-	protected $params;
 	
-	/** @property $validateHeaders
-	 *  @bool Whether to validate the headers before parsing.
+	/**
+	 * Whether to validate the headers before parsing.
+	 * @var bool
 	 */
 	protected $validateHeaders;
 
-	/** Construct the request object.
-	 *  @param $validateHeaders @bool Whether to validate against rfc2616 or
-	 *  assume that it is valid and try to pull the data without checking.
+	/**
+	 * Construct the request object.
+	 *
+	 * @param bool Whether to validate against rfc2616 or assume that it is
+	 *             valid and try to pull the data without checking.
 	 */
 	public function __construct($validateHeaders=true)
 	{
@@ -83,7 +88,7 @@ class Request implements RequestIface
 	 * Get the query parameter.
 	 *
 	 * @param string The parameter to get.
-	 * @return bool The query parameter.
+	 * @return mixed The query parameter.
 	 */
 	public function getQueryParam($param)
 	{

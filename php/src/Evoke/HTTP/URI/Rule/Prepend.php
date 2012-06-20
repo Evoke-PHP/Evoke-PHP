@@ -3,20 +3,31 @@ namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
-/** A rule to prepend a string to the classname.
- *  No parameters are matched by this class.
+/**
+ * Prepend
+ *
+ * A rule to prepend a string to the classname.
+ * No parameters are matched by this class.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class Prepend extends Rule
 {
-	/** @property $str
-	 *  @string String to prepend to the classname.
+	/**
+	 * String to prepend to the classname.
+	 * @var string
 	 */
 	protected $str;
 
-	/** Construct the prepend rule.
-	 *  @param str @string The string to prepend.
-	 *  @param authoritative @bool Whether the rule can definitely give the
-	 *  final route for all URIs that it matches.
+	/**
+	 * Construct the prepend rule.
+	 *
+	 * @param string The string to prepend.
+	 * @param bool   Whether the rule can definitely give the final route for
+	 *               all URIs that it matches.
 	 */
 	public function __construct(/* String */ $str,
 	                            /* Bool   */ $authoritative = false)
@@ -36,17 +47,21 @@ class Prepend extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Get the classname.
-	 *  @param uri @string The URI to get the classname from.
-	 *  @return @string The uri with the string prepended.
+	/**
+	 * Get the classname.
+	 *
+	 * @param string The URI to get the classname from.
+	 * @return string The uri with the string prepended.
 	 */
 	public function getClassname($uri)
 	{
 		return $this->str . $uri;
 	}
 	
-	/** The prepend rule always matches.
-	 *  @return @bool TRUE.
+	/**
+	 * The prepend rule always matches.
+	 *
+	 * @return bool TRUE.
 	 */
 	public function isMatch($uri)
 	{

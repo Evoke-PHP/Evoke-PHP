@@ -3,33 +3,46 @@ namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
-/** A regex rule to map the uri classname and parameters.  There is a single
- *  match for the URI, with all replacements being made from this match.  If
- *  there are more complex requirements such as optional parameters then the
- *  RegexTwoLevel rule should be used.
+/**
+ * Regex
+ *
+ * A regex rule to map the uri classname and parameters.  There is a single
+ * match for the URI, with all replacements being made from this match.  If
+ * there are more complex requirements such as optional parameters then the
+ * RegexTwoLevel rule should be used.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package HTTP
  */
 class Regex extends Rule
 {
-	/** @property $match
-	 *  Regex match @string for the URI.
+	/**
+	 * Regex match for the URI.
+	 * @var string
 	 */
 	protected $match;
 
-	/** @property $params
-	 *  @array of parameter key and value replacement regex for the URI.
+	/**
+	 * Parameter key and value replacement regex for the URI.
+	 * @var Array[]
 	 */
 	protected $params;
 
-	/** @property $replacement
-	 *  Regex replacement @string Replacement for the classname.
+	/**
+	 * Regex replacement for the classname.
+	 * @var string
 	 */
 	protected $replacement;
 
-	/** Construct the SimpleReplace Rule.
-	 *  @param match         @string The Regex to match the URI with.
-	 *  @param replacement   @string The classname regex replacement string.
-	 *  @param params        @Array  Regexes replacements for the parameters.
-	 *  @param authoritative @bool   Is this always the final route?
+	/**
+	 * Construct the SimpleReplace Rule.
+	 *
+	 * @param string  The Regex to match the URI with.
+	 * @param string  The classname regex replacement string.
+	 * @param Array[] Regexes replacements for the parameters.
+	 * @param bool    Is this always the final route?
 	 */
 	public function __construct(/* String */ $match,
 	                            /* String */ $replacement,
@@ -79,18 +92,22 @@ class Regex extends Rule
 	/* Public Methods */
 	/******************/
 
-	/** Get the classname.
-	 *  @param uri @string The URI to get the classname from.
-	 *  @return @string The uri with the match replaced.
+	/**
+	 * Get the classname.
+	 *
+	 * @param string The URI to get the classname from.
+	 * @return string The uri with the match replaced.
 	 */
 	public function getClassname($uri)
 	{
 		return preg_replace($this->match, $this->replacement, $uri);
 	}
 
-	/** Get any parameters.
-	 *  @param uri @string The URI to get the parameters from.
-	 *  @return @array Parameters from the URI.
+	/**
+	 * Get any parameters.
+	 *
+	 * @param string The URI to get the parameters from.
+	 * @return mixed[] Parameters from the URI.
 	 */
 	public function getParams($uri)
 	{
@@ -105,8 +122,11 @@ class Regex extends Rule
 		return $params;		
 	}
 	
-	/** Check the uri to see if it matches.
-	 *  @return @bool Whether the uri is matched.
+	/**
+	 * Check the uri to see if it matches.
+	 *
+	 * @param string The URI.
+	 * @return bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)
 	{
