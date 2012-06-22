@@ -6,49 +6,73 @@ use Evoke\Message\TreeIface,
 	InvalidArgumentException,
 	OutOfRangeException;
 
-/// Info provides an interface to gather information about a DB table.
+/**
+ * Info
+ *
+ * Info provides an interface to gather information about a DB table.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
+ */
 class Info implements InfoIface
 { 
-	/** @property $createInfo
-	 *  @string The create information for the database table.
+	/**
+	 * The create information for the database table.
+	 * @var string
 	 */
 	private $createInfo;
 
-	/** @property $description
-	 *  @string The description information for the database table.
+	/**
+	 * The description information for the database table.
+	 * @var string
 	 */
 	private $description;
 
-	/** @property $failures
-	 *  @object The failures
+	/**
+	 * Failures
+	 * @var Evoke\Message\TreeIface
 	 */
 	protected $failures;
 
-	/** @property $fields
-	 *  @array The fields for the database table.
+	/**
+	 * The fields for the database table.
+	 * @var mixed[]
 	 */
 	private $fields;
 
-	/** @property $primaryKeys
-	 *  @array The primary keys for the database table.
+	/**
+	 * The primary keys for the database table.
+	 * @var string[]
 	 */
 	private $primaryKeys;
 
-	/** @property $requiredFields
-	 *  @array The required fields for the database table.
+	/**
+	 * The required fields for the database table.
+	 * @var string[]
 	 */
 	private $requiredFields;
 
-	/** @property $sql
-	 *  @object SQL 
+	/**
+	 * SQL object.
+	 * @var Evoke\Persistance\DB\SQLIface
 	 */
 	protected $sql;
 
-	/** @property $tableName
-	 *  @string The table name for the table we are retrieving information for.
+	/**
+	 * The table name for the table we are retrieving information for.
+	 * @var string
 	 */
 	protected $tableName;
-   
+
+	/**
+	 * Construct a Table Info object.
+	 *
+	 * @param Evoke\Persistance\DB\SQLIface SQL object.
+	 * @param string                        Table Name.
+	 * @param Evoke\Message\TreeIface       Failures.
+	 */
 	public function __construct(SQLIface     $sql,
 	                            /* String */ $tableName,
 	                            TreeIface    $failures = NULL)
@@ -79,43 +103,82 @@ class Info implements InfoIface
 	/* Public Methods */
 	/******************/
 
-	/// Get the description of the database table.
+	/**
+	 * Get the description of the database table.
+	 *
+	 * @return string
+	 */
 	public function getDescription()
 	{
 		return $this->description;
 	}
-   
-	/// Get the fields in the database table.
+
+	/**
+	 * Get a copy of the failure array object showing the last failures from an
+	 * action.
+	 *
+	 * @return The failure array object.
+	 */
+	public function getFailures()
+	{
+		return $this->failures;
+	}
+	
+	/**
+	 * Get the fields in the database table.
+	 *
+	 * @return mixed[]
+	 */
 	public function getFields()
 	{
 		return $this->fields;
 	}
 
-	/// Get the foreign keys.
+	/**
+	 * Get the foreign keys.
+	 *
+	 * @return mixed[]
+	 */
 	public function getForeignKeys()
 	{
 		return $this->foreignKeys;
 	}
    
-	/// Get the primary keys.
+	/**
+	 * Get the primary keys.
+	 *
+	 * @return mixed[]
+	 */
 	public function getPrimaryKeys()
 	{
 		return $this->primaryKeys;
 	}
 
-	/// Get the required fields.
+	/**
+	 * Get the required fields.
+	 *
+	 * @return mixed[]
+	 */
 	public function getRequired()
 	{
 		return $this->requiredFields;
 	}
 
-	/// Get the table name.
+	/**
+	 * Get the table name.
+	 *
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return $this->tableName;
 	}
    
-	/// Get the type of the specified field.
+	/**
+	 * Get the type of the specified field.
+	 *
+	 * @return string
+	 */
 	public function getType($field)
 	{
 		if (!in_array($field, $this->fields))
@@ -139,7 +202,11 @@ class Info implements InfoIface
 		return $type;
 	}
 
-	/// Get the types of all of the fields in the table.
+	/**
+	 * Get the types of all of the fields in the table.
+	 *
+	 * @return mixed[]
+	 */
 	public function getTypes()
 	{
 		$types = array();
@@ -152,7 +219,13 @@ class Info implements InfoIface
 		return $types;
 	}
 
-	/// Return whether the database requires the field.
+	/**
+	 * Return whether the database requires the field.
+	 *
+	 * @param string The field to check.
+	 *
+	 * @return bool
+	 */
 	public function isRequired($field)
 	{
 		if (!in_array($field, $this->fields))
@@ -166,23 +239,17 @@ class Info implements InfoIface
 		        in_array($field, $this->requiredFields));
 	}
    
-	/** Get a copy of the failure array object showing the last failures from an
-	 *  action.
-	 *  @return The failure array object.
-	 */
-	public function getFailures()
-	{
-		return $this->failures;
-	}
-
-	/** Check whether a set of fields would be valid for an insert or delete
-	 *  statement.  
-	 *  @param fieldset @array The set of fields to check.
-	 *  @param ignoredFields @array Any fields that should be ignored in the
-	 *  calculation of the validity.
-	 *  @return A @bool of whether the fieldset is valid for an insert or
-	 *  delete statement. If the return is false @ref getFailures can be used
-	 *  to retrieve the errors.
+	/**
+	 * Check whether a set of fields would be valid for an insert or delete
+	 * statement.
+	 *
+	 * @param mixed[] The set of fields to check.
+	 * @param mixed[] Any fields that should be ignored in the calculation of
+	 *                the validity.
+	 *
+	 * @return bool Whether the fieldset is valid for an insert or delete
+	 *              statement. If the return is false `getFailures` can be used
+	 *              to retrieve the errors.
 	 */
 	public function isValid($fieldset, $ignoredFields=array())
 	{
@@ -288,7 +355,9 @@ class Info implements InfoIface
 	/* Protected Methods */
 	/*********************/
 
-	/// Store the fields from the table into the object.
+	/**
+	 * Store the fields from the table into the object.
+	 */
 	protected function calculateFields()
 	{
 		$this->fields = array();
@@ -299,8 +368,10 @@ class Info implements InfoIface
 		}
 	}
    
-	/// Get the fields that are required for an entry to be made to the database
-	//  and store them in the object.
+	/**
+	 * Get the fields that are required for an entry to be made to the database
+	 * and store them in the object.
+	 */
 	protected function calculateRequiredFields()
 	{
 		$this->requiredFields = array();
@@ -315,7 +386,9 @@ class Info implements InfoIface
 		}
 	}
 
-	/// Get the key information from the database and store it in the object.
+	/**
+	 * Get the key information from the database and store it in the object.
+	 */
 	protected function calculateKeyInfo()
 	{
 		$pK_STR = 'PRIMARY KEY';
@@ -358,9 +431,15 @@ class Info implements InfoIface
 		}
 	}
 
-	/** Generic validity checking for a database field.
-	 *  Check that required values are present.
-	 *  @returns Whether the field is valid.
+	/**
+	 * Generic validity checking for a database field.  Check that required
+	 * values are present.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 *
+	 * @returns bool Whether the field is valid.
 	 */
 	protected function isValidGeneric($key, $val, $required)
 	{
@@ -375,7 +454,16 @@ class Info implements InfoIface
 		}
 	}
 
-	/// Check that a text field is within its length limit.
+	/**
+	 * Check that a text field is within its length limit.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 * @param string The subtype of the field.
+	 *
+	 * @return bool
+	 */
 	protected function isValidText($key, $val, $required, $subType)
 	{
 		if (!$this->isValidGeneric($key, $val, $required))
@@ -397,7 +485,16 @@ class Info implements InfoIface
 	}
 
 	/// @todo Range checking.
-	/// Check that the value is an integer within the required bounds.
+	/**
+	 * Check that the value is an integer within the required bounds.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 * @param string The subtype of the field.
+	 *
+	 * @return bool
+	 */
 	protected function isValidInt($key, $val, $required, $subType)
 	{
 		if (!$this->isValidGeneric($key, $val, $required))
@@ -432,7 +529,16 @@ class Info implements InfoIface
 	}
    
 	/// @todo range checking.
-	/// Check that the value is a float within the required bounds.
+	/**
+	 * Check that the value is a float within the required bounds.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 * @param string The subtype of the field.
+	 *
+	 * @return bool
+	 */	 
 	protected function isValidFloat($key, $val, $required, $subType)
 	{
 		if (!$this->isValidGeneric($key, $val, $required))
@@ -478,7 +584,16 @@ class Info implements InfoIface
 	}
 
 	/// @todo Improve the check.
-	/// Do a crude check on the date to ensure it is valid.
+	/**
+	 * Do a crude check on the date to ensure it is valid.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 * @param string The subtype of the field.
+	 *
+	 * @return bool
+	 */	 
 	protected function isValidDate($key, $val, $required, $type, $subType)
 	{
 		if (!$this->isValidGeneric($key, $val, $required))
@@ -504,7 +619,16 @@ class Info implements InfoIface
 		}
 	}
 
-	/// Check that the value is within the set of accepted values.
+	/**
+	 * Check that the value is within the set of accepted values.
+	 *
+	 * @param string The field name.
+	 * @param string The value.
+	 * @param bool   Whether the field is required.
+	 * @param string The subtype of the field.
+	 *
+	 * @return bool
+	 */	 
 	protected function isValidSet($key, $val, $required, $subType)
 	{
 		if (!$this->isValidGeneric($key, $val, $required))

@@ -8,75 +8,86 @@ use Evoke\Model\Data\DataIface,
 	InvalidArgumentException,
 	RuntimeException;
 
-/// View to represent a list of records.
+/**
+ * RecordList
+ *
+ * View to represent a list of records.
+ *
+ * @todo This may be implemented elsewhere?
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class RecordList implements ViewIface
 {
-	/** @property $contentAttribs
+	/**
 	 *  Attributes @array for the content.
 	 */
 	protected $contentAttribs;
 
-	/** @property $data
+	/**
 	 *  @array The data for the record list.
 	 */
 	protected $data;
 
-	/** @property $dataAttribs
+	/**
 	 *  Attributes @array for the data.
 	 */
 	protected $dataAttribs;
 
-	/** @property $viewRowButtons
+	/**
 	 *  @array Buttons for each row (text => attributes).
 	 */
 	protected $rowButtons;
 	
-	/** @property $editedRecord
+	/**
 	 *  @array The edited record from the record list.
 	 */
 	protected $editedRecord;
 
-	/** @property $emptyDataAttribs
+	/**
 	 *  Attributes @array for an empty record list.
 	 */
 	protected $emptyDataAttribs;
 
-	/** @property $fields
+	/**
 	 *  @array of fields in the record list.
 	 */
 	protected $fields;
 
-	/** @property $headingSetup
+	/**
 	 *  The setup for the headings.
 	 */
 	protected $headingSetup;
 
-	/** @property $ignoredFields
+	/**
 	 *  @array Fields to be ignored in the record list.
 	 */
 	protected $ignoredFields;
 
-	/** @property $labels
+	/**
 	 *  @array Labels.
 	 */
 	protected $labels;
 
-	/** @property $primaryKeys
+	/**
 	 *  @array The primary keys for the record list.
 	 */
 	protected $primaryKeys;
 
-	/** @property $rowAttribs
+	/**
 	 *  @array Attributes for the record list rows.
 	 */
 	protected $rowAttribs;
 
-	/** @property $tableName
+	/**
 	 *  @string The table name for the record data.
 	 */
 	protected $tableName;
 
-	/** @property $translateLabels
+	/**
 	 *  @bool Whether to translate the labels for the fields.
 	 */
 	protected $translateLabels;

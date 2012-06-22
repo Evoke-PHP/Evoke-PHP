@@ -8,18 +8,22 @@ use Evoke\Service\CacheIface,
 
 class InterfaceRouter implements InterfaceRouterIface
 {
-	/** @property $reflectionCache
-	 *  @object ReflectionCache
+	/**
+	 * Reflection Cache
+	 * @var Evoke\Service\CacheIface
 	 */
 	protected $reflectionCache;
 	
-	/** @property $rules
-	 *  @array of rules that the router uses to route.
+	/**
+	 * Rules that the router uses to route.
+	 * @var Evoke\Service\Provider\Rule\RuleIface
 	 */
 	protected $rules = array();
 	
-	/** Construct an Interface Router object.
-	 *  @param reflectionCache @object ReflectionCache
+	/**
+	 * Construct an Interface Router object.
+	 *
+	 * @param Evoke\Service\CacheIface Reflection Cache
 	 */
 	public function __construct(CacheIface $reflectionCache)
 	{
@@ -30,18 +34,23 @@ class InterfaceRouter implements InterfaceRouterIface
 	/* Public Methods */
 	/******************/
 	
-	/** Add a rule to the router.
-	 *  @param rule @object HTTP URI Rule object.
+	/**
+	 * Add a rule to the router.
+	 *
+	 * @param Evoke\Service\Provider\Rule\RuleIface Provider Rule.
 	 */
 	public function addRule(Rule\RuleIface $rule)
 	{
 		$this->rules[] = $rule;
 	}
 
-	/** Route the Interface to a concrete class.
-	 *  @param interfaceName @string The interface name to route.
-	 *  @return @mixed The classname (or false if no concrete class could be
-	 *  found).
+	/**
+	 * Route the Interface to a concrete class.
+	 *
+	 * @param string The interface name to route.
+	 *
+	 * @return string|bool The classname (or false if no concrete class could be
+	 *                     found).
 	 */
 	public function route($interfaceName)
 	{
@@ -73,9 +82,12 @@ class InterfaceRouter implements InterfaceRouterIface
 	/* Protected Methods */
 	/*********************/
 
-	/** Whether the class can be built into a concrete object.
-	 *  @param classname @string The classname to check.
-	 *  @return @bool Whether the classname corresponds to a concrete class.
+	/**
+	 * Whether the class can be built into a concrete object.
+	 *
+	 * @param string The classname to check.
+	 *
+	 * @return bool Whether the classname corresponds to a concrete class.
 	 */
 	protected function isInstantiable($classname)
 	{

@@ -12,7 +12,7 @@ use BadMethodCallException;
  * are accessed as per a standard Array.
  *
  * Usage:
- * <code>
+ * <pre><code>
  * $obj = new Data(array(),
  *                 array('List_ID' => $dataObjectForList));
  * // Setting the data of the parent sets the data for the joint lists (and
@@ -33,7 +33,7 @@ use BadMethodCallException;
  *       $y = $listRecord['Joint_Record_Field'];
  *    }
  * }
- * </code>
+ * </code></pre>
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -43,14 +43,15 @@ use BadMethodCallException;
 abstract class DataAbstract implements DataIface
 {
 	/**
-	 * @var Array The data that is being modelled.
+	 *  The data that is being modelled.
+	 * @var mixed[]
 	 */
 	protected $data;
 
 	/**
 	 *  Construct a Data model.
 	 *
-	 *  @param Array $data Raw data that we are modelling.
+	 *  @param mixed[] Raw data that we are modelling.
 	 */
 	public function __construct(Array $data = array())
 	{
@@ -61,28 +62,31 @@ abstract class DataAbstract implements DataIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the current record as a simple array (without iterator or class
-	 *  properties).
+	/**
+	 * Get the current record as a simple array (without iterator or class
+	 * properties).
 	 *
-	 *  @return Array The record that we are managing.
+	 * @return mixed[] The record that we are managing.
 	 */
 	public function getRecord()
 	{
 		return current($this->data);
 	}
 	
-	/** Return whether the data is empty or not.
+	/**
+	 * Whether the data is empty or not.
 	 *
-	 *  @return @bool Whether the data is empty or not.
+	 * @return bool Whether the data is empty or not.
 	 */
 	public function isEmpty()
 	{
 		return empty($this->data);
 	}
    
-	/** Set the data that we are managing.
+	/**
+	 * Set the data that we are managing.
 	 *
-	 *  @param data @array The data we want to manage.
+	 * @param mixed[] The data we want to manage.
 	 */
 	public function setData(Array $data)
 	{
@@ -98,6 +102,8 @@ abstract class DataAbstract implements DataIface
 	 * Return the current record of data (as a Data object with iterator and
 	 * reference access).  This is just the object as the object implements the
 	 * iterator and references.
+	 *
+	 * @return Evoke\Model\Data\DataIface
 	 */
 	public function current()
 	{
@@ -106,6 +112,8 @@ abstract class DataAbstract implements DataIface
 
 	/**
 	 * Return the key of the current data item.
+	 *
+	 * @return string|int
 	 */
 	public function key()
 	{
@@ -115,6 +123,8 @@ abstract class DataAbstract implements DataIface
 	/**
 	 * Get the next record of data. Set the next record within the Data object
 	 * and return the object.
+	 *
+	 * @return Evoke\Model\Data\DataIface
 	 */
 	public function next()
 	{
@@ -143,9 +153,9 @@ abstract class DataAbstract implements DataIface
 	}
 
 	/**
-	 * Return whether there are still data records to iterate over.
+	 * Whether there are still data records to iterate over.
 	 *
-	 * @return @bool Whether the current data record is valid.
+	 * @return bool Whether the current data record is valid.
 	 */
 	public function valid()
 	{
@@ -177,7 +187,8 @@ abstract class DataAbstract implements DataIface
 	/**
 	 * We are required to make these available to complete the interface,
 	 * but we don't want the element to change, so this should never be called.
-	 * @throws RuntimeException *** ALWAYS ***
+	 *
+	 * @throw RuntimeException *** ALWAYS ***
 	 */
 	public function offsetSet($offset, $value)
 	{
@@ -189,7 +200,8 @@ abstract class DataAbstract implements DataIface
 	/**
 	 * We are required to make these available to complete the interface,
 	 * but we don't want the element to change, so this should never be called.
-	 * @throws RuntimeException *** ALWAYS ***
+	 *
+	 * @throw RuntimeException *** ALWAYS ***
 	 */
 	public function offsetUnset($offset)
 	{
@@ -206,7 +218,7 @@ abstract class DataAbstract implements DataIface
 	 * Extra actions to be performed upon updating the current record within the
 	 * data.
 	 *
-	 * @param Array $record The current record that we are setting.
+	 * @param mixed[] The current record that we are setting.
 	 */
 	protected function setRecord(Array $record)
 	{

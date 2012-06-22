@@ -3,13 +3,25 @@ namespace Evoke\View\XHTML;
 
 use Evoke\View\ViewIface;
 
+/**
+ * Session
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Session implements ViewIface
 {
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	/// Write the session so that we can see it.
+	/**
+	 * Get the view of the session.
+	 *
+	 * @param mixed[] Parameters to the view.
+	 */
 	public function get(Array $params = array())
 	{
 		return array(

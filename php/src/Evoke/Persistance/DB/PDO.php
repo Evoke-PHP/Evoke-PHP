@@ -3,9 +3,28 @@ namespace Evoke\Persistance\DB;
 
 use InvalidArgumentException;
 
-/// PDO wrapper class to ensure DB implements the Evoke DB interface.
+/**
+ * PDO
+ *
+ * PDO wrapper class to ensure DB implements the Evoke DB interface.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
+ */
 class PDO extends \PDO implements DBIface
 {
+	/**
+	 * Construct the PDO object.
+	 *
+	 * @param string  Data source name.
+	 * @param string  Password.
+	 * @param string  Username.
+	 * @param mixed[] Options.
+	 *
+	 * @throw InvalidArgumentException	 
+	 */
 	public function __construct(
 		/* String */ $dataSourceName,
 		/* String */ $password,

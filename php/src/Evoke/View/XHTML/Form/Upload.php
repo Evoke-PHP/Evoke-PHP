@@ -1,8 +1,18 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
-/** XHTML entry form for a databse record.
- *  Provide an XHTML form to show and allow modification to database tables.
+/**
+ * Upload
+ *
+ * XHTML entry form for a databse record.
+ * Provide an XHTML form to show and allow modification to database tables.
+ *
+ * @todo Fix to the new view interface.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
  */
 class Upload extends Form
 {

@@ -4,17 +4,28 @@ namespace Evoke\Model\Mapper\DB;
 use Evoke\Model\Mapper\MapperIface,
 	Evoke\Persistance\DB\SQLIface;
 
-/// Provides the basic implementation for a database based data mapper.
+/**
+ * DB
+ *
+ * The basic implementation for a database based data mapper.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 abstract class DB implements MapperIface
 { 
-	/** @property $sql
-	 *  @object SQL
+	/** 
+	 * SQL Object
+	 * @var Evoke\Persistance\DB\SQLIface
 	 */
 	protected $sql;
 
-	/** Construct a Base object.
-	 *  @param sql        @object SQL object.
-	 *  @param dataPrefix @array  Data prefix to offset the data to.
+	/**
+	 * Construct a DB Mapper.
+	 *
+	 *  @param Evoke\Persistance\DB\SQLIface SQL object.
 	 */
 	public function __construct(SQLIface $sql)
 	{

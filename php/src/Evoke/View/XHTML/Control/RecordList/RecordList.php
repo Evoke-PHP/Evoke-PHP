@@ -4,94 +4,123 @@ namespace Evoke\View\XHTML\Control\RecordList;
 use Evoke\View\Text\TranslatorIface,
 	Evoke\View\ViewIface;
 
-/// View to represent a list of records.
+/**
+ * RecordList
+ *
+ * View to represent a list of records.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class RecordList implements ViewIface
 {
-	/** @property $contentAttribs
-	 *  Attributes \array for the content.
+	/**
+	 * Attributes for the content.
+	 * @var mixed[]
 	 */
 	protected $contentAttribs;
 
-	/** @property $data
-	 *  \array The data for the record list.
+	/**
+	 * The data for the record list.
+	 * @var mixed[]
 	 */
 	protected $data;
 
-	/** @property $dataAttribs
-	 *  Attributes \array for the data.
+	/**
+	 * Attributes for the data.
+	 * @var mixed[]
 	 */
 	protected $dataAttribs;
 
-	/** @property $editedRecord
-	 *  \array The edited record from the record list.
+	/**
+	 * The edited record from the record list.
+	 * @var mixed[]
 	 */
 	protected $editedRecord;
 
-	/** @property $emptyDataAttribs
-	 *  Attributes \array for an empty record list.
+	/**
+	 * Attributes for an empty record list.
+	 * @var mixed[]
 	 */
 	protected $emptyDataAttribs;
 
-	/** @property $fields
-	 *  \array of fields in the record list.
+	/**
+	 * Fields in the record list.
+	 * @var mixed[]
 	 */
 	protected $fields;
 
-	/** @property $headingSetup
-	 *  The setup for the headings.
+	/**
+	 * The setup for the headings.
+	 * @var mixed[]
 	 */
 	protected $headingSetup;
 
-	/** @property $ignoredFields
-	 *  \array Fields to be ignored in the record list.
+	/**
+	 * Fields to be ignored in the record list.
+	 * @var mixed[]
 	 */
 	protected $ignoredFields;
 
-	/** @property $labels
-	 *  \array Labels.
+	/**
+	 * Labels.
+	 * @var string[]
 	 */
 	protected $labels;
 
-	/** @property $primaryKeys
-	 *  \array The primary keys for the record list.
+	/**
+	 * The primary keys for the record list.
+	 * @var string[]
 	 */
 	protected $primaryKeys;
 
-	/** @property $rowAttribs
-	 *  \array Attributes for the record list rows.
+	/**
+	 * Attributes for the record list rows.
+	 * @var mixed[]
 	 */
 	protected $rowAttribs;
 
-	/** @property $rowButtons
-	 *  \array Buttons for each row.
+	/**
+	 * Buttons for each row.
+	 * @var mixed[]
 	 */
 	protected $rowButtons;
 
-	/** @property $rowButtonsAsForm
-	 *  \bool Whether the row buttons should be in a form.
+	/**
+	 * Whether the row buttons should be in a form.
+	 * @var bool
 	 */
 	protected $rowButtonsAsForm;
 
-	/** @property $rowButtonsAttribs
-	 *  \array Attributes for the row buttons.
+	/**
+	 * Attributes for the row buttons.
+	 * @var mixed[]
 	 */
 	protected $rowButtonsAttribs;
 
-	/** @property $tableName
-	 *  \string The table name for the record data.
+	/**
+	 * The table name for the record data.
+	 * @var string
 	 */
 	protected $tableName;
 
-	/** @property $translateLabels
-	 *  \bool Whether to translate the labels for the fields.
+	/**
+	 * Whether to translate the labels for the fields.
+	 * @var bool
 	 */
 	protected $translateLabels;
 
-	/** @property $translator
-	 *  @object Translator
+	/**
+	 * Translator object.
+	 * @var Evoke\View\Text\TranslatorIface
 	 */
 	protected $translator;
-	
+
+	/**
+	 * @todo Fix to new interface,
+	 */
 	public function __construct(Array $setup)
 	{
 		/// @todo Fix to new View interface.
@@ -164,6 +193,11 @@ class RecordList implements ViewIface
 	/* Protected Methods */
 	/*********************/
 
+	/**
+	 * Get the view.
+	 *
+	 * @param mixed[] Parameters to the view.
+	 */
 	public function get(Array $params = array())
 	{
 		/** @todo Implement get.
@@ -171,7 +205,11 @@ class RecordList implements ViewIface
 		throw new \RuntimeException(__METHOD__ .  ' not yet implemented.');
 	}
 	
-	/// Build the elements for the record list.
+	/**
+	 * Build the elements for the record list.
+	 *
+	 * @return mixed[] The elements in the record list.
+	 */
 	protected function buildRecordListElems()
 	{
 		$fields = $this->getFields();
@@ -201,10 +239,14 @@ class RecordList implements ViewIface
 		return $recordListElems;
 	}
 
-	/** Build the content of the record list including any inline headings,
-	 *  data and data buttons. (Not the top or bottom headings).
-	 *  @param headings \array Array of headings for use in inline headings.
-	 *  \return Return the element containing the content of the record list.
+	/**
+	 * Build the content of the record list including any inline headings,
+	 * data and data buttons. (Not the top or bottom headings).
+	 *
+	 * @param mixed[] Array of headings for use in inline headings.
+	 *
+	 * @return mixed[] Return the element containing the content of the record
+	 *                 list.
 	 */
 	protected function buildContent($fields, $headings)
 	{
@@ -232,9 +274,12 @@ class RecordList implements ViewIface
 		return array('div', array('class' => 'Content'), $rowElems);
 	}
 
-	/** Build the element for an empty record list.
-	 *  @param headingElem \object The heading element that may be used.
-	 *  \return \array Array of elements for an empty record list.
+	/**
+	 * Build the element for an empty record list.
+	 *
+	 * @param mixed[] The heading element that may be used.
+	 *
+	 * @return mixed[] Array of elements for an empty record list.
 	 */
 	protected function buildEmptyData()
 	{
@@ -243,9 +288,12 @@ class RecordList implements ViewIface
 		             $this->translator->get('No_Records_Found'));
 	}
    
-	/** Build the heading row element.
-	 *  @param headings \array Array of heading row elements.
-	 *  \return \object The heading row element.
+	/**
+	 * Build the heading row element.
+	 *
+	 * @param mixed[] Array of heading row elements.
+	 *
+	 * @return mixed[] The heading row element.
 	 */
 	protected function buildHeadingRow($headings)
 	{
@@ -259,10 +307,13 @@ class RecordList implements ViewIface
 		                         $this->getHeadingButtons())));
 	}
 
-	/** Build the element holding the buttons in a row.
-	 *  @param row \mixed The key for the row.
-	 *  @param rowData \array The data for the row.
-	 *  \return \array Array of elements that make up the buttons.
+	/**
+	 * Build the element holding the buttons in a row.
+	 *
+	 * @param mixed   The key for the row.
+	 * @param mixed[] The data for the row.
+	 *
+	 * @return mixed[] Array of elements that make up the buttons.
 	 */
 	protected function buildRowButtons($row, $rowData)
 	{
@@ -291,11 +342,14 @@ class RecordList implements ViewIface
 		}
 	}
    
-	/** Build the element holding the data in a row.
-	 *  @param fields  \array The fields for the row.
-	 *  @param row     \mixed The key for the row.
-	 *  @param rowData \array The data for the row.
-	 *  \return \array Array of elements that make up the data.
+	/**
+	 * Build the element holding the data in a row.
+	 *
+	 * @param string[] The fields for the row.
+	 * @param mixed    The key for the row.
+	 * @param mixed[]  The data for the row.
+	 *
+	 * @return mixed[] Array of elements that make up the data.
 	 */
 	protected function buildRowData($fields, $row, $rowData, $headings)
 	{
@@ -343,9 +397,11 @@ class RecordList implements ViewIface
 		}
 	}
 
-	/** Get the data attributes for the row.
-	 *  @param row \mixed The key of the row.
-	 *  @param rowData \array The data for the row.
+	/**
+	 * Get the data attributes for the row.
+	 *
+	 * @param mixed   The key of the row.
+	 * @param mixed[] The data for the row.
 	 */
 	protected function getDataAttribs($row, $rowData)
 	{
@@ -369,21 +425,32 @@ class RecordList implements ViewIface
 		return $dataAttribs;
 	}   
 
-	/// Get the fields for display.
+	/**
+	 * Get the fields for display.
+	 *
+	 * @return string[] The fields to be displayed.
+	 */
 	protected function getFields()
 	{
 		return $this->fields;
 	}
    
-	/// Get the heading buttons that appear with Top or Bottom headings.
+	/**
+	 * Get the heading buttons that appear with Top or Bottom headings.
+	 *
+	 * @return mixed[] The heading buttons.
+	 */
 	protected function getHeadingButtons()
 	{
 		return $this->headingSetup['Buttons'];
 	}
    
-	/** Build the headings for each field.
-	 *  @param fields \array Array of fields.
-	 *  \return \array Associative array of the heading elements keyed by field.
+	/**
+	 * Build the headings for each field.
+	 *
+	 *  @param string[] The fields.
+	 *
+	 *  @return string[] Array of the heading elements keyed by field.
 	 */
 	protected function getHeadings($fields)
 	{
@@ -416,16 +483,23 @@ class RecordList implements ViewIface
 		return $headings;
 	}
 
-	/// Get the primary keys for a row.
+	/**
+	 * Get the primary keys for a row.
+	 *
+	 * @return string[] The primary keys for the row.
+	 */
 	protected function getPrimaryKeys()
 	{
 		return $this->primaryKeys;
 	}
 
    
-	/** Get the buttons for the row.
-	 *  @param row \string The key of the row.
-	 *  @return An array of button elements for the row.
+	/**
+	 * Get the buttons for the row.
+	 *
+	 * @param string The key of the row.
+	 *
+	 * @return mixed[] Button elements for the row.
 	 */
 	protected function getRowButtons($row)
 	{
@@ -442,9 +516,12 @@ class RecordList implements ViewIface
 		return $buttons;
 	}
    
-	/** Determine if the row data is from the currently edited record.
-	 *  @param rowData \array The data for the row.
-	 *  \return \bool Whether the row is the currently edited record.
+	/**
+	 * Determine if the row data is from the currently edited record.
+	 * 
+	 * @param mixed[] The data for the row.
+	 * 
+	 * @return bool Whether the row is the currently edited record.
 	 */
 	protected function isEditedRecord($rowData)
 	{

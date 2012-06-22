@@ -22,16 +22,16 @@ use InvalidArgumentException,
  * 	   // Traverse over each record in the data.
  * 	   foreach ($data as $key => $record)
  * 	   {
- * 	      // Access a field as though it is an array.
- * 	      $x = $record['Field'];
+ * 	       // Access a field as though it is an array.
+ * 	       $x = $record['Field'];
  *
- * 	      // Access joint data (with ->).  The joint data is itself a data object.
- * 	      // The name used after -> is the lowerCamelCase (_ID is removed
- * 	      // automatically).
- * 	      foreach ($record->list as $listRecord)
- * 	      {
- * 	         $y = $listRecord['Joint_Record_Field'];
- * 	      }
+ * 	       // Access joint data (with ->).  The joint data is itself a data
+ *         // object.  The name used after -> is the lowerCamelCase (_ID is
+ *         // removed automatically).
+ * 	       foreach ($record->list as $listRecord)
+ * 	       {
+ * 	           $y = $listRecord['Joint_Record_Field'];
+ * 	       }
  *     }
  * 
  * @author Paul Young <evoke@youngish.homelinux.org>
@@ -42,16 +42,20 @@ use InvalidArgumentException,
 class Data extends DataAbstract
 {
 	/**
-	 * @var array Raw data that we are modeling.
+	 * Raw data that we are modeling.
+	 * @var mixed[]
 	 */
 	protected $data;
 
-	/** @var array Joint data objects.
+	/**
+	 * Joint data objects.
+	 * @var DataIface[]
 	 */
 	protected $dataJoins;
 
 	/**
-	 * @var string The key that is used for joint data within the raw data.
+	 * The key that is used for joint data within the raw data.
+	 * @var string
 	 */
 	protected $jointKey;
 
@@ -102,8 +106,8 @@ class Data extends DataAbstract
 	 * This is because we convert the name from Upper_Pascal_Case and optionally
 	 * remove 'ID' from the end of the parent field.
 	 *
-	 * @param string $parentField The parent field for the joint data.  This can
-	 *                            be as per the return value of getJoinName.
+	 * @param string The parent field for the joint data.  This can be as per
+	 *               the return value of getJoinName.
 	 */
 	public function __get($parentField)
 	{
@@ -133,7 +137,7 @@ class Data extends DataAbstract
 	/**
 	 * Set the data that we are managing.
 	 *
-	 * @param Array[] $data The data we want to manage.
+	 * @param mixed[] The data we want to manage.
 	 */
 	public function setData(Array $data)
 	{
@@ -149,7 +153,7 @@ class Data extends DataAbstract
 	 * Set all of the Joint Data from the current record into the data
 	 * containers supplied by the references given at construction.
 	 *
-	 * @param mixed[] $record The current record to set the joint data with.
+	 * @param mixed[] The current record to set the joint data with.
 	 */
 	protected function setRecord(Array $record)
 	{
@@ -172,7 +176,8 @@ class Data extends DataAbstract
 	 * the standard naming of our objects (lowerCamelCase) and not contain the
 	 * final ID which is not needed.
 	 *
-	 * @param string $parentField The parent field for the joint data.
+	 * @param string The parent field for the joint data.
+	 *
 	 * @return string The reference name.
 	 */
 	private function getJoinName($parentField)

@@ -1,8 +1,19 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
+/**
+ * EntryDialog
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class EntryDialog extends Entry
 {
+	/**
+	 * @todo Check if this class is obsolete.
+	 */
 	public function __construct($setup=array())
 	{
 		/// @todo Fix to new View interface.

@@ -3,8 +3,19 @@ namespace Evoke\View\XHTML\Control;
 
 use Evoke\View\ViewIface;
 
+/**
+ * TabPanel
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class TabPanel implements ViewIface
 { 
+	/**
+	 * @todo Fix to the new view interface.
+	 */
 	public function __construct($setup=array())
 	{
 		/// @todo Fix to new View interface.
@@ -27,8 +38,10 @@ class TabPanel implements ViewIface
 	/* Public Methods */
 	/******************/
 
-	/** Set the Tab panel entries.
-	 *  @param tabEntries \array The tab panel entries for the view.
+	/**
+	 * Set the Tab panel entries.
+	 *
+	 * @param mixed[] The tab panel entries for the view.
 	 */
 	public function get(Array $tabEntries = array())
 	{
@@ -55,16 +68,15 @@ class TabPanel implements ViewIface
 				array('li', $contentAttribs, $tabEntry['Content']);
 		}
 
-		return parent::set(
-			array('div',
-			      $attribs,
-			      array(array('ul',
-			                  $headingListAttribs,
-			                  $headingElems),
-			            array('div', $clearAttribs),
-			            array('ul',
-			                  $contentListAttribs,
-			                  $contentElems))));
+		return array('div',
+		             $attribs,
+		             array(array('ul',
+		                         $headingListAttribs,
+		                         $headingElems),
+		                   array('div', $clearAttribs),
+		                   array('ul',
+		                         $contentListAttribs,
+		                         $contentElems)));
 	}
 }
 // EOF

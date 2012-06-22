@@ -5,30 +5,52 @@ use Evoke\Service\Log\LogIface,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
-/// The system exception handler.
+/**
+ * Exception Handler
+ *
+ * The system exception handler.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class Exception implements HandlerIface
 {
-	/** @property $detailedInsecureMessage
-	 *  @bool Whether to display a detailed insecure message.
+	/**
+	 * Whether to display a detailed insecure message.
+	 * @var bool
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $log
-	 *  @object Log.
+	/**
+	 * Log object.
+	 * @var Evoke\Service\Log\LogIface
 	 */
 	protected $log;
 
-	/** @property $maxLengthExceptionMessage
-	 *  @int The maximum length of exception message to display.
+	/**
+	 * The maximum length of exception message to display.
+	 * @var int
 	 */
 	protected $maxLengthExceptionMessage;
 
-	/** @property $writer
-	 *  @object Writer 
+	/**
+	 * Writer object.
+	 * @var Evoke\Writer\WriterIface
 	 */
 	protected $writer;
 
-	
+	/**
+	 * Construct an Exception Handler object.
+	 *
+	 * @param bool Whether to show a detailed insecure message.
+	 * @param int  Maximum length of exception message to show.
+	 * @param Evoke\Service\Log\LogIface
+	 *             Log object.
+	 * @param Evoke\Writer\WriterIface
+	 *             Writer object.
+	 */
 	public function __construct(/* Bool */  $detailedInsecureMessage,
 	                            /* Int  */  $maxLengthExceptionMessage,
 	                            LogIface $log,
@@ -50,13 +72,14 @@ class Exception implements HandlerIface
 	/* Public Methods */
 	/******************/
 
-	/** Handle uncaught exceptions for the system by logging information and
-	 *  displaying a generic notice to the user so that they are informaed of an
-	 *  error without exposing information that could be used for an attack.
+	/**
+	 * Handle uncaught exceptions for the system by logging information and
+	 * displaying a generic notice to the user so that they are informaed of an
+	 * error without exposing information that could be used for an attack.
 	 *
-	 *  @param uncaughtException An exception that was not caught in the system.
+	 * @param Exception An exception that was not caught in the system.
 	 */
-	public function handler($uncaughtException)
+	public function handler(Exception $uncaughtException)
 	{
 		try
 		{
@@ -159,11 +182,17 @@ class Exception implements HandlerIface
 		$this->writer->output();
 	}
 
+	/**
+	 * Register the handler.
+	 */
 	public function register()
 	{
 		return set_exception_handler(array($this, 'handler'));
 	}
 
+	/**
+	 * Unregister the handler.
+	 */
 	public function unregister()
 	{
 		return restore_exception_handler();      

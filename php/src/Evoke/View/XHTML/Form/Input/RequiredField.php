@@ -3,9 +3,19 @@ namespace Evoke\View\XHTML\Form\Input;
 
 use Evoke\View\ViewIface;
 
+/**
+ * RequiredField
+ *
+ * @todo Fix to new view interface.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class RequiredField implements ViewIface
 {
-	/** @property $translator
+	/**
 	 *  Translator \object
 	 */
 	protected $translator;

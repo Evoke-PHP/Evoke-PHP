@@ -4,21 +4,32 @@ namespace Evoke\Service;
 use DomainException,
 	OverflowException;
 
-/** Control of the service objects.
+/**
+ * Service
+ *
+ * Control of the service objects.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
  */
 class Service implements ServiceIface
 {
-	/** @property $cache
-	 *  @array The cache for the shared services.  The cache stores the entries
-	 *         in the following format:
-	 *  @code
+	/** 
+	 * The cache for the shared services.  The cache stores the entries in the
+	 * following format:
+	 *
+	 * <pre><code>
 	 *	array('Service\Name'    => array(
 	 *	          array('Object' => $objectInstance,
-	 *                  'Params' => array($arg1, $arg2, $etc)),
-	 *            array('Object' => $objectOther,
-	 *                  'Params' => array($differentParamsSameObject))),
-	 *        'Another\Service' => array())
-	 *  @endcode
+	 *                 'Params' => array($arg1, $arg2, $etc)),
+	 *           array('Object' => $objectOther,
+	 *                 'Params' => array($differentParamsSameObject))),
+	 *       'Another\Service' => array())
+	 * </code></pre>
+	 *
+	 * @var mixed[]
 	 */
 	protected $cache = array();
 	
@@ -26,12 +37,14 @@ class Service implements ServiceIface
 	/* Public Methods */
 	/******************/
 	
-	/** Check whether there is a service object cached for the specified class
-	 *  and parameter combination.
-	 *  @param name   @string The name of the service (class or interface).
-	 *  @param params @array  The construction parameters of the service.
+	/**
+	 * Check whether there is a service object cached for the specified class
+	 * and parameter combination.
 	 *
-	 *  @returns @bool Whether the service object exists in the cache.
+	 * @param string  The name of the service (class or interface).
+	 * @param mixed[] The construction parameters of the service.
+	 *
+	 * @return bool Whether the service object exists in the cache.
 	 */
 	public function exists($name, Array $params)
 	{
@@ -46,15 +59,17 @@ class Service implements ServiceIface
 		return false;		
 	}
 
-	/** Get the service object cached for the specified class and parameter
-	 *  combination.  A check must already have been made using isService before
-	 *  calling this.
-	 *  @param name   @string The name of the service (class or interface).
-	 *  @param params @array  The construction parameters of the service.
+	/**
+	 * Get the service object cached for the specified class and parameter
+	 * combination.  A check must already have been made using isService before
+	 * calling this.
 	 *
-	 *  @returns @object The service object.
+	 * @param string  The name of the service (class or interface).
+	 * @param mixed[] The construction parameters of the service.
 	 *
-	 *  @throws DomainException If the service cannot be retrieved.
+	 * @return mixed The service object.
+	 *
+	 * @throws DomainException If the service cannot be retrieved.
 	 */
 	public function get($name, $params)
 	{
@@ -75,18 +90,22 @@ class Service implements ServiceIface
 		throw new DomainException(__METHOD__ . ' service has not been set.');
 	}
 
-	/** Check whether the named service has been registered.
-	 *  @param name @string The name of the service (class or interface).
+	/**
+	 * Check whether the named service has been registered.
 	 *
-	 *  @returns @bool Whether the name is registered as a service.
+	 * @param string The name of the service (class or interface).
+	 *
+	 * @return bool Whether the name is registered as a service.
 	 */
 	public function isService($name)
 	{
 		return isset($this->cache[$name]);
 	}
 
-	/** Register the name as a service, re-registering has no effect.
-	 *  @param name @string The name of the service (class or interface).
+	/**
+	 * Register the name as a service, re-registering has no effect.
+	 *
+	 * @param string The name of the service (class or interface).
 	 */
 	public function register($name)
 	{
@@ -96,15 +115,17 @@ class Service implements ServiceIface
 		}			  
 	}
 
-	/** Set the service object for the named service with the specified
-	 *  parameters.
-	 *  @param name   @string The name of the service (class or interface).
-	 *  @param object @object The object to be set as the service instance.
-	 *  @param params @array  The construction parameters of the service.
+	/**
+	 * Set the service object for the named service with the specified
+	 * parameters.
 	 *
-	 *  @throws OverflowException If the service has already been set.
-	 *  @throws DomainException   If the named service is not a registered
-	 *                            service.
+	 *  @param string  The name of the service (class or interface).
+	 *  @param mixed   The object to be set as the service instance.
+	 *  @param mixed[] The construction parameters of the service.
+	 *
+	 *  @throw OverflowException If the service has already been set.
+	 *  @throw DomainException   If the named service is not a registered
+	 *                           service.
 	 */
 	public function set(/* String */ $name,
 	                    /* Object */ $object,
@@ -126,10 +147,11 @@ class Service implements ServiceIface
 		                              'Params' => $params);
 	}
 
-	/** Unregister the name as a service (clearing all cached service objects
-	 *  for the named service. Unregistering a non-existant service has no
-	 *  effect.
-	 *  @param name @string The name of the service (class or interface).
+	/**
+	 * Unregister the name as a service (clearing all cached service objects for
+	 * the named service. Unregistering a non-existant service has no effect.
+	 *
+	 * @param string The name of the service to unregister (class or interface).
 	 */
 	public function unregister($name)
 	{

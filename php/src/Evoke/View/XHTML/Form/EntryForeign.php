@@ -1,11 +1,22 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
-/** Entry form for a databse record using foreign table inputs.
- *  Provide a form to show and allow modification to database tables.
+/** 
+ * EntryForeign
+ *
+ * Entry form for a databse record using foreign table inputs.
+ * Provide a form to show and allow modification to database tables.
+ *
+ * @todo Check whether this class is obsolete.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
  */
 class EntryForeign extends Entry
 {
+
 	/// Construct the entry form with the table information.
 	public function __construct($setup=array())
 	{

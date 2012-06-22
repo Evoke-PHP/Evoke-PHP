@@ -1,9 +1,19 @@
 <?php
 namespace Evoke\View\XHTML\Control\RecordList;
 
-/// View to display a list of records from a table.
+/**
+ * Table
+ *
+ * View to display a list of records from a table.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Table extends RecordList
 { 
+	/// @todo Fix to new View interface.
 	public function __construct(Array $setup)
 	{
 		/// @todo Fix to new View interface.

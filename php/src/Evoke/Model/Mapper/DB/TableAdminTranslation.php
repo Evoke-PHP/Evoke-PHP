@@ -6,6 +6,18 @@ use Evoke\Persistance\DB\SQLIface,
 	Exception,
 	InvalidArgumentException;
 
+/**
+ * @todo Investigate whether this class is now obsolete.
+ */
+
+/**
+ * TableAdminTranslation
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class TableAdminTranslation extends TableAdmin
 {
 	protected $languageTable;

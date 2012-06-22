@@ -1,16 +1,27 @@
 <?php
 namespace Evoke\View\XHTML\Control\RecordList;
 
+/**
+ * NoButtons
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class NoButtons extends RecordList
 { 
 	/*********************/
 	/* Protected Methods */
 	/*********************/
 
-	/** Build the element holding the buttons in a row (No Buttons).
-	 *  @param row @mixed The key for the row.
-	 *  @param rowData @array The data for the row.
-	 *  @return @array Array of elements that make up the buttons.
+	/**
+	 * Build the element holding the buttons in a row (No Buttons).
+	 *
+	 * @param mixed   The key for the row.
+	 * @param mixed[] The data for the row.
+	 *
+	 * @return mixed[] Array of elements that make up the buttons.
 	 */    
 	protected function buildRowButtons($row, $rowData)
 	{

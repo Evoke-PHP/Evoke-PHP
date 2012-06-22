@@ -4,27 +4,43 @@ namespace Evoke\View\XHTML;
 use Evoke\Model\Data\DataIface,
 	Evoke\View\ViewIface;
 
+/**
+ * ListElement
+ *
+ * @todo Make this generically useful.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class ListElement implements ViewIface
 { 
-	/** @property data
-	 *  @object Data
+	/**
+	 * Data
+	 * @var Evoke\Model\Data\DataIface
 	 */
 	protected $data;
 
-	/** @property attribs
-	 *  @array Attribs
+	/**
+	 * Attribs
+	 * @var string[]
 	 */
 	protected $attribs;
 
-	/** @property liAttribs
-	 *  @array LiAttribs
+	/**
+	 * List Item Attribs
+	 * @var string[]
 	 */
 	protected $liAttribs;
 
-	/** Construct a OrderedList object.
-	 *  @param data      @object Data.
-	 *  @param attribs   @array  Attribs.
-	 *  @param liAttribs @array  LiAttribs.
+	/**
+	 * Construct a OrderedList object.
+	 *
+	 * @param Evoke\Model\Data\DatatIface Data.
+	 * @param string[]                    Attribs.
+	 * @param Evoke\View\ViewIface        List Item View.
+	 * @param string[] List Item          Attribs.
 	 */
 	public function __construct(DataIface $data,
 	                            Array     $attribs,

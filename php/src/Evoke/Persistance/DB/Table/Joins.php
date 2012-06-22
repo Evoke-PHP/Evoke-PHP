@@ -3,38 +3,41 @@ namespace Evoke\Persistance\DB\Table;
 
 use InvalidArgumentException;
 
-/** The JoinTree class is used to interact with Relational Databases.
- *  Relational databases have tables of data that are linked to other tables
- *  via Foreign Keys.  The JoinTree provides a way or representing these
- *  relationships so that data can be managed in real world units (with related
- *  data joint by the appropriate relationship).
+/**
+ * Join Tree
  *
- *  Example:
- *     List of products, each of a particular size with a set of related images.
- *  
- *  SQL structure (PK = Primary Key, FK = Foreign Key):
- *  @verbatim
- *    +====================+     
- *    | Product            |     +===============+
- *    +--------------------+     | Image_List    |
- *    | PK | ID            |     +---------------+     +===============+
- *    |    | Name          |     | PK | ID       |     | Image         |
- *    | FK | Image_List_ID |---->|    | List_ID  |     +---------------+
- *    | FK | Size_ID       |-.   | FK | Image_ID |---->| PK | ID       |
- *    +====================+ |   +===============+     |    | Filename |
- *                           |                         +===============+
- *                           |   +===========+
- *                    	     |   | Size      |
- *                    	     |   +-----------+
- *                    	     `-->| PK | ID   |
- *                    	         |    | Name |
- *                    	         +===========+
- *  @endverbatim
+ * The JoinTree class is primarily used to interact with Relational Databases.
+ * Relational databases have tables of data that are linked to other tables
+ * via Foreign Keys.  The JoinTree provides a way or representing these
+ * relationships so that data can be managed in real world units (with related
+ * data joint by the appropriate relationship).
  *
- *  Joins:
- *  @verbatim
- *  array(Table_Name => Product,
- *        Joins => array(
+ * Example:
+ *    List of products, each of a particular size with a set of related images.
+ * 
+ * SQL structure (PK = Primary Key, FK = Foreign Key):
+ * <pre>
+ *   +====================+     
+ *   | Product            |     +===============+
+ *   +--------------------+     | Image_List    |
+ *   | PK | ID            |     +---------------+     +===============+
+ *   |    | Name          |     | PK | ID       |     | Image         |
+ *   | FK | Image_List_ID |---->|    | List_ID  |     +---------------+
+ *   | FK | Size_ID       |-.   | FK | Image_ID |---->| PK | ID       |
+ *   +====================+ |   +===============+     |    | Filename |
+ *                          |                         +===============+
+ *                          |   +===========+
+ *                   	    |   | Size      |
+ *                   	    |   +-----------+
+ *                   	    `-->| PK | ID   |
+ *                   	        |    | Name |
+ *                   	        +===========+
+ * </pre>
+ *
+ * Joins:
+ * <pre><code>
+ * array(Table_Name => Product,
+ *       Joins => array(
  *	          array(Child_Field  => List_ID,
  *	                Parent_Field => Image_List_ID,
  *	                Table_Name   => Image_List,
@@ -45,92 +48,121 @@ use InvalidArgumentException;
  *	          array(Child_Field  => ID,
  *	                Parent_Field => Size_ID,
  *	                Table_Name   => Size)));
- *  @endverbatim
+ * </code></pre>
  *
- *  The above is an abstract representation of the Joins tree that would
- *  represent the data.  The JoinTree class models the above with its properties
- *  and Joins array which contains references to further JoinTree objects.  The
- *  methods within the class are used to process the JoinTree.
+ * The above is an abstract representation of the Joins tree that would
+ * represent the data.  The JoinTree class models the above with its properties
+ * and Joins array which contains references to further JoinTree objects.  The
+ * methods within the class are used to process the JoinTree.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
  */
 class Joins implements JoinsIface
 {
-	/** @property $adminManaged
-	 *  @bool Whether the current join is administatively managed (for the
-	 *  purposes of adding, editing or deleting data).
+	/**
+	 * Whether the current join is administatively managed (for the purposes of
+	 * adding, editing or deleting data).
+	 * @var bool
 	 */
 	protected $adminManaged;
 
-	/** @property $autoFields
-	 *  @array Fields that are handled automatically by the database.
+	/**
+	 * Fields that are handled automatically by the database.
+	 * @var string[]
 	 */
 	protected $autoFields;
 
-	/** @property $childField
-	 *  @string The child field of the join.  This is the name of the field in
-	 *  the table that this join points to.
+	/**
+	 * The child field of the join.  This is the name of the field in the table
+	 * that this join points to.
+	 * @var string
 	 */
 	protected $childField;
 
-	/** @property $compareType
-	 *  @string How a match should be determined between the parent field and
-	 *  child field.
+	/**
+	 * How a match should be determined between the parent field & child field.
+	 * @var string
 	 */
 	protected $compareType;
 
-	/** @property $idSeparator
-	 *  @string Separator string to use between IDs in a table with multiple
-	 *  keys.
+	/** 
+	 * Separator string to use between IDs in a table with multiple keys.
+	 * @var string
 	 */
 	protected $idSeparator;
 
-	/** @property $info
-	 *  @object Database Table Info
+	/**
+	 * Database Table Info
+	 * @var Evoke\Persistance\DB\Table\InfoIface
 	 */
 	protected $info;
 	
-	/** @property $joinType
-	 *  @string The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
+	/**
+	 * The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
+	 * @var string
 	 */
 	protected $joinType;
 
-	/** @property $joins
-	 *  @array of Join objects from this node to other Join objects in the join
-	 *  tree.
+	/**
+	 * Array ofJoin objects from this node to other Join objects in the join
+	 * tree.
+	 * @var Evoke\Persistance\DB\Table\JoinsIface[]
 	 */
 	protected $joins;
 
-	/** @property $jointKey
-	 *  @string The field used to join records together.
+	/**
+	 * The field used to join records together.
+	 * @var string
 	 */
 	protected $jointKey;
 
-	/** @property $parentField
-	 *  @string The parent field for the current join.  The parent field is
-	 *  related to the Join object that is the current node's parent.  It is the
-	 *  field in that node's Table.
+	/**
+	 * The parent field for the current join.  The parent field is related to
+	 * the Join object that is the current node's parent.  It is the field in
+	 * that node's Table.
+	 * @var string
 	 */
 	protected $parentField;
 
-	/** @property $tableAlias
-	 *  @string The table name to be used for the current table (Aliases can be
-	 *  used to disambiguate data).
+	/**
+	 * The table name to be used for the current table (Aliases can be used to
+	 * disambiguate data).
+	 * @var string
 	 */
 	protected $tableAlias;
 
-	/** @property $tableName
-	 *  @string The table name of the current table.
+	/**
+	 * The table name of the current table.
+	 * @var string
 	 */
 	protected $tableName;
 
-	/** @property $tableSeparator
-	 *  @string The table separator to be used between tables.
+	/**
+	 * The table separator to be used between tables.
+	 * @var string
 	 */
 	protected $tableSeparator;
 
-	/** Construct the Joins object.
-	 *  @param info         @object DB Table Info object.
-	 *  @param joins        @array  Joins from this node.
+	/**
+	 * Construct the Joins object.
 	 *
+	 * @param Evoke\Persistance\DB\Table\InfoIface
+	 *                    DB Table Info object.
+	 * @param string      Table Name.
+	 * @param string      Parent Field.
+	 * @param string      Child Field.
+	 * @param Evoke\Persistance\DB\Table\JoinsIface[]
+	 *                    Joins from this node.
+	 * @param string      Admin Managed.
+	 * @param string      Compare Type.
+	 * @param string      ID Separator.
+	 * @param string      Join Type.
+	 * @param string      Joint Key.
+	 * @param string|null Table Alias.
+	 * @param string      Table Separator.
 	 */
 	public function __construct(
 		InfoIface    $info,
@@ -172,10 +204,13 @@ class Joins implements JoinsIface
 	/* Public Methods */
 	/******************/
 
-	/** Arrange a set of results for the database that match the Join tree.
-	 *  @param results @array The results from the database.
-	 *  @param data @array The data already processed from the results.
-	 *  @return @array The data that was arranged from the results.
+	/**
+	 * Arrange a set of results for the database that match the Join tree.
+	 *
+	 * @param mixed[] The results from the database.
+	 * @param mixed[] The data already processed from the results.
+	 *
+	 * @return mixed[] The data that was arranged from the results.
 	 */
 	public function arrangeResults(Array $results, Array $data=array())
 	{
@@ -226,7 +261,11 @@ class Joins implements JoinsIface
 		return $data;
 	}
    
-	/// Get a list of all fields fully named by their table alias.
+	/**
+	 * Get a list of all fields fully named by their table alias.
+	 *
+	 * @return mixed[]
+	 */
 	public function getAllFields()
 	{
 		$fields = array();
@@ -249,25 +288,41 @@ class Joins implements JoinsIface
 		return $fields;
 	}
 
-	/// Get the fields that should be left for auto filling.
+	/**
+	 * Get the fields that should be left for auto filling.
+	 *
+	 * @return mixed[]
+	 */
 	public function getAutoFields()
 	{
 		return $this->autoFields;
 	}
    
-	/// Get the child field.
+	/**
+	 * Get the child field.
+	 *
+	 * @return string
+	 */
 	public function getChildField()
 	{
 		return $this->childField;
 	}
    
-	/// Get the compare type.
+	/**
+	 * Get the compare type.
+	 *
+	 * @return string
+	 */
 	public function getCompareType()
 	{
 		return $this->compareType;
 	}
 
-	/// Get an empty joint data record.
+	/**
+	 * Get an empty joint data record.
+	 *
+	 * @return mixed[]
+	 */
 	public function getEmpty()
 	{
 		$emptyRecord = array();
@@ -281,19 +336,31 @@ class Joins implements JoinsIface
 		return $emptyRecord;
 	}
 
-	/// Return any failures from validation of data.
+	/**
+	 * Return any failures from validation of data.
+	 *
+	 * @return Evoke\Message\TreeIface
+	 */
 	public function getFailures()
 	{
 		return $this->info->getFailures();
 	}
 	
-	/// Get the joins.
+	/**
+	 * Get the joins.
+	 *
+	 * @return Evoke\Persistance\DB\Table\JoinsIface[]
+	 */
 	public function getJoins()
 	{
 		return $this->joins;
 	}
       
-	/// Get the join statement for the tables.
+	/**
+	 * Get the join statement for the tables.
+	 *
+	 * @return string
+	 */
 	public function getJoinStatement()
 	{
 		$joinStatement = '';
@@ -309,31 +376,52 @@ class Joins implements JoinsIface
 		return $joinStatement;
 	}
 
-	/// Get the join type.
+	/**
+	 * Get the join type.
+	 *
+	 * @return string
+	 */
 	public function getJoinType()
 	{
 		return $this->joinType;
 	}
    
-	// Get the Joint_Key.
+	/**
+	 * Get the Joint_Key.
+	 *
+	 * @return string
+	 */
 	public function getJointKey()
 	{
 		return $this->jointKey;
 	}
 
-	/// Get the parent field.
+	/**
+	 * Get the parent field.
+	 *
+	 * @return string
+	 */
 	public function getParentField()
 	{
 		return $this->parentField;
 	}
 
-	/// Get the primary keys for the table (not all primary keys for all referenced tables).
+	/**
+	 * Get the primary keys for the table (not all primary keys for all
+	 * referenced tables).
+	 *
+	 * @return string
+	 */
 	public function getPrimaryKeys()
 	{
 		return $this->info->getPrimaryKeys();
 	}
    
-	/// Get the table name that has possibly been aliassed.
+	/**
+	 * Get the table name that has possibly been aliassed.
+	 *
+	 * @return string
+	 */
 	public function getTableAlias()
 	{
 		if (isset($this->tableAlias))
@@ -346,30 +434,54 @@ class Joins implements JoinsIface
 		}
 	}
 
-	/// Get the table name.
+	/**
+	 * Get the table name.
+	 *
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return $this->tableName;
 	}
 
-	/// Get the table separator.
+	/**
+	 * Get the table separator.
+	 *
+	 * @return string
+	 */
 	public function getTableSeparator()
 	{
 		return $this->tableSeparator;
 	}
    
-	/// Whether the table reference is administratively managed.
+	/**
+	 * Whether the table reference is administratively managed.
+	 *
+	 * @return bool
+	 */
 	public function isAdminManaged()
 	{
 		return $this->adminManaged;
 	}
    
-	/// Return whether the table has an alias that is set.
+	/**
+	 * Whether the table has an alias that is set.
+	 *
+	 * @return bool
+	 */
 	public function isTableAliassed()
 	{
 		return isset($this->tableAlias);
 	}
 
+	/**
+	 * Whether the fieldset is valid.
+	 *
+	 * @param mixed[] The fieldset.
+	 * @param mixed[] Fields that should be ignored in the fieldset.
+	 *
+	 * @return bool
+	 */
 	public function isValid($fieldset, $ignoredFields=array())
 	{
 		return $this->info->isValid($fieldset, $ignoredFields);
@@ -379,7 +491,13 @@ class Joins implements JoinsIface
 	/* Protected Methods */
 	/*********************/
 
-	// Get a row ID that uniquely identifies a row for a table.
+	/**
+	 * Get a row ID value that uniquely identifies a row for a table.
+	 *
+	 * @param mixed[] The row from the result.
+	 *
+	 * @return string
+	 */
 	protected function getRowID($row)
 	{
 		$id = NULL;
@@ -407,7 +525,13 @@ class Joins implements JoinsIface
    /* Private Methods */
    /*******************/
    
-	/// Build the join from the join components.
+	/**
+	 * Build the join from the join components.
+	 *
+	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 *
+	 * @return string
+	 */
 	private function buildJoin($ref)
 	{
 		$join = ' ' . $ref->getJoinType() . ' ' . $ref->getTableName();
@@ -422,8 +546,13 @@ class Joins implements JoinsIface
 			$ref->getTableAlias() . '.' .  $ref->getChildField();
 	}
 
-	/** Filter the fields that belong to a table from the list and return the
-	 *  fields without their table name preceding them.
+	/**
+	 * Filter the fields that belong to a table from the list and return the
+	 * fields without their table name preceding them.
+	 *
+	 * @param mixed[] The field list that we are filtering.
+	 *
+	 * @return mixed[]
 	 */
 	private function filterFields($fieldList)
 	{
@@ -442,7 +571,13 @@ class Joins implements JoinsIface
 		return $filteredFields;
 	}
 
-	/// Determine whether the result is a result (has data for this table).
+	/**
+	 * Determine whether the result is a result (has data for this table).
+	 *
+	 * @param result The result data.
+	 *
+	 * @return bool Whether the result contains information for this table.
+	 */
 	private function isResult($result)
 	{
 		// A non result may be an array with all NULL entries, so we cannot just

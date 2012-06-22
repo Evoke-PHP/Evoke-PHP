@@ -5,8 +5,9 @@ use DomainException;
 
 class Cache implements CacheIface
 {
-	/** @property $items
-	 *  @array Collection of cache entries.
+	/** 
+	 * Collection of cache entries.
+	 * @var mixed[]
 	 */
 	protected $items = array();
 
@@ -14,24 +15,30 @@ class Cache implements CacheIface
 	/* Public Methods */
 	/******************/
 
-	/** Clear an item from the cache.
-	 *  @param key @string The key from the cache to clear.
+	/**
+	 * Clear an item from the cache.
+	 *
+	 * @param string The key from the cache to clear.
 	 */
 	public function clear($key)
 	{
 		unset($this->items[$key]);
 	}
 
-	/// Clear all items from the cache.	
+	/**
+	 * Clear all items from the cache.
+	 */
 	public function clearAll()
 	{
 		$this->items = array();
 	}
 
-	/** Check whether the key exists in the cache (the value could still be
-	 *  NULL).
-	 *  @param key @string The key of the item to check for existance.
-	 *  @return @bool Whether the key exists in the cache.
+	/**
+	 * Check whether the key exists in the cache (the value could still be NULL)
+	 *
+	 *  @param string The key of the item to check for existance.
+	 *
+	 *  @return bool Whether the key exists in the cache.
 	 */
 	public function exists($key)
 	{
@@ -39,10 +46,14 @@ class Cache implements CacheIface
 		return array_key_exists($key, $this->items);
 	}
 	
-	/** Get an item from the cache (or if none has been defined return NULL).
-	 *  @param key @string The key for the item to get.
-	 *  @return @mixed The value of the item.
-	 *  @throws DomainException when the key does not exist.
+	/**
+	 * Get an item from the cache (or if none has been defined return NULL).
+	 *
+	 * @param string|null The key for the item to get.
+	 *
+	 * @return mixed The value of the item.
+	 *
+	 * @throw DomainException when the key does not exist.
 	 */
 	public function get($key)
 	{
@@ -58,10 +69,12 @@ class Cache implements CacheIface
 		return $this->items[$key];
 	}
 
-	/** Set an item in the cache.  If the value already exists it will be
-	 *  overwritten.
-	 *  @param key   @string The key for the item to set.
-	 *  @param value @mixed  The value to set in the cache.
+	/**
+	 * Set an item in the cache.  If the value already exists it will be
+	 * overwritten.
+	 *
+	 * @param string The key for the item to set.
+	 * @param mixed  The value to set in the cache.
 	 */
 	public function set($key, $value)
 	{

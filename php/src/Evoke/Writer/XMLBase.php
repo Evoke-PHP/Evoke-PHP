@@ -4,32 +4,44 @@ namespace Evoke\Writer;
 use InvalidArgumentException,
 	XMLWriter;
 
-/// Base class for writing XML elements.
+/**
+ * XMLBase
+ *
+ * Base class for writing XML elements.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
+ */
 abstract class XMLBase implements WriterIface
 {
-	/** @property $language
-	 *  @string The language of the XML being written.
+	/**
+	 * The language of the XML being written.
+	 * @var string
 	 */
 	protected $language;
 	
-	/** @property $pos
-	 *  @array The position of the tag, attribs and children in the element.
+	/**
+	 * The position of the tag, attribs and children in the element.
+	 * @var mixed[]
 	 */
 	protected $pos;
 
-	/** @property $xMLWriter
-	 *  @object The XML Writer 
+	/**
+	 * The XML Writer object.
+	 * @var XMLWriter
 	 */
 	protected $xmlWriter;
 	
-	/** Create an abstract XML Writer.
-	 *  @param xmlWriter    @object XMLWriter object.
-	 *  @param indent       @bool   Whether the XML produced should be indented.
-	 *  @param indentString @string The string that should be used to indent
-	 *                              the XML.
-	 *  @param language     @string The language of the XML we are writing.
-	 *  @param pos          @array  The positions of the components within the
-	 *                              XML.
+	/**
+	 * Create an abstract XML Writer.
+	 *
+	 * @param XMLWriter XMLWriter object.
+	 * @param bool      Whether the XML produced should be indented.
+	 * @param string    The string that should be used to indent the XML.
+	 * @param string    The language of the XML we are writing.
+	 * @param mixed[]   The positions of the components within the XML.
 	 */
 	public function __construct(
 		XMLWriter   $xmlWriter,
@@ -57,41 +69,48 @@ abstract class XMLBase implements WriterIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the XHTML that has been written into the memory buffer (without
-	 *  resetting it).
-	 *  @return A string of the XHTML.
+	/**
+	 * Get the XHTML that has been written into the memory buffer (without
+	 * resetting it).
+	 *
+	 * @return string The XHTML from the buffer as a string.
 	 */
 	public function __toString()
 	{
 		return $this->xmlWriter->outputMemory(false);
 	}
    
-	/// Flush the memory buffer containing the XHTML that has been written.
+	/**
+	 * Flush the memory buffer containing the XHTML that has been written.
+	 */
 	public function flush()
 	{
 		$this->xmlWriter->flush();
 	}
 	
-	/** Output the memory buffer for the XHTML that has been written and reset
-	 *  the memory buffer.
+	/**
+	 * Output the memory buffer for the XHTML that has been written and reset
+	 * the memory buffer.
 	 */
 	public function output()
 	{
 		echo($this->xmlWriter->outputMemory(true));
 	}
 
-	/** Write XML elements into the memory buffer.
-	 *  @param xml @mixed Array accessible value for the xml to be written of the
-	 *  form: array($tag, $attributes, $children)
+	/**
+	 * Write XML elements into the memory buffer.
 	 *
-	 *  An example of this is below with the default values that are used for the
-	 *  options array. Attributes and options are optional.
-	 *  @verbatim
-	 *  array(0 => tag,
-	 *        1 => array('attrib_1' => '1', 'attrib_2' => '2'),
-	 *        2 => array($child, 'text', $anotherChild)
-	 *       )
-	 *  @endverbatim
+	 * @param mixed[] Array accessible value for the xml to be written of the
+	 *                form: `array($tag, $attributes, $children)`
+	 *
+	 * An example of this is below with the default values that are used for the
+	 * options array. Attributes and options are optional.
+	 * <pre><code>
+	 * array(0 => tag,
+	 *       1 => array('attrib_1' => '1', 'attrib_2' => '2'),
+	 *       2 => array($child, 'text', $anotherChild)
+	 *      )
+	 * </code></pre>
 	 */
 	public function write($xml)
 	{
@@ -164,8 +183,10 @@ abstract class XMLBase implements WriterIface
 	/* Protected Methods */
 	/*********************/
 	
-	/** Write the start of the document based on the type.
-	 *  @param type @string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
+	/**
+	 * Write the start of the document based on the type.
+	 *
+	 * @param string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
 	 */
 	protected function writeStartDocument($type)
 	{

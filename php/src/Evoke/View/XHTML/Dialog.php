@@ -3,8 +3,18 @@ namespace Evoke\View\XHTML;
 
 use Evoke\View\ViewIface;
 
+/**
+ * Dialog
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Dialog implements ViewIface
 {
+	/** @todo Fix to new interface.
+	 */
 	public function __construct(Array $setup)
 	{
 		/// \todo Fix this to the new view interface.

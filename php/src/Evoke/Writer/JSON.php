@@ -1,7 +1,15 @@
 <?php
 namespace Evoke\Writer;
 
-/** Writer for JSON (buffered).
+/**
+ * JSON Writer
+ *
+ * A buffered writer for JSON.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
  */
 class JSON extends Writer
 {	
@@ -9,8 +17,10 @@ class JSON extends Writer
 	/* Public Methods */
 	/******************/
 
-	/** Write the JSON data into the buffer.
-	 *  @param data \mixed PHP data to be converted to JSON for writing.
+	/**
+	 * Write the data in JSON format into the buffer.
+	 *
+	 * @param mixed[] PHP data to be encoded into the buffer as JSON.
 	 */
 	public function write($data)
 	{

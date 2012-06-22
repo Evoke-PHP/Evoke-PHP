@@ -4,24 +4,37 @@ namespace Evoke\View\XHTML;
 use Evoke\Model\Data\DataIface,
 	Evoke\View\ViewIface;
 
+/**
+ * Backtrace
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Backtrace implements ViewIface
 { 
-	/** @property data
-	 *  @object Data
+	/**
+	 * Data
+	 * @var Evoke\Model\Data\DataIface
 	 */
 	protected $data;
 
-	/** @property attribs
-	 *  @array Attribs
+	/**
+	 * Attribs
+	 * @var mixed[]
 	 */
 	protected $attribs;
 
-	/** Construct a Backtrace object.
-	 *  @param data            @object Data.
-	 *  @param attribs         @array  Attribs.
+	/**
+	 * Construct a Backtrace object.
+	 *
+	 * @param Evoke\Model\Data\DataIface Data
+	 * @param mixed[]                    attribs
 	 */
-	public function __construct(DataIface $data,
-	                            Array     $attribs         = array('class' => 'Backtrace'))
+	public function __construct(
+		DataIface $data,
+		Array     $attribs = array('class' => 'Backtrace'))
 	{
 		$this->data            = $data;
 		$this->attribs         = $attribs;
@@ -31,6 +44,13 @@ class Backtrace implements ViewIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view of the backtrace.
+	 *
+	 * @param mixed[] Paramaters to the view.
+	 *
+	 * @return mixed[] The view.
+	 */
 	public function get(Array $params = array())
 	{
 		$listItems = array();
@@ -63,5 +83,4 @@ class Backtrace implements ViewIface
 		return array('ol', $this->attribs, $listItems);
 	}
 }
-
 // EOF

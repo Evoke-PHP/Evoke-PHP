@@ -3,18 +3,33 @@ namespace Evoke\Service\Log;
 
 use DateTime;
 
+/**
+ * Log
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class Log implements LogIface
 { 
-	/** @property $dateTime
-	 *  @object DateTime for each log message.
+	/**
+	 * DateTime for each log message.
+	 * @var DateTime
 	 */
 	protected $dateTime;
 
-	/** @property $observers
-	 *  @array The Logging objects that are observing the log messages.
+	/**
+	 * The Logging objects that are observing the log messages.
+	 * @var Evoke\Service\Log\LoggerIface
 	 */
 	protected $observers = array();
-	
+
+	/**
+	 * Construct a Log object.
+	 *
+	 * @param DateTime DateTime object.
+	 */
 	public function __construct(DateTime $dateTime)
 	{
 		$this->dateTime = $dateTime;
@@ -24,18 +39,22 @@ class Log implements LogIface
 	/* Public Methods */
 	/******************/
 
-	/** Add a logger to the observer list.
-	 *  @param observer @object The logger to add.
+	/**
+	 * Add a logger to the observer list.
+	 *
+	 * @param Evoke\Service\Log\LoggerIface The logger to add.
 	 */
 	public function attach(LoggerIface $observer)
 	{
 		$this->observers[] = $observer;
 	}
 
-	/** Remove a logger from the observer list.
-	 *  @param observer @object The logger to remove (If there are more than one
-	 *                          occurences of the logger in the list then only
-	 *                          one is removed).
+	/**
+	 * Remove a logger from the observer list.
+	 *
+	 * @param Evoke\Service\Log\LoggerIface
+	 *           The logger to remove (If there are more than one occurences of
+	 *           the logger in the list then only one is removed).
 	 */
 	public function detach(LoggerIface $observer)
 	{
@@ -49,9 +68,11 @@ class Log implements LogIface
 		}
 	}
 
-	/** Log a message by calling all of the observers in the observer list.
-	 *  @param message @mixed The message to log.
-	 *  @param level   @mixed The level of the message to log.
+	/**
+	 * Log a message by calling all of the observers in the observer list.
+	 *
+	 * @param mixed The message to log.
+	 * @param mixed The level of the message to log.
 	 */
 	public function log($message, $level)
 	{

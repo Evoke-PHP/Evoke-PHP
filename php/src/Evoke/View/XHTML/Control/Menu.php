@@ -2,24 +2,36 @@
 namespace Evoke\View\XHTML\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
-	Evoke\Service\TranslatorIface,
+	Evoke\View\Text\TranslatorIface,
 	Evoke\View\ViewIface;
 
+/**
+ * Menu
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Menu implements ViewIface
 {
-	/** @property data
-	 *  @object Data
+	/**
+	 * Data object.
+	 * @var Evoke\Model\Data\Menu
 	 */
 	protected $data;
 
-	/** @property $translator
-	 *  @object Translator.
+	/**
+	 * Translator object
+	 * @var Evoke\View\Text\TranslatorIface
 	 */
 	protected $translator;
 	
-	/** Construct a Menu object.
-	 *  @param translator @object Translator.
-	 *  @param data       @object Data for the menu.
+	/**
+	 * Construct a Menu object.
+	 *
+	 * @param Evoke\View\Text\TranslatorIface Translator.
+	 * @param Evoke\Model\Data\Menu           Menu Data.
 	 */
 	public function __construct(TranslatorIface $translator,
 	                            DataMenu        $data)
@@ -32,9 +44,12 @@ class Menu implements ViewIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the menu represented by the data.
-	 *  @param menuItems @array The menu items.
-	 *  @return @array The menu element data.
+	/**
+	 * Get the menu represented by the data.
+	 *
+	 * @param Parameters to the view.
+	 *
+	 * @return mixed[] The menu element data.
 	 */
 	public function get(Array $params = array())
 	{
@@ -58,6 +73,11 @@ class Menu implements ViewIface
 	/* Private Methods */
 	/*******************/
 
+	/**
+	 * Build the menu elements.
+	 *
+	 * @return mixed[] The menu elements.
+	 */
 	private function buildMenu($data, $level = 0)
 	{
 		$lang = $this->translator->getLanguage();

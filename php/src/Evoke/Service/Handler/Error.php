@@ -5,13 +5,27 @@ use ErrorException,
 	Evoke\Service\Log\LogIface,
 	OutOfBoundsException;
 
+/**
+ * Error Handler
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class Error implements HandlerIface
 {
-	/** @property $log
-	 *  @object Log
+	/**
+	 * Log object.
+	 * @var Evoke\Service\Log\LogIface
 	 */
 	protected $log;
 
+	/**
+	 * Construct a system error handler.
+	 *
+	 * @param Evoke\Service\Log\LogIface Log object.
+	 */
 	public function __construct(LogIface $log)
 	{
 		$this->log = $log;
@@ -21,6 +35,17 @@ class Error implements HandlerIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * System Error Handler to log error messages.
+	 *
+	 * @param int    Error Number.
+	 * @param string Error String.
+	 * @param string File where the error occurred.
+	 * @param int    Line where the error occurred.
+	 *
+	 * @return bool Whether the default system error handler should be
+	 *              suppressed.
+	 */
 	public function handler($errNo, $errStr, $errFile, $errLine)
 	{
 		// If the error code should not be reported return.
@@ -69,11 +94,17 @@ class Error implements HandlerIface
 		return false;
 	}
 
+	/**
+	 * Register the handler.
+	 */
 	public function register()
 	{
 		return set_error_handler(array($this, 'handler'));
 	}
 
+	/**
+	 * Unregister the handler.
+	 */
 	public function unregister()
 	{
 		return restore_error_handler();

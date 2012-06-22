@@ -5,45 +5,61 @@ use Evoke\View\ViewIface,
 	InvalidArgumentException,
 	RuntimeException;
 
+/**
+ * Select
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Select implements ViewIface
 {
-	/** @property $attribs
-	 *  @array Attributes for the select element.
+	/**
+	 * Attributes for the select element.
+	 * @var string[]
 	 */
 	protected $attribs;
 	
-	/** @property appendData
-	 *  @array Data to be appended to the options available for selection.
+	/**
+	 * Data to be appended to the options available for selection.
+	 * @var mixed[]
 	 */
 	protected $appendData;
 
-	/** @property optionAttribs
-	 *  @array Attributes for each select option.
+	/**
+	 * Attributes for each select option.
+	 * @var string[]
 	 */
 	protected $optionAttribs;
 
-	/** @property prependData
-	 *  @array Data to be prepended to the options available for selection.
+	/**
+	 * Data to be prepended to the options available for selection.
+	 * @var mixed[]
 	 */
 	protected $prependData;
 
-	/** @property $textField
-	 *  @string The field to use from the data for the option text.
+	/**
+	 * The field to use from the data for the option text.
+	 * @var string
 	 */
 	protected $textField;
 
-	/** @property $valueField
-	 *  @string The field to use for the value of the options.
+	/**
+	 * The field to use for the value of the options.
+	 * @var string
 	 */
 	protected $valueField;
 
-	/** Construct a Select object.
-	 *  @param textField     @string Field from the data for the option text.
-	 *  @param valueField    @string Field from the data for the option value.
-	 *  @param attribs       @array  Attributes for the select element.
-	 *  @param appendData    @array  Appended data for adding options.
-	 *  @param optionAttribs @array  Attributes for the option elements.
-	 *  @param prependData   @array  Prepended data for adding options.
+	/**
+	 * Construct a Select object.
+	 *
+	 * @param string   Field from the data for the option text.
+	 * @param string   Field from the data for the option value.
+	 * @param string[] Attributes for the select element.
+	 * @param mixed[]  Appended data for adding options.
+	 * @param string[] Attributes for the option elements.
+	 * @param mixed[]  Prepended data for adding options.
 	 */
 	public function __construct(/* String */ $textField,
 	                            /* String */ $valueField    = 'ID',
@@ -75,12 +91,16 @@ class Select implements ViewIface
 	/* Public Methods */
 	/******************/
 
-	/** Set the select element.
-	 *  @param params @array The select data in the form:
-	 *  @code
+	/**
+	 * Get the select element.
+	 *
+	 *  @param mixed[] The select data in the form:
+	 *  <pre><code>
 	 *  array('Records'  => \array records, // Records for the select
 	 *        'Selected' => \scalar value); // The value that is selected.
-	 *  @endcode
+	 *  </code></pre>
+	 *
+	 * @return The select element.
 	 */    
 	public function get(Array $params = array())
 	{

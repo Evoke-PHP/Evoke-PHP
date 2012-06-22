@@ -3,85 +3,108 @@ namespace Evoke\View\XHTML\Input;
 
 use Evoke\View\ViewIface;
 
-/** View_DB_Input provide elements for input to the database.
+/**
+ * View_DB_Input provide elements for input to the database.
  * Make an element from the database describe table information.
- * @param fieldInfo \array A single row from the describe table information.
+ *
+ * @param mixed[] A single row from the describe table information.
  *
  *  Below is an example of the describe table information (A single row from
  *  this provides the field information):
- *  \verbatim
- +-------+--------------+------+-----+---------+----------------+
- | Field | Type         | Null | Key | Default | Extra          |
- +-------+--------------+------+-----+---------+----------------+
- | ID    | int(11)      | NO   | PRI | NULL    | auto_increment |
- | Name  | varchar(100) | YES  |     | 'Smith' |                |
- +-------+--------------+------+-----+---------+----------------+
- \endverbatim
-*/
+ *
+ * <pre>
+ * +-------+--------------+------+-----+---------+----------------+
+ * | Field | Type         | Null | Key | Default | Extra          |
+ * +-------+--------------+------+-----+---------+----------------+
+ * | ID    | int(11)      | NO   | PRI | NULL    | auto_increment |
+ * | Name  | varchar(100) | YES  |     | 'Smith' |                |
+ * +-------+--------------+------+-----+---------+----------------+
+ * </pre>
+ *
+ * @todo Fix this to the new view interface.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class DB implements ViewIface
 {
-	/** @property $encasing
-	 *  \bool Whether the input is to be encased within a div element.
+	/**
+	 * Whether the input is to be encased within a div element.
+	 * @var bool
 	 */
 	protected $encasing;
 
-	/** @property $fieldAttribs
-	 *  \array of attributes for the field.
+	/**
+	 * Attributes for the field.
+	 * @var string[]
 	 */
 	protected $fieldAttribs;
 
-	/** @property $fieldInfo
-	 *  \array Information for the field.
+	/**
+	 * Information for the field.
+	 * @var mixed[]
 	 */
 	protected $fieldInfo;
 
-	/** @property $fieldPrefix
-	 *  Prefix \string to be used for the name attribute of the field.
+	/**
+	 * Prefix to be used for the name attribute of the field.
+	 * @var string
 	 */
 	protected $fieldPrefix;
 
-	/** @property $fieldValue
-	 *  \string The value of the input (the text within it).
+	/**
+	 * The value of the input (the text within it).
+	 * @var string
 	 */
 	protected $fieldValue;
 
-	/** @property $hidden
-	 *  \bool Whether the input is hidden.
+	/**
+	 * Whether the input is hidden.
+	 * @var bool
 	 */
 	protected $hidden;
 
-	/** @property $highlighted
-	 *  \bool Whether the input is highlighted.
+	/**
+	 * Whether the input is highlighted.
+	 * @var bool
 	 */
 	protected $highlighted;
 
-	/** @property $id
-	 *  \string The id attribute for the input.
+	/**
+	 * The id attribute for the input.
+	 * @var string
 	 */
 	protected $id;
 
-	/** @property $label
-	 *  \string The label for the input.
+	/**
+	 * The label for the input.
+	 * @var string
 	 */
 	protected $label;
 
-	/** @property $requiredIndication
-	 *  \bool Whether there should be a required indication for the input (*).
+	/**
+	 * Whether there should be a required indication for the input (*).
+	 * @var bool
 	 */
 	protected $requiredIndication;
 
-	/** @property $translateLabel
-	 *  \bool Whether the label should be translated.
+	/**
+	 * Whether the label should be translated.
+	 * @var bool
 	 */
 	protected $translateLabel;
 
-	/** @property $translatePrefix
-	 *  \string The prefix to use for the translation.
+	/**
+	 * The prefix to use for the translation.
+	 * @var string
 	 */
 	protected $translatePrefix;
 
-	/** @property $translator
-	 *  Translator \object
+	/**
+	 * Translator object.
+	 * @var Evoke\View\Text\TranslatorIface
 	 */
 	protected $translator;
 

@@ -4,21 +4,33 @@ namespace Evoke\View\XHTML\Message;
 use Evoke\Message\TreeIface,
 	Evoke\View\ViewIface;
 
+/**
+ * Tree
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Tree implements ViewIface
 {
-	/** @property attribs
-	 *  @array Attribs
+	/**
+	 * Attribs
+	 * @var mixed[]
 	 */
 	protected $attribs;
 
-	/** @property messageTree
-	 *  @object MessageTree
+	/**
+	 * MessageTree
+	 * @var Evoke\Message\TreeIface
 	 */
 	protected $messageTree;
 
-	/** Construct a Message Array view.
-	 *  @param messageTree @object MessageTree.
-	 *  @param attribs     @array  Attribs.
+	/**
+	 * Construct a Message Tree view.
+	 *
+	 * @param Evoke\Message\TreeIface MessageTree.
+	 * @param mixed[]                 Attribs.
 	 */
 	public function __construct(
 		TreeIface $messageTree,
@@ -32,6 +44,11 @@ class Tree implements ViewIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view.
+	 *
+	 * @param mixed[] Parameters to the view.
+	 */	
 	public function get(Array $params = array())
 	{
 		$params += array('Start_Level' => 0);
@@ -46,7 +63,12 @@ class Tree implements ViewIface
 	/* Protected Methods */
 	/*********************/
 
-	/// Build the view of the MessageTree recursively.
+	/**
+	 * Build the view of the MessageTree recursively.
+	 *
+	 * @param Evoke\Message\TreeIface The message tree to build the view from.
+	 * @param int                     The level we are building.
+	 */
 	protected function buildElems(TreeIface $messageTree, $level)
 	{
 		/// @todo Fix the is_array check to something appropriate.

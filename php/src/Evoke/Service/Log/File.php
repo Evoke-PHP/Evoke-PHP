@@ -5,55 +5,74 @@ use DateTime,
 	Evoke\Persistance\FilesystemIface,
 	InvalidArgumentException;
 
+/**
+ * File Logger
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class File implements LoggerIface
 {
-	/** @property $append
-	 *  @bool Whether the file should be appended to.
+	/**
+	 * Whether the file should be appended to.
+	 * @var bool	 
 	 */
 	protected $append;
 
-	/** @property $dirMode
-	 *  @int (octal) The mode for any created directories.
+	/**
+	 * The mode for any created directories.
+	 * @var int (octal)
 	 */
 	protected $dirMode;
 
-	/** @property $fileMode
-	 *  @int (octal) The mode for the file.
+	/**
+	 * The mode for the file.
+	 * @var int (octal)
 	 */
 	protected $fileMode;
 
-	/** @property $filename
-	 *  @string The filename to log to.
+	/**
+	 * The filename to log to.
+	 * @var string
 	 */
 	protected $filename;
 	
-	/** @property $filePointer
-	 *  @resource File pointer to the log file.
+	/**
+	 * File pointer to the log file.
+	 * @var mixed
 	 */
 	private $filePointer;
 
-	/** @property $filesystem
-	 *  @object Filesystem
+	/**
+	 * Filesystem
+	 * @var Evoke\Persistance\FilesystemIface
 	 */
 	protected $filesystem;
 
-	/** @property $locking
-	 *  @bool Whether the file is locked when writing to the file.
+	/**
+	 * Whether the file is locked when writing to the file.
+	 * @var bool
 	 */
 	protected $locking;
 	
-	/** @property $opened
-	 *  @bool Indicates whether or not the resource has been opened.
+	/**
+	 * Indicates whether or not the resource has been opened.
+	 * @var bool
 	 */
 	protected $opened = false;
 
-	/** Construct a File Logger object.
-	 *  @param $filesystem  @object Filesystem object
-	 *  @param append       @bool   Whether to append to the file.
-	 *  @param dirMode      @object The directory mode for the log file.
-	 *  @param filename     @string The filename for the log.
-	 *  @param fileMode     @object Permissions to set the file to
-	 *  @param locking      @bool   Whether to lock the file for writing.
+	/**
+	 * Construct a File Logger object.
+	 *
+	 * @param Evoke\Persistance\FilesystemIface
+	 *                   Filesystem object
+	 * @param bool       Whether to append to the file.
+	 * @param int(octal) The directory mode for the log file.
+	 * @param string     The filename for the log.
+	 * @param int(octal) Permissions to set the file to
+	 * @param bool       Whether to lock the file for writing.
 	 */
 	public function __construct(FilesystemIface   $filesystem,
 	                            /* Bool */        $append=true,
@@ -91,10 +110,12 @@ class File implements LoggerIface
 	/* Public Methods */
 	/******************/
 
-	/** Logs a message to the file.
-	 *  @param date    @object The DateTime for the log message.
-	 *  @param message @array  The message to log.
-	 *  @param level   @int    The level of the message.
+	/**
+	 * Logs a message to the file.
+	 *
+	 * @param DateTime The DateTime for the log message.
+	 * @param mixed    The message to log.
+	 * @param mixed    The level of the message.
 	 */
 	public function log(DateTime $date, $message, $level)
 	{
@@ -123,8 +144,9 @@ class File implements LoggerIface
 	/* Private Methods */
 	/*******************/
 
-	/** Open the log file for output. Creating directories, files as appropriate.
-	 *  Use the modes from setup for the directory, file and append settings.
+	/**
+	 * Open the log file for output. Creating directories, files as appropriate.
+	 * Use the modes from setup for the directory, file and append settings.
 	 */
 	private function open()
 	{

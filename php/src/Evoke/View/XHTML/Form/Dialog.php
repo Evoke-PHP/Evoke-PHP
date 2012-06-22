@@ -1,8 +1,19 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
+/**
+ * Dialog
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Dialog extends Form
 {
+	/**
+	 * @todo Check whether this class is now obsolete.
+	 */
 	public function __construct(Array $setup)
 	{
 		/// @todo Fix to new View interface.

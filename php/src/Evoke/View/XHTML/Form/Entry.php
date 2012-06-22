@@ -1,7 +1,17 @@
 <?php
 namespace Evoke\View\XHTML\Form;
-/** Entry form for a databse record.
- *  Provide a form to show and allow modification to database tables.
+/**
+ * Entry
+ *
+ * Entry form for a databse record.
+ * Provide a form to show and allow modification to database tables.
+ *
+ * @todo Fix to new view interface.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
  */
 class Entry extends Form
 {

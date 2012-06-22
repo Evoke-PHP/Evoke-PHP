@@ -3,23 +3,37 @@ namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Persistance\DB\SQLIface;
 
-/// Get a list of tables from the database.
+/**
+ * Tables Mapper
+ *
+ * Get a list of tables from the database.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Tables extends DB
 {
-	/** @property $extraTables
-	 *  @array Extra tables to include in the data.
+	/**
+	 * Extra tables to include in the data.
+	 * @var mixed[]
 	 */
 	protected $extraTables;
 
-	/** @property $ignoredTables
-	 *  @array Table to ignore in the data.
+	/**
+	 * Tables to ignore in the data.
+	 * @var mixed[]
 	 */
 	protected $ignoredTables;
 
-	/** Construct a model for a list of database tables.
-	 *  @param sql           @object SQL object.
-	 *  @param extraTables   @array  Extra tables to list.
-	 *  @param ignoredTables @array  Tables to ignore for the list.
+	/**
+	 * Construct a model for a list of database tables.
+	 *
+	 * @param Evoke\Persistance\DB\SQLIface
+	 *                SQL object.
+	 * @param mixed[] Extra tables to list.
+	 * @param mixed[] Tables to ignore for the list.
 	 */
 	public function __construct(SQLIface $sql,
 	                            Array    $extraTables   = array(),
@@ -35,11 +49,14 @@ class Tables extends DB
 	/* Public Methods */
 	/******************/
 
-	/** Fetch the specified tables if they are in the database or extra tables,
-	 *  and are not being ignored.
-	 *  @param params @array The conditions to match in the mapped data.  If no
-	 *  parameters are passed then it is assumed that all matching tables should
-	 *  be returned, otherwise the passed parameters are returned if they match.
+	/**
+	 * Fetch the specified tables if they are in the database or extra tables,
+	 * and are not being ignored.
+	 *
+	 * @param mixed[] The conditions to match in the mapped data.  If no
+	 *                parameters are passed then it is assumed that all matching
+	 *                tables should be returned, otherwise a table must be
+	 *                within the passed parameters to match.
 	 */
 	public function fetch(Array $params = array())
 	{

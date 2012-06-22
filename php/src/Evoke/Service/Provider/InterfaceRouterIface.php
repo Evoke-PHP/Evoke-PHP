@@ -13,14 +13,15 @@ interface InterfaceRouterIface
 	/**
 	 * Add a rule to the router.
 	 *
-	 * @param Rule\RuleIface rule HTTP URI Rule object.
+	 * @param Evoke\Service\Provider\Rule\RuleIface Provider Rule.
 	 */
 	public function addRule(Rule\RuleIface $rule);
 
 	/**
 	 * Route the Interface to a concrete class.
 	 *
-	 * @param string interfaceName The interface name to route.
+	 * @param string The interface name to route.
+	 *
 	 * @return string|bool The classname (or false if no concrete class could be
 	 *                     found).
 	 */

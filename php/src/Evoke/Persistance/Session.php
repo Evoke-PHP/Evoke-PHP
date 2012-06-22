@@ -3,8 +3,19 @@ namespace Evoke\Persistance;
 
 use RuntimeException;
 
+/**
+ * Session
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
+ */
 class Session implements SessionIface
 {
+	/**
+	 * Construct a session object.
+	 */
 	public function __construct()
 	{
 		$this->ensure();
@@ -14,6 +25,9 @@ class Session implements SessionIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Ensure that the session is initialized.
+	 */
 	public function ensure()
 	{
 		if (!isset($_SESSION))
@@ -40,17 +54,14 @@ class Session implements SessionIface
 		}
 	}
 
-	/// Return the string of the session ID.
+	/**
+	 * Return the string of the session ID.
+	 *
+	 * @return string
+	 */
 	public function getID()
 	{
-		if (PHP_SAPI === 'cli')
-		{
-			return 'CLI_SESSION';
-		}
-		else
-		{
-			return session_id();
-		}
+		return (PHP_SAPI === 'cli') ? 'CLI_SESSION' : session_id();
 	}
 }
 // EOF

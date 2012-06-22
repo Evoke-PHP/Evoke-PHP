@@ -1,8 +1,14 @@
 <?php
 namespace Evoke\Writer;
-/** XHTML Writing Resource
- *  Provide an interface to the XML Writer to write page content and methods to
- *  write the DTD, head and end of a webpage.
+/**
+ * XML Writer
+ *
+ * Provide an interface to write XML specific content.
+ * 
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
  */
 class XML extends XMLBase
 {
@@ -10,8 +16,8 @@ class XML extends XMLBase
 	/* Public Methods */
 	/******************/
 
-	/** Write the DTD, html head and start the body of the document.
-	 *  @param setup @array The setup for the start of the document.
+	/**
+	 * Write the start of the document.
 	 */
 	public function writeStart()
 	{

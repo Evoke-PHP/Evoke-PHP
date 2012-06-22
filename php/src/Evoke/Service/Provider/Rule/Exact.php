@@ -1,24 +1,36 @@
 <?php
 namespace Evoke\Service\Provider\Rule;
 
-/** A Provider interface routing rule that matches the exact interface name and
- *  converts it to a specific concrete classname.
+/**
+ * Exact Rule
+ *
+ * A Provider interface routing rule that matches the exact interface name and
+ * converts it to a specific concrete classname.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
  */
 class Exact implements RuleIface
 {
-	/** @property $classname
-	 *  @string The exact classname that this rule converts to.
+	/**
+	 * The exact classname that this rule converts to.
+	 * @var string
 	 */
 	protected $classname;
 
-	/** @property $interfaceName
-	 *  @string The exact interfaceName that this rule converts from.
+	/**
+	 * The exact interfaceName that this rule converts from.
+	 * @var string
 	 */
 	protected $interfaceName;
 
-	/** Construct the Exact rule.
-	 *  @param interfaceName @string The interface name to match.
-	 *  @param classname     @string The classname to convert to.
+	/**
+	 * Construct the Exact rule.
+	 *
+	 * @param string The interface name to match.
+	 * @param string The classname to convert to.
 	 */
 	public function __construct(/* String */ $interfaceName,
 	                            /* String */ $classname)
@@ -31,21 +43,26 @@ class Exact implements RuleIface
 	/* Public Methods */
 	/******************/
 
-	/** Return the exact conversion which is always the constructed classname.
-	 *  @param interfaceName @string Interface that we ignore because we know
-	 *                               the rule matches and what we want to
-	 *                               return.
-	 *  @return @string The classname of the exact match.
+	/**
+	 * Return the exact conversion which is always the constructed classname.
+	 *
+	 * @param string Interface that we ignore because we know the rule matches
+	 *               and what we want to return.
+	 *
+	 * @return string The classname of the exact match.
 	 */
 	public function getClassname($interfaceName)
 	{
 		return $this->classname;
 	}
 	
-	/** Check to see if the rule matches.
-	 *  @param interfaceName @string The interface name to match exactly. (Type
-	 *                               is considered unimportant == is ok.)
-	 *  @return @bool Whether the rule matches.
+	/**
+	 * Check to see if the rule matches.
+	 *
+	 * @param string The interface name to match exactly. (Type is considered
+	 *               unimportant == is ok.)
+	 *
+	 * @return bool Whether the rule matches.
 	 */
 	public function isMatch($interfaceName)
 	{

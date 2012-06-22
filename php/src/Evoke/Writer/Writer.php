@@ -1,16 +1,27 @@
 <?php
 namespace Evoke\Writer;
 
-/// abstract Writer.
+/**
+ * Writer
+ *
+ * Abstract Writer
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
+ */
 abstract class Writer implements WriterIface
 {
-	/** @property $buffer
-	 *  @string The buffer that holds the text that has been written ready for
-	 *  output.
+	/**
+	 * The buffer that holds the text that has been written ready for output.
+	 * @var string
 	 */
 	protected $buffer;
 
-	/// Construct the buffered Writer.
+	/**
+	 * Construct the buffered Writer.
+	 */
 	public function __construct()
 	{
 		$this->buffer = '';
@@ -20,27 +31,35 @@ abstract class Writer implements WriterIface
 	/* Public Methods */
 	/******************/
 
-	/// Get the string representation of the buffer that we are writing to.
+	/**
+	 * Get the string representation of the buffer that we are writing to.
+	 */
 	public function __toString()
 	{
 		return $this->buffer;
 	}
 
-	/// Reset the buffer that we are writing to.
+	/**
+	 * Reset the buffer that we are writing to.
+	 */
 	public function flush()
 	{
 		$this->buffer = '';
 	}
 	
-	/// Output the buffer that we have written into.
+	/**
+	 * Output the buffer that we have written into.
+	 */
 	public function output()
 	{
 		echo $this->buffer;
 		$this->buffer = '';
 	}
 	
-	/** Write data into the buffer.
-	 *  @param data @mixed The data to write into the buffer.
+	/**
+	 * Write data into the buffer.
+	 *
+	 * @param mixed The data to write into the buffer.
 	 */
 	abstract public function write($data);
 }

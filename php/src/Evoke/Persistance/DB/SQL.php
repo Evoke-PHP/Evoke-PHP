@@ -4,39 +4,53 @@ namespace Evoke\Persistance\DB;
 use Evoke\Message\Exception\DB as ExceptionDB,
 	Exception;
 
-/** The SQL class provides an implementation of the SQL interface which extends
- *  the DB interface in Evoke.
+/**
+ * SQL
+ *
+ * The SQL class provides an implementation of the SQL interface which extends
+ * the DB interface in Evoke.
  *
  * Provides simple pass-through wrappers for the DB interface functions.
  *
  * Provides wrappers to help the writing of the following SQL statements:
- *   SELECT, UPDATE, DELETE, INSERT
+ *     SELECT, UPDATE, DELETE, INSERT
  *
- *   Conditions for WHERE statements are either in string format or as a keyed
- *   array which is AND'ed together and the comparison operator '=' is used.
- *      Example: array(ID => 1, Name => '`Peter`') becomes ID=1 AND Name=`Peter`
- *   A condition passed in as a string is unchanged and can be used for more
- *   complex comparison operations.
+ * Conditions for WHERE statements are either in string format or as a keyed
+ * array which is AND'ed together and the comparison operator '=' is used.
+ *     Example: array(ID => 1, Name => '`Peter`') becomes ID=1 AND Name=`Peter`
+ * A condition passed in as a string is unchanged and can be used for more
+ * complex comparison operations.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
  */
 class SQL implements SQLIface
 {
-	/** @property $db
-	 *  @object Database object.
+	/**
+	 * Database object.
+	 * @var Evoke\Persistance\DB\DBIface
 	 */
 	protected $db;
 
-	/** @property $inTransaction
-	 *  @bool Whether we are currently in a transaction or not.
+	/**
+	 * Whether we are currently in a transaction or not.
+	 * @var bool
 	 */
 	protected $inTransaction = false;
 
-	/** @property $statementClass
-	 *  @string The classname to use for special PDOStatement processing.
+	/**
+	 * The classname to use for special PDOStatement processing.
+	 * @var string
 	 */
 	protected $statementClass;
 	
-	/** Construct an SQL object.
-	 *  @param database @object Database object to perform the SQL on.
+	/**
+	 * Construct an SQL object.
+	 *
+	 * @param Evoke\Persistance\DB\DBIface
+	 *        Database object to perform the SQL on.
 	 */
 	public function __construct(
 		DBIface      $database,
@@ -46,11 +60,15 @@ class SQL implements SQLIface
 		$this->statementClass = $statementClass;
 	}
    
-	/*****************************************/
-	/* Public Methods - Transaction Handling */
-	/*****************************************/
+	/*****************************/
+	/* Public Methods - DB Iface */
+	/*****************************/
 
-	/// Begin a transaction or raise an exception if we are already in one.
+	/**
+	 * Begin a transaction in the database.
+	 *
+	 * @throw Evoke\Message\Exception\DB If we are already in a transaction.
+	 */
 	public function beginTransaction()
 	{
 		if ($this->inTransaction)
@@ -64,7 +82,9 @@ class SQL implements SQLIface
 		}
 	}
 
-	/// Commit the current transaction.
+	/**
+	 * Commit the current transaction to the database.
+	 */
 	public function commit()
 	{
 		if ($this->inTransaction)
@@ -78,67 +98,79 @@ class SQL implements SQLIface
 		}
 	}
 
-	/// Return whether we are in a trasaction.
-	public function inTransaction()
-	{
-		return $this->inTransaction;
-	}
-   
-	/// Rolls back the current transaction.
-	public function rollBack()
-	{
-		if ($this->inTransaction)
-		{
-			$this->inTransaction = false;
-			return $this->db->rollBack();
-		}
-		else
-		{
-			throw new ExceptionDB(__METHOD__, 'Not in a transaction.');
-		}
-	}
-   
-	/*************************************************/
-	/* Public Methods - Simple Pass-Through Wrappers */
-	/*************************************************/
-
-	/// Return the SQLSTATE.
+	/**
+	 * Get the error code from the database.
+	 */
 	public function errorCode()
 	{
 		return $this->db->errorCode();
 	}
 
-	/// Get the extended error information associated with the last DB operation.
+	/**
+	 * Get the error information associated with the last DB operation.
+	 */
 	public function errorInfo()
 	{
 		return $this->db->errorInfo();
 	}
 
-	/// Execute an SQL statement and return the number of rows affected.
+	/**
+	 * Execute an SQL statement.
+	 *
+	 * @return int Number of rows affected.
+	 */
 	public function exec($statement)
 	{
 		return $this->db->exec($statement);
 	}
 
-	/// Get a database connection attribute.
+	/**
+	 * Get a database attribute.
+	 *
+	 * @return mixed The attribute.
+	 */
 	public function getAttribute($attribute)
 	{
 		return $this->db->getAttribute($attribute);
 	}
 
-	/// Get an array of available PDO drivers.
+	/**
+	 * Get an array of available PDO drivers.
+	 *
+	 * @return mixed[]
+	 */
 	public function getAvailableDrivers()
 	{
 		return $this->db->getAvailableDrivers();
 	}
+
+	/**
+	 * Whether we are in a transaction.
+	 *
+	 * @return bool Whether we are in a transaction.
+	 */
+	public function inTransaction()
+	{
+		return $this->inTransaction;
+	}
    
-	/// Get the ID of the last inserted row or sequence value.
+	/**
+	 * Get the ID of the last inserted row or sequence value.
+	 *
+	 * @param string|null The name of the sequence object.
+	 *
+	 * @return string
+	 */
 	public function lastInsertId($name=NULL)
 	{
 		return $this->db->lastInsertId($name);
 	}
 
-	/// Prepares a statement for execution and returns a statement object.
+	/**
+	 * Prepares a statement for execution and returns a statement object.
+	 *
+	 * @return mixed Return the PDO statement object.
+	 */
 	public function prepare($statement, $driverOptions=array())
 	{
 		try
@@ -157,9 +189,13 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Executes an SQL statement, returns a result set as a PDOStatement object.
-	 *  Any supplied object should be filled as per the fetch options.
-	 *  @param queryString \string The query string.
+	/**
+	 * Executes an SQL statement, returns a result set as a PDOStatement object.
+	 * Any supplied object should be filled as per the fetch options.
+	 *
+	 * @param string     The query string.
+	 * @param int        The fetch mode.
+	 * @param mixed|null What to fetch the query into.
 	 */
 	public function query($queryString, $fetchMode=0, $into=NULL)
 	{
@@ -179,25 +215,212 @@ class SQL implements SQLIface
 		}
 	}  
 
-	/// Quotes the input string (if required) and escapes special characters.
+	/**
+	 * Quotes the input string (if required) and escapes special characters.
+	 *
+	 * @param string The string to quote.
+	 * @param int    The type to quote it as.
+	 */
 	public function quote($string, $parameterType=\PDO::PARAM_STR)
 	{
 		return $this->db->quote($string, $parameterType);
 	}
    
-	/// Sets an attribute on the database
+	/**
+	 * Rolls back the current transaction avoiding any change to the database.
+	 */
+	public function rollBack()
+	{
+		if ($this->inTransaction)
+		{
+			$this->inTransaction = false;
+			return $this->db->rollBack();
+		}
+		else
+		{
+			throw new ExceptionDB(__METHOD__, 'Not in a transaction.');
+		}
+	}
+	
+	/**
+	 * Set an attribute on the database
+	 *
+	 * @param int   The attribute to set.
+	 * @param mixed The value to set it to.
+	 */
 	public function setAttribute($attribute, $value)
 	{
 		return $this->db->setAttribute($attribute, $value);
 	}
    
 	/*****************************/
-	/* Public Methods - Wrappers */
+	/* Public Methods - SQLIface */
 	/*****************************/
    
-	/** Get an associative array of results for a query.
-	 *  @param queryString \string Query string.
-	 *  \return \array Associative array of results from the query.
+	/**
+	 * Add a column to a table.
+	 *
+	 * @param string The table to add the column to.
+	 * @param string The column name to add.
+	 * @param string The data type of the column to add.
+	 *
+	 * @return bool Whether the add column was successful.
+	 */	
+	public function addColumn($table, $column, $fieldType)
+	{
+		$q = 'ALTER TABLE ' . $table . ' ADD COLUMN `' . $column . '` ' .
+			$fieldType;
+		return $this->exec($q);
+	}
+
+	/**
+	 * Change a column in the table.
+	 *
+	 * @param string The table for the column change.
+	 * @param string The column name to change.
+	 * @param string The field name to set the column to.
+	 * @param string The type of field to create.
+	 *
+	 * @return \int The number of records modified.
+	 */	
+	public function changeColumn($table, $oldCol, $newCol, $fieldType)
+	{
+		$q = 'ALTER TABLE ' . $table . ' CHANGE COLUMN `' . $oldCol . '` `' .
+			$newCol . '` ' . $fieldType;
+		return $this->exec($q);      
+	}
+
+	/**
+	 * Simple SQL DELETE statement wrapper.
+	 *
+	 * @param mixed Tables to delete from.
+	 * @param mixed Conditions (see class description).
+	 *
+	 * @return int The number of rows affected by the delete.
+	 */	
+	public function delete($tables, $conditions)
+	{
+		$q = 'DELETE FROM ' . $this->expand($tables) . ' WHERE ';
+
+		foreach ($conditions as $field => $value)
+		{
+			if (!isset($value))
+			{
+				$q .= $field . ' IS NULL AND ';
+				unset($conditions[$field]);
+			}
+			else
+			{
+				$q .= $field . '=? AND ';
+			}
+		}
+
+		$q = rtrim($q, 'AND ');
+      
+		try
+		{
+			$statement = $this->prepare($q);
+			$statement->execute($conditions);
+
+			return $statement->rowCount();
+		}
+		catch (Exception $e)
+		{
+			throw new ExceptionDB(
+				__METHOD__ . ' query: ' . var_export($q, true) .
+				' conditions: ' . var_export($conditions, true),
+				$this->db,
+				$e);
+		}
+	}
+	
+	/**
+	 * Drop a column from the table.
+	 *
+	 * @param string The table to drop the column from.
+	 * @param string The column name to drop.
+	 *
+	 * @return int The number of records modified.
+	 */	
+	public function dropColumn($table, $column)
+	{
+		$q = 'ALTER TABLE ' . $table . ' DROP COLUMN `' . $column . '`';
+		return $this->exec($q);
+	}
+
+	/**
+	 * Simple SQL INSERT statement wrapper.
+	 *
+	 * @param string Table to insert into.
+	 * @param mixed Fields to insert.
+	 * @param mixed[] An array specifying one or more record to insert.
+	 */	
+	public function insert($table, $fields, $valArr)
+	{
+		// Prepare
+		try
+		{
+			$statement = $this->prepare(
+				'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
+				'VALUES (' . $this->placeholders($fields) . ')');
+		}
+		catch (Exception $e)
+		{
+			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
+				var_export($fields, true);
+	 
+			throw new ExceptionDB(
+				__METHOD__, $msg, $this->db, $e);
+		}
+
+		if (!is_array($valArr))
+		{
+			$valArr = array($valArr);
+		}
+      
+		// If the first entry in the values array is an array then we have
+		// multiple records that we should be inserting.
+		if (is_array(reset($valArr)))
+		{
+			try
+			{
+				foreach ($valArr as $entryNum => $entry)
+				{
+					$statement->execute($entry);
+				}
+			}
+			catch (Exception $e)
+			{
+				throw new ExceptionDB(
+					__METHOD__,
+					'Multiple Values: ' . var_export($valArr, true),
+					$this->db,
+					$e);
+			}
+		}
+		else // There should only be one entry to insert.
+		{
+			try
+			{
+				$statement->execute($valArr);
+			}
+			catch (Exception $e)
+			{
+				throw new ExceptionDB(
+					__METHOD__,
+					'Single Value: ' . var_export($valArr, true),
+					$this->db,
+					$e);
+			}
+		}
+	}
+   
+	/**
+	 * Get an associative array of results for a query.
+	 *
+	 * @param string Query string.
+	 *
+	 * @return mixed[] Associative array of results from the query.
 	 */
 	public function getAssoc($queryString, $params=array())
 	{
@@ -220,9 +443,13 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Get a result set which must contain exactly one row and return it.
-	 *  @param queryString \string The query to get exactly one row.
-	 *  @param params \array The parmeters for the sql query.
+	/**
+	 * Get a result set which must contain exactly one row and return it.
+	 *
+	 * @param string  The query to get exactly one row.
+	 * @param mixed[] The parmeters for the sql query.
+	 *
+	 * @return mixed[] The result as an associative array.
 	 */
 	public function getSingleRow($queryString, $params=array())
 	{
@@ -253,10 +480,14 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Get a single value result from an sql statement.
-	 *  @param queryString \string The query string to get exactly one row.
-	 *  @param params \array The parmeters for the sql query.
-	 *  @param column \int The column of the row to return the value for.
+	/**
+	 * Get a single value result from an sql statement.
+	 *
+	 * @param string  The query string to get exactly one row.
+	 * @param mixed[] The parmeters for the sql query.
+	 * @param int     The column of the row to return the value for.
+	 *
+	 * @return mixed The result value.
 	 */
 	public function getSingleValue($queryString, $params=array(), $column=0)
 	{
@@ -287,15 +518,18 @@ class SQL implements SQLIface
 		}
 	}
    
-	/** Simple SQL SELECT statement wrapper.
-	 *  @param tables \mixed Tables to select from.
-	 *  @param fields \mixed Fields to select.
-	 *  @param conditions \mixed Conditions (see class description).
-	 *  @param order \mixed ORDER BY directives.
-	 *  @param limit \int Number of records - defaults to unlimited.
-	 *  @param distinct \bool Return only distinct records.
-	 *  \returns An associative \array containing the data returned by the query.
-	 */
+	/**
+	 * Simple SQL SELECT statement wrapper.
+	 *
+	 * @param mixed Tables to select from.
+	 * @param mixed Fields to select.
+	 * @param mixed Conditions (see class description).
+	 * @param mixed ORDER BY directives.
+	 * @param int   Number of records - defaults to unlimited.
+	 * @param bool  Whether to return only distinct records.
+	 *
+	 * @return mixed[] The data returned by the query.
+	 */	
 	public function select($tables, $fields, $conditions='', $order='', $limit=0,
 	                       $distinct=false)
 	{
@@ -358,10 +592,14 @@ class SQL implements SQLIface
 		}	 
 	}
 
-	/** Get a single value result from an sql select statement.
-	 *  @param table \string The table to get the value from.
-	 *  @param field \string The parmeters for the sql query.
-	 *  @param conditions \mixed The conditions for the WHERE.
+	/**
+	 * Get a single value result from an sql statement.
+	 *
+	 * @param string  The query string to get exactly one row.
+	 * @param mixed[] The parmeters for the sql query.
+	 * @param int     The column of the row to return the value for.
+	 *
+	 * @return mixed The result value.
 	 */
 	public function selectSingleValue($table, $field, $conditions)
 	{
@@ -390,11 +628,13 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Simple SQL UPDATE statement wrapper.
-	 *  @param tables \mixed Tables to update.
-	 *  @param setValues \mixed Keyed array of set values.
-	 *  @param conditions \mixed Conditions (see class description).
-	 *  @param limit \int Number of records - defaults to unlimited.
+	/**
+	 * Simple SQL UPDATE statement wrapper.
+	 *
+	 * @param mixed Tables to update.
+	 * @param mixed Keyed array of set values.
+	 * @param mixed Conditions (see class description).
+	 * @param int   Number of records - defaults to unlimited.
 	 */
 	public function update($tables, $setValues, $conditions='', $limit=0)
 	{
@@ -429,163 +669,19 @@ class SQL implements SQLIface
 		{
 			throw new ExceptionDB(__METHOD__, 'Execute', $statement);
 		}
-      
-		return true;
 	}
 
-	/** Simple SQL DELETE statement wrapper.
-	 *  @param tables \mixed Tables to delete from.
-	 *  @param conditions \mixed Conditions (see class description).
-	 *  \return The number of rows affected by the delete.
-	 */
-	public function delete($tables, $conditions)
-	{
-		$q = 'DELETE FROM ' . $this->expand($tables) . ' WHERE ';
-
-		foreach ($conditions as $field => $value)
-		{
-			if (!isset($value))
-			{
-				$q .= $field . ' IS NULL AND ';
-				unset($conditions[$field]);
-			}
-			else
-			{
-				$q .= $field . '=? AND ';
-			}
-		}
-
-		$q = rtrim($q, 'AND ');
-      
-		try
-		{
-			$statement = $this->prepare($q);
-			$statement->execute($conditions);
-
-			return $statement->rowCount();
-		}
-		catch (Exception $e)
-		{
-			throw new ExceptionDB(
-				__METHOD__ . ' query: ' . var_export($q, true) .
-				' conditions: ' . var_export($conditions, true),
-				$this->db,
-				$e);
-		}
-	}
-
-	/** Simple SQL INSERT statement wrapper.
-	 *  @param table \string Table to insert into.
-	 *  @param fields \mixed Fields to insert.
-	 *  @param valArr \array An array specifying one or more record to insert.
-	 */
-	public function insert($table, $fields, $valArr)
-	{
-		// Prepare
-		try
-		{
-			$statement = $this->prepare(
-				'INSERT INTO ' . $table . ' (' . $this->expand($fields) . ') ' .
-				'VALUES (' . $this->placeholders($fields) . ')');
-		}
-		catch (Exception $e)
-		{
-			$msg = 'Prepare Table: ' . var_export($table, true) . ' Fields: ' .
-				var_export($fields, true);
-	 
-			throw new ExceptionDB(
-				__METHOD__, $msg, $this->db, $e);
-		}
-
-		if (!is_array($valArr))
-		{
-			$valArr = array($valArr);
-		}
-      
-		// If the first entry in the values array is an array then we have
-		// multiple records that we should be inserting.
-		if (is_array(reset($valArr)))
-		{
-			try
-			{
-				foreach ($valArr as $entryNum => $entry)
-				{
-					$statement->execute($entry);
-				}
-			}
-			catch (Exception $e)
-			{
-				throw new ExceptionDB(
-					__METHOD__,
-					'Multiple Values: ' . var_export($valArr, true),
-					$this->db,
-					$e);
-			}
-		}
-		else // There should only be one entry to insert.
-		{
-			try
-			{
-				$statement->execute($valArr);
-			}
-			catch (Exception $e)
-			{
-				throw new ExceptionDB(
-					__METHOD__,
-					'Single Value: ' . var_export($valArr, true),
-					$this->db,
-					$e);
-			}
-		}
-	}
-   
-	/** Add a column to a table.
-	 *  @param table \string The table to add the column to.
-	 *  @param column \string The column name to add.
-	 *  @param fieldType \string The data type of the column to add.
-	 *  \return \bool Whether the add column was successful.
-	 */
-	public function addColumn($table, $column, $fieldType)
-	{
-		$q = 'ALTER TABLE ' . $table . ' ADD COLUMN `' . $column . '` ' .
-			$fieldType;
-		return $this->exec($q);
-	}
-
-	/** Drop a column from the table.
-	 *  @param table \string The table to drop the column from.
-	 *  @param column \string The column name to drop.
-	 *  \return \int The number of records modified.
-	 */
-	public function dropColumn($table, $column)
-	{
-		$q = 'ALTER TABLE ' . $table . ' DROP COLUMN `' . $column . '`';
-		return $this->exec($q);
-	}
-
-	/** Change a column in the table.
-	 *  @param table \string The table for the column change.
-	 *  @param oldCol \string The column name to change.
-	 *  @param newCol \string The field name to set the column to.
-	 *  @param fieldType \string The type of field to create.
-	 *  \return \int The number of records modified.
-	 */
-	public function changeColumn($table, $oldCol, $newCol, $fieldType)
-	{
-		$q = 'ALTER TABLE ' . $table . ' CHANGE COLUMN `' . $oldCol . '` `' .
-			$newCol . '` ' . $fieldType;
-		return $this->exec($q);      
-	}
-   
 	/*******************/
 	/* Private Methods */
 	/*******************/
 
-	/** Expand an array using the separator given.
-	 *  @param arg \mixed The array to separate or a string to return.
-	 *  @param separator \string The separator to use between each element
-	 *  of the array.
-	 *  \returns A \string of the separated array or the string arg.
+	/**
+	 * Expand an array using the separator given.
+	 *
+	 * @param mixed The array to separate or a string to return.
+	 * @param string The separator to use between each element of the array.
+	 *
+	 * @returns string The separated array or the string arg.
 	 */
 	private function expand($arg, $separator=',')
 	{
@@ -610,14 +706,16 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Expand a keyed array using the between value between the key and the
-	 *  value and the separator between each element pair.
-	 *  @param arg \mixed Either a keyed array that is to be expanded or the
-	 *  value to be converted to a string.
-	 *  @param between \string The separator to use between each key and value.
-	 *  @param separator \string The separator to use between each key/value
-	 *  pair.
-	 *  \returns A \string of the separated keyed array or the string for arg.
+	/**
+	 * Expand a keyed array using the between value between the key and the
+	 * value and the separator between each element pair.
+	 *
+	 * @param mixed  Either a keyed array that is to be expanded or the value to
+	 *               be converted to a string.
+	 * @param string The separator to use between each key and value.
+	 * @param string The separator to use between each key/value pair.
+	 *
+	 * @return string The separated keyed array or the string for arg.
 	 */
 	private function expandKeyedArr($arg, $between='=', $separator=' AND ')
 	{
@@ -657,12 +755,15 @@ class SQL implements SQLIface
 		}
 	}
 
-	/** Create a string with unnamed placeholders for each item specified.
-	 *  @param arg \mixed Either an array where every item is replaced or a
-	 *  single placeholder for an object or string entry. An empty string will
-	 *  be returned for an empty array.
-	 *  @param separator \string The separator to place between each placeholder.
-	 *  \return A \string of the placeholders correctly separated.
+	/**
+	 * Create a string with unnamed placeholders for each item specified.
+	 *
+	 * @param mixed Either an array where every item is replaced or a single
+	 *              placeholder for an object or string entry. An empty string
+	 *              will be returned for an empty array.
+	 * @param string The separator to place between each placeholder.
+	 *
+	 * @return string The placeholders correctly separated.
 	 */
 	private function placeholders($arg, $separator=',')
 	{
@@ -688,14 +789,17 @@ class SQL implements SQLIface
 		return $str;
 	}
 
-	/** Create a string with the array keys and unnamed placeholders. The string
-	 *  will be of the format: 'key1=? AND key2=? AND key3=?' with default
-	 *  parameters.
-	 *  @param arg \mixed Either a keyed array that is to be expanded or the
-	 *  value to be converted to a string.
-	 *  @param between \string String between each key and unnamed placeholder.
-	 *  @param separator \string String between each key/placeholder pair.
-	 *  \returns A \string with the keys and placeholders in it.
+	/**
+	 * Create a string with the array keys and unnamed placeholders. The string
+	 * will be of the format: 'key1=? AND key2=? AND key3=?' with default
+	 * parameters.
+	 *
+	 * @param mixed  Either a keyed array that is to be expanded or the value to
+	 *               be converted to a string.
+	 * @param string The value to use between each key and unnamed placeholder.
+	 * @param string The value between each key/placeholder pair.
+	 *
+	 * @returns A \string with the keys and placeholders in it.
 	 */
 	private function placeholdersKeyed(
 		$arg, $between='=', $separator=' AND ')

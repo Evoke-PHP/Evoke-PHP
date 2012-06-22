@@ -5,29 +5,44 @@ use BadMethodCallException,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
-/// The system shutdown handler.
+/**
+ * Shutdown Handler
+ *
+ * The system shutdown handler called upon every shutdown if it is registered.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class Shutdown implements HandlerIface
 {
-	/** @property $administratorEmail
-	 *  @string The administrator's email address.
+	/** 
+	 * The administrator's email address.
+	 * @var string
 	 */
 	protected $administratorEmail;
 
-	/** @property $detailedInsecureMessage
-	 *  @bool Whether to display a detailed insecure message.
+	/**
+	 * Whether to display a detailed insecure message.
+	 * @var bool
 	 */
 	protected $detailedInsecureMessage;
 
-	/** @property $writer
-	 *  @object writer
+	/**
+	 * Writer object.
+	 * @var Evoke\Writer\WriterIface
 	 */
 	protected $writer;
 
-	/** Construct the System Shutdown handler.
-	 *  @param administratorEmail @string Admin's Email to use as a contact.
-	 *  @param detailedInsecureMessage @bool Whether to show detailed logging
-	 *  information (which is insecure).
-	 *  @param writer @object The writer object to write the fatal message.
+	/**
+	 * Construct the System Shutdown handler.
+	 *
+	 * @param string Admin's Email to use as a contact.
+	 * @param bool   Whether to show detailed logging information (which is
+	 *               insecure).
+	 * @param Evoke\Writer\WriterIface
+	 *               The writer object to write the fatal message.
 	 */
 	public function __construct(/* String */ $administratorEmail,
 	                            /* Bool   */ $detailedInsecureMessage,
@@ -54,6 +69,9 @@ class Shutdown implements HandlerIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Handle the shutdown of the system, recording any fatal errors.
+	 */
 	public function handler()
 	{
 		$err = error_get_last();
@@ -111,13 +129,19 @@ class Shutdown implements HandlerIface
 		$this->writer->output();
 	}
 
-	/// Register the shutdown handler.
+	/**
+	 * Register the shutdown handler.
+	 */
 	public function register()
 	{
 		register_shutdown_function(array($this, 'handler'));
 	}
 
-	/// Unregister the shutdown handler (which is not currently possible).
+	/**
+	 * Unregister the shutdown handler (which is not currently possible).
+	 *
+	 * @throw BadMethodCallException
+	 */
 	public function unregister()
 	{
 		throw new BadMethodCallException(

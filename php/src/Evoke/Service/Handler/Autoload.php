@@ -4,32 +4,52 @@ namespace Evoke\Service\Handler;
 use InvalidArgumentException,
 	RuntimeException;
 
+/**
+ * Autoload
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Service
+ */
 class Autoload implements HandlerIface
 {
-	/** @property $authoritative
-	 *  Whether we have complete authority over the namespace, or we should allow
-	 *  other autoloaders a chance to load the classes for our domain (if we are
-	 *  not able to).  This gives us the opportunity to throw an exception and
-	 *  avoid the __fatal error__ that is *almost* sure to follow an unloaded
-	 *  class.
+	/** 
+	 * Whether we have complete authority over the namespace, or we should allow
+	 * other autoloaders a chance to load the classes for our domain (if we are
+	 * not able to).  This gives us the opportunity to throw an exception and
+	 * avoid the __fatal error__ that is *almost* sure to follow an unloaded
+	 * class.
+	 * @var bool
 	 */
 	protected $authoritative;
 
-	/** @property $baseDir
-	 *  The base directory for the files.
+	/**
+	 * The base directory for the files.
+	 * @var string
 	 */
 	protected $baseDir;
 
-	/** @property $extension
-	 *  The file extension to use.
+	/**
+	 * The file extension to use.
+	 * @var string
 	 */
 	protected $extension;
 
-	/** @property $namespace
-	 *  The base namespace that we are autoloading.
+	/**
+	 * The base namespace that we are autoloading.
+	 * @var string
 	 */
 	protected $namespace;
 
+	/**
+	 * Construct an Autoload object.
+	 *
+	 * @param string Base directory.
+	 * @param string Namespace.
+	 * @param bool   Authoritative
+	 * @param string Extension
+	 */
 	public function __construct(/* String */ $baseDir,
 	                            /* String */ $namespace,
 	                            /* Bool   */ $authoritative=true,
@@ -57,8 +77,10 @@ class Autoload implements HandlerIface
 	/* Public Methods */
 	/******************/
 
-	/** Provide the autoload function.
-	 *  @param name \string The full specification of the class being autoloaded.
+	/**
+	 * Provide the autoload function.
+	 *
+	 * @param string The full specification of the class being autoloaded.
 	 */
 	public function handler($name)
 	{
@@ -101,12 +123,18 @@ class Autoload implements HandlerIface
 				'authoritative autoloader.');
 		}
 	}
-   
+
+	/**
+	 * Register the handler.
+	 */
 	public function register()
 	{
 		spl_autoload_register(array($this, 'handler'), true);
 	}
 
+	/**
+	 * Unregister the handler
+	 */
 	public function unregister()
 	{
 		if (!spl_autoload_unregister())

@@ -1,8 +1,15 @@
 <?php
 namespace Evoke\Writer;
-/** HTML5 Writer
- *  Provide an interface to the XML Writer to write page content and methods to
- *  write the DTD, head and end of a webpage.
+
+/**
+ * HTML5 Writer
+ *
+ * Write HTML5 specific content.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
  */
 class HTML5 extends XHTML
 {
@@ -10,8 +17,10 @@ class HTML5 extends XHTML
 	/* Public Methods */
 	/******************/
 		
-	/** Write the DTD, html head and start the body of the document.
-	 *  @param setup \array The setup for the start of the document.
+	/**
+	 * Write the DTD, html head and start the body of the document.
+	 *
+	 * @param mixed[] The setup for the start of the document.
 	 */
 	public function writeStart(Array $setup=array())
 	{

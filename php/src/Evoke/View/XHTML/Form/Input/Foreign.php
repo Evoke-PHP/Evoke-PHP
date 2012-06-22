@@ -1,6 +1,16 @@
 <?php
 namespace Evoke\View\XHTML\Input;
 
+/**
+ * Foreign DB Input
+ *
+ * @todo Check whether this class is obsolete.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Foreign extends DB
 {
 	public function __construct(Array $setup)

@@ -1,28 +1,39 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
+/**
+ * Checkboxes
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Checkboxes extends Form
 {
-	/** @property $emptyText
+	/**
 	 *  The text \string if there are no checkboxes.
 	 */
 	protected $emptyText;
 
-	/** @property $prefix
+	/**
 	 *  Prefix \string for the id attribute of the checkboxes.
 	 */
 	protected $prefix;
 
-	/** @property $textField
+	/**
 	 *  \string The field to use for the checkbox text.
 	 */
 	protected $textField;
 
-	/** @property $valueField
+	/**
 	 *  \string The field that defines the value of the checkbox.
 	 */
 	protected $valueField;
 
+	/**
+	 * @todo Check if this class is obsolete.
+	 */
 	public function __construct(Array $setup)
 	{
 		/// @todo Fix to new View interface.

@@ -7,6 +7,13 @@ use Evoke\View\ViewIface;
  *  Elements are added to the Form using the \ref setElements method which
  *  must be defined by derived classes.  The form is written using the
  *  \ref write method.
+ *
+ * @todo Check whether this class is obsolete.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
  */
 abstract class Form implements ViewIface
 {

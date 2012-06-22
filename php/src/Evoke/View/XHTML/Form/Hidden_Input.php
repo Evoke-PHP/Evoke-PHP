@@ -1,6 +1,16 @@
 <?php
 namespace Evoke\View\XHTML\Form;
 
+/**
+ * Hidden Input
+ *
+ * @todo Check whether this class is obsolete.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class HiddenInput extends Form
 {
 	protected $record;

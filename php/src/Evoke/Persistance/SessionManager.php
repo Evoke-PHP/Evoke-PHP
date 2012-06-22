@@ -1,21 +1,40 @@
 <?php
 namespace Evoke\Persistance;
 
-/// Session_Manager provide management of a session domain.
+/**
+ * SessionManager
+ *
+ * Provide management of a session domain.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistance
+ */
 class SessionManager implements SessionManagerIface
 {
-	/** @property $domain
-	 *  @array The domain within the session that we are managing.  This is an
-	 *  ordered list of the keys required to reach the domain:
-	 *  `array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']`
+	/**
+	 * The domain within the session that we are managing.  This is an ordered
+	 * list of the keys required to reach the domain:
+	 *
+	 *     array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']
+	 *
+	 * @var string[]
 	 */
 	protected $domain;
 
-	/** @property $session
-	 *  @object Session
+	/**
+	 * Session object.
+	 * @var Evoke\Persistance\SessionIface
 	 */
 	protected $session;
-   
+
+	/**
+	 * Construct a Session Manager object.
+	 *
+	 * @param Evoke\Persistance\SessionIface Session
+	 * @param string[]                       Domain to manage.
+	 */
 	public function __construct(SessionIface $session,
 	                            Array        $domain)
 	{
@@ -29,14 +48,20 @@ class SessionManager implements SessionManagerIface
 	/* Public Methods */
 	/******************/
 
-	/// Add a value to the array stored in the session domain.
+	/**
+	 * Add a value to the array stored in the session domain.
+	 *
+	 * @param mixed The value to add to the session.
+	 */
 	public function addValue($value)
 	{
 		$session =& $this->getAccess();
 		$session[] = $value;
 	}
 
-	/// Ensure the session is started and the session domain is set or created.
+	/**
+	 * Ensure the session is started and the session domain is set or created.
+	 */
 	public function ensure()
 	{
 		$this->session->ensure();
@@ -57,14 +82,24 @@ class SessionManager implements SessionManagerIface
 		}
 	}
 
-	/// Return the value of the key in the session domain.
+	/**
+	 * Return the value of the key in the session domain.
+	 *
+	 * @param mixed The index of the value to retrieve.
+	 *
+	 * @return mixed The value from the session.
+	 */
 	public function get($key)
 	{      
 		$session = $this->getAccess();
 		return $session[$key];
 	}
    
-	/// Get the session domain that we are managing and return a reference to it.
+	/**
+	 * Get the session domain that we are managing and return a reference to it.
+	 *
+	 * @return mixed[] A reference to the session data.
+	 */
 	public function &getAccess()
 	{
 		// Set currentDomain to reference $_SESSION.
@@ -79,21 +114,31 @@ class SessionManager implements SessionManagerIface
 		return $currentDomain;
 	}
 
-	/// Return the domain as a flat array.
+	/**
+	 * Return the domain as a flat array.
+	 *
+	 * @return string[]
+	 */
 	public function getFlatDomain()
 	{
 		return $this->domain;
 	}
    
-	/// Return the string of the session ID.
+	/**
+	 * Return the string of the session ID.
+	 *
+	 * @return string
+	 */
 	public function getID()
 	{
 		return $this->session->getID();
 	}
 
-	/** Increment the value in the session by the offset.
-	 *  @param key @string The session key to increment.
-	 *  @param offset @int The amount to increment the value.
+	/**
+	 * Increment the value in the session by the offset.
+	 *
+	 * @param mixed The session key to increment.
+	 * @param int   The amount to increment the value.
 	 */
 	public function increment($key, $offset=1)
 	{
@@ -101,14 +146,25 @@ class SessionManager implements SessionManagerIface
 		$session[$key] += $offset;
 	}
    
-	/// Return whether the key is set to the specified value.
+	/**
+	 * Return whether the key is set to the specified value.
+	 *
+	 * @param mixed The session key to check.
+	 * @param mixed The value to check it against.
+	 *
+	 * @return bool
+	 */
 	public function is($key, $val)
 	{
 		$session = $this->getAccess();
 		return (isset($session[$key]) && ($session[$key] === $val));
 	}
 
-	/// Return whether the session domain is empty or not.
+	/**
+	 * Return whether the session domain is empty or not.
+	 *
+	 * @return bool
+	 */
 	public function isEmpty()
 	{
 		$session = $this->getAccess();
@@ -116,21 +172,32 @@ class SessionManager implements SessionManagerIface
 	}
 
    
-	/// Whether the key has been set in the session domain.
+	/**
+	 * Whether the key has been set in the session domain.
+	 *
+	 * @param mixed The session key to check.
+	 *
+	 * @return bool
+	 */
 	public function issetKey($key)
 	{
 		$session = $this->getAccess();
 		return isset($session[$key]);
 	}
 
-	/// Return the number of keys stored by the session.
+	/**
+	 * Return the number of keys stored by the session.
+	 *
+	 * @return int
+	 */
 	public function keyCount()
 	{
 		return count($this->getAccess());
 	}
    
-	/** Remove the session domain from the session.
-	 *  This does not remove the hierarchy above the session domain.
+	/**
+	 * Remove the session domain from the session.  This does not remove the
+	 * hierarchy above the session domain.
 	 */
 	public function remove()
 	{
@@ -157,15 +224,19 @@ class SessionManager implements SessionManagerIface
 		}
 	}
 
-	/// Remove all of the values in the session domain.
+	/**
+	 * Remove all of the values in the session domain.
+	 */
 	public function removeValues()
 	{
 		$session =& $this->getAccess();
 		$session = array();
 	}
 
-	/** Replace the session with the passed value.
-	 *  @param newValue @mixed The new value(s) for the session.
+	/**
+	 * Replace the session with the passed value.
+	 *
+	 * @param mixed The new value(s) for the session.
 	 */
 	public function replaceWith($newValue)
 	{
@@ -173,21 +244,32 @@ class SessionManager implements SessionManagerIface
 		$session = $newValue;
 	}
    
-	/// Reset the session to a blank start.
+	/**
+	 * Reset the session to a blank start.
+	 */
 	public function reset()
 	{
 		$this->remove();
 		$this->ensure();
 	}
    
-	/// Set the value of the key in the session domain.
+	/**
+	 * Set the value of the key in the session domain.
+	 *
+	 * @param mixed The index in the session to set.
+	 * @param mixed The value to set.
+	 */
 	public function set($key, $value)
 	{
 		$session =& $this->getAccess();
 		$session[$key] = $value;
 	}
 
-	/// Unset the key in the session domain.
+	/**
+	 * Unset the key in the session domain.
+	 *
+	 * @param mixed The index in the session to unset.
+	 */
 	public function unsetKey($key)
 	{
 		$session =& $this->getAccess();

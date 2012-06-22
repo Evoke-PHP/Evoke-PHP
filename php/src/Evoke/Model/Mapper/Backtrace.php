@@ -4,15 +4,26 @@ namespace Evoke\Model\Mapper;
 use InvalidArgumentException,
 	RuntimeException;
 
+/**
+ * Backtrace
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Backtrace implements MapperIface
 { 
-	/** @property levelsToRetrace
-	 *  @int LevelsToRetrace The number of levels to start the stack trace from.
+	/** 
+	 * The number of levels up the stack to start the backtrace from.
+	 * @var int
 	 */
 	protected $levelsToRetrace;
 
-	/** Construct a Backtrace object.
-	 *  @param levelsToRetrace @int The number of levels up the trace to start.
+	/**
+	 * Construct a Backtrace object.
+	 *
+	 * @param int The number of levels up the stack to start the backtrace from.
 	 */
 	public function __construct(/* Int */ $levelsToRetrace = 2)
 	{
@@ -29,7 +40,12 @@ class Backtrace implements MapperIface
 	/******************/
 	/* Public Methods */
 	/******************/
-
+	
+	/**
+	 * Fetch the backtrace.
+	 *
+	 * @param mixed[] The conditions to match in the mapped data.
+	 */
 	public function fetch(Array $params = array())
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

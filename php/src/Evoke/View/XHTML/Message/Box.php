@@ -4,15 +4,26 @@ namespace Evoke\View\XHTML\Message;
 use Evoke\View\ViewIface,
 	InvalidArgumentException;
 
+/**
+ * Message Box
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Box implements ViewIface
 {
-	/** @property attribs
-	 *  @array Message Box attributes.
+	/**
+	 * Message Box attributes.
+	 * @var mixed[]
 	 */
 	protected $attribs;
 
-	/** Construct a Box object.
-	 *  @param attribs @array Message Box attributes.
+	/**
+	 * Construct a Box object.
+	 *
+	 * @param mixed[] Message Box attributes.
 	 */
 	public function __construct(
 		Array $attribs = array('class' => 'Message_Box Info'))
@@ -24,6 +35,11 @@ class Box implements ViewIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view.
+	 *
+	 * @param mixed[] Parameters to the view.
+	 */
 	public function get(Array $message=array())
 	{
 		if (!isset($message['Description']))

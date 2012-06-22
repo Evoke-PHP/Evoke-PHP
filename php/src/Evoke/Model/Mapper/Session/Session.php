@@ -4,16 +4,27 @@ namespace Evoke\Model\Mapper\Session;
 use Evoke\Model\Mapper\MapperIface,
 	Evoke\Persistance\SessionManagerIface;
 
+/**
+ * Session Mapper
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Session implements MapperIface
 {
-	/** @property $sessionManager
-	 *  @object Session Manager
+	/**
+	 * Session Manager
+	 * @var Evoke\Persistance\SessionManagerIface
 	 */
 	protected $sessionManager;
 
-	/** Construct a Session model.
-	 *  @param SessionManager @object The Session Manager for the part of the
-	 *  session we are modelling.
+	/**
+	 * Construct a Session Mapper.
+	 *
+	 * @param Evoke\Persistance\SessionManagerIfaceSessionManager
+	 *        The Session Manager for the part of the session we are mapping.
 	 */
 	public function __construct(SessionManagerIface $sessionManager)
 	{
@@ -24,8 +35,10 @@ class Session implements MapperIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the data from the session.
-	 *  @params The offset in the data to fetch.
+	/**
+	 * Get the data from the session.
+	 *
+	 * @params The offset in the data to fetch.
 	 */
 	public function fetch(Array $params = array())
 	{

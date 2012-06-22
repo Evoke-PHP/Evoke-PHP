@@ -4,24 +4,36 @@ namespace Evoke\Model\Composite;
 use Evoke\Model\DataIface,
 	Evoke\Model\MapperIface;
 
-/** An administrative model using mappers from the model layer to acheive the
- *  processing required for typical administration.
+/**
+ * Admin
+ *
+ * An administrative model using mappers from the model layer to acheive the
+ * processing required for typical administration.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
  */
 class Admin
 {
-	/** @property currentData
-	 *  @object Current Data
+	/**
+	 * Current Data
+	 * @var Evoke\Model\DataIface
 	 */
 	protected $currentData;
 
-	/** @property mapper
-	 *  @object Mapper
+	/**
+	 * Mapper
+	 * @var Evoke\Model\MapperIface
 	 */
 	protected $mapper;
 
-	/** Construct a Admin object.
-	 *  @param currentData @object CurrentData.
-	 *  @param mapper      @object Mapper.
+	/**
+	 * Construct an Admin Model.
+	 *
+	 * @param Evoke\Model\DataIface   CurrentData.
+	 * @param Evoke\Model\MapperIface Mapper.
 	 */
 	public function __construct(DataIface   $currentData,
 	                            MapperIface $mapper)
@@ -34,23 +46,43 @@ class Admin
 	/* Public Methods */
 	/******************/
 
-	public function create($requestData)
+	/**
+	 * Create an entry.
+	 *
+	 * @param mixed[] The entry to create.
+	 */
+	public function create(Array $requestData)
 	{
 		var_export($requestData);
 	}
 
-	public function delete($requestData)
+	/**
+	 * Delete an entry.
+	 *
+	 * @param mixed[] The entry to delete.
+	 */
+	public function delete(Array $requestData)
 	{
 		var_export($requestData);
 	}
 
+	/**
+	 * Get the state of the administration model.
+	 *
+	 * @return mixed[] The state of the administrative model.
+	 */
 	public function getState()
 	{
 		return array('Failures'      => 'NONE',
 		             'Notifications' => 'ALL');
 	}
-	
-	public function update($requestData)
+
+	/**
+	 * Update an entry.
+	 *
+	 * @param mixed[] The new entry value.
+	 */
+	public function update(Array $requestData)
 	{
 		var_export($requestData);
 	}

@@ -1,21 +1,35 @@
 <?php
 namespace Evoke\Model\Data;
 
+/**
+ * Menu
+ *
+ * Menu Model for MPTT data.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Model
+ */
 class Menu extends Data implements MenuIface
 {
-	/** @property $left
-	 *  Left field name @string
+	/** 
+	 * Left field name
+	 * @var string
 	 */
 	protected $left;
 
-	/** @property $right
-	 *  Right field name @string
+	/**
+	 * Right field name
+	 * @var string
 	 */
 	protected $right;
 
-	/** Construct the menu data.
-	 *  @param left  @string Left field name.
-	 *  @param right @string Right field name.
+	/**
+	 * Construct the menu data.
+	 *
+	 * @param string Left field name.
+	 * @param string Right field name.
 	 */
 	public function __construct(Array        $data      = array(),
 	                            Array        $dataJoins = array(),
@@ -33,7 +47,10 @@ class Menu extends Data implements MenuIface
 	/* Public Methods */
 	/******************/
 
-	/** Get the menu as a tree.
+	/**
+	 * Get the menu as a tree.
+	 *
+	 * @return mixed[] Menu tree.
 	 */
 	public function getMenu()
 	{
@@ -53,10 +70,13 @@ class Menu extends Data implements MenuIface
 	/* Protected Methods */
 	/*********************/
    
-	/** Arrange the menu items into a tree.  We assume that the data is arranged
-	 *  by Left order so that we can build from the ROOT item, left to right.
-	 *  @param menuItems @object Data object for the menu items.
-	 *  @return @array Menu tree.
+	/**
+	 * Arrange the menu items into a tree.  We assume that the data is arranged
+	 * by Left order so that we can build from the ROOT item, left to right.
+	 *
+	 * @param mixed[] Data object for the menu items.
+	 *
+	 * @return mixed[] Menu tree.
 	 */
 	protected function getTree($menuItems)
 	{      

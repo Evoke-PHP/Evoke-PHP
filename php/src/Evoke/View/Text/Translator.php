@@ -7,44 +7,64 @@ use DomainException,
 	InvalidArgumentException,
 	LogicException;
 
+/**
+ * Translator
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Translator implements TranslatorIface
 {
-	/** @property $defaultLanguage
-	 *  @string The default language to use for translations.
+	/**
+	 * The default language to use for translations.
+	 * @var string
 	 */
 	protected $defaultLanguage;
 
-	/** @property $langKey
-	 *  @string The key that is used in HTTP queries for the language parameter.
+	/**
+	 * The key that is used in HTTP queries for the language parameter.
+	 * @var string
 	 */
 	protected $langKey;
 
-	/** @property $language
-	 *  @string The current language that the translator is set to.
+	/**
+	 * The current language that the translator is set to.
+	 * @var string
 	 */
 	private $language;
 	
-	/** @property $languages
-	 *  @array The languages that the translator supports.
+	/**
+	 * The languages that the translator supports.
+	 * @var string[]
 	 */
 	protected $languages;
 
-	/** @property $request
-	 *  @object Request
+	/**
+	 * Request object.
+	 * @var Evoke\HTTP\RequestIface
 	 */
 	protected $request;
 
-	/** @property $translations
-	 *  @object The translations data.
+	/**
+	 * The translations data.
+	 * @var Evoke\Model\Data\TranslationsIface
 	 */
 	protected $translations;
 
-	public function __construct(
-		DataIface    $translations,
-		RequestIface $request,
-		/* String */ $defaultLanguage,
-		/* String */ $translationsFilename,
-		/* String */ $langKey = 'l')
+	/**
+	 * Construct a translator.
+	 *
+	 * @param Evoke\Data\TranslationsIface The translations data.
+	 * @param Evoke\HTTP\RequestIface      The request.
+	 * @param string                       The default language.
+	 * @param string                       The language key for the query.
+	 */
+	public function __construct(TranslationsIface $translations,
+	                            RequestIface      $request,
+	                            /* String */      $defaultLanguage,
+	                            /* String */      $langKey = 'l')
 	{
 		if (!is_string($defaultLanguage))
 		{
@@ -63,6 +83,13 @@ class Translator implements TranslatorIface
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view (of the data) to be written.
+	 *
+	 * @param mixed[] Parameters for retrieving the view.
+	 *
+	 * @return mixed[] The view data.
+	 */	
 	public function get(Array $params = array())
 	{
 		if (!isset($params['Key_Match']))
@@ -84,26 +111,32 @@ class Translator implements TranslatorIface
 		return $translationMatches;		
 	}
 	
-	/// Return the current language in its short form (e.g EN or ES).
+	/**
+	 * Return the current language in its short form (e.g EN or ES).
+	 *
+	 * @return string The current language.
+	 */
 	public function getLanguage()
 	{
-		if (!isset($this->language))
-		{
-			$this->setLanguage();
-		}
-
-		return $this->language;
+		return $this->translations->getLanguage();
 	}
 
-	/// The languages that the translator has translations for.
+	/**
+	 * Get the languages that the translator has translations for.
+	 *
+	 * @return string[] The languages that the translator has translations for.
+	 */
 	public function getLanguages()
 	{
 		return $this->translations->getLanguages();
 	}
 
-	/** Get the language HTTP Query for the end of a URL (e.g 'l=EN' or 'l=ES').
-	 *  @param lang The language to use or left empty for the current language.
-	 *  @returns @string The HTTP Query parameter for the language.
+	/**
+	 * Get the language HTTP Query for the end of a URL (e.g 'l=EN' or 'l=ES').
+	 *
+	 * @param string The language to use or left empty for the current language.
+	 *
+	 * @return string The HTTP Query parameter for the language.
 	 */
 	public function getLanguageHTTPQuery($lang='')
 	{
@@ -115,25 +148,19 @@ class Translator implements TranslatorIface
 		return http_build_query(array($this->langKey => $lang));
 	}
 	
-	/** Get the translation for the current language.
-	 *  @param trKey @string The translation key.
-	 *  @param page @string The page to get the translation for.
-	 *  @return @string The translation for the translation key.
+	/**
+	 * Get the translation for the current language.
+	 *
+	 * @param string The translation key.
+	 * @param string The page to get the translation for.
+	 *
+	 * @return string The translation for the translation key.
 	 */
 	public function tr($trKey)
 	{
 		$translation = $this->translations->get($trKey);
 
 		return $translation[$this->getLanguage()];
-	}
-
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-	
-	protected function isValidLanguage($lang)
-	{
-		return isset($lang) && array_key_exists($lang, $this->languages);
 	}
 }
 // EOF

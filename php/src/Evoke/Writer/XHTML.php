@@ -1,8 +1,15 @@
 <?php
 namespace Evoke\Writer;
-/** XHTML Writer
- *  Provide an interface to the XML Writer to write page content and methods to
- *  write the DTD, head and end of a webpage.
+
+/**
+ * XHTML Writer
+ *
+ * Provide an interface to write XHTML specific content.
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Writer
  */
 class XHTML extends XMLBase implements PageIface
 {
@@ -10,15 +17,19 @@ class XHTML extends XMLBase implements PageIface
 	/* Public Methods */
 	/******************/
 		
-	/// End the html page and write the output.
+	/**
+	 * End the html page and write the output.
+	 */
 	public function writeEnd()
 	{
 		$this->xmlWriter->endElement(); // body
 		$this->xmlWriter->endElement(); // html
 	}
 
-	/** Write the DTD, html head and start the body of the document.
-	 *  @param setup \array The setup for the start of the document.
+	/**
+	 * Write the DTD, html head and start the body of the document.
+	 *
+	 * @param mixed[] The setup for the start of the document.
 	 */
 	public function writeStart(Array $setup=array())
 	{
@@ -51,8 +62,10 @@ class XHTML extends XMLBase implements PageIface
 	/* Private Methods */
 	/*******************/
 
-	/** Write the links to CSS.
-	 *  @param cssArr \array Links to the CSS to be written.
+	/**
+	 * Write the links to CSS.
+	 *
+	 * @param string[] Links to the CSS to be written.
 	 */
 	private function writeCSS($cssArr)
 	{
@@ -65,7 +78,11 @@ class XHTML extends XMLBase implements PageIface
 		}
 	}
 
-	/// Add javascript source reference(s).
+	/**
+	 * Add javascript source reference(s).
+	 *
+	 * @param string[] Javascript files.
+	 */
 	private function writeJS($jsArr)
 	{
 		foreach($jsArr as $js)

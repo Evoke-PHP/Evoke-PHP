@@ -3,9 +3,19 @@ namespace Evoke\View\XHTML;
 
 use Evoke\View\ViewIface;
 
+/**
+ * Admin
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package View
+ */
 class Admin implements ViewIface
 {
-	/** Construct an Admin view.
+	/**
+	 * Construct an Admin view.
+	 *
 	 *  @param info            @object $info
 	 *  @param tableName       @string $tableName
 	 *  @param pageName        @string $pageName
