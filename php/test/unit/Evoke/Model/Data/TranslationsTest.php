@@ -39,6 +39,31 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the filtering of translations uses only the default page (empty) or
+	 * the specific page, with the preference being for the specific page.
+	 *
+	 * @covers       Evoke\Model\Data\Translations::setData	 
+	 * @covers       Evoke\Model\Data\Translations::filterTranslations
+	 * @dataProvider providerFilterTranslations
+	 */
+	public function testFilterTranslations(
+		$translationData, $page, $expectedRawData)
+	{
+		$object = new Translations($this->getMock('\Evoke\HTTP\RequestIface'),
+		                           $translationData,
+		                           $page);
+		
+		$actualRawData = array();
+		
+		foreach ($object as $data)
+		{
+			$actualRawData[] = $data->getRecord();
+		}
+
+		$this->assertSame($expectedRawData, $actualRawData);
+	}
+	
+	/**
 	 * Test that the languages that the translations are provided in can be
 	 * retrieved.
 	 *
@@ -80,6 +105,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	 * Test that the language can be set and retrieved using the translator.
 	 *
 	 * @covers Evoke\Model\Data\Translations::getLanguage
+	 * @covers Evoke\Model\Data\Translations::setData
 	 * @covers Evoke\Model\Data\Translations::setLanguage
 	 */
 	public function testSetLanguageExplicit()
@@ -99,6 +125,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test the setting of a language that does not have a translation.
 	 *
+	 * @covers            Evoke\Model\Data\Translations::setData
 	 * @covers            Evoke\Model\Data\Translations::setLanguage
 	 * @expectedException DomainException
 	 */
@@ -118,6 +145,57 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	/* Data Providers */
 	/******************/
 
+	public function providerFilterTranslations()
+	{
+		$tests = array();
+		$request = $this->getMock('Evoke\HTTP\RequestIface');
+
+		$tests['Empty_Data_Default_Page'] =
+			array('Data'              => array(),
+			      'Page'              => '',
+			      'Expected_Raw_Data' => array());
+
+
+		$expectedRawData = array(array('ID'     => '1',
+		                               'Name'   => '1',
+		                               'Page'   => '',
+		                               'EN'     => 'EN_One',
+		                               'ES'     => 'ES_Uno'),
+		                         array('ID'     => '3',
+		                               'Name'   => '3',
+		                               'Page'   => 'SPECIFIC',
+		                               'EN'     => 'EN_Three_Specific',
+		                               'ES'     => 'ES_Tres_Especifico'));
+
+		$translationsData = array(array('ID'     => '1',
+		                                'Name'   => '1',
+		                                'Page'   => '',
+		                                'EN'     => 'EN_One',
+		                                'ES'     => 'ES_Uno'),
+		                          array('ID'     => '1',
+		                                'Name'   => '1',
+		                                'Page'   => 'Non_Default_No_Match',
+		                                'EN'     => 'EN_One',
+		                                'ES'     => 'ES_Uno'),
+		                          array('ID'     => '3',
+		                                'Name'   => '3',
+		                                'Page'   => '',
+		                                'EN'     => 'EN_Three_Default',
+		                                'ES'     => 'ES_Tres_Default'),
+		                          array('ID'     => '3',
+		                                'Name'   => '3',
+		                                'Page'   => 'SPECIFIC',
+		                                'EN'     => 'EN_Three_Specific',
+		                                'ES'     => 'ES_Tres_Especifico'));	
+		
+		$tests['Multiple_Records_Uses_Default_But_Prefers_Specific'] =
+			array('Data'              => $translationsData,
+			      'Page'              => 'SPECIFIC',
+			      'Expected_Raw_Data' => $expectedRawData);
+		
+		return $tests;
+	}
+	
 	public function providerGetLanguages()
 	{
 		$tests = array();
