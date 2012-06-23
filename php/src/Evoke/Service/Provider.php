@@ -111,6 +111,8 @@ use ReflectionClass,
  * undesirable class which we pass in manually.
  *
  * This file takes from the Provider of the Atrax-Core dev branch: 648624a3cb.
+ * https://github.com/rdlowrey/Artax-Core
+ *
  * @author Daniel Lowrey <rdlowrey@gmail.com>
  * @author Paul Young <evoke@youngish.homelinux.org>
  *
