@@ -3,7 +3,8 @@ namespace Evoke\Model\Data;
 
 use DomainException,
 	Evoke\HTTP\RequestIface,
-	InvalidArgumentException;
+	InvalidArgumentException,
+	RuntimeException;
 
 /**
  * Translations Data
@@ -262,6 +263,32 @@ class Translations extends DataAbstract
 		$this->currentLanguage = reset($currentLanguages);
 	}
 
+	/**
+	 * Get the translation data for a single entry.
+	 *
+	 * @param string The key for the translation to retrieve.
+	 *
+	 * @return mixed[] The translation data.
+	 */
+	public function tr(/* String */ $key)
+	{
+		if (isset($this->data[$key][$this->currentLanguage]))
+		{
+			return $this->data[$key][$this->currentLanguage];
+		}
+
+		if (!isset($this->data[$key]))
+		{
+			throw new RuntimeException(
+				' no translation for: ' . $key . 'for the page: ' .
+				$this->currentPage);
+		}
+
+		throw new DomainException(
+			' translation is not in ' . $this->currentLanguage . ' for: ' .
+			$key . ' on page: ' . $this->currentPage);
+	}
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/

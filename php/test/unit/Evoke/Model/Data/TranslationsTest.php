@@ -3,6 +3,7 @@ namespace Evoke_Test\Model\Data;
 
 use Evoke\Model\Data\Translations,
 	Evoke\HTTP\RequestIface,
+	Exception,
 	PHPUnit_Framework_TestCase;
 
 /**
@@ -55,9 +56,9 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		
 		$actualRawData = array();
 		
-		foreach ($object as $data)
+		foreach ($object as $key => $data)
 		{
-			$actualRawData[] = $data->getRecord();
+			$actualRawData[$key] = $data->getRecord();
 		}
 
 		$this->assertSame($expectedRawData, $actualRawData);
@@ -140,6 +141,77 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 			            'DE'   => 'German is Third')));
 		$object->setLanguage('ZZ');
 	}
+
+	/**
+	 * Test the retrieval of a single translation.
+	 *
+	 * @covers       Evoke\Model\Data\Translations::tr
+	 * @dataProvider providerTranslateSingle
+	 */
+	public function testTranslateSingle($object, $key, $expected)
+	{
+		$this->assertSame($object->tr($key), $expected);
+	}
+
+	/**
+	 * Test the retrieval of a single translation where the desired language is
+	 * missing.
+	 *
+	 * @covers            Evoke\Model\Data\Translations::tr
+	 * @expectedException DomainException
+	 */
+	public function testTranslationMissingLanguage()
+	{
+		try
+		{
+			$object = new Translations(
+				$this->getMock('Evoke\HTTP\RequestIface'),
+				array(array('Name' => 'First',
+				            'Page' => '',
+				            'FR'   => 'French is First',
+				            'TG'   => 'Tagalog',
+				            'DE'   => 'German is Third')));
+			$object->setLanguage('EN');
+		}
+		catch (Exception $e)
+		{
+			// Ensure the above does not make the test pass by throwing a
+			// DomainException.
+		}
+
+		// This should throw the DomainException.
+		$object->tr('First');
+	}
+
+	/**
+	 * Test the retrieval of a single translation where the translation does not
+	 * exist.
+	 *
+	 * @covers            Evoke\Model\Data\Translations::tr
+	 * @expectedException RuntimeException
+	 */
+	public function testTranslationMissingTranslation()
+	{
+		try
+		{
+			$object = new Translations(
+				$this->getMock('Evoke\HTTP\RequestIface'),
+				array(array('Name' => 'First',
+				            'Page' => '',
+				            'FR'   => 'French is First',
+				            'TG'   => 'Tagalog',
+				            'DE'   => 'German is Third')));
+			$object->setLanguage('FR');
+		}
+		catch (Exception $e)
+		{
+			// Ensure the above does not make the test pass by throwing a
+			// RuntimeException.
+		}
+			
+		// This should throw the RuntimeException.
+		$object->tr('NO_HAVE_TR');
+	}
 	
 	/******************/
 	/* Data Providers */
@@ -156,37 +228,38 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 			      'Expected_Raw_Data' => array());
 
 
-		$expectedRawData = array(array('ID'     => '1',
-		                               'Name'   => '1',
-		                               'Page'   => '',
-		                               'EN'     => 'EN_One',
-		                               'ES'     => 'ES_Uno'),
-		                         array('ID'     => '3',
-		                               'Name'   => '3',
-		                               'Page'   => 'SPECIFIC',
-		                               'EN'     => 'EN_Three_Specific',
-		                               'ES'     => 'ES_Tres_Especifico'));
-
 		$translationsData = array(array('ID'     => '1',
-		                                'Name'   => '1',
+		                                'Name'   => 'One',
 		                                'Page'   => '',
 		                                'EN'     => 'EN_One',
 		                                'ES'     => 'ES_Uno'),
-		                          array('ID'     => '1',
-		                                'Name'   => '1',
+		                          array('ID'     => '2',
+		                                'Name'   => 'One',
 		                                'Page'   => 'Non_Default_No_Match',
 		                                'EN'     => 'EN_One',
 		                                'ES'     => 'ES_Uno'),
 		                          array('ID'     => '3',
-		                                'Name'   => '3',
+		                                'Name'   => 'Two',
 		                                'Page'   => '',
-		                                'EN'     => 'EN_Three_Default',
-		                                'ES'     => 'ES_Tres_Default'),
-		                          array('ID'     => '3',
-		                                'Name'   => '3',
+		                                'EN'     => 'EN_Two_Default',
+		                                'ES'     => 'ES_Dos_Default'),
+		                          array('ID'     => '4',
+		                                'Name'   => 'Two',
 		                                'Page'   => 'SPECIFIC',
-		                                'EN'     => 'EN_Three_Specific',
-		                                'ES'     => 'ES_Tres_Especifico'));	
+		                                'EN'     => 'EN_Two_Specific',
+		                                'ES'     => 'ES_Dos_Especifico'));	
+
+		$expectedRawData = array(
+			'One' => array('ID'     => '1',
+			               'Name'   => 'One',
+			               'Page'   => '',
+			               'EN'     => 'EN_One',
+			               'ES'     => 'ES_Uno'),
+			'Two' => array('ID'     => '4',
+			               'Name'   => 'Two',
+			               'Page'   => 'SPECIFIC',
+			               'EN'     => 'EN_Two_Specific',
+			               'ES'     => 'ES_Dos_Especifico'));
 		
 		$tests['Multiple_Records_Uses_Default_But_Prefers_Specific'] =
 			array('Data'              => $translationsData,
@@ -405,5 +478,62 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		
 		return $tests;
 	}
+
+	public function providerTranslateSingle()
+	{
+		$tests = array();
+		
+		$translationsData = array(array('ID'     => '1',
+		                                'Name'   => 'One',
+		                                'Page'   => '',
+		                                'EN'     => 'EN_One',
+		                                'ES'     => 'ES_Uno'),
+		                          array('ID'     => '2',
+		                                'Name'   => 'One',
+		                                'Page'   => 'Non_Default_No_Match',
+		                                'EN'     => 'EN_One',
+		                                'ES'     => 'ES_Uno'),
+		                          array('ID'     => '3',
+		                                'Name'   => 'Two',
+		                                'Page'   => '',
+		                                'EN'     => 'EN_Two_Default',
+		                                'ES'     => 'ES_Dos_Default'),
+		                          array('ID'     => '4',
+		                                'Name'   => 'Two',
+		                                'Page'   => 'SPECIFIC',
+		                                'EN'     => 'EN_Two_Specific',
+		                                'ES'     => 'ES_Dos_Especifico'));
+
+		$englishTranslator =
+			new Translations($this->getMock('\Evoke\HTTP\RequestIface'),
+			                 $translationsData,
+			                 'SPECIFIC');
+		$englishTranslator->setLanguage('EN');
+		
+		$tests['One'] = array('Object'   => $englishTranslator,
+		                      'Key'      => 'One',
+		                      'Expected' => 'EN_One');
+		
+		$tests['Two'] = array('Object'   => $englishTranslator,
+		                      'Key'      => 'Two',
+		                      'Expected' => 'EN_Two_Specific');
+
+		$spanishTranslator =
+			new Translations($this->getMock('\Evoke\HTTP\RequestIface'),
+			                 $translationsData,
+			                 'SPECIFIC');
+		$spanishTranslator->setLanguage('ES');
+
+		$tests['Uno'] = array('Object'   => $spanishTranslator,
+		                      'Key'      => 'One',
+		                      'Expected' => 'ES_Uno');
+		
+		$tests['Dos'] = array('Object'   => $spanishTranslator,
+		                      'Key'      => 'Two',
+		                      'Expected' => 'ES_Dos_Especifico');
+	
+		return $tests;
+	}
+
 }
 // EOF
