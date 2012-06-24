@@ -43,6 +43,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	 * Test the filtering of translations uses only the default page (empty) or
 	 * the specific page, with the preference being for the specific page.
 	 *
+	 * @covers       Evoke\Model\Data\DataAbstract::getRecord
 	 * @covers       Evoke\Model\Data\Translations::setData	 
 	 * @covers       Evoke\Model\Data\Translations::filterTranslations
 	 * @dataProvider providerFilterTranslations

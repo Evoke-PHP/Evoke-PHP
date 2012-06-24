@@ -10,6 +10,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 	 * Test the construction of a good object.
 	 *
 	 * @covers       Evoke\Model\Data\Data::__construct
+	 * @covers       Evoke\Model\Data\DataAbstract::__construct
 	 * @dataProvider provider__constructGood
 	 */
 	public function test__constructGood($data      = NULL,
@@ -81,11 +82,11 @@ class DataTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test the GOOD retrieval of joint data.
 	 *
-	 * @covers            Evoke\Model\Data\Data::__get
-	 * @covers            Evoke\Model\Data\Data::getJoinName
-	 * @covers            Evoke\Model\Data\Data::setRecord
-	 * @depends           test__constructGood
-	 * @dataProvider      provider__getGood
+	 * @covers       Evoke\Model\Data\Data::__get
+	 * @covers       Evoke\Model\Data\Data::getJoinName
+	 * @covers       Evoke\Model\Data\Data::setRecord
+	 * @depends      test__constructGood
+	 * @dataProvider provider__getGood
 	 */
 	public function test__getGood($object, $parentField, $expected)
 	{

@@ -129,22 +129,7 @@ class Data extends DataAbstract
 			var_export($parentField, true) . ' joins are: ' .
 			implode(', ', array_keys($this->dataJoins)));
 	}
-
-	/******************/
-	/* Public Methods */
-	/******************/
    
-	/**
-	 * Set the data that we are managing.
-	 *
-	 * @param mixed[] The data we want to manage.
-	 */
-	public function setData(Array $data)
-	{
-		$this->data = $data;
-		$this->rewind();
-	}   
-
 	/*********************/
 	/* Protected Methods */
 	/*********************/
