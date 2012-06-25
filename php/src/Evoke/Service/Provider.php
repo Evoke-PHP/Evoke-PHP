@@ -62,7 +62,7 @@ use Evoke\Service\CacheIface,
  * @author Daniel Lowrey (See History)
  * @link https://github.com/rdlowrey/Artax
  * @author Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @copyright Copyright (c) Daniel Lowrey, Paul Young
  * @license MIT
  * @package Service
  */
