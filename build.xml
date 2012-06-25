@@ -131,9 +131,8 @@
 	</phpdepend>
   </target>
 
-  <target name        = "php-documentor"
-		  depends     = "prepare"
-		  description = "Generate API documentation using phpDocumentor">
+  <target name        = "php-documentor-update"
+		  description = "Update API documentation using phpDocumentor">
 	<!-- This comment should work, but fails miserably due to a bad phpdoc2 task
 		 implementation or my current configuration.
 		 <phpdoc2 destdir = "dox">
@@ -154,6 +153,10 @@
 	  <arg value = "--sourcecode"/>
 	</exec>
   </target>
+
+  <target name        = "php-documentor"
+		  depends     = "prepare, php-documentor-update"
+		  description = "Generate API documentation using phpDocumentor"/>  
   
   <target name        = "php-lint"
 		  depends     = "php-lint-src, php-lint-test"
