@@ -1,134 +1,73 @@
 <?php
 namespace Evoke\Service;
 
-use ReflectionClass,
+use Evoke\Service\CacheIface,
+	InvalidArgumentException,
+	ReflectionClass,
 	ReflectionParameter;
 
 /**
- * A dependency injection/provider class (Thanks to rdlowrey see comments).
+ * Dependency Injection Provider
  *
- * #### History ####
+ * The dependency injection provider serves two purposes:
  *
- * The Evoke Provider class is a combination of Evoke's old InstanceManager
- * class with Daniel Lowrey's Artax Provider Class.  Code and ideas were used
- * with permission from Daniel Lowrey.  Artax is an event-driven Application
- * engine.  It can be found here: https://github.com/rdlowrey/Artax-Core
+ * - __Lazy Injection__
+ * - __Object creation__
  *
- * Modifications made by Paul Young.  The heart of the Provider logic remains
- * unchanged from the awesome implementation of rdlowrey.  There have been
- * widespread changes to bring the class into the style of Evoke.  A simplified
- * interface was also chosen.
+ * ## History
  *
- * #### Rationale ####
+ * This Provider class like most of Evoke has been modified numerous times.  The
+ * ideas and core of the code are from Daniel Lowrey's Artax provider class,
+ * with some changes to bring it into the style of Evoke.  Artax is an
+ * event-driven Application engine.  It can be found here:
  *
- * The provider is responsible for creating objects and shared services.  It is
- * used to create objects and retrieve shared objects in the system.  Using the
- * provider decouples code that would otherwise use the new operator and gives
- * control for the creation of instances, avoiding nasty singleton type
- * methods.
+ *     https://github.com/rdlowrey/Artax
  *
- * Calling `new foo()` or bar::getInstance in code makes that code require a
- * foo class or a bar class with a getInstance method.  This is a tight
- * coupling that can be avoided by using this class.  By using this class the
- * only requirement created in code that creates or gets instances of objects
- * is that it is always injected with an object that implements the Provider
- * interface.
+ * This file originated from copying and editing the Provider of the Atrax-Core
+ * dev branch: 648624a3cb.
  *
- * Using this class for all of your objects and shared resources makes it easy
- * to test your code (you won't need stubs) as you will be able to inject all
- * of the required testing objects at test time.
+ * My thanks go to Daniel Lowrey for the creation of the Artax provider and his
+ * permission for me to use the code from the Artax Provider class.  The
+ * provider was an awesome idea that was done well in Artax.  I recommend Artax,
+ * it is very high quality code.
  *
- * #### Usage Scenarios ####
+ * ## Rationale
  *
- * ## Object with Concrete Typehinted Dependencies ##
+ * #### Lazy Injection
  *
- * <pre><code>
- * class Concrete
- * {
- *     // Cement, Water, Sand and Gravel are real (concrete) objects.
- *     public function __construct(Cement $cement,
- *                                 Water  $water,
- *                                 Sand   $sand,
- *                                 Gravel $greyGravelForMixing) {}
- * }
+ * Building an object graph can be a lot of work.  Each object in the object
+ * graph requires its construction parameters to be supplied.
  *
- * // Automatic creation of Concrete Typehinted Dependencies!
- * $concrete = $provider->make('Concrete');
+ * - Scalar/array configuration values.
+ * - Typehinted Objects and interfaces.
+ * - Possibly overriden default values.
  *
- * class DistilledWater extends Water {}
+ * Ideally we would like to do as little work as possible.  The provider class
+ * can remove some of our burden by:
  *
- * // Specialization combined with automatic injection.
- * $specialWater = $provider->make('DistilledWater');
- * $specialGravel = $provider->make('Gravel');
- * $specialConcrete = $provider->make(
- *     'Concrete',
- *     array('Grey_Gravel_For_Mixing' => $specialGravel,
- *           'Water'                  => $specialWater)); 
- * </code</pre>
+ * - Creating concrete objects that have no unknown dependencies.
+ * - Override particular default values.
  *
- * Observe how we pass in dependencies using the second argument to make.  The
- * Pascal_Case from the array is converted to camelCase to match the name of
- * the constructor argument (Grey_Gravel_For_Mixing => greyGravelForMixing).
- * This matches the Evoke standard of using Pascal_Case for array indexes and
- * camelCase for variables.
+ * It cannot provide the Scalar/Array configuration values.  I also choose not
+ * to let it route interfaces to concrete classes (I did this before but I am
+ * choosing not to now to avoid the global state that it brought).
  *
- * ## Object with Scalars ##
+ * #### Object Creation
  *
- * <pre><code>
- * namespace Weight;
+ * Creating an object using `new` on a particular class couples the code tightly
+ * to the class it creates.  By having an object that creates others we have a
+ * loose binding to an object that can create others.  It also provides us with
+ * the seam that isolates each unit for unit testing.
  *
- * class Scale
- * {
- *     /// weightLimit is an integer.
- *     public function __construct($weightLimit) {}
- * }
- *
- * // Injection of a scalar value! (This also works in combination with other
- * // dependencies).
- * $provider->make('\Weight\Scale', array('Weight_Limit' => 50));
- * </code></pre>
- *
- * ## Object with Interfaces ##
- *
- * <pre><code>
- * // Injection of interfaces!?! (Using the Interface Router!)  An interface
- * // router must be passed to the Provider.  This router is responsible for
- * // connecting interfaces with concrete classes.  so that the following is
- * // possible (given an InterfaceRouter with valid rules for the classes).
- * class UI
- * {
- *     public function __construct(\Evoke\Iface\User        $user,
- *                                 \Evoke\Iface\Core\Writer $writer) {}
- * }
- *
- * $provider->make(
- *     'UI', array('Writer' => $provider->make('\Evoke\Writer\XHTML')));
- * </code></pre>
- *
- * We can even inject interfaces!?!  We have a default conversion that renames
- * the interface by replacing \Iface\ with \.  So, \Evoke\User is automatically
- * injected.  However the writer interface points to an abstract or otherwise
- * undesirable class which we pass in manually.
- *
- * This file takes from the Provider of the Atrax-Core dev branch: 648624a3cb.
- * https://github.com/rdlowrey/Artax-Core
- *
- * @author Daniel Lowrey <rdlowrey@gmail.com>
+ * @author Daniel Lowrey (See History)
+ * @link https://github.com/rdlowrey/Artax
  * @author Paul Young <evoke@youngish.homelinux.org>
- *
- * @copyright Copyright (c) 2012
+ * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Service
  */
-
 class Provider implements ProviderIface
 {
-	/**
-	 * Interface Router.
-	 * @var Evoke\Service\Provider\InterfaceRouter
-	 */
-	protected $interfaceRouter;
-	
 	/**
 	 * Reflection Cache
 	 * @var Evoke\Service\CacheIface
@@ -136,58 +75,39 @@ class Provider implements ProviderIface
 	protected $reflectionCache;
 
 	/**
-	 * Service object.
-	 * @var Evoke\Service\ServiceIface
-	 */
-	protected $service;
-
-	/**
 	 * Construct a Provider object.
 	 *
-	 * @param Evoke\Service\CacheIface               Reflection Cache
-	 * @param Evoke\Service\Provider\InterfaceRouter Interface Router
-	 * @param Evoke\Service\ServiceIface             Service
+	 * @param Evoke\Service\CacheIface Reflection Cache
 	 */
-	public function __construct(CacheIface               $reflectionCache,
-	                            Provider\InterfaceRouter $interfaceRouter,
-	                            ServiceIface             $service)
+	public function __construct(CacheIface $reflectionCache)
 	{
-		$this->interfaceRouter = $interfaceRouter;
 		$this->reflectionCache = $reflectionCache;
-		$this->service         = $service;
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
-
+	
 	/**
 	 * Make an object and return it.
 	 *
-	 * This is the way to create objects (or retrieve shared services) using
-	 * Evoke.  Using this method decouples object creation from your code.
-	 * This makes it easy to test your code as it is not tightly bound to the
-	 * objects that it depends on.
+	 * This is the way to create objects using Evoke.  Using this method
+	 * decouples object creation from your code.  This makes it easy to test
+	 * your code as it is not tightly bound to the objects that it depends on.
 	 *
 	 * @param string  Classname, including namespace.
 	 * @param mixed[] Construction parameters.  Only the parameters that cannot
-	 *                be lazy loaded (scalars with no default or interfaces that
-	 *                have no corresponding concrete object with the mapped
-	 *                classname) need to be passed.
+	 *                be lazy loaded need to be passed.  They are:
+	 *
+	 * - Scalars / Arrays that have no default
+	 * - Objects that satisfy the interface typehints
+	 * - Non-trivial objects (those that have a dependency as above).
 	 *
 	 * @return mixed The object that has been created.
 	 */
 	public function make($classname, Array $params=array())
 	{
-		$passedParameters = $this->pascalToCamel($params);
-		$isService = $this->service->isService($classname);
-		
-		if ($isService &&
-		    $this->service->exists($classname, $passedParameters))
-		{
-			return $this->service->get($classname, $passedParameters);
-		}
-
+		$passedParameters = $this->convertPascalToCamel($params);
 		$reflection = $this->getReflection($classname);
 		
         // If there is no possibility of passing parameters to the code then
@@ -208,16 +128,9 @@ class Provider implements ProviderIface
 	    // Create the object.
 	    $object = $reflection['Class']->newInstanceArgs($deps);
 	    
-	    // If this is a service class, then we have just created it for the
-	    // first time.  Set it as the service instance.	    
-	    if ($isService)
-	    {
-		    $this->service->set($classname, $object, $passedParameters);
-	    }
-	    
         return $object;
 	}
-	
+
 	/*********************/
 	/* Protected Methods */
 	/*********************/
@@ -250,13 +163,12 @@ class Provider implements ProviderIface
 
 		if (!isset($depClass))
 		{
-			/** \todo Investiage, should an exception be throw here?  It is
-			 *  likely to be an unset required scalar, so should we bail hard
-			 *  and early?
-			 */
-			// Use NULL for something that we cannot reflect upon to get the
-			// required details to do an automatic injection.
-			return NULL;
+			$message = 'Missing ';
+			$message .= $reflectionParam->isArray() ? 'Array' : 'Scalar';
+			$message .= ' dependency.';
+			
+			// It must be an unset Scalar or Array.  Bail hard and early.
+			throw new InvalidArgumentException($message);
 		}
 
 		if ($depClass->isInstantiable())
@@ -265,26 +177,12 @@ class Provider implements ProviderIface
 			return $this->make($depClass->name);
 		}
 
-		// Should we try converting it from an interface to a concrete?
-		if ($depClass->isInterface())
+		if ($reflectionParam->isOptional())
 		{
-			$concreteClass =
-				$this->interfaceRouter->route($depClass->name);
-			
-			if ($concreteClass != false)
-			{
-				// Make the concrete class that we were routed to.
-				return $this->make($concreteClass);
-			}
+			return null;
 		}
-
-		/** @todo Investigate, should an exception be thrown here?  It is
-		 *  likely that a required scalar parameter was not passed or an
-		 *  interface without a route to a concrete class was encountered.
-		 */		
-		// Use NULL, why not?  What could possibly go wrong?  I'd be expecting
-		// to catch exceptions from the constructor when we reach here.
-		return NULL;
+		
+		throw new InvalidArgumentException('Missing Interface Dependency');
 	}
 	
 	/**
@@ -292,8 +190,8 @@ class Provider implements ProviderIface
 	 *
 	 * @param string The full classname (including the namespace).
 	 *
-	 * @return mixed NULL if no reflection could be made, or an array of the
-	 *               format:
+	 * @return mixed[] Array of format:
+	 *
 	 * <pre><code>
 	 * array('Class' =>  $reflectionClass,
 	 *       'Params' => $reflectionParams);
@@ -330,7 +228,7 @@ class Provider implements ProviderIface
 	 *
 	 * @param mixed[] The array to convert.
 	 */
-	private function pascalToCamel(Array $pascalArr)
+	private function convertPascalToCamel(Array $pascalArr)
 	{
 		$camelArr = array();
 		
