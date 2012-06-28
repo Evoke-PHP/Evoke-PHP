@@ -153,10 +153,18 @@ class Provider implements ProviderIface
 			return $passedParameters[$reflectionParam->name];
 		}
 
+		/* As far as I can tell the difference between isDefaultValueAvailable
+		 * and isOptional is that:
+		 *     isDefaultValueAvailable is for classes in PHP
+		 *     isOptional is for builtin objects from the PHP engine
+		 */
 		if ($reflectionParam->isDefaultValueAvailable())
 		{
-			// Use a default value.
 			return $reflectionParam->getDefaultValue();
+		}
+		elseif ($reflectionParam->isOptional())
+		{
+			return null;
 		}
 
 		$depClass = $reflectionParam->getClass();
@@ -165,7 +173,7 @@ class Provider implements ProviderIface
 		{
 			$message = 'Missing ';
 			$message .= $reflectionParam->isArray() ? 'Array' : 'Scalar';
-			$message .= ' dependency.';
+			$message .= ' Dependency';
 			
 			// It must be an unset Scalar or Array.  Bail hard and early.
 			throw new InvalidArgumentException($message);
@@ -177,12 +185,8 @@ class Provider implements ProviderIface
 			return $this->make($depClass->name);
 		}
 
-		if ($reflectionParam->isOptional())
-		{
-			return null;
-		}
-		
-		throw new InvalidArgumentException('Missing Interface Dependency');
+		throw new InvalidArgumentException(
+			'Missing Abstract/Interface Dependency');
 	}
 	
 	/**
