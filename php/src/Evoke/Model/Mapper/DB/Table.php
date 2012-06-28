@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistance\DB\SQLIface,
+use Evoke\Persistence\DB\SQLIface,
 	InvalidArgumentException;
 
 /**
@@ -30,7 +30,7 @@ class Table extends DB
 
 	/** Construct a mapper for a database table.
 	 *
-	 *  @param Evoke\Persistance\DB\SQLIface
+	 *  @param Evoke\Persistence\DB\SQLIface
 	 *                 SQL object.
 	 *  @param string  The database table that the model represents.
 	 *  @param mixed[] Select statement settings.

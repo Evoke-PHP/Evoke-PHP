@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Persistance\DB\Table;
+namespace Evoke\Persistence\DB\Table;
 
 use Evoke\Message\TreeIface,
-	Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistence\DB\SQLIface,
 	InvalidArgumentException,
 	OutOfRangeException;
 
@@ -14,7 +14,7 @@ use Evoke\Message\TreeIface,
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class Info implements InfoIface
 { 
@@ -56,7 +56,7 @@ class Info implements InfoIface
 
 	/**
 	 * SQL object.
-	 * @var Evoke\Persistance\DB\SQLIface
+	 * @var Evoke\Persistence\DB\SQLIface
 	 */
 	protected $sql;
 
@@ -69,7 +69,7 @@ class Info implements InfoIface
 	/**
 	 * Construct a Table Info object.
 	 *
-	 * @param Evoke\Persistance\DB\SQLIface SQL object.
+	 * @param Evoke\Persistence\DB\SQLIface SQL object.
 	 * @param string                        Table Name.
 	 * @param Evoke\Message\TreeIface       Failures.
 	 */

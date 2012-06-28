@@ -3,10 +3,10 @@ namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Message\TreeIface,
 	Evoke\Model\AdminIface,
-	Evoke\Persistance\DB\SQLIface,
-	Evoke\Persistance\DB\Table\JoinsIface,
-	Evoke\Persistance\DB\Table\ListIDIface,
-	Evoke\Persistance\SessionManagerIface,
+	Evoke\Persistence\DB\SQLIface,
+	Evoke\Persistence\DB\Table\JoinsIface,
+	Evoke\Persistence\DB\Table\ListIDIface,
+	Evoke\Persistence\SessionManagerIface,
 	Exception,
 	RuntimeException;
 
@@ -36,26 +36,26 @@ class JointAdmin extends Joint implements AdminIface
 
 	/**
 	 * Session Manager
-	 * @var Evoke\Persistance\SessionManagerIface
+	 * @var Evoke\Persistence\SessionManagerIface
 	 */
 	protected $sessionManager;
 
 	/**
 	 * Database List ID management
-	 * @var Evoke\Persistance\DB\Table\ListIDIface
+	 * @var Evoke\Persistence\DB\Table\ListIDIface
 	 */
 	protected $tableListID;
 	
 	/**
 	 * Construct an Administration Model of a joint set of database tables.
 	 *
-	 * @param Evoke\Persistance\DB\SQLIface
+	 * @param Evoke\Persistence\DB\SQLIface
 	 *                SQL object.   
 	 * @param string  The table name where joins start from.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                Joins object.
-	 * @param Evoke\Persistance\SessionManagerIface SessionManager object.
-	 * @param Evoke\Persistance\DB\Table\ListIDIface
+	 * @param Evoke\Persistence\SessionManagerIface SessionManager object.
+	 * @param Evoke\Persistence\DB\Table\ListIDIface
 	 *                DB List ID Table object.
 	 * @param Evoke\Message\TreeIface
 	 *                Failure messages object.
@@ -449,7 +449,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * Delete the records for the current table.
 	 *
 	 *  @param mixed[]                               The records to be deleted.
-	 *  @param Evoke\Persistance\DB\Table\JoinsIface The Joins object.
+	 *  @param Evoke\Persistence\DB\Table\JoinsIface The Joins object.
 	 */
 	protected function deleteEntries($data, $join)
 	{
@@ -492,7 +492,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * Order is important when callback functions alter the data they receive.
 	 *
 	 * @param mixed[]  The data to traverse.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                 The joins object to traverse the data with.
 	 * @return mixed[] The data after possibly being modified by the callbacks.
 	 */
@@ -538,7 +538,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * Feeback the List_ID from the joint child records into the parent record.
 	 *
 	 * @param mixed[] The parent record.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                The Join to the child record.
 	 */
 	protected function feedbackListID(&$parentRecord, $join)
@@ -568,7 +568,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * Validate all of the data specified with the Joins.
 	 *
 	 * @param  mixed[] The data to validate.
-	 * @param  Evoke\Persistance\DB\Table\JoinsIface
+	 * @param  Evoke\Persistence\DB\Table\JoinsIface
 	 *                 The Joins object to validate the data with.
 	 * @return bool Whether the data is valid or not.
 	 */
@@ -586,7 +586,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * Validate the entries for the table.
 	 *
 	 * @param mixed[]                               The data for the table.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface The join for the data.
+	 * @param Evoke\Persistence\DB\Table\JoinsIface The join for the data.
 	 */
 	protected function validateEntries(Array      $data,
 	                                   JoinsIface $join)
@@ -625,7 +625,7 @@ class JointAdmin extends Joint implements AdminIface
 	 * @param mixed[] The array of callbacks that we are calling from.
 	 * @param string  Index for the callback that we want to call.
 	 * @param mixed[] The data to pass to the callback by reference.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                The Joins object to pass to the callback.
 	 */
 	private function call(Array $callbacks, $cb, Array &$data, $joins)

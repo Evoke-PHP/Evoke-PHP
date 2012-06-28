@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance\DB;
+namespace Evoke\Persistence\DB;
 
 use Evoke\Message\Exception\DB as ExceptionDB,
 	Exception;
@@ -24,13 +24,13 @@ use Evoke\Message\Exception\DB as ExceptionDB,
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class SQL implements SQLIface
 {
 	/**
 	 * Database object.
-	 * @var Evoke\Persistance\DB\DBIface
+	 * @var Evoke\Persistence\DB\DBIface
 	 */
 	protected $db;
 
@@ -49,12 +49,12 @@ class SQL implements SQLIface
 	/**
 	 * Construct an SQL object.
 	 *
-	 * @param Evoke\Persistance\DB\DBIface
+	 * @param Evoke\Persistence\DB\DBIface
 	 *        Database object to perform the SQL on.
 	 */
 	public function __construct(
 		DBIface      $database,
-		/* String */ $statementClass = 'Evoke\Persistance\DB\PDOStatement')
+		/* String */ $statementClass = 'Evoke\Persistence\DB\PDOStatement')
 	{
 		$this->db             = $database;
 		$this->statementClass = $statementClass;

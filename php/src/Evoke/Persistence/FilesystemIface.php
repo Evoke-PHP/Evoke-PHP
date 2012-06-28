@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance;
+namespace Evoke\Persistence;
 
 interface FilesystemIface
 {

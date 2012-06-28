@@ -2,7 +2,7 @@
 namespace Evoke\Model;
 
 use DomainException,
-	Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistence\DB\SQLIface,
 	Evoke\Service\ProviderIface;
 
 /**
@@ -23,7 +23,7 @@ class Factory implements FactoryIface
 
 	/**
 	 * SQL Object.
-	 * @var Evoke\Persistance\DB\SQLIface
+	 * @var Evoke\Persistence\DB\SQLIface
 	 */
 	protected $sql;
 	
@@ -102,7 +102,7 @@ class Factory implements FactoryIface
 	 *
 	 * @param mixed[] Parameters for the table info.
 	 *
-	 * @return Evoke\Persistance\DB\Table\Info
+	 * @return Evoke\Persistence\DB\Table\Info
 	 */
 	public function buildInfo(Array $params)
 	{
@@ -112,7 +112,7 @@ class Factory implements FactoryIface
 		}
 
 		return $this->provider->make(
-			'Evoke\Persistance\DB\Table\Info', $params);
+			'Evoke\Persistence\DB\Table\Info', $params);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Factory implements FactoryIface
 		if (!empty($params['Joins']) && isset($params['Table_Name']))
 		{
 			$params['Joins'] = $this->provider->make(
-				'Evoke\Persistance\DB\Table\Joins',
+				'Evoke\Persistence\DB\Table\Joins',
 				array('Info'       => $this->buildInfo(
 					      array('Table_Name' => $params['Table_Name'])),
 				      'Joins'      => $this->buildJoins(
@@ -254,7 +254,7 @@ class Factory implements FactoryIface
 			{
 				$childTable = $matches[2];
 				$builtJoins[] = $this->provider->make(
-					'Evoke\Persistance\DB\Table\Joins',
+					'Evoke\Persistence\DB\Table\Joins',
 					array('Child_Field'  => $matches[3],
 					      'Info'         => $this->buildInfo(
 						      array('Table_Name' => $childTable)),

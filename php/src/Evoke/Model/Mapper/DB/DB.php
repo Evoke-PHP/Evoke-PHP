@@ -2,7 +2,7 @@
 namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Model\Mapper\MapperIface,
-	Evoke\Persistance\DB\SQLIface;
+	Evoke\Persistence\DB\SQLIface;
 
 /**
  * DB
@@ -18,14 +18,14 @@ abstract class DB implements MapperIface
 { 
 	/** 
 	 * SQL Object
-	 * @var Evoke\Persistance\DB\SQLIface
+	 * @var Evoke\Persistence\DB\SQLIface
 	 */
 	protected $sql;
 
 	/**
 	 * Construct a DB Mapper.
 	 *
-	 *  @param Evoke\Persistance\DB\SQLIface SQL object.
+	 *  @param Evoke\Persistence\DB\SQLIface SQL object.
 	 */
 	public function __construct(SQLIface $sql)
 	{

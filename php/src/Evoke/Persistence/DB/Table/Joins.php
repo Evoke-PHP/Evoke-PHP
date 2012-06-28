@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance\DB\Table;
+namespace Evoke\Persistence\DB\Table;
 
 use InvalidArgumentException;
 
@@ -58,7 +58,7 @@ use InvalidArgumentException;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class Joins implements JoinsIface
 {
@@ -96,7 +96,7 @@ class Joins implements JoinsIface
 
 	/**
 	 * Database Table Info
-	 * @var Evoke\Persistance\DB\Table\InfoIface
+	 * @var Evoke\Persistence\DB\Table\InfoIface
 	 */
 	protected $info;
 	
@@ -109,7 +109,7 @@ class Joins implements JoinsIface
 	/**
 	 * Array ofJoin objects from this node to other Join objects in the join
 	 * tree.
-	 * @var Evoke\Persistance\DB\Table\JoinsIface[]
+	 * @var Evoke\Persistence\DB\Table\JoinsIface[]
 	 */
 	protected $joins;
 
@@ -149,12 +149,12 @@ class Joins implements JoinsIface
 	/**
 	 * Construct the Joins object.
 	 *
-	 * @param Evoke\Persistance\DB\Table\InfoIface
+	 * @param Evoke\Persistence\DB\Table\InfoIface
 	 *                    DB Table Info object.
 	 * @param string      Table Name.
 	 * @param string      Parent Field.
 	 * @param string      Child Field.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface[]
+	 * @param Evoke\Persistence\DB\Table\JoinsIface[]
 	 *                    Joins from this node.
 	 * @param string      Admin Managed.
 	 * @param string      Compare Type.
@@ -349,7 +349,7 @@ class Joins implements JoinsIface
 	/**
 	 * Get the joins.
 	 *
-	 * @return Evoke\Persistance\DB\Table\JoinsIface[]
+	 * @return Evoke\Persistence\DB\Table\JoinsIface[]
 	 */
 	public function getJoins()
 	{
@@ -528,7 +528,7 @@ class Joins implements JoinsIface
 	/**
 	 * Build the join from the join components.
 	 *
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *
 	 * @return string
 	 */

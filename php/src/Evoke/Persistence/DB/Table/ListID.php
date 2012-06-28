@@ -1,8 +1,8 @@
 <?php
-namespace Evoke\Persistance\DB\Table;
+namespace Evoke\Persistence\DB\Table;
 
 use Evoke\Message\Exception\DB as ExceptionDB,
-	Evoke\Persistance\DB\SQLIface,
+	Evoke\Persistence\DB\SQLIface,
 	Exception,
 	LogicException;
 
@@ -12,7 +12,7 @@ use Evoke\Message\Exception\DB as ExceptionDB,
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class ListID
 {
@@ -30,14 +30,14 @@ class ListID
 
 	/**
 	 * SQL object.
-	 * @var Evoke\Persistance\DB\SQLIface
+	 * @var Evoke\Persistence\DB\SQLIface
 	 */
 	protected $sql;
 
 	/**
 	 * Construct a List ID object.
 	 *
-	 * @param Evoke\Persistance\DB\SQLIface
+	 * @param Evoke\Persistence\DB\SQLIface
 	 *                 SQL object.
 	 * @param string[] Fields used in the List ID table.
 	 * @param string   The table name of the List ID table.

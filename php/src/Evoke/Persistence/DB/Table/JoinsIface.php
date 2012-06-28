@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance\DB\Table;
+namespace Evoke\Persistence\DB\Table;
 
 /**
  * JoinsIface
@@ -7,7 +7,7 @@ namespace Evoke\Persistance\DB\Table;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 interface JoinsIface
 {

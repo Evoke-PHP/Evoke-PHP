@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance\DB;
+namespace Evoke\Persistence\DB;
 
 /**
  * DBIface
@@ -10,7 +10,7 @@ namespace Evoke\Persistance\DB;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 interface DBIface
 {

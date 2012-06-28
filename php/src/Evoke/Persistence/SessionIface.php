@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance;
+namespace Evoke\Persistence;
 
 /**
  * SessionIface
@@ -7,7 +7,7 @@ namespace Evoke\Persistance;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 interface SessionIface
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance\DB;
+namespace Evoke\Persistence\DB;
 
 use InvalidArgumentException;
 
@@ -11,7 +11,7 @@ use InvalidArgumentException;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class PDO extends \PDO implements DBIface
 {

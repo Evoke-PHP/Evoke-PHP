@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance;
+namespace Evoke\Persistence;
 
 /**
  * SessionManager
@@ -9,7 +9,7 @@ namespace Evoke\Persistance;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class SessionManager implements SessionManagerIface
 {
@@ -25,14 +25,14 @@ class SessionManager implements SessionManagerIface
 
 	/**
 	 * Session object.
-	 * @var Evoke\Persistance\SessionIface
+	 * @var Evoke\Persistence\SessionIface
 	 */
 	protected $session;
 
 	/**
 	 * Construct a Session Manager object.
 	 *
-	 * @param Evoke\Persistance\SessionIface Session
+	 * @param Evoke\Persistence\SessionIface Session
 	 * @param string[]                       Domain to manage.
 	 */
 	public function __construct(SessionIface $session,

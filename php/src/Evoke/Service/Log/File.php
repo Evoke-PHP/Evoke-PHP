@@ -2,7 +2,7 @@
 namespace Evoke\Service\Log;
 
 use DateTime,
-	Evoke\Persistance\FilesystemIface,
+	Evoke\Persistence\FilesystemIface,
 	InvalidArgumentException;
 
 /**
@@ -47,7 +47,7 @@ class File implements LoggerIface
 
 	/**
 	 * Filesystem
-	 * @var Evoke\Persistance\FilesystemIface
+	 * @var Evoke\Persistence\FilesystemIface
 	 */
 	protected $filesystem;
 
@@ -66,7 +66,7 @@ class File implements LoggerIface
 	/**
 	 * Construct a File Logger object.
 	 *
-	 * @param Evoke\Persistance\FilesystemIface
+	 * @param Evoke\Persistence\FilesystemIface
 	 *                   Filesystem object
 	 * @param bool       Whether to append to the file.
 	 * @param int(octal) The directory mode for the log file.

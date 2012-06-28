@@ -2,10 +2,10 @@
 namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Message\TreeIface,
-	Evoke\Persistance\DB\SQLIface,
-	Evoke\Persistance\DB\Table\JoinsIface,
-	Evoke\Persistance\DB\Table\ListIDIface,
-	Evoke\Persistance\SessionManagerIface;
+	Evoke\Persistence\DB\SQLIface,
+	Evoke\Persistence\DB\Table\JoinsIface,
+	Evoke\Persistence\DB\Table\ListIDIface,
+	Evoke\Persistence\SessionManagerIface;
 /**
  * JointAdminLinked
  *
@@ -46,14 +46,14 @@ class JointAdminLinked extends JointAdmin
 	
 	/** Construct an Administration Model of a joint set of database tables with
 	 *  linked information in the filesystem.
-	 *  @param Evoke\Persistance\DB\SQLIface
+	 *  @param Evoke\Persistence\DB\SQLIface
 	 *                 SQL object.   
 	 *  @param string  Table name where joins start from.
-	 *  @param Evoke\Persistance\DB\Table\JoinsIface
+	 *  @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                 Joins object.
-	 *  @param Evoke\Persistance\SessionManagerIface
+	 *  @param Evoke\Persistence\SessionManagerIface
 	 *                 SessionManager object.
-	 *  @param Evoke\Persistance\DB\Table\ListIDIface
+	 *  @param Evoke\Persistence\DB\Table\ListIDIface
 	 *                 DB List ID Table object.
 	 *  @param Evoke\Message\TreeIface
 	 *                 Failure messages object.

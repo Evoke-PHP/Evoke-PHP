@@ -1,8 +1,8 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistance\DB\SQLIface,
-	Evoke\Persistance\FilesystemIface,
+use Evoke\Persistence\DB\SQLIface,
+	Evoke\Persistence\FilesystemIface,
 	Exception,
 	InvalidArgumentException;
 

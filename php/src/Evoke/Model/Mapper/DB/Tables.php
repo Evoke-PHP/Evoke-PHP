@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistance\DB\SQLIface;
+use Evoke\Persistence\DB\SQLIface;
 
 /**
  * Tables Mapper
@@ -30,7 +30,7 @@ class Tables extends DB
 	/**
 	 * Construct a model for a list of database tables.
 	 *
-	 * @param Evoke\Persistance\DB\SQLIface
+	 * @param Evoke\Persistence\DB\SQLIface
 	 *                SQL object.
 	 * @param mixed[] Extra tables to list.
 	 * @param mixed[] Tables to ignore for the list.

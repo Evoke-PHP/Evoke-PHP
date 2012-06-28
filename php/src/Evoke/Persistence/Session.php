@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistance;
+namespace Evoke\Persistence;
 
 use RuntimeException;
 
@@ -9,7 +9,7 @@ use RuntimeException;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistance
+ * @package Persistence
  */
 class Session implements SessionIface
 {

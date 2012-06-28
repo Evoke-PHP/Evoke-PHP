@@ -1,8 +1,8 @@
 <?php
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistance\DB\SQLIface,
-	Evoke\Persistance\DB\Table\JoinsIface,
+use Evoke\Persistence\DB\SQLIface,
+	Evoke\Persistence\DB\Table\JoinsIface,
 	InvalidArgumentException;
 
 /**
@@ -23,7 +23,7 @@ class Joint extends DB
 	 * The joins provide the relationships of the data, allowing it to be joint
 	 * together into a meaningful unit of data.
 	 *
-	 * @var Evoke\Persistance\DB\Table\JoinsIface
+	 * @var Evoke\Persistence\DB\Table\JoinsIface
 	 */
 	protected $joins;
 	
@@ -42,10 +42,10 @@ class Joint extends DB
 	/**
 	 * Construct a Mapper for of a joint set of database tables.
 	 *
-	 * @param Evoke\Persistance\DB\SQLIface
+	 * @param Evoke\Persistence\DB\SQLIface
 	 *                SQL object.
 	 * @param string  The table name where joins start from.
-	 * @param Evoke\Persistance\DB\Table\JoinsIface
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                Joins object.
 	 * @param mixed[] Select statement settings.
 	 */
