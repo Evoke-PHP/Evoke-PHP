@@ -53,7 +53,7 @@ class Exception implements HandlerIface
 	 */
 	public function __construct(/* Bool */  $detailedInsecureMessage,
 	                            /* Int  */  $maxLengthExceptionMessage,
-	                            LogIface $log,
+	                            LogIface    $log,
 	                            WriterIface $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
@@ -79,7 +79,7 @@ class Exception implements HandlerIface
 	 *
 	 * @param Exception An exception that was not caught in the system.
 	 */
-	public function handler(Exception $uncaughtException)
+	public function handler(\Exception $uncaughtException)
 	{
 		try
 		{
