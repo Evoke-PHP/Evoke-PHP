@@ -89,7 +89,7 @@ class Translations extends DataAbstract
 	 * @param string   The page field for the translations.
 	 */
 	public function __construct(RequestIface $request,
-	                            Array        $translations      = array(),
+	                            Array        $translations,
 	                            /* String */ $currentPage       = '',
 	                            /* String */ $defaultLanguage   = 'EN',
 	                            /* String */ $langKey           = 'l',
@@ -272,6 +272,11 @@ class Translations extends DataAbstract
 	 */
 	public function tr(/* String */ $key)
 	{
+		if (!isset($this->currentLanguage))
+		{
+			$this->setLanguage();
+		}
+		
 		if (isset($this->data[$key][$this->currentLanguage]))
 		{
 			return $this->data[$key][$this->currentLanguage];
@@ -280,7 +285,7 @@ class Translations extends DataAbstract
 		if (!isset($this->data[$key]))
 		{
 			throw new RuntimeException(
-				' no translation for: ' . $key . 'for the page: ' .
+				' no translation for: ' . $key . ' for the page: ' .
 				$this->currentPage);
 		}
 

@@ -29,7 +29,7 @@ class PDO extends \PDO implements DBIface
 		/* String */ $dataSourceName,
 		/* String */ $password,
 		/* String */ $username,
-		Array        $options=array(
+		Array        $options = array(
 			\PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
 			\PDO::ATTR_EMULATE_PREPARES => false,))
 	{

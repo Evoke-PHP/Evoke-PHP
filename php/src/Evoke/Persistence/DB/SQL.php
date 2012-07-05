@@ -51,6 +51,7 @@ class SQL implements SQLIface
 	 *
 	 * @param Evoke\Persistence\DB\DBIface
 	 *        Database object to perform the SQL on.
+	 * @param string The PDOStatement class to use.
 	 */
 	public function __construct(
 		DBIface      $database,

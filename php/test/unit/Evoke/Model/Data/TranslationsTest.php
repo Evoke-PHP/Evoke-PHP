@@ -23,7 +23,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertInstanceOf(
 			'Evoke\Model\Data\Translations',
-			new Translations($this->getMock('\Evoke\HTTP\RequestIface')));
+			new Translations($this->getMock('\Evoke\HTTP\RequestIface'), array()));
 	}
 
 	/**
@@ -144,6 +144,17 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that making a translation sets the language if it is required.
+	 *
+	 * @covers       Evoke\Model\Data\Translations::tr
+	 * @dataProvider providerTranslateSetsLanguage
+	 */
+	public function testTranslateSetsLanguage($object, $key, $expected)
+	{
+		$this->assertSame($object->tr($key), $expected);
+	}
+	
+	/**
 	 * Test the retrieval of a single translation.
 	 *
 	 * @covers       Evoke\Model\Data\Translations::tr
@@ -171,8 +182,10 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 				            'Page' => '',
 				            'FR'   => 'French is First',
 				            'TG'   => 'Tagalog',
-				            'DE'   => 'German is Third')));
-			$object->setLanguage('EN');
+				            'DE'   => 'German is Third'),
+				      array('Name' => 'Missing',
+				            'Page' => '')));
+			$object->setLanguage('FR');
 		}
 		catch (Exception $e)
 		{
@@ -181,7 +194,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		}
 
 		// This should throw the DomainException.
-		$object->tr('First');
+		$object->tr('Missing');
 	}
 
 	/**
@@ -276,7 +289,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		$request = $this->getMock('Evoke\HTTP\RequestIface');
 
 		$tests['Empty_Data'] =
-			array('Object'   => new Translations($request),
+			array('Object'   => new Translations($request, array()),
 			      'Expected' => array());
 		
 		$twoLanguagesData = array(array('ID'     => '1',
@@ -322,7 +335,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	{
 		$tests = array();
 		$request = $this->getMock('Evoke\HTTP\RequestIface');
-		$emptyObject = new Translations($request);
+		$emptyObject = new Translations($request, array());
 		
 		$tests['Empty_Any'] =
 			array('Object'   => $emptyObject,
@@ -480,6 +493,31 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		return $tests;
 	}
 
+	public function providerTranslateSetsLanguage()
+	{
+		$requestMock = $this->getMock('\Evoke\HTTP\RequestIface');
+		$requestMock
+			->expects($this->at(0))
+			->method('issetQueryParam')
+			->will($this->returnValue(true));
+		$requestMock
+			->expects($this->at(1))
+			->method('getQueryParam')
+			->will($this->returnValue('EU'));
+
+		$translationsData = array(array('Name' => 'TRME',
+		                                'Page' => '',
+		                                'AU'   => 'NOPE',
+		                                'EU'   => 'EXPECTED',
+		                                'US'   => 'NOT'));
+		
+		return array(
+			'Set_Language' => array(
+				'Object'   => new Translations($requestMock, $translationsData),
+				'Key'      => 'TRME',
+				'Expected' => 'EXPECTED'));
+	}
+	
 	public function providerTranslateSingle()
 	{
 		$tests = array();
@@ -532,7 +570,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		$tests['Dos'] = array('Object'   => $spanishTranslator,
 		                      'Key'      => 'Two',
 		                      'Expected' => 'ES_Dos_Especifico');
-	
+
 		return $tests;
 	}
 
