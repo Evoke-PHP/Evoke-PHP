@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Form;
+namespace Evoke\View\Form;
 
 /**
  * Upload

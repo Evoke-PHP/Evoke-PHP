@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Control;
+namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
 	Evoke\View\Text\TranslatorIface,

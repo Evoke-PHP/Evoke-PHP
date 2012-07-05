@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Control\RecordList;
+namespace Evoke\View\Control\RecordList;
 
 /**
  * NoButtons

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Form\Input;
+namespace Evoke\View\Form\Input;
 
 use Evoke\View\ViewIface,
 	InvalidArgumentException,

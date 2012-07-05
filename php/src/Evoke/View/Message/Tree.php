@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Message;
+namespace Evoke\View\Message;
 
 use Evoke\Message\TreeIface,
 	Evoke\View\ViewIface;

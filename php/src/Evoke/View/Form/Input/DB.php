@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML\Input;
+namespace Evoke\View\Input;
 
 use Evoke\View\ViewIface;
 
