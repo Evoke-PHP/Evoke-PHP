@@ -148,6 +148,14 @@ abstract class XMLBase implements WriterIface
 		$children = isset($xml[$this->pos['Children']]) ?
 			$xml[$this->pos['Children']] : array();
 
+		$inlineElement = (preg_match('(^(strong|em|pre|code)$)i', $tag));
+
+		// Toggle the indent off.
+		if ($inlineElement)
+		{
+			$this->xmlWriter->setIndent(false);
+		}
+		
 		$this->xmlWriter->startElement($tag);
 
 		foreach ($attribs as $attrib => $value)
@@ -176,6 +184,12 @@ abstract class XMLBase implements WriterIface
 		else
 		{
 			$this->xmlWriter->endElement();
+		}
+
+		// Toggle the indent back on.
+		if ($inlineElement)
+		{
+			$this->xmlWriter->setIndent(true);
 		}
 	}
 

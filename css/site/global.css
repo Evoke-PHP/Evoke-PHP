@@ -90,6 +90,18 @@ html,body
     min-height: 100%;
 }
 
+/***********/
+/* General */
+/***********/
+
+.Inline
+{
+	display: inline-block;
+}
+
+/**********/
+/* Dialog */
+/**********/
 .mask
 {
     opacity: 0.9;
@@ -251,6 +263,24 @@ html,body
 .Button.Bad
 {
     background: #F00;
+}
+
+/**********/
+/* Basics */
+/**********/
+code.prettyprint
+{
+	margin-top: 20px;
+	display: inline-block;
+	background: #eee;
+	padding: 20px 60px;
+	border: 3px dashed #000;
+}
+
+.Plain
+{
+	text-decoration: none;
+	color: #000;
 }
 
 /***************/

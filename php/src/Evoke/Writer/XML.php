@@ -17,6 +17,14 @@ class XML extends XMLBase
 	/******************/
 
 	/**
+	 * Write the end of the document.
+	 */
+	public function writeEnd()
+	{
+		$this->endDocument();
+	}
+	
+	/**
 	 * Write the start of the document.
 	 */
 	public function writeStart()

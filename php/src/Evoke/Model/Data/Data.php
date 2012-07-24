@@ -42,12 +42,6 @@ use InvalidArgumentException,
 class Data extends DataAbstract
 {
 	/**
-	 * Raw data that we are modeling.
-	 * @var mixed[]
-	 */
-	protected $data;
-
-	/**
 	 * Joint data objects.
 	 * @var DataIface[]
 	 */

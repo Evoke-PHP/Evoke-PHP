@@ -27,20 +27,22 @@ class NotFound extends Controller
 		
 		switch ($outputFormat)
 		{
-		case JSON:
+		case 'JSON':
 			$this->writer->write(array('Code' => '404',
 			                           'Text' => 'Not Found'));
 			break;
 
-		case TEXT:
+		case 'TEXT':
 			$this->writer->write('404 Not Found');
 			break;
 			
-		case HTML5:
-		case XHTML:
-		case XHML:
+		case 'HTML5':
+		case 'XHTML':
+		case 'XML':
 		default:
+			$this->writer->writeStart($this->pageSetup);
 			$this->writeXMLNotFound();
+			$this->writer->writeEnd();
 			break;
 		}
 		

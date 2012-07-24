@@ -25,6 +25,13 @@ interface TranslationsIface extends DataIface
 	public function getLanguages();
 
 	/**
+	 * Get the key that is used for the language query parameter.
+	 *
+	 * @return string The key used in query parameters to set the language.
+	 */
+	public function getLanguageKey();
+
+	/**
 	 * Clear the language so that it can be set from a fresh start.
 	 */
 	public function resetLanguage();
@@ -33,6 +40,24 @@ interface TranslationsIface extends DataIface
 	 * Set the language.
 	 */
 	public function setLanguage($lang = NULL);
-}
 
+	/**
+	 * Get the translation data for a single entry.
+	 *
+	 * @param string The key for the translation to retrieve.
+	 *
+	 * @return string The translated string.
+	 */
+	public function tr(/* String */ $key);
+	
+	/**
+	 * Get the translation data for a single entry in the specified language.
+	 *
+	 * @param string The key for the translation to retrieve.
+	 * @param string The language that we want the translation in.
+	 *
+	 * @return string The translated string.
+	 */
+	public function trSpecific($key, $language);	
+}
 // EOF

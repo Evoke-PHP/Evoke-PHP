@@ -17,8 +17,14 @@ use DomainException,
  * @license MIT
  * @package Model
  */
-class Translations extends DataAbstract
+class Translations extends DataAbstract implements TranslationsIface
 {
+	/**
+	 * The translation key to use when no translation is found.
+	 * @var string
+	 */
+	const NO_TRANSLATION_FOUND = 'NO_TRANSLATION_FOUND';
+
 	/**
 	 * The current language that the translations data is representing.
 	 * @var string 
@@ -139,7 +145,7 @@ class Translations extends DataAbstract
 
 		return $this->currentLanguage;
 	}
-
+	
 	/**
 	 * Get all of the languages that the translations are provided in for the
 	 * current record.
@@ -164,6 +170,16 @@ class Translations extends DataAbstract
 	}
 
 	/**
+	 * Get the key that is used for the language query parameter.
+	 *
+	 * @return string The key used in query parameters to set the language.
+	 */
+	public function getLanguageKey()
+	{
+		return $this->langKey;
+	}
+
+	/**
 	 * Return whether the language is modelled by the translations.
 	 *
 	 * @param string The language to check.
@@ -175,6 +191,16 @@ class Translations extends DataAbstract
 
 		return isset($currentRecord[$language]);		
 	}
+
+	/**
+	 * Reset the language for the translations so that another language can be
+	 * chosen.
+	 */
+	public function resetLanguage()
+	{
+		$this->currentLanguage = NULL;
+	}
+	 
 	
 	/**
 	 * Set the data for the translations, using the page specific value if it
@@ -268,7 +294,7 @@ class Translations extends DataAbstract
 	 *
 	 * @param string The key for the translation to retrieve.
 	 *
-	 * @return mixed[] The translation data.
+	 * @return string The translated string.
 	 */
 	public function tr(/* String */ $key)
 	{
@@ -284,13 +310,65 @@ class Translations extends DataAbstract
 
 		if (!isset($this->data[$key]))
 		{
+			if ($key !== self::NO_TRANSLATION_FOUND)
+			{
+				trigger_error(
+					'No translation for: ' . $key .
+					(!empty($this->currentPage) ? '' :
+					 ' on page: ' . $this->currentPage),
+					E_USER_WARNING);
+				
+				return $this->tr(self::NO_TRANSLATION_FOUND) . $key;
+			}
+
 			throw new RuntimeException(
-				' no translation for: ' . $key . ' for the page: ' .
-				$this->currentPage);
+				'Either all translations must be defined or ' .
+				self::NO_TRANSLATION_FOUND . ' must be defined for missing ' .
+				'translations.');
 		}
 
 		throw new DomainException(
 			' translation is not in ' . $this->currentLanguage . ' for: ' .
+			$key . ' on page: ' . $this->currentPage);
+	}
+	
+	/**
+	 * Get the translation data for a single entry in the specified language.
+	 *
+	 * @param string The key for the translation to retrieve.
+	 * @param string The language that we want the translation in.
+	 *
+	 * @return string The translated string.
+	 */
+	public function trSpecific($key, $language)
+	{
+		if (isset($this->data[$key][$this->currentLanguage]))
+		{
+			return $this->data[$key][$this->currentLanguage];
+		}
+
+		if (!isset($this->data[$key]))
+		{
+			if ($key !== self::NO_TRANSLATION_FOUND)
+			{
+				trigger_error(
+					'No translation for: ' . $key .
+					(!empty($this->currentPage) ? '' :
+					 ' on page: ' . $this->currentPage),
+					E_USER_WARNING);
+				
+				return $this->trSpecific(
+					self::NO_TRANSLATION_FOUND, $language) . $key;
+			}
+
+			throw new RuntimeException(
+				'Either all translations must be defined or ' .
+				self::NO_TRANSLATION_FOUND . ' must be defined for missing ' .
+				'translations.');
+		}
+
+		throw new DomainException(
+			' translation is not in ' . $language . ' for: ' .
 			$key . ' on page: ' . $this->currentPage);
 	}
 	

@@ -2,7 +2,7 @@
 namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
-	Evoke\View\Text\TranslatorIface,
+	Evoke\Model\Data\TranslationsIface,
 	Evoke\View\ViewIface;
 
 /**
@@ -22,22 +22,32 @@ class Menu implements ViewIface
 	protected $data;
 
 	/**
+	 * Class for the menu items.
+	 *
+	 * @var string
+	 */
+	protected $menuItemClass;
+	
+	/**
 	 * Translator object
-	 * @var Evoke\View\Text\TranslatorIface
+	 * @var Evoke\Model\Data\TranslationsIface
 	 */
 	protected $translator;
 	
 	/**
 	 * Construct a Menu object.
 	 *
-	 * @param Evoke\View\Text\TranslatorIface Translator.
-	 * @param Evoke\Model\Data\Menu           Menu Data.
+	 * @param Evoke\Model\Data\TranslationsIface Translator.
+	 * @param Evoke\Model\Data\Menu              Menu Data.
+	 * @param string                             Menu Item class
 	 */
-	public function __construct(TranslatorIface $translator,
-	                            DataMenu        $data)
+	public function __construct(TranslationsIface $translator,
+	                            DataMenu          $data,
+	                            /* String */      $menuItemClass = 'Menu_Item')
 	{
-		$this->data       = $data;
-		$this->translator = $translator;
+		$this->data          = $data;
+		$this->menuItemClass = $menuItemClass;
+		$this->translator    = $translator;
 	}
 	
 	/******************/
@@ -89,7 +99,7 @@ class Menu implements ViewIface
 			{
 				$menu[] = array(
 					'li',
-					array('class' => 'Level_' . $level),
+					array('class' => $this->menuItemClass . ' Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
 					            $menuItem['Text_' . $lang]),
@@ -102,7 +112,7 @@ class Menu implements ViewIface
 			{
 				$menu[] = array(
 					'li',
-					array('class' => 'Level_' . $level),
+					array('class' => $this->menuItemClass . ' Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
 					            $menuItem['Text_' . $lang])));

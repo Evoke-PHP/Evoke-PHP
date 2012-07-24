@@ -171,12 +171,12 @@ class Provider implements ProviderIface
 
 		if (!isset($depClass))
 		{
-			$message = 'Missing ';
-			$message .= $reflectionParam->isArray() ? 'Array' : 'Scalar';
-			$message .= ' Dependency';
-			
+			var_export(array_keys($passedParameters));
 			// It must be an unset Scalar or Array.  Bail hard and early.
-			throw new InvalidArgumentException($message);
+			throw new InvalidArgumentException(
+				'Missing ' .
+				($reflectionParam->isArray() ? 'Array' : 'Scalar') .
+				' Dependency for parameter: ' .	$reflectionParam->getName());
 		}
 
 		if ($depClass->isInstantiable())
@@ -186,7 +186,8 @@ class Provider implements ProviderIface
 		}
 
 		throw new InvalidArgumentException(
-			'Missing Abstract/Interface Dependency');
+			'Missing Abstract/Interface Dependency for parameter: ' .
+			$reflectionParam->getName());
 	}
 	
 	/**

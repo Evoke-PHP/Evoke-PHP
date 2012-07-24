@@ -18,7 +18,7 @@ class XHTML extends XMLBase implements PageIface
 	/******************/
 		
 	/**
-	 * End the html page and write the output.
+	 * End the html page.
 	 */
 	public function writeEnd()
 	{

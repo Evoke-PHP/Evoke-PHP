@@ -37,20 +37,22 @@ class Error extends Controller
 
 		switch ($outputFormat)
 		{
-		case JSON:
+		case 'JSON':
 			$this->writer->write(array('Code'    => '500',
 			                           'Title'   => 'Internal Server Error'));
 			break;
 
-		case TEXT:
+		case 'TEXT':
 			$this->writer->write('500 Internal Server Error');
 			break;
 			
-		case HTML5:
-		case XHTML:
-		case XHML:
+		case 'HTML5':
+		case 'XHTML':
+		case 'XML':
 		default:
+			$this->writer->writeStart($this->pageSetup);
 			$this->writeXMLError();
+			$this->writer->writeEnd();
 			break;
 		}
 		
