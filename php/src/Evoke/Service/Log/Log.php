@@ -76,6 +76,27 @@ class Log implements LogIface
 	 */
 	public function log($message, $level)
 	{
+		$errType = array (E_ERROR             => 'Error',
+		                  E_WARNING           => 'Warning',
+		                  E_PARSE             => 'Parse',
+		                  E_NOTICE            => 'Notice',
+		                  E_CORE_ERROR        => 'Core Error',
+		                  E_CORE_WARNING      => 'Core Warning',
+		                  E_COMPILE_ERROR     => 'Compile Error',
+		                  E_COMPILE_WARNING   => 'Compile Warning',
+		                  E_USER_ERROR        => 'User Error',
+		                  E_USER_WARNING      => 'User Warning',
+		                  E_USER_NOTICE       => 'User Notice',
+		                  E_STRICT            => 'Strict',
+		                  E_RECOVERABLE_ERROR => 'Recoverable Error',
+		                  E_DEPRECATED        => 'Deprecated',
+		                  E_USER_DEPRECATED   => 'User Deprecated');
+
+		if (isset($errType[$level]))
+		{
+			$level = $errType[$level];
+		}
+		
 		$this->dateTime->setTimestamp(time());
 
 		if (empty($this->observers))

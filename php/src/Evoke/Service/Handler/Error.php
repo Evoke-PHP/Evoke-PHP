@@ -56,29 +56,8 @@ class Error implements HandlerIface
 			return true;
 		}
       
-		$errType = array (E_ERROR             => 'Error',
-		                  E_WARNING           => 'Warning',
-		                  E_PARSE             => 'Parse',
-		                  E_NOTICE            => 'Notice',
-		                  E_CORE_ERROR        => 'Core Error',
-		                  E_CORE_WARNING      => 'Core Warning',
-		                  E_COMPILE_ERROR     => 'Compile Error',
-		                  E_COMPILE_WARNING   => 'Compile Warning',
-		                  E_USER_ERROR        => 'User Error',
-		                  E_USER_WARNING      => 'User Warning',
-		                  E_USER_NOTICE       => 'User Notice',
-		                  E_STRICT            => 'Strict',
-		                  E_DEPRECATED        => 'Deprecated',
-		                  E_USER_DEPRECATED   => 'User Deprecated',
-		                  E_RECOVERABLE_ERROR => 'Recoverable Error');
-
-		$errTypeStr = isset($errType[$errNo]) ?
-			$errType[$errNo] : 'Unknown ' . $errNo;
-
-		$message = 'Error handler [' . $errTypeStr . '] ' . $errStr .
-			' in ' . $errFile . ' on ' . $errLine;
-
-		$this->log->log($message, $errNo);
+		$this->log->log($errStr . ' in ' . $errFile . ' on ' . $errLine,
+		                $errNo);
 
 		// The easiest way to recover from a recoverable error is by handling an
 		// exception.  This ensure the problem is addressed before any related
