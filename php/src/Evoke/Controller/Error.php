@@ -19,9 +19,7 @@ class Error extends Controller
 	 * @param string The output format to use in uppercase.
 	 */
 	public function execute($method, $outputFormat)
-	{
-		$this->response->setStatus(500);
-			
+	{			
 		$currentBuffer = (string)($this->writer);
 
 		if (!empty($currentBuffer))
@@ -53,7 +51,9 @@ class Error extends Controller
 			break;
 		}
 		
+		$this->response->setStatus(500);
 		$this->response->setBody($this->writer);
+		$this->response->send();
 	}
 
 	/*******************/

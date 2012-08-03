@@ -43,6 +43,7 @@ class NotFound extends Controller
 		
 		$this->response->setStatus(404);
 		$this->response->setBody($this->writer);
+		$this->response->send();
 	}
 
 	/*******************/
