@@ -171,7 +171,6 @@ class Provider implements ProviderIface
 
 		if (!isset($depClass))
 		{
-			var_export(array_keys($passedParameters));
 			// It must be an unset Scalar or Array.  Bail hard and early.
 			throw new InvalidArgumentException(
 				'Missing ' .

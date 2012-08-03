@@ -89,15 +89,6 @@ abstract class XMLBase implements WriterIface
 	}
 	
 	/**
-	 * Output the memory buffer for the XHTML that has been written and reset
-	 * the memory buffer.
-	 */
-	public function output()
-	{
-		echo($this->xmlWriter->outputMemory(true));
-	}
-
-	/**
 	 * Write XML elements into the memory buffer.
 	 *
 	 * @param mixed[] Array accessible value for the xml to be written of the

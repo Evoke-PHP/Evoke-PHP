@@ -20,11 +20,8 @@ class Error extends Controller
 	 */
 	public function execute($method, $outputFormat)
 	{
-		if (!headers_sent())
-		{
-			$this->response->setResponseCode(500);
-		}
-
+		$this->response->setStatus(500);
+			
 		$currentBuffer = (string)($this->writer);
 
 		if (!empty($currentBuffer))
@@ -56,7 +53,7 @@ class Error extends Controller
 			break;
 		}
 		
-		$this->writer->output();
+		$this->response->setBody($this->writer);
 	}
 
 	/*******************/

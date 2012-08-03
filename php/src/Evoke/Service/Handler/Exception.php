@@ -1,7 +1,8 @@
 <?php
 namespace Evoke\Service\Handler;
 
-use Evoke\Service\Log\LogIface,
+use Evoke\HTTP\ResponseIface,
+	Evoke\Service\Log\LogIface,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -36,6 +37,12 @@ class Exception implements HandlerIface
 	protected $maxLengthExceptionMessage;
 
 	/**
+	 * Response object.
+	 * @var Evoke\HTTP\ResponseIface
+	 */
+	protected $response;
+	
+	/**
 	 * Writer object.
 	 * @var Evoke\Writer\WriterIface
 	 */
@@ -48,13 +55,16 @@ class Exception implements HandlerIface
 	 * @param int  Maximum length of exception message to show.
 	 * @param Evoke\Service\Log\LogIface
 	 *             Log object.
+	 * @param Evoke\HTTP\ResponseIface
+	 *             Response object.
 	 * @param Evoke\Writer\WriterIface
 	 *             Writer object.
 	 */
-	public function __construct(/* Bool */  $detailedInsecureMessage,
-	                            /* Int  */  $maxLengthExceptionMessage,
-	                            LogIface    $log,
-	                            WriterIface $writer)
+	public function __construct(/* Bool */    $detailedInsecureMessage,
+	                            /* Int  */    $maxLengthExceptionMessage,
+	                            LogIface      $log,
+	                            ResponseIface $response,
+	                            WriterIface   $writer)
 	{
 		if (!is_bool($detailedInsecureMessage))
 		{
@@ -65,6 +75,7 @@ class Exception implements HandlerIface
 		$this->detailedInsecureMessage   = $detailedInsecureMessage;
 		$this->log                       = $log;
 		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
+		$this->response                  = $response;
 		$this->writer                    = $writer;
 	}
    
@@ -179,7 +190,9 @@ class Exception implements HandlerIface
 			            array('div', array('class' => 'Description'), $message))
 				));
 		$this->writer->writeEnd();
-		$this->writer->output();
+
+		$this->response->setStatus(500);
+		$this->response->setBody($this->writer);
 	}
 
 	/**

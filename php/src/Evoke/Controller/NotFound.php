@@ -20,11 +20,6 @@ class NotFound extends Controller
 	 */
 	public function execute($method, $outputFormat)
 	{
-		if (!headers_sent())
-		{
-			$this->response->setResponseCode(404);
-		}
-		
 		switch ($outputFormat)
 		{
 		case 'JSON':
@@ -46,7 +41,8 @@ class NotFound extends Controller
 			break;
 		}
 		
-		$this->writer->output();
+		$this->response->setStatus(404);
+		$this->response->setBody($this->writer);
 	}
 
 	/*******************/

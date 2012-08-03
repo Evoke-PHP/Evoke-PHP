@@ -22,11 +22,6 @@ interface WriterIface
 	 * Reset the buffer that we are writing to.
 	 */
 	public function flush();
-
-	/**
-	 * Output the buffer that we have written into.
-	 */
-	public function output();
 	
 	/**
 	 * Write the data into the buffer.

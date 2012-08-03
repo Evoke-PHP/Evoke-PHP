@@ -1,15 +1,21 @@
 <?php
+/**
+ * Evoke HTTP Request
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP;
 
 use LogicException;
 
 /**
- * Request
+ * HTTP Request as per RFC2616-sec5
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @link      http://www.w3.org/Protocols/rfc2616/rfc2616.html
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP
  */
 class Request implements RequestIface
 {
@@ -28,7 +34,7 @@ class Request implements RequestIface
 	/**
 	 * Construct the request object.
 	 *
-	 * @param bool Whether to validate against rfc2616 or assume that it is
+	 * @param bool Whether to validate against RFC2616 or assume that it is
 	 *             valid and try to pull the data without checking.
 	 */
 	public function __construct($validateHeaders=true)
@@ -133,7 +139,7 @@ class Request implements RequestIface
 	}
 	
 	/**
-	 * Parse the Accept header field from the request according to RFC-2616.
+	 * Parse the Accept header field from the request according to RFC2616.
 	 *
 	 * This field specifies the preferred media types for responses.
 	 *
@@ -315,25 +321,26 @@ class Request implements RequestIface
 	/**
 	 * Compare two accept media types so that they can be sorted via usort.
 	 *
-	 * @param [] The first accepted media type.
-	 * @param [] The second accepted media type.
+	 * @param mixed[] The first accepted media type.
+	 * @param mixed[] The second accepted media type.
 	 * @return int As required by usort.
 	 */
-	protected function compareAccept(Array $a, Array $b)
+	protected function compareAccept(Array $first, Array $second)
 	{
-		return $this->scoreAccept($b) - $this->scoreAccept($a);
+		return $this->scoreAccept($second) - $this->scoreAccept($first);
 	}
 
 	/**
 	 * Compare two accept languages so that they can be sorted via usort.
 	 *
-	 *  @param [] The first accept language.
-	 *  @param [] The second accept language.
-	 *  @return int as required by usort.
+	 * @param mixed[] The first accept language.
+	 * @param mixed[] The second accept language.
+	 * @return int as required by usort.
 	 */
-	protected function compareAcceptLanguage(Array $a, Array $b)
+	protected function compareAcceptLanguage(Array $first, Array $second)
 	{
-		return $this->scoreAcceptLanguage($b) - $this->scoreAcceptLanguage($a);
+		return $this->scoreAcceptLanguage($second) -
+			$this->scoreAcceptLanguage($first);
 	}
 
 	/*******************/

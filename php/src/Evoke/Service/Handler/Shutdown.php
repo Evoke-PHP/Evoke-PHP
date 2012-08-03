@@ -2,6 +2,7 @@
 namespace Evoke\Service\Handler;
 
 use BadMethodCallException,
+	Evoke\HTTP\ResponseIface,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -30,6 +31,12 @@ class Shutdown implements HandlerIface
 	protected $detailedInsecureMessage;
 
 	/**
+	 * Response object.
+	 * @var Evoke\HTTP\ResponseIface
+	 */
+	protected $response;
+	
+	/**
 	 * Writer object.
 	 * @var Evoke\Writer\WriterIface
 	 */
@@ -41,12 +48,15 @@ class Shutdown implements HandlerIface
 	 * @param string Admin's Email to use as a contact.
 	 * @param bool   Whether to show detailed logging information (which is
 	 *               insecure).
+	 * @param Evoke\HTTP\ResponseIface
+	 *               Response object.
 	 * @param Evoke\Writer\WriterIface
 	 *               The writer object to write the fatal message.
 	 */
-	public function __construct(/* String */ $administratorEmail,
-	                            /* Bool   */ $detailedInsecureMessage,
-	                            WriterIface  $writer)
+	public function __construct(/* String */  $administratorEmail,
+	                            /* Bool   */  $detailedInsecureMessage,
+	                            ResponseIface $response,
+	                            WriterIface   $writer)
 	{
 		if (!is_string($administratorEmail))
 		{
@@ -62,6 +72,7 @@ class Shutdown implements HandlerIface
 
 		$this->administratorEmail      = $administratorEmail;
 		$this->detailedInsecureMessage = $detailedInsecureMessage;
+		$this->response                = $response;
 		$this->writer                  = $writer;
 	}
 
@@ -126,7 +137,9 @@ class Shutdown implements HandlerIface
 			      array(array('div', array('class' => 'Title'),       $title),
 			            array('div', array('class' => 'Description'), $message))));
 		$this->writer->writeEnd();
-		$this->writer->output();
+
+		$this->response->setStatus(500);
+		$this->response->setBody($this->writer);
 	}
 
 	/**

@@ -1,40 +1,145 @@
 <?php
+/**
+ * Evoke HTTP Response
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP;
 
-use LogicException;
+use InvalidArgumentException,
+	LogicException;
 
 /**
- * Response
+ * HTTP Response
  *
- * The HTTP Response.
+ * The HTTP Response as per RFC2616 and to a lesser extent RFC1945.  Links in
+ * this documentation will generally refer to RFC2616.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * It is important to understand that PHP is generally run as mod_php or under
+ * a similar environment where the HTTP response headers are calculated
+ * automatically.
+ *
+ * @link      http://tools.ietf.org/html/rfc1945
+ * @link      http://www.w3.org/Protocols/rfc2616/rfc2616.html
+ *
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP
  */
 class Response implements ResponseIface
 {
+	/**
+	 * The body of the response.
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2
+	 *
+	 * @var string
+	 */
+	protected $body = '';
+
+	/**
+	 * The headers for the response (Field_Name => Field_Value).
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6.2
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.1
+	 *
+	 * @var string[]
+	 */
+	protected $headers = array();
+
+	/**
+	 * The HTTP status code for automata (and intelligent humans).
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6.1.1
+	 *
+	 * @var int
+	 */
+	protected $statusCode;
+
+	/**
+	 * The HTTP status reason for humans.
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6.1.1
+	 *
+	 * @var string
+	 */
+	protected $statusReason;
+
+	/**
+	 * HTTP protocol version (1.0, 1.1, etc.).
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.1
+	 *
+	 * @var string
+	 */
+	protected $httpVersion;
+
+	/**
+	 * Construct a Response object.
+	 *
+	 * @param string HTTP Version (1.0, 1.1, etc.)
+	 */
+	public function __construct($httpVersion = '1.1')
+	{
+		// Ensure httpVersion matches the spec. 
+		if (!preg_match('(\d+\.\d+)', $httpVersion))
+		{
+			throw new InvalidArgumentException(
+				'HTTP Version must match Augmented BNF: 1*DIGIT "." 1*DIGIT');
+		}
+		
+		$this->httpVersion = $httpVersion;
+	}
+
 	/******************/
 	/* Public Methods */
 	/******************/
-
+	
 	/**
-	 * Redirect to a different page.
-	 *
-	 * @param string Where to redirect to.
+	 * Send the Response as per RFC2616-sec6.
 	 */
-	public function redirect($location)
+	public function send()
 	{
 		if (headers_sent())
 		{
-			throw new LogicException(
-				__METHOD__ . ' headers have already been sent.');
+			throw new LogicException('Headers have already been sent');
 		}
+        
+		if (!isset($this->statusCode))
+		{
+			throw new LogicException('HTTP Response code must be set.');
+		}
+		
+		$statusLine = 'HTTP/' . $this->httpVersion . ' ' . $this->statusCode;
+		$statusReason = $this->getStatusReason();
 
-		header('Location: ' . $location);
+		if ($statusReason)
+		{
+			$statusLine .= ' ' . $statusReason;
+		}
+		
+		header($statusLine);
+        
+		foreach ($this->headers as $field => $value)
+		{
+			header($field . ': ' . $value);
+		}
+            
+		echo $this->body;
 	}
-	
+    
+	/**
+	 * Set the body of the response.
+	 *
+	 * @param string The text to set the response body to.
+	 */
+	public function setBody($text)
+	{
+		$this->body = $text;
+	}
+    
 	/**
 	 * Set the headers to show that the document should be cached.
 
@@ -48,61 +153,104 @@ class Response implements ResponseIface
 	 */
 	public function setCache($days=0, $hours=0, $minutes=0, $seconds=0)
 	{
-		if (headers_sent())
-		{
-			throw new LogicException(
-				__METHOD__ . ' headers have already been sent.');
-		}
-      
 		// Calculate the offset in seconds.
 		$offset = ((((($days * 24) + $hours) * 60) + $minutes) * 60) + $seconds;
 
-		header('Pragma: public');
-		header('Cache-Control: must-revalidate maxage=' . $offset);
-		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
+		$this->setHeader('Pragma', 'public');
+		$this->setHeader('Cache-Control', 'must-revalidate maxage=' . $offset);
+		$this->setHeader('Expires',
+		                 gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
 	}
 
 	/**
-	 * Set the content type header for the response.
+	 * Set the header field in the response.
 	 *
-	 * @param string The content type.
+	 * The valid header fields are defined in RFC2616 sections 4.5, 6.2, 7.1.
+	 * (Note: 7.1 extension-header allows for the wide range of headers that we
+	 * match here, even though they may be ignored by clients.)
 	 */
-	public function setContentType($contentType)
+	public function setHeader($field, $value)
 	{
-		if (headers_sent())
-		{
-			throw new LogicException(
-				__METHOD__ . ' headers have already been sent.');
-		}
-
-		header('Content-Type: ' . $contentType);
+		// RFC2616-sec4.2 Field names are case-insensitive.
+		$this->headers[strtoupper($field)] = $value;
 	}
-	
+        
 	/**
-	 * Set the reponse code (200 OK, 404 Not Found, etc.)
+	 * Set the HTTP status code and reason (200 OK, 404 Not Found, etc.)
 	 *
 	 * @param int The HTTP status code.
+	 * @param string The HTTP status reason.
 	 */
-	public function setResponseCode($code)
+	public function setStatus($code, $reason = NULL)
 	{
-		if (headers_sent())
+		$this->statusCode = $code;
+		$this->statusReason = $reason;
+	}
+
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
+	/**
+	 * Get the status reason, defaulting to HTTP 1.1 recommendations.
+	 *
+	 * @return string The status reason.
+	 */
+	protected function getStatusReason()
+	{
+		if (isset($this->statusReason))
 		{
-			throw new LogicException(
-				__METHOD__ . ' headers have already been sent.');
+			return $this->statusReason;
 		}
 
-		/** http_response_code should appear in PHP 5.4, but to keep Evoke
-		 *  compatible with PHP 5.3 we only use it if it is callable.
-		 */
-		if (is_callable('http_response_code'))
+		$defaultReasons = array(
+			"100"  => "Continue",
+			"101"  => "Switching Protocols",
+			"200"  => "OK",
+			"201"  => "Created",
+			"202"  => "Accepted",
+			"203"  => "Non-Authoritative Information",
+			"204"  => "No Content",
+			"205"  => "Reset Content",
+			"206"  => "Partial Content",
+			"300"  => "Multiple Choices",
+			"301"  => "Moved Permanently",
+			"302"  => "Found",
+			"303"  => "See Other",
+			"304"  => "Not Modified",
+			"305"  => "Use Proxy",
+			"307"  => "Temporary Redirect",
+			"400"  => "Bad Request",
+			"401"  => "Unauthorized",
+			"402"  => "Payment Required",
+			"403"  => "Forbidden",
+			"404"  => "Not Found",
+			"405"  => "Method Not Allowed",
+			"406"  => "Not Acceptable",
+			"407"  => "Proxy Authentication Required",
+			"408"  => "Request Time-out",
+			"409"  => "Conflict",
+			"410"  => "Gone",
+			"411"  => "Length Required",
+			"412"  => "Precondition Failed",
+			"413"  => "Request Entity Too Large",
+			"414"  => "Request-URI Too Large",
+			"415"  => "Unsupported Media Type",
+			"416"  => "Requested range not satisfiable",
+			"417"  => "Expectation Failed",
+			"500"  => "Internal Server Error",
+			"501"  => "Not Implemented",
+			"502"  => "Bad Gateway",
+			"503"  => "Service Unavailable",
+			"504"  => "Gateway Time-out",
+			"505"  => "HTTP Version not supported");
+
+		if (isset($defaultReasons[$this->statusCode]))
 		{
-			http_response_code($code);
+			return $defaultReasons[$this->statusCode];
 		}
-		else
-		{
-			/// @todo Make a switch for the status text.
-			header('HTTP/1.0 ' . $code . ' todo status text');	
-		}
-	}
+
+		return '';
+	}    
 }
 // EOF

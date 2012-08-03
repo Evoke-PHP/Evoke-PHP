@@ -320,11 +320,12 @@ class Translations extends DataAbstract implements TranslationsIface
 				
 				return $this->tr(self::NO_TRANSLATION_FOUND) . $key;
 			}
-
-			throw new RuntimeException(
-				'Either all translations must be defined or ' .
-				self::NO_TRANSLATION_FOUND . ' must be defined for missing ' .
-				'translations.');
+			else
+			{
+				throw new RuntimeException(
+					self::NO_TRANSLATION_FOUND . ' must be defined for ' .
+					'undefined translations.');
+			}
 		}
 
 		throw new DomainException(

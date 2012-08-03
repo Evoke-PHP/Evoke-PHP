@@ -14,7 +14,7 @@ namespace Evoke\Writer;
 abstract class Writer implements WriterIface
 {
 	/**
-	 * The buffer that holds the text that has been written ready for output.
+	 * The buffer that holds the text that is to be written.
 	 * @var string
 	 */
 	protected $buffer;
@@ -46,16 +46,7 @@ abstract class Writer implements WriterIface
 	{
 		$this->buffer = '';
 	}
-	
-	/**
-	 * Output the buffer that we have written into.
-	 */
-	public function output()
-	{
-		echo $this->buffer;
-		$this->buffer = '';
-	}
-	
+		
 	/**
 	 * Write data into the buffer.
 	 *

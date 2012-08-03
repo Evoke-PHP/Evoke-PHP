@@ -4,6 +4,9 @@ namespace Evoke\HTTP;
 /**
  * ResponseIface
  *
+ * The HTTP Response interface designed to meet RFC2616-sec6 and to a lesser
+ * extent RFC1945-sec6.
+ *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
@@ -12,11 +15,16 @@ namespace Evoke\HTTP;
 interface ResponseIface
 {
 	/**
-	 * Redirect to a different page.
-	 *
-	 * @param string Where to redirect to.
+	 * Send the Response as per RFC2616-sec6, (send the headers and body).
 	 */
-	public function redirect($location);
+	public function send();
+	
+	/**
+	 * Set the body of the response.
+	 *
+	 * @param string The text to set the response body to.
+	 */
+	public function setBody($text);		
 	
 	/**
 	 * Set the headers to show that the document should be cached.
@@ -30,19 +38,21 @@ interface ResponseIface
 	 * @param int The number of seconds to cache the document for.
 	 */
 	public function setCache($days=0, $hours=0, $minutes=0, $seconds=0);
-
-	/**
-	 * Set the content type header for the response.
-	 *
-	 * @param string The content type.
-	 */
-	public function setContentType($contentType);
 	
 	/**
-	 * Set the reponse code (200 OK, 404 Not Found, etc.)
+	 * Set the header field with the given value.
+	 *
+	 * @param string The header field to set.
+	 * @param string The value to set the header field to.
+	 */
+	public function setHeader($field, $value);
+	
+	/**
+	 * Set the HTTP status code and reason (200 OK, 404 Not Found, etc.)
 	 *
 	 * @param int The HTTP status code.
+	 * @param null | string The HTTP status reason.
 	 */
-	public function setResponseCode($code);
+	public function setStatus($code, $reason = NULL);
 }
 // EOF
