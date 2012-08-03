@@ -57,7 +57,7 @@ class ProviderTest extends PHPUnit_Framework_TestCase
 	 * @covers  Evoke\Service\Provider::getDependency 
 	 * @depends Evoke_Test\Service\ProviderTest::test__construct
 	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Missing Array Dependency
+	 * @expectedExceptionMessage Missing Array Dependency for parameter: arr
 	 */
 	public function testMissingDependencyArray()
 	{

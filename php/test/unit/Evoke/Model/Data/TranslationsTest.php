@@ -202,9 +202,44 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 	 * exist.
 	 *
 	 * @covers            Evoke\Model\Data\Translations::tr
-	 * @expectedException RuntimeException
 	 */
 	public function testTranslationMissingTranslation()
+	{
+		$object = new Translations(
+			$this->getMock('Evoke\HTTP\RequestIface'),
+			array(array('Name' => 'First',
+			            'Page' => '',
+			            'FR'   => 'French is First',
+			            'TG'   => 'Tagalog',
+			            'DE'   => 'German is Third'),
+			      array('Name' => 'NO_TRANSLATION_FOUND',
+			            'Page' => '',
+			            'FR'   => 'Non_Merci_')));
+		$object->setLanguage('FR');
+		
+		$errorHandler = function($errno, $errstr)
+			{
+				echo $errno . ' ' . $errstr;
+				return true;
+			};
+
+		ob_start();
+		set_error_handler($errorHandler);
+		$this->assertSame('Non_Merci_NO_HAVE_TR', $object->tr('NO_HAVE_TR'));
+		restore_error_handler();
+
+		$this->assertStringStartsWith('512 No translation for: NO_HAVE_TR',
+		                              ob_get_clean());
+	}
+	
+	/**
+	 * Test the retrieval of NO_TRANSLATION_FOUND throws a RuntimeException if
+	 * it is not defined in the translations.
+	 *
+	 * @covers            Evoke\Model\Data\Translations::tr
+	 * @expectedException RuntimeException
+	 */
+	public function testTranslationMissingNoTranslationFound()
 	{
 		try
 		{
@@ -224,7 +259,7 @@ class TranslationsTest extends PHPUnit_Framework_TestCase
 		}
 			
 		// This should throw the RuntimeException.
-		$object->tr('NO_HAVE_TR');
+		$object->tr('NO_TRANSLATION_FOUND');
 	}
 	
 	/******************/

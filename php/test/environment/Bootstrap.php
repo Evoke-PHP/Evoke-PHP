@@ -8,5 +8,4 @@ require $evokeDir . 'Evoke/Service/Handler/Autoload.php';
 
 $evokeAutoload = new \Evoke\Service\Handler\Autoload($evokeDir, 'Evoke\\');
 $evokeAutoload->register();
-
 // EOF
