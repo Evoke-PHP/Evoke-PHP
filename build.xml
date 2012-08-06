@@ -38,10 +38,8 @@
 
   <!-- Main Target definitions -->
   <target name        = "build"
-		  description = "Check for code quality, package the code and produce
-						 reports on the built code."
+		  description = "Check for code quality produce reports on it."
 		  depends     = "check-build-sanity,
-						 package-code,
 						 create-reports"/>
 
   <target name        = "check-build-sanity"
@@ -63,13 +61,6 @@
 						 php-mess-detector,
 						 php-unit,
 						 php-code-browser"/>
-
-  <target name        = "package-code"
-		  description = "Perform any processing required to create the build.">
-	<!-- Compile the less to css.  This should be a new phing task (when I get
-		 the time to write it). -->
-	<exec executable="plessc_all"/>
-  </target>
 
   <target name        = "prepare"
 		  description = "Prepare the build directory to receive reports etc."

@@ -1,6 +1,6 @@
 <phpunit backupGlobals                      = "false"
          backupStaticAttributes             = "false"
-         bootstrap                          = "../php/test/environment/Bootstrap.php"
+         bootstrap                          = "../test/php/environment/Bootstrap.php"
          colors                             = "false"
          convertErrorsToExceptions          = "false"
          convertNoticesToExceptions         = "false"
@@ -12,13 +12,13 @@
          verbose                            = "true">
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">../../php/src</directory>
+      <directory suffix=".php">../../src/php</directory>
     </whitelist>
   </filter>
   
   <testsuites>
     <testsuite name="Evoke-PHP">
-      <directory>../../php/test/unit</directory>
+      <directory>../../test/php/unit</directory>
     </testsuite>
   </testsuites>
 </phpunit>
