@@ -17,11 +17,11 @@
 
   <property name        = "project.php_source"
 			description = "The directory for the PHP source files."
-			value       = "${project.basedir}/php/src"/>
+			value       = "${project.basedir}/src/php"/>
 
   <property name        = "project.php_test"
 			description = "The directory for the PHP test files."
-			value       = "${project.basedir}/php/test/unit"/>
+			value       = "${project.basedir}/test/php/unit"/>
 
   <property name        = "project.reports"
 			description = "Build report directory"
