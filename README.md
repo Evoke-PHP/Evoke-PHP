@@ -37,13 +37,13 @@ The master repository for the code is on github.
 
 ## Website
 EvokePHP(http://www.evokephp.com)
-You can view the complete documentation for the framework here.
+You can view the complete documentation for the library here.
 
 ## Documentation
 Full documentation is available on the website.  The documentation can also be built from the source code using doxygen.
 
 ## License
-Evoke-PHP-Framework is released under the MIT License.  See the LICENSE file.
+Evoke-PHP is released under the MIT License.  See the LICENSE file.
 
 ## Contact
 Questions or comments are encouraged.  Join the team.  I would like to add your name here!
