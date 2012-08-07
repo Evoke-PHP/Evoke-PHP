@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\XHTML;
+namespace Evoke\View;
 
 use Evoke\Model\Data\DataIface,
 	Evoke\View\ViewIface;
@@ -36,8 +36,8 @@ class Backtrace implements ViewIface
 		DataIface $data,
 		Array     $attribs = array('class' => 'Backtrace'))
 	{
-		$this->data            = $data;
-		$this->attribs         = $attribs;
+		$this->data    = $data;
+		$this->attribs = $attribs;
 	}
 
 	/******************/
@@ -56,11 +56,11 @@ class Backtrace implements ViewIface
 		$listItems = array();
 		
 		foreach ($this->data as $level => $info)
-		{			
+		{
 			$stackLineElements = array(
-				'span',
-				array('class' => 'File'),
-				empty($info['File']) ? '<internal>' : $info['File']);
+				array('span',
+				      array('class' => 'File'),
+				      empty($info['File']) ? '<internal>' : $info['File']));
 		
 			if (!empty($info['Line']))
 			{
@@ -77,7 +77,7 @@ class Backtrace implements ViewIface
 			$stackLineElements[] = array(
 				'span',	array('class' => 'Function'), $info['Function']);
 			
-			$listItems[] = array('li', array(), $stackLine);
+			$listItems[] = array('li', array(), $stackLineElements);
 		}
 
 		return array('ol', $this->attribs, $listItems);
