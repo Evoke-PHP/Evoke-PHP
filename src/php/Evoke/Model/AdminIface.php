@@ -10,7 +10,7 @@ namespace Evoke\Model;
  * @package Model
  */
 interface AdminIface
-{   
+{
 	/**
 	 * Add a record.
 	 *

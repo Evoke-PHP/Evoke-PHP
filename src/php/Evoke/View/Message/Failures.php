@@ -12,7 +12,7 @@ use Evoke\Message\TreeIface;
  * @package View
  */
 class Failures extends Tree
-{ 
+{
 	/**
 	 * Construct a Failures Message view.
 	 *

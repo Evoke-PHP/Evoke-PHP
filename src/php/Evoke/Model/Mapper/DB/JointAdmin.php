@@ -361,7 +361,8 @@ class JointAdmin extends Joint implements AdminIface
 				{
 					if (isset($currentJoint[$key]))
 					{
-						$currentJoint[$key] = array_merge($currentJoint[$key], $val);
+						$currentJoint[$key] = array_merge($currentJoint[$key],
+						                                  $val);
 					}
 					else
 					{
@@ -437,7 +438,8 @@ class JointAdmin extends Joint implements AdminIface
 	 
 			foreach ($data as &$childRecord)
 			{
-				$childRecord[$childField] = $this->sql->lastInsertID($childField);
+				$childRecord[$childField] =
+					$this->sql->lastInsertID($childField);
 			}  
 		}
        
@@ -478,7 +480,8 @@ class JointAdmin extends Joint implements AdminIface
 	 *      'Depth_First_Parent'   => NULL) // Data,          Joins.
 	 * </code></pre>
 	 *
-	 * For any one bit of data these functions are called in the following order:
+	 * For any one bit of data these functions are called in the following
+	 * order:
 	 *
 	 * <ol>
 	 *	  <li>Breadth_First_Data</li>
@@ -505,8 +508,8 @@ class JointAdmin extends Joint implements AdminIface
       
 		$this->call($callbacks, 'Breadth_First_Data', $data, $joins);
       
-		// Loop through the data record by record, recursing downwards through the
-		// joint data referenced by the joins.
+		// Loop through the data record by record, recursing downwards through
+		// the joint data referenced by the joins.
 		foreach ($data as &$record)
 		{
 			$this->call($callbacks, 'Breadth_First_Record', $record, $joins);
@@ -517,12 +520,14 @@ class JointAdmin extends Joint implements AdminIface
 	    
 				if (isset($record[$jointKey][$parentField]))
 				{
-					$this->call($callbacks, 'Breadth_First_Parent', $record, $join);
+					$this->call(
+						$callbacks, 'Breadth_First_Parent', $record, $join);
 	       
 					$record[$jointKey][$parentField] = $this->recurse(
 						$callbacks, $record[$jointKey][$parentField], $join);
 	       
-					$this->call($callbacks, 'Depth_First_Parent', $record, $join);
+					$this->call(
+						$callbacks, 'Depth_First_Parent', $record, $join);
 				}
 			}
 	 
@@ -598,9 +603,10 @@ class JointAdmin extends Joint implements AdminIface
 
 		foreach ($data as $record)
 		{
-			// We validate, ignoring the joint key field and any child and parent
-			// fields which are set automatically.
-			$ignoredFields = array($join->getJointKey(), $join->getChildField());
+			// We validate, ignoring the joint key field and any child and
+			// parent fields which are set automatically.
+			$ignoredFields = array($join->getJointKey(),
+			                       $join->getChildField());
 			$joins = $join->getJoins();
 	 
 			foreach ($joins as $j)

@@ -15,7 +15,7 @@ use Evoke\Model\Mapper\MapperIface,
  * @package Model
  */
 abstract class DB implements MapperIface
-{ 
+{
 	/** 
 	 * SQL Object
 	 * @var Evoke\Persistence\DB\SQLIface

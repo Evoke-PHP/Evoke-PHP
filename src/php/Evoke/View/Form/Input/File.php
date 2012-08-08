@@ -14,7 +14,7 @@ use Evoke\View\ViewIface;
  * @package View
  */
 class File implements ViewIface
-{ 
+{
 	/**
 	 * Construct a button/input that will enable styling to be done on the ugly
 	 * file input.  With our CSS we can control the behaviour by overlapping the

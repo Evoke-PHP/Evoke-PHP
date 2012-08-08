@@ -12,7 +12,7 @@ namespace Evoke\Writer;
  * @package Writer
  */
 class JSON extends Writer
-{	
+{
 	/******************/
 	/* Public Methods */
 	/******************/

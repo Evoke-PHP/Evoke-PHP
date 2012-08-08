@@ -13,7 +13,7 @@ use Evoke\Model\Data\DataIface,
  * @package View
  */
 class Backtrace implements ViewIface
-{ 
+{
 	/**
 	 * Data
 	 * @var Evoke\Model\Data\DataIface
