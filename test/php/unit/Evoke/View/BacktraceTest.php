@@ -66,7 +66,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 			      
 			            
 		$obj = new Backtrace($data);
-		
+
 		$this->assertSame(
 			['ol',
 			 ['class' => 'Backtrace'],
