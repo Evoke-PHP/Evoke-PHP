@@ -26,7 +26,7 @@ class Filesystem implements FilesystemIface
 		if (!chmod($filename, $mode))
 		{
 			throw new RuntimeException(
-				__METHOD__ . ' Unable to chmod: ' . var_export($filename, true));
+				'Unable to chmod: ' . var_export($filename, true));
 		}
 	}
    
@@ -67,7 +67,8 @@ class Filesystem implements FilesystemIface
 					{
 						throw new RuntimeException(
 							__METHOD__ . ' From: ' . $from . ' To: ' . $to .
-							' Copying subdirectory from:' . $src . ' to: ' . $dest);
+							' Copying subdirectory from:' . $src . ' to: ' .
+							$dest);
 					}
 
 					chmod($dest, $dirMode);

@@ -15,7 +15,7 @@ use Evoke\Model\Data\DataIface,
  * @package View
  */
 class ListElement implements ViewIface
-{ 
+{
 	/**
 	 * Data
 	 * @var Evoke\Model\Data\DataIface
@@ -45,8 +45,7 @@ class ListElement implements ViewIface
 	public function __construct(DataIface $data,
 	                            Array     $attribs,
 	                            ViewIface $listItemView,
-	                            Array     $liAttribs = array('class' => 'Row')
-	                            )
+	                            Array     $liAttribs = array('class' => 'Row'))
 	{
 		$this->data      = $data;
 		$this->attribs   = $attribs;
@@ -63,7 +62,7 @@ class ListElement implements ViewIface
 		
 		foreach ($this->data as $item)
 		{
-			$listItems[] = array('li', $this->liAttribs, $item['Text']);			                     
+			$listItems[] = array('li', $this->liAttribs, $item['Text']);
 		}
 
 		return array('ol', $this->attribs, $listItems);

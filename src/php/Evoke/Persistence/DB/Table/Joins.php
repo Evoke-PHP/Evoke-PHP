@@ -229,8 +229,8 @@ class Joins implements JoinsIface
 					$data[$rowID] = $currentTableResult;
 				}
 
-				// If this result could contain information for referenced tables
-				// lower in the heirachy set it in the joint data.
+				// If this result could contain information for referenced
+				// tables lower in the heirachy set it in the joint data.
 				if (!empty($this->joins))
 				{
 					if (!isset($data[$rowID][$this->jointKey]))
@@ -369,7 +369,8 @@ class Joins implements JoinsIface
 		{
 			foreach ($this->joins as $ref)
 			{
-				$joinStatement .= $this->buildJoin($ref) . $ref->getJoinStatement();
+				$joinStatement .= $this->buildJoin($ref) .
+					$ref->getJoinStatement();
 			}
 		}
 
@@ -581,8 +582,8 @@ class Joins implements JoinsIface
 	private function isResult($result)
 	{
 		// A non result may be an array with all NULL entries, so we cannot just
-		// check that the result array is empty.  The easiest way is just to check
-		// that there is at least one value that is set.
+		// check that the result array is empty.  The easiest way is just to
+		// check that there is at least one value that is set.
 		foreach ($result as $resultData)
 		{
 			if (isset($resultData))

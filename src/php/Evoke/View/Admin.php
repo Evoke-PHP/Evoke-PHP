@@ -57,7 +57,8 @@ class Admin implements ViewIface
 
 		if (!is_bool($editSeparately))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires editSeparately as bool');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires editSeparately as bool');
 		}
 
 		$this->info            = $info;
@@ -89,7 +90,8 @@ class Admin implements ViewIface
 		$this->writeFailures($state['Failures']);
 		$this->writeNotifications($state['Notifications']);
             
-		// Set and not false for the delete request is interpreted as requesting.
+		// Set and not false for the delete request is interpreted as
+		// requesting.
 		if ($state['Delete_Request'] !== false)
 		{
 			$this->writeDeleteRequest($state['Delete_Record']);
@@ -145,26 +147,29 @@ class Admin implements ViewIface
       
 		if ($isNew)
 		{
-			$buttonsArr[] = array('input',
-			                      array('class' => 'Add Button Good',
-			                            'name'  => 'Add',
-			                            'type'  => 'submit',
-			                            'value' => $this->translator->get('Add')));
+			$buttonsArr[] = array(
+				'input',
+				array('class' => 'Add Button Good',
+				      'name'  => 'Add',
+				      'type'  => 'submit',
+				      'value' => $this->translator->get('Add')));
 		}
 		else
 		{
-			$buttonsArr[] = array('input',
-			                      array('class' => 'Modify Button Info',
-			                            'name'  => 'Modify',
-			                            'type'  => 'submit',
-			                            'value' => $this->translator->get('Modify')));
+			$buttonsArr[] = array(
+				'input',
+				array('class' => 'Modify Button Info',
+				      'name'  => 'Modify',
+				      'type'  => 'submit',
+				      'value' => $this->translator->get('Modify')));
 		}
       
-		$buttonsArr[] = array('input',
-		                      array('class' => 'Cancel Button Bad',
-		                            'name'  => 'Cancel',
-		                            'type'  => 'submit',
-		                            'value' => $this->translator->get('Cancel')));
+		$buttonsArr[] = array(
+			'input',
+			array('class' => 'Cancel Button Bad',
+			      'name'  => 'Cancel',
+			      'type'  => 'submit',
+			      'value' => $this->translator->get('Cancel')));
       
 		return $buttonsArr;
 	}
@@ -234,7 +239,8 @@ class Admin implements ViewIface
 				      'Heading_Text'     => $this->translator-> get(
 					      'Confirm_Delete_Heading'),
 				      'Message_Views' => array($recordToDelete),
-				      'Message_Text'     => $this->translator->get('Confirm_Delete_Text'))));
+				      'Message_Text'     => $this->translator->get(
+					      'Confirm_Delete_Text'))));
 	}
    
 	/// Write a header.
@@ -262,24 +268,29 @@ class Admin implements ViewIface
 			$this->instanceManager->create(
 				'View_Record_List_Table',
 				array_merge(
-					array('Data'           => $data,
-					      'Row_Buttons'    => array(
-						      array(
-							      'input',
-							      array('class' => 'Dialog_Submit Button Info Small',
-							            'name'  => 'Edit',
-							            'type'  => 'submit',
-							            'value' => $this->translator->get('Edit'))),
-						      array(
-							      'input',
-							      array('class' => 'Dialog_Request Button Bad Small',
-							            'name'  => 'Delete_Request',
-							            'type'  => 'submit',
-							            'value' => $this->translator->get('Delete')))),
-					      'Row_Buttons_As_Form' => true,
-					      'Table_Info'          => $this->tableInfo,
-					      'Table_Name'          => $this->tableName,
-					      'Translator'          => $this->translator),
+					array(
+						'Data'           => $data,
+						'Row_Buttons'    => array(
+							array(
+								'input',
+								array('class' =>
+								      'Dialog_Submit Button Info Small',
+								      'name'  => 'Edit',
+								      'type'  => 'submit',
+								      'value' =>
+								      $this->translator->get('Edit'))),
+							array(
+								'input',
+								array('class' =>
+								      'Dialog_Request Button Bad Small',
+								      'name'  => 'Delete_Request',
+								      'type'  => 'submit',
+								      'value' =>
+								      $this->translator->get('Delete')))),
+						'Row_Buttons_As_Form' => true,
+						'Table_Info'          => $this->tableInfo,
+						'Table_Name'          => $this->tableName,
+						'Translator'          => $this->translator),
 					$this->recordListSetup)));
 	}
 }

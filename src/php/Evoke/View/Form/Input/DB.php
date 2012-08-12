@@ -130,7 +130,8 @@ class DB implements ViewIface
 
 		if (!$translator instanceof \Evoke\Core\Iface\Translator)
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' needs Translator');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' needs Translator');
 		}
       
 		parent::__construct($setup);
@@ -282,7 +283,8 @@ class DB implements ViewIface
 
 		/// The subtype either specifies the length of a field or the options a
 		/// field can contain.
-		// Get the subType as a simple number representing the length of an item.
+		// Get the subType as a simple number representing the length of an
+		// item.
 		$subType = preg_replace("/.*\(([0-9]*)\)$/", "$1", $fieldInfo['Type']);
 		// Get the subTypeArr as a list of options for an ENUM or SET type.
 		// Match the enums or sets in ENUM('a','b','c')
@@ -395,8 +397,9 @@ class DB implements ViewIface
 				//   -1234567e-3 (11 chars) vs 1234.567 (8 chars) vs
 				//   -123456.7e-2 (12 chars)
 	    
-				// We allow entry of a sign character, decimal character, exponent
-				// character, exponent sign and 2 exponent digits (6 extras).
+				// We allow entry of a sign character, decimal character,
+				// exponent character, exponent sign and 2 exponent digits (6
+				// extras).
 				$entryLength = $subTypeArr[0] + 6;
 
 				// We allow display of a sign character and decimal character.
@@ -463,7 +466,8 @@ class DB implements ViewIface
 			break;
 
 		default:
-			throw new \OutOfBoundsException(__METHOD__ . ' Unknown type: ' . $type);
+			throw new \OutOfBoundsException(
+				__METHOD__ . ' Unknown type: ' . $type);
 		}
 
 		return $elems;

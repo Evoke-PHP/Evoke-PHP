@@ -65,8 +65,10 @@ class Trim extends Rule
 	public function isMatch($uri)
 	{
 		return (
-			preg_match('/^[' . preg_quote($this->characters, '/') . ']+/', $uri) ||
-			preg_match('/[' . preg_quote($this->characters, '/') . ']+$/', $uri));
+			preg_match(
+				'/^[' . preg_quote($this->characters, '/') . ']+/', $uri) ||
+			preg_match(
+				'/[' . preg_quote($this->characters, '/') . ']+$/', $uri));
 	}	
 }
 // EOF

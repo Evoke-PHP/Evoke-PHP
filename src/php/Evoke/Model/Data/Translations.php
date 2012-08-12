@@ -242,8 +242,8 @@ class Translations extends DataAbstract implements TranslationsIface
 			if (!$this->hasLanguage($lang))
 			{
 				throw new DomainException(
-					__METHOD__ . ' Language must be valid for the translator. ' .
-					'Unknown language: ' . var_export($lang, true));
+					__METHOD__ . ' Language must be valid for the ' .
+					'translator. Unknown language: ' . var_export($lang, true));
 			}
 			
 			$this->currentLanguage = $lang;

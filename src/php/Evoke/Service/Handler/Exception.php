@@ -124,14 +124,14 @@ class Exception implements HandlerIface
 
 			if ($loggedError)
 			{
-				$message = 'El administrador ha estado notificado del error.  ' .
-					'Perdon, vamos a arreglarlo.';
+				$message = 'El administrador ha estado notificado del error.  '
+					. 'Perdon, vamos a arreglarlo.';
 			}
 			else
 			{
 				$message =
-					'No pudimos notificar el administrador de esta problema.  ' .
-					'Por favor llamanos, queremos arreglarlo.';
+					'No pudimos notificar el administrador de esta problema.  '
+					. 'Por favor llamanos, queremos arreglarlo.';
 			}
 		}
 		else
@@ -140,8 +140,8 @@ class Exception implements HandlerIface
 
 			if ($loggedError)
 			{
-				$message = 'The administrator has been notified of this error.  ' .
-					'Sorry, we will fix this.';
+				$message = 'The administrator has been notified of this ' .
+					'error.  Sorry, we will fix this.';
 			}
 			else
 			{
@@ -156,14 +156,16 @@ class Exception implements HandlerIface
 		{
 			$exceptionMessage = (string)($uncaughtException);
 
-			// If the exception is huge, only include the start and end on screen.
+			// If the exception is huge, only include the start and end on
+			// screen.
 			if ($loggedError && $this->maxLengthExceptionMessage > 0 &&
 			    mb_strlen($exceptionMessage) > $this->maxLengthExceptionMessage)
 			{
 				$halfMessage = $this->maxLengthExceptionMessage / 2;
-				$exceptionMessage = mb_substr($exceptionMessage, 0, $halfMessage) .
-					"\n\n <<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>> \n\n" .
-					mb_substr($exceptionMessage, -$halfMessage);
+				$exceptionMessage =
+					mb_substr($exceptionMessage, 0, $halfMessage) . "\n\n" .
+					'<<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>>' .
+					"\n\n" . mb_substr($exceptionMessage, -$halfMessage);
 			}
 
 			$message .= "\n\n" . $exceptionMessage;
@@ -208,7 +210,7 @@ class Exception implements HandlerIface
 	 */
 	public function unregister()
 	{
-		return restore_exception_handler();      
+		return restore_exception_handler();
 	}
 }
 // EOF

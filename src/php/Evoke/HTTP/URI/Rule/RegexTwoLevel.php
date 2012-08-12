@@ -170,18 +170,21 @@ class RegexTwoLevel extends Rule
 
 		foreach ($this->params as $paramSpec)
 		{
-			if (!isset($paramSpec['Name'], $paramSpec['Required'], $paramSpec['Value']))
+			if (!isset($paramSpec['Name'],
+			           $paramSpec['Required'],
+			           $paramSpec['Value']))
 			{
 				throw new DomainException(
-					__METHOD__ . ' param spec: ' . var_export($paramSpec, true) .
+					__METHOD__ . ' param spec: ' .
+					var_export($paramSpec, true) .
 					' does not follow Name, Required, Value format.');
 			}
 	      
 			try
 			{
 				// getMappedValue will throw an UnexpectedValueException if the
-				// second level regex does not match.  This is fine if the parameter
-				// is not required.
+				// second level regex does not match.  This is fine if the
+				// parameter is not required.
 				$params[$this->getMappedValue($paramSpec['Name'], $uri)] =
 					$this->getMappedValue($paramSpec['Value'], $uri);
 			}

@@ -68,8 +68,8 @@ class Error implements HandlerIface
 		}
 		
 		// Allow PHP to perform its normal reporting of errors.  We have
-		// augmented it with our own writing of the error which used our built-in
-		// xml writing.
+		// augmented it with our own writing of the error which used our
+		// built-in xml writing.
 		return false;
 	}
 

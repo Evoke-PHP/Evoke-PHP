@@ -92,7 +92,8 @@ class Info implements InfoIface
 			array(),
 			1);
       
-		$this->description = $this->sql->getAssoc('DESCRIBE ' . $this->tableName);
+		$this->description = $this->sql->getAssoc(
+			'DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
 		$this->calculateRequiredFields();
@@ -475,7 +476,7 @@ class Info implements InfoIface
 		{
 			$this->failures->add($key, 'Overflow_Error');
 			$this->failures->add($key, 'STRLEN: ' . var_export($val, true) .
-			                              ' Allowed: ' . var_export($subType, true));
+			                     ' Allowed: ' . var_export($subType, true));
 			return false;
 		}
 		else

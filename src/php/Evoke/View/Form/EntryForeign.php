@@ -64,7 +64,8 @@ class EntryForeign extends Entry
 			return parent::buildInput($description, $fieldSetup);
 		}
       
-		return $this->buildForeignInput($description, $fieldSetup, $foreignKeys);
+		return $this->buildForeignInput(
+			$description, $fieldSetup, $foreignKeys);
 	}
 
 	/** Build the foreign input to the form.

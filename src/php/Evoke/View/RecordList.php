@@ -354,8 +354,8 @@ class RecordList implements ViewIface
 
 		foreach ($fields as $field)
 		{
-			// Use a different label if one has been specified by the label array
-			// or a translation is required.
+			// Use a different label if one has been specified by the label
+			// array or a translation is required.
 			if (isset($this->labels[$field]))
 			{
 				$headingText = $this->labels[$field];

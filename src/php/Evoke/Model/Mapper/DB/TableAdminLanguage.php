@@ -51,7 +51,8 @@ class TableAdminLanguage extends TableAdmin
 					else
 					{
 						$newField =
-							$langField['Field_Name'] . '_' . $record['Language'];
+							$langField['Field_Name'] . '_' .
+							$record['Language'];
 					}
 	       
 					$this->sql->addColumn($langField['Table_Name'],
@@ -116,7 +117,8 @@ class TableAdminLanguage extends TableAdmin
 						$dropField = $langField['Field_Name'] . '_' . $dropLang;
 					}
 	       
-					$this->sql->dropColumn($langField['Table_Name'], $dropField);
+					$this->sql->dropColumn($langField['Table_Name'],
+					                       $dropField);
 				}
 
 				$this->sql->commit();
@@ -128,8 +130,8 @@ class TableAdminLanguage extends TableAdmin
 		}
 		catch (Exception $e)
 		{
-			$msg = 'Failure deleting language from database due to exception:  ' .
-				$e->getMessage();
+			$msg = 'Failure deleting language from database due to exception:  '
+				. $e->getMessage();
 
 			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,
@@ -183,9 +185,11 @@ class TableAdminLanguage extends TableAdmin
 						}
 						else
 						{
-							$oldField = $langField['Field_Name'] . '_' . $oldLang;
+							$oldField = $langField['Field_Name'] . '_' .
+								$oldLang;
 							$newField =
-								$langField['Field_Name'] . '_' . $record['Language'];
+								$langField['Field_Name'] . '_' .
+								$record['Language'];
 						}
 	       
 						$this->sql->changeColumn($langField['Table_Name'],
@@ -204,8 +208,8 @@ class TableAdminLanguage extends TableAdmin
 		}
 		catch (Exception $e)
 		{
-			$msg = 'Failure modifying language in database due to exception:  ' .
-				$e->getMessage();
+			$msg = 'Failure modifying language in database due to exception:  '
+				. $e->getMessage();
 	 
 			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
 			                                         'Message' => $msg,

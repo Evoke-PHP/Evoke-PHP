@@ -80,7 +80,8 @@ class Foreign extends DB
 			     $forKeyData[
 				     $this->selectedFields['Field']]))
 			{
-				$attribs = array_merge($attribs, array('selected' => 'selected'));
+				$attribs = array_merge($attribs,
+				                       array('selected' => 'selected'));
 			}
 	 
 			$optionElements[] = array('option', $attribs, $options);

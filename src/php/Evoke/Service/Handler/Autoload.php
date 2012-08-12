@@ -116,11 +116,11 @@ class Autoload implements HandlerIface
 			trigger_error(
 				__METHOD__ . ' Authoritative autoloader can\'t load: ' .
 				$filename);
-			// We are the authoritative autoloader for the namespace - If we can't
-			// find it no-one can.
+			// We are the authoritative autoloader for the namespace - If we
+			// can't find it no-one can.
 			throw new RuntimeException(
-				__METHOD__ . ' filename: ' . $filename . ' does not exist for ' .
-				'authoritative autoloader.');
+				__METHOD__ . ' filename: ' . $filename .
+				' does not exist for authoritative autoloader.');
 		}
 	}
 

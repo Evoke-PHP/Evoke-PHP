@@ -126,24 +126,25 @@ class RecordList implements ViewIface
 		/// @todo Fix to new View interface.
 		throw new \RuntimeException('Fix to new view interface.');
 
-		$setup += array('Content_Attribs'     => array('class' => 'Content'),
-		                'Data'                => NULL,
-		                'Data_Attribs'        => array('class' => 'Data'),
-		                'Default_Attribs'     => array('class' => 'Record_List'),
-		                'Edited_Record'       => array(),
-		                'Empty_Data_Attribs'  => array('class' => 'Empty Data'),
-		                'Fields'              => array(),
-		                'Heading_Setup'       => NULL,	    
-		                'Ignored_Fields'      => array('Joint_Data'),
-		                'Labels'              => array(),
-		                'Primary_Keys'        => array(),
-		                'Row_Attribs'         => array('class' => 'Row'),
-		                'Row_Buttons'         => NULL,
-		                'Row_Buttons_As_Form' => true,
-		                'Row_Buttons_Attribs' => array('class' => 'Row_Buttons'),
-		                'Table_Name'          => NULL,
-		                'Translate_Labels'    => true,
-		                'Translator'          => NULL);
+		$setup += array(
+			'Content_Attribs'     => array('class' => 'Content'),
+			'Data'                => NULL,
+			'Data_Attribs'        => array('class' => 'Data'),
+			'Default_Attribs'     => array('class' => 'Record_List'),
+			'Edited_Record'       => array(),
+			'Empty_Data_Attribs'  => array('class' => 'Empty Data'),
+			'Fields'              => array(),
+			'Heading_Setup'       => NULL,	    
+			'Ignored_Fields'      => array('Joint_Data'),
+			'Labels'              => array(),
+			'Primary_Keys'        => array(),
+			'Row_Attribs'         => array('class' => 'Row'),
+			'Row_Buttons'         => NULL,
+			'Row_Buttons_As_Form' => true,
+			'Row_Buttons_Attribs' => array('class' => 'Row_Buttons'),
+			'Table_Name'          => NULL,
+			'Translate_Labels'    => true,
+			'Translator'          => NULL);
 
 		if (!isset($data))
 		{
@@ -458,8 +459,8 @@ class RecordList implements ViewIface
 
 		foreach ($fields as $field)
 		{
-			// Use a different label if one has been specified by the label array
-			// or a translation is required.
+			// Use a different label if one has been specified by the label
+			// array or a translation is required.
 			if (isset($this->labels[$field]))
 			{
 				$headingText = $this->labels[$field];

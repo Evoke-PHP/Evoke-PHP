@@ -115,9 +115,10 @@ class Checkboxes extends Form
 			{
 				throw new \InvalidArgumentException(
 					__METHOD__ . ' Record: ' . var_export($record, true) .
-					' at key: ' . $key . ' does not contain the required fields ' .
-					'Text_Field: ' . $this->textField .
-					' and Value_Field: ' . $this->valueField);
+					' at key: ' . $key .
+					' does not contain the required fields Text_Field: ' .
+					$this->textField . ' and Value_Field: ' .
+					$this->valueField);
 			}
 	 
 			$id = $this->prefix . $record[$this->valueField];

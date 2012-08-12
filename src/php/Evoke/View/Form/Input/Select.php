@@ -76,7 +76,8 @@ class Select implements ViewIface
 
 		if (!is_string($valueField))
 		{
-			throw new InvalidArgumentException(__METHOD__ . ' requires valueField as string');
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires valueField as string');
 		}
 
 		$this->attribs       = $attribs;
@@ -120,8 +121,8 @@ class Select implements ViewIface
 		if (empty($fullData))
 		{
 			throw new RuntimeException(
-				__METHOD__ . ' cannot set select element without having options ' .
-				'to select from (The XHTML would be invalid).');
+				__METHOD__ . ' cannot set select element without having ' .
+				'options to select from (The XHTML would be invalid).');
 		}
 
 		$optionElements = array();
@@ -133,8 +134,8 @@ class Select implements ViewIface
 			{
 				throw new InvalidArgumentException(
 					__METHOD__ . ' Record: ' . var_export($record, true) .
-					' at key: ' . $key . ' does not contain the required fields ' .
-					'Text_Field: ' . $this->textField .
+					' at key: ' . $key . ' does not contain the required ' .
+					'fields Text_Field: ' . $this->textField .
 					' and Value_Field: ' . $this->valueField);
 			}
 

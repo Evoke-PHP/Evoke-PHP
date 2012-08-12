@@ -35,7 +35,7 @@ class Exact extends Match
 	 * @param string[] Fields that are to be ignored in the match.
 	 */
 	public function __construct(/* String */ $outputFormat,
-	                            Array        $match,	                            
+	                            Array        $match,
 	                            Array        $ignoredFields = array('Q_Factor'))
 	{
 		parent::__construct($outputFormat, $match);

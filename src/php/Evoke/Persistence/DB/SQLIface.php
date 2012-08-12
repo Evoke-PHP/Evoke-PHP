@@ -105,7 +105,8 @@ interface SQLIface extends DBIface
 	 *
 	 * @return mixed[] The data returned by the query.
 	 */	
-	public function select($tables, $fields, $conditions='', $order='', $limit=0, $distinct=false);
+	public function select($tables, $fields, $conditions='', $order='',
+	                       $limit=0, $distinct=false);
 
 	/**
 	 * Get a single value result from an sql select statement.

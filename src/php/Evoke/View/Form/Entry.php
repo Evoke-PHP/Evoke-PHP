@@ -113,9 +113,9 @@ class Entry extends Form
 					{
 						$groupElements[] = $this->buildRow(
 							$this->buildInput(
-								array_merge(
-									array('Field_Info' => $tableDescription[$field]),
-									$this->getFieldSetup($field))));
+								array_merge(array('Field_Info' =>
+								                  $tableDescription[$field]),
+								            $this->getFieldSetup($field))));
 					}
 				}
 
@@ -140,7 +140,8 @@ class Entry extends Form
 					$this->buildRow(
 						$this->buildInput(
 							array_merge(array('Field_Info' => $fieldInfo),
-							            $this->getFieldSetup($fieldDescription))),
+							            $this->getFieldSetup($fieldDescription)
+								)),
 						isset($this->highlighted[$fieldDescription])));
 			}
 		}

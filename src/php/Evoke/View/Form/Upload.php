@@ -65,10 +65,12 @@ class Upload extends Form
 			            array('type' => 'file',
 			                  'id'   => $this->uploadSetup['Upload_ID'],
 			                  'name' => $this->uploadSetup['Upload_File'],
-			                  'size' => $this->uploadSetup['Upload_Field_Size'])),
+			                  'size' => $this->uploadSetup[
+				                  'Upload_Field_Size'])),
 			      array('input',
 			            array('type' => 'submit',
-			                  'value' => $this->uploadSetup['Upload_Button']))));
+			                  'value' => $this->uploadSetup[
+				                  'Upload_Button']))));
 
 		$upload = array(
 			'div',

@@ -80,7 +80,8 @@ class TableAdminTranslation extends TableAdmin
 			trigger_error(
 				'Failure adding translation to database due to exception:  ' .
 				$e->getMessage(), E_USER_WARNING);	 
-			$this->failures->add('Failure Adding Language', 'Sys_Admin_Notified');
+			$this->failures->add('Failure Adding Language',
+			                     'Sys_Admin_Notified');
 			$this->sql->rollBack();
 		}
 	}

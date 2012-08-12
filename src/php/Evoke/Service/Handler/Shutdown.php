@@ -113,9 +113,9 @@ class Shutdown implements HandlerIface
       
 		$title = 'Fatal Error';
 		$message = 'This is an error that we were unable to handle.  Please ' .
-			'tell us any information that could help us avoid this error in the ' .
-			'future.  Useful information such as the date, time and what you ' .
-			'were doing when the error occurred should help us fix this.';
+			'tell us any information that could help us avoid this error in ' .
+			'the future.  Useful information such as the date, time and what ' .
+			'you were doing when the error occurred should help us fix this.';
 
 		if (!empty($this->administratorEmail))
 		{
@@ -135,7 +135,8 @@ class Shutdown implements HandlerIface
 			array('div',
 			      array('class' => 'Shutdown_Handler Message_Box System'),
 			      array(array('div', array('class' => 'Title'),       $title),
-			            array('div', array('class' => 'Description'), $message))));
+			            array('div', array('class' => 'Description'), $message)
+				      )));
 		$this->writer->writeEnd();
 
 		$this->response->setStatus(500);

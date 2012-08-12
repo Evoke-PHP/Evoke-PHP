@@ -44,12 +44,14 @@ class Dialog implements ViewIface
 
 		if (!isset($data['Content']))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Content');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Content');
 		}
 
 		if (!isset($data['Heading']))
 		{
-			throw new \InvalidArgumentException(__METHOD__ . ' requires Heading');
+			throw new \InvalidArgumentException(
+				__METHOD__ . ' requires Heading');
 		}
       
 		$dialogItems = array(

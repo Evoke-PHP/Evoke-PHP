@@ -437,7 +437,8 @@ class SQL implements SQLIface
 		{
 			throw new ExceptionDB(
 				__METHOD__,
-				'Exception Raised for query: ' . var_export($queryString, true) .
+				'Exception Raised for query: ' .
+				var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->db,
 				$e);
@@ -474,7 +475,8 @@ class SQL implements SQLIface
 		{
 			throw new ExceptionDB(
 				__METHOD__,
-				'Exception Raised for query: ' . var_export($queryString, true) .
+				'Exception Raised for query: ' .
+				var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->db,
 				$e);
@@ -512,7 +514,8 @@ class SQL implements SQLIface
 		{
 			throw new ExceptionDB(
 				__METHOD__,
-				'Exception Raised for query: ' . var_export($queryString, true) .
+				'Exception Raised for query: ' .
+				var_export($queryString, true) .
 				' params: ' . var_export($params, true),
 				$this->db,
 				$e);
@@ -531,12 +534,13 @@ class SQL implements SQLIface
 	 *
 	 * @return mixed[] The data returned by the query.
 	 */	
-	public function select($tables, $fields, $conditions='', $order='', $limit=0,
-	                       $distinct=false)
+	public function select($tables, $fields, $conditions='', $order='',
+	                       $limit=0, $distinct=false)
 	{
 		try
 		{
-			// SELECT fields FROM tables WHERE conditions ORDER BY order LIMIT lim
+			// SELECT fields FROM tables WHERE conditions ORDER BY order
+			// LIMIT lim
 			$q  = 'SELECT ';
 	 
 			if ($distinct)
@@ -644,7 +648,8 @@ class SQL implements SQLIface
 
 		if (!empty($conditions))
 		{
-			$q .= ' WHERE ' . $this->placeholdersKeyed($conditions, '=', ' AND ');
+			$q .= ' WHERE ' . $this->placeholdersKeyed(
+				$conditions, '=', ' AND ');
 		}
       
 		if (!empty($limit) && $limit !== 0)
@@ -733,8 +738,8 @@ class SQL implements SQLIface
 						$str .= $key . $between . $val . $separator;
 					}
 	       
-					// The array is not empty so we can cut the last separator which
-					// has definitely been added to str.
+					// The array is not empty so we can cut the last separator
+					// which has definitely been added to str.
 					$str = substr($str, 0, -1 * strlen((string)$separator));
 				}
 	 
@@ -805,8 +810,8 @@ class SQL implements SQLIface
 	private function placeholdersKeyed(
 		$arg, $between='=', $separator=' AND ')
 	{
-		/** \todo Fix for NULL placeholders.  So where conditions can accept NULL
-		 *  values.
+		/** \todo Fix for NULL placeholders.  So where conditions can accept
+		 *  NULL values.
 		 */
 		try
 		{
@@ -821,8 +826,8 @@ class SQL implements SQLIface
 						$str .= $key . $between . '?' . $separator;
 					}
 	       
-					// The array is not empty so we can cut the last separator which
-					// has definitely been added to str.
+					// The array is not empty so we can cut the last separator
+					// which has definitely been added to str.
 					$str = substr($str, 0, -1 * strlen((string)$separator));
 				}
 	 

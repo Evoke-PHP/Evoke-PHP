@@ -95,7 +95,8 @@ class File implements LoggerIface
 
 		if (!is_bool($locking))
 		{
-			throw new InvalidArgumentException(__METHOD__ . ' requires locking as bool');
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires locking as bool');
 		}
 
 		$this->append     = $append;
@@ -125,7 +126,8 @@ class File implements LoggerIface
 		}
       
 		// Ensure the message is a string.
-		$entry = $date->format('Y-M-d@H:i:sP') . ' [' . $level . '] ' . $message . "\n";
+		$entry = $date->format('Y-M-d@H:i:sP') . ' [' . $level . '] ' .
+			$message . "\n";
 
 		// Write to the file, with or without file locking.
 		if ($this->locking)
