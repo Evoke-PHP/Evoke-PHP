@@ -30,9 +30,9 @@ class Submit implements ViewIface
 		$this->attribs = $attribs;
 	}
 	
-   /******************/
-   /* Public Methods */
-   /******************/
+	/******************/
+	/* Public Methods */
+	/******************/
 
 	/**
 	 * Get the submit view with any further attributes specified.

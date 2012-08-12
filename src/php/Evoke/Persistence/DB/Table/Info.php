@@ -17,7 +17,7 @@ use Evoke\Message\TreeIface,
  * @package Persistence
  */
 class Info implements InfoIface
-{ 
+{
 	/**
 	 * The create information for the database table.
 	 * @var string
@@ -560,9 +560,9 @@ class Info implements InfoIface
 			return false;
 		}
 
-		// Check for overflow of the integer portion of the number. Decimal place
-		// overflow is ignored but this function could be overriden if it is
-		// required.
+		// Check for overflow of the integer portion of the number. Decimal
+		// place overflow is ignored but this function could be overriden if it
+		// is required.
 		$floatSpec = explode(',', $subType);
 		$totalDigits = $floatSpec[0];
 		$decimalPlaces = 0;

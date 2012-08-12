@@ -62,6 +62,13 @@ interface SessionManagerIface
 	public function increment($key, $offset=1);
    
 	/**
+	 * Return whether the session domain is empty or not.
+	 *
+	 * @return bool
+	 */
+	public function isEmpty();
+
+	/**
 	 * Return whether the key is set to the specified value.
 	 *
 	 * @param mixed The session key to check.
@@ -69,14 +76,7 @@ interface SessionManagerIface
 	 *
 	 * @return bool
 	 */
-	public function is($key, $val);
-
-	/**
-	 * Return whether the session domain is empty or not.
-	 *
-	 * @return bool
-	 */
-	public function isEmpty();
+	public function isEqual($key, $val);
 
 	/**
 	 * Whether the key has been set in the session domain.

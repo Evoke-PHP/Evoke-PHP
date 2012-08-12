@@ -12,7 +12,7 @@ use DateTime;
  * @package Service
  */
 class Log implements LogIface
-{ 
+{
 	/**
 	 * DateTime for each log message.
 	 * @var DateTime

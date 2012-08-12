@@ -147,20 +147,6 @@ class SessionManager implements SessionManagerIface
 	}
    
 	/**
-	 * Return whether the key is set to the specified value.
-	 *
-	 * @param mixed The session key to check.
-	 * @param mixed The value to check it against.
-	 *
-	 * @return bool
-	 */
-	public function is($key, $val)
-	{
-		$session = $this->getAccess();
-		return (isset($session[$key]) && ($session[$key] === $val));
-	}
-
-	/**
 	 * Return whether the session domain is empty or not.
 	 *
 	 * @return bool
@@ -171,6 +157,19 @@ class SessionManager implements SessionManagerIface
 		return empty($session);
 	}
 
+	/**
+	 * Return whether the key is set to the specified value.
+	 *
+	 * @param mixed The session key to check.
+	 * @param mixed The value to check it against.
+	 *
+	 * @return bool
+	 */
+	public function isEqual($key, $val)
+	{
+		$session = $this->getAccess();
+		return (isset($session[$key]) && ($session[$key] === $val));
+	}
    
 	/**
 	 * Whether the key has been set in the session domain.

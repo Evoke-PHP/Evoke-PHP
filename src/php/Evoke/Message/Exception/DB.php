@@ -12,7 +12,7 @@ namespace Evoke\Message\Exception;
  * @package Message
  */
 class DB extends \Exception
-{ 
+{
 	/**
 	 * Create a Database exception class that captures the errorCode and
 	 * errorInfo from the database that has thrown an exception.

@@ -10,7 +10,7 @@ use FilesystemIterator,
  *  File stream contexts are not dealt with by this wrapper.
  */
 class Filesystem implements FilesystemIface
-{   
+{
 	/******************/
 	/* Public Methods */
 	/******************/

@@ -13,7 +13,7 @@ use InvalidArgumentException,
  * @package Model
  */
 class Backtrace implements MapperIface
-{ 
+{
 	/** 
 	 * The number of levels up the stack to start the backtrace from.
 	 * @var int

@@ -522,9 +522,9 @@ class Joins implements JoinsIface
 		return $id;
 	}
       
-   /*******************/
-   /* Private Methods */
-   /*******************/
+	/*******************/
+	/* Private Methods */
+	/*******************/
    
 	/**
 	 * Build the join from the join components.

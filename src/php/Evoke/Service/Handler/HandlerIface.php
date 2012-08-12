@@ -10,7 +10,7 @@ namespace Evoke\Service\Handler;
  * @package Service
  */
 interface HandlerIface
-{ 
+{
 	/**
 	 * Register the handler.
 	 */

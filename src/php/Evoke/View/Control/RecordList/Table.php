@@ -12,7 +12,7 @@ namespace Evoke\View\Control\RecordList;
  * @package View
  */
 class Table extends RecordList
-{ 
+{
 	/// @todo Fix to new View interface.
 	public function __construct(Array $setup)
 	{

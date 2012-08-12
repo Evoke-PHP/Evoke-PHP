@@ -10,7 +10,7 @@ namespace Evoke\View\Control\RecordList;
  * @package View
  */
 class NoButtons extends RecordList
-{ 
+{
 	/*********************/
 	/* Protected Methods */
 	/*********************/

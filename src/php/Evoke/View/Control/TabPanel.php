@@ -12,7 +12,7 @@ use Evoke\View\ViewIface;
  * @package View
  */
 class TabPanel implements ViewIface
-{ 
+{
 	/**
 	 * @todo Fix to the new view interface.
 	 */
