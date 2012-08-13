@@ -259,20 +259,22 @@ class Info implements InfoIface
 	 */
 	protected function calculateKeyInfo()
 	{
-		$pK_STR = 'PRIMARY KEY';
-		$fK_STR = 'FOREIGN KEY';
+		$primaryStr = 'PRIMARY KEY';
+		$foreignStr = 'FOREIGN KEY';
 
 		// Set the key arrays to blank.
 		$this->primaryKeys = array();
 		$this->foreignKeys = array();
 
 		$createInfoArr = explode("\n", $this->createInfo);
-		$primaryKeyLinesArr = preg_grep("/$pK_STR/", $createInfoArr);
-		$foreignKeyLinesArr = preg_grep("/$fK_STR/", $createInfoArr);
+		$primaryKeyLinesArr = preg_grep('/' . $primaryStr . '/',
+		                                $createInfoArr);
+		$foreignKeyLinesArr = preg_grep('/' . $foreignStr . '/',
+		                                $createInfoArr);
 
 		foreach ($primaryKeyLinesArr as $primaryKeyLine)
 		{
-			preg_match('/.*' . $pK_STR . '\s*\(`([^`]*)`\)/',
+			preg_match('/.*' . $primaryStr . '\s*\(`([^`]*)`\)/',
 			           $primaryKeyLine,
 			           $matches);
 
@@ -288,7 +290,7 @@ class Info implements InfoIface
 		foreach ($foreignKeyLinesArr as $foreignKeyLine)
 		{
 			preg_match(
-				'/.*' . $fK_STR . '\s*\(`([^`]*)`\) REFERENCES `([^`]*)` ' .
+				'/.*' . $foreignStr . '\s*\(`([^`]*)`\) REFERENCES `([^`]*)` ' .
 				'\(`([^`]*)`\)/',
 				$foreignKeyLine,
 				$keyArr);
