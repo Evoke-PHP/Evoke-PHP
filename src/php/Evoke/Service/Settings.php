@@ -34,8 +34,8 @@ class Settings implements SettingsIface
 	 * @param mixed[] The initial frozen settings.
 	 * @param mixed[] The initial variable settings.
 	 */
-	public function __construct(Array $frozen=array(),
-	                            Array $variable=array())
+	public function __construct(Array $frozen   = array(),
+	                            Array $variable = array())
 	{
 		$this->frozen   = $frozen;
 		$this->variable = $variable;

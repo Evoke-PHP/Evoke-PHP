@@ -21,6 +21,18 @@ use DomainException,
  */
 abstract class Controller
 {
+	/**
+	 * HTTP Method (POST, GET, PUT, DELETE, etc.).
+	 * @var string
+	 */
+	protected $method;
+
+	/**
+	 * Output format as an uppercase string (JSON, XHTML, etc.)
+	 * @var string
+	 */
+	protected $outputFormat;
+	
 	/** 
 	 * Setup for the page based output formats (XHTML, HTML5).
 	 * @var mixed[]
@@ -60,26 +72,32 @@ abstract class Controller
 	/**
 	 * Construct the Controller.
 	 *
+	 * @param string                      Method (POST, GET, PUT, DELETE, etc.)
+	 * @param string                      The output format to use in uppercase.
+	 * @param mixed[]					  Parameters.
 	 * @param Evoke\Service\ProviderIface Provider object.
 	 * @param Evoke\HTTP\RequestIface     Request object.
 	 * @param Evoke\HTTP\ResponseIface 	  Response object.
 	 * @param Evoke\Writer\WriterIface 	  Writer object.
-	 * @param mixed[]					  Parameters.
 	 * @param mixed[]					  Setup for page based output formats.
 	 */
-	public function __construct(ProviderIface $provider,
+	public function __construct(/* String */  $method,
+	                            /* String */  $outputFormat,
+	                            Array         $params,
+	                            ProviderIface $provider,
 	                            RequestIface  $request,
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
-	                            Array         $params,
 	                            Array         $pageSetup = array())
 	{
-		$this->pageSetup = $pageSetup;
-		$this->params    = $params;
-		$this->provider	 = $provider;
-		$this->request 	 = $request;
-		$this->response	 = $response;
-		$this->writer    = $writer;
+		$this->method  	    = $method;
+		$this->outputFormat = $outputFormat;
+		$this->pageSetup    = $pageSetup;
+		$this->params  	    = $params;
+		$this->provider	   	= $provider;
+		$this->request 	   	= $request;
+		$this->response	   	= $response;
+		$this->writer  	    = $writer;
 	}
 	
 	/******************/
@@ -87,12 +105,8 @@ abstract class Controller
 	/******************/
 
 	/**
-	 * Execute the controller responding to the request method in the correct
-	 * output format.
-	 *
-	 * @param string The Request method (POST, GET, PUT, DELETE, etc.)
-	 * @param string The output format to use in uppercase.
+	 * Execute the controller.
 	 */
-	abstract public function execute($method, $outputFormat);
+	abstract public function execute();
 }
 // EOF

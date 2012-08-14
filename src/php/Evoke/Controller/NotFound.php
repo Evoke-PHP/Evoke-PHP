@@ -12,15 +12,11 @@ namespace Evoke\Controller;
 class NotFound extends Controller
 {
 	/**
-	 * Execute the controller responding to the request method in the correct
-	 * output format.
-	 *
-	 * @param string The Request method (POST, GET, PUT, DELETE, etc.)
-	 * @param string The output format to use in uppercase.
+	 * Execute the controller.
 	 */
-	public function execute($method, $outputFormat)
+	public function execute()
 	{
-		switch ($outputFormat)
+		switch ($this->outputFormat)
 		{
 		case 'JSON':
 			$this->writer->write(array('Code' => '404',
@@ -40,7 +36,7 @@ class NotFound extends Controller
 			$this->writer->writeEnd();
 			break;
 		}
-		
+
 		$this->response->setStatus(404);
 		$this->response->setBody($this->writer);
 		$this->response->send();

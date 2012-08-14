@@ -12,13 +12,9 @@ namespace Evoke\Controller;
 class Error extends Controller
 {
 	/**
-	 * Execute the controller responding to the request method in the correct
-	 * output format.
-	 *
-	 * @param string The Request method (POST, GET, PUT, DELETE, etc.)
-	 * @param string The output format to use in uppercase.
+	 * Execute the controller.
 	 */
-	public function execute($method, $outputFormat)
+	public function execute()
 	{			
 		$currentBuffer = (string)($this->writer);
 
@@ -30,7 +26,7 @@ class Error extends Controller
 			$this->writer->flush();
 		}
 
-		switch ($outputFormat)
+		switch ($this->outputFormat)
 		{
 		case 'JSON':
 			$this->writer->write(array('Code'    => '500',
