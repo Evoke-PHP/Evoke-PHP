@@ -1,4 +1,9 @@
 <?php
+/**
+ * SessionManager
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence;
 
 /**
@@ -61,6 +66,9 @@ class SessionManager implements SessionManagerIface
 
 	/**
 	 * Ensure the session is started and the session domain is set or created.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)
 	 */
 	public function ensure()
 	{
@@ -99,6 +107,9 @@ class SessionManager implements SessionManagerIface
 	 * Get the session domain that we are managing and return a reference to it.
 	 *
 	 * @return mixed[] A reference to the session data.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)	 
 	 */
 	public function &getAccess()
 	{
@@ -197,6 +208,9 @@ class SessionManager implements SessionManagerIface
 	/**
 	 * Remove the session domain from the session.  This does not remove the
 	 * hierarchy above the session domain.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)
 	 */
 	public function remove()
 	{

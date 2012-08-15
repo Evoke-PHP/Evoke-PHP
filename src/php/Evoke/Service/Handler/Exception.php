@@ -89,6 +89,9 @@ class Exception implements HandlerIface
 	 * error without exposing information that could be used for an attack.
 	 *
 	 * @param Exception An exception that was not caught in the system.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)
 	 */
 	public function handler(\Exception $uncaughtException)
 	{

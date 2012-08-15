@@ -116,7 +116,7 @@ class RegexTwoLevel extends Rule
 
 		$this->ensureSecondLevelRegexp($classname);
 
-		foreach ($params as $paramKey => $paramEntry)
+		foreach ($params as $paramEntry)
 		{
 			if (!isset($paramEntry['Name'],
 			           $paramEntry['Required'],

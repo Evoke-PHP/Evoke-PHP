@@ -1,6 +1,16 @@
 <?php
+/**
+ * Filesystem Interface.
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence;
-
+/**
+ * Filesystem Interface.
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName) - Method names match PHP's.
+ * @SuppressWarnings(PHPMD.TooManyMethods)      - Filesystem needs lots.
+ */
 interface FilesystemIface
 {
 	/**

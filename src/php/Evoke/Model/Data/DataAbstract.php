@@ -1,4 +1,9 @@
 <?php
+/**
+ * Model Read-Only access to data.
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Data;
 
 use BadMethodCallException;
@@ -39,6 +44,8 @@ use BadMethodCallException;
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Model
+ *
+ * @SuppressWarnings(PHPMD.TooManyMethods) - We need a lot.
  */
 abstract class DataAbstract implements DataIface
 {
@@ -194,7 +201,8 @@ abstract class DataAbstract implements DataIface
 	{
 		throw new BadMethodCallException(
 			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.');
+			'transferrable it is not to be modified.  It was called with ' .
+			'offset: ' . $offset . ' and value: ' . $value);
 	}
 
 	/**
@@ -207,7 +215,8 @@ abstract class DataAbstract implements DataIface
 	{
 		throw new BadMethodCallException(
 			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.');
+			'transferrable it is not to be modified.  It was called with ' .
+			'offset: ' . $offset);
 	}
 
 	/*********************/
@@ -219,6 +228,8 @@ abstract class DataAbstract implements DataIface
 	 * data.
 	 *
 	 * @param mixed[] The current record that we are setting.
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	protected function setRecord(Array $record)
 	{

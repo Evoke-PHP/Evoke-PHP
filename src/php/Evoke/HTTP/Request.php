@@ -16,6 +16,9 @@ use LogicException;
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
  * @package   HTTP
+ *
+ * @SuppressWarnings(PHPMD.Superglobals)
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  */
 class Request implements RequestIface
 {
@@ -224,9 +227,9 @@ class Request implements RequestIface
 				
 				if (!empty($matches['Params'][$i]))
 				{
-					$numParams = preg_match_all($paramsPattern,
-					                            $matches['Params'][$i],
-					                            $paramsMatches);
+					preg_match_all($paramsPattern,
+					               $matches['Params'][$i],
+					               $paramsMatches);
 
 					$params = array_combine($paramsMatches['P_KEY'],
 					                        $paramsMatches['P_VAL']);

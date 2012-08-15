@@ -6,8 +6,12 @@ use FilesystemIterator,
 	RecursiveIteratorIterator,
 	RuntimeException;
 
-/** File_System Wrapper class to enable exceptions on filesystem actions.
- *  File stream contexts are not dealt with by this wrapper.
+/**
+ * File_System Wrapper class to enable exceptions on filesystem actions.
+ * File stream contexts are not dealt with by this wrapper.
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName) - Method names match PHP's.
+ * @SuppressWarnings(PHPMD.TooManyMethods)      - Filesystem needs lots.
  */
 class Filesystem implements FilesystemIface
 {

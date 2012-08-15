@@ -1,4 +1,9 @@
 <?php
+/**
+ * Session
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence;
 
 use RuntimeException;
@@ -27,6 +32,9 @@ class Session implements SessionIface
 
 	/**
 	 * Ensure that the session is initialized.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)
 	 */
 	public function ensure()
 	{

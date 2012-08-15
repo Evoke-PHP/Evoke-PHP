@@ -22,7 +22,7 @@ class Clear extends Session
 	/**
 	 * Clear the session of its values.
 	 */
-	public function clear()
+	public function remove()
 	{
 		$this->sessionManager->remove();
 	}

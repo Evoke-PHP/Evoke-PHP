@@ -25,6 +25,10 @@ use Evoke\Message\Exception\DB as ExceptionDB,
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Persistence
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) - SQL is complex.
+ * @SuppressWarnings(PHPMD.TooManyMethods)           - We need many.
+ * @SuppressWarnings(PHPMD.ShortVariable)            - db is too useful.
  */
 class SQL implements SQLIface
 {
