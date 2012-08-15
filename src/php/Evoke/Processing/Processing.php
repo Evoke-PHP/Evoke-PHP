@@ -1,45 +1,56 @@
 <?php
+/**
+ * Abstract Processing
+ *
+ * @package Processing
+ */
 namespace Evoke\Processing;
 
 use InvalidArgumentException;
 
-/** The processing class handles the processing of request data ($_GET, $_POST,
- *  $_FILE, etc.) using callbacks.
+/**
+ * The processing class handles the processing of request data ($_GET, $_POST,
+ * $_FILE, etc.) using callbacks.
  *
- *  Each request is received as an array.  We match the keys of the request to
- *  the callback array to determine the processing that should be done.
+ * Each request is received as an array.  We match the keys of the request to
+ * the callback array to determine the processing that should be done.
  */
 abstract class Processing implements ProcessingIface
 {
-	/** @property $callbacks
-	 *  @array Associative array of request IDs to processing callback.
+	/**
+	 * Associative array of request IDs to processing callback.
+	 * @var mixed[]
 	 */
 	protected $callbacks;
 
-	/** @property $matchRequired
-	 *  @bool Whether a key is required to match for processing.
+	/**
+	 * Whether a key is required to match for processing.
+	 * @var bool
 	 */
 	protected $matchRequired;
 
-	/** @property $requestMethod
-	 *  @string The request method that the processing handles.
+	/**
+	 * The request method that the processing handles.
+	 * @var string
 	 */
 	protected $requestMethod;
 
-	/** @property $uniqueMatch
-	 *  @bool Whether only a single request type can be processed at a time.
+	/**
+	 * Whether only a single request type can be processed at a time.
+	 * @var bool
 	 */
 	protected $uniqueMatch;
 
-	/** Construct a Processing object.
-	 *  @param requestMethod @string The request method that we are processing.
-	 *  @param callbacks     @array  Associative array of request IDs to
-	 *                               processing callback.
-	 *  @param matchRequired @bool   Whether a match is required.
-	 *  @param uniqueMatch   @bool   Whether a unique match is required.
+	/**
+	 * Construct a Processing object.
+	 *
+	 * @param mixed[] Associative array of request IDs to processing callback.
+	 * @param string  The request method that we are processing.
+	 * @param bool    Whether a match is required.
+	 * @param bool    Whether a unique match is required.
 	 */
-	public function __construct(/* String */       $requestMethod,
-	                            Array              $callbacks,
+	public function __construct(Array              $callbacks,
+	                            /* String */       $requestMethod,
 	                            /* Bool   */       $matchRequired = true,
 	                            /* Bool   */       $uniqueMatch   = true)
 	{
@@ -60,7 +71,9 @@ abstract class Processing implements ProcessingIface
 	/* Public Methods */
 	/******************/
 
-	/// Process the request.
+	/**
+	 * Process the request.
+	 */
 	public function process()
 	{
 		if ($this->getRequestMethod() !== strtoupper($this->requestMethod))
@@ -82,9 +95,11 @@ abstract class Processing implements ProcessingIface
 	/* Protected Methods */
 	/*********************/
    
-	/** Notify the matches which should now be processed.
-	 *  @param callbacks   @array The callbacks that should be executed.
-	 *  @param requestData @array The data for the requests.
+	/**
+	 * Notify the matches which should now be processed.
+	 *
+	 * @param mixed[] The callbacks that should be executed.
+	 * @param mixed[] The data for the requests.
 	 */
 	protected function callRequests(Array $callbacks, Array $requestData)
 	{
@@ -97,11 +112,13 @@ abstract class Processing implements ProcessingIface
 		}
 	}
 
-	/** Check to ensure that the matches we have conform to the expectations for
-	 *  uniqueness and optionality.
-	 *  @param matches     @array The matches found in the request data.
-	 *  @param requestData @mixed The request data.
-	 *  @return @bool Whether the matches were as expected.
+	/**
+	 * Check to ensure that the matches we have conform to the expectations for
+	 * uniqueness and optionality.
+	 *
+	 * @param mixed[] The matches found in the request data.
+	 * @param mixed   The request data.
+	 * @return bool   Whether the matches were as expected.
 	 */
 	protected function checkMatches(Array $matches, $requestData)
 	{
@@ -127,15 +144,22 @@ abstract class Processing implements ProcessingIface
 		return true;
 	}
 
-	/** Get the request keys that match the request data.
-	 *  @param data @array The request data.
+	/**
+	 * Get the request keys that match the request data.
+	 *
+	 * @param mixed[] The request data.
 	 */
 	protected function getRequestMatches($data)
 	{
 		return array_intersect_key($this->callbacks, $data);
 	}
 
-	/** Get the request method.
+	/**
+	 * Get the request method.
+	 *
+	 * @return string The request method in uppercase.
+	 *
+	 * @SuppressWarnings(PHPMD)
 	 */
 	protected function getRequestMethod()
 	{
