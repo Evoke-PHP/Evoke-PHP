@@ -2,7 +2,7 @@
 namespace Evoke\Service\Handler;
 
 use Evoke\HTTP\ResponseIface,
-	Evoke\Service\Log\LogIface,
+	Evoke\Service\Log\LoggingIface,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -25,10 +25,10 @@ class Exception implements HandlerIface
 	protected $detailedInsecureMessage;
 
 	/**
-	 * Log object.
-	 * @var Evoke\Service\Log\LogIface
+	 * Logging object.
+	 * @var Evoke\Service\Log\LoggingIface
 	 */
-	protected $log;
+	protected $logging;
 
 	/**
 	 * The maximum length of exception message to display.
@@ -53,8 +53,8 @@ class Exception implements HandlerIface
 	 *
 	 * @param bool Whether to show a detailed insecure message.
 	 * @param int  Maximum length of exception message to show.
-	 * @param Evoke\Service\Log\LogIface
-	 *             Log object.
+	 * @param Evoke\Service\Log\LoggingIface
+	 *             Logging object.
 	 * @param Evoke\HTTP\ResponseIface
 	 *             Response object.
 	 * @param Evoke\Writer\WriterIface
@@ -62,7 +62,7 @@ class Exception implements HandlerIface
 	 */
 	public function __construct(/* Bool */    $detailedInsecureMessage,
 	                            /* Int  */    $maxLengthExceptionMessage,
-	                            LogIface      $log,
+	                            LoggingIface  $logging,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
@@ -73,7 +73,7 @@ class Exception implements HandlerIface
 		}
 
 		$this->detailedInsecureMessage   = $detailedInsecureMessage;
-		$this->log                       = $log;
+		$this->logging                   = $logging;
 		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
 		$this->response                  = $response;
 		$this->writer                    = $writer;
@@ -102,14 +102,14 @@ class Exception implements HandlerIface
 				header('HTTP/1.1 500 Internal Server Error');
 			}
 
-			$this->log->log($uncaughtException->getMessage(), E_USER_ERROR);
+			$this->logging->log($uncaughtException->getMessage(), E_USER_ERROR);
 			$loggedError = true;
 
 			$currentBuffer = (string)($this->writer);
 
 			if (!empty($currentBuffer))
 			{
-				$this->log->log(
+				$this->logging->log(
 					'Buffer needs to be flushed in exception handler for ' .
 					'clean error page.  Buffer was: ' .	$currentBuffer,
 					E_USER_WARNING);

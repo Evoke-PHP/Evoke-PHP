@@ -2,7 +2,7 @@
 namespace Evoke\Service\Handler;
 
 use ErrorException,
-	Evoke\Service\Log\LogIface,
+	Evoke\Service\Log\LoggingIface,
 	OutOfBoundsException;
 
 /**
@@ -16,19 +16,19 @@ use ErrorException,
 class Error implements HandlerIface
 {
 	/**
-	 * Log object.
-	 * @var Evoke\Service\Log\LogIface
+	 * Logging object.
+	 * @var Evoke\Service\Log\LoggingIface
 	 */
-	protected $log;
+	protected $logging;
 
 	/**
 	 * Construct a system error handler.
 	 *
-	 * @param Evoke\Service\Log\LogIface Log object.
+	 * @param Evoke\Service\Log\LoggingIface Logging object.
 	 */
-	public function __construct(LogIface $log)
+	public function __construct(LoggingIface $logging)
 	{
-		$this->log = $log;
+		$this->logging = $logging;
 	}
    
 	/******************/
@@ -56,8 +56,8 @@ class Error implements HandlerIface
 			return true;
 		}
       
-		$this->log->log($errStr . ' in ' . $errFile . ' on ' . $errLine,
-		                $errNo);
+		$this->logging->log($errStr . ' in ' . $errFile . ' on ' . $errLine,
+		                    $errNo);
 
 		// The easiest way to recover from a recoverable error is by handling an
 		// exception.  This ensure the problem is addressed before any related
