@@ -2,7 +2,7 @@
 namespace Evoke\Service;
 
 /**
- * ValiditionIface
+ * ValidationIface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
