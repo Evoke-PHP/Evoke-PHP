@@ -15,17 +15,17 @@ class File extends Processing
 	 * Construct a File processing object.
 	 *
 	 * @param mixed[] The processing callbacks.
-	 * @param string  The request method.
 	 * @param bool    Whether a match is required.
 	 * @param bool    Whether a unique match is required.
+	 * @param string  The request method.
 	 */
 	public function __construct(Array        $callbacks,
-	                            /* String */ $requestMethod = 'FILE',
 	                            /* Bool   */ $matchRequired = true,
-	                            /* Bool   */ $uniqueMatch   = true)
+	                            /* Bool   */ $uniqueMatch   = true,
+	                            /* String */ $requestMethod = 'FILE')
 	{
 		parent::__construct(
-			$callbacks, $requestMethod, $matchRequired, $uniqueMatch);
+			$callbacks, $matchRequired, $uniqueMatch, $requestMethod);
 	}
 
 	/******************/

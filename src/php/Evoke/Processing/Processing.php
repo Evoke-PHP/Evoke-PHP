@@ -45,14 +45,14 @@ abstract class Processing implements ProcessingIface
 	 * Construct a Processing object.
 	 *
 	 * @param mixed[] Associative array of request IDs to processing callback.
-	 * @param string  The request method that we are processing.
 	 * @param bool    Whether a match is required.
 	 * @param bool    Whether a unique match is required.
+	 * @param string  The request method that we are processing.
 	 */
 	public function __construct(Array              $callbacks,
-	                            /* String */       $requestMethod,
 	                            /* Bool   */       $matchRequired = true,
-	                            /* Bool   */       $uniqueMatch   = true)
+	                            /* Bool   */       $uniqueMatch   = true,
+	                            /* String */       $requestMethod = NULL),
 	{
 
 		if (!is_string($requestMethod))

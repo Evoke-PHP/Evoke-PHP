@@ -15,17 +15,17 @@ class Get extends Processing
 	 * Construct a Get Processing object.
 	 *
 	 * @param mixed[] Callbacks.
-	 * @param string  Request method.
 	 * @param bool    MatchRequired.
 	 * @param bool    UniqueMatch.
+	 * @param string  Request method.
 	 */
 	public function __construct(Array        $callbacks,
-	                            /* String */ $requestMethod = 'GET',
 	                            /* Bool   */ $matchRequired = true,
-	                            /* Bool   */ $uniqueMatch   = true)
+	                            /* Bool   */ $uniqueMatch   = true,
+	                            /* String */ $requestMethod = 'GET')
 	{
 		parent::__construct(
-			$callbacks, $requestMethod, $matchRequired, $uniqueMatch);
+			$callbacks, $matchRequired, $uniqueMatch, $requestMethod);
 	}
 
 	/******************/

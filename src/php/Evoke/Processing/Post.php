@@ -15,17 +15,17 @@ class Post extends Processing
 	 * Construct a Post Processing object.
 	 *
 	 * @param mixed[] Callbacks.
-	 * @param string  Request Method.
 	 * @param bool    MatchRequired.
-	 * @param bool    UniqueMatch.
+	 * @param bool    Whether a Unique Match is required.
+	 * @param string  Request Method.
 	 */
 	public function __construct(Array        $callbacks,
-	                            /* String */ $requestMethod = 'POST',
 	                            /* Bool   */ $matchRequired = true,
-	                            /* Bool   */ $uniqueMatch   = true)
+	                            /* Bool   */ $uniqueMatch   = true,
+	                            /* String */ $requestMethod = 'POST')
 	{
 		parent::__construct(
-			$callbacks, $requestMethod, $matchRequired, $uniqueMatch);
+			$callbacks, $matchRequired, $uniqueMatch, $requestMethod);
 	}
 
 	/******************/
