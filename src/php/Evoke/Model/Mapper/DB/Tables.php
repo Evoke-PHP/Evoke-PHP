@@ -1,10 +1,16 @@
 <?php
+/**
+ * Tables Mapper (Read Only)
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistence\DB\SQLIface;
+use Evoke\Model\Mapper\ReadIface,
+	Evoke\Persistence\DB\SQLIface;
 
 /**
- * Tables Mapper
+ * Tables Mapper (Read Only)
  *
  * Get a list of tables from the database.
  *
@@ -13,7 +19,7 @@ use Evoke\Persistence\DB\SQLIface;
  * @license MIT
  * @package Model
  */
-class Tables extends DB
+class Tables implements ReadIface
 {
 	/**
 	 * Extra tables to include in the data.
@@ -27,6 +33,12 @@ class Tables extends DB
 	 */
 	protected $ignoredTables;
 
+	/** 
+	 * SQL Object
+	 * @var Evoke\Persistence\DB\SQLIface
+	 */
+	protected $sql;	
+	
 	/**
 	 * Construct a model for a list of database tables.
 	 *
@@ -39,10 +51,9 @@ class Tables extends DB
 	                            Array    $extraTables   = array(),
 	                            Array    $ignoredTables = array())
 	{
-		parent::__construct($sql);
-
 		$this->extraTables   = $extraTables;
 		$this->ignoredTables = $ignoredTables;
+		$this->sql           = $sql;
 	}
 
 	/******************/
@@ -50,7 +61,7 @@ class Tables extends DB
 	/******************/
 
 	/**
-	 * Fetch the specified tables if they are in the database or extra tables,
+	 * Read the specified tables if they are in the database or extra tables,
 	 * and are not being ignored.
 	 *
 	 * @param mixed[] The conditions to match in the mapped data.  If no
@@ -58,7 +69,7 @@ class Tables extends DB
 	 *                tables should be returned, otherwise a table must be
 	 *                within the passed parameters to match.
 	 */
-	public function fetch(Array $params = array())
+	public function read(Array $params = array())
 	{
 		$tableResults = $this->sql->getAssoc('SHOW TABLES');
 		$allTables = array();

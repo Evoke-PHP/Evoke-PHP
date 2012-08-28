@@ -1,4 +1,9 @@
 <?php
+/**
+ * Language Table Mapper
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Mapper\DB;
 
 use Exception;
@@ -10,14 +15,14 @@ use Exception;
  */
 
 /**
- * TableAdminLanguage
+ * Language Table Mapper
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Model
  */
-class TableAdminLanguage extends TableAdmin
+class TableLanguage extends Table
 {
 	/******************/
 	/* Public Methods */
@@ -29,7 +34,7 @@ class TableAdminLanguage extends TableAdmin
 	 *
 	 * @var mixed[] The record to add.
 	 */
-	public function add(Array $record)
+	public function create(Array $data = array())
 	{
 		////////////////////
 		// DB Transaction //
@@ -37,8 +42,11 @@ class TableAdminLanguage extends TableAdmin
 		try
 		{
 			$this->sql->beginTransaction();
-	 
-			if (parent::add($record))
+			
+			/// @todo Fix this. The parent create is a single transaction, we
+			/// need to implement the whole thing here, based on the surrounding
+			/// logic that is in place at the moment.
+			if (parent::create($data))
 			{
 				$langFields = $this->sql->select('Language_Fields', '*');
 
@@ -46,13 +54,13 @@ class TableAdminLanguage extends TableAdmin
 				{
 					if (empty($langField['Field_Name']))
 					{
-						$newField = $record['Language'];
+						$newField = $data['Language'];
 					}
 					else
 					{
 						$newField =
 							$langField['Field_Name'] . '_' .
-							$record['Language'];
+							$data['Language'];
 					}
 	       
 					$this->sql->addColumn($langField['Table_Name'],
@@ -62,25 +70,11 @@ class TableAdminLanguage extends TableAdmin
 
 				$this->sql->commit();
 			}
-			else
-			{
-				$this->sql->rollBack();
-			}
 		}
 		catch (Exception $e)
 		{
-			$msg = 'Failure adding language to database due to exception:  ' .
-				$e->getMessage();
-
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
-			$this->failures->add(
-				'Failure Adding Language',
-				'System Administrator has been notified.');
-
 			$this->sql->rollBack();
+			throw $e;
 		}
 	}
 
@@ -89,7 +83,7 @@ class TableAdminLanguage extends TableAdmin
 	 *
 	 * @param mixed[] The record to delete.
 	 */
-	public function deleteConfirm(Array $record)
+	public function delete(Array $params = array())
 	{
 		////////////////////
 		// DB Transaction //
@@ -99,10 +93,13 @@ class TableAdminLanguage extends TableAdmin
 			$this->sql->beginTransaction();
 
 			// Get the name of the language before we delete it.
-			$result = $this->sql->select('Language', 'Language', $record);
+			$result = $this->sql->select('Language', 'Language', $params);
 			$dropLang = $result[0]['Language'];
 	 
-			if (parent::deleteConfirm($record))
+			/// @todo Fix this. The parent delete is a single transaction, we
+			/// need to implement the whole thing here, based on the surrounding
+			/// logic that is in place at the moment.
+			if (parent::delete($params))
 			{
 				$langFields = $this->sql->select('Language_Fields', '*');
 
@@ -123,35 +120,21 @@ class TableAdminLanguage extends TableAdmin
 
 				$this->sql->commit();
 			}
-			else
-			{
-				$this->sql->rollBack();
-			}
 		}
 		catch (Exception $e)
 		{
-			$msg = 'Failure deleting language from database due to exception:  '
-				. $e->getMessage();
-
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
-			$this->failures->add(
-				'Failure Deleting Language',
-				'System Administrator has been notified.');
-
 			$this->sql->rollBack();
+			throw $e;
 		}
 	}
 
 	/**
-	 * Modify a language record.
+	 * Update a language record.
 	 *
 	 * @param mixed[] The record to modify.
 	 * @param mixed[] The new values for the record.
 	 */
-	public function modify(Array $oldRecord, Array $newRecord)
+	public function update(Array $old = array(), Array $new = array())
 	{
 		////////////////////
 		// DB Transaction //
@@ -167,8 +150,12 @@ class TableAdminLanguage extends TableAdmin
 				$this->sessionManager->get('Edited_Record'));
 	 
 			$oldLang = $result[0]['Language'];
-	 
-			if (parent::modify($record))
+
+			
+			/// @todo Fix this. The parent update is a single transaction, we
+			/// need to implement the whole thing here, based on the surrounding
+			/// logic that is in place at the moment.
+			if (parent::update($record))
 			{
 				// If the language has changed.
 				if ($oldLang !== $record['Language'])
@@ -201,25 +188,11 @@ class TableAdminLanguage extends TableAdmin
 	    
 				$this->sql->commit();
 			}
-			else
-			{
-				$this->sql->rollBack();
-			}
 		}
 		catch (Exception $e)
 		{
-			$msg = 'Failure modifying language in database due to exception:  '
-				. $e->getMessage();
-	 
-			$this->eventManager->notify('Log', array('Level'   => LOG_ERR,
-			                                         'Message' => $msg,
-			                                         'Method'  => __METHOD__));
-
-			$this->failures->add(
-				'Failure Modifying Language',
-				'System Administrator has been notified.');
-
 			$this->sql->rollBack();
+			throw $e;
 		}
 	}
 }

@@ -9,7 +9,7 @@ use Evoke\Message\TreeIface,
 /**
  * JointAdminLinked
  *
- * JointAdminLinked provides a CRUD interface to a joint set of data with linked
+ * JointLinked provides a CRUD interface to a joint set of data with linked
  * information stored in files referenced from the database.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
@@ -17,7 +17,7 @@ use Evoke\Message\TreeIface,
  * @license MIT
  * @package Model
  */
-class JointAdminLinked extends JointAdmin
+class JointLinked extends Joint
 {
 	/**
 	 * The directory mode in octal to create directories at.
@@ -26,16 +26,20 @@ class JointAdminLinked extends JointAdmin
 	protected $dirMode;
 
 	/**
-	 * @var int (octal) The file mode to create linked files with.
+	 * The file mode to create linked files with.
+	 * @var int (octal)
 	 */
 	protected $fileMode;
 	
 	/**
+	 * The filesystem object to interact with the filesystem.
 	 * @var Filesystem
 	 */
 	protected $filesystem;
 
-	/** @var ImageManip
+	/**
+	 * Image manipulator.
+	 * @var ImageManip
 	 */
 	protected $imageManip;
 
@@ -44,23 +48,25 @@ class JointAdminLinked extends JointAdmin
 	 */
 	protected $links;
 	
-	/** Construct an Administration Model of a joint set of database tables with
-	 *  linked information in the filesystem.
-	 *  @param Evoke\Persistence\DB\SQLIface
-	 *                 SQL object.   
-	 *  @param string  Table name where joins start from.
-	 *  @param Evoke\Persistence\DB\Table\JoinsIface
-	 *                 Joins object.
-	 *  @param Evoke\Persistence\SessionManagerIface
-	 *                 SessionManager object.
-	 *  @param Evoke\Persistence\DB\Table\ListIDIface
-	 *                 DB List ID Table object.
-	 *  @param Evoke\Message\TreeIface
-	 *                 Failure messages object.
-	 *  @param Evoke\Message\TreeIface
-	 *                 Notification messages object.
-	 *  @param mixed[] Select statement settings.
-	 *  @param bool                Whether to validate the data.
+	/**
+	 * Construct an Administration Model of a joint set of database tables with
+	 * linked information in the filesystem.
+	 *
+	 * @param Evoke\Persistence\DB\SQLIface
+	 *                SQL object.   
+	 * @param string  Table name where joins start from.
+	 * @param Evoke\Persistence\DB\Table\JoinsIface
+	 *                Joins object.
+	 * @param Evoke\Persistence\SessionManagerIface
+	 *                SessionManager object.
+	 * @param Evoke\Persistence\DB\Table\ListIDIface
+	 *                DB List ID Table object.
+	 * @param Evoke\Message\TreeIface
+	 *                Failure messages object.
+	 * @param Evoke\Message\TreeIface
+	 *                Notification messages object.
+	 * @param mixed[] Select statement settings.
+	 * @param bool                Whether to validate the data.
 	 */
 	public function __construct(SQLIface            $sql,
 	                            /* String */        $tableName,

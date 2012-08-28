@@ -12,7 +12,7 @@ use InvalidArgumentException,
  * @license MIT
  * @package Model
  */
-class Backtrace implements MapperIface
+class Backtrace implements ReadIface
 {
 	/** 
 	 * The number of levels up the stack to start the backtrace from.
@@ -35,18 +35,17 @@ class Backtrace implements MapperIface
 
 		$this->levelsToRetrace = $levelsToRetrace;
 	}
-
 	
 	/******************/
 	/* Public Methods */
 	/******************/
 	
 	/**
-	 * Fetch the backtrace.
+	 * Read the backtrace.
 	 *
 	 * @param mixed[] The conditions to match in the mapped data.
 	 */
-	public function fetch(Array $params = array())
+	public function read(Array $params = array())
 	{
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 

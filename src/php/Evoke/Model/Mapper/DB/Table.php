@@ -1,79 +1,58 @@
 <?php
+/**
+ * Table Mapper for CRUD.
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Persistence\DB\SQLIface,
-	InvalidArgumentException;
+use Evoke\Model\AdminIface;
 
 /**
- * Table
+ * Table Mapper for CRUD.
  *
- * Provide a read only model to a table of data.
+ * Provide a full mapper for a single database table.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Model
  */
-class Table extends DB
+class Table extends TableRead implements MapperIface
 {
-	/** 
-	 * Settings for the selection of records.
-	 * @var mixed[]
-	 */
-	protected $select;
-
-	/**
-	 * Table name.
-	 * @var string
-	 */
-	protected $tableName;
-
-	/** Construct a mapper for a database table.
-	 *
-	 *  @param Evoke\Persistence\DB\SQLIface
-	 *                 SQL object.
-	 *  @param string  The database table that the model represents.
-	 *  @param mixed[] Select statement settings.
-	 */
-	public function __construct(
-		SQLIface     $sql,
-		/* String */ $tableName,
-		Array        $select = array())
-	{
-		if (!is_string($tableName))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires tableName as string');
-		}
-		
-		parent::__construct($sql);
-
-		$this->select    = array_merge($select,
-		                               array('Fields'     => '*',
-		                                     'Conditions' => '',
-		                                     'Order'      => '',
-		                                     'Limit'      => 0));
-		$this->tableName = $tableName;
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/
 
 	/**
-	 * Fetch some data from the mapper (specified by params).
+	 * Create a record in the table.
 	 *
-	 * @param mixed[] The conditions to match in the mapped data.
+	 * @param mixed[] The record to add.
 	 */
-	public function fetch(Array $params = array())
+	public function create(Array $data = array())
 	{
-		$params = array_merge($this->select, $params);
-
-		return $this->sql->select($this->tableName,
-		                          $params['Fields'],
-		                          $params['Conditions'],
-		                          $params['Order'],
-		                          $params['Limit']);
+		$this->sql->insert($this->tableName, array_keys($data), $data);
+	}
+	
+	/**
+	 * Delete record(s) from the table.
+	 *
+	 * @param mixed[] The record(s) to delete.
+	 */
+	public function delete(Array $params = array())
+	{
+		$this->sql->delete($this->tableName, $params);
+	}
+			
+	/**
+	 * Update a record in the table.
+	 *  
+	 * @param mixed[] The record to modify.
+	 * @param mixed[] The value to set the record to.
+	 */
+	public function update(Array $old = array(), Array $new = array())
+	{
+		$this->sql->update($this->tableName, $new, $old);
 	}
 }
 // EOF

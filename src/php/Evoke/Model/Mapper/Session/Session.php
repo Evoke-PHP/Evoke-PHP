@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\Model\Mapper\Session;
 
-use Evoke\Model\Mapper\MapperIface,
+use Evoke\Model\Mapper\ReadIface,
 	Evoke\Persistence\SessionManagerIface;
 
 /**
@@ -12,7 +12,7 @@ use Evoke\Model\Mapper\MapperIface,
  * @license MIT
  * @package Model
  */
-class Session implements MapperIface
+class Session implements ReadIface
 {
 	/**
 	 * Session Manager
@@ -40,7 +40,7 @@ class Session implements MapperIface
 	 *
 	 * @params The offset in the data to fetch.
 	 */
-	public function fetch(Array $params = array())
+	public function read(Array $params = array())
 	{
 		$session = $this->sessionManager->getAccess();
 

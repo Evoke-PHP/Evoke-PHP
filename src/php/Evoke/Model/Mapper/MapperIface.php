@@ -1,8 +1,15 @@
 <?php
+/**
+ * Mapper Interface
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Mapper;
 
 /**
- * MapperIface
+ * Mapper Interface
+ *
+ * Decouples the CRUD from the storage mechanism.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -10,12 +17,7 @@ namespace Evoke\Model\Mapper;
  * @package Model
  */
 interface MapperIface
+implements CreateIface, ReadIface, UpdateIface, DeleteIface
 {
-	/**
-	 * Fetch some data from the mapper (specified by params).
-	 *
-	 * @param mixed[] The conditions to match in the mapped data.
-	 */
-	public function fetch(Array $params = array());
 }
 // EOF
