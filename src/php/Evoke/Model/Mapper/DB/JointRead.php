@@ -74,11 +74,11 @@ class JointRead implements ReadIface
 		}
 
 		$this->joins     = $joins;
-		$this->select    = array_mege($select,
-		                              array('Conditions' => '',
-		                                    'Fields'     => '*',
-		                                    'Order'      => '',
-		                                    'Limit'      => 0));
+		$this->select    = array_merge($select,
+		                               array('Conditions' => '',
+		                                     'Fields'     => '*',
+		                                     'Order'      => '',
+		                                     'Limit'      => 0));
 		$this->sql       = $sql;
 		$this->tableName = $tableName;
 	}

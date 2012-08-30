@@ -52,7 +52,7 @@ abstract class Processing implements ProcessingIface
 	public function __construct(Array              $callbacks,
 	                            /* Bool   */       $matchRequired = true,
 	                            /* Bool   */       $uniqueMatch   = true,
-	                            /* String */       $requestMethod = NULL),
+	                            /* String */       $requestMethod = NULL)
 	{
 
 		if (!is_string($requestMethod))

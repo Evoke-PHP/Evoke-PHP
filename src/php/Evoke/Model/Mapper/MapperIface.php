@@ -16,8 +16,7 @@ namespace Evoke\Model\Mapper;
  * @license MIT
  * @package Model
  */
-interface MapperIface
-implements CreateIface, ReadIface, UpdateIface, DeleteIface
+interface MapperIface extends CreateIface, ReadIface, UpdateIface, DeleteIface
 {
 }
 // EOF

@@ -158,6 +158,10 @@ class Factory implements FactoryIface
 				      'Table_Name' => $params['Table_Name']));
 		}
 
+		$params['Table_List_ID'] = $this->provider->make(
+			'Evoke\Persistence\DB\Table\ListID',
+			array('Sql' => $this->sql));
+
 		return $this->provider->make('Evoke\Model\Mapper\DB\Joint', $params);
 	}
 

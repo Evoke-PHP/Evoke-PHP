@@ -14,7 +14,7 @@ use Evoke\Message\Exception\DB as ExceptionDB,
  * @license MIT
  * @package Persistence
  */
-class ListID
+class ListID implements ListIDIface
 {
 	/**
 	 * The fields used in the List ID table.

@@ -7,11 +7,10 @@
 namespace Evoke\Model\Mapper\DB;
 
 use Evoke\Message\TreeIface,
-	Evoke\Model\AdminIface,
+	Evoke\Model\Mapper\MapperIface,
 	Evoke\Persistence\DB\SQLIface,
 	Evoke\Persistence\DB\Table\JoinsIface,
 	Evoke\Persistence\DB\Table\ListIDIface,
-	Evoke\Persistence\SessionManagerIface,
 	Exception,
 	RuntimeException;
 
@@ -27,24 +26,6 @@ use Evoke\Message\TreeIface,
  */
 class Joint extends JointRead implements MapperIface
 {
-	/** 
-	 * MessageTree of any failures.
-	 * @var Evoke\Message\TreeIface
-	 */
-	protected $failures;
-
-	/**
-	 * MessageTree of any notifications.
-	 * @var Evoke\Message\TreeIface
-	 */
-	protected $notifications;
-
-	/**
-	 * Session Manager
-	 * @var Evoke\Persistence\SessionManagerIface
-	 */
-	protected $sessionManager;
-
 	/**
 	 * Database List ID management
 	 * @var Evoke\Persistence\DB\Table\ListIDIface
@@ -59,34 +40,20 @@ class Joint extends JointRead implements MapperIface
 	 * @param string  The table name where joins start from.
 	 * @param Evoke\Persistence\DB\Table\JoinsIface
 	 *                Joins object.
-	 * @param Evoke\Persistence\SessionManagerIface SessionManager object.
 	 * @param Evoke\Persistence\DB\Table\ListIDIface
 	 *                DB List ID Table object.
-	 * @param Evoke\Message\TreeIface
-	 *                Failure messages object.
-	 * @param Evoke\Message\TreeIface
-	 *                Notification messages object.
 	 * @param mixed[] Select statement settings.
 	 * @param bool    Whether to validate the data.
 	 */
 	public function __construct(SQLIface            $sql,
 	                            /* String */        $tableName,
 	                            JoinsIface          $joins,
-	                            SessionManagerIface $sessionManager,
 	                            ListIDIface         $tableListID,
-	                            TreeIface           $failures,
-	                            TreeIface           $notifications,
 	                            Array               $select   = array(),
 	                            /* Bool */          $validate = true)
 	{
-		/// @todo This class is broken, needs fixing.
-		throw new RuntimeException('Fix this class, call by ref was altered.');
-		
 		parent::__construct($sql, $tableName, $joins, $select);
 
-		$this->failures       = $failures;
-		$this->notifications  = $notifications;
-		$this->sessionManager = $sessionManager;
 		$this->tableListID    = $tableListID;
 	}
    

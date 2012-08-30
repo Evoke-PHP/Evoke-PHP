@@ -6,7 +6,7 @@
  */
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Model\AdminIface;
+use Evoke\Model\Mapper\MapperIface;
 
 /**
  * Table Mapper for CRUD.
