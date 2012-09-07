@@ -65,6 +65,29 @@ class SessionManager implements SessionManagerIface
 	}
 
 	/**
+	 * Delete the portion of the session stored at the offset.
+	 *
+	 * @param mixed[] The offset to the part of the session to delete.
+	 */
+	public function deleteAtOffset(Array $offset = array())
+	{
+		$session =& $this->getAccess();
+
+		foreach ($offset as $part)
+		{
+			if (!isset($session[$part]))
+			{
+				// It is already deleted.
+				return;
+			}
+
+			$session =& $session[$part];
+		}
+
+		$session = array();
+	}
+
+	/**
 	 * Ensure the session is started and the session domain is set or created.
 	 *
 	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -99,7 +122,7 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function get($key)
 	{      
-		$session = $this->getAccess();
+		$session = $this->getCopy();
 		return $session[$key];
 	}
    
@@ -123,6 +146,54 @@ class SessionManager implements SessionManagerIface
 		}
 
 		return $currentDomain;
+	}
+
+	/**
+	 * Get a copy of the session domain that we are managing.
+	 *
+	 * @return mixed[] The sesssion data.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)	 
+	 */
+	public function getCopy()
+	{
+		// Set currentDomain to reference $_SESSION.
+		$currentDomain = $_SESSION;
+
+		foreach($this->domain as $subdomain)
+		{
+			// Update the currentDomain to reference the session subdomain.
+			$currentDomain = $currentDomain[$subdomain]; 
+		}
+
+		return $currentDomain;
+	}
+
+	/**
+	 * Get a copy of the data in the session at the offset specified.
+	 *
+	 * @param mixed[] The offset to the data.
+	 *
+	 * @return mixed|null The data at the offset (NULL if the offset doesn't
+	 *                    exist).
+	 */
+	public function getAtOffset(Array $offset = array())
+	{
+		$sessionOffset = $this->getCopy();
+
+		foreach ($offset as $part)
+		{
+			// If there is no data at the offset return NULL.
+			if (!isset($sessionOffset[$part]))
+			{
+				return NULL;
+			}
+
+			$sessionOffset = $session[$part];
+		}
+
+		return $sessionOffset;
 	}
 
 	/**
@@ -164,7 +235,7 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function isEmpty()
 	{
-		$session = $this->getAccess();
+		$session = $this->getCopy();
 		return empty($session);
 	}
 
@@ -178,7 +249,7 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function isEqual($key, $val)
 	{
-		$session = $this->getAccess();
+		$session = $this->getCopy();
 		return (isset($session[$key]) && ($session[$key] === $val));
 	}
    
@@ -191,7 +262,7 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function issetKey($key)
 	{
-		$session = $this->getAccess();
+		$session = $this->getCopy();
 		return isset($session[$key]);
 	}
 
@@ -202,7 +273,7 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function keyCount()
 	{
-		return count($this->getAccess());
+		return count($this->getCopy());
 	}
    
 	/**
@@ -236,26 +307,6 @@ class SessionManager implements SessionManagerIface
 			unset($previousSubdomain[$lastSubdomain]);
 		}
 	}
-
-	/**
-	 * Remove all of the values in the session domain.
-	 */
-	public function removeValues()
-	{
-		$session =& $this->getAccess();
-		$session = array();
-	}
-
-	/**
-	 * Replace the session with the passed value.
-	 *
-	 * @param mixed The new value(s) for the session.
-	 */
-	public function replaceWith($newValue)
-	{
-		$session =& $this->getAccess();
-		$session = $newValue;
-	}
    
 	/**
 	 * Reset the session to a blank start.
@@ -276,6 +327,17 @@ class SessionManager implements SessionManagerIface
 	{
 		$session =& $this->getAccess();
 		$session[$key] = $value;
+	}
+
+	/**
+	 * Set the session to the specified data.
+	 *
+	 * @param mixed[]|mixed The new data to set the session to.
+	 */
+	public function setData($data)
+	{
+		$session =& $this->getAccess();
+		$session = $newValue;
 	}
 
 	/**

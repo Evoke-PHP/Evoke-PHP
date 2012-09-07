@@ -1,4 +1,9 @@
 <?php
+/**
+ * Translations Data
+ *
+ * @package Model
+ */
 namespace Evoke\Model\Data;
 
 use DomainException,
@@ -84,15 +89,15 @@ class Translations extends DataAbstract implements TranslationsIface
 	 * Construct a Translations object that modifies the iteration over the
 	 * data to be page aware.
 	 *
-	 * @param Evoke\HTTP\RequestIface The request object.
-	 * @param Array[]  Raw translations data.
-	 * @param string   The currentPage that we want the translations for.
-	 * @param string   The language query key used in GET requests to specify
-	 *                 the desired language of translations.
-	 * @param string   The name field for the translations.
-	 * @param string[] The fields in the data that don't represent translations
-	 *                 in a language.
-	 * @param string   The page field for the translations.
+	 * @param RequestIface The request object.
+	 * @param Array[]  	   Raw translations data.
+	 * @param string   	   The currentPage that we want the translations for.
+	 * @param string   	   The language query key used in GET requests to
+	 *                     specify the desired language of translations.
+	 * @param string   	   The name field for the translations.
+	 * @param string[] 	   The fields in the data that don't represent
+	 *                     translations in a language.
+	 * @param string   	   The page field for the translations.
 	 */
 	public function __construct(RequestIface $request,
 	                            Array        $translations,

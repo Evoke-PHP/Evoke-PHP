@@ -1,4 +1,9 @@
 <?php
+/**
+ * RequestIface
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP;
 
 /**

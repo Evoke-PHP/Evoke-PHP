@@ -1,4 +1,9 @@
 <?php
+/**
+ * TreeIface
+ *
+ * @package Message
+ */
 namespace Evoke\Message;
 
 /**
@@ -14,7 +19,7 @@ interface TreeIface
 	/**
 	 * Append a child message tree object to the tree node.
 	 *
-	 * @param Evoke\Message\TreeIface MessageTree to append.
+	 * @param TreeIface MessageTree to append.
 	 */
 	public function append(TreeIface $child);
 	

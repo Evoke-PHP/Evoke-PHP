@@ -101,7 +101,7 @@ class JointRead implements ReadIface
 		{
 			$params['Fields'] = $this->joins->getAllFields();
 		}
-
+		
 		return $this->joins->arrangeResults(
 			$this->sql->select($tables,
 			                   $params['Fields'],

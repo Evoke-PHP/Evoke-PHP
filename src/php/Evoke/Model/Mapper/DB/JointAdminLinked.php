@@ -403,7 +403,7 @@ class JointLinked extends Joint
    
 	private function renumberSession($session, $data)
 	{
-		$session->replaceWith(array_values($data));
+		$session->setData(array_values($data));
 	}
 
 	// Create images scaled to our desired sizes.

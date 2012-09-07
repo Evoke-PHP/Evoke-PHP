@@ -1,4 +1,9 @@
 <?php
+/**
+ * View Interface
+ *
+ * @package View
+ */
 namespace Evoke\View;
 
 /**

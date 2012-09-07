@@ -1,16 +1,21 @@
 <?php
+/**
+ * Joins
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence\DB\Table;
 
 use InvalidArgumentException;
 
 /**
- * Join Tree
+ * Joins
  *
- * The JoinTree class is primarily used to interact with Relational Databases.
- * Relational databases have tables of data that are linked to other tables
- * via Foreign Keys.  The JoinTree provides a way or representing these
- * relationships so that data can be managed in real world units (with related
- * data joint by the appropriate relationship).
+ * The Joins class is used to interact with Relational Databases.  Relational
+ * databases have tables of data that are linked to other tables via Foreign
+ * Keys.  Joins provides a way or representing these relationships so that data
+ * can be managed in real world units (with related data joint by the
+ * appropriate relationship).
  *
  * Example:
  *    List of products, each of a particular size with a set of related images.
@@ -51,9 +56,9 @@ use InvalidArgumentException;
  * </code></pre>
  *
  * The above is an abstract representation of the Joins tree that would
- * represent the data.  The JoinTree class models the above with its properties
- * and Joins array which contains references to further JoinTree objects.  The
- * methods within the class are used to process the JoinTree.
+ * represent the data.  The Joins class models the above with its properties
+ * and Joins array which contains references to further Joins objects.  The
+ * methods within the class are used to process the tree of Joins.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -149,20 +154,18 @@ class Joins implements JoinsIface
 	/**
 	 * Construct the Joins object.
 	 *
-	 * @param Evoke\Persistence\DB\Table\InfoIface
-	 *                    DB Table Info object.
-	 * @param string      Table Name.
-	 * @param string      Parent Field.
-	 * @param string      Child Field.
-	 * @param Evoke\Persistence\DB\Table\JoinsIface[]
-	 *                    Joins from this node.
-	 * @param string      Admin Managed.
-	 * @param string      Compare Type.
-	 * @param string      ID Separator.
-	 * @param string      Join Type.
-	 * @param string      Joint Key.
-	 * @param string|null Table Alias.
-	 * @param string      Table Separator.
+	 * @param InfoIface    DB Table Info object.
+	 * @param string       Table Name.
+	 * @param string       Parent Field.
+	 * @param string       Child Field.
+	 * @param JoinsIface[] Joins from this node.
+	 * @param string       Admin Managed.
+	 * @param string       Compare Type.
+	 * @param string       ID Separator.
+	 * @param string       Join Type.
+	 * @param string       Joint Key.
+	 * @param string|null  Table Alias.
+	 * @param string       Table Separator.
 	 */
 	public function __construct(
 		InfoIface    $info,
@@ -473,19 +476,6 @@ class Joins implements JoinsIface
 	public function isTableAliassed()
 	{
 		return isset($this->tableAlias);
-	}
-
-	/**
-	 * Whether the fieldset is valid.
-	 *
-	 * @param mixed[] The fieldset.
-	 * @param mixed[] Fields that should be ignored in the fieldset.
-	 *
-	 * @return bool
-	 */
-	public function isValid($fieldset, $ignoredFields=array())
-	{
-		return $this->info->isValid($fieldset, $ignoredFields);
 	}
 
 	/*********************/

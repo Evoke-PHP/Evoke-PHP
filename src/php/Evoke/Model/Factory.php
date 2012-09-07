@@ -69,7 +69,7 @@ class Factory implements FactoryIface
 		}
 		elseif (!isset($dataJoins[$tableName]))
 		{
-			return $this->provider->make('Evoke\Model\Data');
+			return $this->provider->make('Evoke\Model\Data\Data');
 		}
 
 		$tableJoins = explode(',', $dataJoins[$tableName]);
@@ -93,7 +93,7 @@ class Factory implements FactoryIface
 			}
 		}
 
-		return $this->provider->make('Evoke\Model\Data',
+		return $this->provider->make('Evoke\Model\Data\Data',
 		                             array('Data_Joins' => $builtData));
 	}
 

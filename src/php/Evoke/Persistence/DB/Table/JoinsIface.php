@@ -11,10 +11,13 @@ namespace Evoke\Persistence\DB\Table;
  */
 interface JoinsIface
 {
-	/** Arrange a set of results for the database that match the Join tree.
-	 *  @param results @array The results from the database.
-	 *  @param data @array The data already processed from the results.
-	 *  @return @array The data that was arranged from the results.
+	/**
+	 * Arrange a set of results for the database that match the Join tree.
+	 *
+	 * @param mixed[] The results from the database.
+	 * @param mixed[] The data already processed from the results.
+	 *
+	 * @return mixed[] The data that was arranged from the results.
 	 */
 	public function arrangeResults(Array $results, Array $data=array());
    
@@ -103,12 +106,4 @@ interface JoinsIface
 	 * Return whether the table has an alias that is set.
 	 */
 	public function isTableAliassed();
-
-	/**
-	 * Whether the fieldset is valid.
-	 *
-	 * @param mixed[]  The fieldset to validate.
-	 * @param string[] Fields that should be ignored.
-	 */
-	public function isValid($fieldset, $ignoredFields=array());
 }

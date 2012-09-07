@@ -93,6 +93,73 @@ class DataTest extends PHPUnit_Framework_TestCase
 		$jointData = $object->$parentField;
 		$this->assertSame($expected, $jointData);
 	}
+
+	/**
+	 * Test that multiple records can be iterated.  The children for each
+	 * single record should contain only the joint data that is appropriate.
+	 *
+	 *
+	 * @covers       Evoke\Model\Data\Data::__get
+	 * @covers       Evoke\Model\Data\Data::getJoinName
+	 * @covers       Evoke\Model\Data\Data::setRecord
+	 * @depends      test__constructGood
+	 */
+	public function testNextChildren()
+	{
+		$data = [
+			1 => ['ID' => 1,
+			      'Name' => 'admin',
+			      'Password' => '$2y$aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+			      'Joint_Data' => 
+			      ['ID' =>
+			       ['' => ['User_ID' => 1,
+			               'Role_ID' => 1,
+			               'Joint_Data' => 
+			               ['Role_ID' => 
+			                [1 => ['ID' => 1,
+			                       'Name' => 'Admin',
+			                       'Joint_Data' =>
+			                       ['ID' =>
+			                        ['' => ['Role_ID' => 1,
+			                                'Permission_ID' => 1,
+			                                'Joint_Data' => 
+			                                ['Permission_ID' => 
+			                                 [1 => ['ID' => 1,
+			                                        'Name' => 'Create']]]]]]]]]
+					       ]]]],
+				                            
+			2 => ['ID' => 2,
+			      'Name' => 'temp',
+			      'Password' => '$2y$bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			      'Joint_Data' => 
+			      ['ID' => []]]];
+
+
+		$object = new Data(
+			$data,
+			['ID' => new Data(
+					[],
+					['Role_ID' => new Data(
+							[],
+							['ID' => new Data(
+									[],
+									['Permission_ID' => new Data()])
+								])
+						])
+				]);
+		$object->setData($data);
+
+		$this->assertSame('Create',
+		                  $object->ID->Role_ID->ID->Permission_ID['Name']);
+
+		$object->next();
+		$this->assertSame('temp', $object['Name']);
+
+
+		$this->assertTrue($object->ID->Role_ID->ID->Permission_ID->isEmpty());
+		$this->assertNull($object->ID->Role_ID->ID->Permission_ID['Name'],
+		                  'Next child should have a NULL result.');
+	}
 	
 	/******************/
 	/* Data Providers */

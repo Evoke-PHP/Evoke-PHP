@@ -142,6 +142,10 @@ class Data extends DataAbstract
 			{
 				$data->setData($record[$this->jointKey][$parentField]);
 			}
+			else
+			{
+				$data->setData(array());
+			}
 		}
 	}
 

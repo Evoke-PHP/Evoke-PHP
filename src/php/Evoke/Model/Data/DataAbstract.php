@@ -131,7 +131,8 @@ abstract class DataAbstract implements DataIface
 	 * Get the next record of data. Set the next record within the Data object
 	 * and return the object.
 	 *
-	 * @return Evoke\Model\Data\DataIface
+	 * @return Evoke\Model\Data\DataIface|bool Return the next data object, or
+	 *                                         boolean false.
 	 */
 	public function next()
 	{
@@ -139,6 +140,7 @@ abstract class DataAbstract implements DataIface
 
 		if ($nextItem === false)
 		{
+			$this->setRecord(array());
 			return false;
 		}
 
@@ -156,6 +158,10 @@ abstract class DataAbstract implements DataIface
 		if ($first !== false)
 		{
 			$this->setRecord($first);
+		}
+		else
+		{
+			$this->setRecord(array());
 		}
 	}
 
@@ -175,6 +181,10 @@ abstract class DataAbstract implements DataIface
    
 	/**
 	 * Provide the array isset operator.
+	 *
+	 * @param string The offest to check for existence.
+	 *
+	 * @return bool Whether the offset exists.
 	 */
 	public function offsetExists($offset)
 	{
@@ -184,6 +194,10 @@ abstract class DataAbstract implements DataIface
 
 	/**
 	 * Provide the array access operator.
+	 *
+	 * @param string The offset to get.
+	 *
+	 * @return mixed The value at the offset.
 	 */
 	public function offsetGet($offset)
 	{
@@ -194,6 +208,9 @@ abstract class DataAbstract implements DataIface
 	/**
 	 * We are required to make these available to complete the interface,
 	 * but we don't want the element to change, so this should never be called.
+	 *
+	 * @param mixed Offset.
+	 * @param mixed Value.
 	 *
 	 * @throw RuntimeException *** ALWAYS ***
 	 */
@@ -208,6 +225,8 @@ abstract class DataAbstract implements DataIface
 	/**
 	 * We are required to make these available to complete the interface,
 	 * but we don't want the element to change, so this should never be called.
+	 *
+	 * @param mixed Offset.
 	 *
 	 * @throw RuntimeException *** ALWAYS ***
 	 */

@@ -1,11 +1,15 @@
 <?php
+/**
+ * Message Tree
+ *
+ * @package Message
+ */
 namespace Evoke\Message;
-/// @todo Create a recursive iterator for using the Tree?
 
 use InvalidArgumentException;
 
 /**
- * Tree
+ * Message Tree
  *
  * Message Tree with a title and text at each node.
  *
@@ -37,27 +41,15 @@ class Tree implements TreeIface
 	/**
 	 * Construct a message tree node.
 	 *
-	 * @param string Title for the message.
-	 * @param string Text for the message.
+	 * @param null|string Title for the message.
+	 * @param null|string Text for the message.
+	 * @param array Children of the node.
 	 */
-	public function __construct(/* String */ $title,
-	                            /* String */ $text)
+	public function __construct(/* Mixed */ $title    = NULL,
+	                            /* Mixed */ $text     = NULL,
+	                            /* Array */ $children = array())
 	{
-		if (!is_string($title))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires title as string');
-		}
-
-		if (!is_string($text))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires text as string');
-		}
-
-		$this->children = array();
-		$this->text     = $text;
-		$this->title    = $title;
+		$this->reset($title, $text, $children);
 	}
 	
 	/******************/
@@ -67,18 +59,29 @@ class Tree implements TreeIface
 	/**
 	 * Append a child message tree object to the tree node.
 	 *
-	 * @param Evoke\Message\TreeIface MessageTree to append.
+	 * @param TreeIface MessageTree to append.
 	 */
 	public function append(TreeIface $child)
 	{
 		$this->children[] = $child;
 	}
 
-	public function buildNode($text, $title)
+	/**
+	 * Return whether the node has been set.
+	 *
+	 * @return bool Whether the node has been set.
+	 */
+	public function exists()
 	{
-		return new Tree($text, $title);
+		return isset($this->title) || isset($this->text) ||
+			!empty($this->children);
 	}
-	
+
+	/**
+	 * Get the children of the tree node.
+	 *
+	 * @return TreeIface[] The children of the tree node.
+	 */
 	public function getChildren()
 	{
 		return $this->children;
@@ -103,7 +106,7 @@ class Tree implements TreeIface
 	{
 		return $this->title;
 	}
-
+	
 	/**
 	 * Whether the node has children.
 	 *
@@ -113,5 +116,63 @@ class Tree implements TreeIface
 	{
 		return !empty($this->children);
 	}
+
+	/**
+	 * Reset the node to passed in values or default empty state.
+	 *
+	 * @param null|string Title for the message.
+	 * @param null|string Text for the message.
+	 * @param array Children of the node.
+	 */
+	public function reset(/* Mixed */ $title    = NULL,
+	                      /* Mixed */ $text     = NULL,
+	                      /* Array */ $children = array())
+	{
+		if (isset($title) && !is_string($title))
+		{
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires title as string or NULL');
+		}
+
+		if (isset($text) && !is_string($text))
+		{
+			throw new InvalidArgumentException(
+				__METHOD__ . ' requires text as string or NULL');
+		}
+
+		$this->children = $children;
+		$this->text     = $text;
+		$this->title    = $title;
+	}
+	
+	/**
+	 * Set the text of the node.
+	 *
+	 * @param string Text for the node.
+	 */
+	public function setText(/* String */ $text)
+	{
+		if (!is_string($text))
+		{
+			throw new InvalidArgumentException('Text must be a string.');
+		}
+		
+		$this->text = $text;
+	}
+
+	/**
+	 * Set the title of the node.
+	 *
+	 * @param string Title for the node.
+	 */
+	public function setTitle(/* String */ $title)
+	{
+		if (!is_string($title))
+		{
+			throw new InvalidArgumentException('Title must be a string.');
+		}
+		
+		$this->title = $title;
+	}	
 }
 // EOF

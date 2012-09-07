@@ -19,6 +19,13 @@ interface SessionManagerIface
 	public function addValue($value);
 
 	/**
+	 * Delete the portion of the session stored at the offset.
+	 *
+	 * @param mixed[] The offset to the part of the session to delete.
+	 */
+	public function deleteAtOffset(Array $offset = array());
+	
+	/**
 	 * Ensure the session is started and the session domain is set or created.
 	 */
 	public function ensure();
@@ -39,6 +46,20 @@ interface SessionManagerIface
 	 */
 	public function &getAccess();
 
+	/**
+	 * Get a copy of the session domain that we are managing.
+	 *
+	 * @return mixed[] The sesssion data.
+	 */
+	public function getCopy();
+
+	/**
+	 * Get a copy of the data in the session at the offset specified.
+	 *
+	 * @param mixed[] The offset to the data.
+	 */
+	public function getAtOffset(Array $offset = array());
+	
 	/**
 	 * Return the domain as a flat array.
 	 *
@@ -101,18 +122,6 @@ interface SessionManagerIface
 	public function remove();
 
 	/**
-	 * Remove all of the values in the session domain.
-	 */
-	public function removeValues();
-
-	/**
-	 * Replace the session with the passed value.
-	 *
-	 * @param mixed The new value(s) for the session.
-	 */
-	public function replaceWith($newValue);
-   
-	/**
 	 * Reset the session to a blank start.
 	 */
 	public function reset();
@@ -125,6 +134,13 @@ interface SessionManagerIface
 	 */
 	public function set($key, $value);
 
+	/**
+	 * Set the session to the specified data.
+	 *
+	 * @param mixed[]|mixed The new data to set the session to.
+	 */
+	public function setData($data);
+	
 	/**
 	 * Unset the key in the session domain.
 	 *

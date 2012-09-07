@@ -1,8 +1,9 @@
 <?php
 namespace Evoke\Model\Mapper\Session;
 
-use Evoke\Model\Mapper\ReadIface,
-	Evoke\Persistence\SessionManagerIface;
+use Evoke\Model\Mapper\MapperIface,
+	Evoke\Persistence\SessionManagerIface,
+	RuntimeException;
 
 /**
  * Session Mapper
@@ -12,7 +13,7 @@ use Evoke\Model\Mapper\ReadIface,
  * @license MIT
  * @package Model
  */
-class Session implements ReadIface
+class Session implements MapperIface
 {
 	/**
 	 * Session Manager
@@ -36,6 +37,27 @@ class Session implements ReadIface
 	/******************/
 
 	/**
+	 * Create some data in the session.
+	 *
+	 * @param mixed[] The data to create.
+	 */
+	public function create(Array $data = array())
+	{
+		$this->sessionManager->setData($data);
+	}
+
+	/**
+	 * Delete some data from storage.
+	 *
+	 * @param mixed[] The offset in the data to delete.
+	 */
+	public function delete(Array $params = array())
+	{
+		$this->sessionManager->deleteAtOffset($params);
+	}
+
+
+	/**
 	 * Get the data from the session.
 	 *
 	 * @params The offset in the data to fetch.
@@ -46,10 +68,37 @@ class Session implements ReadIface
 
 		foreach ($params as $sessionOffset)
 		{
+			if (!isset($session[$sessionOffset]))
+			{
+				$session = NULL;
+				break;
+			}
+			
 			$session =& $session[$sessionOffset];
 		}
 
-		return is_array($session) ? $session : NULL;
+		return $session;
+	}
+
+	/**
+	 * Update some data from the storage mechanism.
+	 *
+	 * @param mixed[] The old data from storage.
+	 * @param mixed[] The new data to set it to.
+	 */
+	public function update(Array $old = array(),
+	                       Array $new = array())
+	{
+		$session = $this->sessionManager->getAccess();
+		
+		// Ensure the the session has not been modified from the old values.
+		if ($session != $old)
+		{
+			throw new RuntimeException(
+				'Session has been modified before update.');
+		}
+
+		$this->sessionManager->setData($new);
 	}
 }
 // EOF
