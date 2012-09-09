@@ -1,5 +1,10 @@
 <?php
-namespace Evoke\View\Form\Input;
+/**
+ * Submit View
+ *
+ * @package View
+ */
+namespace Evoke\View\Input;
 
 use Evoke\View\ViewIface;
 

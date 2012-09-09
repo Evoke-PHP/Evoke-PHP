@@ -1,4 +1,9 @@
 <?php
+/**
+ * Hidden Input View
+ *
+ * @package View
+ */
 namespace Evoke\View\Form;
 
 /**

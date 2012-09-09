@@ -71,20 +71,20 @@ class SessionManager implements SessionManagerIface
 	 */
 	public function deleteAtOffset(Array $offset = array())
 	{
-		$session =& $this->getAccess();
+		$sessionOffset =& $this->getAccess();
 
 		foreach ($offset as $part)
 		{
-			if (!isset($session[$part]))
+			if (!isset($sessionOffset[$part]))
 			{
 				// It is already deleted.
 				return;
 			}
 
-			$session =& $session[$part];
+			$sessionOffset =& $sessionOffset[$part];
 		}
 
-		$session = array();
+		$sessionOffset = array();
 	}
 
 	/**
@@ -190,7 +190,7 @@ class SessionManager implements SessionManagerIface
 				return NULL;
 			}
 
-			$sessionOffset = $session[$part];
+			$sessionOffset = $sessionOffset[$part];
 		}
 
 		return $sessionOffset;
@@ -337,7 +337,7 @@ class SessionManager implements SessionManagerIface
 	public function setData($data)
 	{
 		$session =& $this->getAccess();
-		$session = $newValue;
+		$session = $data;
 	}
 
 	/**

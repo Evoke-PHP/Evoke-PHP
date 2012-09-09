@@ -1,12 +1,16 @@
 <?php
+/**
+ * File Input View
+ *
+ * @package View
+ */
 namespace Evoke\View\Form\Input;
 
-use Evoke\View\ViewIface;
+use Evoke\View\ViewIface,
+	InvalidArgumentException;
 
 /**
  * Input File
- *
- * @todo Fix to the new view interface.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -42,56 +46,52 @@ class File implements ViewIface
 	 * cannot make javascript send a click event to the input of type file due
 	 * to perceived security risks in firefox < 4 and possibly others.  To
 	 * display the button the opacity of the input file should be set to 0%.
+	 *
+	 * @param string  The text for the file upload button.
+	 * @param mixed[] The overlaid button attributes.
+	 * @param mixed[] Attributes for the container that holds the button and
+	 *                input.
+	 * @param mixed[] The input attributes.
 	 */
-	public function __construct(Array $setup)
+	public function __construct(
+		/* string */ $buttonText,
+		Array        $buttonAttribs    = array(
+			'class' => 'Input_File Button Good',
+			'type'  => 'submit',
+			'name'  => 'Input_File_Redirect'),
+		Array        $containerAttribs = array(
+			'class' => 'Input_File_Container'),
+		Array        $inputAttribs     = array('class' => 'Input_File Hidden',
+		                                       'type'  => 'file',
+		                                       'size'  => 7,
+		                                       'name'  => 'Input_File'))
 	{
-		/// @todo Fix to new View interface.
-		throw new \RuntimeException('Fix to new view interface.');
-
-		/// The default setup assumes setup 1 as above in the construct comment.
-		$setup += array(
-			'Button_Attribs'    => array('class' => 'Input_File Button Good',
-			                             'type'  => 'submit',
-			                             'name'  => 'Input_File_Redirect'),
-			'Button_Text'       => NULL,
-			'Default_Attribs'   => array('class' => 'Input_File_Container'),
-			'Input_Attribs'     => array('class' => 'Input_File Hidden',
-			                             'type'  => 'file',
-			                             'size'  => 7),
-			'Request_Alias'     => NULL,
-			'Request_Prefix'    => 'Input_File',
-			'Request_Separator' => '_');
-
-		parent::__construct($setup);
-      
-		if (!isset($this->buttonText))
+		if (!isset($buttonText))
 		{
-			throw new \InvalidArgumentException(
-				__METHOD__ . ' needs Button_Text');
+			throw new InvalidArgumentException('needs Button_Text');
 		}
 
-		$this->buttonAttribs['value'] = $this->buttonText;
-
-		if (!isset($this->inputAttribs['name']))
-		{
-			$this->inputAttribs['name'] = $this->requestPrefix;
-
-			if (isset($this->requestAlias))
-			{
-				$this->inputAttribs['name'] .=
-					$this->requestSeparator . $this->requestAlias;
-			}
-		}
+		$this->buttonText       = $buttonText;
+		$this->buttonAttribs    = $buttonAttribs;
+		$this->containerAttribs = $containerAttribs;
+		$this->inputAttribs     = $inputAttribs;
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view of the file input.
+	 *
+	 * @param mixed[] Parameters to the view.
+	 *
+	 * @return mixed[] The file input.
+	 */
 	public function get(Array $params = array())
 	{
 		return array('div',
-		             array(),
+		             $this->containerAttribs,
 		             array('Children' => array(
 			                   array('input', $this->buttonAttribs),
 			                   array('input', $this->inputAttribs))));
