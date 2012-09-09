@@ -82,7 +82,7 @@ class Checkboxes implements ViewIface
 	 *       'Selected'   => array()) // Array of values that are checked.
 	 * </code></pre>
 	 */
-	public function get(Array $data)
+	public function get(Array $data = array())
 	{
 		$data += array('Checkboxes'    => NULL,
 		               'Selected'      => NULL);
@@ -104,7 +104,7 @@ class Checkboxes implements ViewIface
 			             $this->attribs,
 			             array(array('div',
 			                         array('class' => 'No_Elements'),
-			                         $this->emptyText))));
+			                         $this->emptyText)));
 		}
 
 		$checkboxElems = array();
@@ -136,10 +136,10 @@ class Checkboxes implements ViewIface
 			                         array_merge(array('type' => 'checkbox',
 			                                           'id'   => $id,
 			                                           'name' => $id),
-			                                     $isSelected))));
+			                                     $isSelected));
 		}
       
-		return array('fieldset', $this->attribs, $checkboxElems));
+		return array('fieldset', $this->attribs, $checkboxElems);
 	}
 }
 // EOF
