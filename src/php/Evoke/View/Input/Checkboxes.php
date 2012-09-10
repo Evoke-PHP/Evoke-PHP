@@ -64,7 +64,6 @@ class Checkboxes implements ViewIface
 		/* string[]   */ $attribs    = array(),
 		/* string     */ $emptyText  = 'No options available',
 		/* string     */ $prefix     = '')
-	                            
 	{
 		$this->attribs    = $attribs;
 		$this->emptyText  = $emptyText;

@@ -1,10 +1,23 @@
 <?php
+/**
+ * Validation
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence\DB\Table;
 
 use Evoke\Message\TreeIface,
 	Evoke\Persistence\DB\Table\InfoIface,
 	Evoke\Service\ValidationIface;
 
+/**
+ * Validation
+ *
+ * @author Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license MIT
+ * @package Persistence
+ */
 class Validation implements ValidationIface
 {
 	/**
@@ -94,9 +107,6 @@ class Validation implements ValidationIface
 			$required = $this->tableInfo->isRequired($key);
 			$type = strtoupper(preg_replace("/\(.*\)$/", '', $fullType));
 			$subType = preg_replace("/^.*\((.*)\).*$/", "$1", $fullType);
-
-			$passMatch = '';
-			$failMatch = '';
 
 			// 1 is removed later as it is used to store the text or blob.
 			$textBlobLength = 1;

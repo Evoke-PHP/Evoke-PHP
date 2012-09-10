@@ -43,14 +43,12 @@ class Joint extends JointRead implements MapperIface
 	 * @param Evoke\Persistence\DB\Table\ListIDIface
 	 *                DB List ID Table object.
 	 * @param mixed[] Select statement settings.
-	 * @param bool    Whether to validate the data.
 	 */
 	public function __construct(SQLIface            $sql,
 	                            /* String */        $tableName,
 	                            JoinsIface          $joins,
 	                            ListIDIface         $tableListID,
-	                            Array               $select   = array(),
-	                            /* Bool */          $validate = true)
+	                            Array               $select   = array())
 	{
 		parent::__construct($sql, $tableName, $joins, $select);
 
