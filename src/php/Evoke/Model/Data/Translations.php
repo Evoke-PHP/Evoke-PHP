@@ -254,7 +254,7 @@ class Translations extends DataAbstract implements TranslationsIface
 			$this->currentLanguage = $lang;
 			return;
 		}
-	
+
 		if ($this->request->issetQueryParam($this->langKey))
 		{
 			$lang = $this->request->getQueryParam($this->langKey);
@@ -307,7 +307,7 @@ class Translations extends DataAbstract implements TranslationsIface
 		{
 			$this->setLanguage();
 		}
-		
+
 		if (isset($this->data[$key][$this->currentLanguage]))
 		{
 			return $this->data[$key][$this->currentLanguage];

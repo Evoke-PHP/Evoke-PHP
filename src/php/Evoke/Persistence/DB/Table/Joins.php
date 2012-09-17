@@ -226,7 +226,7 @@ class Joins implements JoinsIface
 			if ($this->isResult($currentTableResult))
 			{
 				$rowID = $this->getRowID($currentTableResult);
-	    
+				
 				if (!isset($data[$rowID]))
 				{
 					$data[$rowID] = $currentTableResult;
@@ -493,7 +493,7 @@ class Joins implements JoinsIface
 	{
 		$id = NULL;
 		$primaryKeys = $this->info->getPrimaryKeys();
-
+		
 		foreach ($primaryKeys as $primaryKey)
 		{
 			if (isset($row[$primaryKey]))

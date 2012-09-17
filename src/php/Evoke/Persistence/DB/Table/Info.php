@@ -274,16 +274,16 @@ class Info implements InfoIface
 
 		foreach ($primaryKeyLinesArr as $primaryKeyLine)
 		{
-			preg_match('/.*' . $primaryStr . '\s*\(`([^`]*)`\)/',
-			           $primaryKeyLine,
-			           $matches);
-
-			// Ignore the full match.
-			$matchedKeys = array_slice($matches, 1);
-
-			foreach ($matchedKeys as $pKey)
+			if (preg_match('(' . $primaryStr . '\s*\(([^\)]+)\))i',
+			               $primaryKeyLine,
+			               $matches))
 			{
-				$this->primaryKeys[] = $pKey;
+				$matchedKeys = explode(',', $matches[1]);
+
+				foreach ($matchedKeys as $pKey)
+				{
+					$this->primaryKeys[] = trim($pKey, '` ');
+				}
 			}
 		}
 
