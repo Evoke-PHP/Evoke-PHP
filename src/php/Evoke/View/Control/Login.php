@@ -25,8 +25,10 @@ class Login implements ViewIface
 	 */
 	protected $translations;
 
-	/** Construct a Login object.
-	 *  @param TranslationsIface Translations.
+	/**
+	 * Construct a Login object.
+	 *
+	 * @param TranslationsIface Translations.
 	 */
 	public function __construct(TranslationsIface $translations)
 	{
@@ -51,25 +53,29 @@ class Login implements ViewIface
 		                   'class'  => 'Login',
 		                   'method' => 'POST'),
 		             array(
-			             array('label',
-			                   array('for' => 'Username'),
-			                   $this->translations->tr('Username')),
-			             array('input',
-			                   array('length' => '100',
-			                         'name'   => 'Username',
-			                         'type'   => 'text')),
-			             array('label',
-			                   array('for' => 'Password'),
-			                   $this->translations->tr('Password')),
-			             array('input',
-			                   array('length' => '60',
-			                         'name'   => 'Password',
-			                         'type'   => 'password')),
+			             array('div',
+			                   array('class' => 'Username'),
+			                   array(array('label',
+			                               array('for' => 'Username'),
+			                               $this->translations->tr('Username')),
+			                         array('input',
+			                               array('length' => '100',
+			                                     'name'   => 'Username',
+			                                     'type'   => 'text')))),
+			             array('div',
+			                   array('class' => 'Password'),
+			                   array(array('label',
+			                               array('for' => 'Password'),
+			                               $this->translations->tr('Password')),
+			                         array('input',
+			                               array('length' => '60',
+			                                     'name'   => 'Password',
+			                                     'type'   => 'password')))),
 			             array('input',
 			                   array('name'  => 'Login',
 			                         'type'  => 'submit',
-			                         'value' => $this->translations->tr('Login')
-				                   ))));
+			                         'value' =>
+			                         $this->translations->tr('Login')))));
 	}
 }
 // EOF

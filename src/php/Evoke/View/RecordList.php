@@ -1,19 +1,46 @@
 <?php
-namespace Evoke\View\XHTML;
+/**
+ * Record List View.
+ *
+ * @package View
+ */
+namespace Evoke\View;
 
-use Evoke\Model\Data\DataIface,
-	Evoke\View\Text\TranslatorIface,
+use Evoke\Model\Data\RecordListIface,
 	Evoke\View\ViewIface,
-	Exception,
-	InvalidArgumentException,
-	RuntimeException;
+	InvalidArgumentException;
 
 /**
- * RecordList
+ * Record List View.
  *
  * View to represent a list of records.
  *
- * @todo This may be implemented elsewhere?
+ *        		       +---------------+
+ *        		       | Headings View |
+ *        			   +---------------+
+ * +-----------------+ +---------------+ +--------------+
+ * | Inline Headings | | Record View / | | Buttons View |
+ * | View            | | Empty View    | |              |
+ * +-----------------+ +---------------+ +--------------+
+ *
+ *    "         "          "        "       "        "    // (Repeat)
+ *                     +---------------+
+ *                     | Headings View |
+ *                     |  (Separator)  |
+ *                     +---------------+
+ * +-----------------+ +---------------+ +--------------+
+ * | Inline Headings | | Record View   | | Buttons View |
+ * | View            | |               | |              |
+ * +-----------------+ +---------------+ +--------------+
+ *
+ *    "         "          "        "       "        "    // (Repeat)
+ *                     +---------------+
+ *                     | Headings View |
+ *                     |   (Bottom)    |
+ *                     +---------------+
+ *
+ * This is a composite view which controls the above layout using the Heading
+ * Options and the views passed into the constructor.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -23,407 +50,200 @@ use Evoke\Model\Data\DataIface,
 class RecordList implements ViewIface
 {
 	/**
-	 *  Attributes @array for the content.
+	 * Attributes for the record list.
+	 * @var string[]
 	 */
-	protected $contentAttribs;
+	protected $attribs;
 
 	/**
-	 *  @array The data for the record list.
+	 * Attributes for a single entry within the record list.
+	 * @var string[]
 	 */
-	protected $data;
-
-	/**
-	 *  Attributes @array for the data.
-	 */
-	protected $dataAttribs;
-
-	/**
-	 *  @array Buttons for each row (text => attributes).
-	 */
-	protected $rowButtons;
+	protected $entryAttribs;
 	
 	/**
-	 *  @array The edited record from the record list.
+	 * Heading Options.
+	 * @var mixed[]
 	 */
-	protected $editedRecord;
+	protected $headingOptions;
+	 
+	/**
+	 * The record list data.
+	 * @var RecordListIface
+	 */
+	protected $recordList;
 
 	/**
-	 *  Attributes @array for an empty record list.
+	 * Buttons View.
+	 * @var ViewIface
 	 */
-	protected $emptyDataAttribs;
+	protected $viewButtons;
 
 	/**
-	 *  @array of fields in the record list.
+	 * Empty View.
+	 * @var ViewIface
 	 */
-	protected $fields;
+	protected $viewEmpty;
+	
+	/**
+	 * Headings View.
+	 * @var ViewIface
+	 */
+	protected $viewHeadings;
+	
+	/**
+	 * Inline Headings View.
+	 * @var ViewIface
+	 */
+	protected $viewHeadingsInline;
+	
+	/**
+	 * Record View.
+	 * @var ViewIface
+	 */
+	protected $viewRecord;
 
 	/**
-	 *  The setup for the headings.
+	 * Construct a RecordList View.
+	 *
+	 * @param RecordListIface Record List data.
+	 * @param ViewIface 	  Buttons View.
+	 * @param ViewIface 	  Empty View.
+	 * @param ViewIface 	  Record View.
+	 * @param string[]        Record List Attributes.
+	 * @param string[]        Entry Attributes.
+	 * @param ViewIface 	  Headings View.
+	 * @param ViewIface 	  Inline Headings View.
+	 * @param mixed[]   	  Heading Options.
 	 */
-	protected $headingSetup;
-
-	/**
-	 *  @array Fields to be ignored in the record list.
-	 */
-	protected $ignoredFields;
-
-	/**
-	 *  @array Labels.
-	 */
-	protected $labels;
-
-	/**
-	 *  @array The primary keys for the record list.
-	 */
-	protected $primaryKeys;
-
-	/**
-	 *  @array Attributes for the record list rows.
-	 */
-	protected $rowAttribs;
-
-	/**
-	 *  @string The table name for the record data.
-	 */
-	protected $tableName;
-
-	/**
-	 *  @bool Whether to translate the labels for the fields.
-	 */
-	protected $translateLabels;
-
-	/** Construct a RecordList object.
-	 *  @param translator      @object Translator.
-	 *  @param data            @object Data.
-	 *  @param viewButtons     @object ViewButtons.
-	 *  @param viewRecord      @object ViewRecord.
-	 *  @param fields          @array  Data fields to be displayed.
-	 *  @param attribs         @array  Attributes for the record list.
-	 *  @param contentAttribs  @array  Attributes for the content.
-	 *  @param dataAttribs     @array  DataAttribs.
-	 *  @param ignoredFields   @array  IgnoredFields.
-	 *  @param labels          @array  Labels.
-	 *  @param rowAttribs      @array  RowAttribs.
-	 *  @param translateLabels @bool   TranslateLabels.
-	 */
-	public function __construct(
-	    TranslatorIface $translator,
-		DataIface       $data,
-		ViewIface       $viewRecord,
-		Array           $fields,
-		Array           $attribs        = array('class' => 'Record_List'),
-		Array           $contentAttribs = array('class' => 'Content'),
-		Array           $dataAttribs    = array('class' => 'Data'),
-		Array           $headings       = array(),			
-		Array           $ignoredFields  = array(),
-		Array           $rowAttribs     = array('class' => 'Row'))
+	public function __construct(RecordListIface $recordList,
+	                            ViewIface 		$viewEmpty,
+	                            ViewIface 		$viewRecord,
+	                            Array           $attribs            = array(
+		                            'class' => 'Record_List'),
+	                            Array           $entryAttribs        = array(
+		                            'class' => 'Entry'),
+	                            ViewIface 		$viewButtons        = NULL,
+	                            ViewIface 		$viewHeadings       = NULL,
+	                            ViewIface 		$viewHeadingsInline = NULL,
+	                            Array     		$headingOptions     = array())
 	{
-		if (!is_bool($translateLabels))
+		$this->headingOptions = array_merge($headingOptions,
+		                                    array('Bottom'    => false,
+		                                          'Inline'    => false,
+		                                          'Separator' => -1,
+		                                          'Top'       => true));
+
+		if (($this->headingOptions['Bottom'] ||
+		     $this->headingOptions['Separator'] > 0 ||
+		     $this->headingOptions['Top']) &&
+		    !$viewHeadings instanceof ViewIface)
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' requires translateLabels as bool');
+				'needs viewHeadings with the specified headingOptions.');
+		}
+		
+		if ($this->headingOptions['Inline'] &&
+		    !$viewHeadingsInline instanceof ViewIface)
+		{
+			throw new InvalidArgumentException(
+				'needs viewHeadingsInline with specified headingOptions.');
 		}
 
-		parent::__construct($translator);
-
-		$this->contentAttribs = $contentAttribs;
-		$this->data           = $data;
-		$this->dataAttribs    = $dataAttribs;
-		$this->viewButtons    = $viewButtons;
-		$this->viewRecord     = $viewRecord;
-		$this->fields         = $fields;
-		$this->headings       = array_merge(array('Bottom' => false,
-		                                          'Every'  => -1,
-		                                          'Inline' => false,
-		                                          'Top'    => false),
-		                                    $headings);
-		$this->ignoredFields  = $ignoredFields;
-		$this->rowAttribs     = $rowAttribs;
+		$this->attribs            = $attribs;
+		$this->entryAttribs       = $entryAttribs;
+		$this->recordList      	  = $recordList;
+		$this->viewButtons    	  = $viewButtons;
+		$this->viewEmpty      	  = $viewEmpty;
+		$this->viewHeadings   	  = $viewHeadings;
+		$this->viewHeadingsInline = $viewHeadingsInline;
+		$this->viewRecord         = $viewRecord;
 	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Get the view of the record list.
+	 *
+	 * @return mixed[] The record list view.
+	 */
 	public function get(Array $params = array())
 	{
 		$recordListElems = array();
-		$fields = array_diff($this->fields, $this->ignoredFields);
-		$headingElements = $this->getHeadings($fields);
-		$headingRow = $this->buildHeadingRow($headings);
+		$row = 0;
 
-		if ($this->headingSetup['Top'])
+		// Calculate the heading elements once as they may be repeated
+		// throughout.
+		if ($this->viewHeadings instanceof ViewIface)
 		{
-			$recordListElems[] = $headingRow;
+			$heading = $this->viewHeadings->get();
 		}
 
-		$recordListElems[] = $this->buildContent($fields, $headingElements);
-
-		if ($this->headingSetup['Bottom'])
+		if ($this->viewHeadingsInline instanceof ViewIface)
 		{
-			$recordListElems[] = $headingRow;
+			$headingInlineSelected =
+				$this->viewHeadingsInline->get(array('Selected' => true));
+			$headingInlineDeselected =
+				$this->viewHeadingsInline->get(array('Selected' => false));
 		}
 
-		$this->writer->write(array('div', $this->attribs, $recordListElems));
-	}
-	
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	/** Build the content of the record list including any inline headings,
-	 *  data and data buttons. (Not the top or bottom headings).
-	 *  @param headings @array Array of headings for use in inline headings.
-	 *  @return Return the element containing the content of the record list.
-	 */
-	protected function buildContent($fields, $headings)
-	{
-		if ($this->data->isEmpty())
+		// Compose the view using the components.
+		if ($this->headingOptions['Top'])
 		{
-			$rowElems = array(
-				array('div', $this->rowAttribs, $this->buildEmptyData()));
+			$recordListElems[] = $heading;
+		}
+
+		if ($this->recordList->isEmpty())
+		{
+			$recordListElems[] = $this->viewEmpty->get();
 		}
 		else
 		{
-			$rowElems = array();
-	 
-			foreach ($this->data as $row => $rowData)
+			foreach ($this->recordList as $record)
 			{
-				$rowElems[] = array(
-					'div',
-					$this->rowAttribs,
-					array($this->buildRowData(
-						      $fields, $row, $rowData, $headings),
-					      $this->buildRowButtons($row, $rowData)));
-			}
-		}
-
-		return array('div', array('class' => 'Content'), $rowElems);
-	}
-
-	/** Build the element for an empty record list.
-	 *  @param headingElem @object The heading element that may be used.
-	 *  @return @array Array of elements for an empty record list.
-	 */
-	protected function buildEmptyData()
-	{
-		return array('div',
-		             $this->emptyDataAttribs,
-		             $this->translator->get('No_Records_Found'));
-	}
-   
-	/** Build the heading row element.
-	 *  @param headings @array Array of heading row elements.
-	 *  @return @object The heading row element.
-	 */
-	protected function buildHeadingRow($headings)
-	{
-		return array('div',
-		             array('class' => 'Row'),
-		             array(array('div',
-		                         $this->dataAttribs,
-		                         $headings),
-		                   array('div',
-		                         $this->headingSetup['Buttons_Attribs'],
-		                         $this->getHeadingButtons())));
-	}
-
-	/** Build the element holding the buttons in a row.
-	 *  @param row @mixed The key for the row.
-	 *  @param rowData @array The data for the row.
-	 *  @return @array Array of elements that make up the buttons.
-	 */
-	protected function buildRowButtons($row, $rowData)
-	{
-		if ($this->rowButtonsAsForm)
-		{
-			return $this->app->getNew(
-				'View_Form_Hidden_Input',
-				array('App'            => $this->app,
-				      'Attribs'        => array_merge(
-					      array('action' => '',
-					            'method' => 'post'),
-					      $this->rowButtonsAttribs),
-				      'Data'           => $rowData,
-				      'Encasing'       => false,
-				      'Ignored_Fields' => $this->ignoredFields,
-				      'Name_Prefix'    => $this->tableName . '.',
-				      'Primary_Keys'   => $this->getPrimaryKeys(),
-				      'Submit_Buttons' => $this->rowButtons,
-				      'Translator'     => $this->translator));
-		}
-		else
-		{
-			return array('div',
-			             $this->rowButtonsAttribs,
-			             $this->getRowButtons($row));
-		}
-	}
-   
-	/** Build the element holding the data in a row.
-	 *  @param fields  @array The fields for the row.
-	 *  @param row     @mixed The key for the row.
-	 *  @param rowData @array The data for the row.
-	 *  @return @array Array of elements that make up the data.
-	 */
-	protected function buildRowData($fields, $row, $rowData, $headings)
-	{
-		try
-		{
-			$rowElems = array();
-
-			// Add inline headings and row contents to the row.
-			if ($this->headingSetup['Inline'])
-			{
-				foreach($fields as $field)
+				$entryElems = array();
+				$recordSelected = $this->recordList->isSelectedRecord();
+				
+				if ($this->headingOptions['Separator'] > 0 &&
+				    (($row % $this->headingOptions['Separator']) === 0) &&
+				    $row > 1)
 				{
-					$rowElems[] = array(
-						'div',
-						array('class' => 'Field_Row'),
-						array($headings[$field],
-						      array('div',
-						            array('class' => 'Data_Item ' . $field .
-						                  '_Field'),
-						            $rowData[$field])));
+					$recordListElems[] = $heading;
 				}
-			}
-			else
-			{
-				foreach($fields as $field)
+				
+				if ($this->headingOptions['Inline'])
 				{
-					$rowElems[] = array(
-						'div',
-						array('class' => 'Data_Item ' . $field . '_Field'),
-						$rowData[$field]);
+					$entryElems[] = $recordSelected ?
+						$headingInlineSelected : $headingInlineDeselected;
 				}
-			}
-	 
-			return array('div',
-			             $this->getDataAttribs($row, $rowData),
-			             $rowElems);
-		}
-		catch (Exception $e)
-		{
-			throw new RuntimeException(
-				__METHOD__,
-				' Caught exception processing row data: ' .
-				var_export($rowData, true),
-				$e);
-		}
-	}
+				
+				$entryElems[] = $this->viewRecord->get(
+					array('Data'     => $record,
+					      'Row'      => $row,
+					      'Selected' => $recordSelected));
 
-	/** Get the data attributes for the row.
-	 *  @param row @mixed The key of the row.
-	 *  @param rowData @array The data for the row.
-	 */
-	protected function getDataAttribs($row, $rowData)
-	{
-		$dataAttribs = $this->dataAttribs;
-
-		// Counting from 0 the first row should be odd.
-		if ($row%2 == 0)
-		{
-			$dataAttribs['class'] .= ' Odd';
-		}
-		else
-		{
-			$dataAttribs['class'] .= ' Even';
-		}
-
-		if ($this->isEditedRecord($rowData))
-		{
-			$dataAttribs['class'] .= ' Edited_Record';
-		}
-
-		return $dataAttribs;
-	}
-   
-	/// Get the heading buttons that appear with Top or Bottom headings.
-	protected function getHeadingButtons()
-	{
-		return $this->headingSetup['Buttons'];
-	}
-   
-	/** Build the headings for each field.
-	 *  @param fields @array Array of fields.
-	 *  @return @array Associative array of the heading elements keyed by field.
-	 */
-	protected function getHeadings($fields)
-	{
-		$headings = array();
-
-		foreach ($fields as $field)
-		{
-			// Use a different label if one has been specified by the label
-			// array or a translation is required.
-			if (isset($this->labels[$field]))
-			{
-				$headingText = $this->labels[$field];
-			}
-			elseif ($this->translateLabels)
-			{
-				$headingText = $this->translator->get(
-					$this->tableName . '_Field_' . $field);
-			}
-			else
-			{
-				$headingText = $field;
-			}
-
-			$headings[$field] = array(
-				'div',
-				array('class' => 'Heading ' . $field . '_Field'),
-				$headingText);
-		}
-
-		return $headings;
-	}
-
-	/// Get the primary keys for a row.
-	protected function getPrimaryKeys()
-	{
-		return $this->primaryKeys;
-	}
-
-   
-	/** Get the buttons for the row.
-	 *  @param row @string The key of the row.
-	 *  @return An array of button elements for the row.
-	 */
-	protected function getRowButtons($row)
-	{
-		$buttons = array();
-
-		foreach ($this->rowButtons as $attribs)
-		{
-			$attribs['name'] = '[' . $row . ']';
-			$buttons[] = array('input', $attribs);
-		}
-
-		return $buttons;
-	}
-   
-	/** Determine if the row data is from the currently edited record.
-	 *  @param rowData @array The data for the row.
-	 *  @return @bool Whether the row is the currently edited record.
-	 */
-	protected function isEditedRecord($rowData)
-	{
-		if (empty($this->editedRecord))
-		{
-			return false;
-		}
-
-		// Check that every primary key matches.
-		foreach ($this->editedRecord as $pKey => $pValue)
-		{
-			if (!isset($rowData[$pKey]) || $rowData[$pKey] !== $pValue)
-			{
-				return false;
+				if (isset($this->viewButtons))
+				{
+					$entryElems[] = $this->viewButtons->get(
+						array('Data'     => $record,
+						      'Row'      => $row,
+						      'Selected' => $recordSelected));
+				}
+				
+				$recordListElems[] = array(
+					'div', $this->entryAttribs, $entryElems);
+				$row++;
 			}
 		}
+		
+		if ($this->headingOptions['Bottom'])
+		{
+			$recordListElems[] = $heading;
+		}
 
-		return true;
+		return array('div', $this->attribs, $recordListElems);
 	}
 }
 // EOF

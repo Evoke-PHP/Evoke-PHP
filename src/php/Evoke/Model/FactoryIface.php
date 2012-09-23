@@ -78,17 +78,6 @@ interface FactoryIface
 	 */
 	public function buildMapperDBTable(/* String */ $tableName,
 	                                   Array        $select = array());
-
-	/**
-	 * Build an administrative mapper for a database table.
-	 *
-	 * @param string  The database table to map.
-	 * @param mixed[] SQL select settings for the table.
-	 *
-	 * @return Evoke\Model\Mapper\DB\TableAdmin
-	 */
-	public function buildMapperDBTableAdmin(/* String */ $tableName,
-	                                        Array        $select = array());
 	
 	/**
 	 * Build a mapper for a database tables list.

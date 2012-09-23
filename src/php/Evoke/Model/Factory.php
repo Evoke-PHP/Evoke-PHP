@@ -1,4 +1,9 @@
 <?php
+/**
+ * Model Factory
+ *
+ * @package Model
+ */
 namespace Evoke\Model;
 
 use DomainException,
@@ -6,7 +11,7 @@ use DomainException,
 	Evoke\Service\ProviderIface;
 
 /**
- * Factory
+ * Model Factory
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -26,7 +31,13 @@ class Factory implements FactoryIface
 	 * @var Evoke\Persistence\DB\SQLIface
 	 */
 	protected $sql;
-	
+
+	/**
+	 * Construct the model factory.
+	 *
+	 * @param ProviderIface Provider for creating objects.
+	 * @param SQLIface      SQL object for DB based models.
+	 */
 	public function __construct(ProviderIface $provider,
 	                            SQLIface      $sql)
 	{
@@ -182,24 +193,6 @@ class Factory implements FactoryIface
 			      'Sql'        => $this->sql,
 			      'Table_Name' => $tableName));
 	}
-
-	/**
-	 * Build an administrative mapper for a database table.
-	 *
-	 * @param string  The database table to map.
-	 * @param mixed[] SQL select settings for the table.
-	 *
-	 * @return Evoke\Model\Mapper\DB\TableAdmin
-	 */
-	public function buildMapperDBTableAdmin(/* String */ $tableName,
-	                                        Array        $select = array())
-	{
-		return $this->provider->make(
-			'Evoke\Model\Mapper\DB\TableAdmin',
-			array('Select'     => $select,
-			      'Sql'        => $this->sql,
-			      'Table_Name' => $tableName));
-	}
 	
 	/**
 	 * Build a mapper for a database tables list.
@@ -234,6 +227,9 @@ class Factory implements FactoryIface
 	 *     // <Child_Table>  Table name for the child field that is being joint.
 	 *     <Join>            <Parent_Field>=<Child_Table>.<Child_Field>
 	 *     <Table_Joins>     <Join>(,<Join>)*
+	 *
+	 * @param mixed[] The joins to be built.
+	 * @param string  The initial table name to start the joins from.
 	 */
 	protected function buildJoins(Array $joins, $tableName)
 	{
