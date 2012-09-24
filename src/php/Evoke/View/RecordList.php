@@ -167,6 +167,9 @@ class RecordList implements ViewIface
 	/**
 	 * Get the view of the record list.
 	 *
+	 * @param mixed[] The are no parameters for the record list so this is
+	 *                ignored.
+	 *
 	 * @return mixed[] The record list view.
 	 */
 	public function get(Array $params = array())
