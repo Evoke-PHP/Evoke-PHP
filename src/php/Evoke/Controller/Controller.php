@@ -82,7 +82,6 @@ abstract class Controller
 	                            WriterIface   $writer,
 	                            Array         $pageSetup = array())
 	{
-		$this->method  	    = $method;
 		$this->outputFormat = $outputFormat;
 		$this->pageSetup    = $pageSetup;
 		$this->params  	    = $params;

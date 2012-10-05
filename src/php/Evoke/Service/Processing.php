@@ -99,7 +99,7 @@ class Processing implements ProcessingIface
 			}
 			else
 			{
-				foreach ($callbackList as $callback)
+				foreach ($callbacks as $callback)
 				{
 					call_user_func($callback, $callbackData);
 				}
