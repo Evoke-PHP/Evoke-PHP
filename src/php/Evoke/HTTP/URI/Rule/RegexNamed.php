@@ -1,10 +1,15 @@
 <?php
+/**
+ * Regex Named
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Regex
+ * Regex Named
  *
  * A regex rule to map the uri classname and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
@@ -16,37 +21,31 @@ use InvalidArgumentException;
  * @license MIT
  * @package HTTP
  */
-class Regex extends Rule
+class RegexNamed extends Rule
 {
 	/**
-	 * Regex match for the URI.
+	 * Regex match for the URI.  The named subpatterns are used for the
+	 * parameters.
 	 * @var string
 	 */
 	protected $match;
 
 	/**
-	 * Parameter key and value replacement regex for the URI.
-	 * @var Array[]
-	 */
-	protected $params;
-
-	/**
-	 * Regex replacement for the classname.
+	 * Regex replacement for the classname.  Any named subpatterns must be
+	 * referred to by number in the replacement.
 	 * @var string
 	 */
 	protected $replacement;
 
 	/**
-	 * Construct the Regex Rule.
+	 * Construct the Regex Named rule.
 	 *
-	 * @param string  The Regex to match the URI with.
+	 * @param string  The Regex to match the URI with named subpatterns.
 	 * @param string  The classname regex replacement string.
-	 * @param Array[] Regexes replacements for the parameters.
 	 * @param bool    Is this always the final route?
 	 */
 	public function __construct(/* String */ $match,
 	                            /* String */ $replacement,
-	                            Array        $params        = array(),
 	                            /* Bool   */ $authoritative = false)
 	{
 		if (!is_string($match))
@@ -60,31 +59,10 @@ class Regex extends Rule
 			throw new InvalidArgumentException(
 				__METHOD__ . ' requires replacement as string');
 		}
-		
-		foreach ($params as $index => $paramSpec)
-		{
-			// Set the keys to remove need for isset checks.
-			$paramSpec += array('Key' => NULL, 'Value' => NULL);
-
-			if (!is_string($paramSpec['Key']))
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' param spec at index: ' . $index .
-					' requires Key as string.');
-			}
-
-			if (!is_string($paramSpec['Value']))
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' param spec at index: ' . $index .
-					' requires Value as string.');
-			}
-		}
-		
+				
 		parent::__construct($authoritative);
 
 		$this->match       = $match;
-		$this->params      = $params;
 		$this->replacement = $replacement;
 	}
    
@@ -107,19 +85,22 @@ class Regex extends Rule
 	 * Get any parameters.
 	 *
 	 * @param string The URI to get the parameters from.
-	 * @return mixed[] Parameters from the URI.
+	 *
+	 * @return mixed[] Named parameters from the URI subpattern matches.
 	 */
 	public function getParams($uri)
 	{
-		$params = array();
+		preg_match($this->match, $uri, $params);
 
-		foreach ($this->params as $paramSpec)
+		foreach ($params as $key => $value)
 		{
-			$params[preg_replace($this->match, $paramSpec['Key'], $uri)] =
-				preg_replace($this->match, $paramSpec['Value'], $uri);
+			if (!is_string($key))
+			{
+				unset($params[$key]);
+			}
 		}
 
-		return $params;		
+		return $params;
 	}
 	
 	/**
@@ -131,7 +112,7 @@ class Regex extends Rule
 	public function isMatch($uri)
 	{
 		$result = preg_match($this->match, $uri);
-		
+
 		return $result !== false && $result > 0;
 	}
 }

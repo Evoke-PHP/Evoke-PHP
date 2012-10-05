@@ -24,7 +24,7 @@ class Tree implements TreeIface
 	 * Children of the Message Tree node.
 	 * @var mixed[]
 	 */
-	protected $children;
+	protected $children = array();
 	
 	/**
 	 * The text for the message.
@@ -38,20 +38,6 @@ class Tree implements TreeIface
 	 */
 	protected $title;
 
-	/**
-	 * Construct a message tree node.
-	 *
-	 * @param null|string Title for the message.
-	 * @param null|string Text for the message.
-	 * @param array Children of the node.
-	 */
-	public function __construct(/* Mixed */ $title    = NULL,
-	                            /* Mixed */ $text     = NULL,
-	                            /* Array */ $children = array())
-	{
-		$this->reset($title, $text, $children);
-	}
-	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -118,61 +104,50 @@ class Tree implements TreeIface
 	}
 
 	/**
-	 * Reset the node to passed in values or default empty state.
+	 * Return whether the node is empty.
 	 *
-	 * @param null|string Title for the message.
-	 * @param null|string Text for the message.
-	 * @param array Children of the node.
+	 * @return bool Whether the node is empty.
 	 */
-	public function reset(/* Mixed */ $title    = NULL,
-	                      /* Mixed */ $text     = NULL,
-	                      /* Array */ $children = array())
+	public function isEmpty()
 	{
-		if (isset($title) && !is_string($title))
+		return empty($this->title) && empty($this->text) &&
+			empty($this->children);
+	}
+	
+	/**
+	 * Reset the node to the default empty state.
+	 */
+	public function reset()
+	{
+		$this->children = array();
+		$this->text     = NULL;
+		$this->title    = NULL;
+	}
+	
+	/**
+	 * Set the node to the passed in values.
+	 *
+	 * @param string      Title for the message.
+	 * @param string      Text for the message.
+	 * @param TreeIface[] Children of the node.
+	 */
+	public function set(/* String */ $title,
+	                    /* String */ $text,
+	                    Array        $children = array())
+	{
+		if (!is_string($title))
 		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires title as string or NULL');
+			throw new InvalidArgumentException('requires title as string');
 		}
 
-		if (isset($text) && !is_string($text))
+		if (!is_string($text))
 		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires text as string or NULL');
+			throw new InvalidArgumentException('requires text as string');
 		}
 
 		$this->children = $children;
 		$this->text     = $text;
 		$this->title    = $title;
 	}
-	
-	/**
-	 * Set the text of the node.
-	 *
-	 * @param string Text for the node.
-	 */
-	public function setText(/* String */ $text)
-	{
-		if (!is_string($text))
-		{
-			throw new InvalidArgumentException('Text must be a string.');
-		}
-		
-		$this->text = $text;
-	}
-
-	/**
-	 * Set the title of the node.
-	 *
-	 * @param string Title for the node.
-	 */
-	public function setTitle(/* String */ $title)
-	{
-		if (!is_string($title))
-		{
-			throw new InvalidArgumentException('Title must be a string.');
-		}
-		
-		$this->title = $title;
-	}	
 }
 // EOF

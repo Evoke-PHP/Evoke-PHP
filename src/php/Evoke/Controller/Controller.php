@@ -22,12 +22,6 @@ use DomainException,
 abstract class Controller
 {
 	/**
-	 * HTTP Method (POST, GET, PUT, DELETE, etc.).
-	 * @var string
-	 */
-	protected $method;
-
-	/**
 	 * Output format as an uppercase string (JSON, XHTML, etc.)
 	 * @var string
 	 */
@@ -72,7 +66,6 @@ abstract class Controller
 	/**
 	 * Construct the Controller.
 	 *
-	 * @param string                      Method (POST, GET, PUT, DELETE, etc.)
 	 * @param string                      The output format to use in uppercase.
 	 * @param mixed[]					  Parameters.
 	 * @param Evoke\Service\ProviderIface Provider object.
@@ -81,8 +74,7 @@ abstract class Controller
 	 * @param Evoke\Writer\WriterIface 	  Writer object.
 	 * @param mixed[]					  Setup for page based output formats.
 	 */
-	public function __construct(/* String */  $method,
-	                            /* String */  $outputFormat,
+	public function __construct(/* String */  $outputFormat,
 	                            Array         $params,
 	                            ProviderIface $provider,
 	                            RequestIface  $request,

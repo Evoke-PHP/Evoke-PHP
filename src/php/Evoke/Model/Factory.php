@@ -65,20 +65,12 @@ class Factory implements FactoryIface
 	 * This is basically a comma separated list of joins for each table.
 	 * (No comma is required at the very end of this list.)
 	 *
-	 * @param Evoke\Model\Data\DataIface[]
-	 *                 Array non-standard data objects by their table name.
-	 *
 	 * @return mixed Evoke\Model\Data\Data or the premade object passed in.
 	 */
-	public function buildData(/* String */ $tableName      = '',
-	                          Array        $dataJoins      = array(),
-	                          Array        $premadeObjects = array())
+	public function buildData(/* String */ $tableName = '',
+	                          Array        $dataJoins = array())
 	{
-		if (isset($premadeObjects[$tableName]))
-		{
-			return $premadeObjects[$tableName];
-		}
-		elseif (!isset($dataJoins[$tableName]))
+		if (!isset($dataJoins[$tableName]))
 		{
 			return $this->provider->make('Evoke\Model\Data\Data');
 		}
@@ -100,7 +92,7 @@ class Factory implements FactoryIface
 				// Build the data model for the child table (match 2) from the
 				// joint field match 1.
 				$builtData[$matches[1]] =
-					$this->buildData($matches[2], $dataJoins, $premadeObjects);
+					$this->buildData($matches[2], $dataJoins);
 			}
 		}
 
@@ -210,6 +202,22 @@ class Factory implements FactoryIface
 			array('Extra_Tables'   => $extraTables,
 			      'Ignored_Tables' => $ignoredTables,
 			      'Sql'            => $this->sql));
+	}
+
+	/**
+	 * Build record list data.
+	 *
+	 * @param string   Table Name.
+	 * @param string[] Joins.
+	 *
+	 * @return Evoke\Model\Data\RecordList The record list.
+	 */
+	public function buildRecordList(/* String */ $tableName,
+	                                Array        $joins = array())
+	{
+		return $this->provider->make(
+			'Evoke\Model\Data\RecordList',
+			array('Data' => $this->buildData($tableName, $joins)));
 	}
 	
 	/*********************/

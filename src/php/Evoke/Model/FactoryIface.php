@@ -31,14 +31,10 @@ interface FactoryIface
 	 * This is basically a comma separated list of joins for each table.
 	 * (No comma is required at the very end of this list.)
 	 *
-	 * @param Evoke\Model\Data\DataIface[]
-	 *                 Array non-standard data objects by their table name.
-	 *
 	 * @return mixed Evoke\Model\Data\Data or the premade object passed in.
 	 */
 	public function buildData(/* String */ $tableName      = '',
-	                          Array        $dataJoins      = array(),
-	                          Array        $premadeObjects = array());
+	                          Array        $dataJoins      = array());
 
 	/**
 	 * Build a table info object.
@@ -89,5 +85,16 @@ interface FactoryIface
 	 */
 	public function buildMapperDBTables(Array $extraTables   = array(),
 	                                    Array $ignoredTables = array());
+
+	/**
+	 * Build record list data.
+	 *
+	 * @param string   Table Name.
+	 * @param string[] Joins.
+	 *
+	 * @return Evoke\Model\Data\RecordList The record list.
+	 */
+	public function buildRecordList(/* String */ $tableName,
+	                                Array        $joins = array());	
 }
 // EOF

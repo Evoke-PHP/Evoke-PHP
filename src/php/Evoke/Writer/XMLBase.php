@@ -121,15 +121,10 @@ abstract class XMLBase implements WriterIface
 
 		if (isset($xml[$this->pos['Children']]))
 		{
-			if (is_string($xml[$this->pos['Children']]))
+			if (!is_array($xml[$this->pos['Children']]))
 			{
 				$xml[$this->pos['Children']]
 					= array($xml[$this->pos['Children']]);
-			}
-			elseif (!is_array($xml[$this->pos['Children']]))
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' bad children: ' . var_export($xml, true));
 			}
 		}
 			
@@ -156,7 +151,7 @@ abstract class XMLBase implements WriterIface
 
 		foreach ($children as $child)
 		{
-			if (is_string($child))
+			if (is_scalar($child))
 			{
 				$this->xmlWriter->text($child);
 			}

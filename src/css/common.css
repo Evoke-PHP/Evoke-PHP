@@ -51,6 +51,7 @@
   font-size:1.5em;
   font-weight:900;
   text-decoration:none;
+  border-radius: 10px;
   -moz-border-radius:10px;
 }
 .Button.Small {
