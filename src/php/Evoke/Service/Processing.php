@@ -46,10 +46,10 @@ class Processing implements ProcessingIface
 	 * @param bool    Whether a match is required.
 	 * @param bool    Whether a unique match is required.
 	 */
-	public function __construct(Array              $data,
-	                            Array              $callbacks,
-	                            /* Bool   */       $matchRequired = false,
-	                            /* Bool   */       $uniqueMatch   = true)
+	public function __construct(Array        $data,
+	                            Array        $callbacks,
+	                            /* Bool   */ $matchRequired = false,
+	                            /* Bool   */ $uniqueMatch   = true)
 	{
 		$this->callbacks     = $callbacks;
 		$this->data          = $data;

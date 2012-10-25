@@ -7,8 +7,15 @@
 namespace Evoke\Model;
 
 use DomainException,
+	Evoke\Model\Data\Data,
+	Evoke\Model\Data\RecordList,
+	Evoke\Model\Mapper\DB\Joint,
+	Evoke\Model\Mapper\DB\Table,
+	Evoke\Model\Mapper\DB\Tables,
 	Evoke\Persistence\DB\SQLIface,
-	Evoke\Service\ProviderIface;
+	Evoke\Persistence\DB\Table\Info,
+	Evoke\Persistence\DB\Table\Joins,
+	Evoke\Persistence\DB\Table\ListID;
 
 /**
  * Model Factory
@@ -21,12 +28,6 @@ use DomainException,
 class Factory implements FactoryIface
 {
 	/**
-	 * Provider for dependency injection.
-	 * @var Evoke\Service\ProviderIface
-	 */
-	protected $provider;
-
-	/**
 	 * SQL Object.
 	 * @var Evoke\Persistence\DB\SQLIface
 	 */
@@ -35,13 +36,10 @@ class Factory implements FactoryIface
 	/**
 	 * Construct the model factory.
 	 *
-	 * @param ProviderIface Provider for creating objects.
-	 * @param SQLIface      SQL object for DB based models.
+	 * @param SQLIface SQL object for DB based models.
 	 */
-	public function __construct(ProviderIface $provider,
-	                            SQLIface      $sql)
+	public function __construct(SQLIface $sql)
 	{
-		$this->provider = $provider;
 		$this->sql      = $sql;
 	}
 
@@ -72,7 +70,7 @@ class Factory implements FactoryIface
 	{
 		if (!isset($dataJoins[$tableName]))
 		{
-			return $this->provider->make('Evoke\Model\Data\Data');
+			return new Data;
 		}
 
 		$tableJoins = explode(',', $dataJoins[$tableName]);
@@ -96,26 +94,7 @@ class Factory implements FactoryIface
 			}
 		}
 
-		return $this->provider->make('Evoke\Model\Data\Data',
-		                             array('Data_Joins' => $builtData));
-	}
-
-	/**
-	 * Build a table info object.
-	 *
-	 * @param mixed[] Parameters for the table info.
-	 *
-	 * @return Evoke\Persistence\DB\Table\Info
-	 */
-	public function buildInfo(Array $params)
-	{
-		if (!isset($params['Sql']))
-		{
-			$params['Sql'] = $this->sql;
-		}
-
-		return $this->provider->make(
-			'Evoke\Persistence\DB\Table\Info', $params);
+		return new Data(array(), $builtData);
 	}
 
 	/**
@@ -123,49 +102,42 @@ class Factory implements FactoryIface
 	 *
 	 * @param string The menu name.
 	 *
-	 * @return Evoke\Model\Mapper\DB\Joint
+	 * @return Joint
 	 */
 	public function buildMapperDBMenu(/* String */ $menuName)
 	{
 		return $this->buildMapperDBJoint(
-			array('Joins'      => array('Menu' => 'List_ID=Menu_List.Menu_ID'),
-			      'Select'     => array(
-				      'Conditions' => array('Menu.Name' => $menuName),
-				      'Fields'     => '*',
-				      'Order'      => 'Menu_List_T_Lft ASC',
-				      'Limit'      => 0),
-			      'Table_Name' => 'Menu'));
+			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
+			'Menu',                                                // Table Name
+			array('Conditions' => array('Menu.Name' => $menuName), // Select
+			      'Fields'     => '*',
+			      'Order'      => 'Menu_List_T_Lft ASC',
+			      'Limit'      => 0));
 	}
 
 	/**
 	 * Build a mapper that maps a joint set of data from the DB.
 	 *
-	 * @param mixed[] The parameters for the Joint Mapper construction, with any
-	 *                joins built using the simple buildJoins method.
+	 * @param string[] The joins for the data set.
+	 * @param string   The name of the primary table.
+	 * @param mixed[]  The select statement settings.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(Array $params)
+	public function buildMapperDBJoint(Array        $joins,
+	                                   /* String */ $tableName,
+	                                   Array        $select =  array())
 	{
-		$params += array('Sql' => $this->sql);
-
-		// Build the joins.
-		if (!empty($params['Joins']) && isset($params['Table_Name']))
-		{
-			$params['Joins'] = $this->provider->make(
-				'Evoke\Persistence\DB\Table\Joins',
-				array('Info'       => $this->buildInfo(
-					      array('Table_Name' => $params['Table_Name'])),
-				      'Joins'      => $this->buildJoins(
-					      $params['Joins'], $params['Table_Name']),
-				      'Table_Name' => $params['Table_Name']));
-		}
-
-		$params['Table_List_ID'] = $this->provider->make(
-			'Evoke\Persistence\DB\Table\ListID',
-			array('Sql' => $this->sql));
-
-		return $this->provider->make('Evoke\Model\Mapper\DB\Joint', $params);
+		return new Joint($this->sql,
+		                 $tableName,
+		                 new Joins(
+			                 new Info($this->sql, $tableName),
+			                 $tableName,
+			                 NULL,
+			                 NULL,
+			                 $this->buildJoins($joins, $tableName)),
+		                 new ListID($this->sql),
+		                 $select);
 	}
 
 	/**
@@ -174,16 +146,12 @@ class Factory implements FactoryIface
 	 * @param string  The database table to map.
 	 * @param mixed[] SQL select settings for the table.
 	 *
-	 * @return Evoke\Model\Mapper\DB\Table
+	 * @return Table
 	 */
 	public function buildMapperDBTable(/* String */ $tableName,
 	                                   Array        $select = array())
 	{
-		return $this->provider->make(
-			'Evoke\Model\Mapper\DB\Table',
-			array('Select'     => $select,
-			      'Sql'        => $this->sql,
-			      'Table_Name' => $tableName));
+		return new Table($this->sql, $tableName, $select);
 	}
 	
 	/**
@@ -192,16 +160,14 @@ class Factory implements FactoryIface
 	 * @param string[] Extra tables to list.
 	 * @param string[] Tables to ignore.
 	 *
-	 * @return Evoke\Model\Mapper\DB\Tables
+	 * @return Tables
 	 */
 	public function buildMapperDBTables(Array $extraTables   = array(),
 	                                    Array $ignoredTables = array())
 	{
-		return $this->provider->make(
-			'Evoke\Model\Mapper\DB\Tables',
-			array('Extra_Tables'   => $extraTables,
-			      'Ignored_Tables' => $ignoredTables,
-			      'Sql'            => $this->sql));
+		return new Tables($this->sql,
+		                  $extraTables,
+		                  $ignoredTables);
 	}
 
 	/**
@@ -210,14 +176,13 @@ class Factory implements FactoryIface
 	 * @param string   Table Name.
 	 * @param string[] Joins.
 	 *
-	 * @return Evoke\Model\Data\RecordList The record list.
+	 * @return RecordList The record list.
 	 */
 	public function buildRecordList(/* String */ $tableName,
 	                                Array        $joins = array())
 	{
-		return $this->provider->make(
-			'Evoke\Model\Data\RecordList',
-			array('Data' => $this->buildData($tableName, $joins)));
+		return new RecordList(
+			$this->buildData($tableName, $joins));
 	}
 	
 	/*********************/
@@ -248,10 +213,12 @@ class Factory implements FactoryIface
 
 		$tableJoins = explode(',', $joins[$tableName]);
 		$builtJoins = array();
-
+		$pattern =
+			'(^(?<Parent_Field>\w+)=(?<Child_Table>\w+)\.(?<Child_Field>\w+)$)';
+		
 		foreach ($tableJoins as $index => $tableJoin)
 		{
-			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
+			if (!preg_match($pattern, $tableJoin, $matches))
 			{
 				throw new DomainException(
 					__METHOD__ . var_export($tableJoin, true) .
@@ -261,15 +228,12 @@ class Factory implements FactoryIface
 			else
 			{
 				$childTable = $matches[2];
-				$builtJoins[] = $this->provider->make(
-					'Evoke\Persistence\DB\Table\Joins',
-					array('Child_Field'  => $matches[3],
-					      'Info'         => $this->buildInfo(
-						      array('Table_Name' => $childTable)),
-					      'Joins'        => $this->buildJoins(
-						      $joins, $childTable),
-					      'Parent_Field' => $matches[1],
-					      'Table_Name'   => $childTable));
+				$builtJoins[] = new Joins(
+					new Info($this->sql, $matches['Child_Table']),
+					$matches['Child_Table'],
+					$matches['Parent_Field'],
+					$matches['Child_Field'],
+					$this->buildJoins($joins, $matches['Child_Table']));
 			}
 		}
 

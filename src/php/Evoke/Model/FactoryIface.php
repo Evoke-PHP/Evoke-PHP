@@ -37,15 +37,6 @@ interface FactoryIface
 	                          Array        $dataJoins      = array());
 
 	/**
-	 * Build a table info object.
-	 *
-	 * @param mixed[] Parameters for the table info.
-	 *
-	 * @return Evoke\Persistence\DB\Table\Info
-	 */
-	public function buildInfo(Array $params);
-
-	/**
 	 * Build a mapper that maps a menu from the DB.
 	 *
 	 * @param string The menu name.
@@ -57,12 +48,15 @@ interface FactoryIface
 	/**
 	 * Build a mapper that maps a joint set of data from the DB.
 	 *
-	 * @param mixed[] The parameters for the Joint Mapper construction, with any
-	 *                joins built using the simple buildJoins method.
+	 * @param string[] The joins for the data set.
+	 * @param string   The name of the primary table.
+	 * @param mixed[]  The select statement settings.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(Array $params);
+	public function buildMapperDBJoint(Array        $joins,
+	                                   /* String */ $tableName,
+	                                   Array        $select =  array());
 
 	/**
 	 * Build a mapper for a database table.

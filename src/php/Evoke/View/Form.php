@@ -64,6 +64,21 @@ class Form extends Element
 	}
 
 	/**
+	 * Add an input to the form.
+	 */
+	public function addInput(Array $attribs, $value = NULL)
+	{
+		$element = array('input', $attribs);
+
+		if (isset($value))
+		{
+			$element[] = $value;
+		}
+
+		$this->children[] = $element;
+	}
+	
+	/**
 	 * Add a hidden input to the form.
 	 *
 	 * @param string The name for the input.
@@ -86,6 +101,13 @@ class Form extends Element
 		$this->add(array('label', array('for' => $for), $text));
 	}
 
+	public function addSubmit($name, $value)
+	{
+		$this->add(array('input', array('type'  => 'submit',
+		                                'name'  => $name,
+		                                'value' => $value)));
+	}
+	
 	/**
 	 * Add a text input.
 	 *
