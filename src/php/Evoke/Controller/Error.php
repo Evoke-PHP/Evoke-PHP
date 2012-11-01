@@ -1,6 +1,10 @@
 <?php
 namespace Evoke\Controller;
 
+use Evoke\HTTP\ResponseIface,
+	Evoke\View\ViewIface,
+	Evoke\Writer\WriterIface;
+
 /**
  * Error Controller
  *
@@ -11,6 +15,48 @@ namespace Evoke\Controller;
  */
 class Error extends Controller
 {
+	/**
+	 * isDetailed
+	 * @var bool
+	 */
+	protected $isDetailed;
+
+	/**
+	 * View for the Error page.
+	 * @var ViewIface
+	 */
+	protected $view;
+	
+	/**
+	 * Construct the Controller.
+	 *
+	 * @param string        The output format to use in uppercase.
+	 * @param mixed[]		Parameters.
+	 * @param ResponseIface Response object.
+	 * @param WriterIface 	Writer object.
+	 * @param ViewIface     View
+	 * @param bool          Whether the error message is detailed.
+	 * @param mixed[]		Setup for page based output formats.
+	 */
+	public function __construct(/* String */  $outputFormat,
+	                            Array         $params,
+	                            ResponseIface $response,
+	                            WriterIface   $writer,
+	                            ViewIface     $view,
+	                            /* Bool */    $isDetailed,
+	                            Array         $pageSetup = array())
+	{
+		parent::__construct($outputFormat, $params, $response,
+		                    $writer, $pageSetup);
+
+		$this->isDetailed = $isDetailed;
+		$this->view       = $view;
+	}
+
+	/******************/
+	/* Public Methods */
+	/******************/
+
 	/**
 	 * Execute the controller.
 	 */
@@ -42,7 +88,16 @@ class Error extends Controller
 		case 'XML':
 		default:
 			$this->writer->writeStart($this->pageSetup);
-			$this->writeXMLError();
+			
+			if ($this->isDetailed)
+			{
+				$this->writer->write($this->view->get(error_get_last()));
+			}
+			else
+			{
+				$this->writer->write($this->view->get());
+			}
+			
 			$this->writer->writeEnd();
 			break;
 		}
@@ -51,26 +106,5 @@ class Error extends Controller
 		$this->response->setBody($this->writer);
 		$this->response->send();
 	}
-
-	/*******************/
-	/* Private Methods */
-	/*******************/
-	
-	/**
-	 * Write the error in XML.
-	 */
-	private function writeXMLError()
-	{
-		$view = $this->provider->make(
-			'Evoke\View\Message\Box',
-			array('Attribs' => array('class' => 'Message_Box System')));
-
-		$this->params += array(
-			'Description' => 'An error has occurred.  We have been notified.' .
-			'  We will fix this as soon as possible.',
-			'Title'       => 'System Error');
-		
-		$this->writer->write($view->get($this->params));
-	}	
 }
 // EOF

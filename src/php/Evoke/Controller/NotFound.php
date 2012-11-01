@@ -1,6 +1,10 @@
 <?php
 namespace Evoke\Controller;
 
+use Evoke\HTTP\ResponseIface,
+	Evoke\View\ViewIface,
+	Evoke\Writer\WriterIface;
+
 /**
  * NotFound Controller
  *
@@ -11,6 +15,39 @@ namespace Evoke\Controller;
  */
 class NotFound extends Controller
 {
+	/**
+	 * View for the Not Found page.
+	 * @var ViewIface
+	 */
+	protected $view;
+	
+	/**
+	 * Construct the Controller.
+	 *
+	 * @param string          The output format to use in uppercase.
+	 * @param mixed[]		  Parameters.
+	 * @param ResponseIface   Response object.
+	 * @param WriterIface 	  Writer object.
+	 * @param ViewIface       View
+	 * @param mixed[]		  Setup for page based output formats.
+	 */
+	public function __construct(/* String */  $outputFormat,
+	                            Array         $params,
+	                            ResponseIface $response,
+	                            WriterIface   $writer,
+	                            ViewIface     $view,
+	                            Array         $pageSetup = array())
+	{
+		parent::__construct($outputFormat, $params, $response,
+		                    $writer, $pageSetup);
+
+		$this->view = $view;
+	}
+
+	/******************/
+	/* Public Methods */
+	/******************/
+
 	/**
 	 * Execute the controller.
 	 */
@@ -32,7 +69,7 @@ class NotFound extends Controller
 		case 'XML':
 		default:
 			$this->writer->writeStart($this->pageSetup);
-			$this->writeXMLNotFound();
+			$this->writer->write($this->view->get());
 			$this->writer->writeEnd();
 			break;
 		}
@@ -41,25 +78,5 @@ class NotFound extends Controller
 		$this->response->setBody($this->writer);
 		$this->response->send();
 	}
-
-	/*******************/
-	/* Private Methods */
-	/*******************/
-
-	/**
-	 * Write a Message Box in XML showing the Not Found message.
-	 */
-	private function writeXMLNotFound()
-	{
-		$view = $this->provider->make(
-			'Evoke\View\Message\Box',
-			array('Attribs' => array('class' => 'Message_Box System')));
-
-		$this->params += array(
-			'Description' => 'The requested page could not be found.',
-			'Title'       => 'Not Found');
-		
-		$this->writer->write($view->get($this->params));
-	}	
 }
 // EOF

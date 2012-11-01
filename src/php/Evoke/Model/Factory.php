@@ -63,7 +63,7 @@ class Factory implements FactoryIface
 	 * This is basically a comma separated list of joins for each table.
 	 * (No comma is required at the very end of this list.)
 	 *
-	 * @return mixed Evoke\Model\Data\Data or the premade object passed in.
+	 * @return Data.
 	 */
 	public function buildData(/* String */ $tableName = '',
 	                          Array        $dataJoins = array())
@@ -96,7 +96,7 @@ class Factory implements FactoryIface
 
 		return new Data(array(), $builtData);
 	}
-
+	
 	/**
 	 * Build a mapper that maps a menu from the DB.
 	 *

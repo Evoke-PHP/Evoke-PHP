@@ -30,13 +30,13 @@ class Tree implements TreeIface
 	 * The text for the message.
 	 * @var string
 	 */
-	protected $text;
+	protected $text = NULL;
 
 	/**
 	 * The title of the message.
 	 * @var string
 	 */
-	protected $title;
+	protected $title = NULL;
 
 	/******************/
 	/* Public Methods */
@@ -52,6 +52,16 @@ class Tree implements TreeIface
 		$this->children[] = $child;
 	}
 
+	/**
+	 * Build a tree node.
+	 *
+	 * @return Tree The new tree node.
+	 */
+	public function buildNode()
+	{
+		return new self;
+	}		
+	
 	/**
 	 * Return whether the node has been set.
 	 *

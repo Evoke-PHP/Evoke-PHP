@@ -1,10 +1,7 @@
 <?php
 namespace Evoke\Controller;
 
-use DomainException,
-	Evoke\HTTP\RequestIface,
-	Evoke\HTTP\ResponseIface,
-	Evoke\Service\ProviderIface,
+use Evoke\HTTP\ResponseIface,
 	Evoke\Writer\WriterIface;
 	
 /**
@@ -40,44 +37,28 @@ abstract class Controller
 	protected $params;
 	
 	/**
-	 * Provider Object.
-	 * @var Evoke\Service\ProviderIface
-	 */
-	protected $provider;
-
-	/**
-	 * Request Object.
-	 * @var Evoke\HTTP\RequestIface
-	 */
-	protected $request;
-
-	/**
 	 * Response Object
-	 * @var Evoke\HTTP\ResponseIface
+	 * @var ResponseIface
 	 */
 	protected $response;
 
 	/**
 	 * Writer Object
-	 * @var Evoke\Writer\WriterIface
+	 * @var WriterIface
 	 */
 	protected $writer;
 	
 	/**
 	 * Construct the Controller.
 	 *
-	 * @param string                      The output format to use in uppercase.
-	 * @param mixed[]					  Parameters.
-	 * @param Evoke\Service\ProviderIface Provider object.
-	 * @param Evoke\HTTP\RequestIface     Request object.
-	 * @param Evoke\HTTP\ResponseIface 	  Response object.
-	 * @param Evoke\Writer\WriterIface 	  Writer object.
-	 * @param mixed[]					  Setup for page based output formats.
+	 * @param string        The output format to use in uppercase.
+	 * @param mixed[]		Parameters.
+	 * @param ResponseIface Response object.
+	 * @param WriterIface 	Writer object.
+	 * @param mixed[]		Setup for page based output formats.
 	 */
 	public function __construct(/* String */  $outputFormat,
 	                            Array         $params,
-	                            ProviderIface $provider,
-	                            RequestIface  $request,
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
 	                            Array         $pageSetup = array())
@@ -85,8 +66,6 @@ abstract class Controller
 		$this->outputFormat = $outputFormat;
 		$this->pageSetup    = $pageSetup;
 		$this->params  	    = $params;
-		$this->provider	   	= $provider;
-		$this->request 	   	= $request;
 		$this->response	   	= $response;
 		$this->writer  	    = $writer;
 	}

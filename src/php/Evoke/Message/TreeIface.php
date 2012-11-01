@@ -22,6 +22,13 @@ interface TreeIface
 	 * @param TreeIface MessageTree to append.
 	 */
 	public function append(TreeIface $child);
+
+	/**
+	 * Build a tree node.
+	 *
+	 * @return Tree The new tree node.
+	 */
+	public function buildNode();
 	
 	/**
 	 * Get the text of the message node.
