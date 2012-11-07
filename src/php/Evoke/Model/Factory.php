@@ -40,7 +40,7 @@ class Factory implements FactoryIface
 	 */
 	public function __construct(SQLIface $sql)
 	{
-		$this->sql      = $sql;
+		$this->sql = $sql;
 	}
 
 	/******************/
@@ -55,46 +55,58 @@ class Factory implements FactoryIface
 	 * data.
 	 *
 	 * @param string   The table name for the primary table.
-	 * @param string[] Joins listed in a simple string format:
+	 * @param string[] Joins listed in a simple string format
 	 *
-	 *     Key:   <Table Name for parent field>
-	 *     Value: [<Parent_Field>=<Child_Table>.<Child_Field>,]*
+	 * <pre><code>
+	 *     array(Parent_Table =>
+	 * 	             "(Data_Type.)?Parent_Field=Child_Table.Child_Field," .
+	 * 	             "(Data_Type.)?Parent_Field=Child_Table.Child_Field," .
+	 * 	             etc.),
+	 * 	         Another_Parent_Table => etc.)
+	 * </code></pre>
 	 *
-	 * This is basically a comma separated list of joins for each table.
-	 * (No comma is required at the very end of this list.)
-	 *
-	 * @return Data.
+	 * @param string   The data type to create the data object as.
+	 * @return Data
 	 */
 	public function buildData(/* String */ $tableName = '',
-	                          Array        $dataJoins = array())
+	                          Array        $dataJoins = array(),
+	                          /* String */ $dataType  = 'Evoke\Model\Data\Data')
 	{
 		if (!isset($dataJoins[$tableName]))
 		{
-			return new Data;
+			return new $dataType;
 		}
 
 		$tableJoins = explode(',', $dataJoins[$tableName]);
-		$builtData = array();
-
+ 		$builtData = array();
+		$pattern = '(^((?<Data_Type>[\w\\\]+)\.)?(?<Parent_Field>\w+)=' .
+			'(?<Child_Table>\w+)\.(?<Child_Field>\w+)$)';
+		
 		foreach ($tableJoins as $index => $tableJoin)
 		{
-			if (!preg_match('(^(\w+)=(\w+)\.(\w+)$)', $tableJoin, $matches))
+			if (!preg_match($pattern, $tableJoin, $matches))
 			{
 				throw new DomainException(
 					__METHOD__ . var_export($tableJoin, true) .
 					' join for table: ' . $tableName . ' at index: ' . $index .
 					' is not valid.');
 			}
+
+			if (!empty($matches['Data_Type']))
+			{
+				$builtData[$matches['Parent_Field']] =
+					$this->buildData($matches['Child_Table'],
+					                 $dataJoins,
+					                 $matches['Data_Type']);
+			}
 			else
 			{
-				// Build the data model for the child table (match 2) from the
-				// joint field match 1.
-				$builtData[$matches[1]] =
-					$this->buildData($matches[2], $dataJoins);
+				$builtData[$matches['Parent_Field']] =
+					$this->buildData($matches['Child_Table'], $dataJoins);
 			}
 		}
 
-		return new Data(array(), $builtData);
+		return new $dataType(array(), $builtData);
 	}
 	
 	/**
@@ -195,11 +207,11 @@ class Factory implements FactoryIface
 	 * is a string that specifies the joins from the table as a string using
 	 * the following grammar:
 	 * 
-	 *     // <Parent_Field> Parent field name for the Join.
-	 *     // <Child_Field>  Child field name for the join.
-	 *     // <Child_Table>  Table name for the child field that is being joint.
-	 *     <Join>            <Parent_Field>=<Child_Table>.<Child_Field>
-	 *     <Table_Joins>     <Join>(,<Join>)*
+	 *     Parent_Field  <Parent field name for the Join>
+	 *     Child_Field   <Child field name for the join>
+	 *     Child_Table   <Table name for the child field that is being joint>
+	 *     Join          Parent_Field=Child_Table.Child_Field
+	 *     Table_Joins   Join(,Join)*
 	 *
 	 * @param mixed[] The joins to be built.
 	 * @param string  The initial table name to start the joins from.
@@ -227,7 +239,6 @@ class Factory implements FactoryIface
 			}
 			else
 			{
-				$childTable = $matches[2];
 				$builtJoins[] = new Joins(
 					new Info($this->sql, $matches['Child_Table']),
 					$matches['Child_Table'],
