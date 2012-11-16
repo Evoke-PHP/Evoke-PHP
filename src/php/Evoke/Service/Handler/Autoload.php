@@ -14,16 +14,6 @@ use InvalidArgumentException,
  */
 class Autoload implements HandlerIface
 {
-	/** 
-	 * Whether we have complete authority over the namespace, or we should allow
-	 * other autoloaders a chance to load the classes for our domain (if we are
-	 * not able to).  This gives us the opportunity to throw an exception and
-	 * avoid the __fatal error__ that is *almost* sure to follow an unloaded
-	 * class.
-	 * @var bool
-	 */
-	protected $authoritative;
-
 	/**
 	 * The base directory for the files.
 	 * @var string
@@ -47,12 +37,10 @@ class Autoload implements HandlerIface
 	 *
 	 * @param string Base directory.
 	 * @param string Namespace.
-	 * @param bool   Authoritative
 	 * @param string Extension
 	 */
 	public function __construct(/* String */ $baseDir,
 	                            /* String */ $namespace,
-	                            /* Bool   */ $authoritative=true,
 	                            /* String */ $extension='.php')
 	{
 		if (!is_string($baseDir))
@@ -67,7 +55,6 @@ class Autoload implements HandlerIface
 				__METHOD__ . ' requires namespace as string');
 		}
 
-		$this->authoritative = $authoritative;
 		$this->baseDir       = rtrim($baseDir, DIRECTORY_SEPARATOR);
 		$this->extension     = $extension;
 		$this->namespace     = $namespace;
@@ -82,7 +69,7 @@ class Autoload implements HandlerIface
 	 *
 	 * @param string The full specification of the class being autoloaded.
 	 */
-	public function handler($name)
+	public function load($name)
 	{
 		// Only handle the specified namespace (and its subnamespaces).
 		if (substr($name, 0, strlen($this->namespace)) !== $this->namespace)
@@ -111,17 +98,6 @@ class Autoload implements HandlerIface
 		{
 			require $filename;
 		}
-		elseif ($this->authoritative)
-		{
-			trigger_error(
-				__METHOD__ . ' Authoritative autoloader can\'t load: ' .
-				$filename);
-			// We are the authoritative autoloader for the namespace - If we
-			// can't find it no-one can.
-			throw new RuntimeException(
-				__METHOD__ . ' filename: ' . $filename .
-				' does not exist for authoritative autoloader.');
-		}
 	}
 
 	/**
@@ -129,7 +105,7 @@ class Autoload implements HandlerIface
 	 */
 	public function register()
 	{
-		spl_autoload_register(array($this, 'handler'), true);
+		spl_autoload_register(array($this, 'load'), true);
 	}
 
 	/**
@@ -137,7 +113,7 @@ class Autoload implements HandlerIface
 	 */
 	public function unregister()
 	{
-		if (!spl_autoload_unregister())
+		if (!spl_autoload_unregister(array($this, 'load')))
 		{
 			throw new RuntimeException(
 				__METHOD__ . ' spl_autoload_unregister failed.');
