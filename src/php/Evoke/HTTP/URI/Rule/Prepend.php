@@ -6,7 +6,7 @@ use InvalidArgumentException;
 /**
  * Prepend
  *
- * A rule to prepend a string to the classname.
+ * A rule to prepend a string to the controller.
  * No parameters are matched by this class.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
@@ -17,7 +17,7 @@ use InvalidArgumentException;
 class Prepend extends Rule
 {
 	/**
-	 * String to prepend to the classname.
+	 * String to prepend to the controller.
 	 * @var string
 	 */
 	protected $str;
@@ -48,12 +48,12 @@ class Prepend extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
+	 * @param string The URI to get the controller from.
 	 * @return string The uri with the string prepended.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
 		return $this->str . $uri;
 	}

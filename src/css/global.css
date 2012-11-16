@@ -226,9 +226,10 @@ html,body
     background: #F00;
 }
 
-.Message_Box.System .Description
+.Message_Box.System .Description,.Message_Box.System .Message,.Message_Box.System .Trace
 {
-    background: #FDD;
+	background: #FDD;
+	padding: 10px;
 }
 
 /***********/

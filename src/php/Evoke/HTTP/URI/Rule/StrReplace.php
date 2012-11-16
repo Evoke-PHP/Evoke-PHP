@@ -6,7 +6,7 @@ use InvalidArgumentException;
 /**
  * StrReplace
  *
- * A rule to change strings from the URI so that a classname can be formed.
+ * A rule to change strings from the URI so that a controller can be formed.
  * No parameters are matched by this class.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
@@ -63,12 +63,12 @@ class StrReplace extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
+	 * @param string The URI to get the controller from.
 	 * @return string The uri with the string replacements made.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
 		return str_replace($this->match, $this->replacement, $uri);
 	}

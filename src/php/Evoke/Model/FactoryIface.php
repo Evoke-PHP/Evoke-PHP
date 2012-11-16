@@ -48,14 +48,14 @@ interface FactoryIface
 	/**
 	 * Build a mapper that maps a joint set of data from the DB.
 	 *
-	 * @param string[] The joins for the data set.
 	 * @param string   The name of the primary table.
+	 * @param string[] The joins for the data set.
 	 * @param mixed[]  The select statement settings.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(Array        $joins,
-	                                   /* String */ $tableName,
+	public function buildMapperDBJoint(/* String */ $tableName,
+	                                   Array        $joins,
 	                                   Array        $select =  array());
 
 	/**
@@ -80,6 +80,15 @@ interface FactoryIface
 	public function buildMapperDBTables(Array $extraTables   = array(),
 	                                    Array $ignoredTables = array());
 
+	/**
+	 * Build a Session Mapper.
+	 *
+	 * @param string[] The session domain to map.
+	 *
+	 * @return Evoke\Model\Mapper\Session The session mapper.
+	 */
+	public function buildMapperSession(Array $domain);
+	
 	/**
 	 * Build record list data.
 	 *

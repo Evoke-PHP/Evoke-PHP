@@ -11,7 +11,7 @@ use InvalidArgumentException;
 /**
  * Regex Named
  *
- * A regex rule to map the uri classname and parameters.  There is a single
+ * A regex rule to map the uri controller and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
  * there are more complex requirements such as optional parameters then the
  * RegexTwoLevel rule should be used.
@@ -31,7 +31,7 @@ class RegexNamed extends Rule
 	protected $match;
 
 	/**
-	 * Regex replacement for the classname.  Any named subpatterns must be
+	 * Regex replacement for the controller.  Any named subpatterns must be
 	 * referred to by number in the replacement.
 	 * @var string
 	 */
@@ -41,7 +41,7 @@ class RegexNamed extends Rule
 	 * Construct the Regex Named rule.
 	 *
 	 * @param string  The Regex to match the URI with named subpatterns.
-	 * @param string  The classname regex replacement string.
+	 * @param string  The controller regex replacement string.
 	 * @param bool    Is this always the final route?
 	 */
 	public function __construct(/* String */ $match,
@@ -71,12 +71,12 @@ class RegexNamed extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
+	 * @param string The URI to get the controller from.
 	 * @return string The uri with the match replaced.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
 		return preg_replace($this->match, $this->replacement, $uri);
 	}

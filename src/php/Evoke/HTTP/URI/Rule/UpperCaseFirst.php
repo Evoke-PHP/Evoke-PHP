@@ -40,28 +40,28 @@ class UpperCaseFirst extends Rule
 	/******************/
 
 	/**
-	 * Get the classname with each word starting in upper case.
+	 * Get the controller with each word starting in upper case.
 	 *
 	 * @param string The URI.
-	 * @return string The string representing the Classname.
+	 * @return string The string representing the Controller.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
-		$classname = $uri;
+		$controller = $uri;
 		
 		foreach ($this->delimiters as $delimiter)
 		{
-			$parts = explode($delimiter, $classname);
+			$parts = explode($delimiter, $controller);
 
 			foreach ($parts as &$part)
 			{
 				$part = ucfirst($part);
 			}
 
-			$classname = implode($delimiter, $parts);
+			$controller = implode($delimiter, $parts);
 		}
 
-		return $classname;
+		return $controller;
 	}
 
 	/**

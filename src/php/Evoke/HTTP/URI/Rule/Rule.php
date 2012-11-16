@@ -6,7 +6,7 @@ use InvalidArgumentException;
 /**
  * Rule
  *
- * Map the URI to a class and parameters (probably a controller).
+ * Map the URI to a controller and parameters.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young

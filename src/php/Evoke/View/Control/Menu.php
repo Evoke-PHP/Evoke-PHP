@@ -29,25 +29,25 @@ class Menu implements ViewIface
 	protected $menuItemClass;
 	
 	/**
-	 * Translator object
+	 * Translations data.
 	 * @var Evoke\Model\Data\TranslationsIface
 	 */
-	protected $translator;
+	protected $translations;
 	
 	/**
 	 * Construct a Menu object.
 	 *
-	 * @param Evoke\Model\Data\TranslationsIface Translator.
 	 * @param Evoke\Model\Data\Menu              Menu Data.
+	 * @param Evoke\Model\Data\TranslationsIface Translations.
 	 * @param string                             Menu Item class
 	 */
-	public function __construct(TranslationsIface $translator,
-	                            DataMenu          $data,
+	public function __construct(DataMenu          $data,
+	                            TranslationsIface $translations,
 	                            /* String */      $menuItemClass = 'Menu_Item')
 	{
 		$this->data          = $data;
 		$this->menuItemClass = $menuItemClass;
-		$this->translator    = $translator;
+		$this->translations    = $translations;
 	}
 	
 	/******************/
@@ -90,7 +90,7 @@ class Menu implements ViewIface
 	 */
 	private function buildMenu($data, $level = 0)
 	{
-		$lang = $this->translator->getLanguage();
+		$lang = $this->translations->getLanguage();
 		$menu = array();
 
 		foreach ($data as $menuItem)

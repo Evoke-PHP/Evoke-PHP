@@ -47,12 +47,12 @@ class Trim extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
+	 * @param string The URI to get the controller from.
 	 * @return string The uri trimmed appropriately.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
 		return trim($uri, $this->characters);
 	}

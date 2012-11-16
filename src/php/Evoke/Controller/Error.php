@@ -1,4 +1,9 @@
 <?php
+/**
+ * Error Controller
+ *
+ * @package Controller
+ */
 namespace Evoke\Controller;
 
 use Evoke\HTTP\ResponseIface,
@@ -16,12 +21,6 @@ use Evoke\HTTP\ResponseIface,
 class Error extends Controller
 {
 	/**
-	 * isDetailed
-	 * @var bool
-	 */
-	protected $isDetailed;
-
-	/**
 	 * View for the Error page.
 	 * @var ViewIface
 	 */
@@ -35,7 +34,6 @@ class Error extends Controller
 	 * @param ResponseIface Response object.
 	 * @param WriterIface 	Writer object.
 	 * @param ViewIface     View
-	 * @param bool          Whether the error message is detailed.
 	 * @param mixed[]		Setup for page based output formats.
 	 */
 	public function __construct(/* String */  $outputFormat,
@@ -43,13 +41,11 @@ class Error extends Controller
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
 	                            ViewIface     $view,
-	                            /* Bool */    $isDetailed,
 	                            Array         $pageSetup = array())
 	{
 		parent::__construct($outputFormat, $params, $response,
 		                    $writer, $pageSetup);
 
-		$this->isDetailed = $isDetailed;
 		$this->view       = $view;
 	}
 
@@ -72,36 +68,20 @@ class Error extends Controller
 			$this->writer->flush();
 		}
 
-		switch ($this->outputFormat)
-		{
-		case 'JSON':
-			$this->writer->write(array('Code'    => '500',
-			                           'Title'   => 'Internal Server Error'));
-			break;
-
-		case 'TEXT':
-			$this->writer->write('500 Internal Server Error');
-			break;
-			
-		case 'HTML5':
-		case 'XHTML':
-		case 'XML':
-		default:
-			$this->writer->writeStart($this->pageSetup);
-			
-			if ($this->isDetailed)
-			{
-				$this->writer->write($this->view->get(error_get_last()));
-			}
-			else
-			{
-				$this->writer->write($this->view->get());
-			}
-			
-			$this->writer->writeEnd();
-			break;
-		}
+		$pageBased = $this->isPageBased();
 		
+		if ($pageBased)
+		{
+			$this->writer->writeStart($this->pageSetup);
+		}
+
+		$this->writer->write($this->view->get());
+			
+		if ($pageBased)
+		{
+			$this->writer->writeEnd();
+		}
+
 		$this->response->setStatus(500);
 		$this->response->setBody($this->writer);
 		$this->response->send();

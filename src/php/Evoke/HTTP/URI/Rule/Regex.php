@@ -6,7 +6,7 @@ use InvalidArgumentException;
 /**
  * Regex
  *
- * A regex rule to map the uri classname and parameters.  There is a single
+ * A regex rule to map the uri controller and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
  * there are more complex requirements such as optional parameters then the
  * RegexTwoLevel rule should be used.
@@ -31,7 +31,7 @@ class Regex extends Rule
 	protected $params;
 
 	/**
-	 * Regex replacement for the classname.
+	 * Regex replacement for the controller.
 	 * @var string
 	 */
 	protected $replacement;
@@ -40,7 +40,7 @@ class Regex extends Rule
 	 * Construct the Regex Rule.
 	 *
 	 * @param string  The Regex to match the URI with.
-	 * @param string  The classname regex replacement string.
+	 * @param string  The controller regex replacement string.
 	 * @param Array[] Regexes replacements for the parameters.
 	 * @param bool    Is this always the final route?
 	 */
@@ -93,12 +93,12 @@ class Regex extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
+	 * @param string The URI to get the controller from.
 	 * @return string The uri with the match replaced.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
 		return preg_replace($this->match, $this->replacement, $uri);
 	}

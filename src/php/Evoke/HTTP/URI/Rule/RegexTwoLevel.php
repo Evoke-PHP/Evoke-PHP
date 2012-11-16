@@ -10,7 +10,7 @@ use DomainException,
  * RegexTwoLevel
  *
  * A powerful rule based on regular expressions for refining the URI to a
- * classname and parameters that will respond (generally a Controller).
+ * controller and parameters that will respond.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -19,6 +19,12 @@ use DomainException,
  */
 class RegexTwoLevel extends Rule
 {
+	/**
+	 * The controller to calculate from the URI (see __construct);
+	 * @var $controller
+	 */
+	protected $controller;
+	
 	/**
 	 * The regex match to determine whether this object matches the URI.
 	 * @var string
@@ -31,12 +37,6 @@ class RegexTwoLevel extends Rule
 	 */
 	protected $params;
 
-	/**
-	 * The classname to calculate from the URI (see __construct);
-	 * @var $classname
-	 */
-	protected $classname;
-	
 	/**
 	 * Create a Regex URI Rule.
 	 *
@@ -51,19 +51,19 @@ class RegexTwoLevel extends Rule
 	 *
 	 * Before the second level Regex's are applied its subject is calculated
 	 * using the matched subpatterns from the first level.  This is done using
-	 * the Match_Part in the classname and params arguments.
+	 * the Match_Part in the controller and params arguments.
 	 *
-	 * The second level Regex's are defined in the classname and params
+	 * The second level Regex's are defined in the controller and params
 	 * arguments with their Pattern and Replacement.
 	 *
 	 * @param string   The first level regex for the match.
 	 *                 This is used to:
 	 *                 -# Check that the URI is matched by the rule.
 	 *                 -# Provide the capture subpatterns used by the second
-	 *                    level Regex for the classname and params.
+	 *                    level Regex for the controller and params.
 	 *
-	 * @param string[] The second level regex for calculating the classname for
-	 *                 the URI.  The classname array is of the form:
+	 * @param string[] The second level regex for calculating the controller for
+	 *                 the URI.  The controller array is of the form:
 	 * <pre><code>
 	 * array('Pattern'     => '//',
 	 *       'Replacement' => '//',
@@ -75,7 +75,7 @@ class RegexTwoLevel extends Rule
 	 *
 	 * - The first level uses the match property as the pattern, and the
 	 *   Match_Part as the replacement.
-	 * - The second level uses the Pattern and Replacement from the classname
+	 * - The second level uses the Pattern and Replacement from the controller
 	 *   array against the subject calculated from the first level
 	 *   replacement.
 	 *
@@ -104,7 +104,7 @@ class RegexTwoLevel extends Rule
 	 *                 all URIs that it matches.
 	 */
 	public function __construct(/* String */ $match,
-	                            Array        $classname,
+	                            Array        $controller,
 	                            Array        $params,
 	                            /* Bool   */ $authoritative = false)
 	{
@@ -114,7 +114,7 @@ class RegexTwoLevel extends Rule
 				__METHOD__ . ' requires match as string');
 		}
 
-		$this->ensureSecondLevelRegexp($classname);
+		$this->ensureSecondLevelRegexp($controller);
 
 		foreach ($params as $paramEntry)
 		{
@@ -136,9 +136,9 @@ class RegexTwoLevel extends Rule
 		
 		parent::__construct($authoritative);
 
-		$this->match    = $match;
-		$this->params   = $params;
-		$this->classname = $classname;
+		$this->controller = $controller;
+		$this->match      = $match;
+		$this->params     = $params;
 	}
 
 	/******************/
@@ -146,14 +146,14 @@ class RegexTwoLevel extends Rule
 	/******************/
 
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
-	 * @return string The uri with the classname regex applied.
+	 * @param string The URI to get the controller from.
+	 * @return string The uri with the controller regex applied.
 	 */
-	public function getClassname($uri)
+	public function getController($uri)
 	{
-		return $this->getMappedValue($this->classname, $uri);
+		return $this->getMappedValue($this->controller, $uri);
 	}
 
 	/**

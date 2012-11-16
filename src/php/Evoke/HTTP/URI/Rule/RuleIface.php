@@ -12,12 +12,12 @@ namespace Evoke\HTTP\URI\Rule;
 interface RuleIface extends \Evoke\HTTP\RuleIface
 {
 	/**
-	 * Get the classname.
+	 * Get the controller.
 	 *
-	 * @param string The URI to get the classname from.
-	 * @return string The uri mapped towards the classname with the rule.
+	 * @param string The URI to get the controller from.
+	 * @return string The uri mapped towards the controller with the rule.
 	 */	
-	public function getClassname($uri);
+	public function getController($uri);
 
 	/**
 	 * Return the parameters for the URI.

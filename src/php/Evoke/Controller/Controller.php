@@ -7,9 +7,8 @@ use Evoke\HTTP\ResponseIface,
 /**
  * Abstract Controller
  *
- * Controllers are responsible for providing and using the correct objects
- * from the processing, model and view layers to execute the desired request
- * from the user.
+ * Controllers are responsible for processing input and passing the data to the
+ * views.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -78,5 +77,16 @@ abstract class Controller
 	 * Execute the controller.
 	 */
 	abstract public function execute();
+
+	/**
+	 * Whether the controller is for a page based output.
+	 *
+	 * @return bool Whether the contoller is to produce a page based ouptut.
+	 */
+	protected function isPageBased()
+	{
+		return !in_array(strtolower($this->outputFormat),
+		                 array('text', 'json'));
+	}
 }
 // EOF

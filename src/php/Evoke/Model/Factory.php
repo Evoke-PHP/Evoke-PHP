@@ -12,10 +12,13 @@ use DomainException,
 	Evoke\Model\Mapper\DB\Joint,
 	Evoke\Model\Mapper\DB\Table,
 	Evoke\Model\Mapper\DB\Tables,
+	Evoke\Model\Mapper\Session\Session as MapperSession,
 	Evoke\Persistence\DB\SQLIface,
 	Evoke\Persistence\DB\Table\Info,
 	Evoke\Persistence\DB\Table\Joins,
-	Evoke\Persistence\DB\Table\ListID;
+	Evoke\Persistence\DB\Table\ListID,
+	Evoke\Persistence\Session,
+	Evoke\Persistence\SessionManager;
 
 /**
  * Model Factory
@@ -119,8 +122,8 @@ class Factory implements FactoryIface
 	public function buildMapperDBMenu(/* String */ $menuName)
 	{
 		return $this->buildMapperDBJoint(
-			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
 			'Menu',                                                // Table Name
+			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
 			array('Conditions' => array('Menu.Name' => $menuName), // Select
 			      'Fields'     => '*',
 			      'Order'      => 'Menu_List_T_Lft ASC',
@@ -130,14 +133,14 @@ class Factory implements FactoryIface
 	/**
 	 * Build a mapper that maps a joint set of data from the DB.
 	 *
-	 * @param string[] The joins for the data set.
 	 * @param string   The name of the primary table.
+	 * @param string[] The joins for the data set.
 	 * @param mixed[]  The select statement settings.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(Array        $joins,
-	                                   /* String */ $tableName,
+	public function buildMapperDBJoint(/* String */ $tableName,
+	                                   Array        $joins,
 	                                   Array        $select =  array())
 	{
 		return new Joint($this->sql,
@@ -177,9 +180,19 @@ class Factory implements FactoryIface
 	public function buildMapperDBTables(Array $extraTables   = array(),
 	                                    Array $ignoredTables = array())
 	{
-		return new Tables($this->sql,
-		                  $extraTables,
-		                  $ignoredTables);
+		return new Tables($this->sql, $extraTables, $ignoredTables);
+	}
+
+	/**
+	 * Build a Session Mapper.
+	 *
+	 * @param string[] The session domain to map.
+	 *
+	 * @return MapperSession The session mapper.
+	 */
+	public function buildMapperSession(Array $domain)
+	{
+		return new MapperSession(new SessionManager(new Session, $domain));
 	}
 
 	/**
@@ -193,10 +206,9 @@ class Factory implements FactoryIface
 	public function buildRecordList(/* String */ $tableName,
 	                                Array        $joins = array())
 	{
-		return new RecordList(
-			$this->buildData($tableName, $joins));
+		return new RecordList($this->buildData($tableName, $joins));
 	}
-	
+
 	/*********************/
 	/* Protected Methods */
 	/*********************/
