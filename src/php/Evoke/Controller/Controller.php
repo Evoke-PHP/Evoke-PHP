@@ -17,53 +17,59 @@ use Evoke\HTTP\ResponseIface,
  */
 abstract class Controller
 {
-	/**
-	 * Output format as an uppercase string (JSON, XHTML, etc.)
-	 * @var string
-	 */
-	protected $outputFormat;
+	protected
+		/**
+		 * Output format as an uppercase string (JSON, XHTML, etc.)
+		 * @var string
+		 */
+		$outputFormat,
 	
-	/** 
-	 * Setup for the page based output formats (XHTML, HTML5).
-	 * @var mixed[]
-	 */
-	protected $pageSetup;
-
-	/**
-	 * Parameters for the Controller.
-	 * @var mixed[]
-	 */
-	protected $params;
-	
-	/**
-	 * Response Object
-	 * @var ResponseIface
-	 */
-	protected $response;
-
-	/**
-	 * Writer Object
-	 * @var WriterIface
-	 */
-	protected $writer;
+		/** 
+		 * Setup for the page based output formats (XHTML, HTML5).
+		 * @var mixed[]
+		 */
+		$pageSetup,
+		
+		/**
+		 * Parameters for the Controller.
+		 * @var mixed[]
+		 */
+		$params,
+		
+		/**
+		 * Response Object
+		 * @var ResponseIface
+		 */
+		$response,
+		
+		/**
+		 * Writer Object
+		 * @var WriterIface
+		 */
+		$writer;
 	
 	/**
 	 * Construct the Controller.
 	 *
 	 * @param string        The output format to use in uppercase.
+	 * @param mixed[]		Setup for page based output formats.
 	 * @param mixed[]		Parameters.
 	 * @param ResponseIface Response object.
 	 * @param WriterIface 	Writer object.
-	 * @param mixed[]		Setup for page based output formats.
 	 */
 	public function __construct(/* String */  $outputFormat,
+	                            Array         $pageSetup,
 	                            Array         $params,
 	                            ResponseIface $response,
-	                            WriterIface   $writer,
-	                            Array         $pageSetup = array())
+	                            WriterIface   $writer)
 	{
 		$this->outputFormat = $outputFormat;
-		$this->pageSetup    = $pageSetup;
+		$this->pageSetup    = array_merge(array('CSS'         => array(),
+		                                        'Description' => '',
+		                                        'Keywords'    => '',
+		                                        'JS'          => array(),
+		                                        'Title'       => ''),
+		                                  $pageSetup);		
 		$this->params  	    = $params;
 		$this->response	   	= $response;
 		$this->writer  	    = $writer;
@@ -78,6 +84,10 @@ abstract class Controller
 	 */
 	abstract public function execute();
 
+	/*********************/
+	/* Protected Methods */
+	/*********************/
+
 	/**
 	 * Whether the controller is for a page based output.
 	 *
@@ -87,6 +97,22 @@ abstract class Controller
 	{
 		return !in_array(strtolower($this->outputFormat),
 		                 array('text', 'json'));
+	}
+	
+	/**
+	 * Ensure a clean writer, triggering an error if the buffer is not clear.
+	 */
+	protected function requireCleanWriter()
+	{
+		$currentBuffer = (string)($this->writer);
+
+		if (!empty($currentBuffer))
+		{
+			trigger_error(
+				'Buffer needs to be flushed for clean error page, was: ' .
+				$currentBuffer, E_USER_WARNING);
+			$this->writer->flush();
+		}
 	}
 }
 // EOF

@@ -25,21 +25,21 @@ class NotFound extends Controller
 	 * Construct the Controller.
 	 *
 	 * @param string          The output format to use in uppercase.
+	 * @param mixed[]		  Setup for page based output formats.
 	 * @param mixed[]		  Parameters.
 	 * @param ResponseIface   Response object.
 	 * @param WriterIface 	  Writer object.
 	 * @param ViewIface       View
-	 * @param mixed[]		  Setup for page based output formats.
 	 */
 	public function __construct(/* String */  $outputFormat,
+	                            Array         $pageSetup,
 	                            Array         $params,
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
-	                            ViewIface     $view,
-	                            Array         $pageSetup = array())
+	                            ViewIface     $view)
 	{
-		parent::__construct($outputFormat, $params, $response,
-		                    $writer, $pageSetup);
+		parent::__construct(
+			$outputFormat, $pageSetup, $params, $response, $writer);
 
 		$this->view = $view;
 	}
@@ -53,25 +53,19 @@ class NotFound extends Controller
 	 */
 	public function execute()
 	{
-		switch ($this->outputFormat)
-		{
-		case 'JSON':
-			$this->writer->write(array('Code' => '404',
-			                           'Text' => 'Not Found'));
-			break;
+		$this->requireCleanWriter();
+		$pageBased = $this->isPageBased();
 
-		case 'TEXT':
-			$this->writer->write('404 Not Found');
-			break;
-			
-		case 'HTML5':
-		case 'XHTML':
-		case 'XML':
-		default:
+		if ($pageBased)
+		{
 			$this->writer->writeStart($this->pageSetup);
-			$this->writer->write($this->view->get());
+		}
+
+		$this->writer->write($this->view->get());
+
+		if ($pageBased)
+		{
 			$this->writer->writeEnd();
-			break;
 		}
 
 		$this->response->setStatus(404);

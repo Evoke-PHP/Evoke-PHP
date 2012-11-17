@@ -30,21 +30,21 @@ class Error extends Controller
 	 * Construct the Controller.
 	 *
 	 * @param string        The output format to use in uppercase.
+	 * @param mixed[]		Setup for page based output formats.
 	 * @param mixed[]		Parameters.
 	 * @param ResponseIface Response object.
 	 * @param WriterIface 	Writer object.
 	 * @param ViewIface     View
-	 * @param mixed[]		Setup for page based output formats.
 	 */
 	public function __construct(/* String */  $outputFormat,
+	                            Array         $pageSetup,
 	                            Array         $params,
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
-	                            ViewIface     $view,
-	                            Array         $pageSetup = array())
+	                            ViewIface     $view)
 	{
-		parent::__construct($outputFormat, $params, $response,
-		                    $writer, $pageSetup);
+		parent::__construct(
+			$outputFormat, $pageSetup, $params, $response, $writer);
 
 		$this->view       = $view;
 	}
@@ -58,16 +58,7 @@ class Error extends Controller
 	 */
 	public function execute()
 	{			
-		$currentBuffer = (string)($this->writer);
-
-		if (!empty($currentBuffer))
-		{
-			trigger_error(
-				'Buffer needs to be flushed for clean error page, was: ' .
-				$currentBuffer, E_USER_WARNING);
-			$this->writer->flush();
-		}
-
+		$this->requireCleanWriter();
 		$pageBased = $this->isPageBased();
 		
 		if ($pageBased)

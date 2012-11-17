@@ -198,6 +198,7 @@ class Exception implements HandlerIface
 
 		$this->response->setStatus(500);
 		$this->response->setBody($this->writer);
+		$this->response->send();
 	}
 
 	/**
