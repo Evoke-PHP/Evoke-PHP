@@ -46,7 +46,7 @@ class Error extends Controller
 		parent::__construct(
 			$outputFormat, $pageSetup, $params, $response, $writer);
 
-		$this->view       = $view;
+		$this->view = $view;
 	}
 
 	/******************/

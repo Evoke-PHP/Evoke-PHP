@@ -29,9 +29,10 @@ class Record implements ViewIface
 	public function get(Array $params = array())
 	{
 		$recordElems = array();
-		$params += array('Data'     => array(),
-		                 'Row'      => 0,
-		                 'Selected' => false);
+		$params = array_merge(array('Data'     => array(),
+		                            'Row'      => 0,
+		                            'Selected' => false),
+		                      $params);
 
 		foreach ($this->fields as $field)
 		{
@@ -43,9 +44,12 @@ class Record implements ViewIface
 			                       $fieldValue);
 		}
 
-		return array('div',
-		             array('class' => 'Record'),
-		             $recordElems);
+		$oddEven = $params['Row'] % 2 ? 'Odd' : 'Even';
+		
+		return array(
+			'div',
+			array('class' => 'Record ' . $oddEven),
+			$recordElems);
 	}
 }
 // EOF

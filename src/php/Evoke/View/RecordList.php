@@ -15,29 +15,40 @@ use Evoke\Model\Data\RecordListIface,
  *
  * View to represent a list of records.
  *
- *        		       +---------------+
- *        		       | Headings View |
- *        			   +---------------+
- * +-----------------+ +---------------+ +--------------+
- * | Inline Headings | | Record View / | | Buttons View |
- * | View            | | Empty View    | |              |
- * +-----------------+ +---------------+ +--------------+
+ * +----------+
+ * | *Heading |
+ * |   (Top)  |
+ * +----------+
  *
- *    "         "          "        "       "        "    // (Repeat)
- *                     +---------------+
- *                     | Headings View |
- *                     |  (Separator)  |
- *                     +---------------+
- * +-----------------+ +---------------+ +--------------+
- * | Inline Headings | | Record View   | | Buttons View |
- * | View            | |               | |              |
- * +-----------------+ +---------------+ +--------------+
- *
- *    "         "          "        "       "        "    // (Repeat)
- *                     +---------------+
- *                     | Headings View |
- *                     |   (Bottom)    |
- *                     +---------------+
+ * +------------+
+ * | Empty View |
+ * +------------+
+ *      OR
+ * +-------------+ +--------------+
+ * | *Field View | | Buttons View |
+ * +-------------+ +--------------+
+ *      OR
+ * +-----------------------------------+ +--------------+
+ * |   +-----------------------------+ | |              |
+ * | * | +----------+ +------------+ | | |              |
+ * |   | | Heading  | | Field View | | | | Buttons View |
+ * |   | | (Inline) | |            | | | |              |
+ * |   | +----------+ +------------+ | | |              |
+ * |   +-----------------------------+ | |              |
+ * +-----------------------------------+ +--------------+
+ *           "                                        // (Repeat)
+ * +-------------+
+ * |  Heading    |
+ * | (Separator) |
+ * +-------------+
+ * +-----------------+
+ * | Record as Above |
+ * +-----------------+
+ *       "                                            // (Repeat)
+ * +----------+
+ * | Headings |
+ * | (Bottom) |
+ * +----------+
  *
  * This is a composite view which controls the above layout using the Heading
  * Options and the views passed into the constructor.
@@ -49,115 +60,70 @@ use Evoke\Model\Data\RecordListIface,
  */
 class RecordList implements ViewIface
 {
-	/**
-	 * Attributes for the record list.
-	 * @var string[]
-	 */
-	protected $attribs;
+	protected
+		/**
+		 * The fields to display.
+		 * @var string[]
+		 */
+		$displayFields,
+		
+		/**
+		 * Heading Options.
+		 * @var mixed[]
+		 */
+		$headingOptions,
 
-	/**
-	 * Attributes for a single entry within the record list.
-	 * @var string[]
-	 */
-	protected $entryAttribs;
-	
-	/**
-	 * Heading Options.
-	 * @var mixed[]
-	 */
-	protected $headingOptions;
-	 
-	/**
-	 * The record list data.
-	 * @var RecordListIface
-	 */
-	protected $recordList;
+		/**
+		 * Buttons View.
+		 * @var ViewIface
+		 */
+		$viewButtons,
 
-	/**
-	 * Buttons View.
-	 * @var ViewIface
-	 */
-	protected $viewButtons;
+		/**
+		 * Empty View.
+		 * @var ViewIface
+		 */
+		$viewEmpty,
 
-	/**
-	 * Empty View.
-	 * @var ViewIface
-	 */
-	protected $viewEmpty;
+		/**
+		 * Field view.
+		 * @var ViewIface
+		 */
+		$viewField,
 	
-	/**
-	 * Headings View.
-	 * @var ViewIface
-	 */
-	protected $viewHeadings;
-	
-	/**
-	 * Inline Headings View.
-	 * @var ViewIface
-	 */
-	protected $viewHeadingsInline;
-	
-	/**
-	 * Record View.
-	 * @var ViewIface
-	 */
-	protected $viewRecord;
+		/**
+		 * Heading View.
+		 * @var ViewIface
+		 */
+		$viewHeading;
 
 	/**
 	 * Construct a RecordList View.
 	 *
-	 * @param RecordListIface Record List data.
+	 * @param string[]        The fields to display.
 	 * @param ViewIface 	  Buttons View.
 	 * @param ViewIface 	  Empty View.
 	 * @param ViewIface 	  Record View.
-	 * @param string[]        Record List Attributes.
-	 * @param string[]        Entry Attributes.
 	 * @param ViewIface 	  Headings View.
-	 * @param ViewIface 	  Inline Headings View.
 	 * @param mixed[]   	  Heading Options.
 	 */
-	public function __construct(RecordListIface $recordList,
+	public function __construct(Array           $displayFields,
+	                            ViewIface 		$viewButtons,
 	                            ViewIface 		$viewEmpty,
-	                            ViewIface 		$viewRecord,
-	                            Array           $attribs            = array(
-		                            'class' => 'Record_List'),
-	                            Array           $entryAttribs        = array(
-		                            'class' => 'Entry'),
-	                            ViewIface 		$viewButtons        = NULL,
-	                            ViewIface 		$viewHeadings       = NULL,
-	                            ViewIface 		$viewHeadingsInline = NULL,
-	                            Array     		$headingOptions     = array())
+	                            ViewIface 		$viewField,
+	                            ViewIface 		$viewHeading,
+	                            Array     		$headingOptions = array())
 	{
-		$this->headingOptions = array_merge($headingOptions,
-		                                    array('Bottom'    => false,
-		                                          'Inline'    => false,
-		                                          'Separator' => -1,
-		                                          'Top'       => true));
-
-		if (($this->headingOptions['Bottom'] ||
-		     $this->headingOptions['Separator'] > 0 ||
-		     $this->headingOptions['Top']) &&
-		    !$viewHeadings instanceof ViewIface)
-		{
-			throw new InvalidArgumentException(
-				'needs viewHeadings with the specified headingOptions.');
-		}
-		
-		if ($this->headingOptions['Inline'] &&
-		    !$viewHeadingsInline instanceof ViewIface)
-		{
-			throw new InvalidArgumentException(
-				'needs viewHeadingsInline with specified headingOptions.');
-		}
-
-		$this->attribs            = $attribs;
-		$this->entryAttribs       = $entryAttribs;
-		$this->recordList      	  = $recordList;
+		$this->displayFields      = $displayFields;
+		$this->headingOptions     = array_merge(array('Bottom'    => false,
+		                                              'Inline'    => false,
+		                                              'Separator' => -1,
+		                                              'Top'       => true),
+		                                        $headingOptions);
 		$this->viewButtons    	  = $viewButtons;
 		$this->viewEmpty      	  = $viewEmpty;
-		$this->viewHeadings   	  = $viewHeadings;
-		$this->viewHeadingsInline = $viewHeadingsInline;
-		$this->viewRecord         = $viewRecord;
+		$this->viewField          = $viewField;
+		$this->viewHeading   	  = $viewHeading;
 	}
 
 	/******************/
@@ -167,86 +133,111 @@ class RecordList implements ViewIface
 	/**
 	 * Get the view of the record list.
 	 *
-	 * @param mixed[] The are no parameters for the record list so this is
-	 *                ignored.
-	 *
+	 * @param mixed[] Parameters for the view (Record_List).
 	 * @return mixed[] The record list view.
 	 */
 	public function get(Array $params = array())
 	{
+		if (!isset($params['Record_List']))
+		{
+			throw new InvalidArgumentException('needs Record_List in params');
+		}
+
+		$recordList = $params['Record_List'];
 		$recordListElems = array();
 		$row = 0;
 
-		// Calculate the heading elements once as they may be repeated
-		// throughout.
-		if ($this->viewHeadings instanceof ViewIface)
-		{
-			$heading = $this->viewHeadings->get();
-		}
+		// Calculate the headings for use throughout the record list.
+		$headings = array();
 
-		if ($this->viewHeadingsInline instanceof ViewIface)
+		foreach ($this->displayFields as $field)
 		{
-			$headingInlineSelected =
-				$this->viewHeadingsInline->get(array('Selected' => true));
-			$headingInlineDeselected =
-				$this->viewHeadingsInline->get(array('Selected' => false));
+			$headings[$field] = $this->viewHeading->get(
+				array('Field' => $field));
 		}
-
+		
 		// Compose the view using the components.
 		if ($this->headingOptions['Top'])
 		{
-			$recordListElems[] = $heading;
+			$recordListElems[] = array(
+				'div', array('class' => 'Headings Top'), $headings);
 		}
 
-		if ($this->recordList->isEmpty())
+		if ($recordList->isEmpty())
 		{
 			$recordListElems[] = $this->viewEmpty->get();
 		}
 		else
 		{
-			foreach ($this->recordList as $record)
-			{
-				$entryElems = array();
-				$recordSelected = $this->recordList->isSelectedRecord();
-				
+			foreach ($recordList as $record)
+			{				
 				if ($this->headingOptions['Separator'] > 0 &&
 				    (($row % $this->headingOptions['Separator']) === 0) &&
 				    $row > 1)
 				{
-					$recordListElems[] = $heading;
+					$recordListElems[] = array(
+						'div',
+						array('class' => 'Headings Separator'),
+						$headings);
 				}
+				
+				$recordElems = array();
 				
 				if ($this->headingOptions['Inline'])
 				{
-					$entryElems[] = $recordSelected ?
-						$headingInlineSelected : $headingInlineDeselected;
+					foreach ($this->displayFields as $field)
+					{
+						$recordElems[] = array(
+							'div',
+							array('class' => 'Row'),
+							array($headings[$field],
+							      $this->viewField->get(
+								      array('Field' => $field,
+								            'Value' => $record[$field]))));
+					}
 				}
-				
-				$entryElems[] = $this->viewRecord->get(
-					array('Data'     => $record,
-					      'Row'      => $row,
-					      'Selected' => $recordSelected));
-
-				if (isset($this->viewButtons))
+				else
 				{
-					$entryElems[] = $this->viewButtons->get(
-						array('Data'     => $record,
-						      'Row'      => $row,
-						      'Selected' => $recordSelected));
+					foreach ($this->displayFields as $field)
+					{
+						$recordElems[] = $this->viewField->get(
+							array('Field'    => $field,
+							      'Value'    => $record[$field]));
+					}
+					
 				}
+
+				$recordSelected = $recordList->isSelectedRecord();
+				$entryClass = 'Entry';
+
+				if ($recordSelected)
+				{
+					$entryClass .= ' Selected';
+				}
+
+				$entryClass .= ($row % 2) ? ' Odd' : ' Even';
 				
 				$recordListElems[] = array(
-					'div', $this->entryAttribs, $entryElems);
+					'div',
+					array('class' => $entryClass),
+					array(array('div',
+					            array('class' => 'Record'),
+					            $recordElems),
+					      $this->viewButtons->get(
+						      array('Data'     => $record,
+						            'Row'      => $row,
+						            'Selected' => $recordSelected))));
 				$row++;
 			}
 		}
 		
 		if ($this->headingOptions['Bottom'])
 		{
-			$recordListElems[] = $heading;
+			$recordListElems[] = array(
+				'div', array('class' => 'Headings Bottom'),	$headings);
 		}
 
-		return array('div', $this->attribs, $recordListElems);
+		return array('div', array('class' => 'Record_List'), $recordListElems);
 	}
 }
 // EOF

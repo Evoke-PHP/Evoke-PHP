@@ -56,7 +56,6 @@ class Session implements MapperIface
 		$this->sessionManager->deleteAtOffset($params);
 	}
 
-
 	/**
 	 * Get the data from the session.
 	 *

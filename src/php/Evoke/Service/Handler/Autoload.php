@@ -55,9 +55,9 @@ class Autoload implements HandlerIface
 				__METHOD__ . ' requires namespace as string');
 		}
 
-		$this->baseDir       = rtrim($baseDir, DIRECTORY_SEPARATOR);
-		$this->extension     = $extension;
-		$this->namespace     = $namespace;
+		$this->baseDir   = rtrim($baseDir, DIRECTORY_SEPARATOR);
+		$this->extension = $extension;
+		$this->namespace = $namespace;
 	}
 
 	/******************/

@@ -237,11 +237,11 @@ class Joint extends JointRead implements MapperIface
 	 * // Supply callbacks as values in this array.
 	 * // The comments show what the callback will receive.
 	 * array('Breadth_First_Data'   => NULL, // Data,          Joins.
-	 *      'Breadth_First_Record' => NULL, // Record,        Joins.
-	 *      'Breadth_First_Parent' => NULL, // Parent Record, Child Join.
-	 *      'Depth_First_Data'     => NULL, // Parent Record, Child Join.
-	 *      'Depth_First_Record'   => NULL, // Record,        Joins.
-	 *      'Depth_First_Parent'   => NULL) // Data,          Joins.
+	 *       'Breadth_First_Record' => NULL, // Record,        Joins.
+	 *       'Breadth_First_Parent' => NULL, // Parent Record, Child Join.
+	 *       'Depth_First_Data'     => NULL, // Parent Record, Child Join.
+	 *       'Depth_First_Record'   => NULL, // Record,        Joins.
+	 *       'Depth_First_Parent'   => NULL) // Data,          Joins.
 	 * </code></pre>
 	 *
 	 * For any one bit of data these functions are called in the following

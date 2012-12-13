@@ -287,7 +287,8 @@ code.prettyprint
 /***************/
 /* Record_List */
 /***************/
-.Record_List .Heading_Item,.Record_List .Data_Item
+
+.Record_List .Heading,.Record_List .Field
 {
     display: inline-block;
     font-size: 16px;
@@ -295,60 +296,31 @@ code.prettyprint
 
 .Record_List .Row
 {
+	display: block;
     font-size: 0px;
     width: 100%;
+	height: 30px;
 }
 
-.Record_List .Data
-{
-    display: inline-block;
-    font-size: 0px;
-    padding: 5px;
-    width: 75%;
-}
-
-.Record_List .Data.Odd
-{
-    background: #DDDDDD;
-}
-
-.Record_List .Data.Even
-{
-    background: #BBBBFF;
-}
-
-.Record_List .Data.Empty
+.Record_List .Record .Empty
 {
     background: #EDB845;
     font-size: 16px;
+	height: 100%;
 }
 
-.Record_List .Heading .Data,.Record_List .Heading_Item
+.Record_List .Record .Heading
 {
     background: #FFFFAA;
     font-weight: 700;
+	height: 100%;
+	vertical-align: top;
 }
 
-.Record_List .Row_Buttons,.Record_List .Form_Buttons
+.Record_List .Record .Field
 {
-    display: inline-block;
-    font-size: 0px;
-    background: #8888FF;
-    padding: 3px;
-    vertical-align: top;
-}
-
-.Record_List .Row_Buttons input,.Record_List .Form_Buttons input
-{
-    font-size: 12px;
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-.Record_List .Row_Buttons .Button.Small
-{
-    padding-top: 1px;
-    padding-bottom: 0px;
+	height: 100%;
+	vertical-align: top;
 }
 
 /* Tab Panel */
