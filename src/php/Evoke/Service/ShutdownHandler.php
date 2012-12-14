@@ -1,8 +1,7 @@
 <?php
-namespace Evoke\Service\Handler;
+namespace Evoke\Service;
 
-use BadMethodCallException,
-	Evoke\HTTP\ResponseIface,
+use Evoke\HTTP\ResponseIface,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -16,42 +15,41 @@ use BadMethodCallException,
  * @license MIT
  * @package Service
  */
-class Shutdown implements HandlerIface
+class ShutdownHandler
 {
-	/** 
-	 * The administrator's email address.
-	 * @var string
-	 */
-	protected $administratorEmail;
-
-	/**
-	 * Whether to display a detailed insecure message.
-	 * @var bool
-	 */
-	protected $detailedInsecureMessage;
-
-	/**
-	 * Response object.
-	 * @var Evoke\HTTP\ResponseIface
-	 */
-	protected $response;
-	
-	/**
-	 * Writer object.
-	 * @var Evoke\Writer\WriterIface
-	 */
-	protected $writer;
+	protected
+		/** 
+		 * The administrator's email address.
+		 * @var string
+		 */
+		$administratorEmail,
+		
+		/**
+		 * Whether to display a detailed insecure message.
+		 * @var bool
+		 */
+		$detailedInsecureMessage,
+		
+		/**
+		 * Response object.
+		 * @var Evoke\HTTP\ResponseIface
+		 */
+		$response,
+		
+		/**
+		 * Writer object.
+		 * @var Evoke\Writer\WriterIface
+		 */
+		$writer;
 
 	/**
 	 * Construct the System Shutdown handler.
 	 *
-	 * @param string Admin's Email to use as a contact.
-	 * @param bool   Whether to show detailed logging information (which is
-	 *               insecure).
-	 * @param Evoke\HTTP\ResponseIface
-	 *               Response object.
-	 * @param Evoke\Writer\WriterIface
-	 *               The writer object to write the fatal message.
+	 * @param string        Administrators Email to use as a contact.
+	 * @param bool          Whether to show detailed logging information (which
+	 *                      is insecure).
+	 * @param ResponseIface Response object.
+	 * @param WriterIface   The writer object to write the fatal message.
 	 */
 	public function __construct(/* String */  $administratorEmail,
 	                            /* Bool   */  $detailedInsecureMessage,
@@ -149,17 +147,6 @@ class Shutdown implements HandlerIface
 	public function register()
 	{
 		register_shutdown_function(array($this, 'handler'));
-	}
-
-	/**
-	 * Unregister the shutdown handler (which is not currently possible).
-	 *
-	 * @throw BadMethodCallException
-	 */
-	public function unregister()
-	{
-		throw new BadMethodCallException(
-			__METHOD__ . ' PHP does not have an unregister_shutdown_function.');
 	}
 }
 // EOF

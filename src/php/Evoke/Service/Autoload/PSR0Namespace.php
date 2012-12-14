@@ -1,36 +1,39 @@
 <?php
-namespace Evoke\Service\Handler;
-
-use InvalidArgumentException,
-	RuntimeException;
+/**
+ * PSR0Namespace
+ *
+ * @package Service
+ */
+namespace Evoke\Service\Autoload;
 
 /**
- * Autoload
+ * PSR0Namespace
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Service
  */
-class Autoload implements HandlerIface
+class PSR0Namespace extends Autoload
 {
-	/**
-	 * The base directory for the files.
-	 * @var string
-	 */
-	protected $baseDir;
+	protected
+		/**
+		 * The base directory for the files.
+		 * @var string
+		 */
+		$baseDir,
 
-	/**
-	 * The file extension to use.
-	 * @var string
-	 */
-	protected $extension;
+		/**
+		 * The file extension to use.
+		 * @var string
+		 */
+		$extension,
 
-	/**
-	 * The base namespace that we are autoloading.
-	 * @var string
-	 */
-	protected $namespace;
+		/**
+		 * The base namespace that we are autoloading.
+		 * @var string
+		 */
+		$namespace;
 
 	/**
 	 * Construct an Autoload object.
@@ -65,11 +68,11 @@ class Autoload implements HandlerIface
 	/******************/
 
 	/**
-	 * Provide the autoload function.
+	 * Autoload the specified class.
 	 *
-	 * @param string The full specification of the class being autoloaded.
+	 * @param string The fully namespaced class to load.
 	 */
-	public function load($name)
+	public function load(/* String */ $name)
 	{
 		// Only handle the specified namespace (and its subnamespaces).
 		if (substr($name, 0, strlen($this->namespace)) !== $this->namespace)
@@ -98,26 +101,6 @@ class Autoload implements HandlerIface
 		{
 			require $filename;
 		}
-	}
-
-	/**
-	 * Register the handler.
-	 */
-	public function register()
-	{
-		spl_autoload_register(array($this, 'load'), true);
-	}
-
-	/**
-	 * Unregister the handler
-	 */
-	public function unregister()
-	{
-		if (!spl_autoload_unregister(array($this, 'load')))
-		{
-			throw new RuntimeException(
-				__METHOD__ . ' spl_autoload_unregister failed.');
-		}
-	}
+	}	
 }
 // EOF

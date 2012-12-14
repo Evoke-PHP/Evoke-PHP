@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Service\Handler;
+namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
 	Evoke\Service\Log\LoggingIface,
@@ -16,53 +16,51 @@ use Evoke\HTTP\ResponseIface,
  * @license MIT
  * @package Service
  */
-class Exception implements HandlerIface
+class ExceptionHandler
 {
-	/**
-	 * Whether to display a detailed insecure message.
-	 * @var bool
-	 */
-	protected $detailedInsecureMessage;
+	protected
+		/**
+		 * Whether to display a detailed insecure message.
+		 * @var bool
+		 */
+		$detailedInsecureMessage,
 
-	/**
-	 * Logging object.
-	 * @var Evoke\Service\Log\LoggingIface
-	 */
-	protected $logging;
+		/**
+		 * Logging object.
+		 * @var Evoke\Service\Log\LoggingIface
+		 */
+		$logging,
 
-	/**
-	 * The maximum length of exception message to display.
-	 * @var int
-	 */
-	protected $maxLengthExceptionMessage;
+		/**
+		 * The maximum length of exception message to display.
+		 * @var int
+		 */
+		$maxLengthExceptionMessage,
 
-	/**
-	 * Response object.
-	 * @var Evoke\HTTP\ResponseIface
-	 */
-	protected $response;
+		/**
+		 * Response object.
+		 * @var Evoke\HTTP\ResponseIface
+		 */
+		$response,
 	
-	/**
-	 * Writer object.
-	 * @var Evoke\Writer\WriterIface
-	 */
-	protected $writer;
+		/**
+		 * Writer object.
+		 * @var Evoke\Writer\WriterIface
+		 */
+		$writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param bool Whether to show a detailed insecure message.
-	 * @param int  Maximum length of exception message to show.
-	 * @param Evoke\Service\Log\LoggingIface
-	 *             Logging object.
-	 * @param Evoke\HTTP\ResponseIface
-	 *             Response object.
-	 * @param Evoke\Writer\WriterIface
-	 *             Writer object.
+	 * @param bool          Whether to show a detailed insecure message.
+	 * @param LoggingIface  Logging object.
+	 * @param int           Maximum length of exception message to show.
+	 * @param ResponseIface Response object.
+	 * @param WriterIface   Writer object.
 	 */
 	public function __construct(/* Bool */    $detailedInsecureMessage,
-	                            /* Int  */    $maxLengthExceptionMessage,
 	                            LoggingIface  $logging,
+	                            /* Int  */    $maxLengthExceptionMessage,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
@@ -202,7 +200,9 @@ class Exception implements HandlerIface
 	}
 
 	/**
-	 * Register the handler.
+	 * Register the exception handler.
+	 *
+	 * @return mixed NULL or the previously defined exception handler function.
 	 */
 	public function register()
 	{
@@ -210,7 +210,9 @@ class Exception implements HandlerIface
 	}
 
 	/**
-	 * Unregister the handler.
+	 * Unregister the exception handler.
+	 *
+	 * @return bool TRUE (as per restore_exception_handler()).
 	 */
 	public function unregister()
 	{
