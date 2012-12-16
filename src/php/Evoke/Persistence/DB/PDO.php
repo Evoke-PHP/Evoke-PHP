@@ -19,16 +19,16 @@ class PDO extends \PDO implements DBIface
 	 * Construct the PDO object.
 	 *
 	 * @param string  Data source name.
-	 * @param string  Password.
 	 * @param string  Username.
+	 * @param string  Password.
 	 * @param mixed[] Options.
 	 *
 	 * @throw InvalidArgumentException	 
 	 */
 	public function __construct(
 		/* String */ $dataSourceName,
-		/* String */ $password,
 		/* String */ $username,
+		/* String */ $password,
 		Array        $options = array(
 			\PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
 			\PDO::ATTR_EMULATE_PREPARES => false,))

@@ -59,17 +59,22 @@ class ErrorHandler
 			// they should not be reported.
 			return true;
 		}
-      
-		$this->logging->log($errStr . ' in ' . $errFile . ' on ' . $errLine,
-		                    $errNo . ' context: ' . var_dump($errContext));
+
+		$message = $errStr . ' in ' . $errFile . ' on ' . $errLine;
+
+		if (!empty($errContext))
+		{
+			$message .= ' context: ' .  print_r($errContext, true);
+		}
+		
+		$this->logging->log($message, $errNo);
 
 		// The easiest way to recover from a recoverable error is by handling an
 		// exception.  This ensure the problem is addressed before any related
 		// code fails horribly due to unexpected values.
 		if ($errNo === E_RECOVERABLE_ERROR)
 		{
-			throw new ErrorException(
-				$errStr, 0, $errNo, $errFile, $errLine, $errContext);
+			throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
 		}
 		
 		// Allow PHP to perform its normal reporting of errors.  We have

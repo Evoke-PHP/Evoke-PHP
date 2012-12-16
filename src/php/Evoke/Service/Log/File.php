@@ -40,12 +40,6 @@ class File implements LoggerIface
 	protected $filename;
 	
 	/**
-	 * File pointer to the log file.
-	 * @var mixed
-	 */
-	private $filePointer;
-
-	/**
 	 * Filesystem
 	 * @var Evoke\Persistence\FilesystemIface
 	 */
@@ -64,22 +58,28 @@ class File implements LoggerIface
 	protected $opened = false;
 
 	/**
+	 * File pointer to the log file.
+	 * @var mixed
+	 */
+	private $filePointer;
+
+	/**
 	 * Construct a File Logger object.
 	 *
+	 * @param string     The filename for the log.
 	 * @param Evoke\Persistence\FilesystemIface
 	 *                   Filesystem object
 	 * @param bool       Whether to append to the file.
 	 * @param int(octal) The directory mode for the log file.
-	 * @param string     The filename for the log.
 	 * @param int(octal) Permissions to set the file to
 	 * @param bool       Whether to lock the file for writing.
 	 */
-	public function __construct(FilesystemIface   $filesystem,
-	                            /* Bool */        $append=true,
-	                            /* Int (octal) */ $dirMode=0700,
-	                            /* String */      $filename='php.log',
-	                            /* Int (octal) */ $fileMode=0640,
-	                            /* Bool */        $locking=true)
+	public function __construct(/* String */      $filename,
+	                            FilesystemIface   $filesystem,
+	                            /* Bool */        $append   = true,
+	                            /* Int (octal) */ $dirMode  = 0700,
+	                            /* Int (octal) */ $fileMode = 0640,
+	                            /* Bool */        $locking  = true)
 	{
 		if (!is_bool($append))
 		{

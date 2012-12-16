@@ -44,7 +44,7 @@ abstract class XMLBase implements WriterIface
 	 * @param mixed[]   The positions of the components within the XML.
 	 */
 	public function __construct(
-		XMLWriter   $xmlWriter,
+		XMLWriter    $xmlWriter,
 		/* Bool */   $indent       = true,
 		/* String */ $indentString = '   ',
 		/* String */ $language     = 'EN',
