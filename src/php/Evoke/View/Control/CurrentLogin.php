@@ -7,7 +7,7 @@
 namespace Evoke\View\Control;
 
 use Evoke\Model\Data\TranslationsIface,
-	Evoke\View\ViewIface;
+	Evoke\View\View;
 
 /**
  * CurrentLogin View
@@ -17,7 +17,7 @@ use Evoke\Model\Data\TranslationsIface,
  * @license MIT
  * @package View
  */
-class CurrentLogin implements ViewIface
+class CurrentLogin extends View
 {
 	/**
 	 * Translations
@@ -42,33 +42,30 @@ class CurrentLogin implements ViewIface
 	/**
 	 * Get the view (of the data) to be written.
 	 *
-	 * @param mixed[] Parameters for retrieving the view.
-	 *
 	 * @return mixed[] The view data.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
-		$currentLoginElements = empty($params['Username']) ?
-			array(array('span',
-			            array(),
-			            $this->translations->tr('Not_Logged_In')),
-			      array('a',
-			            array('href' => $params['Login_Page']))) :
-			array(array('span',
-			            array(),
-			            $params['Username']),
-			      array('form',
-			            array('action' => '',
-			                  'method' => 'POST'),
-			            array(array('input',
-			                        array('type' => 'submit',
-			                              'name' => 'Logout',
-			                              'value' => 'Logout')))));
+		$currentLoginElements = array();
+		
+		if (isset($this->data['Logged_In']) && $this->data['Logged_In'])
+		{
+			$currentLoginElements = array(
+				array('span',
+				      array(),
+				      $this->data['Username']),
+				array('form',
+				      array('action' => '',
+				            'method' => 'POST'),
+				      array(array('input',
+				                  array('type' => 'submit',
+				                        'name' => 'Logout',
+				                        'value' => 'Logout')))));
+		}
 		
 		return array('div',
 		             array('class' => 'Current_Login'),
 		             $currentLoginElements);
-
 	}
 }
 // EOF

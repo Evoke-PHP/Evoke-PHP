@@ -16,7 +16,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	 */	  
 	public function test__constructGood()
 	{
-		$obj = new Backtrace($this->getMock('Evoke\Model\Data\DataIface'));
+		$obj = new Backtrace;
 		$this->assertInstanceOf('Evoke\View\Backtrace', $obj);
 		$this->assertInstanceOf('Evoke\View\ViewIface', $obj);
 	}
@@ -28,8 +28,10 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetEmtpy()
 	{
-		$obj = new Backtrace($this->getMock('Evoke\Model\Data\DataIface'));
-		$this->assertSame(['ol', ['class' => 'Backtrace'], []], $obj->get());
+		$obj = new Backtrace;
+		$this->assertSame(
+			['ol', ['class' => 'Backtrace'], []],
+			$obj->get($this->getMock('Evoke\Model\Data\DataIface')));
 	}
 
 	/**
@@ -41,9 +43,10 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	public function testAttributes()
 	{
 		$attribs = ['class' => 'Overriden', 'other' => 'special'];
-		$obj = new Backtrace($this->getMock('Evoke\Model\Data\DataIface'),
-		                     $attribs);
-		$this->assertSame(['ol', $attribs, []],	$obj->get());
+		$obj = new Backtrace($attribs);
+		$this->assertSame(
+			['ol', $attribs, []],
+			$obj->get($this->getMock('Evoke\Model\Data\DataIface')));
 	}
 
 	/**
@@ -63,9 +66,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 			                 'File'     => 'Boog.php',
 			                 'Function' => 'boogieItUp',
 			                 'Type'     => 'btyped')));
-			      
-			            
-		$obj = new Backtrace($data);
+		$obj = new Backtrace;
 
 		$this->assertSame(
 			['ol',
@@ -88,7 +89,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 					  ['span', ['class' => 'Type'],     'btyped'],
 					  ['span', ['class' => 'Function'], 'boogieItUp']
 					  ]]]],
-			$obj->get());			 
+			$obj->get($data));
 	}	
 }
 // EOF

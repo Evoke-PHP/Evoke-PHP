@@ -51,11 +51,12 @@ class Element implements ViewIface
 	/**
 	 * Get the view (of the data) to be written.
 	 *
+	 * @param mixed   The data for the view.
 	 * @param mixed[] Parameters for retrieving the view.
 	 *
 	 * @return mixed[] The view data.
 	 */
-	public function get(Array $params = array())
+	public function get($data = NULL, Array $params = array())
 	{
 		return array($this->tag, $this->attribs, $this->children);
 	}

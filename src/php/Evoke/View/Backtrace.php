@@ -2,7 +2,8 @@
 namespace Evoke\View;
 
 use Evoke\Model\Data\DataIface,
-	Evoke\View\ViewIface;
+	Evoke\View\ViewIface,
+	InvalidArgumentException;
 
 /**
  * Backtrace
@@ -15,12 +16,6 @@ use Evoke\Model\Data\DataIface,
 class Backtrace implements ViewIface
 {
 	/**
-	 * Data
-	 * @var Evoke\Model\Data\DataIface
-	 */
-	protected $data;
-
-	/**
 	 * Attribs
 	 * @var mixed[]
 	 */
@@ -29,14 +24,11 @@ class Backtrace implements ViewIface
 	/**
 	 * Construct a Backtrace object.
 	 *
-	 * @param Evoke\Model\Data\DataIface Data
-	 * @param mixed[]                    attribs
+	 * @param mixed[] attribs
 	 */
 	public function __construct(
-		DataIface $data,
 		Array     $attribs = array('class' => 'Backtrace'))
 	{
-		$this->data    = $data;
 		$this->attribs = $attribs;
 	}
 
@@ -47,15 +39,22 @@ class Backtrace implements ViewIface
 	/**
 	 * Get the view of the backtrace.
 	 *
+	 * @param mixed   The data for the view.
 	 * @param mixed[] Paramaters to the view.
 	 *
 	 * @return mixed[] The view.
 	 */
-	public function get(Array $params = array())
+	public function get(/* Mixed */ $data = NULL, Arrray $params = array())
 	{
+		if (!is_array($data) && !$data instanceof Traversable)
+		{
+			throw new InvalidArguementException(
+				'needs data as array or Traversable');
+		}
+		
 		$listItems = array();
 		
-		foreach ($this->data as $level => $info)
+		foreach ($data as $level => $info)
 		{
 			$stackLineElements = array(
 				array('span',

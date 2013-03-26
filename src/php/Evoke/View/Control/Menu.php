@@ -2,8 +2,8 @@
 namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
-	Evoke\Model\Data\TranslationsIface,
-	Evoke\View\ViewIface;
+	Evoke\View\View,
+	InvalidArgumentException;
 
 /**
  * Menu
@@ -13,41 +13,22 @@ use Evoke\Model\Data\Menu as DataMenu,
  * @license MIT
  * @package View
  */
-class Menu implements ViewIface
+class Menu extends View
 {
 	/**
-	 * Data object.
-	 * @var Evoke\Model\Data\Menu
-	 */
-	protected $data;
-
-	/**
-	 * Class for the menu items.
-	 *
+	 * Language
 	 * @var string
 	 */
-	protected $menuItemClass;
-	
-	/**
-	 * Translations data.
-	 * @var Evoke\Model\Data\TranslationsIface
-	 */
-	protected $translations;
+	protected $language;
 	
 	/**
 	 * Construct a Menu object.
 	 *
-	 * @param Evoke\Model\Data\Menu              Menu Data.
-	 * @param Evoke\Model\Data\TranslationsIface Translations.
-	 * @param string                             Menu Item class
+	 * @param string Language.
 	 */
-	public function __construct(DataMenu          $data,
-	                            TranslationsIface $translations,
-	                            /* String */      $menuItemClass = 'Menu_Item')
+	public function __construct(/* String */ $language)
 	{
-		$this->data          = $data;
-		$this->menuItemClass = $menuItemClass;
-		$this->translations    = $translations;
+		$this->language = $language;
 	}
 	
 	/******************/
@@ -55,14 +36,17 @@ class Menu implements ViewIface
 	/******************/
 
 	/**
-	 * Get the menu represented by the data.
+	 * Get the view of the menu.
 	 *
-	 * @param Parameters to the view.
-	 *
-	 * @return mixed[] The menu element data.
+	 * @return mixed[] The view data.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
+		if (!$this->data instanceof DataMenu)
+		{
+			throw new InvalidArgumentException('needs data as Data\Menu');
+		}
+		
 		$menus = $this->data->getMenu();
 		$menusElements = array();
 		
@@ -86,11 +70,12 @@ class Menu implements ViewIface
 	/**
 	 * Build the menu elements.
 	 *
+	 * @param mixed[] The data for the menu items.
+	 * @param int     The current level of the menu items.
 	 * @return mixed[] The menu elements.
 	 */
-	private function buildMenu($data, $level = 0)
+	private function buildMenu(Array $data, $level = 0)
 	{
-		$lang = $this->translations->getLanguage();
 		$menu = array();
 
 		foreach ($data as $menuItem)
@@ -102,7 +87,7 @@ class Menu implements ViewIface
 					array('class' => $this->menuItemClass . ' Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $lang]),
+					            $menuItem['Text_' . $this->language]),
 					      array('ul',
 					            array(),
 					            $this->buildMenu(
@@ -115,7 +100,7 @@ class Menu implements ViewIface
 					array('class' => $this->menuItemClass . ' Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $lang])));
+					            $menuItem['Text_' . $this->language])));
 			}
 		}
       

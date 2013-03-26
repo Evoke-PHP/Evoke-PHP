@@ -16,7 +16,7 @@ use Evoke\Model\Data\TranslationsIface;
  * @license MIT
  * @package View
  */
-class NotFound implements ViewIface
+class NotFound extends View
 {
 	/**
 	 * Translations
@@ -41,20 +41,18 @@ class NotFound implements ViewIface
 	/**
 	 * Get the view (of the data) to be written.
 	 *
-	 * @param mixed[] Parameters for retrieving the view.
-	 *
 	 * @return mixed[] The view data.
 	 */	
-	public function get(Array $params = array())
+	public function get()
 	{
 		$messageBoxElements = array(
 			array('div',
 			      array('class' => 'Title'),
 			      $this->translations->tr('Not_Found_Title')));
 
-		if (isset($params['Image_Element']))
+		if (isset($this->params['Image_Element']))
 		{
-			$messageBoxElements[] = $params['Image_Element'];
+			$messageBoxElements[] = $this->params['Image_Element'];
 		}
 
 		$messageBoxElements[] =

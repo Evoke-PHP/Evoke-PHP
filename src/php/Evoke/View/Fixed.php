@@ -1,6 +1,9 @@
 <?php
 namespace Evoke\View;
 
+use Evoke\Model\Data\DataIface,
+	RuntimeException;
+
 /**
  * Fixed View
  *
@@ -9,7 +12,7 @@ namespace Evoke\View;
  * @license MIT
  * @package View
  */
-class Fixed implements ViewIface
+class Fixed extends View
 {
 	/**
 	 * Contents
@@ -34,11 +37,17 @@ class Fixed implements ViewIface
 	/**
 	 * Get the fixed view.
 	 *
-	 * @param mixed[] Ignored parameters.
+	 * @return mixed[] The data for the view.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
 		return $this->contents;
+	}
+
+	public function setData(DataIface $data)
+	{
+		throw new RuntimeException(
+			'Data should only be set in the constructor for a fixed view.');
 	}
 }
 // EOF

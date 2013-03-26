@@ -20,11 +20,12 @@ use Evoke\HTTP\ResponseIface,
  */
 class Error extends Controller
 {
-	/**
-	 * View for the Error page.
-	 * @var ViewIface
-	 */
-	protected $view;
+	protected
+		/**
+		 * View for the Error page.
+		 * @var ViewIface
+		 */
+		$view;
 	
 	/**
 	 * Construct the Controller.

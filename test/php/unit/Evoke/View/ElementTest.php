@@ -57,7 +57,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Ensure the backtrace elements are formatted correctly.
+	 * Ensure the elements are formatted correctly.
 	 *
 	 * @covers Evoke\View\Element::get
 	 */

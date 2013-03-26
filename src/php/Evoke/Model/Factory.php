@@ -7,11 +7,13 @@
 namespace Evoke\Model;
 
 use DomainException,
+	Evoke\HTTP\Request,
 	Evoke\Model\Data\Data,
 	Evoke\Model\Data\RecordList,
 	Evoke\Model\Mapper\DB\Joint,
 	Evoke\Model\Mapper\DB\Table,
 	Evoke\Model\Mapper\DB\Tables,
+	Evoke\Model\Mapper\Request\Request as MapperRequest,
 	Evoke\Model\Mapper\Session\Session as MapperSession,
 	Evoke\Persistence\DB\SQLIface,
 	Evoke\Persistence\DB\Table\Info,
@@ -183,6 +185,20 @@ class Factory implements FactoryIface
 		return new Tables($this->sql, $extraTables, $ignoredTables);
 	}
 
+	/**
+	 * Build a Request Mapper (read only).
+	 *
+	 * @param RequestIface The request to map.
+	 * @param string[]     Any keys to ignore in the request.
+	 *
+	 * @return ReadIface The read only request mapper.
+	 */
+	public function buildMapperRequest(RequestIface $request,
+	                                   Array        $ignoredKeys = array())
+	{
+		return new MapperRequest($request, $ignoredKeys);
+	}
+	
 	/**
 	 * Build a Session Mapper.
 	 *
