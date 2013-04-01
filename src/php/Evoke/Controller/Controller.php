@@ -2,10 +2,11 @@
 namespace Evoke\Controller;
 
 use Evoke\HTTP\ResponseIface,
-	Evoke\Writer\WriterIface;
+	Evoke\Writer\WriterIface,
+	Evoke\View\ViewIface;
 	
 /**
- * Abstract Controller
+ * Controller
  *
  * Controllers are responsible for processing input and passing the data to the
  * views.
@@ -15,38 +16,14 @@ use Evoke\HTTP\ResponseIface,
  * @license MIT
  * @package Controller
  */
-abstract class Controller
+class Controller extends ControllerAbstract
 {
 	protected
 		/**
-		 * Output format as an uppercase string (JSON, XHTML, etc.)
-		 * @var string
+		 * View.
+		 * @var ViewIface
 		 */
-		$outputFormat,
-	
-		/** 
-		 * Setup for the page based output formats (XHTML, HTML5).
-		 * @var mixed[]
-		 */
-		$pageSetup,
-		
-		/**
-		 * Parameters for the Controller.
-		 * @var mixed[]
-		 */
-		$params,
-		
-		/**
-		 * Response Object
-		 * @var ResponseIface
-		 */
-		$response,
-		
-		/**
-		 * Writer Object
-		 * @var WriterIface
-		 */
-		$writer;
+		$view;
 	
 	/**
 	 * Construct the Controller.
@@ -54,25 +31,21 @@ abstract class Controller
 	 * @param string        The output format to use in uppercase.
 	 * @param mixed[]		Setup for page based output formats.
 	 * @param mixed[]		Parameters.
-	 * @param ResponseIface Response object.
-	 * @param WriterIface 	Writer object.
+	 * @param ResponseIface Response.
+	 * @param WriterIface 	Writer.
+	 * @param ViewIface     View.
 	 */
 	public function __construct(/* String */  $outputFormat,
 	                            Array         $pageSetup,
 	                            Array         $params,
 	                            ResponseIface $response,
-	                            WriterIface   $writer)
+	                            WriterIface   $writer,
+	                            ViewIface     $view)
 	{
-		$this->outputFormat = $outputFormat;
-		$this->pageSetup    = array_merge(array('CSS'         => array(),
-		                                        'Description' => '',
-		                                        'Keywords'    => '',
-		                                        'JS'          => array(),
-		                                        'Title'       => ''),
-		                                  $pageSetup);		
-		$this->params  	    = $params;
-		$this->response	   	= $response;
-		$this->writer  	    = $writer;
+		parent::__construct(
+			$outputFormat, $pageSetup, $params, $response, $writer);
+
+		$this->view = $view;
 	}
 	
 	/******************/
@@ -82,37 +55,25 @@ abstract class Controller
 	/**
 	 * Execute the controller.
 	 */
-	abstract public function execute();
-
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	/**
-	 * Whether the controller is for a page based output.
-	 *
-	 * @return bool Whether the contoller is to produce a page based ouptut.
-	 */
-	protected function isPageBased()
+	public function execute()
 	{
-		return !in_array(strtolower($this->outputFormat),
-		                 array('text', 'json'));
-	}
-	
-	/**
-	 * Ensure a clean writer, triggering an error if the buffer is not clear.
-	 */
-	protected function requireCleanWriter()
-	{
-		$currentBuffer = (string)($this->writer);
+		$this->requireCleanWriter();
+		$pageBased = $this->isPageBased();
 
-		if (!empty($currentBuffer))
+		if ($pageBased)
 		{
-			trigger_error(
-				'Buffer needs to be flushed for clean error page, was: ' .
-				$currentBuffer, E_USER_WARNING);
-			$this->writer->flush();
+			$this->writer->writeStart($this->pageSetup);
 		}
+
+		$this->writer->write($this->view->get());
+
+		if ($pageBased)
+		{
+			$this->writer->writeEnd();
+		}
+
+		$this->response->setBody($this->writer);
+		$this->response->send();
 	}
 }
 // EOF
