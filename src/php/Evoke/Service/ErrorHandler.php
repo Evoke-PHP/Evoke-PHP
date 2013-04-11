@@ -70,7 +70,7 @@ class ErrorHandler
 		$this->logging->log($message, $errNo);
 
 		// The easiest way to recover from a recoverable error is by handling an
-		// exception.  This ensure the problem is addressed before any related
+		// exception.  This ensures the problem is addressed before any related
 		// code fails horribly due to unexpected values.
 		if ($errNo === E_RECOVERABLE_ERROR)
 		{

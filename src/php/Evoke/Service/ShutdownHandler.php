@@ -98,7 +98,7 @@ class ShutdownHandler
 			E_CORE_WARNING    => 'CORE_WARNING',
 			E_COMPILE_ERROR   => 'COMPILE_ERROR',
 			E_COMPILE_WARNING => 'COMPILE_WARNING');
-      
+		
 		if (!isset($handledErrorTypes[$err['type']]))
 		{
 			return;
@@ -139,6 +139,7 @@ class ShutdownHandler
 
 		$this->response->setStatus(500);
 		$this->response->setBody($this->writer);
+		$this->response->send();
 	}
 
 	/**
