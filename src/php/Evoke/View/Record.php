@@ -26,7 +26,7 @@ class Record implements ViewIface
 	/**
 	 * Get a view of the record.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
 		$recordElems = array();
 		$params = array_merge(array('Data'     => array(),

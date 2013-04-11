@@ -84,7 +84,7 @@ class Menu extends View
 			{
 				$menu[] = array(
 					'li',
-					array('class' => $this->menuItemClass . ' Level_' . $level),
+					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
 					            $menuItem['Text_' . $this->language]),
@@ -97,7 +97,7 @@ class Menu extends View
 			{
 				$menu[] = array(
 					'li',
-					array('class' => $this->menuItemClass . ' Level_' . $level),
+					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
 					            $menuItem['Text_' . $this->language])));

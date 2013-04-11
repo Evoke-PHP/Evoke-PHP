@@ -48,13 +48,14 @@ abstract class View implements ViewIface
 	}
 
 	/**
-	 * Set the parameters for the view.
+	 * Set a paramter for the view.
 	 *
-	 * @param mixed[] The parameters to set for the view.
+	 * @param string The parameter to set for the view.
+	 * @param mixed  The value to set the parameter to.
 	 */
-	public function setParams(Array $params)
+	public function setParam(/* String */ $param, /* Mixed */ $value)
 	{
-		$this->params = $params;
+		$this->params[$param] = $value;
 	}
 }
 // EOF

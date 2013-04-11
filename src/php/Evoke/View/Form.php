@@ -16,31 +16,26 @@ use LogicException;
  * @license MIT
  * @package View
  */
-class Form extends Element
+class Form extends View
 {
-	/**
-	 * Whether to add elements to the row or form.
-	 * @var bool
-	 */
-	private $addToRow = false;
-	
-	/**
-	 * The elements in the current row.
-	 * @var mixed[]
-	 */
-	private $rowElements = array();
+	private
+		/**
+		 * Whether to add elements to the row or form.
+		 * @var bool
+		 */
+		$addToRow = false,
 
-	/**
-	 * Construct a Form object.
-	 *
-	 * @param mixed[] Attribs.
-	 */
-	public function __construct(Array $attribs)
-	{
-		$this->attribs = $attribs;
-
-		parent::__construct('form', $this->attribs);
-	}
+		/**
+		 * Children of the form.
+		 * @var mixed[]
+		 */
+		$children = array(),
+		
+		/**
+		 * The elements in the current row.
+		 * @var mixed[]
+		 */
+		$rowElements = array();
 	
 	/******************/
 	/* Public Methods */
@@ -116,10 +111,10 @@ class Form extends Element
 	 * @param int     The length of the text.
 	 * @param mixed[] Other attributes for the input.
 	 */
-	public function addText($name,
-	                        $value,
-	                        $length       = 30,
-	                        $otherAttribs = array())
+	public function addTextInput($name,
+	                             $value,
+	                             $length       = 30,
+	                             $otherAttribs = array())
 	{
 		$attribs = array_merge($otherAttribs,
 		                       array('length' => $length,
@@ -170,15 +165,23 @@ class Form extends Element
 	/**
 	 * Get the view of the form.
 	 *
-	 * @param mixed[] Parameters for retrieving the view.
-	 *
 	 * @return mixed[] The view data.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
-		return array('form',
-		             $this->attribs,
-		             $this->children);
+		$attribs = isset($this->params['Attribs']) ?
+			$this->params['Attribs'] :
+			array();
+
+		if ($this->addToRow)
+		{
+			trigger_error('Started row has not been finished before the ' .
+			              '\'get\' of the form.  Finishing the row now and ' .
+			              'continuing', E_USER_WARNING);
+			$this->finishRow();
+		}
+		
+		return array('form', $attribs, $this->children);
 	}
 
 	/**

@@ -6,7 +6,7 @@
  */
 namespace Evoke\View;
 
-use InvalidArgumentException;
+use LogicException;
 
 /**
  * Exception View
@@ -18,42 +18,6 @@ use InvalidArgumentException;
  */
 class Exception extends View
 {
-	protected 
-		/**
-		 * Description
-		 * @var string
-		 */
-		$description,
-
-		/**
-		 * Is Detailed
-		 * @var bool
-		 */
-		$isDetailed,
-
-		/**
-		 * Title
-		 * @var string
-		 */
-		$title;
-
-	/**
-	 * Construct a Exception object.
-	 *
-	 * @param bool       Is it a detailed view of the description.
-	 * @param string     Title
-	 * @param string     Description
-	 */
-	public function __construct(
-		/* Bool   */ $isDetailed,
-		/* String */ $title       = 'Exception',
-		/* String */ $description = 'An unexpected exception was thrown.')
-	{
-		$this->description = $description;
-		$this->isDetailed  = $isDetailed;
-		$this->title       = $title;	  
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -65,39 +29,25 @@ class Exception extends View
 	 */	
 	public function get()
 	{
-		$exception = reset($data->getRecord());
-		
 		// We specify exactly \Exception to avoid a clash with the classname.
-		if (!$exception instanceof \Exception)
+		if (!isset($this->data['Exception']) ||
+		    !$this->data['Exception'] instanceof \Exception)
 		{
-			throw new InvalidArgumentException('needs data as Exception');
+			throw new LogicException('needs Data with Exception. Data: ' .
+			                         var_export($this->data, true));
 		}				
-		
-		$exceptionElements = array(
-			array('div', array('class' => 'Description'), $this->description));
 
-		if ($this->isDetailed)
-		{
-			$exceptionElements[] =
-				array('p',
-				      array('class' => 'Message'),
-				      $exception->getMessage());
-			
-			$exceptionElements[] = array(
-				'pre',
-				array('class' => 'Trace'),
-				$exception->getTraceAsString());
-		}
-		
-		return array(
-			'div',
-			array('class' => 'Message_Box System'),
-			array(array('div',
-			            array('class' => 'Title'),
-			            $this->title),
-			      array('div',
-			            array('class' => 'Exception'),
-			            $exceptionElements)));
+		return array('div',
+		             array('class' => 'Exception'),
+		             array(array('div',
+		                         array('class' => 'Type'),
+		                         get_class($this->data['Exception'])),
+		                   array('p',
+		                         array('class' => 'Message'),
+		                         $this->data['Exception']->getMessage()),
+		                   array('pre',
+		                         array('class' => 'Trace'),
+		                         $this->data['Exception']->getTraceAsString())));
 	}
 }
 // EOF

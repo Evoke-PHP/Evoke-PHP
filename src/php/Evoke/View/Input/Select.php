@@ -15,75 +15,59 @@ use Evoke\View\ViewIface,
  */
 class Select implements ViewIface
 {
-	/**
-	 * Attributes for the select element.
-	 * @var string[]
-	 */
-	protected $attribs;
-	
-	/**
-	 * Data to be appended to the options available for selection.
-	 * @var mixed[]
-	 */
-	protected $appendData;
+	protected
+		/**
+		 * Attributes for the select element.
+		 * @var string[]
+		 */
+		$attribs,
+		
+		/**
+		 * Attributes for each select option.
+		 * @var string[]
+		 */
+		$optionAttribs,
+
+		/**
+		 * The field to use from the data for the option text.
+		 * @var string
+		 */
+		$textField,
+		
+		/**
+		 * The field to use for the value of the options.
+		 * @var string
+		 */
+		$valueField;
 
 	/**
-	 * Attributes for each select option.
-	 * @var string[]
-	 */
-	protected $optionAttribs;
-
-	/**
-	 * Data to be prepended to the options available for selection.
-	 * @var mixed[]
-	 */
-	protected $prependData;
-
-	/**
-	 * The field to use from the data for the option text.
-	 * @var string
-	 */
-	protected $textField;
-
-	/**
-	 * The field to use for the value of the options.
-	 * @var string
-	 */
-	protected $valueField;
-
-	/**
-	 * Construct a Select object.
+	 * Construct a Select view.
 	 *
 	 * @param string   Field from the data for the option text.
 	 * @param string   Field from the data for the option value.
 	 * @param string[] Attributes for the select element.
-	 * @param mixed[]  Appended data for adding options.
 	 * @param string[] Attributes for the option elements.
-	 * @param mixed[]  Prepended data for adding options.
 	 */
 	public function __construct(/* String */ $textField,
 	                            /* String */ $valueField    = 'ID',
 	                            Array        $attribs       = array(),
-	                            Array        $appendData    = array(),
-	                            Array        $optionAttribs = array(),
-	                            Array        $prependData   = array())
+	                            Array        $optionAttribs = array())
+	                            
 	{
 		if (!is_string($textField))
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' requires textField as string');
+				__METHOD__ . ' needs textField as string');
 		}
 
 		if (!is_string($valueField))
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' requires valueField as string');
+				__METHOD__ . ' needs valueField as string');
 		}
 
 		$this->attribs       = $attribs;
-		$this->appendData    = $appendData;
 		$this->optionAttribs = $optionAttribs;
-		$this->prependData   = $prependData;
 		$this->textField     = $textField;
 		$this->valueField    = $valueField;
 	}
@@ -95,30 +79,11 @@ class Select implements ViewIface
 	/**
 	 * Get the select element.
 	 *
-	 *  @param mixed[] The select data in the form:
-	 *  <pre><code>
-	 *  array('Records'  => \array records, // Records for the select
-	 *        'Selected' => \scalar value); // The value that is selected.
-	 *  </code></pre>
-	 *
-	 * @return The select element.
+	 * @return mixed[] The select element.
 	 */    
-	public function get(Array $params = array())
+	public function get()
 	{
-		$params += array('Records'  => NULL,
-		               'Selected' => NULL);
-
-		if (!is_array($params['Records']))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires Records as array');
-		}
-
-		$fullData = array_merge($this->prependData,
-		                        $params['Records'],
-		                        $this->appendData);
-
-		if (empty($fullData))
+		if (empty($this->data))
 		{
 			throw new RuntimeException(
 				__METHOD__ . ' cannot set select element without having ' .
@@ -127,7 +92,7 @@ class Select implements ViewIface
 
 		$optionElements = array();
 
-		foreach ($fullData as $key => $record)
+		foreach ($this->data as $key => $record)
 		{
 			if (!isset($record[$this->textField]) ||
 			    !isset($record[$this->valueField]))
@@ -143,7 +108,7 @@ class Select implements ViewIface
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
-			if (isset($params['Selected']) && $value == $params['Selected'])
+			if (isset($this->params['Selected']) && $value == $this->params['Selected'])
 			{
 				$optionAttribs['selected'] = 'selected';
 			}

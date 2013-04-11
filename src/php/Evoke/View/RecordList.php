@@ -7,7 +7,6 @@
 namespace Evoke\View;
 
 use Evoke\Model\Data\RecordListIface,
-	Evoke\View\ViewIface,
 	InvalidArgumentException;
 
 /**
@@ -15,40 +14,19 @@ use Evoke\Model\Data\RecordListIface,
  *
  * View to represent a list of records.
  *
- * +----------+
- * | *Heading |
- * |   (Top)  |
- * +----------+
+ * Regex notation (whitespace should be ignored).
  *
- * +------------+
- * | Empty View |
- * +------------+
- *      OR
- * +-------------+ +--------------+
- * | *Field View | | Buttons View |
- * +-------------+ +--------------+
- *      OR
- * +-----------------------------------+ +--------------+
- * |   +-----------------------------+ | |              |
- * | * | +----------+ +------------+ | | |              |
- * |   | | Heading  | | Field View | | | | Buttons View |
- * |   | | (Inline) | |            | | | |              |
- * |   | +----------+ +------------+ | | |              |
- * |   +-----------------------------+ | |              |
- * +-----------------------------------+ +--------------+
- *           "                                        // (Repeat)
- * +-------------+
- * |  Heading    |
- * | (Separator) |
- * +-------------+
- * +-----------------+
- * | Record as Above |
- * +-----------------+
- *       "                                            // (Repeat)
- * +----------+
- * | Headings |
- * | (Bottom) |
- * +----------+
+ * Heading Row = <Field View>*
+ * Record      = (<Field View><Value View>)* | <Value View>*
+ * Record Row  = <Record><Buttons View>
+ *
+ * Record List = <Heading Row>?
+ *               (<Empty View> | (<Record Row>+<Heading Row>?)+)
+ *               <Heading Row>?
+ *
+ * In english: optional headings at top, followed by empty view or one or more
+ * records optionally separated by headings, followed by optional headings at
+ * the bottom.
  *
  * This is a composite view which controls the above layout using the Heading
  * Options and the views passed into the constructor.
@@ -58,14 +36,14 @@ use Evoke\Model\Data\RecordListIface,
  * @license MIT
  * @package View
  */
-class RecordList implements ViewIface
+class RecordList extends View
 {
 	protected
 		/**
-		 * The fields to display.
-		 * @var string[]
+		 * The fields to display (empty for none, NULL for all).
+		 * @var string[]|null
 		 */
-		$displayFields,
+		$displayedFields,
 		
 		/**
 		 * Heading Options.
@@ -84,46 +62,44 @@ class RecordList implements ViewIface
 		 * @var ViewIface
 		 */
 		$viewEmpty,
-
+	
 		/**
-		 * Field view.
+		 * Field View.
 		 * @var ViewIface
 		 */
 		$viewField,
-	
+
 		/**
-		 * Heading View.
+		 * Value view.
 		 * @var ViewIface
 		 */
-		$viewHeading;
+		$viewValue;
 
 	/**
 	 * Construct a RecordList View.
 	 *
-	 * @param string[]        The fields to display.
-	 * @param ViewIface 	  Buttons View.
-	 * @param ViewIface 	  Empty View.
-	 * @param ViewIface 	  Record View.
-	 * @param ViewIface 	  Headings View.
-	 * @param mixed[]   	  Heading Options.
+	 * @param ViewIface[] Array of views for Buttons, Empty, Field and Value.
 	 */
-	public function __construct(Array           $displayFields,
-	                            ViewIface 		$viewButtons,
-	                            ViewIface 		$viewEmpty,
-	                            ViewIface 		$viewField,
-	                            ViewIface 		$viewHeading,
-	                            Array     		$headingOptions = array())
+	public function __construct(Array $views)
 	{
-		$this->displayFields      = $displayFields;
-		$this->headingOptions     = array_merge(array('Bottom'    => false,
-		                                              'Inline'    => false,
-		                                              'Separator' => -1,
-		                                              'Top'       => true),
-		                                        $headingOptions);
-		$this->viewButtons    	  = $viewButtons;
-		$this->viewEmpty      	  = $viewEmpty;
-		$this->viewField          = $viewField;
-		$this->viewHeading   	  = $viewHeading;
+		if (!$views['Buttons'] instanceof ViewIface ||
+		    !$views['Empty'] instanceof ViewIface ||
+		    !$views['Field'] instanceof ViewIface ||
+		    !$views['Value'] instanceof ViewIface)
+		{
+			throw new InvalidArgumentException(
+				'needs views: Buttons, Empty, Field and Value has: ' .
+				var_export($views, true));
+		}
+			
+		$this->headingOptions = array('Bottom'    => false,
+		                              'Inline'    => false,
+		                              'Separator' => -1,
+		                              'Top'       => true);
+		$this->viewButtons    = $views['Buttons'];
+		$this->viewEmpty      = $views['Empty'];
+		$this->viewField   	  = $views['Field'];
+		$this->viewValue      = $views['Value'];
 	}
 
 	/******************/
@@ -133,27 +109,20 @@ class RecordList implements ViewIface
 	/**
 	 * Get the view of the record list.
 	 *
-	 * @param mixed[] Parameters for the view (Record_List).
 	 * @return mixed[] The record list view.
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
-		if (!isset($params['Record_List']))
-		{
-			throw new InvalidArgumentException('needs Record_List in params');
-		}
-
-		$recordList = $params['Record_List'];
 		$recordListElems = array();
 		$row = 0;
 
 		// Calculate the headings for use throughout the record list.
 		$headings = array();
 
-		foreach ($this->displayFields as $field)
+		foreach ($this->displayedFields as $field)
 		{
-			$headings[$field] = $this->viewHeading->get(
-				array('Field' => $field));
+			$this->viewField->setParam('Field', $field);
+			$headings[$field] = $this->viewField->get();
 		}
 		
 		// Compose the view using the components.
@@ -163,14 +132,14 @@ class RecordList implements ViewIface
 				'div', array('class' => 'Headings Top'), $headings);
 		}
 
-		if ($recordList->isEmpty())
+		if (empty($this->data))
 		{
 			$recordListElems[] = $this->viewEmpty->get();
 		}
 		else
 		{
-			foreach ($recordList as $record)
-			{				
+			foreach ($this->data as $record)
+			{
 				if ($this->headingOptions['Separator'] > 0 &&
 				    (($row % $this->headingOptions['Separator']) === 0) &&
 				    $row > 1)
@@ -183,31 +152,20 @@ class RecordList implements ViewIface
 				
 				$recordElems = array();
 				
-				if ($this->headingOptions['Inline'])
+				foreach ($this->displayedFields as $field)
 				{
-					foreach ($this->displayFields as $field)
-					{
-						$recordElems[] = array(
-							'div',
-							array('class' => 'Row'),
-							array($headings[$field],
-							      $this->viewField->get(
-								      array('Field' => $field,
-								            'Value' => $record[$field]))));
-					}
-				}
-				else
-				{
-					foreach ($this->displayFields as $field)
-					{
-						$recordElems[] = $this->viewField->get(
-							array('Field'    => $field,
-							      'Value'    => $record[$field]));
-					}
+					$this->viewValue->setParam('Field', $field);
+					$this->viewValue->setParam('Value', $this->data[$field]);
 					
+					$recordElems[] = $this->headingOptions['Inline'] ?
+						array('div',
+						      array('class' => 'Row'),
+						      array($headings[$field],
+						            $this->viewValue->get())) :
+						$this->viewValue->get();
 				}
 
-				$recordSelected = $recordList->isSelectedRecord();
+				$recordSelected = $this->data->isSelectedRecord();
 				$entryClass = 'Entry';
 
 				if ($recordSelected)
@@ -216,6 +174,10 @@ class RecordList implements ViewIface
 				}
 
 				$entryClass .= ($row % 2) ? ' Odd' : ' Even';
+
+				$this->viewButtons->setData($record);
+				$this->viewButtons->setParam('Row', $row);
+				$this->viewButtons->setParam('Selected', $recordSelected);
 				
 				$recordListElems[] = array(
 					'div',
@@ -223,10 +185,7 @@ class RecordList implements ViewIface
 					array(array('div',
 					            array('class' => 'Record'),
 					            $recordElems),
-					      $this->viewButtons->get(
-						      array('Data'     => $record,
-						            'Row'      => $row,
-						            'Selected' => $recordSelected))));
+					      $this->viewButtons->get()));
 				$row++;
 			}
 		}
@@ -238,6 +197,57 @@ class RecordList implements ViewIface
 		}
 
 		return array('div', array('class' => 'Record_List'), $recordListElems);
+	}
+
+	/**
+	 * Set the displayed fields in the record list.
+	 *
+	 * @param string[]|null An array of fields to display or null for all.
+	 *                      An empty array means not to display any fields.
+	 */
+	public function setDisplayedFields(/* Mixed */ $displayedFields = NULL)
+	{
+		$this->displayedFields = $displayedFields;
+	}
+
+	/**
+	 * Set whether a heading will appear at the bottom of the record list.
+	 *
+	 * @param bool Whether the bottom heading should be displayed.
+	 */
+	public function setHeadingBottom(/* Bool */ $display = true)
+	{
+		$this->headingOptions['Bottom'] = $display;
+	}
+
+	/**
+	 * Set whether a headings will appear inline for the record list.
+	 *
+	 * @param bool Whether the inline headings should be displayed.
+	 */
+	public function setHeadingInline(/* Bool */ $display = true)
+	{
+		$this->headingOptions['Inline'] = $display;
+	}
+
+	/**
+	 * Set the number of rows between heading separators.
+	 *
+	 * @param int The number of rows between heading separators.
+	 */
+	public function setHeadingSeparatorRows(/* Int */ $separation)
+	{
+		$this->headingOptions['Separator'] = $separation;
+	}
+	
+	/**
+	 * Set whether a heading will appear at the top of the record list.
+	 *
+	 * @param bool Whether the top heading should be displayed.
+	 */
+	public function setHeadingTop(/* Bool */ $display = true)
+	{
+		$this->headingOptions['Top'] = $display;
 	}
 }
 // EOF

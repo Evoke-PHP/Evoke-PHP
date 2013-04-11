@@ -57,12 +57,12 @@ class Error implements ViewIface
 	/**
 	 * Get the view (of the data) to be written.
 	 *
-	 * @param mixed[] Parameters for retrieving the view.
-	 *
 	 * @return mixed[] The view data.
 	 */	
-	public function get(Array $params = array())
+	public function get()
 	{
+		/// \todo Use data instead of params.
+		
 		$descriptionElements = array(
 			array('div',
 			      array('class' => 'General'),

@@ -33,10 +33,11 @@ interface ViewIface
 	public function setData(DataIface $data);
 
 	/**
-	 * Set the parameters for the view.
+	 * Set a paramter for the view.
 	 *
-	 * @param mixed[] The parameters to set for the view.
+	 * @param string The parameter to set for the view.
+	 * @param mixed  The value to set the parameter to.
 	 */
-	public function setParams(Array $params);
+	public function setParam(/* String */ $param, /* Mixed */ $value);
 }
 // EOF

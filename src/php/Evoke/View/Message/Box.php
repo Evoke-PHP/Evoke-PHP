@@ -1,7 +1,7 @@
 <?php
 namespace Evoke\View\Message;
 
-use Evoke\View\ViewIface,
+use Evoke\View\View,
 	InvalidArgumentException;
 
 /**
@@ -12,7 +12,7 @@ use Evoke\View\ViewIface,
  * @license MIT
  * @package View
  */
-class Box implements ViewIface
+class Box extends View
 {
 	/**
 	 * Message Box attributes.
@@ -40,28 +40,26 @@ class Box implements ViewIface
 	 *
 	 * @param mixed[] Parameters to the view.
 	 */
-	public function get(Array $message=array())
+	public function get()
 	{
-		if (!isset($message['Description']))
+		if (!isset($this->data['Description']))
 		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' needs Description');
+			throw new InvalidArgumentException('needs Description');
 		}
 
-		if (!isset($message['Title']))
+		if (!isset($this->data['Title']))
 		{
-			throw new InvalidArgumentException(__METHOD__ . ' needs Title');
+			throw new InvalidArgumentException('needs Title');
 		}
       
-		return array(
-			'div',
-			$this->attribs,
-			array(array('div',
-			            array('class' => 'Title'),
-			            $message['Title']),
-			      array('div',
-			            array('class' => 'Description'),
-			            $message['Description'])));
+		return array('div',
+		             $this->attribs,
+		             array(array('div',
+		                         array('class' => 'Title'),
+		                         $this->data['Title']),
+		                   array('div',
+		                         array('class' => 'Description'),
+		                         $this->data['Description'])));
 	}
 }
 // EOF
