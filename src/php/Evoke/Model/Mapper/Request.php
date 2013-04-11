@@ -4,7 +4,7 @@
  *
  * @package Model
  */
-namespace Evoke\Model\Mapper\Request;
+namespace Evoke\Model\Mapper;
 
 use Evoke\HTTP\RequestIface,
 	Evoke\Model\Mapper\ReadIface;

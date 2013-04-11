@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Model\Mapper\Session;
+namespace Evoke\Model\Mapper;
 
 use Evoke\Model\Mapper\MapperIface,
 	Evoke\Persistence\SessionManagerIface,
