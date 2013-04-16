@@ -16,23 +16,24 @@ use InvalidArgumentException,
  */
 abstract class XMLBase implements WriterIface
 {
-	/**
-	 * The language of the XML being written.
-	 * @var string
-	 */
-	protected $language;
+	protected
+		/**
+		 * The language of the XML being written.
+		 * @var string
+		 */
+		$language,
 	
-	/**
-	 * The position of the tag, attribs and children in the element.
-	 * @var mixed[]
-	 */
-	protected $pos;
+		/**
+		 * The position of the tag, attribs and children in the element.
+		 * @var mixed[]
+		 */
+		$pos,
 
-	/**
-	 * The XML Writer object.
-	 * @var XMLWriter
-	 */
-	protected $xmlWriter;
+		/**
+		 * The XML Writer object.
+		 * @var XMLWriter
+		 */
+		$xmlWriter;
 	
 	/**
 	 * Create an abstract XML Writer.
@@ -155,7 +156,7 @@ abstract class XMLBase implements WriterIface
 			{
 				$this->xmlWriter->text($child);
 			}
-			else
+			elseif (!is_null($child))
 			{
 				$this->write($child);
 			}
