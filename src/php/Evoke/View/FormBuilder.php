@@ -9,14 +9,14 @@ namespace Evoke\View;
 use LogicException;
 
 /**
- * Form View
+ * FormBuilder View
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package View
  */
-class Form extends View
+class FormBuilder extends View implements FormBuilderIface
 {
 	private
 		/**
@@ -36,6 +36,18 @@ class Form extends View
 		 * @var mixed[]
 		 */
 		$rowElements = array();
+
+	/**
+	 * Construct a buildable XHTML form.
+	 *
+	 * @param string[]  Attribs.
+	 */
+	public function __construct(Array $attribs = array('action' => '',
+	                                                   'method' => 'POST'))
+	{
+		$this->params['Attribs'] = $attribs;
+		$this->params['Tag']     = 'form';
+	}
 	
 	/******************/
 	/* Public Methods */
@@ -58,6 +70,21 @@ class Form extends View
 		}
 	}
 
+    /**
+     * Add a file input to the form.
+     *
+     * @param string   The name for the input.
+     * @param string[] Any other attributes.
+     */
+    public function addFile($name, Array $otherAttribs = array())
+    {
+        $this->add(
+            array('input',
+                  array('type' => 'file',
+                        'name' => $name) +
+                  $otherAttribs));
+    }
+    
 	/**
 	 * Add an input to the form.
 	 */
@@ -82,6 +109,7 @@ class Form extends View
 	public function addHidden($name, $value)
 	{
 		$this->add(array('input', array('type'  => 'hidden',
+		                                'name'  => $name,
 		                                'value' => $value)));
 	}
 	
@@ -96,6 +124,12 @@ class Form extends View
 		$this->add(array('label', array('for' => $for), $text));
 	}
 
+	/**
+	 * Add a submit button to the form.
+	 *
+	 * @param string Name of the submit button.
+	 * @param string Value for the button text.
+	 */
 	public function addSubmit($name, $value)
 	{
 		$this->add(array('input', array('type'  => 'submit',
@@ -111,42 +145,37 @@ class Form extends View
 	 * @param int     The length of the text.
 	 * @param mixed[] Other attributes for the input.
 	 */
-	public function addTextInput($name,
-	                             $value,
-	                             $length       = 30,
-	                             $otherAttribs = array())
+	public function addText($name,
+                            $value,
+                            $length       = 30,
+                            $otherAttribs = array())
 	{
-		$attribs = array_merge($otherAttribs,
-		                       array('length' => $length,
-		                             'name'   => $name,
-		                             'type'   => 'text',
-		                             'value'  => $value));
-		                             
 		$this->add(array('input',
-		                 array_merge($otherAttribs,
-		                             array('length' => $length,
-		                                   'name'   => $name,
-		                                   'type'   => 'text',
-		                                   'value'  => $value))));
+		                 $otherAttribs + array('length' => $length,
+		                                       'name'   => $name,
+		                                       'type'   => 'text',
+		                                       'value'  => $value)));
 	}
 
 	/**
 	 * Add a text area.
 	 *
-	 * @param string The name of the text area.
-	 * @param string The initial text.
-	 * @param int    The number of rows.
-	 * @param int    The number of columns.
+	 * @param string   Name of the text area.
+	 * @param string   Initial text.
+	 * @param int      Number of rows.
+	 * @param int      Number of columns.
+	 * @param string[] Other attributes. 
 	 */
-	public function addTextArea($name,
-	                            $value,
-	                            $rows = 10,
-	                            $cols = 50)
+	public function addTextArea(/* String */ $name,
+	                            /* String */ $value,
+	                            /* Int    */ $rows         = 10,
+	                            /* Int    */ $cols         = 50,
+	                            Array        $otherAttribs = array())
 	{
 		$this->add(array('textarea',
-		                 array('name' => $name,
-		                       'rows' => $rows,
-		                       'cols' => $cols),
+		                 $otherAttribs + array('name' => $name,
+		                                       'rows' => $rows,
+		                                       'cols' => $cols),
 		                 $value));
 	}
 	
@@ -169,23 +198,39 @@ class Form extends View
 	 */
 	public function get()
 	{
-		$attribs = isset($this->params['Attribs']) ?
-			$this->params['Attribs'] :
-			array();
-
 		if ($this->addToRow)
 		{
 			trigger_error('Started row has not been finished before the ' .
 			              '\'get\' of the form.  Finishing the row now and ' .
-			              'continuing', E_USER_WARNING);
+			              'continuing.', E_USER_WARNING);
 			$this->finishRow();
 		}
 		
-		return array('form', $attribs, $this->children);
+		return array('form', $this->params['Attribs'], $this->children);
 	}
 
 	/**
-	 * Start a row (rows cannot be nested).
+	 * Set the action of the form.
+	 *
+	 * @param string Action.
+	 */
+	public function setAction(/* String */ $action)
+	{
+		$this->params['Attribs']['action'] = $action;
+	}
+	
+	/**
+	 * Set the method of the form.
+	 *
+	 * @param string Method.
+	 */
+	public function setMethod(/* String */ $method)
+	{
+		$this->params['Attribs']['method'] = $method;
+	}
+
+	/**
+	 * Start a row (rows should not be nested).
 	 */
 	public function startRow()
 	{
