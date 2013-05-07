@@ -3,7 +3,7 @@ namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
 	Evoke\View\View,
-	InvalidArgumentException;
+	LogicException;
 
 /**
  * Menu
@@ -14,23 +14,7 @@ use Evoke\Model\Data\Menu as DataMenu,
  * @package View
  */
 class Menu extends View
-{
-	/**
-	 * Language
-	 * @var string
-	 */
-	protected $language;
-	
-	/**
-	 * Construct a Menu object.
-	 *
-	 * @param string Language.
-	 */
-	public function __construct(/* String */ $language)
-	{
-		$this->language = $language;
-	}
-	
+{	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -44,7 +28,12 @@ class Menu extends View
 	{
 		if (!$this->data instanceof DataMenu)
 		{
-			throw new InvalidArgumentException('needs data as Data\Menu');
+			throw new LogicException('needs data as Data\Menu');
+		}
+
+		if (empty($this->params['Language']))
+		{
+			throw new LogicException('needs Language as parameter.');
 		}
 		
 		$menus = $this->data->getMenu();
@@ -87,7 +76,7 @@ class Menu extends View
 					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $this->language]),
+					            $menuItem['Text_' . $this->params['Language']]),
 					      array('ul',
 					            array(),
 					            $this->buildMenu(
@@ -100,7 +89,8 @@ class Menu extends View
 					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $this->language])));
+					            $menuItem['Text_' . $this->params['Language']])
+						));
 			}
 		}
       
