@@ -52,9 +52,9 @@ class Factory implements FactoryIface
 	/******************/
 
 	/**
-	 * Build all of the data models using an associative array of table joins
+	 * Create all of the data models using an associative array of table joins
 	 * and an array of object types for the data models.  The associative array
-	 * used in this method is shared with the buildMapperDBJoint method.  This
+	 * used in this method is shared with the createMapperDBJoint method.  This
 	 * method does not set the data.  A separate call must be made to set the
 	 * data.
 	 *
@@ -72,9 +72,10 @@ class Factory implements FactoryIface
 	 * @param string   The data type to create the data object as.
 	 * @return Data
 	 */
-	public function buildData(/* String */ $tableName = '',
-	                          Array        $dataJoins = array(),
-	                          /* String */ $dataType  = 'Evoke\Model\Data\Data')
+	public function createData(
+		/* String */ $tableName = '',
+		Array        $dataJoins = array(),
+		/* String */ $dataType  = 'Evoke\Model\Data\Data')
 	{
 		if (!isset($dataJoins[$tableName]))
 		{
@@ -82,7 +83,7 @@ class Factory implements FactoryIface
 		}
 
 		$tableJoins = explode(',', $dataJoins[$tableName]);
- 		$builtData = array();
+		$builtData = array();
 		$pattern = '(^((?<Data_Type>[\w\\\]+)\.)?(?<Parent_Field>\w+)=' .
 			'(?<Child_Table>\w+)\.(?<Child_Field>\w+)$)';
 		
@@ -99,14 +100,14 @@ class Factory implements FactoryIface
 			if (!empty($matches['Data_Type']))
 			{
 				$builtData[$matches['Parent_Field']] =
-					$this->buildData($matches['Child_Table'],
-					                 $dataJoins,
-					                 $matches['Data_Type']);
+					$this->createData($matches['Child_Table'],
+					                  $dataJoins,
+					                  $matches['Data_Type']);
 			}
 			else
 			{
 				$builtData[$matches['Parent_Field']] =
-					$this->buildData($matches['Child_Table'], $dataJoins);
+					$this->createData($matches['Child_Table'], $dataJoins);
 			}
 		}
 
@@ -114,15 +115,15 @@ class Factory implements FactoryIface
 	}
 	
 	/**
-	 * Build a mapper that maps a menu from the DB.
+	 * Create a mapper that maps a menu from the DB.
 	 *
 	 * @param string The menu name.
 	 *
 	 * @return Joint
 	 */
-	public function buildMapperDBMenu(/* String */ $menuName)
+	public function createMapperDBMenu(/* String */ $menuName)
 	{
-		return $this->buildMapperDBJoint(
+		return $this->createMapperDBJoint(
 			'Menu',                                                // Table Name
 			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
 			array('Conditions' => array('Menu.Name' => $menuName), // Select
@@ -132,7 +133,7 @@ class Factory implements FactoryIface
 	}
 
 	/**
-	 * Build a mapper that maps a joint set of data from the DB.
+	 * Create a mapper that maps a joint set of data from the DB.
 	 *
 	 * @param string   The name of the primary table.
 	 * @param string[] The joins for the data set.
@@ -140,9 +141,9 @@ class Factory implements FactoryIface
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(/* String */ $tableName,
-	                                   Array        $joins,
-	                                   Array        $select =  array())
+	public function createMapperDBJoint(/* String */ $tableName,
+	                                    Array        $joins,
+	                                    Array        $select =  array())
 	{
 		return new Joint($this->sql,
 		                 $tableName,
@@ -151,63 +152,63 @@ class Factory implements FactoryIface
 			                 $tableName,
 			                 NULL,
 			                 NULL,
-			                 $this->buildJoins($joins, $tableName)),
+			                 $this->createJoins($joins, $tableName)),
 		                 new ListID($this->sql),
 		                 $select);
 	}
 
 	/**
-	 * Build a mapper for a database table.
+	 * Create a mapper for a database table.
 	 *
 	 * @param string  The database table to map.
 	 * @param mixed[] SQL select settings for the table.
 	 *
 	 * @return Table
 	 */
-	public function buildMapperDBTable(/* String */ $tableName,
-	                                   Array        $select = array())
+	public function createMapperDBTable(/* String */ $tableName,
+	                                    Array        $select = array())
 	{
 		return new Table($this->sql, $tableName, $select);
 	}
 	
 	/**
-	 * Build a mapper for a database tables list.
+	 * Create a mapper for a database tables list.
 	 *
 	 * @param string[] Extra tables to list.
 	 * @param string[] Tables to ignore.
 	 *
 	 * @return Tables
 	 */
-	public function buildMapperDBTables(Array $extraTables   = array(),
-	                                    Array $ignoredTables = array())
+	public function createMapperDBTables(Array $extraTables   = array(),
+	                                     Array $ignoredTables = array())
 	{
 		return new Tables($this->sql, $extraTables, $ignoredTables);
 	}
 	
 	/**
-	 * Build a Session Mapper.
+	 * Create a Session Mapper.
 	 *
 	 * @param string[] The session domain to map.
 	 *
 	 * @return MapperSession The session mapper.
 	 */
-	public function buildMapperSession(Array $domain)
+	public function createMapperSession(Array $domain)
 	{
 		return new MapperSession(new SessionManager(new Session, $domain));
 	}
 
 	/**
-	 * Build record list data.
+	 * Create record list data.
 	 *
 	 * @param string   Table Name.
 	 * @param string[] Joins.
 	 *
 	 * @return RecordList The record list.
 	 */
-	public function buildRecordList(/* String */ $tableName,
-	                                Array        $joins = array())
+	public function createRecordList(/* String */ $tableName,
+	                                 Array        $joins = array())
 	{
-		return new RecordList($this->buildData($tableName, $joins));
+		return new RecordList($this->createData($tableName, $joins));
 	}
 
 	/*********************/
@@ -215,7 +216,7 @@ class Factory implements FactoryIface
 	/*********************/
 
 	/**
-	 * Build all of the joins using an associative array of table joins.  The
+	 * Create all of the joins using an associative array of table joins.  The
 	 * keys of the array represent the table names.  The value for each table
 	 * is a string that specifies the joins from the table as a string using
 	 * the following grammar:
@@ -229,7 +230,7 @@ class Factory implements FactoryIface
 	 * @param mixed[] The joins to be built.
 	 * @param string  The initial table name to start the joins from.
 	 */
-	protected function buildJoins(Array $joins, $tableName)
+	protected function createJoins(Array $joins, $tableName)
 	{
 		if (!isset($joins[$tableName]))
 		{
@@ -257,7 +258,7 @@ class Factory implements FactoryIface
 					$matches['Child_Table'],
 					$matches['Parent_Field'],
 					$matches['Child_Field'],
-					$this->buildJoins($joins, $matches['Child_Table']));
+					$this->createJoins($joins, $matches['Child_Table']));
 			}
 		}
 

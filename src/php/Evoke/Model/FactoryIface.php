@@ -2,10 +2,6 @@
 namespace Evoke\Model;
 
 /**
- * @todo Add the interface.
- */
-
-/**
  * FactoryIface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
@@ -16,9 +12,9 @@ namespace Evoke\Model;
 interface FactoryIface
 {
 	/**
-	 * Build all of the data models using an associative array of table joins
+	 * Create all of the data models using an associative array of table joins
 	 * and an array of object types for the data models.  The associative array
-	 * used in this method is shared with the buildMapperDBJoint method.  This
+	 * used in this method is shared with the createMapperDBJoint method.  This
 	 * method does not set the data.  A separate call must be made to set the
 	 * data.
 	 *
@@ -33,20 +29,20 @@ interface FactoryIface
 	 *
 	 * @return mixed Evoke\Model\Data\Data or the premade object passed in.
 	 */
-	public function buildData(/* String */ $tableName      = '',
-	                          Array        $dataJoins      = array());
+	public function createData(/* String */ $tableName      = '',
+	                           Array        $dataJoins      = array());
 
 	/**
-	 * Build a mapper that maps a menu from the DB.
+	 * Create a mapper that maps a menu from the DB.
 	 *
 	 * @param string The menu name.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */
-	public function buildMapperDBMenu(/* String */ $menuName);
+	public function createMapperDBMenu(/* String */ $menuName);
 
 	/**
-	 * Build a mapper that maps a joint set of data from the DB.
+	 * Create a mapper that maps a joint set of data from the DB.
 	 *
 	 * @param string   The name of the primary table.
 	 * @param string[] The joins for the data set.
@@ -54,50 +50,50 @@ interface FactoryIface
 	 *
 	 * @return Evoke\Model\Mapper\DB\Joint
 	 */	 
-	public function buildMapperDBJoint(/* String */ $tableName,
-	                                   Array        $joins,
-	                                   Array        $select =  array());
+	public function createMapperDBJoint(/* String */ $tableName,
+	                                    Array        $joins,
+	                                    Array        $select =  array());
 
 	/**
-	 * Build a mapper for a database table.
+	 * Create a mapper for a database table.
 	 *
 	 * @param string  The database table to map.
 	 * @param mixed[] SQL select settings for the table.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Table
 	 */
-	public function buildMapperDBTable(/* String */ $tableName,
-	                                   Array        $select = array());
+	public function createMapperDBTable(/* String */ $tableName,
+	                                    Array        $select = array());
 	
 	/**
-	 * Build a mapper for a database tables list.
+	 * Create a mapper for a database tables list.
 	 *
 	 * @param string[] Extra tables to list.
 	 * @param string[] Tables to ignore.
 	 *
 	 * @return Evoke\Model\Mapper\DB\Tables
 	 */
-	public function buildMapperDBTables(Array $extraTables   = array(),
-	                                    Array $ignoredTables = array());
+	public function createMapperDBTables(Array $extraTables   = array(),
+	                                     Array $ignoredTables = array());
 
 	/**
-	 * Build a Session Mapper.
+	 * Create a Session Mapper.
 	 *
 	 * @param string[] The session domain to map.
 	 *
 	 * @return Evoke\Model\Mapper\Session The session mapper.
 	 */
-	public function buildMapperSession(Array $domain);
+	public function createMapperSession(Array $domain);
 	
 	/**
-	 * Build record list data.
+	 * Create record list data.
 	 *
 	 * @param string   Table Name.
 	 * @param string[] Joins.
 	 *
 	 * @return Evoke\Model\Data\RecordList The record list.
 	 */
-	public function buildRecordList(/* String */ $tableName,
-	                                Array        $joins = array());	
+	public function createRecordList(/* String */ $tableName,
+	                                 Array        $joins = array());	
 }
 // EOF
