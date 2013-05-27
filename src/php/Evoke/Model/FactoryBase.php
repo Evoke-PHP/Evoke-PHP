@@ -7,7 +7,6 @@
 namespace Evoke\Model;
 
 use DomainException,
-	Evoke\HTTP\Request,
 	Evoke\Model\Data\Data,
 	Evoke\Model\Data\RecordList,
 	Evoke\Model\Mapper\DB\Joint,
@@ -22,14 +21,18 @@ use DomainException,
 	Evoke\Persistence\SessionManager;
 
 /**
- * Model Factory
+ * Model Factory Base
+ *
+ * A model factory must be able to build a model using the base components
+ * from the model layer.  This factory base builds these components for a
+ * specific factory implementation to consume.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
  * @package Model
  */
-class Factory implements FactoryIface
+abstract class FactoryBase
 {
 	/**
 	 * SQL Object.
@@ -47,9 +50,9 @@ class Factory implements FactoryIface
 		$this->sql = $sql;
 	}
 
-	/******************/
-	/* Public Methods */
-	/******************/
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
 	/**
 	 * Create all of the data models using an associative array of table joins
@@ -72,7 +75,7 @@ class Factory implements FactoryIface
 	 * @param string   The data type to create the data object as.
 	 * @return Data
 	 */
-	public function createData(
+	protected function createData(
 		/* String */ $tableName = '',
 		Array        $dataJoins = array(),
 		/* String */ $dataType  = 'Evoke\Model\Data\Data')
@@ -114,107 +117,6 @@ class Factory implements FactoryIface
 		return new $dataType(array(), $builtData);
 	}
 	
-	/**
-	 * Create a mapper that maps a menu from the DB.
-	 *
-	 * @param string The menu name.
-	 *
-	 * @return Joint
-	 */
-	public function createMapperDBMenu(/* String */ $menuName)
-	{
-		return $this->createMapperDBJoint(
-			'Menu',                                                // Table Name
-			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
-			array('Conditions' => array('Menu.Name' => $menuName), // Select
-			      'Fields'     => '*',
-			      'Order'      => 'Menu_List_T_Lft ASC',
-			      'Limit'      => 0));
-	}
-
-	/**
-	 * Create a mapper that maps a joint set of data from the DB.
-	 *
-	 * @param string   The name of the primary table.
-	 * @param string[] The joins for the data set.
-	 * @param mixed[]  The select statement settings.
-	 *
-	 * @return Evoke\Model\Mapper\DB\Joint
-	 */	 
-	public function createMapperDBJoint(/* String */ $tableName,
-	                                    Array        $joins,
-	                                    Array        $select =  array())
-	{
-		return new Joint($this->sql,
-		                 $tableName,
-		                 new Joins(
-			                 new Info($this->sql, $tableName),
-			                 $tableName,
-			                 NULL,
-			                 NULL,
-			                 $this->createJoins($joins, $tableName)),
-		                 new ListID($this->sql),
-		                 $select);
-	}
-
-	/**
-	 * Create a mapper for a database table.
-	 *
-	 * @param string  The database table to map.
-	 * @param mixed[] SQL select settings for the table.
-	 *
-	 * @return Table
-	 */
-	public function createMapperDBTable(/* String */ $tableName,
-	                                    Array        $select = array())
-	{
-		return new Table($this->sql, $tableName, $select);
-	}
-	
-	/**
-	 * Create a mapper for a database tables list.
-	 *
-	 * @param string[] Extra tables to list.
-	 * @param string[] Tables to ignore.
-	 *
-	 * @return Tables
-	 */
-	public function createMapperDBTables(Array $extraTables   = array(),
-	                                     Array $ignoredTables = array())
-	{
-		return new Tables($this->sql, $extraTables, $ignoredTables);
-	}
-	
-	/**
-	 * Create a Session Mapper.
-	 *
-	 * @param string[] The session domain to map.
-	 *
-	 * @return MapperSession The session mapper.
-	 */
-	public function createMapperSession(Array $domain)
-	{
-		return new MapperSession(new SessionManager(new Session, $domain));
-	}
-
-	/**
-	 * Create record list data.
-	 *
-	 * @param string   Table Name.
-	 * @param string[] Joins.
-	 *
-	 * @return RecordList The record list.
-	 */
-	public function createRecordList(/* String */ $tableName,
-	                                 Array        $joins = array())
-	{
-		return new RecordList($this->createData($tableName, $joins));
-	}
-
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
 	/**
 	 * Create all of the joins using an associative array of table joins.  The
 	 * keys of the array represent the table names.  The value for each table
@@ -263,6 +165,103 @@ class Factory implements FactoryIface
 		}
 
 		return $builtJoins;
+	}
+
+	/**
+	 * Create a mapper that maps a menu from the DB.
+	 *
+	 * @param string The menu name.
+	 *
+	 * @return Joint
+	 */
+	protected function createMapperDBMenu(/* String */ $menuName)
+	{
+		return $this->createMapperDBJoint(
+			'Menu',                                                // Table Name
+			array('Menu' => 'List_ID=Menu_List.Menu_ID'),          // Joins
+			array('Conditions' => array('Menu.Name' => $menuName), // Select
+			      'Fields'     => '*',
+			      'Order'      => 'Menu_List_T_Lft ASC',
+			      'Limit'      => 0));
+	}
+
+	/**
+	 * Create a mapper that maps a joint set of data from the DB.
+	 *
+	 * @param string   The name of the primary table.
+	 * @param string[] The joins for the data set.
+	 * @param mixed[]  The select statement settings.
+	 *
+	 * @return Evoke\Model\Mapper\DB\Joint
+	 */	 
+	protected function createMapperDBJoint(/* String */ $tableName,
+	                                       Array        $joins,
+	                                       Array        $select =  array())
+	{
+		return new Joint($this->sql,
+		                 $tableName,
+		                 new Joins(
+			                 new Info($this->sql, $tableName),
+			                 $tableName,
+			                 NULL,
+			                 NULL,
+			                 $this->createJoins($joins, $tableName)),
+		                 new ListID($this->sql),
+		                 $select);
+	}
+
+	/**
+	 * Create a mapper for a database table.
+	 *
+	 * @param string  The database table to map.
+	 * @param mixed[] SQL select settings for the table.
+	 *
+	 * @return Table
+	 */
+	protected function createMapperDBTable(/* String */ $tableName,
+	                                       Array        $select = array())
+	{
+		return new Table($this->sql, $tableName, $select);
+	}
+	
+	/**
+	 * Create a mapper for a database tables list.
+	 *
+	 * @param string[] Extra tables to list.
+	 * @param string[] Tables to ignore.
+	 *
+	 * @return Tables
+	 */
+	protected function createMapperDBTables(Array $extraTables   = array(),
+	                                        Array $ignoredTables = array())
+	{
+		return new Tables($this->sql, $extraTables, $ignoredTables);
+	}
+	
+	/**
+	 * Create a Session Mapper.
+	 *
+	 * @param string[] The session domain to map.
+	 *
+	 * @return MapperSession The session mapper.
+	 */
+	protected function createMapperSession(Array $domain)
+	{
+		return new MapperSession(new SessionManager(new Session, $domain));
+	}
+
+	/**
+	 * Create record list data.
+	 *
+	 * @param string   Table Name.
+	 * @param string[] Joins.
+	 *
+	 * @return RecordList The record list.
+	 */
+	protected function createRecordList(/* String */ $tableName,
+	                                    Array        $joins = array())
+	{
+		return new RecordList($this->createData($tableName, $joins));
 	}
 }
 // EOF

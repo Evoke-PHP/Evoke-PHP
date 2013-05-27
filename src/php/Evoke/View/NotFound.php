@@ -6,8 +6,6 @@
  */
 namespace Evoke\View;
 
-use Evoke\Model\Data\TranslationsIface;
-
 /**
  * NotFound
  *
@@ -18,22 +16,6 @@ use Evoke\Model\Data\TranslationsIface;
  */
 class NotFound extends View
 {
-	/**
-	 * Translations
-	 * @var TranslationsIface
-	 */
-	protected $translations;
-
-	/**
-	 * Construct a NotFound object.
-	 *
-	 * @param TranslationsIface Translations.
-	 */
-	public function __construct(TranslationsIface $translations)
-	{
-		$this->translations = $translations;
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -48,7 +30,7 @@ class NotFound extends View
 		$messageBoxElements = array(
 			array('div',
 			      array('class' => 'Title'),
-			      $this->translations->tr('Not_Found_Title')));
+			      $this->data['Not_Found_Title']));
 
 		if (isset($this->params['Image_Element']))
 		{
@@ -58,7 +40,7 @@ class NotFound extends View
 		$messageBoxElements[] =
 			array('div',
 			      array('class' => 'Description'),
-			      $this->translations->tr('Not_Found_Description'));
+			      $this->data['Not_Found_Description']);
 		
 		return array('div',
 		             array('class' => 'Not_Found Message_Box System'),

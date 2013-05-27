@@ -6,8 +6,7 @@
  */
 namespace Evoke\View\Control;
 
-use Evoke\Model\Data\TranslationsIface,
-	Evoke\View\View;
+use Evoke\View\View;
 
 /**
  * Login View
@@ -19,22 +18,6 @@ use Evoke\Model\Data\TranslationsIface,
  */
 class Login extends View
 {
-	/**
-	 * Translations
-	 * @var TranslationsIface
-	 */
-	protected $translations;
-
-	/**
-	 * Construct a Login object.
-	 *
-	 * @param TranslationsIface Translations.
-	 */
-	public function __construct(TranslationsIface $translations)
-	{
-		$this->translations = $translations;
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -55,7 +38,7 @@ class Login extends View
 			                   array('class' => 'Username'),
 			                   array(array('label',
 			                               array('for' => 'Username'),
-			                               $this->translations->tr('Username')),
+			                               $this->data['Username']),
 			                         array('input',
 			                               array('length' => '100',
 			                                     'name'   => 'Username',
@@ -64,7 +47,7 @@ class Login extends View
 			                   array('class' => 'Password'),
 			                   array(array('label',
 			                               array('for' => 'Password'),
-			                               $this->translations->tr('Password')),
+			                               $this->data['Password']),
 			                         array('input',
 			                               array('length' => '60',
 			                                     'name'   => 'Password',
@@ -73,7 +56,7 @@ class Login extends View
 			                   array('name'  => 'Login',
 			                         'type'  => 'submit',
 			                         'value' =>
-			                         $this->translations->tr('Login')))));
+			                         $this->data['Login']))));
 	}
 }
 // EOF

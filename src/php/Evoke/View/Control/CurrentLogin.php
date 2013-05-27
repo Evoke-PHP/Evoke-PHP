@@ -6,8 +6,7 @@
  */ 
 namespace Evoke\View\Control;
 
-use Evoke\Model\Data\TranslationsIface,
-	Evoke\View\View;
+use Evoke\View\View;
 
 /**
  * CurrentLogin View
@@ -19,22 +18,6 @@ use Evoke\Model\Data\TranslationsIface,
  */
 class CurrentLogin extends View
 {
-	/**
-	 * Translations
-	 * @var TranslationsIface
-	 */
-	protected $translations;
-	
-	/**
-	 * Construct a Login object.
-	 *
-	 * @param TranslationsIface Translations.
-	 */
-	public function __construct(TranslationsIface $translations)
-	{
-		$this->translations = $translations;
-	}
-
 	/******************/
 	/* Public Methods */
 	/******************/
