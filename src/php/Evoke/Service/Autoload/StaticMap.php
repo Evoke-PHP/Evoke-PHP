@@ -51,7 +51,7 @@ class StaticMap extends Autoload
 		{
 			if (!file_exists($this->staticMap[$name]))
 			{
-				throw new RuntimeException('File: ' $this->staticMap[$name] .
+				throw new RuntimeException('File: ' . $this->staticMap[$name] .
 				                           ' does not exist.');
 			}
 			

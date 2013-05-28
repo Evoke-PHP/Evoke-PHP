@@ -27,7 +27,7 @@ class Element extends View
 	{
 		$this->params['Attribs'] = $attribs;
 		$this->params['Tag']     = $tag;
-		$this->viewChild = $viewChild;
+		$this->viewChild         = $viewChild;
 	}
 
 	/******************/
@@ -45,8 +45,9 @@ class Element extends View
 		
 		if (isset($this->viewChild))
 		{
-			foreach ($this->data as $data)
+ 			foreach ($this->data as $data)
 			{
+                $this->viewChild->setData($data);
 				$children[] = $this->viewChild->get();
 			}
 		}

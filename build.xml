@@ -132,7 +132,6 @@
 	-->
 	<exec executable="phpdoc" passthru="true">
 	  <arg value = "run"/>
-	  <arg value = "--template=evoke"/>
 	  <arg value = "-d"/>
 	  <arg path  = "${project.php_source}"/>
 	  <arg value = "-t"/>

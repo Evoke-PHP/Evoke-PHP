@@ -49,13 +49,13 @@ class RegexTest extends PHPUnit_Framework_TestCase
 		
 	/** Test getResponse and the private method getMappedValue.
 	 *  @depends      test__constructGood
-	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getClassname
+	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getController
 	 */
-	public function testGetClassname()
+	public function testGetController()
 	{
 		$obj = new Regex('/foo/', 'bar');
 		$this->assertSame('this/bar/isFobar',
-		                  $obj->getClassname('this/foo/isFofoo'));
+		                  $obj->getController('this/foo/isFofoo'));
 	}
 
 	/**

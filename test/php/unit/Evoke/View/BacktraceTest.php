@@ -10,18 +10,6 @@ use Evoke\View\Backtrace,
 class BacktraceTest extends PHPUnit_Framework_TestCase
 { 
 	/**
-	 * Ensure that a Backtrace View can be constructed.
-	 *
-	 * @covers Evoke\View\Backtrace::__construct
-	 */	  
-	public function test__constructGood()
-	{
-		$obj = new Backtrace;
-		$this->assertInstanceOf('Evoke\View\Backtrace', $obj);
-		$this->assertInstanceOf('Evoke\View\ViewIface', $obj);
-	}
-
-	/**
 	 * Ensure that the view of an empty backtrace is good.
 	 *
 	 * @covers Evoke\View\Backtrace::get
@@ -29,24 +17,8 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	public function testGetEmtpy()
 	{
 		$obj = new Backtrace;
-		$this->assertSame(
-			['ol', ['class' => 'Backtrace'], []],
-			$obj->get($this->getMock('Evoke\Model\Data\DataIface')));
-	}
-
-	/**
-	 * Ensure that the attributes from construction are used by the view.
-	 *
-	 * @covers Evoke\View\Backtrace::__construct
-	 * @covers Evoke\View\Backtrace::get
-	 */
-	public function testAttributes()
-	{
-		$attribs = ['class' => 'Overriden', 'other' => 'special'];
-		$obj = new Backtrace($attribs);
-		$this->assertSame(
-			['ol', $attribs, []],
-			$obj->get($this->getMock('Evoke\Model\Data\DataIface')));
+        $obj->setData($this->getMock('Evoke\Model\Data\DataIface'));
+		$this->assertSame(['ol', ['class' => 'Backtrace'], []],	$obj->get());
 	}
 
 	/**
@@ -67,6 +39,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 			                 'Function' => 'boogieItUp',
 			                 'Type'     => 'btyped')));
 		$obj = new Backtrace;
+        $obj->setData($data);
 
 		$this->assertSame(
 			['ol',
@@ -89,7 +62,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 					  ['span', ['class' => 'Type'],     'btyped'],
 					  ['span', ['class' => 'Function'], 'boogieItUp']
 					  ]]]],
-			$obj->get($data));
+			$obj->get());
 	}	
 }
 // EOF

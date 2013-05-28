@@ -1,7 +1,8 @@
 <?php
 namespace Evoke_Test\View;
 
-use Evoke\View\Element,
+use Evoke\Model\Data\Data,
+    Evoke\View\Element,
 	PHPUnit_Framework_TestCase;
 
 /**
@@ -18,29 +19,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	{
 		$obj = new Element('div');
 		$this->assertInstanceOf('Evoke\View\Element', $obj);
-		$this->assertInstanceOf('Evoke\View\ViewIface', $obj);
-	}
-
-	/**
-	 * Ensure that a bad tag is raised as an exception.
-	 *
-	 * @covers            Evoke\View\Element::__construct
-	 * @expectedException InvalidArgumentException
-	 */	  
-	public function test__constructBad()
-	{
-		$obj = new Element(array('BAD'));
-	}
-
-	/**
-	 * Ensure that the view of an empty element is good.
-	 *
-	 * @covers Evoke\View\Element::get
-	 */
-	public function testEmtpy()
-	{
-		$obj = new Element('div');
-		$this->assertSame(['div', [], NULL], $obj->get());
+		$this->assertInstanceOf('Evoke\View\View', $obj);
 	}
 
 	/**
@@ -53,21 +32,50 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	{
 		$attribs = ['class' => 'Overriden', 'other' => 'special'];
 		$obj = new Element('form', $attribs);
-		$this->assertSame(['form', $attribs, NULL],	$obj->get());
+		$this->assertSame(['form', $attribs, []], $obj->get());
 	}
 
 	/**
-	 * Ensure the elements are formatted correctly.
+	 * Ensure that data is passed to the child view.
 	 *
 	 * @covers Evoke\View\Element::get
 	 */
 	public function testChildren()
-	{
-		$children = [['div', ['class' => 'one'], '1'],
-		             ['p',   ['class' => 'two'], '2']];
+	{        
+		$children = [0 => ['div', ['class' => 'one'], '1'],
+                     1 => ['p',   ['class' => 'two'], '2']];
+        $viewChild = $this->getMock('Evoke\View\View');
+        $dataChildren = new Data($children);
+
+        foreach ($children as $index => $child)
+        {
+            $viewChild
+                ->expects($this->at(2 * $index))
+                ->method('setData')
+                ->with($dataChildren);
+            
+            $viewChild
+                ->expects($this->at((2 * $index) + 1))
+                ->method('get')
+                ->with()
+                ->will($this->returnValue($child));
+        }
+        
 			      
-		$obj = new Element('div', [], $children);
+		$obj = new Element('div', [], $viewChild);
+        $obj->setData($dataChildren);
 		$this->assertSame(['div', [], $children], $obj->get());
 	}	
+
+	/**
+	 * Ensure that the view of an empty element is good.
+	 *
+	 * @covers Evoke\View\Element::get
+	 */
+	public function testEmtpy()
+	{
+		$obj = new Element('div');
+		$this->assertSame(['div', [], []], $obj->get());
+	}
 }
 // EOF
