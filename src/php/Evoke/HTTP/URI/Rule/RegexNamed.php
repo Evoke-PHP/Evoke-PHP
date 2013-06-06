@@ -93,7 +93,7 @@ class RegexNamed extends Rule
 		preg_match($this->match, $uri, $params);
 
 		// Return only the named parameters rather than the numbered ones. 
-		foreach ($params as $key => $value)
+		foreach (array_keys($params) as $key)
 		{
 			if (!is_string($key))
 			{

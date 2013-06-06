@@ -59,8 +59,8 @@ class Router implements RouterIface
 	 */
 	public function route()
 	{
-		// The controller starts as the request URI and is refined by the mappers
-		// until it is the correct controller.
+		// The controller starts as the request URI and is refined by the
+		// mappers until it is the correct controller.
 		$controller = $this->request->getURI();
 		$params = array();
       

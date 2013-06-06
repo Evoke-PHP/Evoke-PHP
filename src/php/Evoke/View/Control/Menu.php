@@ -14,7 +14,7 @@ use Evoke\Model\Data\Menu as DataMenu,
  * @package View
  */
 class Menu extends View
-{	
+{
 	/******************/
 	/* Public Methods */
 	/******************/

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\View\Form\Input;
+namespace Evoke\View\Input;
 
 use Evoke\View\ViewIface,
 	InvalidArgumentException,
@@ -52,7 +52,6 @@ class Select implements ViewIface
 	                            /* String */ $valueField    = 'ID',
 	                            Array        $attribs       = array(),
 	                            Array        $optionAttribs = array())
-	                            
 	{
 		if (!is_string($textField))
 		{
@@ -108,7 +107,8 @@ class Select implements ViewIface
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
-			if (isset($this->params['Selected']) && $value == $this->params['Selected'])
+			if (isset($this->params['Selected']) &&
+			    $value == $this->params['Selected'])
 			{
 				$optionAttribs['selected'] = 'selected';
 			}

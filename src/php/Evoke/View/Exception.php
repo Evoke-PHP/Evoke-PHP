@@ -47,7 +47,8 @@ class Exception extends View
 		                         $this->data['Exception']->getMessage()),
 		                   array('pre',
 		                         array('class' => 'Trace'),
-		                         $this->data['Exception']->getTraceAsString())));
+		                         $this->data['Exception']->getTraceAsString())
+			             ));
 	}
 }
 // EOF
