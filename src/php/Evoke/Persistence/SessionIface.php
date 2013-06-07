@@ -40,13 +40,6 @@ interface SessionIface
 	public function get($key);
    
 	/**
-	 * Get the session domain that we are managing and return a reference to it.
-	 *
-	 * @return mixed[] A reference to the session data.
-	 */
-	public function &getAccess();
-
-	/**
 	 * Get a copy of the session domain that we are managing.
 	 *
 	 * @return mixed[] The sesssion data.

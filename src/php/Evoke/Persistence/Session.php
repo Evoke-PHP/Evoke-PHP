@@ -34,7 +34,7 @@ class Session implements SessionIface
 	 *
 	 * @param string[] Domain to manage.
 	 */
-	public function __construct(Array $domain)
+	public function __construct(Array $domain = array())
 	{
 		$this->domain = $domain;
 		$this->ensure();
@@ -139,28 +139,6 @@ class Session implements SessionIface
 	}
 
 	/**
-	 * Get a copy of the session domain that we are managing.
-	 *
-	 * @return mixed[] The sesssion data.
-	 *
-	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-	 * @SuppressWarnings(PHPMD.Superglobals)	 
-	 */
-	public function getCopy()
-	{
-		// Set currentDomain to reference $_SESSION.
-		$currentDomain = $_SESSION;
-
-		foreach($this->domain as $subdomain)
-		{
-			// Update the currentDomain to reference the session subdomain.
-			$currentDomain = $currentDomain[$subdomain]; 
-		}
-
-		return $currentDomain;
-	}
-
-	/**
 	 * Get a copy of the data in the session at the offset specified.
 	 *
 	 * @param mixed[] The offset to the data.
@@ -184,6 +162,28 @@ class Session implements SessionIface
 		}
 
 		return $sessionOffset;
+	}
+
+	/**
+	 * Get a copy of the session domain that we are managing.
+	 *
+	 * @return mixed[] The sesssion data.
+	 *
+	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+	 * @SuppressWarnings(PHPMD.Superglobals)	 
+	 */
+	public function getCopy()
+	{
+		// Set currentDomain to reference $_SESSION.
+		$currentDomain = $_SESSION;
+
+		foreach($this->domain as $subdomain)
+		{
+			// Update the currentDomain to reference the session subdomain.
+			$currentDomain = $currentDomain[$subdomain]; 
+		}
+
+		return $currentDomain;
 	}
 
 	/**
