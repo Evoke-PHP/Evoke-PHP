@@ -109,8 +109,9 @@ abstract class ControllerAbstract implements ControllerIface
 		if (!empty($currentBuffer))
 		{
 			trigger_error(
-				'Buffer needs to be flushed for clean error page, was: ' .
-				$currentBuffer, E_USER_WARNING);
+				'Writer is required to be clean, found "' .	$currentBuffer .
+				'" flushing and continuing.',
+				E_USER_WARNING);
 			$this->writer->flush();
 		}
 	}
