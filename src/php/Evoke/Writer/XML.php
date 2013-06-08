@@ -21,7 +21,7 @@ class XML extends XMLBase
 	 */
 	public function writeEnd()
 	{
-		$this->endDocument();
+		$this->xmlWriter->endDocument();
 	}
 	
 	/**
@@ -29,7 +29,7 @@ class XML extends XMLBase
 	 */
 	public function writeStart()
 	{
-		$this->writeDocInfo('XML');
+		$this->writeStartDocument('XML');
 	}
 }
 // EOF
