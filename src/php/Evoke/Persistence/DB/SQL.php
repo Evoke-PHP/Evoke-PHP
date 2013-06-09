@@ -561,7 +561,7 @@ class SQL implements SQLIface
 	 
 			if (!empty($order))
 			{
-				$q .= ' ORDER BY ' . $this->placeholdersKeyed($order, ' ', ',');
+				$q .= ' ORDER BY ' . $this->expandKeyedArr($order, ' ', ',');
 			}
 	 
 			if (!empty($limit) && $limit !== 0)

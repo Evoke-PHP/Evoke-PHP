@@ -42,6 +42,35 @@ class SQLTest extends PHPUnit_Framework_TestCase
 			                            'Retval' => TRUE]
 			];
 	}
+
+	public function providerSelect()
+	{
+		return[
+			'Table_All'    => [
+				'Params'         => [['Table'], '*'],
+				'Prepare_String' => 'SELECT * FROM Table',
+				'Results'        => [['Table_Field_1' => 1,
+				                      'Table_Field_2' => 2],
+				                     ['Table_Field_1' => 'a',
+				                      'Table_Field_2' => 'b']]
+				],
+			'Placeholders' => [
+				'Params'         => [['T1', 'T2'],
+				                     ['F1', 'F2'],
+				                     ['F3' => 3,
+				                      'F4' => 4],
+				                     ['F5' => 'ASC',
+				                      'F6' => 'DESC'],
+				                     9,
+				                     TRUE],
+				'Prepare_String' => 'SELECT DISTINCT F1,F2 FROM T1,T2 WHERE ' .
+				'F3=? AND F4=? ORDER BY F5 ASC,F6 DESC LIMIT 9',
+				'Results'        => [['F1' => 1, 'F2' => 2],
+				                     ['F1' => 11, 'F2' => 22]]
+					
+				]
+			];
+	}
 	
 	/*********/
 	/* Tests */
@@ -71,6 +100,65 @@ class SQLTest extends PHPUnit_Framework_TestCase
 		$object = new SQL($db);
 		$this->assertEquals(
 			$retVal, call_user_func_array([$object, $method], $params));
+	}
+
+	/**
+	 * @dataProvider providerSelect
+	 */
+	public function testSelect($params, $prepareString, $results)
+	{		
+		$conditions = $params[2] ?: [];
+		$order = $params[3] ?: [];
+
+		if (!is_array($conditions))
+		{
+			$conditions = [$conditions];
+		}
+
+		if (!is_array($order))
+		{
+			$order = [$order];
+		}
+		
+		$executionParameters = array_merge($conditions, $order);
+
+		$statementMock = $this->getMock('PDOStatement');
+		$statementMock
+			->expects($this->at(0))
+			->method('execute')
+			->with($executionParameters);
+		$statementMock
+			->expects($this->at(1))
+			->method('fetchAll')
+			->will($this->returnValue($results));
+			
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->with($prepareString)
+			->will($this->returnValue($statementMock));
+		$object = new SQL($db);
+		
+		$actualResults = call_user_func_array([$object, 'select'], $params);
+
+		$this->assertEquals($results, $actualResults);
+	}
+
+	/**
+	 * @covers            Evoke\Persistence\DB\SQL::select
+	 * @expectedException Evoke\Message\Exception\DB
+	 */
+	public function testSelectException()
+	{
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->with('SELECT Field FROM Table')
+			->will($this->throwException(new \Exception));
+		$object = new SQL($db);
+		$object->select('Table', 'Field');
 	}
 	
 	/**
