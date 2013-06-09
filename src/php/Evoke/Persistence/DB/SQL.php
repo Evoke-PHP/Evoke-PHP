@@ -695,24 +695,13 @@ class SQL implements SQLIface
 	 */
 	private function expand($arg, $separator=',')
 	{
-		try
+		if (is_array($arg))
 		{
-			if (is_array($arg))
-			{
-				return implode($separator, $arg);
-			}
-			else
-			{
-				return (string)$arg;
-			}
+			return implode($separator, $arg);
 		}
-		catch (Exception $e)
+		else
 		{
-			throw new Exception(
-				__METHOD__,
-				'arg: ' . var_export($arg, true) .
-				' separator: ' . var_export($separator, true),
-				$e);
+			return (string)$arg;
 		}
 	}
 
@@ -729,40 +718,28 @@ class SQL implements SQLIface
 	 */
 	private function expandKeyedArr($arg, $between='=', $separator=' AND ')
 	{
-		try
+		if (is_array($arg))
 		{
-			if (is_array($arg))
+			$str = '';
+			
+			if (!empty($arg))
 			{
-				$str = '';
-	    
-				if (!empty($arg))
+				foreach ($arg as $key => $val)
 				{
-					foreach ($arg as $key => $val)
-					{
-						$str .= $key . $between . $val . $separator;
-					}
-	       
-					// The array is not empty so we can cut the last separator
-					// which has definitely been added to str.
-					$str = substr($str, 0, -1 * strlen((string)$separator));
+					$str .= $key . $between . $val . $separator;
 				}
-	 
-				return $str;
+				
+				// The array is not empty so we can cut the last separator which
+				// has definitely been added to str.
+				$str = substr($str, 0, -1 * strlen((string)$separator));
 			}
-			else
-			{
-				return (string)$arg;
-			}      
+			
+			return $str;
 		}
-		catch (Exception $e)
+		else
 		{
-			throw new Exception(
-				__METHOD__,
-				'arg: ' . var_export($arg, true) . ' separator: ' .
-				var_export($separator, true) . ' between: ' .
-				var_export($between, true),
-				$e);
-		}
+			return (string)$arg;
+		}      
 	}
 
 	/**
@@ -814,42 +791,31 @@ class SQL implements SQLIface
 	private function placeholdersKeyed(
 		$arg, $between='=', $separator=' AND ')
 	{
-		/** \todo Fix for NULL placeholders.  So where conditions can accept
-		 *  NULL values.
+		/**
+		 * @todo Fix for NULL placeholders.  So where conditions can accept NULL
+		 *       values.
 		 */
-		try
+		if (is_array($arg))
 		{
-			if (is_array($arg))
+			$str = '';
+			
+			if (!empty($arg))
 			{
-				$str = '';
-	    
-				if (!empty($arg))
+				foreach ($arg as $key => $val)
 				{
-					foreach ($arg as $key => $val)
-					{
-						$str .= $key . $between . '?' . $separator;
-					}
-	       
-					// The array is not empty so we can cut the last separator
-					// which has definitely been added to str.
-					$str = substr($str, 0, -1 * strlen((string)$separator));
+					$str .= $key . $between . '?' . $separator;
 				}
-	 
-				return $str;
+				
+				// The array is not empty so we can cut the last separator
+				// which has definitely been added to str.
+				$str = substr($str, 0, -1 * strlen((string)$separator));
 			}
-			else
-			{
-				return (string)$arg;
-			}      
+			
+			return $str;
 		}
-		catch (Exception $e)
+		else
 		{
-			throw new Exception(
-				__METHOD__,
-				'arg: ' . var_export($arg, true) .
-				' separator: ' . var_export($separator, true) .
-				' between: ' . var_export($between, true),
-				$e);
+			return (string)$arg;
 		}
 	}
 }
