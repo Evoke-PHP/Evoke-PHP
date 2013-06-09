@@ -195,29 +195,21 @@ class SQL implements SQLIface
 	}
 
 	/**
-	 * Executes an SQL statement, returns a result set as a PDOStatement object.
-	 * Any supplied object should be filled as per the fetch options.
+	 * Executes an SQL statement, returns a result set as a statement object.
+	 * This object can have its fetch mode set using PDOStatement::setFetchMode.
 	 *
-	 * @param string     The query string.
-	 * @param int        The fetch mode.
-	 * @param mixed|null What to fetch the query into.
+	 * @param   string The query string.
+	 * @returns mixed  The statement object
 	 */
-	public function query($queryString, $fetchMode=0, $into=NULL)
+	public function query($queryString)
 	{
 		$namedPlaceholders = (strpos($queryString, ':') !== false);
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
-			array($this->statement, array($namedPlaceholders)));
+			array($this->statementClass, array($namedPlaceholders)));
 
-		if ($fetchMode === 0)
-		{
-			return $this->db->query($queryString);
-		}
-		else
-		{
-			return $this->db->query($queryString, $fetchMode, $into);
-		}
+		return $this->db->query($queryString);
 	}  
 
 	/**

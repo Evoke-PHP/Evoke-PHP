@@ -43,6 +43,15 @@ class SQLTest extends PHPUnit_Framework_TestCase
 			];
 	}
 
+	public function providerQuery()
+	{
+		return [
+			['Statement_Class'    => 'PDOStatement',
+			 'Named_Placeholders' => true,
+			 'Query_String' => 'SELECT :P1,:P2 FROM Table']
+			];
+	}
+	
 	public function providerSelect()
 	{
 		return[
@@ -102,6 +111,32 @@ class SQLTest extends PHPUnit_Framework_TestCase
 			$retVal, call_user_func_array([$object, $method], $params));
 	}
 
+	/**
+	 * Ensure that a query is executed an returns the specified statement class.
+	 *
+	 * covers        Evoke\Persistence\DB\SQL::prepare
+	 * @dataProvider providerQuery
+	 */
+	public function testQuery($statementClass, $namedPlaceholders, $queryString)
+	{
+		$statementObject = $this->getMock($statementClass);
+		$dbIndex = 0;
+		$db = $this->getMock('Evoke\Persistence\DB\SQL');
+		$db
+			->expects($this->at($dbIndex++))
+			->method('setAttribute')
+			->with(\PDO::ATTR_STATEMENT_CLASS,
+			       [$statementClass, [$namedPlaceholders]]);
+		
+		$db->expects($this->at($dbIndex++))
+			->method('query')
+			->with($queryString)
+			->will($this->returnValue($statementObject));
+		
+		$object = new SQL($db, $statementClass);
+		$this->assertInstanceOf($statementClass, $object->query($queryString));
+	}
+	
 	/**
 	 * @dataProvider providerSelect
 	 */
@@ -191,6 +226,39 @@ class SQLTest extends PHPUnit_Framework_TestCase
 		$object = new SQL($db);
 		$this->assertFalse($object->inTransaction(), 'Not in a transaction');
 		$object->commit();
+	}
+
+	/**
+	 * Ensure that rolling back a transaction calls rollBack and modifies
+	 * inTransaction appropriately.
+	 *
+	 * @covers Evoke\Persistence\DB\SQL::rollBack
+	 */
+	public function testTransactionRollBackNormal()
+	{
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db->expects($this->once())
+			->method('rollBack');
+		
+		$object = new SQL($db);
+		$object->beginTransaction();
+		
+		$this->assertTrue($object->inTransaction());
+		$object->rollBack();
+		$this->assertFalse($object->inTransaction());
+	}
+
+	/**
+	 * Ensure that a rollback outside of a transaction throws an exception.
+	 *
+	 * @expectedException Evoke\Message\Exception\DB
+	 */
+	public function testTransactionRollBackOutsideOfTransaction()
+	{
+		$object = new SQL($this->getMock('Evoke\Persistence\DB\DBIface'));
+		
+		$this->assertFalse($object->inTransaction());
+		$object->rollBack();
 	}
 	
 	/**
