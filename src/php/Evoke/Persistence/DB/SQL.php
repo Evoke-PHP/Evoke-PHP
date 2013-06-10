@@ -7,19 +7,29 @@ use Evoke\Message\Exception\DB as ExceptionDB,
 /**
  * SQL
  *
- * The SQL class provides an implementation of the SQL interface which extends
- * the DB interface in Evoke.
- *
- * Provides simple pass-through wrappers for the DB interface functions.
+ * The SQL class is a DB interface for Evoke. It is largely a wrapper for a PDO
+ * database object, but it also provides safe but simple SQL interaction using
+ * the following methods:
+ * 
+ * - addColumn
+ * - changeColumn
+ * - delete
+ * - dropColumn
+ * - insert
+ * - getAssoc
+ * - getSingleRow
+ * - getSingleValue
+ * - select
+ * - selectSingleValue
+ * - update
+ * * Provides simple pass-through wrappers for the DB interface functions.
  *
  * Provides wrappers to help the writing of the following SQL statements:
  *     SELECT, UPDATE, DELETE, INSERT
+
+ * All field, table and conditions are limited to defined safe character ranges.
  *
- * Conditions for WHERE statements are either in string format or as a keyed
- * array which is AND'ed together and the comparison operator '=' is used.
- *     Example: array(ID => 1, Name => '`Peter`') becomes ID=1 AND Name=`Peter`
- * A condition passed in as a string is unchanged and can be used for more
- * complex comparison operations.
+ * 
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -415,16 +425,16 @@ class SQL implements SQLIface
 	/**
 	 * Get an associative array of results for a query.
 	 *
-	 * @param string Query string.
+	 * @param string  Query string.
+	 * @param mixed[] Parameters for the query.
 	 *
 	 * @return mixed[] Associative array of results from the query.
 	 */
-	public function getAssoc($queryString, $params=array())
+	public function getAssoc($queryString, Array $params=array())
 	{
 		try
 		{
 			$statement = $this->prepare($queryString);
-			$params = is_array($params) ? $params : array($params);
 			$statement->execute($params);
 
 			return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -449,13 +459,11 @@ class SQL implements SQLIface
 	 *
 	 * @return mixed[] The result as an associative array.
 	 */
-	public function getSingleRow($queryString, $params=array())
+	public function getSingleRow($queryString, Array $params=array())
 	{
-		// Prepare
 		try
 		{
 			$statement = $this->prepare($queryString);
-			$params = is_array($params) ? $params : array($params);
 			$statement->execute($params);
 			$result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -488,13 +496,13 @@ class SQL implements SQLIface
 	 *
 	 * @return mixed The result value.
 	 */
-	public function getSingleValue($queryString, $params=array(), $column=0)
+	public function getSingleValue(
+		$queryString, Array $params=array(), $column=0)
 	{
 		// Prepare
 		try
 		{
 			$statement = $this->prepare($queryString);
-			$params = is_array($params) ? $params : array($params);
 			$statement->execute($params);
 			$result = $statement->fetchColumn($column);
 
@@ -598,7 +606,7 @@ class SQL implements SQLIface
 	 *
 	 * @param string  Table to get a single result from.
 	 * @param string  Field for the result.
-	 * @param mixed[] Conditions for the result.
+	 * @param mixed[] Conditions for the WHERE.
 	 *
 	 * @return mixed The result value.
 	 */

@@ -61,7 +61,7 @@ interface SQLIface extends DBIface
 	 *
 	 * @return mixed[] Associative array of results from the query.
 	 */
-	public function getAssoc($queryString, $params=array());
+	public function getAssoc($queryString, Array $params=array());
 	
 	/**
 	 * Get a result set which must contain exactly one row and return it.
@@ -71,7 +71,7 @@ interface SQLIface extends DBIface
 	 *
 	 * @return mixed[] The result as an associative array.
 	 */
-	public function getSingleRow($queryString, $params=array());
+	public function getSingleRow($queryString, Array $params=array());
 
 	/**
 	 * Get a single value result from an sql statement.
@@ -82,7 +82,8 @@ interface SQLIface extends DBIface
 	 *
 	 * @return mixed The result value.
 	 */
-	public function getSingleValue($queryString, $params=array(), $column=0);
+	public function getSingleValue(
+		$queryString, Array $params=array(), $column=0);
 
 	/**
 	 * Simple SQL INSERT statement wrapper.
@@ -109,14 +110,14 @@ interface SQLIface extends DBIface
 	                       $limit=0, $distinct=false);
 
 	/**
-	 * Get a single value result from an sql select statement.
+	 * A simple way to select a single value result.
 	 *
-	 * @param string The table to get the value from.
-	 * @param string The parmeters for the sql query.
-	 * @param mixed The conditions for the WHERE.
+	 * @param string  Table to get a single result from.
+	 * @param string  Field for the result.
+	 * @param mixed[] Conditions for the WHERE.
 	 *
-	 * @return mixed The single value.
-	 */	
+	 * @return mixed The result value.
+	 */
 	public function selectSingleValue($table, $field, $conditions);
 
 	/**
