@@ -80,6 +80,22 @@ class SQLTest extends PHPUnit_Framework_TestCase
 				]
 			];
 	}
+
+	public function providerUpdateGood()
+	{
+		return[
+			'All_Params' => [
+				'Execution_Parameters' => [['Table'], '*'],
+				'Params'               => [['T1', 'T2'],
+				                           ['T1.F1' => 't1f1',
+				                            'T2.F1' => 't2f1'],
+				                           ['T1.F1' => 1,
+				                            'T1.F2' => 3],
+				                           9],
+				'Prepare_String'       =>
+				'UPDATE T1,T2 SET T1.F1=?,T2.F1=? WHERE T1.F1=? AND T1.F2=? LIMIT 9']
+			];
+	}
 	
 	/*********/
 	/* Tests */
@@ -195,6 +211,35 @@ class SQLTest extends PHPUnit_Framework_TestCase
 		$object = new SQL($db);
 		$object->select('Table', 'Field');
 	}
+
+	/**
+	 * Ensure that we can get a single value.
+	 *
+	 * @todo Write test.
+	 */
+	public function testSelectSingleValueGood()
+	{
+		$singleValue = 987;
+		$statementMock = $this->getMock('PDOStatement');
+		$statementMock
+			->expects($this->at(0))
+			->method('execute')
+			->with([]);
+		$statementMock
+			->expects($this->at(1))
+			->method('fetchColumn')
+			->will($this->returnValue($singleValue));
+		
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->with('SELECT F1 FROM T LIMIT 1')
+			->will($this->returnValue($statementMock));
+		$object = new SQL($db);
+		$this->assertEquals($singleValue,
+		                    $object->selectSingleValue('T', 'F1', []));
+	}
 	
 	/**
 	 * @covers Evoke\Persistence\DB\SQL::commit
@@ -298,6 +343,87 @@ class SQLTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(TRUE, 'No exception yet.');
 		$object->beginTransaction();
 	}
-	
+
+	/**
+	 * Ensure that a database update is prepared and executed as expected.
+	 *
+	 * @dataProvider providerUpdateGood
+	 */
+	public function testUpdateGood(
+		$executionParameters, $params, $prepareString)
+	{
+		$setValues = $params[1] ?: [];
+		$conditions = $params[2] ?: [];
+
+		if (!is_array($setValues))
+		{
+			$setValues = [$setValues];
+		}
+
+		if (!is_array($conditions))
+		{
+			$conditions = [$conditions];
+		}
+		
+		$executionParameters = array_merge(array_values($setValues),
+		                                   array_values($conditions));
+
+		$statementMock = $this->getMock('PDOStatement');
+		$statementMock
+			->expects($this->at(0))
+			->method('execute')
+			->with($executionParameters)
+			->will($this->returnValue(TRUE));
+			
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->with($prepareString)
+			->will($this->returnValue($statementMock));
+		$object = new SQL($db);
+		
+		call_user_func_array([$object, 'update'], $params);
+	}
+
+	/**
+	 * Ensure that a failed execution throws a database exception.
+	 *
+	 * @expectedException Evoke\Message\Exception\DB
+	 */
+	public function testUpdateThrowsForExecution()
+	{
+		$statementMock = $this->getMock('PDOStatement');
+		$statementMock
+			->expects($this->once())
+			->method('execute')
+			->will($this->returnValue(FALSE));
+		
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->will($this->returnValue($statementMock));
+
+		$object = new SQL($db);
+		$object->update('table', ['field' => 'one']);
+	}
+
+	/**
+	 * Ensure that a bad prepare throws a database exception.
+	 *
+	 * @expectedException Evoke\Message\Exception\DB
+	 */
+	public function testUpdateThrowsForPrepare()
+	{
+		$db = $this->getMock('Evoke\Persistence\DB\DBIface');
+		$db
+			->expects($this->once())
+			->method('prepare')
+			->will($this->throwException(new \Exception));
+		$object = new SQL($db);
+
+		$object->update('table', ['field' => 'one']);		
+	}
 }
 // EOF

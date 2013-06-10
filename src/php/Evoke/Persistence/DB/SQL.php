@@ -180,11 +180,11 @@ class SQL implements SQLIface
 	{
 		try
 		{
-			$namedPlaceholders = (strpos($statement, ':') !== false);
+			$hasNamedPlaceholders = (strpos($statement, ':') !== false);
 	 
 			$this->setAttribute(
 				\PDO::ATTR_STATEMENT_CLASS,
-				array($this->statementClass, array($namedPlaceholders)));
+				array($this->statementClass, array($hasNamedPlaceholders)));
 	 
 			return $this->db->prepare($statement, $driverOptions);
 		}
@@ -203,11 +203,11 @@ class SQL implements SQLIface
 	 */
 	public function query($queryString)
 	{
-		$namedPlaceholders = (strpos($queryString, ':') !== false);
+		$hasNamedPlaceholders = (strpos($queryString, ':') !== false);
 
 		$this->setAttribute(
 			\PDO::ATTR_STATEMENT_CLASS,
-			array($this->statementClass, array($namedPlaceholders)));
+			array($this->statementClass, array($hasNamedPlaceholders)));
 
 		return $this->db->query($queryString);
 	}  
@@ -594,26 +594,26 @@ class SQL implements SQLIface
 	}
 
 	/**
-	 * Get a single value result from an sql statement.
+	 * A simple way to select a single value result.
 	 *
-	 * @param string  The query string to get exactly one row.
-	 * @param mixed[] The parmeters for the sql query.
-	 * @param int     The column of the row to return the value for.
+	 * @param string  Table to get a single result from.
+	 * @param string  Field for the result.
+	 * @param mixed[] Conditions for the result.
 	 *
 	 * @return mixed The result value.
 	 */
 	public function selectSingleValue($table, $field, $conditions)
 	{
+		$q = 'SELECT ' . $field . ' FROM ' . $table;
+		
+		if (!empty($conditions))
+		{
+			$q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
+		}
+
 		try
 		{
-			$q  = 'SELECT ' . $field . ' FROM ' . $table;
-	 
-			if (!empty($conditions))
-			{
-				$q .= ' WHERE ' . $this->placeholdersKeyed($conditions);
-			}
-	 
-			$statement = $this->prepare($q);
+			$statement = $this->prepare($q . ' LIMIT 1');
 			$statement->execute($conditions);
 
 			return $statement->fetchColumn();
