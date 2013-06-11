@@ -1,5 +1,5 @@
 <?php
-namespace Evoke\Persistence\DB\Table;
+namespace Evoke\Persistence\DB;
 
 /**
  * InfoIface

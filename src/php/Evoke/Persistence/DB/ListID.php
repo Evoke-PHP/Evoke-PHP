@@ -1,9 +1,7 @@
 <?php
 namespace Evoke\Persistence\DB\Table;
 
-use Evoke\Message\Exception\DB as ExceptionDB,
-	Evoke\Persistence\DB\SQLIface,
-	Exception,
+use Exception,
 	LogicException;
 
 /**
@@ -29,10 +27,10 @@ class ListID implements ListIDIface
 	private $tableName;
 
 	/**
-	 * SQL object.
-	 * @var Evoke\Persistence\DB\SQLIface
+	 * PDO object.
+	 * @var PDO
 	 */
-	protected $sql;
+	protected $pdo;
 
 	/**
 	 * Construct a List ID object.
@@ -43,14 +41,14 @@ class ListID implements ListIDIface
 	 * @param string   The table name of the List ID table.
 	 */
 	public function __construct(
-		SQLIface     $sql,
+		PDO          $pdo,
 		Array        $fields    = array('Counter'  => 'Counter',
 		                                'DB_Table' => 'DB_Table',
 		                                'DB_Field' => 'DB_Field'),
 		/* String */ $tableName = 'List_IDs')
 	{
 		$this->fields    = $fields;
-		$this->sql       = $sql;
+		$this->pdo       = $pdo;
 		$this->tableName = $tableName;
 	}
 
@@ -68,7 +66,7 @@ class ListID implements ListIDIface
 	 */
 	public function getNew($table, $field)
 	{
-		if (!$this->sql->inTransaction())
+		if (!$this->pdo->inTransaction())
 		{
 			throw new LogicException(
 				__METHOD__ . ' we must be in a transaction to get a new List ' .
@@ -77,7 +75,7 @@ class ListID implements ListIDIface
 	 
 		try
 		{
-			$listID = $this->sql->selectSingleValue(
+			$listID = $this->pdo->selectSingleValue(
 				$this->tableName,
 				$this->fields['Counter'],
 				array($this->fields['DB_Table'] => $table,
@@ -88,7 +86,7 @@ class ListID implements ListIDIface
 				return NULL;
 			}
 	 
-			$this->sql->update($this->tableName,
+			$this->pdo->update($this->tableName,
 			                   array($this->fields['Counter'] => ++$listID),
 			                   array($this->fields['DB_Table'] => $table,
 			                         $this->fields['DB_Field'] => $field));
@@ -99,7 +97,7 @@ class ListID implements ListIDIface
 		{
 			throw new ExceptionDB(
 				__METHOD__, 'Unable to get new list ID for table: ' . $table .
-				' field: ' . $field, $this->sql, $e);
+				' field: ' . $field, $this->pdo, $e);
 		}
 	}   
 }

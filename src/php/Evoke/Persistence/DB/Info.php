@@ -1,9 +1,9 @@
 <?php
 namespace Evoke\Persistence\DB\Table;
 
-use Evoke\Persistence\DB\SQLIface,
-	InvalidArgumentException,
-	OutOfRangeException;
+use InvalidArgumentException,
+	OutOfRangeException,
+	PDO;
 
 /**
  * Info
@@ -48,10 +48,10 @@ class Info implements InfoIface
 	private $requiredFields;
 
 	/**
-	 * SQL object.
-	 * @var Evoke\Persistence\DB\SQLIface
+	 * PDO object.
+	 * @var PDO
 	 */
-	protected $sql;
+	protected $pdo;
 
 	/**
 	 * The table name for the table we are retrieving information for.
@@ -62,10 +62,10 @@ class Info implements InfoIface
 	/**
 	 * Construct a Table Info object.
 	 *
-	 * @param Evoke\Persistence\DB\SQLIface SQL object.
-	 * @param string                        Table Name.
+	 * @param PDO    PDO object.
+	 * @param string Table Name.
 	 */
-	public function __construct(SQLIface     $sql,
+	public function __construct(PDO          $pdo,
 	                            /* String */ $tableName)
 	{
 		if (!is_string($tableName))
@@ -74,15 +74,15 @@ class Info implements InfoIface
 				__METHOD__ . ' requires tableName as string');
 		}
 
-		$this->sql       = $sql;
+		$this->pdo       = $pdo;
 		$this->tableName = $tableName;
       
-		$this->createInfo = $this->sql->getSingleValue(
+		$this->createInfo = $this->pdo->getSingleValue(
 			'SHOW CREATE TABLE ' . $this->tableName,
 			array(),
 			1);
       
-		$this->description = $this->sql->getAssoc(
+		$this->description = $this->pdo->getAssoc(
 			'DESCRIBE ' . $this->tableName);
       
 		$this->calculateFields();
@@ -218,7 +218,12 @@ class Info implements InfoIface
 		return (!empty($this->requiredFields) &&
 		        in_array($field, $this->requiredFields));
 	}
-   
+
+	public function update()
+	{
+		
+	}
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/

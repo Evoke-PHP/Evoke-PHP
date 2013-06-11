@@ -4,7 +4,7 @@
  *
  * @package Persistence
  */
-namespace Evoke\Persistence\DB\Table;
+namespace Evoke\Persistence\DB;
 
 use InvalidArgumentException;
 
@@ -67,89 +67,84 @@ use InvalidArgumentException;
  */
 class Joins implements JoinsIface
 {
-	/**
-	 * Whether the current join is administatively managed (for the purposes of
-	 * adding, editing or deleting data).
-	 * @var bool
-	 */
-	protected $adminManaged;
+	protected
+		/**
+		 * Fields that are handled automatically by the database.
+		 * @var string[]
+		 */
+		$autoFields,
 
-	/**
-	 * Fields that are handled automatically by the database.
-	 * @var string[]
-	 */
-	protected $autoFields;
+		/**
+		 * The child field of the join.  This is the name of the field in the
+		 * table that this join points to.
+		 * @var string
+		 */
+		$childField,
 
-	/**
-	 * The child field of the join.  This is the name of the field in the table
-	 * that this join points to.
-	 * @var string
-	 */
-	protected $childField;
+		/**
+		 * How a match should be determined between the parent field & child
+		 * field.
+		 * @var string
+		 */
+		$compareType,
 
-	/**
-	 * How a match should be determined between the parent field & child field.
-	 * @var string
-	 */
-	protected $compareType;
+		/** 
+		 * Separator string to use between IDs in a table with multiple keys.
+		 * @var string
+		 */
+		$idSeparator,
 
-	/** 
-	 * Separator string to use between IDs in a table with multiple keys.
-	 * @var string
-	 */
-	protected $idSeparator;
+		/**
+		 * The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
+		 * @var string
+		 */
+		$joinType,
 
-	/**
-	 * Database Table Info
-	 * @var Evoke\Persistence\DB\Table\InfoIface
-	 */
-	protected $info;
-	
-	/**
-	 * The type of the join ('LEFT JOIN', 'RIGHT JOIN') etc.
-	 * @var string
-	 */
-	protected $joinType;
+		/**
+		 * Array ofJoin objects from this node to other Join objects in the join
+		 * tree.
+		 * @var Evoke\Persistence\DB\JoinsIface[]
+		 */
+		$joins,
+		
+		/**
+		 * The field used to join records together.
+		 * @var string
+		 */
+		$jointKey,
 
-	/**
-	 * Array ofJoin objects from this node to other Join objects in the join
-	 * tree.
-	 * @var Evoke\Persistence\DB\Table\JoinsIface[]
-	 */
-	protected $joins;
+		/**
+		 * The parent field for the current join.  The parent field is related
+		 * to the Join object that is the current node's parent.  It is the
+		 * field in that node's Table.
+		 * @var string
+		 */
+		$parentField,
 
-	/**
-	 * The field used to join records together.
-	 * @var string
-	 */
-	protected $jointKey;
+		/**
+		 * PDO object.
+		 * @var PDO
+		 */
+		$pdo,
+		
+		/**
+		 * The table name to be used for the current table (Aliases can be used
+		 * to disambiguate data).
+		 * @var string
+		 */
+		$tableAlias,
 
-	/**
-	 * The parent field for the current join.  The parent field is related to
-	 * the Join object that is the current node's parent.  It is the field in
-	 * that node's Table.
-	 * @var string
-	 */
-	protected $parentField;
+		/**
+		 * The table name of the current table.
+		 * @var string
+		 */
+		$tableName,
 
-	/**
-	 * The table name to be used for the current table (Aliases can be used to
-	 * disambiguate data).
-	 * @var string
-	 */
-	protected $tableAlias;
-
-	/**
-	 * The table name of the current table.
-	 * @var string
-	 */
-	protected $tableName;
-
-	/**
-	 * The table separator to be used between tables.
-	 * @var string
-	 */
-	protected $tableSeparator;
+		/**
+		 * The table separator to be used between tables.
+		 * @var string
+		 */
+		$tableSeparator;
 
 	/**
 	 * Construct the Joins object.

@@ -4,10 +4,10 @@
  *
  * @package Persistence
  */
-namespace Evoke\Persistence\DB\Table;
+namespace Evoke\Persistence\DB;
 
 use Evoke\Message\TreeIface,
-	Evoke\Persistence\DB\Table\InfoIface,
+	Evoke\Persistence\DB\InfoIface,
 	Evoke\Service\ValidationIface;
 
 /**
@@ -28,15 +28,15 @@ class Validation implements ValidationIface
 
 	/**
 	 * Table Info object.
-	 * @var Evoke\Persistence\DB\Table\InfoIface
+	 * @var Evoke\Persistence\DB\InfoIface
 	 */
 	protected $tableInfo;
 	
 	/**
 	 * Construct a Table Validator object.
 	 *
-	 * @param Evoke\Persistence\DB\Table\InfoIface Table Info object.
-	 * @param Evoke\Message\TreeIface              Failures.
+	 * @param Evoke\Persistence\DB\InfoIface Table Info object.
+	 * @param Evoke\Message\TreeIface        Failures.
 	 */
 	public function __construct(TableInfoIface $tableInfo,
 	                            TreeIface      $failures)
