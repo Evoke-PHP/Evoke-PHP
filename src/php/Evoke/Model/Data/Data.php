@@ -7,6 +7,10 @@ use InvalidArgumentException,
 
 /**
  * Data
+ * ====
+ *
+ * Overview
+ * --------
  *
  * Provide access to data.  Related data is allowed by defining Joins. An
  * iterator is supplied to traverse the array of records that make up the data.
@@ -14,7 +18,64 @@ use InvalidArgumentException,
  * Joint Data is retrieved via class properties that are automatically created
  * from the Joins passed at construction.
  *
- * Below is a usage example containing each different type of access:
+ * Joins
+ * -----
+ *
+ * Joins provide a way of representing trees of data commonly found in
+ * relational databases and many other real world situations.  They allow us to
+ * work with a hierarchy of information considering each part in the hierarchy
+ * as a separate data unit.
+ *
+ * Example from a relational database:
+ *    List of products, each of a particular size with a set of related images.
+ * 
+ * SQL structure (PK = Primary Key, FK = Foreign Key):
+ * <pre>
+ *   +====================+     
+ *   | Product            |     +===============+
+ *   +--------------------+     | Image_List    |
+ *   | PK | ID            |     +---------------+     +===============+
+ *   |    | Name          |     | PK | ID       |     | Image         |
+ *   | FK | Image_List_ID |---->|    | List_ID  |     +---------------+
+ *   | FK | Size_ID       |-.   | FK | Image_ID |---->| PK | ID       |
+ *   +====================+ |   +===============+     |    | Filename |
+ *                          |                         +===============+
+ *                          |   +===========+
+ *                   	    |   | Size      |
+ *                   	    |   +-----------+
+ *                   	    `-->| PK | ID   |
+ *                   	        |    | Name |
+ *                   	        +===========+
+ * </pre>
+ *
+ * Joins:
+ * <pre><code>
+ * array(Table_Name => Product,
+ *       Joins => array(
+ *	          array(Child_Field  => List_ID,
+ *	                Parent_Field => Image_List_ID,
+ *	                Table_Name   => Image_List,
+ *	                Joins        => array(
+ *	                    array(Child_Field => ID,
+ *	                          Parent_Field => Image_ID,
+ *	                          Table_Name  => Image))),
+ *	          array(Child_Field  => ID,
+ *	                Parent_Field => Size_ID,
+ *	                Table_Name   => Size)));
+ * </code></pre>
+ *
+ * The above is an abstract representation of the joins that would
+ * represent the data.
+ *
+ * Results
+ * -------
+ *
+ * Result records commonly come as flat records. To interpret these we need
+ * to arrange them according to the hierarchy of joins that represents our data
+ * structure.
+ *
+ * Usage
+ * -----
  *
  * 	   $data = new Data($dataFromMapperOrOtherSource,
  * 	                   array('List_ID' => $dataObjectForList));
@@ -123,7 +184,64 @@ class Data extends DataAbstract
 			var_export($parentField, true) . ' joins are: ' .
 			implode(', ', array_keys($this->dataJoins)));
 	}
-   
+
+	/**
+	 * Arrange a set of results for the database according to the Join tree.
+	 *
+	 * @param mixed[] The flat result data.
+	 * @param mixed[] The data already processed from the results.
+	 *
+	 * @returns mixed[] The data arranged into a hierarchy by the joins.
+	 */
+	public function arrangeFlatData(Array $results, Array $data=array())
+	{
+		// Get the data from the current table (this is a recursive function).
+		foreach ($results as $rowResult)
+		{
+			$currentTableResult = $this->filterFields($rowResult);
+	 
+			// Determine whether the row has data for the current table.
+			if ($this->isResult($currentTableResult))
+			{
+				$rowID = $this->getRowID($currentTableResult);
+				
+				if (!isset($data[$rowID]))
+				{
+					$data[$rowID] = $currentTableResult;
+				}
+
+				// If this result could contain information for referenced
+				// tables lower in the heirachy set it in the joint data.
+				if (!empty($this->joins))
+				{
+					if (!isset($data[$rowID][$this->jointKey]))
+					{
+						$data[$rowID][$this->jointKey] = array();
+					}
+
+					$jointData = &$data[$rowID][$this->jointKey];
+
+					// Fill in the data for the joins by recursion.
+					foreach($this->joins as $ref)
+					{
+						$jointDataField = $ref->getParentField();
+		  
+						if (!isset($jointData[$jointDataField]))
+						{
+							$jointData[$jointDataField] = array();
+						}
+
+						// Recurse - Arrange the single result (rowResult).
+						$jointData[$jointDataField]  = $ref->arrangeResults(
+							array($rowResult), $jointData[$jointDataField]);
+					}	  
+				}
+			}
+		}
+
+		return $data;
+	}
+	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
