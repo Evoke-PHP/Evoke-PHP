@@ -59,8 +59,7 @@
 						 php-depend,
 						 php-documentor,
 						 php-mess-detector,
-						 php-unit,
-						 php-code-browser"/>
+						 php-unit"/>
 
   <target name        = "prepare"
 		  description = "Prepare the build directory to receive reports etc."
@@ -69,22 +68,6 @@
   </target>
   
   <!-- Sub Target definitions -->
-  <target name        = "php-code-browser"
-		  depends     = "prepare,
-						 php-copy-paste-detector,
-						 php-mess-detector,
-						 php-unit"
-		  description = "Aggregate tool output with PHP_CodeBrowser">
-	<exec executable="phpcb" passthru="true">
-	  <arg value="--log" />
-	  <arg path="${project.reports}/php" />
-	  <arg value="--source" />
-	  <arg path="${project.php_source}" />
-	  <arg value="--output" />
-	  <arg path="${project.reports}/php/code-browser" />
-	</exec>
-  </target>
-
   <target name="php-code-sniffer"
 		  description="Detect coding standard violations.  Output to the Command line.">
 	<exec executable = "phpcs" passthru = "true">
