@@ -41,21 +41,12 @@ use BadMethodCallException;
  */
 class Flat implements DataIface
 {
-	/**
-	 *  The data that is being modelled.
-	 * @var mixed[]
-	 */
-	protected $data;
-
-	/**
-	 *  Construct a Data model.
-	 *
-	 *  @param mixed[] Raw data that we are modelling.
-	 */
-	public function __construct(Array $data = array())
-	{
-		$this->setData($data);
-	}
+	protected
+		/**
+		 *  The data that is being modelled.
+		 * @var mixed[]
+		 */
+		$data;
 
 	/******************/
 	/* Public Methods */

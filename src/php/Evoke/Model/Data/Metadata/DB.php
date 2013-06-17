@@ -61,7 +61,14 @@ use InvalidArgumentException;
  *  LEFT JOIN Image      AS I  ON IL.Image_ID=I.ID
  *  LEFT JOIN Size       AS S  ON Product.Size_ID=Size.ID;'
  * </pre></code>
- * 
+ *
+ * Results
+ * -------
+ *
+ * Result records commonly come as flat records. To interpret these we need
+ * to arrange them according to the hierarchy of joins that represents our data
+ * structure.
+ *
  * Metadata Structure
  * ------------------
  *
@@ -72,21 +79,8 @@ use InvalidArgumentException;
  * <pre><code>
  * [
  *     'Fields'       => ['ID', 'Name', 'Image_List_ID', 'Size_ID'],
- *     'Joins'        =>
- *     [
- *         'Image_List_ID' =>
- *         [
- *             'Field'    => 'List_ID',
- *             'Metadata' => $metadataImageList,
- *             'Table'    => 'Image_List'
- *         ],
- *         'Size_ID'       =>
- *         [
- *             'Field'    => 'ID',
- *             'Metadata' => $metadataSize,
- *             'Table'    => 'Size'
- *         ]
- *     ],
+ *     'Joins'        => ['Image_List_ID=IL.List_ID' => $metadataImageList,
+ *                        'Size_ID=S.ID'             => $metadataSize],
  *     'Primary_Keys' => ['ID'],
  *     'Table_Alias'  => 'Product',
  *     'Table_Name'   => 'Product'
@@ -98,15 +92,7 @@ use InvalidArgumentException;
  * <pre><code>
  * [
  *     'Fields'       => ['ID', 'List_ID', 'Image_ID'],
- *     'Joins'        =>
- *     [
- *         'List_ID' =>
- *         [
- *             'Field'    => 'Image_ID'
- *             'Metadata' => $metadaImage,
- *             'Table'    => 'Image'
- *         ]
- *     ],
+ *     'Joins'        => ['List_ID=I.ID' => $metadataImage],
  *     'Primary_Keys' => ['ID'],
  *     'Table_Alias'  => 'IL',
  *     'Table_Name'   => 'Image_List'
@@ -154,15 +140,19 @@ class DB implements MetadataIface
 		/**
 		 * Joins from the database table.
 		 * <pre><code>
-		 * [<Parent_Field> => ['Field'    => <Child_Field>,
-		 *                     'Metadata' => $metadata,
-		 *                     'Table'    => <Child_Table>]]
+		 * [<Parent_Field>=<Child_Table><Child_Field> => $metadata]
 		 * </code></pre>
 		 *
 		 * @var mixed[]
 		 */
 		$joins,
 
+		/**
+		 * Field to use for joining data.
+		 * @var string
+		 */
+		$jointKey,
+		
 		/**
 		 * Primary keys for the database table.
 		 * @var string[]
@@ -189,12 +179,14 @@ class DB implements MetadataIface
 	 * @param string[] Primary keys for the database table.
 	 * @param string   Table Alias.
 	 * @param string   Table Name.
+	 * @param string   Field to use for joining data.
 	 */
 	public function __construct(Array        $fields,
 	                            Array        $joins,
 	                            Array        $primaryKeys,
 	                            /* string */ $tableAlias,
-	                            /* string */ $tableName)
+	                            /* string */ $tableName,
+	                            /* string */ $jointKey = 'Joint_Data')
 	{
 		$this->fields      = $fields;
 		$this->joins       = $joins;
@@ -244,17 +236,17 @@ class DB implements MetadataIface
 					$jointData = &$data[$rowID][$this->jointKey];
 
 					// Fill in the data for the joins by recursion.
-					foreach($this->joins as $parentField => $ref)
+					foreach($this->joins as $joinID => $metadata)
 					{
-						if (!isset($jointData[$parentField]))
+						if (!isset($jointData[$joinID]))
 						{
-							$jointData[$parentField] = array();
+							$jointData[$joinID] = array();
 						}
 
 						// Recurse - Arrange the single result (rowResult).
-						$jointData[$parentField]  =
-							$ref['Metadata']->arrangeFlatData(
-								array($rowResult), $jointData[$parentField]);
+						$jointData[$joinID] =
+							$metadata->arrangeFlatData(
+								array($rowResult), $jointData[$joinID]);
 					}	  
 				}
 			}
@@ -297,7 +289,7 @@ class DB implements MetadataIface
 	 */
 	private function filterFields(Array $fieldList)
 	{
-		$filteredFields = [];
+		$filteredFields = array();
 		$pattern = '/^' . $this->tableAlias . '\./';
 		
 		foreach ($fieldList as $key => $value)
