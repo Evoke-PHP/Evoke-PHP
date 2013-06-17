@@ -1,7 +1,8 @@
 <?php
 namespace Evoke_Test\View;
 
-use Evoke\View\Backtrace,
+use Evoke\Model\Data\Flat,
+	Evoke\View\Backtrace,
 	PHPUnit_Framework_TestCase;
 
 /**
@@ -28,7 +29,8 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testBacktraceElements()
 	{
-		$data = new \Evoke\Model\Data\Data(
+		$data = new Flat;
+		$data->setData(
 			array(0 => array('Class'    => 'Funky',
 			                 'File'     => 'Funk.php',
 			                 'Function' => 'funkItUp',

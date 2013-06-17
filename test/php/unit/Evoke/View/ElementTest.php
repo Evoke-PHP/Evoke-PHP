@@ -1,7 +1,7 @@
 <?php
 namespace Evoke_Test\View;
 
-use Evoke\Model\Data\Data,
+use Evoke\Model\Data\Flat,
     Evoke\View\Element,
 	PHPUnit_Framework_TestCase;
 
@@ -45,7 +45,8 @@ class ElementTest extends PHPUnit_Framework_TestCase
 		$children = [0 => ['div', ['class' => 'one'], '1'],
                      1 => ['p',   ['class' => 'two'], '2']];
         $viewChild = $this->getMock('Evoke\View\View');
-        $dataChildren = new Data($children);
+        $dataChildren = new Flat;
+        $dataChildren->setData($children);
 
         foreach ($children as $index => $child)
         {

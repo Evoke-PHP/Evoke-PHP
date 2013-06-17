@@ -190,6 +190,7 @@ class DB implements MetadataIface
 	{
 		$this->fields      = $fields;
 		$this->joins       = $joins;
+		$this->jointKey    = $jointKey;
 		$this->primaryKeys = $primaryKeys;
 		$this->tableAlias  = $tableAlias;
 		$this->tableName   = $tableName;

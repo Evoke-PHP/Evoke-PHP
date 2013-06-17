@@ -86,7 +86,7 @@ class FactoryBaseTest extends PHPUnit_Framework_TestCase
 	 * @covers  Evoke\Model\FactoryBase::createData
 	 * @depends test__constructGood
 	 */
-	public function testCreateDataSimple(FactoryShim $modelFactory)
+	public function OLDtestCreateDataSimple(FactoryShim $modelFactory)
 	{
 		$this->assertInstanceOf('Evoke\Model\Data\Data',
 		                        $modelFactory->createData());		                        
@@ -98,7 +98,7 @@ class FactoryBaseTest extends PHPUnit_Framework_TestCase
 	 * @covers  Evoke\Model\FactoryBase::createData
 	 * @depends test__constructGood
 	 */
-	public function testCreateDataSpecific(FactoryShim $modelFactory)
+	public function OLDtestCreateDataSpecific(FactoryShim $modelFactory)
 	{
 		$this->assertInstanceOf(
 			'Evoke\Model\Data\Menu',
@@ -112,7 +112,7 @@ class FactoryBaseTest extends PHPUnit_Framework_TestCase
 	 * @covers  Evoke\Model\FactoryBase::createData
 	 * @depends test__constructGood
 	 */
-	public function testCreateDataComplex(FactoryShim $modelFactory)
+	public function OLDtestCreateDataComplex(FactoryShim $modelFactory)
 	{
 		/**
 		 * Complex Data
