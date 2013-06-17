@@ -7,24 +7,17 @@ _Evoke PHP_ is a library of independent objects that forms a framework for web d
 ###Status: ALPHA###
 Evoke PHP is usable but still under devlopment.
 Parts of the API are changing.
-No unit testing has been done.
+Little unit testing has been done.
 Please contact me for guidance on using Evoke (see email below).
 
 ## Features
-* PHP 5.3+
-* Pure OO
-* Hierarchical MVC
+* PHP 5.4+
+* Object Oriented
+* Loosely Coupled
 * Namespaced
 * Autoloader
-* Dependency Injection
-* Logger
-* Translator
-* Models for DB Tables with relationships
-* CRUD Models for administering data.
-* Easy access to data retrieved.
-* Views and tools for writing AJAX, XML, etc.
-* Form Input Generation
-* Completely decoupled MVC.
+* MVC
+* Layered Architecture
 
 ## Why choose Evoke PHP
 * You like writing beautiful code.
