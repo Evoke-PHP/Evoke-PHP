@@ -1,7 +1,8 @@
 <?php
 namespace Evoke\Model\Data;
 
-use InvalidArgumentException,
+use Evoke\Model\Data\Metadata\MetadataIface,
+	InvalidArgumentException,
 	OutOfBoundsException,
 	RuntimeException;
 
@@ -50,8 +51,7 @@ use InvalidArgumentException,
  *
  * Joins:
  * <pre><code>
- * array(Table_Name => Product,
- *       Joins => array(
+ * array(Joins => array(
  *	          array(Child_Field  => List_ID,
  *	                Parent_Field => Image_List_ID,
  *	                Table_Name   => Image_List,
@@ -61,7 +61,8 @@ use InvalidArgumentException,
  *	                          Table_Name  => Image))),
  *	          array(Child_Field  => ID,
  *	                Parent_Field => Size_ID,
- *	                Table_Name   => Size)));
+ *	                Table_Name   => Size)),
+ *       Table_Name => Product);
  * </code></pre>
  *
  * The above is an abstract representation of the joins that would
@@ -100,52 +101,27 @@ use InvalidArgumentException,
  * @license MIT
  * @package Model
  */
-class Data extends DataAbstract
+class Data
 {
-	/**
-	 * Joint data objects.
-	 * @var DataIface[]
-	 */
-	protected $dataJoins;
-
-	/**
-	 * The key that is used for joint data within the raw data.
-	 * @var string
-	 */
-	protected $jointKey;
+	protected
+		/**
+		 * Description of the data we are modelling.
+		 * @var MetadataIface
+		 */
+		$metadata;
 
 	/**
 	 * Construct a Data model.
 	 *
-	 * @param Array[]     $data      Raw joint data that we are modelling.
-	 * @param DataIface[] $dataJoins Data objects to use for modelling the data
-	 *                               that is joint with this data.
-	 * @param string      $jointKey  The key to use for joint data.
+	 * @param MetadataIface Description of the data we are modelling.
+	 * @param Array[]       Raw data that we are modelling.
 	 */
-	public function __construct(Array        $data      = array(),
-	                            Array        $dataJoins = array(),
-	                            /* String */ $jointKey  = 'Joint_Data')
+	public function __construct(MetadataIface $metadata,
+	                            Array         $data = array())
 	{
-		if (!is_string($jointKey))
-		{
-			throw new InvalidArgumentException(
-				'jointKey can only be a string.');
-		}
-		
-		foreach ($dataJoins as $parentField => $dataContainer)
-		{
-			if (!$dataContainer instanceof DataIface)
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' requires Data for parent field: ' .
-					$parentField);
-			}
-		}
-
-		$this->dataJoins = $dataJoins;
-		$this->jointKey  = $jointKey;
-
 		parent::__construct($data);
+		
+		$this->metadata = $metadata;
 	}
 
 	/**
@@ -166,6 +142,8 @@ class Data extends DataAbstract
 	 */
 	public function __get($parentField)
 	{
+		return $this->metadata->getJointData($parentField);
+		
 		if (isset($this->dataJoins[$parentField]))
 		{
 			return $this->dataJoins[$parentField];
@@ -195,6 +173,15 @@ class Data extends DataAbstract
 	 */
 	public function arrangeFlatData(Array $results, Array $data=array())
 	{
+		foreach ($results as $row)
+		{
+			$currentLevelResult = $this->filterFields($row);
+
+			$data[] = $currentLevelResult;
+		}
+		
+		return $data;
+		
 		// Get the data from the current table (this is a recursive function).
 		foreach ($results as $rowResult)
 		{
@@ -240,11 +227,41 @@ class Data extends DataAbstract
 		}
 
 		return $data;
-	}
+	}	
 	
 	/*********************/
 	/* Protected Methods */
 	/*********************/
+
+	/**
+	 * Get a row ID value that uniquely identifies a row for a table.
+	 *
+	 * @param mixed[] The row from the result.
+	 *
+	 * @return string
+	 */
+	protected function getRowID($row)
+	{
+		$id = NULL;
+		$primaryKeys = $this->info->getPrimaryKeys();
+       
+		foreach ($primaryKeys as $primaryKey)
+		{
+			if (isset($row[$primaryKey]))
+			{
+				if (empty($id))
+				{
+					$id = $row[$primaryKey];
+				}
+				else
+				{
+					$id .= $this->idSeparator . $row[$primaryKey];
+				}
+			}
+		}
+      
+		return $id;
+	}
 
 	/**
 	 * Set all of the Joint Data from the current record into the data
@@ -254,7 +271,7 @@ class Data extends DataAbstract
 	 */
 	protected function setRecord(Array $record)
 	{
-		foreach ($this->dataJoins as $parentField => $data)
+		foreach ($this->dataJoins['Joins'] as $parentField => $data)
 		{
 			if (isset($record[$this->jointKey][$parentField]))
 			{
@@ -270,6 +287,45 @@ class Data extends DataAbstract
 	/*******************/
 	/* Private Methods */
 	/*******************/
+
+	/**
+	 * Filter the fields that belong to a table from the list and return the
+	 * fields without their table name preceding them.
+	 *
+	 * @param mixed[] The field list that we are filtering.
+	 *
+	 * @return mixed[]
+	 */
+	private function filterFields($fieldList)
+	{
+		$filteredFields = [];
+		$pattern = '/^' . $this->dataJoins['Table_Name'] .
+			$this->dataJoint['Table_Separator'] . '/';
+		
+		foreach ($fieldList as $key => $value)
+		{
+			if (preg_match($pattern, $key))
+			{
+				$filteredFields[preg_replace($pattern, '', $key)] = $value;
+			}
+		}
+
+		return $filteredFields;
+		
+		$filteredFields = array();
+		$pattern =
+			'/^' . $this->getTableAlias() . $this->tableSeparator . '/';
+
+		foreach ($fieldList as $key => $value)
+		{
+			if (preg_match($pattern, $key))
+			{
+				$filteredFields[preg_replace($pattern, '', $key)] = $value;
+			}
+		}
+
+		return $filteredFields;
+	}
 
 	/**
 	 * Get the Join name that will be used for accessing the joint data from
@@ -300,6 +356,29 @@ class Data extends DataAbstract
 		}
 
 		return lcfirst($name);
-	}	
+	}
+
+	/**
+	 * Determine whether the result is a result (has data for this table).
+	 *
+	 * @param result The result data.
+	 *
+	 * @return bool Whether the result contains information for this table.
+	 */
+	private function isResult($result)
+	{
+		// A non result may be an array with all NULL entries, so we cannot just
+		// check that the result array is empty.  The easiest way is just to
+		// check that there is at least one value that is set.
+		foreach ($result as $resultData)
+		{
+			if (isset($resultData))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
 // EOF

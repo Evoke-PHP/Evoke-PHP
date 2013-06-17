@@ -1,6 +1,6 @@
 <?php
 /**
- * Model Read-Only access to data.
+ * Model Read-Only access to flat data.
  *
  * @package Model
  */
@@ -9,34 +9,26 @@ namespace Evoke\Model\Data;
 use BadMethodCallException;
 
 /**
- * Model Read-Only access to data.
+ * Model Read-Only access to flat data.
  *
- * Extended classes may use the correct business logic that is appropriate for
- * model layer to perform.  An iterator is supplied to traverse the array of
- * records that make up the data.  Fields from the current record of the data
- * are accessed as per a standard Array.
+ * An iterator is supplied to traverse the records within the data.  Fields from
+ * the current record of the data are accessed as per a standard Array.
  *
- * Usage:
+ * Usage
+ * -----
+ *
  * <pre><code>
- * $obj = new Data(array(),
- *                 array('List_ID' => $dataObjectForList));
- * // Setting the data of the parent sets the data for the joint lists (and
- * // their joint lists etc.).
- * $obj->setData($data);
+ * $object = new Data;
+ * $object->setData($data);
  *
  * // Traverse over each record in the data.
- * foreach ($obj as $key => $record)
+ * foreach ($object as $record)
  * {
- *    // Access a field as though it is an array.
+ *    // Access the fields of each record as though it is an array.
  *    $x = $record['Field'];
  *
- *    // Access joint data (with ->).  The joint data is itself a data object.
- *    // The name used after -> is the lowerCamelCase (_ID is removed
- *    // automatically).
- *    foreach ($record->list as $listRecord)
- *    {
- *       $y = $listRecord['Joint_Record_Field'];
- *    }
+ *    // Deny setting of data.
+ *    $record['Field'] = 'any'; // This would throw an exception.
  * }
  * </code></pre>
  *
@@ -47,7 +39,7 @@ use BadMethodCallException;
  *
  * @SuppressWarnings(PHPMD.TooManyMethods) - We need a lot.
  */
-abstract class DataAbstract implements DataIface
+class Flat implements DataIface
 {
 	/**
 	 *  The data that is being modelled.
@@ -110,7 +102,7 @@ abstract class DataAbstract implements DataIface
 	 * reference access).  This is just the object as the object implements the
 	 * iterator and references.
 	 *
-	 * @return Evoke\Model\Data\DataIface
+	 * @return DataIface
 	 */
 	public function current()
 	{
@@ -131,8 +123,7 @@ abstract class DataAbstract implements DataIface
 	 * Get the next record of data. Set the next record within the Data object
 	 * and return the object.
 	 *
-	 * @return Evoke\Model\Data\DataIface|bool Return the next data object, or
-	 *                                         boolean false.
+	 * @return DataIface|bool Return the next data object, or boolean false.
 	 */
 	public function next()
 	{

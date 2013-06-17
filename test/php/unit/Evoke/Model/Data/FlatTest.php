@@ -1,166 +1,11 @@
 <?php
-namespace Evoke_Test\Model\Data\DataTest;
+namespace Evoke_Test\Model\Data\FlatTest;
 
-use Evoke\Model\Data\Data,
+use Evoke\Model\Data\Flat,
 	PHPUnit_Framework_TestCase;
 
-class DataTest extends PHPUnit_Framework_TestCase
+class FlatTest extends PHPUnit_Framework_TestCase
 { 
-	/**
-	 * Test the construction of a good object.
-	 *
-	 * @covers       Evoke\Model\Data\Data::__construct
-	 * @covers       Evoke\Model\Data\DataAbstract::__construct
-	 * @dataProvider provider__constructGood
-	 */
-	public function test__constructGood($data      = NULL,
-	                                    $dataJoins = NULL,
-	                                    $jointKey  = NULL)
-	{
-		if (!isset($data))
-		{
-			$obj = new Data();
-		}
-		elseif (!isset($dataJoins))
-		{
-			$obj = new Data($data);
-		}
-		elseif (!isset($jointKey))
-		{
-			$obj = new Data($data, $dataJoins);
-		}
-		else
-		{
-			$obj = new Data($data, $dataJoins, $jointKey);
-		}
-		
-		$this->assertInstanceOf('Evoke\Model\Data\Data', $obj);
-	}
-
-	/**
-	 * Test the construction with Invalid Arguments.
-	 *
-	 * @covers            Evoke\Model\Data\Data::__construct
-	 * @dataProvider      provider__constructInvalidArguements
-	 * @expectedException InvalidArgumentException
-	 */
-	public function test__constructInvalidArguments($data      = NULL,
-	                                                $dataJoins = NULL,
-	                                                $jointKey  = NULL)
-	{
-		if (!isset($data))
-		{
-			$obj = new Data();
-		}
-		elseif (!isset($dataJoins))
-		{
-			$obj = new Data($data);
-		}
-		elseif (!isset($jointKey))
-		{
-			$obj = new Data($data, $dataJoins);
-		}
-		else
-		{
-			$obj = new Data($data, $dataJoins, $jointKey);
-		}
-	}
-
-	/**
-	 * Test the BAD retrieval joint data.
-	 *
-	 * @covers            Evoke\Model\Data\Data::__get
-	 * @depends           test__constructGood
-	 * @dataProvider      provider__getBad
-	 * @expectedException OutOfBoundsException
-	 */
-	public function test__getBad($object, $parentField)
-	{
-		$jointData = $object->$parentField;
-	}
-
-	/**
-	 * Test the GOOD retrieval of joint data.
-	 *
-	 * @covers       Evoke\Model\Data\Data::__get
-	 * @covers       Evoke\Model\Data\Data::getJoinName
-	 * @covers       Evoke\Model\Data\Data::setRecord
-	 * @depends      test__constructGood
-	 * @dataProvider provider__getGood
-	 */
-	public function test__getGood($object, $parentField, $expected)
-	{
-		$jointData = $object->$parentField;
-		$this->assertSame($expected, $jointData);
-	}
-
-	/**
-	 * Test that multiple records can be iterated.  The children for each
-	 * single record should contain only the joint data that is appropriate.
-	 *
-	 *
-	 * @covers       Evoke\Model\Data\Data::__get
-	 * @covers       Evoke\Model\Data\Data::getJoinName
-	 * @covers       Evoke\Model\Data\Data::setRecord
-	 * @depends      test__constructGood
-	 */
-	public function testNextChildren()
-	{
-		$data = [
-			1 => ['ID' => 1,
-			      'Name' => 'admin',
-			      'Password' => '$2y$aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-			      'Joint_Data' => 
-			      ['ID' =>
-			       ['' => ['User_ID' => 1,
-			               'Role_ID' => 1,
-			               'Joint_Data' => 
-			               ['Role_ID' => 
-			                [1 => ['ID' => 1,
-			                       'Name' => 'Admin',
-			                       'Joint_Data' =>
-			                       ['ID' =>
-			                        ['' => ['Role_ID' => 1,
-			                                'Permission_ID' => 1,
-			                                'Joint_Data' => 
-			                                ['Permission_ID' => 
-			                                 [1 => ['ID' => 1,
-			                                        'Name' => 'Create']]]]]]]]]
-					       ]]]],
-				                            
-			2 => ['ID' => 2,
-			      'Name' => 'temp',
-			      'Password' => '$2y$bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-			      'Joint_Data' => 
-			      ['ID' => []]]];
-
-
-		$object = new Data(
-			$data,
-			['ID' => new Data(
-					[],
-					['Role_ID' => new Data(
-							[],
-							['ID' => new Data(
-									[],
-									['Permission_ID' => new Data()])
-								])
-						])
-				]);
-		$object->setData($data);
-
-		$this->assertSame('Create',
-		                  $object->ID->Role_ID->ID->Permission_ID['Name']);
-
-		$object->next();
-		$this->assertSame('temp', $object['Name']);
-
-
-		$this->assertTrue($object->ID->Role_ID->ID->Permission_ID->isEmpty());
-		$this->assertNull($object->ID->Role_ID->ID->Permission_ID['Name'],
-		                  'Next child should have a NULL result.');
-	}
-	
 	/******************/
 	/* Data Providers */
 	/******************/
@@ -260,6 +105,190 @@ class DataTest extends PHPUnit_Framework_TestCase
 		$tests['Good_Join_Refered_To_Differently']['Parent_Field'] = 'List_ID';
 
 		return $tests;
+	}
+
+	public function providerArrangeFlatDataSingleLevel()
+	{
+		return [
+			['Flat_Results'  => [['T1.F1' => 1, 'T1.F2' => 2, 'T2.F1' => 3],
+			                     ['T1.F1' => 4, 'T1.F2' => 5, 'T2.F1' => 6]],
+			 'Expected_Data' => [['T1.F1' => 1, 'T1.F2' => 2],
+			                     ['T1.F1' => 4, 'T1.F2' => 5]]]];
+	}
+
+	/*********/
+	/* Tests */
+	/*********/
+
+	/**
+	 * Test the construction of a good object.
+	 *
+	 * @covers       Evoke\Model\Data\Flat::__construct
+	 * @dataProvider provider__constructGood
+	 */
+	public function test__constructGood($data      = NULL,
+	                                    $dataJoins = NULL,
+	                                    $jointKey  = NULL)
+	{
+		if (!isset($data))
+		{
+			$object = new Flat();
+		}
+		elseif (!isset($dataJoins))
+		{
+			$object = new Flat($data);
+		}
+		elseif (!isset($jointKey))
+		{
+			$object = new Flat($data, $dataJoins);
+		}
+		else
+		{
+			$object = new Flat($data, $dataJoins, $jointKey);
+		}
+		
+		$this->assertInstanceOf('Evoke\Model\Data\Flat', $object);
+	}
+
+	/**
+	 * Test the construction with Invalid Arguments.
+	 *
+	 * @covers            Evoke\Model\Data\Flat::__construct
+	 * @dataProvider      provider__constructInvalidArguements
+	 * @expectedException InvalidArgumentException
+	 */
+	public function test__constructInvalidArguments($data      = NULL,
+	                                                $dataJoins = NULL,
+	                                                $jointKey  = NULL)
+	{
+		if (!isset($data))
+		{
+			$object = new Flat();
+		}
+		elseif (!isset($dataJoins))
+		{
+			$object = new Flat($data);
+		}
+		elseif (!isset($jointKey))
+		{
+			$object = new Flat($data, $dataJoins);
+		}
+		else
+		{
+			$object = new Flat($data, $dataJoins, $jointKey);
+		}
+	}
+
+	/**
+	 * Test the BAD retrieval joint data.
+	 *
+	 * @covers            Evoke\Model\Data\Flat::__get
+	 * @depends           test__constructGood
+	 * @dataProvider      provider__getBad
+	 * @expectedException OutOfBoundsException
+	 */
+	public function test__getBad($object, $parentField)
+	{
+		$jointData = $object->$parentField;
+	}
+
+	/**
+	 * Test the GOOD retrieval of joint data.
+	 *
+	 * @covers       Evoke\Model\Data\Flat::__get
+	 * @covers       Evoke\Model\Data\Flat::getJoinName
+	 * @covers       Evoke\Model\Data\Flat::setRecord
+	 * @depends      test__constructGood
+	 * @dataProvider provider__getGood
+	 */
+	public function test__getGood($object, $parentField, $expected)
+	{
+		$jointData = $object->$parentField;
+		$this->assertSame($expected, $jointData);
+	}
+
+	/**
+	 * Ensure that flat result data is filtered to provide only the appropriate
+	 * fields for the single level data structure.
+	 *
+	 * @covers       Evoke\Model\Data\Flat::arrangeFlatData
+	 * @dataProvider providerArrangeFlatDataSingleLevel
+	 */
+	public function testArrangeFlatDataSingleLevel(
+		Array $flatResults, $expectedData)
+	{
+		$object = new Flat([], ['Table_Name'      => 'T1',
+		                        'Table_Separator' => '.']);
+
+		$this->assertEquals($expectedData,
+		                    $object->arrangeFlatData($flatResults));
+	}
+	
+	/**
+	 * Test that multiple records can be iterated.  The children for each
+	 * single record should contain only the joint data that is appropriate.
+	 *
+	 *
+	 * @covers       Evoke\Model\Data\Data::__get
+	 * @covers       Evoke\Model\Data\Data::getJoinName
+	 * @covers       Evoke\Model\Data\Data::setRecord
+	 * @depends      test__constructGood
+	 */
+	public function testNextChildren()
+	{
+		$data = [
+			1 => ['ID' => 1,
+			      'Name' => 'admin',
+			      'Password' => '$2y$aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+			      'Joint_Data' => 
+			      ['ID' =>
+			       ['' => ['User_ID' => 1,
+			               'Role_ID' => 1,
+			               'Joint_Data' => 
+			               ['Role_ID' => 
+			                [1 => ['ID' => 1,
+			                       'Name' => 'Admin',
+			                       'Joint_Data' =>
+			                       ['ID' =>
+			                        ['' => ['Role_ID' => 1,
+			                                'Permission_ID' => 1,
+			                                'Joint_Data' => 
+			                                ['Permission_ID' => 
+			                                 [1 => ['ID' => 1,
+			                                        'Name' => 'Create']]]]]]]]]
+					       ]]]],
+				                            
+			2 => ['ID' => 2,
+			      'Name' => 'temp',
+			      'Password' => '$2y$bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			      'Joint_Data' => 
+			      ['ID' => []]]];
+
+
+		$object = new Data(
+			$data,
+			['ID' => new Data(
+					[],
+					['Role_ID' => new Data(
+							[],
+							['ID' => new Data(
+									[],
+									['Permission_ID' => new Data()])
+								])
+						])
+				]);
+		$object->setData($data);
+
+		$this->assertSame('Create',
+		                  $object->ID->Role_ID->ID->Permission_ID['Name']);
+
+		$object->next();
+		$this->assertSame('temp', $object['Name']);
+
+
+		$this->assertTrue($object->ID->Role_ID->ID->Permission_ID->isEmpty());
+		$this->assertNull($object->ID->Role_ID->ID->Permission_ID['Name'],
+		                  'Next child should have a NULL result.');
 	}
 }
 // EOF
