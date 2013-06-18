@@ -1,10 +1,15 @@
 <?php
+/**
+ * HTTP Router Interface
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP\URI;
 
 use \Evoke\HTTP\RequestIface;
 
 /**
- * Router
+ * HTTP Router Interface
  *
  * Route the Request to a controller and parameters.
  *
@@ -30,7 +35,7 @@ class Router implements RouterIface
 	/**
 	 * Create a HTTP URI Router that routes the request to a response.
 	 *
-	 * @param Evoke\HTTP\RequestIface
+	 * @param RequestIface The request to route.
 	 */
 	public function __construct(RequestIface $request)
 	{
@@ -44,7 +49,7 @@ class Router implements RouterIface
 	/**
 	 * Add a rule to the router.
 	 *
-	 * @param Evoke\HTTP\URI\Rule\RuleIface The rule.
+	 * @param Rule\RuleIface The rule.
 	 */
 	public function addRule(Rule\RuleIface $rule)
 	{

@@ -168,6 +168,9 @@ class Response implements ResponseIface
 	 * The valid header fields are defined in RFC2616 sections 4.5, 6.2, 7.1.
 	 * (Note: 7.1 extension-header allows for the wide range of headers that we
 	 * match here, even though they may be ignored by clients.)
+	 *
+	 * @param string The header to set.
+	 * @param string The value to set it to.
 	 */
 	public function setHeader($field, $value)
 	{

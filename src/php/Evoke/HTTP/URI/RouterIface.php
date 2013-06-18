@@ -1,7 +1,12 @@
 <?php
+/**
+ * HTTP URI Router Interface
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP\URI;
 /**
- * RouterIface
+ * HTTP URI Router Interface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -13,7 +18,7 @@ interface RouterIface
 	/**
 	 * Add a rule to the router.
 	 *
-	 * @param Evoke\HTTP\URI\Rule\RuleIface The rule.
+	 * @param Rule\RuleIface The rule.
 	 */
 	public function addRule(Rule\RuleIface $rule);
 

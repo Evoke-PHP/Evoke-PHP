@@ -1,4 +1,9 @@
 <?php
+/**
+ * Left Trim
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
@@ -11,7 +16,7 @@ use InvalidArgumentException;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package HTTP
+ * @package HTTP\URI\Rule
  */
 class LeftTrim extends Rule
 {

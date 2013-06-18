@@ -1,8 +1,13 @@
 <?php
+/**
+ * Rule Interface
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 /**
- * RuleIface
+ * Rule Interface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young

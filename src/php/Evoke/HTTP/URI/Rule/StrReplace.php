@@ -1,4 +1,9 @@
 <?php
+/**
+ * String Replace
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
