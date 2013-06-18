@@ -1,4 +1,9 @@
 <?php
+/**
+ * JSON Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 /**

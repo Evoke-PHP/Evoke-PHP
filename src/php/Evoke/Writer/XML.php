@@ -1,4 +1,9 @@
 <?php
+/**
+ * XML Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 /**
  * XML Writer

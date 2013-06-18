@@ -1,10 +1,15 @@
 <?php
+/**
+ * Page Interface
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 /**
- * PageIface
+ * Page Interface
  *
- * The interface to an object that writes a page
+ * The interface to an object that writes a page.
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young

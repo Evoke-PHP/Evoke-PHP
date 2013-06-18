@@ -1,4 +1,9 @@
 <?php
+/**
+ * Abstract Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 /**

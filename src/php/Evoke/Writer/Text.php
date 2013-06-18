@@ -1,4 +1,9 @@
 <?php
+/**
+ * Text Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 use InvalidArgumentException;

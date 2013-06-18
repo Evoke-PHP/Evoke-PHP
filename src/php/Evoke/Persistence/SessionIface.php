@@ -1,8 +1,13 @@
 <?php
+/**
+ * Session Interface
+ *
+ * @package Persistence
+ */
 namespace Evoke\Persistence;
 
 /**
- * SessionIface
+ * Session Interface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young

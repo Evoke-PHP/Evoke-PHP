@@ -1,4 +1,9 @@
 <?php
+/**
+ * Controller
+ *
+ * @package Controller
+ */
 namespace Evoke\Controller;
 
 use Evoke\HTTP\ResponseIface,

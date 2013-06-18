@@ -1,4 +1,9 @@
 <?php
+/**
+ * XML Base Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 use InvalidArgumentException,
@@ -19,10 +24,11 @@ abstract class XMLBase implements WriterIface
 	protected
 		/**
 		 * The language of the XML being written.
+		 *
 		 * @var string
 		 */
 		$language,
-	
+		
 		/**
 		 * The position of the tag, attribs and children in the element.
 		 * @var mixed[]

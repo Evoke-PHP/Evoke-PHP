@@ -1,8 +1,13 @@
 <?php
+/**
+ * Writer Interface
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 /**
- * WriterIface
+ * Writer Interface
  *
  * The interface to an object that writes (using a buffer).
  *

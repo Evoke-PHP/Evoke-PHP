@@ -1,4 +1,9 @@
 <?php
+/**
+ * HTML5 Writer
+ *
+ * @package Writer
+ */
 namespace Evoke\Writer;
 
 /**

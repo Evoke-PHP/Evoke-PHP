@@ -23,7 +23,12 @@ class Factory
 	/* Public Methods */
 	/******************/
 
-	public function make(/* String */ $outputFormat)
+	/**
+	 * Create a writer object.
+	 *
+	 * @param string The output format for the writer to create.
+	 */
+	public function create(/* String */ $outputFormat)
 	{
 		$classname = 'Evoke\Writer\\' . $outputFormat;
 		
