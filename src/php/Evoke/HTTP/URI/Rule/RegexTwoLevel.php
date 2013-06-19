@@ -1,4 +1,9 @@
 <?php
+/**
+ * HTTP URI Regex Two Level Rule
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use DomainException,
@@ -7,15 +12,15 @@ use DomainException,
 	UnexpectedValueException;
 
 /**
- * RegexTwoLevel
+ * HTTP URI Regex Two Level Rule
  *
  * A powerful rule based on regular expressions for refining the URI to a
  * controller and parameters that will respond.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class RegexTwoLevel extends Rule
 {

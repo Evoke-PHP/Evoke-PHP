@@ -1,17 +1,21 @@
 <?php
+/**
+ * Session Mapper
+ *
+ * @package Model\Mapper
+ */
 namespace Evoke\Model\Mapper;
 
-use Evoke\Model\Mapper\MapperIface,
-	Evoke\Persistence\SessionManagerIface,
+use Evoke\Persistence\SessionManagerIface,
 	RuntimeException;
 
 /**
  * Session Mapper
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Mapper
  */
 class Session implements MapperIface
 {
@@ -24,7 +28,7 @@ class Session implements MapperIface
 	/**
 	 * Construct a Session Mapper.
 	 *
-	 * @param Evoke\Persistence\SessionManagerIfaceSessionManager
+	 * @param Evoke\Persistence\SessionManagerIface
 	 *        The Session Manager for the part of the session we are mapping.
 	 */
 	public function __construct(SessionManagerIface $sessionManager)

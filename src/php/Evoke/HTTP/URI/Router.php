@@ -1,22 +1,22 @@
 <?php
 /**
- * HTTP Router Interface
+ * HTTP URI Router Interface
  *
- * @package HTTP
+ * @package HTTP\URI
  */
 namespace Evoke\HTTP\URI;
 
 use \Evoke\HTTP\RequestIface;
 
 /**
- * HTTP Router Interface
+ * HTTP URI Router Interface
  *
  * Route the Request to a controller and parameters.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI
  */
 class Router implements RouterIface
 {

@@ -1,18 +1,23 @@
 <?php
+/**
+ * HTTP Media Type Router Interface
+ *
+ * @package HTTP\MediaType
+ */
 namespace Evoke\HTTP\MediaType;
 
 use Evoke\HTTP\RequestIface,
 	OutOfBoundsException;
 
 /**
- * Router
+ * HTTP Media Type Router Interface
  *
  * Route the Accepted Media Types from the request to the correct output format.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\MediaType
  */
 class Router implements RouterIface
 {

@@ -1,18 +1,18 @@
 <?php
 /**
- * TreeIface
+ * Message Tree Interface
  *
  * @package Message
  */
 namespace Evoke\Message;
 
 /**
- * TreeIface
+ * Tree Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Message
+ * @license   MIT
+ * @package   Message
  */
 interface TreeIface
 {

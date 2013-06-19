@@ -1,13 +1,18 @@
 <?php
+/**
+ * HTTP Media Type Rule Interface
+ *
+ * @package HTTP\MediaType\Rule
+ */
 namespace Evoke\HTTP\MediaType\Rule;
 
 /**
- * RuleIface
+ * HTTP Media Type Rule Interface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package HTTP
+ * @package HTTP\MediaType\Rule
  */
 interface RuleIface extends \Evoke\HTTP\RuleIface
 {

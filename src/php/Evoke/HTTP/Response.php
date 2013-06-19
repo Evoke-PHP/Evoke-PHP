@@ -10,7 +10,7 @@ use InvalidArgumentException,
 	LogicException;
 
 /**
- * HTTP Response
+ * HTTP Response 
  *
  * The HTTP Response as per RFC2616 and to a lesser extent RFC1945.  Links in
  * this documentation will generally refer to RFC2616.

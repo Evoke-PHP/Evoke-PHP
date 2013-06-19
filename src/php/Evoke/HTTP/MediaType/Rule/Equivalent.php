@@ -1,17 +1,22 @@
 <?php
+/**
+ * HTTP Media Type Equivalent Rule
+ *
+ * @package HTTP\MediaType\Rule
+ */
 namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Equivalent
+ * HTTP Media Type Equivalent Rule
  *
  * A rule that matches equivalent media types.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\MediaType\Rule
  */
 class Equivalent extends Match
 {

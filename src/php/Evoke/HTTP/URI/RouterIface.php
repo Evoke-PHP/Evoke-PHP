@@ -2,16 +2,16 @@
 /**
  * HTTP URI Router Interface
  *
- * @package HTTP
+ * @package HTTP\URI
  */
 namespace Evoke\HTTP\URI;
 /**
  * HTTP URI Router Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI
  */
 interface RouterIface
 {

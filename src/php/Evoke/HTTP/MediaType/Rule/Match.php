@@ -1,15 +1,20 @@
 <?php
+/**
+ * HTTP Media Type Match Rule
+ *
+ * @package HTTP\MediaType\Rule
+ */
 namespace Evoke\HTTP\MediaType\Rule;
 
 /**
- * Match
+ * HTTP Media Type Match Rule
  *
  * A Media Type rule that matches exactly the media type from the accept header.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\MediaType\Rule
  */
 class Match extends Rule
 {

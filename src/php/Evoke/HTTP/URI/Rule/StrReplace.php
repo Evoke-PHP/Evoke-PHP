@@ -1,6 +1,6 @@
 <?php
 /**
- * String Replace
+ * HTTP URI String Replace Rule
  *
  * @package HTTP\URI\Rule
  */
@@ -9,15 +9,15 @@ namespace Evoke\HTTP\URI\Rule;
 use InvalidArgumentException;
 
 /**
- * StrReplace
+ * HTTP URI String Replace Rule
  *
  * A rule to change strings from the URI so that a controller can be formed.
  * No parameters are matched by this class.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class StrReplace extends Rule
 {

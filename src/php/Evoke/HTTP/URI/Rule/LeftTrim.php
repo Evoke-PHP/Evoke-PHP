@@ -1,6 +1,6 @@
 <?php
 /**
- * Left Trim
+ * HTTP URI Left Trim Rule
  *
  * @package HTTP\URI\Rule
  */
@@ -9,14 +9,14 @@ namespace Evoke\HTTP\URI\Rule;
 use InvalidArgumentException;
 
 /**
- * LeftTrim
+ * HTTP URI Left Trim Rule
  *
  * A rule to trim characters from the left side of the URI.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP\URI\Rule
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class LeftTrim extends Rule
 {

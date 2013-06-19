@@ -1,17 +1,22 @@
 <?php
+/**
+ * HTTP URI Trim Rule
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Trim
+ * HTTP URI Trim Rule
  *
  * A rule to trim characters from the URI.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class Trim extends Rule
 {

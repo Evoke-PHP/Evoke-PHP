@@ -1,29 +1,30 @@
 <?php
+/**
+ * Menu Data
+ *
+ * @package Model\Data
+ */
 namespace Evoke\Model\Data;
 
 /**
- * Menu
+ * Menu Data
  *
- * Menu Model for MPTT data.
+ * Model for MPTT Menu data.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Data
  */
 class Menu extends Data implements MenuIface
 {
 	/** 
-	 * Left field name
-	 * @var string
+	 * Menu Properties.
+	 *
+	 * @var string $left  Left field name.
+	 * @var string $right Right field name.
 	 */
-	protected $left;
-
-	/**
-	 * Right field name
-	 * @var string
-	 */
-	protected $right;
+	protected $left, $right;
 
 	/**
 	 * Construct the menu data.

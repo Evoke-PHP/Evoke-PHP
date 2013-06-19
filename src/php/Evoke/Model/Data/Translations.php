@@ -2,7 +2,7 @@
 /**
  * Translations Data
  *
- * @package Model
+ * @package Model\Data
  */
 namespace Evoke\Model\Data;
 
@@ -17,10 +17,10 @@ use DomainException,
  * Model the translations data, respecting the languages that we are requested
  * to use, and the languages that we have translations for.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Data
  */
 class Translations extends DataAbstract implements TranslationsIface
 {

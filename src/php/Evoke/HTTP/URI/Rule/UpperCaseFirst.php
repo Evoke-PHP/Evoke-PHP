@@ -1,18 +1,23 @@
 <?php
+/**
+ * HTTP URI Uppercase First Rule
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 /**
- * UpperCaseFirst
+ * HTTP URI Uppercase First Rule
  *
  * A rule to convert the first letter of each word to upper case.
  * No parameters are matched by this class.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
-class UpperCaseFirst extends Rule
+class UppercaseFirst extends Rule
 {
 	/**
 	 * The delimiters define the boundary of words.

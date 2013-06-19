@@ -2,7 +2,7 @@
 /**
  * DB Exception
  *
- * @package Message
+ * @package Message\Exception
  */
 namespace Evoke\Message\Exception;
 
@@ -11,10 +11,10 @@ namespace Evoke\Message\Exception;
  *
  * An extended exception class for a DB API that provides error information.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Message
+ * @license   MIT
+ * @package   Message\Exception
  */
 class DB extends \Exception
 {

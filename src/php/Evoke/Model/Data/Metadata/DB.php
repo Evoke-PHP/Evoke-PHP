@@ -2,7 +2,7 @@
 /**
  * DB Metadata
  *
- * @package Model
+ * @package Model\Data\Metadata
  */
 namespace Evoke\Model\Data\Metadata;
 
@@ -123,53 +123,52 @@ use InvalidArgumentException;
  * ]
  * </code></pre>
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Data\Metadata
  */
 class DB implements MetadataIface
 {
-	protected
-		/**
-		 * Fields for the database table.
-		 * @var string[]
-		 */
-		$fields,
+	/**
+	 * Fields for the database table.
+	 * @var string[]
+	 */
+	protected $fields;
 		
-		/**
-		 * Joins from the database table.
-		 * <pre><code>
-		 * [<Parent_Field>=<Child_Table><Child_Field> => $metadata]
-		 * </code></pre>
-		 *
-		 * @var mixed[]
-		 */
-		$joins,
+	/**
+	 * Joins from the database table.
+	 * <pre><code>
+	 * [<Parent_Field>=<Child_Table><Child_Field> => $metadata]
+	 * </code></pre>
+	 *
+	 * @var mixed[]
+	 */
+	protected $joins;
 
-		/**
-		 * Field to use for joining data.
-		 * @var string
-		 */
-		$jointKey,
+	/**
+	 * Field to use for joining data.
+	 * @var string
+	 */
+	protected $jointKey;
 		
-		/**
-		 * Primary keys for the database table.
-		 * @var string[]
-		 */
-		$primaryKeys,
+	/**
+	 * Primary keys for the database table.
+	 * @var string[]
+	 */
+	protected $primaryKeys;
 		
-		/**
-		 * TableAlias
-		 * @var string
-		 */
-		$tableAlias,
+	/**
+	 * TableAlias
+	 * @var string
+	 */
+	protected $tableAlias;
 		
-		/**
-		 * TableName
-		 * @var string
-		 */
-		$tableName;
+	/**
+	 * TableName
+	 * @var string
+	 */
+	protected $tableName;
 
 	/**
 	 * Construct the metadata that describes the database data.

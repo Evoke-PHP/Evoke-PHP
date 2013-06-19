@@ -1,17 +1,22 @@
 <?php
+/**
+ * HTTP URI Rule Interface
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Rule
+ * HTTP URI Rule Interface
  *
  * Map the URI to a controller and parameters.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 abstract class Rule implements RuleIface
 {

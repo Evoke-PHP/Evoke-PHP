@@ -2,17 +2,17 @@
 /**
  * Record List Data Interface
  *
- * @package Model
+ * @package Model\Data
  */
 namespace Evoke\Model\Data;
 
 /**
  * Record List Data Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Data
  */
 interface RecordListIface extends DataIface
 {

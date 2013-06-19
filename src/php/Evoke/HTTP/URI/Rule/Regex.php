@@ -1,20 +1,25 @@
 <?php
+/**
+ * HTTP URI Regex Rule
+ *
+ * @package HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Regex
+ * HTTP URI Regex Rule
  *
  * A regex rule to map the uri controller and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
  * there are more complex requirements such as optional parameters then the
  * RegexTwoLevel rule should be used.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class Regex extends Rule
 {

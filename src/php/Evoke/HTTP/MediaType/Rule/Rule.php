@@ -1,15 +1,20 @@
 <?php
+/**
+ * HTTP Media Type Rule Interface
+ *
+ * @package HTTP\MediaType\Rule
+ */
 namespace Evoke\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Media Type Rule
+ * HTTP Media Type Rule Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\MediaType\Rule
  */
 abstract class Rule implements RuleIface
 {

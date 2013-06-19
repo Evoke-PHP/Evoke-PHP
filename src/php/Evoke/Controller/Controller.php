@@ -16,10 +16,10 @@ use Evoke\HTTP\ResponseIface,
  * Controllers are responsible for processing input and passing the data to the
  * views.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Controller
+ * @license   MIT
+ * @package   Controller
  */
 class Controller extends ControllerAbstract
 {

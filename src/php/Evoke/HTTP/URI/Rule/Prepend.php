@@ -1,18 +1,23 @@
 <?php
+/**
+ * HTTP URI Prepend Rule
+ *
+ * @pakcage HTTP\URI\Rule
+ */
 namespace Evoke\HTTP\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * Prepend
+ * HTTP URI Prepend Rule
  *
  * A rule to prepend a string to the controller.
  * No parameters are matched by this class.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP\URI\Rule
  */
 class Prepend extends Rule
 {

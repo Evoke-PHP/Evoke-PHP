@@ -1,12 +1,18 @@
 <?php
-namespace Evoke\Model\Data;
 /**
- * TranslationsIface
+ * Translations Data Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @package Model\Data
+ */
+namespace Evoke\Model\Data;
+
+/**
+ * Translations Data Interface
+ *
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model
  */
 interface TranslationsIface extends DataIface
 {

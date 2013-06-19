@@ -1,4 +1,9 @@
 <?php
+/**
+ * Data
+ *
+ * @package Model\Data
+ */
 namespace Evoke\Model\Data;
 
 use Metadata\MetadataIface,
@@ -97,10 +102,10 @@ use Metadata\MetadataIface,
  * }
  * </code></pre>
  * 
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model\Data
  */
 class Data extends Flat
 {

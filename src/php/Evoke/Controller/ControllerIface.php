@@ -9,10 +9,10 @@ namespace Evoke\Controller;
 /**
  * Controller Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Controller
+ * @license   MIT
+ * @package   Controller
  */
 interface ControllerIface
 {

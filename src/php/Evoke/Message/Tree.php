@@ -13,10 +13,10 @@ use InvalidArgumentException;
  *
  * Message Tree with a title and text at each node.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Message
+ * @license   MIT
+ * @package   Message
  */
 class Tree implements TreeIface
 {

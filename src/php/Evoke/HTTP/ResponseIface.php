@@ -1,16 +1,21 @@
 <?php
+/**
+ * Response Interface
+ *
+ * @package HTTP
+ */
 namespace Evoke\HTTP;
 
 /**
- * ResponseIface
+ * Response Interface
  *
  * The HTTP Response interface designed to meet RFC2616-sec6 and to a lesser
  * extent RFC1945-sec6.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package HTTP
+ * @license   MIT
+ * @package   HTTP
  */
 interface ResponseIface
 {
