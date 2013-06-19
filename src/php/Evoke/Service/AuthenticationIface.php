@@ -1,17 +1,22 @@
 <?php
+/**
+ * Authentication Interface
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 /**
- * AuthenticationIface
+ * Authentication Interface
  *
  * This interface takes its inspiration from PHP-PasswordLib, so I have added
  * Anthony Ferrara as an author.
  *
- * @author Anthony Ferrara
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Anthony Ferrara
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 The Authors
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 interface AuthenticationIface
 {

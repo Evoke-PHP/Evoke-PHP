@@ -1,4 +1,9 @@
 <?php
+/**
+ * Settings
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 use OutOfBoundsException,
@@ -8,10 +13,10 @@ use OutOfBoundsException,
 /**
  * Settings
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class Settings implements SettingsIface
 {

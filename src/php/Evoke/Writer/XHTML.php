@@ -11,10 +11,10 @@ namespace Evoke\Writer;
  *
  * Provide an interface to write XHTML specific content.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 class XHTML extends XMLBase implements PageIface
 {

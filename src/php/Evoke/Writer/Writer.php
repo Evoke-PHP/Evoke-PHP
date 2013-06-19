@@ -7,14 +7,12 @@
 namespace Evoke\Writer;
 
 /**
- * Writer
- *
  * Abstract Writer
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 abstract class Writer implements WriterIface
 {

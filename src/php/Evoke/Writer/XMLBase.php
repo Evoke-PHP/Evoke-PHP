@@ -14,10 +14,10 @@ use InvalidArgumentException,
  *
  * Base class for writing XML elements.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 abstract class XMLBase implements WriterIface
 {

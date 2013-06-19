@@ -1,6 +1,19 @@
 <?php
+/**
+ * Cache Interface
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
+/**
+ * Cache Interface
+ *
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2013 Paul Young
+ * @license   MIT
+ * @package   Service
+ */
 interface CacheIface
 {
 	/**

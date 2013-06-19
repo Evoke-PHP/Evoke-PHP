@@ -10,7 +10,7 @@ use Evoke\Model\Data\RecordListIface,
 	InvalidArgumentException;
 
 /**
- * Record List View.
+ * Record List View
  *
  * View to represent a list of records.
  *
@@ -31,10 +31,10 @@ use Evoke\Model\Data\RecordListIface,
  * This is a composite view which controls the above layout using the Heading
  * Options and the views passed into the constructor.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class RecordList extends View
 {

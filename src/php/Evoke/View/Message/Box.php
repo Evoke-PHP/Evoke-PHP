@@ -1,16 +1,21 @@
 <?php
+/**
+ * Message Box View
+ *
+ * @package View\Message
+ */
 namespace Evoke\View\Message;
 
 use Evoke\View\View,
 	InvalidArgumentException;
 
 /**
- * Message Box
+ * Message Box View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View\Message
  */
 class Box extends View
 {

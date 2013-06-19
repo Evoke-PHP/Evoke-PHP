@@ -1,18 +1,18 @@
 <?php
 /**
- * PSR0Namespace
+ * PSR0Namespace Autoload
  *
  * @package Service
  */
 namespace Evoke\Service\Autoload;
 
 /**
- * PSR0Namespace
+ * PSR0Namespace Autoload
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class PSR0Namespace extends Autoload
 {

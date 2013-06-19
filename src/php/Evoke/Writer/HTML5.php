@@ -11,10 +11,10 @@ namespace Evoke\Writer;
  *
  * Write HTML5 specific content.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 class HTML5 extends XHTML
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Form View
+ * Form Builder View
  *
  * @package View
  */
@@ -9,12 +9,12 @@ namespace Evoke\View;
 use LogicException;
 
 /**
- * FormBuilder View
+ * Form Builder View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class FormBuilder extends View implements FormBuilderIface
 {

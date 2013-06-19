@@ -1,4 +1,9 @@
 <?php
+/**
+ * Menu Control View
+ *
+ * @package View\Control
+ */
 namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
@@ -6,12 +11,12 @@ use Evoke\Model\Data\Menu as DataMenu,
 	LogicException;
 
 /**
- * Menu
+ * Menu Control View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View\Control
  */
 class Menu extends View
 {

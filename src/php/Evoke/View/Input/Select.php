@@ -1,4 +1,9 @@
 <?php
+/**
+ * Select Input View
+ *
+ * @package View\Input
+ */
 namespace Evoke\View\Input;
 
 use Evoke\View\ViewIface,
@@ -6,12 +11,12 @@ use Evoke\View\ViewIface,
 	RuntimeException;
 
 /**
- * Select
+ * Select Input View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class Select implements ViewIface
 {

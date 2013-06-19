@@ -2,7 +2,7 @@
 /**
  * Logging
  *
- * @package Service
+ * @package Service\Log
  */
 namespace Evoke\Service\Log;
 
@@ -11,10 +11,10 @@ use DateTime;
 /**
  * Logging
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service\Log
  */
 class Logging implements LoggingIface
 {

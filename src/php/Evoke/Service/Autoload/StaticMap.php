@@ -1,6 +1,6 @@
 <?php
 /**
- * StaticMap Autoloader
+ * StaticMap Autoload
  *
  * @package Service
  */
@@ -9,14 +9,14 @@ namespace Evoke\Service\Autoload;
 use RuntimeException;
 
 /**
- * StaticMap Autoloader
+ * StaticMap Autoload
  *
  * Autoload using a fixed mapping of classnames to filenames.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class StaticMap extends Autoload
 {

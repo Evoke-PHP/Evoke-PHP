@@ -1,10 +1,20 @@
 <?php
+/**
+ * XHTML Element View
+ *
+ * @package View
+ */
 namespace Evoke\View;
 
 use InvalidArgumentException;
 
 /**
- * An XHTML element view.
+ * XHTML Element View
+ *
+ * @author    Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license   MIT
+ * @package   View
  */
 class Element extends View
 {

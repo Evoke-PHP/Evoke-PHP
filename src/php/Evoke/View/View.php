@@ -1,6 +1,6 @@
 <?php
 /**
- * View
+ * Abstract View
  *
  * @package View
  */
@@ -9,12 +9,12 @@ namespace Evoke\View;
 use Evoke\Model\Data\DataIface;
 
 /**
- * View
+ * Abstract View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 abstract class View implements ViewIface
 {

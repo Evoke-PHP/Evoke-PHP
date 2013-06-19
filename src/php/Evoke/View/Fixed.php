@@ -1,13 +1,18 @@
 <?php
+/**
+ * Fixed View
+ *
+ * @package View
+ */
 namespace Evoke\View;
 
 /**
  * Fixed View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class Fixed extends View
 {

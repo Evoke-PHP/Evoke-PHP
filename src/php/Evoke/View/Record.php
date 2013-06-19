@@ -1,6 +1,19 @@
 <?php
+/**
+ * Record View
+ *
+ * @package View
+ */
 namespace Evoke\View;
 
+/**
+ * Record View
+ *
+ * @author    Paul Young <evoke@youngish.homelinux.org>
+ * @copyright Copyright (c) 2012 Paul Young
+ * @license   MIT
+ * @package   View
+ */
 class Record implements ViewIface
 {
 	/**

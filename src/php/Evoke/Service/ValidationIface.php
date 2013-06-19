@@ -1,13 +1,18 @@
 <?php
+/**
+ * Validation Interface
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 /**
- * ValidationIface
+ * Validation Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 interface ValidationIface
 {

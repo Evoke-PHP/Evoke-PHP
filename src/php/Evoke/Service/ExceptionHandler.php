@@ -1,4 +1,9 @@
 <?php
+/**
+ * Exception Handler
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
@@ -11,10 +16,10 @@ use Evoke\HTTP\ResponseIface,
  *
  * The system exception handler.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class ExceptionHandler
 {

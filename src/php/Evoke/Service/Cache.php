@@ -1,8 +1,21 @@
 <?php
+/**
+ * Cache
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 use DomainException;
 
+/**
+ * Cache
+ *
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2013 Paul Young
+ * @license   MIT
+ * @package   Service
+ */
 class Cache implements CacheIface
 {
 	/** 

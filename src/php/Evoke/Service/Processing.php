@@ -7,10 +7,17 @@
 namespace Evoke\Service;
 
 /**
+ * Processing
+ *
  * The processing class handles the processing of data using callbacks.
  *
  * Each request is received as an array.  We match the keys of the request to
  * the callback array to determine the processing that should be done.
+ *
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2013 Paul Young
+ * @license   MIT
+ * @package   Service
  */
 class Processing implements ProcessingIface
 {

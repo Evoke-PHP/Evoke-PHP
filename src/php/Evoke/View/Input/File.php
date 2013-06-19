@@ -2,14 +2,14 @@
 /**
  * File Input View
  *
- * @package View
+ * @package View\Form\Input
  */
 namespace Evoke\View\Form\Input;
 
 use LogicException;
 
 /**
- * Input File
+ * File Input View
  *
  * A button/input that will enable styling to be done on the ugly file input.
  * With our CSS we can control the behaviour by overlapping the button with the
@@ -37,10 +37,10 @@ use LogicException;
  * to perceived security risks in firefox < 4 and possibly others.  To
  * display the button the opacity of the input file should be set to 0%.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class File extends View
 {

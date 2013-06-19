@@ -1,20 +1,20 @@
 <?php
 /**
- * Login View
+ * Login View Control
  *
- * @package View
+ * @package View\Control
  */
 namespace Evoke\View\Control;
 
 use Evoke\View\View;
 
 /**
- * Login View
+ * Login View Control
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View\Control
  */
 class Login extends View
 {

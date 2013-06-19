@@ -1,15 +1,20 @@
 <?php
+/**
+ * Failure Messages View
+ *
+ * @package View\Message
+ */
 namespace Evoke\View\Message;
 
 use Evoke\Message\TreeIface;
 
 /**
- * Failures
+ * Failure Messages View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View\Message
  */
 class Failures extends Tree
 {

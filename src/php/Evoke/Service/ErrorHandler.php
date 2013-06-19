@@ -1,4 +1,9 @@
 <?php
+/**
+ * Error Handler
+ *
+ * @package Service
+ */
 namespace Evoke\Service;
 
 use ErrorException,
@@ -7,10 +12,10 @@ use ErrorException,
 /**
  * Error Handler
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class ErrorHandler
 {

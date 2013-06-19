@@ -1,20 +1,20 @@
 <?php
 /**
- * VarExport View
+ * Variable Export View
  *
  * @package View
  */
 namespace Evoke\View;
 
 /**
- * VarExport View
+ * Variable Export View
  *
  * This view is useful for a quick view of data being passed to a view.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class VarExport implements ViewIface
 {

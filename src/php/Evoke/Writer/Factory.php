@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory
+ * Writer Factory
  *
  * @package Writer
  */
@@ -10,12 +10,12 @@ use DomainException,
 	XMLWriter;
 
 /**
- * Factory
+ * Writer Factory
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 class Factory
 {

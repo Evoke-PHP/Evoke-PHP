@@ -16,10 +16,10 @@ use PasswordLib\PasswordLib;
 /**
  * Authentication
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Service
+ * @license   MIT
+ * @package   Service
  */
 class Authentication extends PasswordLib implements AuthenticationIface
 {

@@ -1,18 +1,18 @@
 <?php
 /**
- * Error
+ * Error View
  *
  * @package View
  */
 namespace Evoke\View;
 
 /**
- * Error
+ * Error View
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 class Error implements ViewIface
 {

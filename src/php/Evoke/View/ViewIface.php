@@ -9,12 +9,12 @@ namespace Evoke\View;
 use Evoke\Model\Data\DataIface;
 
 /**
- * ViewIface
+ * View Interface
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package View
+ * @license   MIT
+ * @package   View
  */
 interface ViewIface
 {

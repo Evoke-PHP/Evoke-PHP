@@ -10,10 +10,10 @@ namespace Evoke\Writer;
  *
  * Provide an interface to write XML specific content.
  * 
- * @author Paul Young <evoke@youngish.homelinux.org>
+ * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
- * @license MIT
- * @package Writer
+ * @license   MIT
+ * @package   Writer
  */
 class XML extends XMLBase
 {
