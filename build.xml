@@ -124,6 +124,8 @@
 	  <arg value = "--defaultpackagename"/>
 	  <arg value = "Evoke"/>
 	  <arg value = "--sourcecode"/>
+	  <arg value = "--visibility"/>
+	  <arg value = "public,protected,private"/>
 	</exec>
   </target>
 
