@@ -1,6 +1,6 @@
 <?php
 /**
- * Request
+ * Request Mapper
  *
  * @package Model
  */
@@ -10,7 +10,7 @@ use Evoke\HTTP\RequestIface,
 	Evoke\Model\Mapper\ReadIface;
 
 /**
- * Request
+ * Request Mapper
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
@@ -19,18 +19,13 @@ use Evoke\HTTP\RequestIface,
  */
 class Request implements ReadIface
 {
-	protected
-		/**
-		 * Ignored Keys in the request.
-		 * @var string[]
-		 */
-		$ignoredKeys,
-		
-		/**
-		 * Request
-		 * @var RequestIface
-		 */
-		$request;
+	/**
+	 * Request Mapper properties.
+	 *
+	 * @var string[]     $ignoredKeys Ignored Keys in the request.
+	 * @var RequestIface $request     Request object.
+	 */
+	protected $ignoredKeys, $request;
 
 	/**
 	 * Construct a Request object.

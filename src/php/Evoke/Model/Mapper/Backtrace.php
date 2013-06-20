@@ -1,16 +1,21 @@
 <?php
+/**
+ * Backtrace Mapper
+ *
+ * @package Model\Mapper
+ */
 namespace Evoke\Model\Mapper;
 
 use InvalidArgumentException,
 	RuntimeException;
 
 /**
- * Backtrace
+ * Backtrace Mapper
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Model
+ * @package Model\Mapper
  */
 class Backtrace implements ReadIface
 {

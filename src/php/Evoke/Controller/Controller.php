@@ -23,12 +23,11 @@ use Evoke\HTTP\ResponseIface,
  */
 class Controller extends ControllerAbstract
 {
-	protected
-		/**
-		 * View.
-		 * @var ViewIface
-		 */
-		$view;
+	/**
+	 * View.
+	 * @var ViewIface
+	 */
+	protected $view;
 	
 	/**
 	 * Construct the Controller.

@@ -37,6 +37,9 @@ interface FormBuilderIface extends ViewIface
     
 	/**
 	 * Add an input to the form.
+	 *
+	 * @param mixed[] Attributes for the input.
+	 * @param mixed   Value for the input.
 	 */
 	public function addInput(Array $attribs, $value = NULL);
 	

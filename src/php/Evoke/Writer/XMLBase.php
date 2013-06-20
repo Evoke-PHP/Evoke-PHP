@@ -21,25 +21,15 @@ use InvalidArgumentException,
  */
 abstract class XMLBase implements WriterIface
 {
-	protected
-		/**
-		 * The language of the XML being written.
-		 *
-		 * @var string
-		 */
-		$language,
-		
-		/**
-		 * The position of the tag, attribs and children in the element.
-		 * @var mixed[]
-		 */
-		$pos,
-
-		/**
-		 * The XML Writer object.
-		 * @var XMLWriter
-		 */
-		$xmlWriter;
+	/**
+	 * XML Base Writer Properties
+	 *
+	 * @var string    $language  Language of XML being written.
+	 * @var mixed[]   $pos       Position of the tag, attribs and children in
+	 *                           the element.
+	 * @var XMLWriter $xmlWriter XML Writer object.
+	 */
+	protected $language, $pos, $xmlWriter;
 	
 	/**
 	 * Create an abstract XML Writer.

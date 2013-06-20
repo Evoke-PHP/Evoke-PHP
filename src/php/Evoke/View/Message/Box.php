@@ -41,9 +41,7 @@ class Box extends View
 	/******************/
 
 	/**
-	 * Get the view.
-	 *
-	 * @param mixed[] Parameters to the view.
+	 * Get the output for the view.
 	 */
 	public function get()
 	{

@@ -22,30 +22,30 @@ use Evoke\HTTP\ResponseIface,
  */
 class ShutdownHandler
 {
-	protected
-		/** 
-		 * The administrator's email address.
-		 * @var string
-		 */
-		$administratorEmail,
+	
+	/** 
+	 * The administrator's email address.
+	 * @var string
+	 */
+	protected $administratorEmail;
+	
+	/**
+	 * Whether to display a detailed insecure message.
+	 * @var bool
+	 */
+	protected $detailedInsecureMessage;
 		
-		/**
-		 * Whether to display a detailed insecure message.
-		 * @var bool
-		 */
-		$detailedInsecureMessage,
+	/**
+	 * Response object.
+	 * @var ResponseIface
+	 */
+	protected $response;
 		
-		/**
-		 * Response object.
-		 * @var Evoke\HTTP\ResponseIface
-		 */
-		$response,
-		
-		/**
-		 * Writer object.
-		 * @var Evoke\Writer\WriterIface
-		 */
-		$writer;
+	/**
+	 * Writer object.
+	 * @var WriterIface
+	 */
+	protected $writer;
 
 	/**
 	 * Construct the System Shutdown handler.

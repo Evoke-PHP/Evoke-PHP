@@ -22,36 +22,18 @@ use Evoke\HTTP\ResponseIface,
  */
 abstract class ControllerAbstract implements ControllerIface
 {
-	protected
-		/**
-		 * Output format as an uppercase string (JSON, XHTML, etc.)
-		 * @var string
-		 */
-		$outputFormat,
-	
-		/** 
-		 * Setup for the page based output formats (XHTML, HTML5).
-		 * @var mixed[]
-		 */
-		$pageSetup,
-		
-		/**
-		 * Parameters for the Controller.
-		 * @var mixed[]
-		 */
-		$params,
-		
-		/**
-		 * Response
-		 * @var ResponseIface
-		 */
-		$response,
-		
-		/**
-		 * Writer
-		 * @var WriterIface
-		 */
-		$writer;
+	/**
+	 * Abstract Controller properties.
+	 *
+	 * @var string        $outputFormat Output format as an upcase string (JSON,
+	 *                                  XHTML, etc.)
+	 * @var mixed[]       $pageSetup    Setup for page based output formats
+	 *                                  (XHTML, HTML5).
+	 * @var mixed[]       $params       Parameters for the controller.
+	 * @var ResponseIface $response     Response object
+	 * @var WriterIface   $writer       Writer object
+	 */
+	protected $outputFormat, $pageSetup, $params, $response, $writer;
 	
 	/**
 	 * Construct the Controller.

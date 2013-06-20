@@ -71,13 +71,12 @@ class File implements LoggerIface
 	/**
 	 * Construct a File Logger object.
 	 *
-	 * @param string     The filename for the log.
-	 * @param Evoke\Persistence\FilesystemIface
-	 *                   Filesystem object
-	 * @param bool       Whether to append to the file.
-	 * @param int(octal) The directory mode for the log file.
-	 * @param int(octal) Permissions to set the file to
-	 * @param bool       Whether to lock the file for writing.
+	 * @param string          The filename for the log.
+	 * @param FilesystemIface Filesystem object
+	 * @param bool       	  Whether to append to the file.
+	 * @param int(octal) 	  The directory mode for the log file.
+	 * @param int(octal) 	  Permissions to set the file to
+	 * @param bool       	  Whether to lock the file for writing.
 	 */
 	public function __construct(/* String */      $filename,
 	                            FilesystemIface   $filesystem,

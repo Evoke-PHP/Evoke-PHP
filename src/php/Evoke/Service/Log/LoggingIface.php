@@ -19,16 +19,16 @@ interface LoggingIface
 	/**
 	 * Add a logger to the observer list.
 	 *
-	 * @param Evoke\Service\Log\LoggerIface The logger to add.
+	 * @param LoggerIface The logger to add.
 	 */
 	public function attach(LoggerIface $observer);
 
 	/**
 	 * Remove a logger from the observer list.
 	 *
-	 * @param Evoke\Service\Log\LoggerIface
-	 *             The logger to remove (If there are more than one occurences
-	 *             of the logger in the list then only one is removed).
+	 * @param LoggerIface The logger to remove (If there are more than one
+	 *                    occurences of the logger in the list then only one
+	 *                    is removed).
 	 */
 	public function detach(LoggerIface $observer);
 

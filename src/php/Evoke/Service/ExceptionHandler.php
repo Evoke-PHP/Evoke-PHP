@@ -23,36 +23,26 @@ use Evoke\HTTP\ResponseIface,
  */
 class ExceptionHandler
 {
-	protected
-		/**
-		 * Whether to display a detailed insecure message.
-		 * @var bool
-		 */
-		$detailedInsecureMessage,
-
-		/**
-		 * Logging object.
-		 * @var Evoke\Service\Log\LoggingIface
-		 */
-		$logging,
-
-		/**
-		 * The maximum length of exception message to display.
-		 * @var int
-		 */
-		$maxLengthExceptionMessage,
-
-		/**
-		 * Response object.
-		 * @var Evoke\HTTP\ResponseIface
-		 */
-		$response,
-	
-		/**
-		 * Writer object.
-		 * @var Evoke\Writer\WriterIface
-		 */
-		$writer;
+	/**
+	 * Properties for the Exception Handler.
+	 *
+	 * @var bool          $detailedInsecureMessage
+	 * Whether to display a detailed insecure message.
+	 *
+	 * @var LoggingIface  $logging
+	 * Logging object.
+	 *
+	 * @var int           $maxLengthExceptionMessage
+	 * The maximum length of exception message to display.
+	 *
+	 * @var ResponseIface $response
+	 * Response object.
+	 *
+	 * @var WriterIface   $writer
+	 * Writer object.
+	 */
+	protected $detailedInsecureMessage, $logging, $maxLengthExceptionMessage,
+		$response, $writer;
 
 	/**
 	 * Construct an Exception Handler object.
@@ -91,7 +81,7 @@ class ExceptionHandler
 	 * displaying a generic notice to the user so that they are informaed of an
 	 * error without exposing information that could be used for an attack.
 	 *
-	 * @param Exception An exception that was not caught in the system.
+	 * @param \Exception An exception that was not caught in the system.
 	 *
 	 * @SuppressWarnings(PHPMD.CamelCaseVariableName)
 	 * @SuppressWarnings(PHPMD.Superglobals)

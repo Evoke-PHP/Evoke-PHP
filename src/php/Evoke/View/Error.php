@@ -16,30 +16,21 @@ namespace Evoke\View;
  */
 class Error implements ViewIface
 {
-	protected 
-		/**
-		 * ErrorParams
-		 * @var string[]
-		 */
-		$errorParams,
-
-		/**
-		 * Is Detailed
-		 * @var bool
-		 */
-		$isDetailed,
-	
-		/**
-		 * Unknown String
-		 * @var string
-		 */
-		$unknownString;
+	/**
+	 * Protected Properties.
+	 *
+	 * @var string[] $errorParams   Error parameters.
+	 * @var bool     $isDetailed    Whether the error should be detailed.
+	 * @var string   $unknownString String for an unknown part of the error.
+	 */	 
+	protected $errorParams, $isDetailed, $unknownString;
 
 	/**
 	 * Construct a Error object.
 	 *
-	 * @param string[] ErrorParams.
-	 * @param string   UnknownString.
+	 * @param string[] Error parameters.
+	 * @param bool     Whether the error should be detailed.
+	 * @param string   String for an unkown part of the error.
 	 */
 	public function __construct(Array        $errorParams,
 	                            /* Bool   */ $isDetailed,
@@ -61,7 +52,7 @@ class Error implements ViewIface
 	 */	
 	public function get()
 	{
-		/// \todo Use data instead of params.
+		/// @todo Use data instead of params.
 		
 		$descriptionElements = array(
 			array('div',

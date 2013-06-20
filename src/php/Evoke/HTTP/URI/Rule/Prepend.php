@@ -66,6 +66,7 @@ class Prepend extends Rule
 	/**
 	 * The prepend rule always matches.
 	 *
+	 * @param string The URI to determine the match from.
 	 * @return bool TRUE.
 	 */
 	public function isMatch($uri)

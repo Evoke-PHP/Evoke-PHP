@@ -1,13 +1,18 @@
 <?php
+/**
+ * Data Interface
+ *
+ * @package Model\Data
+ */
 namespace Evoke\Model\Data;
 
 /**
- * DataIface
+ * Data Interface
  *
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Model
+ * @package Model\Data
  */
 interface DataIface extends \ArrayAccess, \Iterator
 {

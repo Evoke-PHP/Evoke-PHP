@@ -18,18 +18,13 @@ use Evoke\Model\Data\DataIface;
  */
 abstract class View implements ViewIface
 {
-	protected
-		/**
-		 * Data
-		 * @var DataIface
-		 */
-		$data,
-		
-		/**
-		 * Parameters
-		 * @var mixed[]
-		 */
-		$params;
+	/**
+	 * Protected properties.
+	 *
+	 * @var DataIface $data   Data
+	 * @var mixed[]   $params Parameters to the view.
+	 */
+	protected $data, $params;
 
 	/******************/
 	/* Public Methods */

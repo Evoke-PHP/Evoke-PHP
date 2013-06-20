@@ -255,11 +255,21 @@ class DB implements MetadataIface
 		return $data;
 	}	
 
+	/**
+	 * Get the joins in the metadata.
+	 *
+	 * @return mixed[]
+	 */
 	public function getJoins()
 	{
 		return $this->joins;
 	}
 
+	/**
+	 * Get the row identifier for the curent row.
+	 *
+	 * @param mixed[] The data row.
+	 */
 	public function getRowID(Array $data)
 	{
 		$rowID = '';

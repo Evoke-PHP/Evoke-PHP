@@ -10,8 +10,7 @@ use Metadata\MetadataIface,
 	OutOfBoundsException;
 
 /**
- * Data
- * ====
+ * <h1>Data</h1>
  *
  * Provide access to joint data via class properties according to metadata.
  *
@@ -19,16 +18,15 @@ use Metadata\MetadataIface,
  * data structure.  This hierarchy is accessed through the joins that are
  * provided at construction.
  *
- * Joins
- * -----
+ * ###Joins
+ * 
  *
  * Joins provide a way of representing trees of data commonly found in
  * relational databases and many other real world situations.  They allow us to
  * work with a hierarchy of information considering each part in the hierarchy
  * as a separate data unit.
  *
- * Example
- * -------
+ * ###Example
  *
  * Example from a relational database:
  *    List of products, each of a particular size with a set of related images.
@@ -77,8 +75,7 @@ use Metadata\MetadataIface,
  * The above is an abstract representation of the joins that would
  * represent the data.
  *
- * Usage
- * -----
+ * ###Usage
  *
  * <pre><code>
  * $data = new Data($metadataProduct,
@@ -109,30 +106,21 @@ use Metadata\MetadataIface,
  */
 class Data extends Flat
 {
-	protected
-		/**
-		 * Joins for the data.
-		 * @var DataIface[]
-		 */
-		$joins,
-
-		/**
-		 * The field that is used to join the data in a record.
-		 * @var string
-		 */
-		$jointKey,
-		
-		/**
-		 * Description of the data we are modelling.
-		 * @var MetadataIface
-		 */
-		$metadata;
+	/**
+	 * Properties for the data.
+	 *
+	 * @var DataIface[]   $joins    Joins for the data.
+	 * @var string        $jointKey Field used to join the data in a record.
+	 * @var MetadataIface $metadata Description of the data we are modelling.
+	 */
+	protected $joins, $jointKey, $metadata;
 
 	/**
 	 * Construct a Data model.
 	 *
 	 * @param MetadataIface Description of the data we are modelling.
 	 * @param DataIface[]   Joins for the data.
+	 * @param string        Field used to join the data in a record.
 	 */
 	public function __construct(MetadataIface $metadata,
 	                            Array         $joins    = array(),

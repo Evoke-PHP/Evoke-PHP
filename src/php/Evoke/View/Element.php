@@ -18,11 +18,10 @@ use InvalidArgumentException;
  */
 class Element extends View
 {
-	protected
-		/** Child View
-		 * @var ViewIface
-		 */
-		$viewChild;
+	/**
+	 * @var ViewIface $viewChild Child View.
+	 */
+	protected $viewChild;
 
 	/**
 	 * Construct a simple XHTML element view.

@@ -18,16 +18,15 @@ namespace Evoke\Persistence;
  */
 class Session implements SessionIface
 {
-	protected
-		/**
-		 * The domain within the session that we are managing.  This is an
-		 * ordered list of the keys required to reach the domain:
-		 *
-		 *     array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']
-		 *
-		 * @var string[]
-		 */
-		$domain;
+	/**
+	 * The domain within the session that we are managing.  This is an ordered
+	 * list of the keys required to reach the domain:
+	 *
+	 *     array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']
+	 *
+	 * @var string[]
+	 */
+	protected $domain;
 
 	/**
 	 * Construct the persistence for a session domain.

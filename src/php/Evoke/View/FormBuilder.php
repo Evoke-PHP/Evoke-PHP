@@ -18,23 +18,16 @@ use LogicException;
  */
 class FormBuilder extends View implements FormBuilderIface
 {
+	/**
+	 * Private Properties.
+	 *
+	 * @var bool    $addToRow    Whether to add elements to the row or form.
+	 * @var mixed[] $children    Children of the form.
+	 * @var mixed[] $rowElements Elements in the current row.
+	 */
 	private
-		/**
-		 * Whether to add elements to the row or form.
-		 * @var bool
-		 */
 		$addToRow = false,
-
-		/**
-		 * Children of the form.
-		 * @var mixed[]
-		 */
 		$children = array(),
-		
-		/**
-		 * The elements in the current row.
-		 * @var mixed[]
-		 */
 		$rowElements = array();
 
 	/**
@@ -87,6 +80,9 @@ class FormBuilder extends View implements FormBuilderIface
     
 	/**
 	 * Add an input to the form.
+	 *
+	 * @param mixed[] Attributes for the input.
+	 * @param mixed   Value for the input.
 	 */
 	public function addInput(Array $attribs, $value = NULL)
 	{

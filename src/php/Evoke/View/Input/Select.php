@@ -20,30 +20,15 @@ use Evoke\View\ViewIface,
  */
 class Select implements ViewIface
 {
-	protected
-		/**
-		 * Attributes for the select element.
-		 * @var string[]
-		 */
-		$attribs,
-		
-		/**
-		 * Attributes for each select option.
-		 * @var string[]
-		 */
-		$optionAttribs,
-
-		/**
-		 * The field to use from the data for the option text.
-		 * @var string
-		 */
-		$textField,
-		
-		/**
-		 * The field to use for the value of the options.
-		 * @var string
-		 */
-		$valueField;
+	/**
+	 * Protected properties.
+	 *
+	 * @var string[] $attribs       Attributes for the select element.
+	 * @var string[] $optionAttribs Attributes for each select option.
+	 * @var string   $textField     Field in the data for the option text.
+	 * @var string   $valueField    Field in the data for the option value.
+	 */
+	protected $attribs, $optionAttribs, $textField, $valueField;
 
 	/**
 	 * Construct a Select view.

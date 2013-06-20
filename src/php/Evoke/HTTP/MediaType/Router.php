@@ -7,7 +7,8 @@
 namespace Evoke\HTTP\MediaType;
 
 use Evoke\HTTP\RequestIface,
-	OutOfBoundsException;
+	OutOfBoundsException,
+	Rule\RuleIface;
 
 /**
  * HTTP Media Type Router Interface
@@ -23,13 +24,13 @@ class Router implements RouterIface
 {
 	/**
 	 * Request Object.
-	 * @var Evoke\HTTP\RequestIface
+	 * @var RequestIface
 	 */
 	protected $request;
 
 	/**
 	 * Rules that the router uses to route.
-	 * @var Evoke\HTTP\MediaType\Rule\RuleIface[]
+	 * @var RuleIface[]
 	 */
 	protected $rules;
 
@@ -37,7 +38,7 @@ class Router implements RouterIface
 	 * Construct a media type router that determines the output format based on
 	 * the acceptable media types.
 	 *
-	 * @param Evoke\HTTP\RequestIface Request object.
+	 * @param RequestIface Request object.
 	 */
 	public function __construct(RequestIface $request)
 	{
@@ -52,9 +53,9 @@ class Router implements RouterIface
 	/**
 	 * Add a rule to the router.
 	 *
-	 * @param Evoke\HTTP\MediaType\Rule\RuleIface HTTP MediaType Rule object.
+	 * @param RuleIface HTTP MediaType Rule object.
 	 */
-	public function addRule(Rule\RuleIface $rule)
+	public function addRule(RuleIface $rule)
 	{
 		$this->rules[] = $rule;
 	}

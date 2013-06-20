@@ -65,6 +65,7 @@ class Trim extends Rule
 	/**
 	 * Check the uri to see if it matches.
 	 *
+	 * @param string The URI to determine the match from.
 	 * @return bool Whether the uri is matched.
 	 */
 	public function isMatch($uri)

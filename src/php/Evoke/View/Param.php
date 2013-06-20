@@ -30,30 +30,56 @@ class Param extends View
 	/* Public Methods */
 	/******************/
 
+	/**
+	 * Add a fixed attribute to the element.
+	 *
+	 * @param string Attribute
+	 * @param mixed  Value.
+	 */
 	public function addAttrib($attrib, $value)
 	{
 		$this->attribList[$attrib][] = array('By_Param' => false,
 		                                     'Value'    => $value);
 	}
 
+	/**
+	 * Add an attribute to the element that will be supplied by the view
+	 * parameters.
+	 *
+	 * @param string Attribute
+	 * @param string Parameter to be used as the value of the attribute.
+	 */
 	public function addAttribParam($attrib, $param)
 	{
 		$this->attribList[$attrib][] = array('By_Param' => true,
 		                                     'Value'    => $param);
 	}
 
+	/**
+	 * Add fixed text to an element.
+	 *
+	 * @param string Text to add to the element.
+	 */
 	public function addText($text)
 	{
 		$this->childList[] = array('By_Param' => false,
 		                           'Value'    => $text);
 	}
 
+	/**
+	 * Add text to an element which will be supplied by the view parameters.
+	 *
+	 * @param string Parameter to be used as the value of the text.
+	 */
 	public function addTextParam($param)
 	{
 		$this->childList[] = array('By_Param' => true,
 		                           'Value'    => $param);
 	}
 
+	/**
+	 * Get the output of the view.
+	 */
 	public function get()
 	{
 		$attribs = array();

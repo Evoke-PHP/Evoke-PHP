@@ -25,6 +25,7 @@ class Any extends Rule
 	/**
 	 * This rule matches anything!
 	 *
+	 * @param  mixed[] The media type we are checking for a match against.
 	 * @return bool True.
 	 */
 	public function isMatch($mediaType)
