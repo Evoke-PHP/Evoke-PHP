@@ -62,29 +62,25 @@ class FactoryShim extends FactoryBase
 }
 
 class FactoryBaseTest extends PHPUnit_Framework_TestCase
-{ 
-	/**
-	 * Test the construction of a good object.
-	 *
-	 * @covers Evoke\Model\FactoryBase::__construct
-	 */
-	public function test__constructGood()
-	{
-		$modelFactory = new FactoryShim(
-			$this->getMockBuilder('Evoke\Persistence\DB\SQL')
-			->disableOriginalConstructor()
-			->getMock());
-		
-		$this->assertInstanceOf('Evoke\Model\FactoryBase', $modelFactory);
-		
-		return $modelFactory;
-	}
+{
+	/******************/
+	/* Data Providers */
+	/******************/
 
+	public function providerShim()
+	{
+		return ['Standard' => ['FactoryShim' => new FactoryShim]];
+	}
+	
+	/*********/
+	/* Tests */
+	/*********/
+	
 	/**
 	 * Test the creation of simple data.
 	 *
-	 * @covers  Evoke\Model\FactoryBase::createData
-	 * @depends test__constructGood
+	 * @covers       Evoke\Model\FactoryBase::createData
+	 * @dataProvider providerShim
 	 */
 	public function OLDtestCreateDataSimple(FactoryShim $modelFactory)
 	{
@@ -96,7 +92,6 @@ class FactoryBaseTest extends PHPUnit_Framework_TestCase
 	 * Test that a specific data type can be built.
 	 *
 	 * @covers  Evoke\Model\FactoryBase::createData
-	 * @depends test__constructGood
 	 */
 	public function OLDtestCreateDataSpecific(FactoryShim $modelFactory)
 	{
@@ -110,7 +105,6 @@ class FactoryBaseTest extends PHPUnit_Framework_TestCase
 	 * strings.
 	 *
 	 * @covers  Evoke\Model\FactoryBase::createData
-	 * @depends test__constructGood
 	 */
 	public function OLDtestCreateDataComplex(FactoryShim $modelFactory)
 	{
