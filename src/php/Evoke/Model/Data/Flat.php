@@ -41,12 +41,11 @@ use BadMethodCallException;
  */
 class Flat implements DataIface
 {
-	protected
-		/**
-		 *  The data that is being modelled.
-		 * @var mixed[]
-		 */
-		$data;
+	/**
+	 * The data that is being modelled.
+	 * @var mixed[]
+	 */
+	protected $data = array();
 
 	/******************/
 	/* Public Methods */
