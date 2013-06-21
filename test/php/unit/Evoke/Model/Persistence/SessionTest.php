@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\Persistence;
+namespace Evoke_Test\Model\Persistence;
 
-use Evoke\Persistence\Session,
+use Evoke\Model\Persistence\Session,
     PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\Persistence\Session
+ *  @covers Evoke\Model\Persistence\Session
  */
 class SessionTest extends PHPUnit_Framework_TestCase
 {
@@ -130,7 +130,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      * Ensure that before a session is created that $_SESSION does
      * not exist.
      *
-     * @covers Evoke\Persistence\Session::__construct
+     * @covers Evoke\Model\Persistence\Session::__construct
      */   
     public function test__constructGood()
     {
@@ -142,15 +142,15 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $object = new Session;
 
 	    $this->assertTrue(isset($_SESSION), 'Session is created.');
-	    $this->assertInstanceOf('Evoke\Persistence\Session', $object);	                            
+	    $this->assertInstanceOf('Evoke\Model\Persistence\Session', $object);
     }
 
     /**
      * Check that data can be set for a session subdomain and part of it can be
      * deleted.
      *
-     * @covers Evoke\Persistence\Session::deleteAtOffset
-     * @covers Evoke\Persistence\Session::setData
+     * @covers Evoke\Model\Persistence\Session::deleteAtOffset
+     * @covers Evoke\Model\Persistence\Session::setData
      * @dataProvider providerDeleteAtOffset
      */
     public function testDeleteAtOffset(Array $data, Array $deleteOffset,
@@ -166,7 +166,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure that a session domain is created for an empty session.
      *
-     * @covers Evoke\Persistence\Session::ensure
+     * @covers Evoke\Model\Persistence\Session::ensure
      */
     public function testEnsureDomainCreatedFromEmpty()
     {
@@ -181,7 +181,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure that a session can be augmented with a domain.
      *
-     * @covers Evoke\Persistence\Session::ensure
+     * @covers Evoke\Model\Persistence\Session::ensure
      */
     public function testEnsureSessionAugmentedWithDomain()
     {
@@ -200,7 +200,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      * Ensure exception thrown for non cli session start after the
      * headers have already been sent.
      *
-     * @covers Evoke\Persistence\Session::ensure
+     * @covers Evoke\Model\Persistence\Session::ensure
      */
     public function testEnsureSessionStartAfterHeadersSentException()
     {
@@ -212,8 +212,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure that data can be retrieved at an offset.
      *
-     * @covers       Evoke\Persistence\Session::getAtOffset
-     * @covers       Evoke\Persistence\Session::setData
+     * @covers       Evoke\Model\Persistence\Session::getAtOffset
+     * @covers       Evoke\Model\Persistence\Session::setData
      * @dataProvider providerGetAtOffset
      */
     public function testGetAtOffset($data, $domain, $expected, $offset)
@@ -227,8 +227,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure that keys can be set and retrieved.
      *
-     * @covers Evoke\Persistence\Session::get
-     * @covers Evoke\Persistence\Session::set
+     * @covers Evoke\Model\Persistence\Session::get
+     * @covers Evoke\Model\Persistence\Session::set
      */
     public function testKeyGetSet()
     {
@@ -241,8 +241,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Ensure that data can be set on a subdomain and can then be retrieved.
      *
-     * @covers       Evoke\Persistence\Session::getCopy
-     * @covers       Evoke\Persistence\Session::setData
+     * @covers       Evoke\Model\Persistence\Session::getCopy
+     * @covers       Evoke\Model\Persistence\Session::setData
      * @dataProvider providerDomainValue
      */
     public function testGetCopySetData(Array $domain, $value)
@@ -256,7 +256,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /**
      * Check that the correct flat domain is returned.
      *
-     * @covers Evoke\Persistence\Session::getFlatDomain
+     * @covers Evoke\Model\Persistence\Session::getFlatDomain
      */
     public function testGetFlatDomain()
     {
@@ -270,8 +270,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
      * Check that a session can be removed, but leaves the hierarchy above the
      * session domain intact.
      *
-     * @covers       Evoke\Persistence\Session::getCopy
-     * @covers       Evoke\Persistence\Session::remove
+     * @covers       Evoke\Model\Persistence\Session::getCopy
+     * @covers       Evoke\Model\Persistence\Session::remove
      * @dataProvider providerDomain
      */
     public function testRemove(Array $domain)

@@ -2,9 +2,9 @@
 /**
  * Session Interface
  *
- * @package Persistence
+ * @package Model\Persistence
  */
-namespace Evoke\Persistence;
+namespace Evoke\Model\Persistence;
 
 /**
  * Session Interface
@@ -12,7 +12,7 @@ namespace Evoke\Persistence;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package Persistence
+ * @package Model\Persistence
  */
 interface SessionIface
 {
