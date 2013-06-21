@@ -1,22 +1,22 @@
 <?php
 /**
- * Message Tree
+ * Message Tree View
  *
- * @package Message
+ * @package View\Message
  */
-namespace Evoke\Message;
+namespace Evoke\View\Message;
 
 use InvalidArgumentException;
 
 /**
- * Message Tree
+ * Message Tree View
  *
  * Message Tree with a title and text at each node.
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   Message
+ * @package   View\Message
  */
 class Tree implements TreeIface
 {
@@ -45,7 +45,7 @@ class Tree implements TreeIface
 	/**
 	 * Append a child message tree object to the tree node.
 	 *
-	 * @param TreeIface MessageTree to append.
+	 * @param TreeIface Message Tree to append.
 	 */
 	public function append(TreeIface $child)
 	{
