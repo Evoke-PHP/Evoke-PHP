@@ -2,117 +2,16 @@
 namespace Evoke_Test\HTTP\URI\Rule\Regex;
 
 use Evoke\HTTP\URI\Rule\Regex,
-	PHPUnit_Framework_TestCase,
-	stdClass;
+	PHPUnit_Framework_TestCase;
 
 /**
  *  @covers Evoke\HTTP\URI\Rule\Regex
  */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * Test that the constructor builds the expected object.
-	 *
-	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
-	 */
-	public function test__constructGood()
-	{
-		$obj = new Regex('str', 'str', array(), true);
-		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
-	}
-
-	/**
-	 * Test that invalid arguments to the constructor raise IAE.
-	 *
-	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
-	 * @expectedException InvalidArgumentException
-	 * @dataProvider      provider__constructInvalidArguments
-	 */
-	public function test__constructInvalidArguments(
-		$match, $replacement, Array $params = array(), $authoritative = false)
-	{
-		new Regex($match, $replacement, $params, $authoritative);
-	}
-
-	/**
-	 * Test that Invalid Param specs to the constructor raise IAE.
-	 *
-	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
-	 * @expectedException InvalidArgumentException
-	 * @dataProvider      provider__constructInvalidParamSpec
-	 */
-	public function test__constructInvalidParamSpec(
-		$match, $replacement, Array $paramSpec, $authoritative = false)
-	{
-		new Regex($match, $replacement, $paramSpec, $authoritative);
-	}
-		
-	/** Test getResponse and the private method getMappedValue.
-	 *  @depends      test__constructGood
-	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getController
-	 */
-	public function testGetController()
-	{
-		$obj = new Regex('/foo/', 'bar');
-		$this->assertSame('this/bar/isFobar',
-		                  $obj->getController('this/foo/isFofoo'));
-	}
-
-	/**
-	 * @depends      test__constructGood	   
-	 * @covers       Evoke\HTTP\URI\Rule\Regex::getParams
-	 * @dataProvider providerGetParams 
-	 */
-	public function testGetParams(
-		$match, $replacement, Array $params, $authoritative, $uri, $expected)
-	{
-		$obj = new Regex($match, $replacement, $params, $authoritative);
-		$this->assertSame(
-			$expected, $obj->getParams($uri), 'unexpected value.');
-	}
-
-	/**
-	 * Test the matches for the regex.
-	 *
-	 * @depends      test__constructGood
-	 * @covers       Evoke\HTTP\URI\Rule\Regex::isMatch
-	 * @dataProvider providerIsMatch
-	 */
-	public function testIsMatch(
-		$match, $replacement, Array $params, $authoritative, $uri, $expected)
-	{
-		$obj = new Regex($match, $replacement, $params, $authoritative);
-		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
-	}
-
 	/******************/
 	/* Data Providers */
 	/******************/
-
-	/**
-	 *  Data provider that provides Invalid Arguments to the constructor.
-	 *
-	 *  The first two parameters should be strings to be valid.
-	 */
-	public function provider__constructInvalidArguments()
-	{
-		return array(
-			'Both_Bad'   =>
-			array('Match'       => array('Both Bad'),
-			      'Replacement' => 12),
-			'Match_Good_Replacement_Bad(Object)' =>
-			array('Match'       => 'Only 1 Good',
-			      'Replacement' => new stdClass()),
-			'Match_Good_Replacement_Bad(Array)' =>
-			array('Match'       => 'Good',
-			      'Replacement' => array('Bad')),
-			'Match_Bad(NULL)_Replacement_Good' =>
-			array('Match'       => NULL,
-			      'Replacement' => 'Replacement one good.'),
-			'Match_Bad(Bool)_Replacement_Good' =>
-			array('Match'       => true,
-			      'Replacement' => 'Match was bad.'));
-	}
 
 	/**
 	 * Data provider that provides invalid param specs to the constructor.
@@ -134,11 +33,11 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			array('Match'       => 'Two1',
 			      'Replacement' => 'Two2',
 			      'Params'  => array(array('Key'   => 'Good',
-			                               'Value' => false))),
+			                               'NoValue' => false))),
 			'Param_Spec_Key_Bad(Bool)' =>
 			array('Match'       => 'Tri1',
 			      'Replacement' => 'Tri2',
-			      'Params'  => array(array('Key'   => false,
+			      'Params'  => array(array('NoKey'   => false,
 			                               'Value' => 'Good'))));
 	}
 
@@ -211,6 +110,72 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			      'Authoritative' => false,
 			      'Uri'           => 'hello/goodday',
 			      'Expected'      => true));
+	}
+
+	/*********/
+	/* Tests */
+	/*********/
+
+	/**
+	 * Test that the constructor builds the expected object.
+	 *
+	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
+	 */
+	public function test__constructGood()
+	{
+		$obj = new Regex('str', 'str', array(), true);
+		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
+	}
+
+	/**
+	 * Test that Invalid Param specs to the constructor raise IAE.
+	 *
+	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @expectedException InvalidArgumentException
+	 * @dataProvider      provider__constructInvalidParamSpec
+	 */
+	public function test__constructInvalidParamSpec(
+		$match, $replacement, Array $paramSpec, $authoritative = false)
+	{
+		new Regex($match, $replacement, $paramSpec, $authoritative);
+	}
+		
+	/** Test getResponse and the private method getMappedValue.
+	 *  @depends      test__constructGood
+	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getController
+	 */
+	public function testGetController()
+	{
+		$obj = new Regex('/foo/', 'bar');
+		$this->assertSame('this/bar/isFobar',
+		                  $obj->getController('this/foo/isFofoo'));
+	}
+
+	/**
+	 * @depends      test__constructGood	   
+	 * @covers       Evoke\HTTP\URI\Rule\Regex::getParams
+	 * @dataProvider providerGetParams 
+	 */
+	public function testGetParams(
+		$match, $replacement, Array $params, $authoritative, $uri, $expected)
+	{
+		$obj = new Regex($match, $replacement, $params, $authoritative);
+		$this->assertSame(
+			$expected, $obj->getParams($uri), 'unexpected value.');
+	}
+
+	/**
+	 * Test the matches for the regex.
+	 *
+	 * @depends      test__constructGood
+	 * @covers       Evoke\HTTP\URI\Rule\Regex::isMatch
+	 * @dataProvider providerIsMatch
+	 */
+	public function testIsMatch(
+		$match, $replacement, Array $params, $authoritative, $uri, $expected)
+	{
+		$obj = new Regex($match, $replacement, $params, $authoritative);
+		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
 	}
 }
 // EOF

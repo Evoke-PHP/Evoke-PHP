@@ -58,9 +58,6 @@ class Regex extends Rule
 
 		foreach ($params as $index => $paramSpec)
 		{
-			// Set the keys to remove need for isset checks.
-			$paramSpec += array('Key' => NULL, 'Value' => NULL);
-
 			if (!isset($paramSpec['Key'], $paramSpec['Value']))
 			{
 				throw new InvalidArgumentException(
