@@ -116,13 +116,11 @@ abstract class XMLBase implements WriterIface
 				__METHOD__ . ' bad attributes: ' . var_export($xml, true));
 		}
 
-		if (isset($xml[$this->pos['Children']]))
+		if (isset($xml[$this->pos['Children']]) &&
+		    !is_array($xml[$this->pos['Children']]))
 		{
-			if (!is_array($xml[$this->pos['Children']]))
-			{
-				$xml[$this->pos['Children']]
-					= array($xml[$this->pos['Children']]);
-			}
+			$xml[$this->pos['Children']]
+				= array($xml[$this->pos['Children']]);
 		}
 			
 		$tag      = $xml[$this->pos['Tag']];

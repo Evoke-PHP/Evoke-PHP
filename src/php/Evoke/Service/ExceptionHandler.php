@@ -26,13 +26,13 @@ class ExceptionHandler
 	/**
 	 * Properties for the Exception Handler.
 	 *
-	 * @var bool          $detailedInsecureMessage
-	 * Whether to display a detailed insecure message.
-	 *
 	 * @var LoggingIface  $logging
 	 * Logging object.
 	 *
-	 * @var int           $maxLengthExceptionMessage
+	 * @var bool          $messageFullInsecure
+	 * Whether to display a detailed insecure message.
+	 *
+	 * @var int           $messageLengthMax
 	 * The maximum length of exception message to display.
 	 *
 	 * @var ResponseIface $response
@@ -41,35 +41,29 @@ class ExceptionHandler
 	 * @var WriterIface   $writer
 	 * Writer object.
 	 */
-	protected $detailedInsecureMessage, $logging, $maxLengthExceptionMessage,
-		$response, $writer;
+	protected $logging, $messageFullInsecure, $messageLengthMax, $response,
+		$writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param bool          Whether to show a detailed insecure message.
 	 * @param LoggingIface  Logging object.
+	 * @param bool          Whether to show a detailed insecure message.
 	 * @param int           Maximum length of exception message to show.
 	 * @param ResponseIface Response object.
 	 * @param WriterIface   Writer object.
 	 */
-	public function __construct(/* Bool */    $detailedInsecureMessage,
-	                            LoggingIface  $logging,
-	                            /* Int  */    $maxLengthExceptionMessage,
+	public function __construct(LoggingIface  $logging,
+	                            /* Bool */    $messageFullInsecure,
+	                            /* Int  */    $messageLengthMax,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
-		if (!is_bool($detailedInsecureMessage))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
-		}
-
-		$this->detailedInsecureMessage   = $detailedInsecureMessage;
-		$this->logging                   = $logging;
-		$this->maxLengthExceptionMessage = $maxLengthExceptionMessage;
-		$this->response                  = $response;
-		$this->writer                    = $writer;
+		$this->logging             = $logging;
+		$this->messageFullInsecure = $messageFullInsecure;
+		$this->messageLengthMax    = $messageLengthMax;
+		$this->response            = $response;
+		$this->writer              = $writer;
 	}
    
 	/******************/
@@ -114,50 +108,31 @@ class ExceptionHandler
 			$loggedError = false;
 		}
 		
-		if (isset($_GET['l']) && ($_GET['l'] === 'ES'))
-		{
-			$title = 'Error de Sistema';
+		$title = 'System Error';
 
-			if ($loggedError)
-			{
-				$message = 'El administrador ha estado notificado del error.  '
-					. 'Perdon, vamos a arreglarlo.';
-			}
-			else
-			{
-				$message =
-					'No pudimos notificar el administrador de esta problema.  '
-					. 'Por favor llamanos, queremos arreglarlo.';
-			}
+		if ($loggedError)
+		{
+			$message = 'The administrator has been notified of this ' .
+				'error.  Sorry, we will fix this.';
 		}
 		else
 		{
-			$title = 'System Error';
-
-			if ($loggedError)
-			{
-				$message = 'The administrator has been notified of this ' .
-					'error.  Sorry, we will fix this.';
-			}
-			else
-			{
-				$message =
-					'The administrator could not be notified of this error.  ' .
-					'Please call us, we want to fix this error.';
-			}
+			$message =
+				'The administrator could not be notified of this error.  ' .
+				'Please call us, we want to fix this error.';
 		}
 
 		// Provide extended details for development servers.
-		if ($this->detailedInsecureMessage)
+		if ($this->messageFullInsecure)
 		{
 			$exceptionMessage = (string)($uncaughtException);
 
 			// If the exception is huge, only include the start and end on
 			// screen.
-			if ($loggedError && $this->maxLengthExceptionMessage > 0 &&
-			    mb_strlen($exceptionMessage) > $this->maxLengthExceptionMessage)
+			if ($loggedError && $this->messageLengthMax > 0 &&
+			    mb_strlen($exceptionMessage) > $this->messageLengthMax)
 			{
-				$halfMessage = $this->maxLengthExceptionMessage / 2;
+				$halfMessage = $this->messageLengthMax / 2;
 				$exceptionMessage =
 					mb_substr($exceptionMessage, 0, $halfMessage) . "\n\n" .
 					'<<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>>' .

@@ -33,7 +33,7 @@ class ShutdownHandler
 	 * Whether to display a detailed insecure message.
 	 * @var bool
 	 */
-	protected $detailedInsecureMessage;
+	protected $messageFullInsecure;
 		
 	/**
 	 * Response object.
@@ -57,26 +57,14 @@ class ShutdownHandler
 	 * @param WriterIface   The writer object to write the fatal message.
 	 */
 	public function __construct(/* String */  $administratorEmail,
-	                            /* Bool   */  $detailedInsecureMessage,
+	                            /* Bool   */  $messageFullInsecure,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
-		if (!is_string($administratorEmail))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires administratorEmail to be a string');
-		}
-      
-		if (!is_bool($detailedInsecureMessage))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires detailedInsecureMessage to be boolean');
-		}
-
-		$this->administratorEmail      = $administratorEmail;
-		$this->detailedInsecureMessage = $detailedInsecureMessage;
-		$this->response                = $response;
-		$this->writer                  = $writer;
+		$this->administratorEmail  = $administratorEmail;
+		$this->messageFullInsecure = $messageFullInsecure;
+		$this->response            = $response;
+		$this->writer              = $writer;
 	}
 
 	/******************/
@@ -126,7 +114,7 @@ class ShutdownHandler
 				'Email us at ' . $this->administratorEmail;
 		}
       
-		if ($this->detailedInsecureMessage)
+		if ($this->messageFullInsecure)
 		{
 			$message .= "<br/>\n<br/>\n" .
 				'PHP [' . $handledErrorTypes[$err['type']] . '] ' .
