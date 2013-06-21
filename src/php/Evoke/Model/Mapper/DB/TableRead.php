@@ -6,9 +6,7 @@
  */
 namespace Evoke\Model\Mapper\DB;
 
-use Evoke\Model\Mapper\ReadIface,
-	Evoke\Persistence\DB\SQLIface,
-	InvalidArgumentException;
+use Evoke\Model\Mapper\ReadIface;
 
 /**
  * Table Mapper (Read Only)
@@ -51,11 +49,6 @@ class TableRead implements ReadIface
 	                            /* String */ $tableName,
 	                            Array        $select = array())
 	{
-		if (!is_string($tableName))
-		{
-			throw new InvalidArgumentException('needs tableName as string');
-		}
-
 		$this->select    = array_merge($select,
 		                               array('Fields'     => '*',
 		                                     'Conditions' => '',

@@ -43,18 +43,6 @@ class Select implements ViewIface
 	                            Array        $attribs       = array(),
 	                            Array        $optionAttribs = array())
 	{
-		if (!is_string($textField))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' needs textField as string');
-		}
-
-		if (!is_string($valueField))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' needs valueField as string');
-		}
-
 		$this->attribs       = $attribs;
 		$this->optionAttribs = $optionAttribs;
 		$this->textField     = $textField;

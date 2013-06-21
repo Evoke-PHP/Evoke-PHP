@@ -6,8 +6,6 @@
  */
 namespace Evoke\HTTP\MediaType\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP Media Type Rule Interface
  *
@@ -31,12 +29,6 @@ abstract class Rule implements RuleIface
 	 */
 	public function __construct($outputFormat)
 	{
-		if (!is_string($outputFormat))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires outputFormat as string');
-		}
-
 		$this->outputFormat = $outputFormat;
 	}
 	

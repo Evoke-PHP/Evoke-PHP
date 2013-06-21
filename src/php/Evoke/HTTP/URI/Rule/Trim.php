@@ -6,8 +6,6 @@
  */
 namespace Evoke\HTTP\URI\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP URI Trim Rule
  *
@@ -36,12 +34,6 @@ class Trim extends Rule
 	public function __construct(/* String */ $characters,
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($characters))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires characters as string');
-		}
-      
 		parent::__construct($authoritative);
 
 		$this->characters = $characters;

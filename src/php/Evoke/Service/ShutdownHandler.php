@@ -7,8 +7,7 @@
 namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
-	Evoke\Writer\WriterIface,
-	InvalidArgumentException;
+	Evoke\Writer\WriterIface;
 
 /**
  * Shutdown Handler

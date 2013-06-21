@@ -7,8 +7,7 @@
 namespace Evoke\Service\Log;
 
 use DateTime,
-	Evoke\Persistence\FilesystemIface,
-	InvalidArgumentException;
+	Evoke\Persistence\FilesystemIface;
 
 /**
  * File Logger
@@ -85,24 +84,6 @@ class File implements LoggerIface
 	                            /* Int (octal) */ $fileMode = 0640,
 	                            /* Bool */        $locking  = true)
 	{
-		if (!is_bool($append))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires append as bool');
-		}
-
-		if (!is_string($filename))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires filename as string');
-		}
-
-		if (!is_bool($locking))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires locking as bool');
-		}
-
 		$this->append     = $append;
 		$this->dirMode    = $dirMode;
 		$this->filename   = $filename;

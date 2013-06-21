@@ -6,8 +6,6 @@
  */
 namespace Evoke\Writer;
 
-use InvalidArgumentException;
-
 /**
  * Text Writer
  *
@@ -31,12 +29,6 @@ class Text extends Writer
 	 */
 	public function write($text)
 	{
-		if (!is_string($text))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' text must be a string.');
-		}
-		
 		$this->buffer .= $text;
 	}
 }

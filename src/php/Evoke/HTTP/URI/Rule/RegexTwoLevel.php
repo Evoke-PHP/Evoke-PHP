@@ -113,12 +113,6 @@ class RegexTwoLevel extends Rule
 	                            Array        $params,
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($match))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires match as string');
-		}
-
 		$this->ensureSecondLevelRegexp($controller);
 
 		foreach ($params as $paramEntry)

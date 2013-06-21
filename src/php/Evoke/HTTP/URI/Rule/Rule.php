@@ -6,8 +6,6 @@
  */
 namespace Evoke\HTTP\URI\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP URI Rule Interface
  *
@@ -35,12 +33,6 @@ abstract class Rule implements RuleIface
 	 */
 	public function __construct(/* Bool */ $authoritative)
 	{
-		if (!is_bool($authoritative))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires authoritative as a bool');
-		}
-
 		$this->authoritative = $authoritative;
 	}
 

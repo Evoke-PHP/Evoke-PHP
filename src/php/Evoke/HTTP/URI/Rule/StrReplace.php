@@ -6,8 +6,6 @@
  */
 namespace Evoke\HTTP\URI\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP URI String Replace Rule
  *
@@ -45,18 +43,6 @@ class StrReplace extends Rule
 	                            /* String */ $replacement,
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($match))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires match as string');
-		}
-
-		if (!is_string($replacement))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires replacement as string');
-		}
-      
 		parent::__construct($authoritative);
 
 		$this->match       = $match;

@@ -54,39 +54,19 @@ class Regex extends Rule
 	                            Array        $params        = array(),
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($match))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires match as string');
-		}
+		parent::__construct($authoritative);
 
-		if (!is_string($replacement))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires replacement as string');
-		}
-		
 		foreach ($params as $index => $paramSpec)
 		{
 			// Set the keys to remove need for isset checks.
 			$paramSpec += array('Key' => NULL, 'Value' => NULL);
 
-			if (!is_string($paramSpec['Key']))
+			if (!isset($paramSpec['Key'], $paramSpec['Value']))
 			{
 				throw new InvalidArgumentException(
-					__METHOD__ . ' param spec at index: ' . $index .
-					' requires Key as string.');
-			}
-
-			if (!is_string($paramSpec['Value']))
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' param spec at index: ' . $index .
-					' requires Value as string.');
+					'param spec needs Key and Value at index: ' . $index);
 			}
 		}
-		
-		parent::__construct($authoritative);
 
 		$this->match       = $match;
 		$this->params      = $params;

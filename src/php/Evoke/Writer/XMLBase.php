@@ -106,14 +106,14 @@ abstract class XMLBase implements WriterIface
 		    !is_string($xml[$this->pos['Tag']]))
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' bad tag: ' . var_export($xml, true));
+				'bad tag: ' . var_export($xml, true));
 		}
 
 		if (isset($xml[$this->pos['Attribs']]) &&
 		    !is_array($xml[$this->pos['Attribs']]))
 		{
 			throw new InvalidArgumentException(
-				__METHOD__ . ' bad attributes: ' . var_export($xml, true));
+				'bad attributes: ' . var_export($xml, true));
 		}
 
 		if (isset($xml[$this->pos['Children']]) &&

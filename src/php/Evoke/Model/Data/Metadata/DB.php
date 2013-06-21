@@ -6,8 +6,6 @@
  */
 namespace Evoke\Model\Data\Metadata;
 
-use InvalidArgumentException;
-
 /**
  * DB Metadata
  * ===========

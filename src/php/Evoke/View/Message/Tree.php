@@ -6,8 +6,6 @@
  */
 namespace Evoke\View\Message;
 
-use InvalidArgumentException;
-
 /**
  * Message Tree View
  *
@@ -145,16 +143,6 @@ class Tree implements TreeIface
 	                    /* String */ $text,
 	                    Array        $children = array())
 	{
-		if (!is_string($title))
-		{
-			throw new InvalidArgumentException('requires title as string');
-		}
-
-		if (!is_string($text))
-		{
-			throw new InvalidArgumentException('requires text as string');
-		}
-
 		$this->children = $children;
 		$this->text     = $text;
 		$this->title    = $title;

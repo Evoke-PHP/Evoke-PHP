@@ -6,8 +6,6 @@
  */
 namespace Evoke\View;
 
-use InvalidArgumentException;
-
 /**
  * XHTML Element View
  *

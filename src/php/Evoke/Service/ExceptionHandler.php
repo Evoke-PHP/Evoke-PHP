@@ -8,8 +8,7 @@ namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
 	Evoke\Service\Log\LoggingIface,
-	Evoke\Writer\WriterIface,
-	InvalidArgumentException;
+	Evoke\Writer\WriterIface;
 
 /**
  * Exception Handler

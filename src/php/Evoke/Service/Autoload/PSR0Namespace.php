@@ -46,18 +46,6 @@ class PSR0Namespace extends Autoload
 	                            /* String */ $namespace,
 	                            /* String */ $extension='.php')
 	{
-		if (!is_string($baseDir))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires baseDir as string');
-		}
-
-		if (!is_string($namespace))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires namespace as string');
-		}
-
 		$this->baseDir   = rtrim($baseDir, DIRECTORY_SEPARATOR);
 		$this->extension = $extension;
 		$this->namespace = $namespace;

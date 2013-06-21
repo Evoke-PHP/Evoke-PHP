@@ -6,8 +6,6 @@
  */
 namespace Evoke\HTTP\URI\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP URI Prepend Rule
  *
@@ -37,12 +35,6 @@ class Prepend extends Rule
 	public function __construct(/* String */ $str,
 	                            /* Bool   */ $authoritative = false)
 	{
-		if (!is_string($str))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires str as string');
-		}
-      
 		parent::__construct($authoritative);
 
 		$this->str = $str;

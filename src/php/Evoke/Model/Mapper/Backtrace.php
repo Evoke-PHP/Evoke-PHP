@@ -6,8 +6,7 @@
  */
 namespace Evoke\Model\Mapper;
 
-use InvalidArgumentException,
-	RuntimeException;
+use RuntimeException;
 
 /**
  * Backtrace Mapper
@@ -32,12 +31,6 @@ class Backtrace implements ReadIface
 	 */
 	public function __construct(/* Int */ $levelsToRetrace = 2)
 	{
-		if (!is_int($levelsToRetrace))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires levelsToRetrace as int');
-		}
-
 		$this->levelsToRetrace = $levelsToRetrace;
 	}
 	
