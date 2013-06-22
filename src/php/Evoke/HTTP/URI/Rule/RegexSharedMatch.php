@@ -1,6 +1,6 @@
 <?php
 /**
- * HTTP URI Regex Rule
+ * HTTP URI Regex Rule with one match used for all calculations.
  *
  * @package HTTP\URI\Rule
  */
@@ -9,7 +9,7 @@ namespace Evoke\HTTP\URI\Rule;
 use InvalidArgumentException;
 
 /**
- * HTTP URI Regex Rule
+ * HTTP URI Regex Rule with one match used for all calculations.
  *
  * A regex rule to map the uri controller and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
@@ -21,7 +21,7 @@ use InvalidArgumentException;
  * @license   MIT
  * @package   HTTP\URI\Rule
  */
-class Regex extends Rule
+class RegexSharedMatch extends Rule
 {
 	/**
 	 * Regex match for the URI.

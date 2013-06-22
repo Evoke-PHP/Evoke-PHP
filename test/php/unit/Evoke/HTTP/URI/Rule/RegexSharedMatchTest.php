@@ -1,13 +1,13 @@
 <?php
-namespace Evoke_Test\HTTP\URI\Rule\Regex;
+namespace Evoke_Test\HTTP\URI\Rule\RegexSharedMatch;
 
-use Evoke\HTTP\URI\Rule\Regex,
+use Evoke\HTTP\URI\Rule\RegexSharedMatch,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\HTTP\URI\Rule\Regex
+ *  @covers Evoke\HTTP\URI\Rule\RegexSharedMatch
  */
-class RegexTest extends PHPUnit_Framework_TestCase
+class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
 	/* Data Providers */
@@ -119,47 +119,47 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that the constructor builds the expected object.
 	 *
-	 * @covers \Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @covers \Evoke\HTTP\URI\Rule\RegexSharedMatch::__construct
 	 */
 	public function test__constructGood()
 	{
-		$obj = new Regex('str', 'str', array(), true);
-		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $obj);
+		$obj = new RegexSharedMatch('str', 'str', array(), true);
+		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\RegexSharedMatch', $obj);
 	}
 
 	/**
 	 * Test that Invalid Param specs to the constructor raise IAE.
 	 *
-	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @covers            Evoke\HTTP\URI\Rule\RegexSharedMatch::__construct
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider      provider__constructInvalidParamSpec
 	 */
 	public function test__constructInvalidParamSpec(
 		$match, $replacement, Array $paramSpec, $authoritative = false)
 	{
-		new Regex($match, $replacement, $paramSpec, $authoritative);
+		new RegexSharedMatch($match, $replacement, $paramSpec, $authoritative);
 	}
 		
 	/** Test getResponse and the private method getMappedValue.
 	 *  @depends      test__constructGood
-	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getController
+	 *  @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::getController
 	 */
 	public function testGetController()
 	{
-		$obj = new Regex('/foo/', 'bar');
+		$obj = new RegexSharedMatch('/foo/', 'bar');
 		$this->assertSame('this/bar/isFobar',
 		                  $obj->getController('this/foo/isFofoo'));
 	}
 
 	/**
 	 * @depends      test__constructGood	   
-	 * @covers       Evoke\HTTP\URI\Rule\Regex::getParams
+	 * @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::getParams
 	 * @dataProvider providerGetParams 
 	 */
 	public function testGetParams(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$obj = new Regex($match, $replacement, $params, $authoritative);
+		$obj = new RegexSharedMatch($match, $replacement, $params, $authoritative);
 		$this->assertSame(
 			$expected, $obj->getParams($uri), 'unexpected value.');
 	}
@@ -168,13 +168,14 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	 * Test the matches for the regex.
 	 *
 	 * @depends      test__constructGood
-	 * @covers       Evoke\HTTP\URI\Rule\Regex::isMatch
+	 * @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$obj = new Regex($match, $replacement, $params, $authoritative);
+		$obj = new RegexSharedMatch(
+			$match, $replacement, $params, $authoritative);
 		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
 	}
 }
