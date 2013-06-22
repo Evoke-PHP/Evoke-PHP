@@ -6,6 +6,8 @@
  */
 namespace Evoke\HTTP\URI\Rule;
 
+use InvalidArgumentException;
+
 /**
  * HTTP URI Regex Rule
  *
@@ -54,6 +56,25 @@ class Regex extends Rule
 	                            /* bool   */ $authoritative)
 	{
 		parent::__construct($authoritative);
+		$invalidArgs = false;
+
+		foreach ($params as $param)
+		{
+			if (!isset($param['Key']['Match'],
+			           $param['Key']['Replace'],
+			           $param['Value']['Match'],
+			           $param['Value']['Replace']))
+			{
+				$invalidArgs = true;
+				break;
+			}			                         
+		}
+		
+		if ($invalidArgs ||
+		    !isset($controller['Match'], $controller['Replace']))
+		{
+			throw new InvalidArgumentException('Bad Arguments');
+		}
 		
 		$this->controller = $controller;
 		$this->match      = $match;
@@ -72,9 +93,12 @@ class Regex extends Rule
 	 */
 	public function getController($uri)
 	{
+		return preg_replace($this->controller['Match'],
+		                    $this->controller['Replace'],
+		                    $uri);
 	}
 
-		/**
+	/**
 	 * Get any parameters.
 	 *
 	 * @param string The URI to get the parameters from.
@@ -82,6 +106,23 @@ class Regex extends Rule
 	 */
 	public function getParams($uri)
 	{
+		$paramsFound = array();
+		
+		foreach ($this->params as $param)
+		{
+			if (preg_match($param['Key']['Match'], $uri) &&
+			    preg_match($param['Value']['Match'], $uri))
+			{
+				$paramsFound[preg_replace($param['Key']['Match'],
+				                          $param['Key']['Replace'],
+				                          $uri)]
+					= preg_replace($param['Value']['Match'],
+					               $param['Value']['Replace'],
+					               $uri);
+			}
+		}
+
+		return $paramsFound;
 	}
 
 	/**
@@ -92,6 +133,7 @@ class Regex extends Rule
 	 */
 	public function isMatch($uri)
 	{
+		return preg_match($this->controller['Match'], $uri) > 0;
 	}	
 }
 // EOF
