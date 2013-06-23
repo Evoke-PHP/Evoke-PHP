@@ -273,7 +273,7 @@ class DB implements MetadataIface
 		// We may be using a shortened form of referring to the join.  We allow
 		// just the parent field to refer to the join if there is only a single
 		// join from that parent field.
-		foreach ($this->joins as $joinID => $value)
+		foreach (array_keys($this->joins) as $joinID)
 		{
 			if ($join == $this->getJoinParentField($joinID))
 			{
