@@ -6,6 +6,8 @@
  */
 namespace Evoke\Model\Data\Metadata;
 
+use DomainException;
+
 /**
  * DB Metadata
  * ===========
@@ -254,38 +256,47 @@ class DB implements MetadataIface
 	}	
 
 	/**
-	 * Get the joins in the metadata.
+	 * Get the join ID for the specified join or throw an exception if it can't
+	 * be found uniquely.
 	 *
-	 * @return mixed[]
-	 */
-	public function getJoins()
-	{
-		return $this->joins;
-	}
-
-	/**
-	 * Get the row identifier for the curent row.
+	 * @param string Join to get the ID for.
 	 *
-	 * @param mixed[] The data row.
+	 * @throws DomainException
 	 */
-	public function getRowID(Array $data)
+	public function getJoinID($join)
 	{
-		$rowID = '';
-		
-		foreach ($data as $field => $value)
+		if (isset($this->joins[$join]))
 		{
-			if (in_array($this->primaryKeys, $field))
-			{
-				$rowID .= (empty($rowID) ? '' : '_') . $value;
-			}
-		}		
+			return $join;
+		}
 		
-		return $rowID;
-	}
+		// We may be using a shortened form of referring to the join.  We allow
+		// just the parent field to refer to the join if there is only a single
+		// join from that parent field.
+		foreach ($this->joins as $joinID => $value)
+		{
+			if ($join == $this->getJoinParentField($joinID))
+			{
+				if (isset($match))
+				{
+					throw new DomainException('Ambiguous match.');
+				}
+				
+				$match = $joinID;
+			}
+		}
 
-	/*******************/
-	/* Private Methods */
-	/*******************/
+		if (isset($match))
+		{
+			return $match;
+		}
+
+		throw new DomainException('Join not found');
+	}
+	
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
 	/**
 	 * Filter the fields that belong to a table from the list and return the
@@ -295,7 +306,7 @@ class DB implements MetadataIface
 	 *
 	 * @return mixed[]
 	 */
-	private function filterFields(Array $fieldList)
+	protected function filterFields(Array $fieldList)
 	{
 		$filteredFields = array();
 		$pattern = '/^' . $this->tableAlias . '\./';
@@ -309,6 +320,38 @@ class DB implements MetadataIface
 		}
 
 		return $filteredFields;
+	}
+
+	/**
+	 * Get the parent field of a join in lowerCamelCase
+	 *
+	 * @param string The join ID to get the parent fied from.
+	 * @return string The parent field in lowerCamelCase.
+	 */
+	protected function getJoinParentField($join)
+	{
+		return lcfirst(
+			str_replace('_', '', substr($join, 0, strpos($join, '='))));
+	}
+	
+	/**
+	 * Get the row identifier for the curent row.
+	 *
+	 * @param mixed[] The data row.
+	 */
+	protected function getRowID(Array $data)
+	{
+		$rowID = '';
+		
+		foreach ($data as $field => $value)
+		{
+			if (in_array($field, $this->primaryKeys))
+			{
+				$rowID .= (empty($rowID) ? '' : '_') . $value;
+			}
+		}		
+		
+		return $rowID;
 	}
 
 	/**
