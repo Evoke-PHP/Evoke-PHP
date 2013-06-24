@@ -36,20 +36,20 @@ interface FormBuilderIface extends ViewIface
     public function addFile($name, Array $otherAttribs = array());
     
 	/**
-	 * Add an input to the form.
-	 *
-	 * @param mixed[] Attributes for the input.
-	 * @param mixed   Value for the input.
-	 */
-	public function addInput(Array $attribs, $value = NULL);
-	
-	/**
 	 * Add a hidden input to the form.
 	 *
 	 * @param string The name for the input.
 	 * @param mixed  The value for the hidden input.
 	 */
 	public function addHidden($name, $value);
+	
+	/**
+	 * Add an input to the form.
+	 *
+	 * @param mixed[] Attributes for the input.
+	 * @param mixed   Value for the input.
+	 */
+	public function addInput(Array $attribs, $value = NULL);
 	
 	/**
 	 * Add a label to the form.
@@ -94,12 +94,7 @@ interface FormBuilderIface extends ViewIface
 	                            /* Int    */ $rows         = 10,
 	                            /* Int    */ $cols         = 50,
 	                            Array        $otherAttribs = array());
-	
-	/**
-	 * Finish a row in the form, adding it to the form elements.
-	 */
-	public function finishRow();
-	
+		
 	/**
 	 * Set the action of the form.
 	 *
@@ -113,10 +108,5 @@ interface FormBuilderIface extends ViewIface
 	 * @param string Method.
 	 */
 	public function setMethod(/* String */ $method);
-
-	/**
-	 * Start a row (rows should not be nested).
-	 */
-	public function startRow();
 }
 // EOF

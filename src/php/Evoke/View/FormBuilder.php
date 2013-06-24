@@ -19,16 +19,10 @@ use LogicException;
 class FormBuilder extends View implements FormBuilderIface
 {
 	/**
-	 * Private Properties.
-	 *
-	 * @var bool    $addToRow    Whether to add elements to the row or form.
-	 * @var mixed[] $children    Children of the form.
-	 * @var mixed[] $rowElements Elements in the current row.
+	 * Children of the form.
+	 * @var mixed[]
 	 */
-	private
-		$addToRow = false,
-		$children = array(),
-		$rowElements = array();
+	protected $children = array();
 
 	/**
 	 * Construct a buildable XHTML form.
@@ -53,14 +47,7 @@ class FormBuilder extends View implements FormBuilderIface
 	 */
 	public function add(Array $element)
 	{
-		if ($this->addToRow)
-		{
-			$this->rowElements[] = $element;
-		}
-		else
-		{
-			$this->children[] = $element;
-		}
+		$this->children[] = $element;
 	}
 
     /**
@@ -79,6 +66,19 @@ class FormBuilder extends View implements FormBuilderIface
     }
     
 	/**
+	 * Add a hidden input to the form.
+	 *
+	 * @param string The name for the input.
+	 * @param mixed  The value for the hidden input.
+	 */
+	public function addHidden($name, $value)
+	{
+		$this->add(array('input', array('type'  => 'hidden',
+		                                'name'  => $name,
+		                                'value' => $value)));
+	}
+	
+	/**
 	 * Add an input to the form.
 	 *
 	 * @param mixed[] Attributes for the input.
@@ -94,19 +94,6 @@ class FormBuilder extends View implements FormBuilderIface
 		}
 
 		$this->children[] = $element;
-	}
-	
-	/**
-	 * Add a hidden input to the form.
-	 *
-	 * @param string The name for the input.
-	 * @param mixed  The value for the hidden input.
-	 */
-	public function addHidden($name, $value)
-	{
-		$this->add(array('input', array('type'  => 'hidden',
-		                                'name'  => $name,
-		                                'value' => $value)));
 	}
 	
 	/**
@@ -176,32 +163,12 @@ class FormBuilder extends View implements FormBuilderIface
 	}
 	
 	/**
-	 * Finish a row in the form, adding it to the form elements.
-	 */
-	public function finishRow()
-	{
-		$this->children[] = array('div',
-		                          array('class' => 'Row'),
-		                          $this->rowElements);
-		$this->addToRow = false;
-		$this->rowElements = array();
-	}
-	
-	/**
 	 * Get the view of the form.
 	 *
 	 * @return mixed[] The view data.
 	 */
 	public function get()
 	{
-		if ($this->addToRow)
-		{
-			trigger_error('Started row has not been finished before the ' .
-			              '\'get\' of the form.  Finishing the row now and ' .
-			              'continuing.', E_USER_WARNING);
-			$this->finishRow();
-		}
-		
 		return array('form', $this->params['Attribs'], $this->children);
 	}
 
@@ -223,20 +190,6 @@ class FormBuilder extends View implements FormBuilderIface
 	public function setMethod(/* String */ $method)
 	{
 		$this->params['Attribs']['method'] = $method;
-	}
-
-	/**
-	 * Start a row (rows should not be nested).
-	 */
-	public function startRow()
-	{
-		if ($this->addToRow)
-		{
-			throw new LogicException('Row already started, cannot nest rows.');
-		}
-		
-		$this->addToRow = true;
-		$this->rowElements = array();
 	}
 }
 // EOF
