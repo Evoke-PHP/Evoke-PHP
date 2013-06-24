@@ -29,7 +29,7 @@ class Backtrace extends View
 	{
 		$listItems = array();
 		
-		foreach ($this->data as $level => $info)
+		foreach ($this->data as $info)
 		{
 			$stackLineElements = array(
 				array('span',
