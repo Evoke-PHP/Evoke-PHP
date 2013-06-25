@@ -23,57 +23,55 @@ use LogicException;
 class Request implements RequestIface
 {
 	/**
+	 * Regexp subpatterns for the HTTP ACCEPT header.
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	 */
+	const PATTERNS_ACCEPT = <<<'EOP'
+		(?<ACCEPT_EXTENSION> ;(?&L)(?&TOKEN)(=((?&TOKEN)|(?&QUOTED_STRING)))?)
+		(?<SUBTYPE>          (?&TOKEN)|\*)
+		(?<TYPE>             (?&TOKEN)|\*)
+EOP;
+
+	/**
+	 * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
+	 * @var string
+	 */
+	const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP'
+		(?<ACCEPT_LANGUAGE>         (?&ACCEPT_LANGUAGE_ELEMENT)((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)
+		(?<ACCEPT_LANGUAGE_ELEMENT> (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE))?)
+		(?<ALPHA_18>                [[:alpha:]]{1,8})
+		(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))
+EOP;
+
+	
+	/**
 	 * Regexp subpatterns to match components of the request header values.
 	 * @var string
 	 */
-	private $basicPatterns;
-	
-	/**
-	 * Whether to validate the headers before parsing.
-	 * @var bool
-	 */
-	protected $validateHeaders;
-
-	/**
-	 * Construct the request object.
-	 *
-	 * @param bool Whether to validate against RFC2616 or assume that it is
-	 *             valid and try to pull the data without checking.
-	 */
-	public function __construct($validateHeaders=true)
-	{
-		$this->validateHeaders = $validateHeaders;
-
-		/* Pattern definitions from:
-		 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec2.html#sec2.2 and
-		 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6 to 3.7.
-		 */
-		$this->basicPatterns =
-			'(?<ATTRIBUTE>     (?&TOKEN))' .
-			'(?<CHAR>          [\x00-\x7f])' .
-			'(?<CRLF>          \x0d\x0a)' .
-			'(?<CTL>           [\x00-\x1f\x7f])' .
-			// A shortcut subroutine for the linear whitespace that litters the
-			// regex thanks to the following in RFC2616-sec2.1:
-			// implied *LWS
-			//     The grammar described by this specification is word-based.
-			//     Except where noted otherwise, linear white space (LWS) can be
-			//     included between any two adjacent words (token or
-			//     quoted-string), and between adjacent words and separators,
-			//     without changing the interpretation of a field.
-			'(?<L>             (?&LWS)*)' .
-			'(?<LWS>           (?&CRLF)? (\x09 | \x20)+)' .
-			'(?<Q_VALUE>       (0(\.[[:digit:]]{0,3})?) | (1(\.0{0,3})))' .
-			'(?<QDTEXT>        [\x09\x0a\x0d\x20\x21\x23-\x7e\x80-\xff])' .
-			'(?<QUOTED_PAIR>   \x5c(?&CHAR))' .
-			'(?<QUOTED_STRING> "((?&QDTEXT) | (?&QUOTED_PAIR))*")' .
-			'(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f' .
-			'\x3a-\x40\x5b-\x5d\x7b\x7d])' .
-			'(?<TOKEN>         (?&TOKEN_CHAR)+)' .
-			'(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39' .
-			'\x41-\x5a\x5e-\x7a\x7c\x7e])' .
-			'(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))';
-	}
+	const PATTERNS_GENERAL = <<<'EOP'
+		(?<ATTRIBUTE>     (?&TOKEN))
+		(?<CHAR>          [\x00-\x7f])
+		(?<CRLF>          \x0d\x0a)
+		(?<CTL>           [\x00-\x1f\x7f])
+		// A shortcut subroutine for the linear whitespace that litters the
+		// regex thanks to the implied *LWS in RFC2616-sec2.1:
+		//     The grammar described by this specification is word-based. Except
+		//     where noted otherwise, linear white space (LWS) can be included
+		//     between any two adjacent words (token or quoted-string), and
+		//     between adjacent words and separators, without changing the
+		//     interpretation of a field.
+		(?<L>             (?&LWS)*)
+		(?<LWS>           (?&CRLF)? (\x09 | \x20)+)
+		(?<Q_VALUE>       (0(\.[[:digit:]]{0,3})?) | (1(\.0{0,3})))
+		(?<QDTEXT>        [\x09\x0a\x0d\x20\x21\x23-\x7e\x80-\xff])
+		(?<QUOTED_PAIR>   \x5c(?&CHAR))
+		(?<QUOTED_STRING> "((?&QDTEXT) | (?&QUOTED_PAIR))*")
+		(?<SEPARATORS>    [\x09\x20\x22\x28\x29\x2c\x2f\x28\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d])
+		(?<TOKEN>         (?&TOKEN_CHAR)+)
+		(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])
+		(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))
+EOP;
 
 	/******************/
 	/* Public Methods */
@@ -87,6 +85,8 @@ class Request implements RequestIface
 	{
 		if (!isset($_SERVER['REQUEST_METHOD']))
 		{
+			trigger_error('Request method is not set, defaulting to GET.',
+			              E_USER_WARNING);
 			return 'GET';
 		}
 		
@@ -140,6 +140,47 @@ class Request implements RequestIface
 	{
 		return isset($_REQUEST[$param]);
 	}
+
+	/**
+	 * Whether the HTTP_ACCEPT header field is valid.
+	 *
+	 *	 * This field specifies the preferred media types for responses.
+	 *
+	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	 * @return bool
+	 */
+	public function isValidAccept()
+	{
+		$validationPattern =
+			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
+			// Accept the ',' separator except  
+			'    (?<ACCEPT>' .
+			'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
+			'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)' .
+			'(?&ACCEPT_PARAMS)?)' .
+			'    (?<ACCEPT_PARAMS>' .
+			'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
+			'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
+			')^(?&ACCEPT)$/x';
+
+		/// @TODO What do we do if $_SERVER['HTTP_ACCEPT'] is not set?
+		return preg_match($validationPattern, $_SERVER['HTTP_ACCEPT']) === 1;
+	}
+
+	/**
+	 * Whether the HTTP ACCEPT LANGUAGE header is of the correct format.
+	 *
+	 */
+	public function isValidAcceptLanguage()
+	{
+		$validationPattern =
+			'/(?(DEFINE)' . self::PATTERNS_GENERAL .
+			self::PATTERNS_ACCEPT_LANGUAGE . ')^(?&ACCEPT_LANGUAGE)$/x';
+				
+		/// @TODO What do we do if $_SERVER['HTTP_ACCEPT_LANGUAGE'] is not set?
+		return preg_match($validationPattern,
+		                  $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
+	}
 	
 	/**
 	 * Parse the Accept header field from the request according to RFC2616.
@@ -165,36 +206,9 @@ class Request implements RequestIface
 
 		$acceptString = $_SERVER['HTTP_ACCEPT'];
 		
-		$acceptPatterns =
-			'(?<ACCEPT_EXTENSION>' .
-			'   ;(?&L)(?&TOKEN)(=((?&TOKEN)|(?&QUOTED_STRING)))?)' .
-			'(?<SUBTYPE>          (?&TOKEN)|\*)' .
-			'(?<TYPE>             (?&TOKEN)|\*)';
-
-		if ($this->validateHeaders)
-		{
-			$validationPattern =
-				'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns .
-				// Accept the ',' separator except  
-				'    (?<ACCEPT>' .
-				'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
-				'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)' .
-				'(?&ACCEPT_PARAMS)?)' .
-				'    (?<ACCEPT_PARAMS>' .
-				'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
-				'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
-				')^(?&ACCEPT)$/x';
-
-			if (!preg_match($validationPattern, $acceptString))
-			{
-				trigger_error(__METHOD__ . ' Accept request header: ' .
-				              $acceptString . ' is invalid.', E_USER_ERROR);
-				return array();
-			}
-		}
-
 		$acceptElementPattern =
-			'/(?(DEFINE)' . $this->basicPatterns . $acceptPatterns . ')' .
+			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
+			')' .
 			// Type/Subtype
 			'(?&L)(?<Type>(?&TYPE))\/(?<Subtype>(?&SUBTYPE))' .
 			// (;q=Q_Factor)?
@@ -210,7 +224,7 @@ class Request implements RequestIface
 		if ($numMatches > 0)
 		{
 			$paramsPattern =
-				'/(?(DEFINE)' . $this->basicPatterns . ')' .
+				'/(?(DEFINE)' . self::PATTERNS_GENERAL . ')' .
 				';(?&L)(?<P_KEY>(?&TOKEN))' .
 				'(=(?<P_VAL>((?&TOKEN)|(?&QUOTED_STRING))))?' .
 				'/x';
@@ -269,32 +283,10 @@ class Request implements RequestIface
 		}
 
 		$acceptLanguageString = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-		$languagePatterns = $this->basicPatterns .
-			'(?<ACCEPT_LANGUAGE>' .
-			'    (?&ACCEPT_LANGUAGE_ELEMENT)' .
-			'    ((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)' .
-			'(?<ACCEPT_LANGUAGE_ELEMENT>' .
-			'    (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)' .
-			'    (?&Q_VALUE))?)' .
-			'(?<ALPHA_18>                [[:alpha:]]{1,8})' .
-			'(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))';
-
-		if ($this->validateHeaders)
-		{
-			$validationPattern =
-				'/(?(DEFINE)' . $languagePatterns . ')^(?&ACCEPT_LANGUAGE)$/x';
-				
-			if (!preg_match($validationPattern, $acceptLanguageString))
-			{
-				trigger_error(__METHOD__ . ' Accept request header: ' .
-				              $acceptLanguageString . ' is invalid.',
-				              E_USER_ERROR);
-				return array();
-			}
-		}
 
 		// Match the language and its optional Q_Factor.
-		$pattern = '/(?(DEFINE)' .	$languagePatterns . ')' .
+		$pattern = '/(?(DEFINE)' .	self::PATTERNS_GENERAL .
+			self::PATTERNS_ACCEPT_LANGUAGE . ')' .
 			'(?<Language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
 			'((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
 
