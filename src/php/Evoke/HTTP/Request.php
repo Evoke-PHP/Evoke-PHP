@@ -26,6 +26,7 @@ class Request implements RequestIface
 	 * Regexp subpatterns for the HTTP ACCEPT header.
 	 *
 	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	 * @var string
 	 */
 	const PATTERNS_ACCEPT = <<<'EOP'
 		(?<ACCEPT_EXTENSION> ;(?&L)(?&TOKEN)(=((?&TOKEN)|(?&QUOTED_STRING)))?)
@@ -35,6 +36,7 @@ EOP;
 
 	/**
 	 * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
+	 * @SuppressWarnings(PHPMD.LineLength)
 	 * @var string
 	 */
 	const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP'
@@ -47,6 +49,7 @@ EOP;
 	
 	/**
 	 * Regexp subpatterns to match components of the request header values.
+	 * @SuppressWarnings(PHPMD.LineLength)
 	 * @var string
 	 */
 	const PATTERNS_GENERAL = <<<'EOP'
