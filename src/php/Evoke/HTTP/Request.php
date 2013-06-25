@@ -22,6 +22,8 @@ use LogicException;
  */
 class Request implements RequestIface
 {
+	// @codingStandardsIgnoreStart
+	
 	/**
 	 * Regexp subpatterns for the HTTP ACCEPT header.
 	 *
@@ -36,7 +38,6 @@ EOP;
 
 	/**
 	 * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
-	 * @SuppressWarnings(PHPMD.LineLength)
 	 * @var string
 	 */
 	const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP'
@@ -45,11 +46,9 @@ EOP;
 		(?<ALPHA_18>                [[:alpha:]]{1,8})
 		(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))
 EOP;
-
 	
 	/**
 	 * Regexp subpatterns to match components of the request header values.
-	 * @SuppressWarnings(PHPMD.LineLength)
 	 * @var string
 	 */
 	const PATTERNS_GENERAL = <<<'EOP'
@@ -76,6 +75,8 @@ EOP;
 		(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))
 EOP;
 
+	// @codingStandardsIgnoreEnd
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -154,6 +155,12 @@ EOP;
 	 */
 	public function isValidAccept()
 	{
+		// The Accept header does not appear to be mandatory.
+		if (!isset($_SERVER['HTTP_ACCEPT']))
+		{
+			return TRUE;
+		}
+
 		$validationPattern =
 			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
 			// Accept the ',' separator except  
@@ -166,7 +173,6 @@ EOP;
 			'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
 			')^(?&ACCEPT)$/x';
 
-		/// @TODO What do we do if $_SERVER['HTTP_ACCEPT'] is not set?
 		return preg_match($validationPattern, $_SERVER['HTTP_ACCEPT']) === 1;
 	}
 
@@ -176,11 +182,16 @@ EOP;
 	 */
 	public function isValidAcceptLanguage()
 	{
+		// The Accept-Language header does not appear to be mandatory.
+		if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		{
+			return TRUE;
+		}
+		
 		$validationPattern =
 			'/(?(DEFINE)' . self::PATTERNS_GENERAL .
 			self::PATTERNS_ACCEPT_LANGUAGE . ')^(?&ACCEPT_LANGUAGE)$/x';
 				
-		/// @TODO What do we do if $_SERVER['HTTP_ACCEPT_LANGUAGE'] is not set?
 		return preg_match($validationPattern,
 		                  $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
 	}
@@ -201,13 +212,9 @@ EOP;
 	{
 		if (!isset($_SERVER['HTTP_ACCEPT']))
 		{
-			trigger_error(__METHOD__ . ' HTTP_ACCEPT is not set.',
-			              E_USER_ERROR);
-
+			// The Accept header does not appear to be mandatory.
 			return array();
 		}
-
-		$acceptString = $_SERVER['HTTP_ACCEPT'];
 		
 		$acceptElementPattern =
 			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
@@ -222,7 +229,7 @@ EOP;
 
 		$accepted = array();		
 		$numMatches = preg_match_all(
-			$acceptElementPattern, $acceptString, $matches);
+			$acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
 
 		if ($numMatches > 0)
 		{
@@ -280,12 +287,9 @@ EOP;
 	{
 		if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			trigger_error(__METHOD__ . ' HTTP_ACCEPT_LANGUAGE is not set.',
-			              E_USER_ERROR);
+			// Accept-Language header is not mandatory.
 			return array();
 		}
-
-		$acceptLanguageString = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 
 		// Match the language and its optional Q_Factor.
 		$pattern = '/(?(DEFINE)' .	self::PATTERNS_GENERAL .
@@ -295,7 +299,7 @@ EOP;
 
 		$acceptLanguages = array();
 		$numLanguages = preg_match_all(
-			$pattern, $acceptLanguageString, $matches);
+			$pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
 		for ($i = 0; $i < $numLanguages; $i++)
 		{
