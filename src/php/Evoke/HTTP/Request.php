@@ -23,9 +23,9 @@ use LogicException;
 class Request implements RequestIface
 {
 	// @codingStandardsIgnoreStart
-	
 	/**
 	 * Regexp subpatterns for the HTTP ACCEPT header.
+	 * This depends on PATTERNS_GENERAL or something equivalent being defined.
 	 *
 	 * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
 	 * @var string
@@ -38,17 +38,33 @@ EOP;
 
 	/**
 	 * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
+	 * This depends on PATTERNS_GENERAL or something equivalent being defined.
+	 *
 	 * @var string
 	 */
 	const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP'
 		(?<ACCEPT_LANGUAGE>         (?&ACCEPT_LANGUAGE_ELEMENT)((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)
 		(?<ACCEPT_LANGUAGE_ELEMENT> (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE))?)
-		(?<ALPHA_18>                [[:alpha:]]{1,8})
+		(?<ALPHA_18>                [a-zA-Z]{1,8})
 		(?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))
 EOP;
 	
 	/**
 	 * Regexp subpatterns to match components of the request header values.
+	 *
+	 * In addition to the standard symbols defined in the RFC there is a
+	 * shortcut subroutine <L>. This is a crazily frequent symbol due to the
+	 * linear whitespace that litters the regex thanks to the implied *LWS in
+	 * RFC2616-sec2.1:
+	 *     The grammar described by this specification is word-based. Except
+	 *     where noted otherwise, linear white space (LWS) can be included
+	 *     between any two adjacent words (token or quoted-string), and
+	 *     between adjacent words and separators, without changing the
+	 *     interpretation of a field.
+	 *
+	 * It was decided that defining this would create less clutter in the
+	 * regexp.
+	 * 
 	 * @var string
 	 */
 	const PATTERNS_GENERAL = <<<'EOP'
@@ -56,13 +72,6 @@ EOP;
 		(?<CHAR>          [\x00-\x7f])
 		(?<CRLF>          \x0d\x0a)
 		(?<CTL>           [\x00-\x1f\x7f])
-		// A shortcut subroutine for the linear whitespace that litters the
-		// regex thanks to the implied *LWS in RFC2616-sec2.1:
-		//     The grammar described by this specification is word-based. Except
-		//     where noted otherwise, linear white space (LWS) can be included
-		//     between any two adjacent words (token or quoted-string), and
-		//     between adjacent words and separators, without changing the
-		//     interpretation of a field.
 		(?<L>             (?&LWS)*)
 		(?<LWS>           (?&CRLF)? (\x09 | \x20)+)
 		(?<Q_VALUE>       (0(\.[[:digit:]]{0,3})?) | (1(\.0{0,3})))
@@ -74,7 +83,6 @@ EOP;
 		(?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])
 		(?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))
 EOP;
-
 	// @codingStandardsIgnoreEnd
 	
 	/******************/
@@ -96,7 +104,7 @@ EOP;
 		
 		return $_SERVER['REQUEST_METHOD'];
 	}
-	
+
 	/**
 	 * Get the query parameter.
 	 *
@@ -121,19 +129,19 @@ EOP;
 	 */
 	public function getQueryParams()
 	{
-		return $_REQUEST;
+		return $_REQUEST ?: array();
 	}
-	
+
 	/**
-	 * Get the URI of the request (without the query string).
+	 * Get the path of the request (no scheme, domain name or query).
 	 *
 	 * @return string The URI of the request.
 	 */
 	public function getURI()
 	{
-		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		return $_SERVER['REQUEST_URI'];
 	}
-
+	
 	/**
 	 * Whether the query parameter is set.
 	 *
@@ -156,18 +164,16 @@ EOP;
 	public function isValidAccept()
 	{
 		// The Accept header does not appear to be mandatory.
-		if (!isset($_SERVER['HTTP_ACCEPT']))
+		if (empty($_SERVER['HTTP_ACCEPT']))
 		{
 			return TRUE;
 		}
 
 		$validationPattern =
 			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
-			// Accept the ',' separator except  
 			'    (?<ACCEPT>' .
 			'        (?&ACCEPT_ELEMENT)?((?&L),(?&L)(?&ACCEPT_ELEMENT))*)' .
-			'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)' .
-			'(?&ACCEPT_PARAMS)?)' .
+			'    (?<ACCEPT_ELEMENT> (?&MEDIA_RANGE)(?&L)(?&ACCEPT_PARAMS)?)' .
 			'    (?<ACCEPT_PARAMS>' .
 			'        (?&L);(?&L)q=(?&Q_VALUE)(?&ACCEPT_EXTENSION)*)' .
 			'    (?<MEDIA_RANGE>    (?&L)(?&TYPE)\/(?&SUBTYPE))' .
@@ -183,7 +189,7 @@ EOP;
 	public function isValidAcceptLanguage()
 	{
 		// The Accept-Language header does not appear to be mandatory.
-		if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
 			return TRUE;
 		}
@@ -210,27 +216,25 @@ EOP;
 	 */
 	public function parseAccept()
 	{
-		if (!isset($_SERVER['HTTP_ACCEPT']))
+		if (empty($_SERVER['HTTP_ACCEPT']))
 		{
 			// The Accept header does not appear to be mandatory.
 			return array();
 		}
-		
+
+		// Match a "Type/Subtype (;q=Q_Factor)? Params" list.
 		$acceptElementPattern =
 			'/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
 			')' .
-			// Type/Subtype
 			'(?&L)(?<Type>(?&TYPE))\/(?<Subtype>(?&SUBTYPE))' .
-			// (;q=Q_Factor)?
 			'((?&L);(?&L)q=(?<Q_Factor>(?&Q_VALUE)))?' .
-			// Params
 			'(?<Params>(?&ACCEPT_EXTENSION)*)' .
 			'/x';
 
 		$accepted = array();		
 		$numMatches = preg_match_all(
 			$acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
-
+		
 		if ($numMatches > 0)
 		{
 			$paramsPattern =
@@ -266,9 +270,9 @@ EOP;
 					'Type'     => $matches['Type'][$i]);
 			}
 		}
-		
+
 		usort($accepted, array($this, 'compareAccept'));
-		
+
 		return $accepted;
 	}
 
@@ -285,7 +289,7 @@ EOP;
 	 */
 	public function parseAcceptLanguage()
 	{
-		if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
 			// Accept-Language header is not mandatory.
 			return array();
