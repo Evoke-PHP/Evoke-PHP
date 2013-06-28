@@ -2,9 +2,9 @@
 /**
  * Select Input View
  *
- * @package View\Input
+ * @package View\XHTML\Input
  */
-namespace Evoke\View\Input;
+namespace Evoke\View\XHTML\Input;
 
 use Evoke\View\Data,
 	LogicException,
@@ -16,7 +16,7 @@ use Evoke\View\Data,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View
+ * @package   View\XHTML
  */
 class Select extends Data
 {

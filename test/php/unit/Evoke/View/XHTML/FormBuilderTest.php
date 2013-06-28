@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View;
+namespace Evoke_Test\View\XHTML;
 
-use Evoke\View\FormBuilder,
+use Evoke\View\XHTML\FormBuilder,
     PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\FormBuilder
+ *  @covers Evoke\View\XHTML\FormBuilder
  */
 class FormBuilderTest extends PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a form can be built by adding generic elements to it.
 	 *
-	 * @covers Evoke\View\FormBuilder::__construct
-	 * @covers Evoke\View\FormBuilder::add
-	 * @covers Evoke\View\FormBuilder::get
+	 * @covers Evoke\View\XHTML\FormBuilder::__construct
+	 * @covers Evoke\View\XHTML\FormBuilder::add
+	 * @covers Evoke\View\XHTML\FormBuilder::get
 	 */
 	public function testAddElement()
 	{
@@ -38,7 +38,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a file input can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addFile
+	 * @covers Evoke\View\XHTML\FormBuilder::addFile
 	 */
 	public function testAddFile()
 	{
@@ -59,7 +59,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a hidden input can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addHidden
+	 * @covers Evoke\View\XHTML\FormBuilder::addHidden
 	 */
 	public function testAddHidden()
 	{
@@ -80,7 +80,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a generic input can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addInput
+	 * @covers Evoke\View\XHTML\FormBuilder::addInput
 	 */
 	public function testAddInput()
 	{
@@ -100,7 +100,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a label can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addLabel
+	 * @covers Evoke\View\XHTML\FormBuilder::addLabel
 	 */
 	public function testAddLabel()
 	{
@@ -117,7 +117,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a submit input can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addSubmit
+	 * @covers Evoke\View\XHTML\FormBuilder::addSubmit
 	 */
 	public function testAddSubmit()
 	{
@@ -137,7 +137,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a text input can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addText
+	 * @covers Evoke\View\XHTML\FormBuilder::addText
 	 */
 	public function testAddText()
 	{
@@ -159,7 +159,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a textarea can be added to the form.
 	 *
-	 * @covers Evoke\View\FormBuilder::addTextArea
+	 * @covers Evoke\View\XHTML\FormBuilder::addTextArea
 	 */
 	public function testAddTextArea()
 	{
@@ -181,7 +181,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a form can have it's action set.
 	 *
-	 * @covers Evoke\View\FormBuilder::setAction
+	 * @covers Evoke\View\XHTML\FormBuilder::setAction
 	 */
 	public function testSetAction()
 	{
@@ -199,7 +199,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that a form can have it's method set.
 	 *
-	 * @covers Evoke\View\FormBuilder::setMethod
+	 * @covers Evoke\View\XHTML\FormBuilder::setMethod
 	 */
 	public function testSetMethod()
 	{

@@ -1,19 +1,19 @@
 <?php
-namespace Evoke_Test\View;
+namespace Evoke_Test\View\XHTML;
 
 use Evoke\Model\Data\Flat,
-	Evoke\View\Backtrace,
+	Evoke\View\XHTML\Backtrace,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\Backtrace
+ *  @covers Evoke\View\XHTML\Backtrace
  */
 class BacktraceTest extends PHPUnit_Framework_TestCase
 { 
 	/**
 	 * Ensure the backtrace elements are formatted correctly.
 	 *
-	 * @covers Evoke\View\Backtrace::get
+	 * @covers Evoke\View\XHTML\Backtrace::get
 	 */
 	public function testBacktraceElements()
 	{
@@ -58,7 +58,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that the view of an empty backtrace is good.
 	 *
-	 * @covers Evoke\View\Backtrace::get
+	 * @covers Evoke\View\XHTML\Backtrace::get
 	 */
 	public function testGetEmtpy()
 	{
@@ -70,7 +70,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that trying to get the view with the data unset throws.
 	 *
-	 * @covers            Evoke\View\Backtrace::get
+	 * @covers            Evoke\View\XHTML\Backtrace::get
 	 * @expectedException LogicException
 	 */
 	public function testUnsetData()

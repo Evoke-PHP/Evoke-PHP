@@ -1,18 +1,20 @@
 <?php
 /**
- * XHTML Element View
+ * Element View
  *
- * @package View
+ * @package View\XHTML
  */
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
+
+use Evoke\View\Data;
 
 /**
- * XHTML Element View
+ * Element View
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View
+ * @package   View\XHTML
  */
 class Element extends Data
 {

@@ -2,9 +2,9 @@
 /**
  * CurrentLogin Control View
  *
- * @package View\Control
+ * @package View\XHTML\Control
  */ 
-namespace Evoke\View\Control;
+namespace Evoke\View\XHTML\Control;
 
 use Evoke\View\Data;
 
@@ -14,7 +14,7 @@ use Evoke\View\Data;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View
+ * @package   View\XHTML\Control
  */
 class CurrentLogin extends Data
 {

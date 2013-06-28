@@ -2,9 +2,9 @@
 /**
  * Login View Control
  *
- * @package View\Control
+ * @package View\XHTML\Control
  */
-namespace Evoke\View\Control;
+namespace Evoke\View\XHTML\Control;
 
 use Evoke\View\Data,
 	LogicException;
@@ -15,7 +15,7 @@ use Evoke\View\Data,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View\Control
+ * @package   View\XHTML\Control
  */
 class Login extends Data
 {

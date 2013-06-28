@@ -14,7 +14,7 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class Fixed extends View
+class Fixed implements ViewIface
 {
 	/**
 	 * Contents
@@ -23,7 +23,7 @@ class Fixed extends View
 	protected $contents;
 
 	/**
-	 * Construct a Fixed object.
+	 * Construct a fixed view.
 	 *
 	 * @param mixed Contents.
 	 */

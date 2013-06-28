@@ -2,11 +2,12 @@
 /**
  * Exception View
  *
- * @package View
+ * @package View\XHTML
  */
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
-use LogicException;
+use Evoke\View\ViewIface,
+	LogicException;
 
 /**
  * Exception View
@@ -14,9 +15,9 @@ use LogicException;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package View
+ * @package View\XHTML
  */
-class Exception extends View
+class Exception implements ViewIface
 {
 	/**
 	 * The exception that we are viewing.

@@ -1,32 +1,32 @@
 <?php
-namespace Evoke_Test\View;
+namespace Evoke_Test\View\XHTML;
 
 use Evoke\Model\Data\Flat,
-    Evoke\View\Element,
+    Evoke\View\XHTML\Element,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\Element
+ *  @covers Evoke\View\XHTML\Element
  */
 class ElementTest extends PHPUnit_Framework_TestCase
 { 
 	/**
 	 * Ensure that a Element View can be constructed.
 	 *
-	 * @covers Evoke\View\Element::__construct
+	 * @covers Evoke\View\XHTML\Element::__construct
 	 */	  
 	public function test__constructGood()
 	{
 		$obj = new Element('div');
-		$this->assertInstanceOf('Evoke\View\Element', $obj);
+		$this->assertInstanceOf('Evoke\View\XHTML\Element', $obj);
 		$this->assertInstanceOf('Evoke\View\ViewIface', $obj);
 	}
 
 	/**
 	 * Ensure that the attributes from construction are used by the view.
 	 *
-	 * @covers Evoke\View\Element::__construct
-	 * @covers Evoke\View\Element::get
+	 * @covers Evoke\View\XHTML\Element::__construct
+	 * @covers Evoke\View\XHTML\Element::get
 	 */
 	public function testAttributes()
 	{
@@ -38,7 +38,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that data is passed to the child view.
 	 *
-	 * @covers Evoke\View\Element::get
+	 * @covers Evoke\View\XHTML\Element::get
 	 */
 	public function testChildren()
 	{        
@@ -71,7 +71,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that the view of an empty element is good.
 	 *
-	 * @covers Evoke\View\Element::get
+	 * @covers Evoke\View\XHTML\Element::get
 	 */
 	public function testEmtpy()
 	{

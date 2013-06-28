@@ -2,9 +2,11 @@
 /**
  * Form Builder Interface
  *
- * @package View
+ * @package View\XHTML
  */
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
+
+use Evoke\View\ViewIface;
 
 /**
  * Form Builder Interface
@@ -12,7 +14,7 @@ namespace Evoke\View;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View
+ * @package   View\XHTML
  */
 interface FormBuilderIface extends ViewIface
 {

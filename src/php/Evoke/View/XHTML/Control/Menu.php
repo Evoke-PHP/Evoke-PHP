@@ -2,9 +2,9 @@
 /**
  * Menu Control View
  *
- * @package View\Control
+ * @package View\XHTML\Control
  */
-namespace Evoke\View\Control;
+namespace Evoke\View\XHTML\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
 	Evoke\View\ViewIface,
@@ -16,7 +16,7 @@ use Evoke\Model\Data\Menu as DataMenu,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View\Control
+ * @package   View\XHTML\Control
  */
 class Menu implements ViewIface
 {

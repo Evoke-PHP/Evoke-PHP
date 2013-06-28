@@ -2,9 +2,9 @@
 /**
  * Message Box View
  *
- * @package View
+ * @package View\XHTML
  */
-namespace Evoke\View;
+namespace Evoke\View\XHTML;
 
 use Evoke\View\Data,
 	LogicException;
@@ -15,7 +15,7 @@ use Evoke\View\Data,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View\Message
+ * @package   View\XHTML
  */
 class MessageBox extends Data
 {
