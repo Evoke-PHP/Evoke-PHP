@@ -6,6 +6,8 @@
  */
 namespace Evoke\View;
 
+use LogicException;
+
 /**
  * Backtrace View
  *
@@ -14,7 +16,7 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class Backtrace extends View
+class Backtrace extends Data
 {
 	/******************/
 	/* Public Methods */
@@ -27,31 +29,47 @@ class Backtrace extends View
 	 */
 	public function get()
 	{
+		if (!isset($this->data))
+		{
+			throw new LogicException('needs data');
+		}
+		
 		$listItems = array();
 		
 		foreach ($this->data as $info)
 		{
-			$stackLineElements = array(
+			$infoElements = array(
 				array('span',
 				      array('class' => 'File'),
 				      empty($info['File']) ? '<internal>' : $info['File']));
 		
-			if (!empty($info['Line']))
+			if (isset($info['Line']))
 			{
-				$stackLineElements[] = array(
+				$infoElements[] = array(
 					'span',
 					array('class' => 'Line'),
 					'(' . $info['Line'] . ')');
 			}
 			
-			$stackLineElements[] = array(
-				'span',	array('class' => 'Class'), $info['Class']);
-			$stackLineElements[] = array(
-				'span',	array('class' => 'Type'), $info['Type']);
-			$stackLineElements[] = array(
-				'span',	array('class' => 'Function'), $info['Function']);
+			if (isset($info['Class']))
+			{
+				$infoElements[] = array(
+					'span',	array('class' => 'Class'), $info['Class']);
+			}
 			
-			$listItems[] = array('li', array(), $stackLineElements);
+			if (isset($info['Type']))
+			{
+				$infoElements[] = array(
+					'span',	array('class' => 'Type'), $info['Type']);
+			}
+			
+			if (isset($info['Function']))
+			{
+				$infoElements[] = array(
+					'span',	array('class' => 'Function'), $info['Function']);
+			}
+			
+			$listItems[] = array('li', array(), $infoElements);
 		}
 
 		return array('ol', array('class' => 'Backtrace'), $listItems);

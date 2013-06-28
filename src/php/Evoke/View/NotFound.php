@@ -6,6 +6,8 @@
  */
 namespace Evoke\View;
 
+use LogicException;
+
 /**
  * Not Found View
  *
@@ -14,7 +16,7 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class NotFound extends View
+class NotFound extends Data
 {
 	/******************/
 	/* Public Methods */
@@ -27,24 +29,20 @@ class NotFound extends View
 	 */	
 	public function get()
 	{
-		$messageBoxElements = array(
-			array('div',
-			      array('class' => 'Title'),
-			      $this->data['Not_Found_Title']));
-
-		if (isset($this->params['Image_Element']))
+		if (!isset($this->data['Description'],
+		           $this->data['Title']))
 		{
-			$messageBoxElements[] = $this->params['Image_Element'];
+			throw new LogicException('needs data with Description and Title');
 		}
-
-		$messageBoxElements[] =
-			array('div',
-			      array('class' => 'Description'),
-			      $this->data['Not_Found_Description']);
 		
 		return array('div',
 		             array('class' => 'Not_Found Message_Box System'),
-		             $messageBoxElements);
+		             array(array('div',
+		                         array('class' => 'Title'),
+		                         $this->data['Title']),
+		                   array('div',
+		                         array('class' => 'Description'),
+		                         $this->data['Description'])));
 	}
 }
 // EOF

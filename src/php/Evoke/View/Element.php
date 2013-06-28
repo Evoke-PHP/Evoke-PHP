@@ -14,23 +14,24 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class Element extends View
+class Element extends Data
 {
 	/**
-	 * @var ViewIface $viewChild Child View.
+	 * Child View.
+	 * @var Data
 	 */
 	protected $viewChild;
 
 	/**
 	 * Construct a simple XHTML element view.
 	 *
-	 * @param string    Tag.
-	 * @param string[]  Attribs.
-	 * @param ViewIface Child view.
+	 * @param string   Tag.
+	 * @param string[] Attribs.
+	 * @param ViewData Child view.
 	 */
 	public function __construct(/* String */ $tag       = 'div',
 	                            Array        $attribs   = array(),
-	                            ViewIface    $viewChild = NULL)
+	                            Data         $viewChild = NULL)
 	{
 		$this->params['Attribs'] = $attribs;
 		$this->params['Tag']     = $tag;
@@ -50,7 +51,7 @@ class Element extends View
 	{
 		$children = array();
 		
-		if (isset($this->viewChild))
+		if (isset($this->data, $this->viewChild))
 		{
  			foreach ($this->data as $data)
 			{

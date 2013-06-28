@@ -7,7 +7,6 @@
 namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
-	Evoke\Service\Log\LoggingIface,
 	Evoke\Writer\WriterIface;
 
 /**
@@ -25,9 +24,6 @@ class ExceptionHandler
 	/**
 	 * Properties for the Exception Handler.
 	 *
-	 * @var LoggingIface  $logging
-	 * Logging object.
-	 *
 	 * @var bool          $messageFullInsecure
 	 * Whether to display a detailed insecure message.
 	 *
@@ -40,25 +36,21 @@ class ExceptionHandler
 	 * @var WriterIface   $writer
 	 * Writer object.
 	 */
-	protected $logging, $messageFullInsecure, $messageLengthMax, $response,
-		$writer;
+	protected $messageFullInsecure, $messageLengthMax, $response, $writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param LoggingIface  Logging object.
 	 * @param bool          Whether to show a detailed insecure message.
 	 * @param int           Maximum length of exception message to show.
 	 * @param ResponseIface Response object.
 	 * @param WriterIface   Writer object.
 	 */
-	public function __construct(LoggingIface  $logging,
-	                            /* Bool */    $messageFullInsecure,
+	public function __construct(/* Bool */    $messageFullInsecure,
 	                            /* Int  */    $messageLengthMax,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
-		$this->logging             = $logging;
 		$this->messageFullInsecure = $messageFullInsecure;
 		$this->messageLengthMax    = $messageLengthMax;
 		$this->response            = $response;
@@ -81,46 +73,30 @@ class ExceptionHandler
 	 */
 	public function handler(\Exception $uncaughtException)
 	{
-		try
+		trigger_error($uncaughtException->getMessage(), E_USER_ERROR);
+
+		if (!headers_sent())
 		{
-			if (!headers_sent())
-			{
-				header('HTTP/1.1 500 Internal Server Error');
-			}
-
-			$this->logging->log($uncaughtException->getMessage(), E_USER_ERROR);
-			$loggedError = true;
-
-			$currentBuffer = (string)($this->writer);
-
-			if (!empty($currentBuffer))
-			{
-				$this->logging->log(
-					'Buffer needs to be flushed in exception handler for ' .
-					'clean error page.  Buffer was: ' .	$currentBuffer,
-					E_USER_WARNING);
-				$this->writer->flush();
-			}
+			header('HTTP/1.1 500 Internal Server Error');
 		}
-		catch (\Exception $raisedException)
-		{
-			$loggedError = false;
-		}
+
+		$currentBuffer = (string)($this->writer);
 		
-		$title = 'System Error';
-
-		if ($loggedError)
+		if (!empty($currentBuffer))
 		{
-			$message = 'The administrator has been notified of this ' .
-				'error.  Sorry, we will fix this.';
-		}
-		else
-		{
-			$message =
-				'The administrator could not be notified of this error.  ' .
-				'Please call us, we want to fix this error.';
+			trigger_error(
+				'Bufffer needs to be flushed in exception handler for ' .
+				'clean error page.  Buffer was: ' .	$currentBuffer,
+				E_USER_WARNING);
+			$this->writer->flush();
 		}
 
+		$messageBoxElements = array(
+			array('div', array('class' => 'Title'), 'System Error'),
+			array('div',
+			      array('class' => 'Message'),
+			      'The administrator has been notified.'));
+		
 		// Provide extended details for development servers.
 		if ($this->messageFullInsecure)
 		{
@@ -128,7 +104,7 @@ class ExceptionHandler
 
 			// If the exception is huge, only include the start and end on
 			// screen.
-			if ($loggedError && $this->messageLengthMax > 0 &&
+			if ($this->messageLengthMax > 0 &&
 			    mb_strlen($exceptionMessage) > $this->messageLengthMax)
 			{
 				$halfMessage = $this->messageLengthMax / 2;
@@ -138,29 +114,19 @@ class ExceptionHandler
 					"\n\n" . mb_substr($exceptionMessage, -$halfMessage);
 			}
 
-			$message .= "\n\n" . $exceptionMessage;
-			$messageElements = explode("\n", $message);
-			$messageChildren = array();
-			
-			foreach ($messageElements as $text)
-			{
-				$messageChildren[] =
-					array('div', array('class' => 'Line'), $text);
-			}
-
-			$message = array(
-				array('div', array('class' => 'Message'), $messageChildren));
+			$description .= "\n\n" . $exceptionMessage;
+			$messageBoxElements[] =
+				array('p', array('class' => 'Description'), $description);
 		}
 
 		$this->writer->writeStart(
 			array('CSS'   => array('/csslib/global.css'),
 			      'Title' => '500 Internal Server Error'));
-		$this->writer->write(
-			array('div',
-			      array('class' => 'Exception_Handler Message_Box System'),
-			      array(array('div', array('class' => 'Title'), $title),
-			            array('div', array('class' => 'Description'), $message))
-				));
+
+		
+		$this->writer->write(array('div',
+		                           array('class' => 'Message_Box System'),
+		                           $messageBoxElements));
 		$this->writer->writeEnd();
 
 		$this->response->setStatus(500);

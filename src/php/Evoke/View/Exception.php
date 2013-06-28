@@ -18,6 +18,12 @@ use LogicException;
  */
 class Exception extends View
 {
+	/**
+	 * The exception that we are viewing.
+	 * @var \Exception
+	 */
+	protected $exception;
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -29,26 +35,32 @@ class Exception extends View
 	 */	
 	public function get()
 	{
-		// We specify exactly \Exception to avoid a clash with the classname.
-		if (!isset($this->data['Exception']) ||
-		    !$this->data['Exception'] instanceof \Exception)
+		if (!isset($this->exception))
 		{
-			throw new LogicException('needs Data with Exception. Data: ' .
-			                         var_export($this->data, true));
+			throw new LogicException('needs exception to be set.');
 		}				
 
 		return array('div',
 		             array('class' => 'Exception'),
 		             array(array('div',
 		                         array('class' => 'Type'),
-		                         get_class($this->data['Exception'])),
+		                         get_class($this->exception)),
 		                   array('p',
 		                         array('class' => 'Message'),
-		                         $this->data['Exception']->getMessage()),
+		                         $this->exception->getMessage()),
 		                   array('pre',
 		                         array('class' => 'Trace'),
-		                         $this->data['Exception']->getTraceAsString())
-			             ));
+		                         $this->exception->getTraceAsString())));
+	}
+
+	/**
+	 * Set the exception for the view.
+	 *
+	 * @param \Exception The exception for the view.	 
+	 */
+	public function setException(\Exception $exception)
+	{
+		$this->exception = $exception;
 	}
 }
 // EOF

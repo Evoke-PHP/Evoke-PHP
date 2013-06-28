@@ -16,7 +16,7 @@ use LogicException;
  * @license   MIT
  * @package   View
  */
-class FormBuilder extends View implements FormBuilderIface
+class FormBuilder implements FormBuilderIface
 {
 	/**
 	 * Children of the form.

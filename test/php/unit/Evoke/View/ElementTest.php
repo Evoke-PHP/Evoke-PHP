@@ -19,7 +19,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	{
 		$obj = new Element('div');
 		$this->assertInstanceOf('Evoke\View\Element', $obj);
-		$this->assertInstanceOf('Evoke\View\View', $obj);
+		$this->assertInstanceOf('Evoke\View\ViewIface', $obj);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class ElementTest extends PHPUnit_Framework_TestCase
 	{        
 		$children = [0 => ['div', ['class' => 'one'], '1'],
                      1 => ['p',   ['class' => 'two'], '2']];
-        $viewChild = $this->getMock('Evoke\View\View');
+        $viewChild = $this->getMock('Evoke\View\Data');
         $dataChildren = new Flat;
         $dataChildren->setData($children);
 

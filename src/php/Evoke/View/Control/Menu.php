@@ -7,7 +7,7 @@
 namespace Evoke\View\Control;
 
 use Evoke\Model\Data\Menu as DataMenu,
-	Evoke\View\View,
+	Evoke\View\ViewIface,
 	LogicException;
 
 /**
@@ -18,8 +18,16 @@ use Evoke\Model\Data\Menu as DataMenu,
  * @license   MIT
  * @package   View\Control
  */
-class Menu extends View
+class Menu implements ViewIface
 {
+	/**
+	 * Protected properties.
+	 *
+	 * @var DataMenu $data     Menu data.
+	 * @var string   $language Language of the menu.
+	 */
+	protected $data, $language;
+
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -35,10 +43,10 @@ class Menu extends View
 		{
 			throw new LogicException('needs data as Data\Menu');
 		}
-
-		if (empty($this->params['Language']))
+		
+		if (!isset($this->language))
 		{
-			throw new LogicException('needs Language as parameter.');
+			throw new LogicException('needs language.');
 		}
 		
 		$menus = $this->data->getMenu();
@@ -56,7 +64,27 @@ class Menu extends View
 			array('div', array('class' => 'Menus'), $menusElements) :
 			reset($menusElements);
 	}
-   
+
+	/**
+	 * Set the menu data.
+	 *
+	 * @param DataMenu Menu data.
+	 */
+	public function setData(DataMenu $dataMenu)
+	{
+		$this->data = $dataMenu;
+	}
+
+	/**
+	 * Set the language of the menu.
+	 *
+	 * @param string Language of the menu.
+	 */
+	public function setLanguage(/* String */ $language)
+	{
+		$this->language = (string) $langauge;
+	}
+	
 	/*******************/
 	/* Private Methods */
 	/*******************/

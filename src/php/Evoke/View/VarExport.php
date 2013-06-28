@@ -6,6 +6,8 @@
  */
 namespace Evoke\View;
 
+use Evoke\View\Data;
+
 /**
  * Variable Export View
  *
@@ -16,8 +18,14 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class VarExport implements ViewIface
+class VarExport extends Data
 {
+	/**
+	 * Variable to export.
+	 * @var mixed
+	 */
+	protected $var;
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -27,11 +35,21 @@ class VarExport implements ViewIface
 	 *
 	 * @param mixed[] The data to view via var_export!
 	 */
-	public function get(Array $params = array())
+	public function get()
 	{
 		return array('div',
 		             array('class' => 'Var_Export'),
-		             var_export($params, true));
+		             var_export($this->var, true));
+	}
+
+	/**
+	 * Set the var to export.
+	 *
+	 * @param mixed Var to export.
+	 */
+	protected function setVar($var)
+	{
+		$this->var = $var;
 	}
 }
 // EOF

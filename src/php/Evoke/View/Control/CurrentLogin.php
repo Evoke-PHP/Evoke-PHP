@@ -6,7 +6,7 @@
  */ 
 namespace Evoke\View\Control;
 
-use Evoke\View\View;
+use Evoke\View\Data;
 
 /**
  * CurrentLogin Control View
@@ -16,7 +16,7 @@ use Evoke\View\View;
  * @license   MIT
  * @package   View
  */
-class CurrentLogin extends View
+class CurrentLogin extends Data
 {
 	/******************/
 	/* Public Methods */
@@ -31,7 +31,8 @@ class CurrentLogin extends View
 	{
 		$currentLoginElements = array();
 		
-		if (isset($this->data['Logged_In']) && $this->data['Logged_In'])
+		if (isset($this->data['Logged_In'], $this->data['Username']) &&
+		    $this->data['Logged_In'])
 		{
 			$currentLoginElements = array(
 				array('span',

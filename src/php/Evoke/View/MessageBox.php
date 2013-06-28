@@ -6,8 +6,8 @@
  */
 namespace Evoke\View;
 
-use Evoke\View\View,
-	InvalidArgumentException;
+use Evoke\View\Data,
+	LogicException;
 
 /**
  * Message Box View
@@ -17,7 +17,7 @@ use Evoke\View\View,
  * @license   MIT
  * @package   View\Message
  */
-class MessageBox extends View
+class MessageBox extends Data
 {
 	/**
 	 * Message Box attributes.
@@ -45,24 +45,19 @@ class MessageBox extends View
 	 */
 	public function get()
 	{
-		if (!isset($this->params['Description']))
+		if (!isset($this->data['Description'], $this->data['Title']))
 		{
-			throw new InvalidArgumentException('needs Description');
-		}
-
-		if (!isset($this->params['Title']))
-		{
-			throw new InvalidArgumentException('needs Title');
+			throw new LogicException('needs Data with Description and Title');
 		}
       
 		return array('div',
 		             $this->attribs,
 		             array(array('div',
 		                         array('class' => 'Title'),
-		                         $this->params['Title']),
+		                         $this->data['Title']),
 		                   array('div',
 		                         array('class' => 'Description'),
-		                         $this->params['Description'])));
+		                         $this->data['Description'])));
 	}
 }
 // EOF

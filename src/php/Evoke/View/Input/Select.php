@@ -6,8 +6,8 @@
  */
 namespace Evoke\View\Input;
 
-use Evoke\View\ViewIface,
-	InvalidArgumentException,
+use Evoke\View\Data,
+	LogicException,
 	RuntimeException;
 
 /**
@@ -18,17 +18,17 @@ use Evoke\View\ViewIface,
  * @license   MIT
  * @package   View
  */
-class Select implements ViewIface
+class Select extends Data
 {
 	/**
 	 * Protected properties.
 	 *
 	 * @var string[] $attribs       Attributes for the select element.
+	 * @var string   $fieldText     Field in the data for the option text.
+	 * @var string   $fieldValue    Field in the data for the option value.
 	 * @var string[] $optionAttribs Attributes for each select option.
-	 * @var string   $textField     Field in the data for the option text.
-	 * @var string   $valueField    Field in the data for the option value.
 	 */
-	protected $attribs, $optionAttribs, $textField, $valueField;
+	protected $attribs, $fieldText, $fieldValue, $optionAttribs;
 
 	/**
 	 * Construct a Select view.
@@ -38,15 +38,15 @@ class Select implements ViewIface
 	 * @param string[] Attributes for the select element.
 	 * @param string[] Attributes for the option elements.
 	 */
-	public function __construct(/* String */ $textField,
-	                            /* String */ $valueField    = 'ID',
+	public function __construct(/* String */ $fieldText,
+	                            /* String */ $fieldValue    = 'ID',
 	                            Array        $attribs       = array(),
 	                            Array        $optionAttribs = array())
 	{
 		$this->attribs       = $attribs;
+		$this->fieldText     = $fieldText;
+		$this->fieldValue    = $fieldValue;
 		$this->optionAttribs = $optionAttribs;
-		$this->textField     = $textField;
-		$this->valueField    = $valueField;
 	}
       
 	/******************/
@@ -67,21 +67,19 @@ class Select implements ViewIface
 				'options to select from (The XHTML would be invalid).');
 		}
 
+		if (!isset($this->data[$this->fieldText],
+		           $this->data[$this->fieldValue]))
+		{
+			throw new LogicException(
+				'needs Data with TextField: ' . $this->fieldText .
+				' and ValueField: ' . $this->fieldValue);
+		}
+
 		$optionElements = array();
 
-		foreach ($this->data as $key => $record)
+		foreach ($this->data as $record)
 		{
-			if (!isset($record[$this->textField]) ||
-			    !isset($record[$this->valueField]))
-			{
-				throw new InvalidArgumentException(
-					__METHOD__ . ' Record: ' . var_export($record, true) .
-					' at key: ' . $key . ' does not contain the required ' .
-					'fields Text_Field: ' . $this->textField .
-					' and Value_Field: ' . $this->valueField);
-			}
-
-			$value = $record[$this->valueField];
+			$value = $record[$this->fieldValue];
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
@@ -92,7 +90,7 @@ class Select implements ViewIface
 			}
 	 
 			$optionElements[] =
-				array('option', $optionAttribs, $record[$this->textField]);
+				array('option', $optionAttribs, $record[$this->fieldText]);
 		}
 
 		return array('select', $this->attribs, $optionElements);

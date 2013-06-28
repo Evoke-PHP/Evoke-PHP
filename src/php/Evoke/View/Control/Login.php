@@ -6,7 +6,8 @@
  */
 namespace Evoke\View\Control;
 
-use Evoke\View\View;
+use Evoke\View\Data,
+	LogicException;
 
 /**
  * Login View Control
@@ -16,7 +17,7 @@ use Evoke\View\View;
  * @license   MIT
  * @package   View\Control
  */
-class Login extends View
+class Login extends Data
 {
 	/******************/
 	/* Public Methods */
@@ -29,6 +30,14 @@ class Login extends View
 	 */
 	public function get()
 	{
+		if (!isset($this->data['Login'],
+		           $this->data['Password'],
+		           $this->data['Username']))
+		{
+			throw new LogicException(
+				'needs data with Login, Password and Username');
+		}
+
 		return array('form',
 		             array('action' => '',
 		                   'class'  => 'Login',

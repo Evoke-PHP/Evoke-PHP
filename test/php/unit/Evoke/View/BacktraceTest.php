@@ -11,18 +11,6 @@ use Evoke\Model\Data\Flat,
 class BacktraceTest extends PHPUnit_Framework_TestCase
 { 
 	/**
-	 * Ensure that the view of an empty backtrace is good.
-	 *
-	 * @covers Evoke\View\Backtrace::get
-	 */
-	public function testGetEmtpy()
-	{
-		$obj = new Backtrace;
-        $obj->setData($this->getMock('Evoke\Model\Data\DataIface'));
-		$this->assertSame(['ol', ['class' => 'Backtrace'], []],	$obj->get());
-	}
-
-	/**
 	 * Ensure the backtrace elements are formatted correctly.
 	 *
 	 * @covers Evoke\View\Backtrace::get
@@ -65,6 +53,30 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 					  ['span', ['class' => 'Function'], 'boogieItUp']
 					  ]]]],
 			$obj->get());
-	}	
+	}
+
+	/**
+	 * Ensure that the view of an empty backtrace is good.
+	 *
+	 * @covers Evoke\View\Backtrace::get
+	 */
+	public function testGetEmtpy()
+	{
+		$obj = new Backtrace;
+        $obj->setData($this->getMock('Evoke\Model\Data\DataIface'));
+		$this->assertSame(['ol', ['class' => 'Backtrace'], []],	$obj->get());
+	}
+
+	/**
+	 * Ensure that trying to get the view with the data unset throws.
+	 *
+	 * @covers            Evoke\View\Backtrace::get
+	 * @expectedException LogicException
+	 */
+	public function testUnsetData()
+	{
+		$obj = new Backtrace;
+		$obj->get();
+	}
 }
 // EOF
