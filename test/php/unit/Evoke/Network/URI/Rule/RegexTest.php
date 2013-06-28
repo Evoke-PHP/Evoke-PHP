@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\HTTP\URI\Rule\Regex;
+namespace Evoke_Test\Network\URI\Rule\Regex;
 
-use Evoke\HTTP\URI\Rule\Regex,
+use Evoke\Network\URI\Rule\Regex,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\HTTP\URI\Rule\Regex
+ *  @covers Evoke\Network\URI\Rule\Regex
  */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
@@ -71,20 +71,20 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that the constructor builds the expected object.
 	 *
-	 * @covers       \Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @covers       \Evoke\Network\URI\Rule\Regex::__construct
 	 * @dataProvider providerGood
 	 */
 	public function test__constructGood(
 		$controller, $match, $params, $authoritative)
 	{
 		$object = new Regex($controller, $match, $params, $authoritative);
-		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\Regex', $object);
+		$this->assertInstanceOf('Evoke\Network\URI\Rule\Regex', $object);
 	}
 
 	/**
 	 * Test that Invalid Param specs to the constructor raise IAE.
 	 *
-	 * @covers            Evoke\HTTP\URI\Rule\Regex::__construct
+	 * @covers            Evoke\Network\URI\Rule\Regex::__construct
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider      providerInvalidArguments
 	 */
@@ -98,7 +98,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	 * Test that we get the expected controller.
 	 *
 	 *  @depends      test__constructGood
-	 *  @covers       Evoke\HTTP\URI\Rule\Regex::getController
+	 *  @covers       Evoke\Network\URI\Rule\Regex::getController
 	 */
 	public function testGetController()
 	{
@@ -114,7 +114,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we get the expected parameters.
 	 *
-	 * @covers       Evoke\HTTP\URI\Rule\Regex::getParams
+	 * @covers       Evoke\Network\URI\Rule\Regex::getParams
 	 * @depends      test__constructGood
 	 * @dataProvider providerGetParams
 	 */
@@ -129,7 +129,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	 * Test the matches for the regex.
 	 *
 	 * @depends test__constructGood
-	 * @covers  Evoke\HTTP\URI\Rule\Regex::isMatch
+	 * @covers  Evoke\Network\URI\Rule\Regex::isMatch
 	 */
 	public function testIsMatch(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)

@@ -2,9 +2,9 @@
 /**
  * HTTP Media Type Exact Rule
  *
- * @package HTTP\MediaType\Rule
+ * @package Network\HTTP\MediaType\Rule
  */
-namespace Evoke\HTTP\MediaType\Rule;
+namespace Evoke\Network\HTTP\MediaType\Rule;
 
 use InvalidArgumentException;
 
@@ -16,7 +16,7 @@ use InvalidArgumentException;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\MediaType\Rule
+ * @package   Network\HTTP\MediaType\Rule
  */
 class Exact extends Match
 {

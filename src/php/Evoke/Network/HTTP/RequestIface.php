@@ -2,9 +2,9 @@
 /**
  * HTTP Request Interface
  *
- * @package HTTP
+ * @package Network\HTTP
  */
-namespace Evoke\HTTP;
+namespace Evoke\Network\HTTP;
 
 /**
  * HTTP Request Interface
@@ -12,9 +12,9 @@ namespace Evoke\HTTP;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP
+ * @package   Network\HTTP
  */
-interface RequestIface
+interface RequestIface extends \Evoke\Network\RequestIface
 {
 	/**
 	 * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST,

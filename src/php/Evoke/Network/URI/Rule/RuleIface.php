@@ -2,9 +2,9 @@
 /**
  * HTTP URI Rule Interface
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 /**
  * HTTP URI Rule Interface
@@ -12,9 +12,9 @@ namespace Evoke\HTTP\URI\Rule;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
-interface RuleIface extends \Evoke\HTTP\RuleIface
+interface RuleIface
 {
 	/**
 	 * Get the controller.
@@ -39,5 +39,14 @@ interface RuleIface extends \Evoke\HTTP\RuleIface
 	 *              matches the input.
 	 */
 	public function isAuthoritative();
+
+	/**
+	 * Check to see if the rule matches.
+	 *
+	 * @param string The URI to check for a match.
+	 * @return bool Whether the rule matches.
+	 */
+	public function isMatch($uri);
+	
 }
 // EOF

@@ -6,7 +6,7 @@
  */
 namespace Evoke\Controller;
 
-use Evoke\HTTP\ResponseIface,
+use Evoke\Network\HTTP\ResponseIface,
 	Evoke\Writer\WriterIface,
 	Evoke\View\ViewIface;
 	

@@ -1,20 +1,20 @@
 <?php
 /**
- * HTTP URI Regex Rule
+ * URI Regex Rule
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * HTTP URI Regex Rule
+ * URI Regex Rule
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 class Regex extends Rule
 {

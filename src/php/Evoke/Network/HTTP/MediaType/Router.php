@@ -2,11 +2,11 @@
 /**
  * HTTP Media Type Router Interface
  *
- * @package HTTP\MediaType
+ * @package Network\HTTP\MediaType
  */
-namespace Evoke\HTTP\MediaType;
+namespace Evoke\Network\HTTP\MediaType;
 
-use Evoke\HTTP\RequestIface,
+use Evoke\Network\HTTP\RequestIface,
 	OutOfBoundsException,
 	Rule\RuleIface;
 
@@ -18,7 +18,7 @@ use Evoke\HTTP\RequestIface,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\MediaType
+ * @package   Network\HTTP\MediaType
  */
 class Router implements RouterIface
 {

@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\HTTP;
+namespace Evoke_Test\Network\HTTP;
 
-use Evoke\HTTP\Response,
+use Evoke\Network\HTTP\Response,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\HTTP\Response
+ *  @covers Evoke\Network\HTTP\Response
  */
 class ResponseTest extends PHPUnit_Framework_TestCase
 { 
@@ -15,21 +15,21 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	public function test__constructGood()
 	{
 		$obj = new Response;
-		$this->assertInstanceOf('Evoke\HTTP\Response', $obj);
+		$this->assertInstanceOf('Evoke\Network\HTTP\Response', $obj);
 
 		$obj = new Response('1.0');
-		$this->assertInstanceOf('Evoke\HTTP\Response', $obj);
+		$this->assertInstanceOf('Evoke\Network\HTTP\Response', $obj);
 
 		// Test a hypothetical HTTP 25.987 future protocol.
 		$obj = new Response('25.987');
-		$this->assertInstanceOf('Evoke\HTTP\Response', $obj);
+		$this->assertInstanceOf('Evoke\Network\HTTP\Response', $obj);
 	}
 
 	/*
 	 * Ensure that the response body is initially blank.
 	 *                       
-	 * @covers Evoke\HTTP\Response::setBody
-	 * @covers Evoke\HTTP\Response::send
+	 * @covers Evoke\Network\HTTP\Response::setBody
+	 * @covers Evoke\Network\HTTP\Response::send
 	 *
 	public function testBodyBeginsEmpty()
 	{

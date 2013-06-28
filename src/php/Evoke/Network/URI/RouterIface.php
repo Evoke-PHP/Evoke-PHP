@@ -1,17 +1,17 @@
 <?php
 /**
- * HTTP URI Router Interface
+ * URI Router Interface
  *
- * @package HTTP\URI
+ * @package Network\URI
  */
-namespace Evoke\HTTP\URI;
+namespace Evoke\Network\URI;
 /**
- * HTTP URI Router Interface
+ * URI Router Interface
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI
+ * @package   Network\URI
  */
 interface RouterIface
 {

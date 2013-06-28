@@ -2,9 +2,9 @@
 /**
  * Evoke HTTP Response
  *
- * @package HTTP
+ * @package Network\HTTP
  */
-namespace Evoke\HTTP;
+namespace Evoke\Network\HTTP;
 
 use InvalidArgumentException,
 	LogicException;
@@ -25,7 +25,7 @@ use InvalidArgumentException,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP
+ * @package   Network\HTTP
  */
 class Response implements ResponseIface
 {

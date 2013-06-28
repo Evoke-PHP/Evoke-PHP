@@ -1,20 +1,20 @@
 <?php
 /**
- * HTTP URI Rule Interface
+ * URI Rule Interface
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Rule Interface
+ * URI Rule Interface
  *
  * Map the URI to a controller and parameters.
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 abstract class Rule implements RuleIface
 {

@@ -1,28 +1,28 @@
 <?php
 /**
- * HTTP URI Router Interface
+ * URI Router Interface
  *
- * @package HTTP\URI
+ * @package Network\URI
  */
-namespace Evoke\HTTP\URI;
+namespace Evoke\Network\URI;
 
-use \Evoke\HTTP\RequestIface;
+use Evoke\Network\RequestIface;
 
 /**
- * HTTP URI Router Interface
+ * URI Router Interface
  *
  * Route the Request to a controller and parameters.
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI
+ * @package   Network\URI
  */
 class Router implements RouterIface
 {
 	/**
 	 *  Request Object.
-	 *  @var Evoke\HTTP\RequestIface
+	 *  @var RequestIface
 	 */
 	protected $request;
 
@@ -33,7 +33,7 @@ class Router implements RouterIface
 	protected $rules = array();
 
 	/**
-	 * Create a HTTP URI Router that routes the request to a response.
+	 * Create a URI Router that routes the request to a response.
 	 *
 	 * @param RequestIface The request to route.
 	 */

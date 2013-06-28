@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\HTTP\URI\Rule\RegexSharedMatch;
+namespace Evoke_Test\Network\URI\Rule\RegexSharedMatch;
 
-use Evoke\HTTP\URI\Rule\RegexSharedMatch,
+use Evoke\Network\URI\Rule\RegexSharedMatch,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\HTTP\URI\Rule\RegexSharedMatch
+ *  @covers Evoke\Network\URI\Rule\RegexSharedMatch
  */
 class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 {
@@ -119,18 +119,18 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that the constructor builds the expected object.
 	 *
-	 * @covers \Evoke\HTTP\URI\Rule\RegexSharedMatch::__construct
+	 * @covers \Evoke\Network\URI\Rule\RegexSharedMatch::__construct
 	 */
 	public function test__constructGood()
 	{
 		$obj = new RegexSharedMatch('str', 'str', array(), true);
-		$this->assertInstanceOf('Evoke\HTTP\URI\Rule\RegexSharedMatch', $obj);
+		$this->assertInstanceOf('Evoke\Network\URI\Rule\RegexSharedMatch', $obj);
 	}
 
 	/**
 	 * Test that Invalid Param specs to the constructor raise IAE.
 	 *
-	 * @covers            Evoke\HTTP\URI\Rule\RegexSharedMatch::__construct
+	 * @covers            Evoke\Network\URI\Rule\RegexSharedMatch::__construct
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider      provider__constructInvalidParamSpec
 	 */
@@ -142,7 +142,7 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 		
 	/** Test getResponse and the private method getMappedValue.
 	 *  @depends      test__constructGood
-	 *  @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::getController
+	 *  @covers       Evoke\Network\URI\Rule\RegexSharedMatch::getController
 	 */
 	public function testGetController()
 	{
@@ -153,7 +153,7 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @depends      test__constructGood	   
-	 * @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::getParams
+	 * @covers       Evoke\Network\URI\Rule\RegexSharedMatch::getParams
 	 * @dataProvider providerGetParams 
 	 */
 	public function testGetParams(
@@ -168,7 +168,7 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 	 * Test the matches for the regex.
 	 *
 	 * @depends      test__constructGood
-	 * @covers       Evoke\HTTP\URI\Rule\RegexSharedMatch::isMatch
+	 * @covers       Evoke\Network\URI\Rule\RegexSharedMatch::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch(

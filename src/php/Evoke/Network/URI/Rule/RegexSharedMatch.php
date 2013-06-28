@@ -1,15 +1,15 @@
 <?php
 /**
- * HTTP URI Regex Rule with one match used for all calculations.
+ * URI Regex Rule with one match used for all calculations.
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 use InvalidArgumentException;
 
 /**
- * HTTP URI Regex Rule with one match used for all calculations.
+ * URI Regex Rule with one match used for all calculations.
  *
  * A regex rule to map the uri controller and parameters.  There is a single
  * match for the URI, with all replacements being made from this match.  If
@@ -19,7 +19,7 @@ use InvalidArgumentException;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 class RegexSharedMatch extends Rule
 {

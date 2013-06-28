@@ -2,9 +2,9 @@
 /**
  * Response Interface
  *
- * @package HTTP
+ * @package Network\HTTP
  */
-namespace Evoke\HTTP;
+namespace Evoke\Network\HTTP;
 
 /**
  * Response Interface
@@ -15,7 +15,7 @@ namespace Evoke\HTTP;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP
+ * @package   Network\HTTP
  */
 interface ResponseIface
 {

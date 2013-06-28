@@ -2,9 +2,9 @@
 /**
  * HTTP Media Type Rule Interface
  *
- * @package HTTP\MediaType\Rule
+ * @package Network\HTTP\MediaType\Rule
  */
-namespace Evoke\HTTP\MediaType\Rule;
+namespace Evoke\Network\HTTP\MediaType\Rule;
 
 /**
  * HTTP Media Type Rule Interface
@@ -12,7 +12,7 @@ namespace Evoke\HTTP\MediaType\Rule;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\MediaType\Rule
+ * @package   Network\HTTP\MediaType\Rule
  */
 abstract class Rule implements RuleIface
 {

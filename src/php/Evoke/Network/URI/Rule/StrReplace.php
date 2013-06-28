@@ -2,9 +2,9 @@
 /**
  * HTTP URI String Replace Rule
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 /**
  * HTTP URI String Replace Rule
@@ -15,7 +15,7 @@ namespace Evoke\HTTP\URI\Rule;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 class StrReplace extends Rule
 {

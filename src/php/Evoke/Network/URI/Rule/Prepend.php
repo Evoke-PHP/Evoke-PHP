@@ -1,13 +1,13 @@
 <?php
 /**
- * HTTP URI Prepend Rule
+ * URI Prepend Rule
  *
- * @pakcage HTTP\URI\Rule
+ * @pakcage Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Prepend Rule
+ * URI Prepend Rule
  *
  * A rule to prepend a string to the controller.
  * No parameters are matched by this class.
@@ -15,7 +15,7 @@ namespace Evoke\HTTP\URI\Rule;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 class Prepend extends Rule
 {

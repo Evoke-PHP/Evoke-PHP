@@ -2,9 +2,9 @@
 /**
  * HTTP Media Type Router Interface
  *
- * @package HTTP\MediaType
+ * @package Network\HTTP\MediaType
  */
-namespace Evoke\HTTP\MediaType;
+namespace Evoke\Network\HTTP\MediaType;
 
 use Rule\RuleIface;
 
@@ -14,7 +14,7 @@ use Rule\RuleIface;
  * @author Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license MIT
- * @package HTTP\MediaType
+ * @package Network\HTTP\MediaType
  */
 interface RouterIface
 {

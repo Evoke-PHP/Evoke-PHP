@@ -1,20 +1,20 @@
 <?php
 /**
- * HTTP URI Left Trim Rule
+ * URI Left Trim Rule
  *
- * @package HTTP\URI\Rule
+ * @package Network\URI\Rule
  */
-namespace Evoke\HTTP\URI\Rule;
+namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Left Trim Rule
+ * URI Left Trim Rule
  *
  * A rule to trim characters from the left side of the URI.
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   HTTP\URI\Rule
+ * @package   Network\URI\Rule
  */
 class LeftTrim extends Rule
 {

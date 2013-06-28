@@ -137,7 +137,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->getMock();
 		
 		return [
-			'Response' => $this->getMock('Evoke\HTTP\ResponseIface'),
+			'Response' => $this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			'Writer'   => $writerMock,
 			'View'     => $this->getMock('Evoke\View\ViewIface')];
 	}	
