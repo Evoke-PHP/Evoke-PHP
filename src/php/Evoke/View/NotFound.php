@@ -6,8 +6,6 @@
  */
 namespace Evoke\View;
 
-use LogicException;
-
 /**
  * Not Found View
  *
@@ -16,33 +14,17 @@ use LogicException;
  * @license   MIT
  * @package   View
  */
-class NotFound extends Data
+class NotFound extends MessageBox
 {
-	/******************/
-	/* Public Methods */
-	/******************/
-
 	/**
-	 * Get the view (of the data) to be written.
+	 * Construct the Not Found message box.
 	 *
-	 * @return mixed[] The view data.
-	 */	
-	public function get()
+	 * @param mixed[] Attributes for the message box.
+	 */
+	public function __construct(
+		Array $attribs = array('class' => 'Not_Found Message_Box System'))
 	{
-		if (!isset($this->data['Description'],
-		           $this->data['Title']))
-		{
-			throw new LogicException('needs data with Description and Title');
-		}
-		
-		return array('div',
-		             array('class' => 'Not_Found Message_Box System'),
-		             array(array('div',
-		                         array('class' => 'Title'),
-		                         $this->data['Title']),
-		                   array('div',
-		                         array('class' => 'Description'),
-		                         $this->data['Description'])));
+		parent::__construct($attribs);
 	}
 }
 // EOF
