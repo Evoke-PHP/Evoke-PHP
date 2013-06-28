@@ -6,8 +6,6 @@
  */
 namespace Evoke\View;
 
-use Evoke\Model\Data\DataIface;
-
 /**
  * View Interface
  *
@@ -19,25 +17,10 @@ use Evoke\Model\Data\DataIface;
 interface ViewIface
 {
 	/**
-	 * Get the view of the data ready for writing.
+	 * Get the view ready for writing.
 	 *
-	 * @return mixed[] The view of the data according to the view parameters.
+	 * @return mixed[] The output of the view.
 	 */
 	public function get();
-
-	/**
-	 * Set the data for the view.
-	 *
-	 * @param DataIface The data to set for the view.
-	 */
-	public function setData(DataIface $data);
-
-	/**
-	 * Set a paramter for the view.
-	 *
-	 * @param string The parameter to set for the view.
-	 * @param mixed  The value to set the parameter to.
-	 */
-	public function setParam(/* String */ $param, /* Mixed */ $value);
 }
 // EOF
