@@ -31,7 +31,7 @@ abstract class Data implements ViewIface
 	/**
 	 * Set the data for the view.
 	 *
-	 * @params DataIface Data for the view.
+	 * @param DataIface Data for the view.
 	 */
 	public function setData(DataIface $data)
 	{

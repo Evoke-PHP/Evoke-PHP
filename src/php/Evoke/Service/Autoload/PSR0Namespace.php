@@ -16,24 +16,14 @@ namespace Evoke\Service\Autoload;
  */
 class PSR0Namespace extends Autoload
 {
-	protected
-		/**
-		 * The base directory for the files.
-		 * @var string
-		 */
-		$baseDir,
-
-		/**
-		 * The file extension to use.
-		 * @var string
-		 */
-		$extension,
-
-		/**
-		 * The base namespace that we are autoloading.
-		 * @var string
-		 */
-		$namespace;
+	/**
+	 * Protected Properties
+	 * 
+	 * @var string $baseDir   Base directory for the files.
+	 * @var string $extension File extension to use.
+	 * @var string $namespace Base namespace that we are autoloading.
+	 */
+	protected $baseDir, $extension, $namespace;
 
 	/**
 	 * Construct an Autoload object.

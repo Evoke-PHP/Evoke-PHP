@@ -14,7 +14,7 @@ use DateTime;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   Service
+ * @package   Service\Log
  */
 interface LoggerIface
 {

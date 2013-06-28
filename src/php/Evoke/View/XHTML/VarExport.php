@@ -33,7 +33,7 @@ class VarExport extends Data
 	/**
 	 * Get the view of the parameters.
 	 *
-	 * @param mixed[] The data to view via var_export!
+	 * @return mixed[] The view of the data.
 	 */
 	public function get()
 	{

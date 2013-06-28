@@ -19,6 +19,18 @@ use Evoke\View\Data;
 class Element extends Data
 {
 	/**
+	 * Attributes.
+	 * @var mixed[]
+	 */
+	protected $attribs;
+
+	/**
+	 * Tag.
+	 * @var string
+	 */
+	protected $tag;
+	
+	/**
 	 * Child View.
 	 * @var Data
 	 */
@@ -29,15 +41,15 @@ class Element extends Data
 	 *
 	 * @param string   Tag.
 	 * @param string[] Attribs.
-	 * @param ViewData Child view.
+	 * @param Data     Child view.
 	 */
 	public function __construct(/* String */ $tag       = 'div',
 	                            Array        $attribs   = array(),
 	                            Data         $viewChild = NULL)
 	{
-		$this->params['Attribs'] = $attribs;
-		$this->params['Tag']     = $tag;
-		$this->viewChild         = $viewChild;
+		$this->attribs   = $attribs;
+		$this->tag       = $tag;
+		$this->viewChild = $viewChild;
 	}
 
 	/******************/
@@ -62,7 +74,7 @@ class Element extends Data
 			}
 		}
 		
-		return array($this->params['Tag'], $this->params['Attribs'], $children);
+		return array($this->tag, $this->attribs, $children);
 	}
 }
 // EOF

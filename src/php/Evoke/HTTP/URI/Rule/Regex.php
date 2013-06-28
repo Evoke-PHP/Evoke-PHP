@@ -49,6 +49,7 @@ class Regex extends Rule
 	 * @param string   Regex to determine whether the rule matches.
 	 * @param Array[]  Parameters each with a key and value regex for match and
 	 *                 replacement.
+	 * @param bool     Whether the rule is authoritative.
 	 */
 	public function __construct(Array $controller,
 	                            /* string */ $match,
