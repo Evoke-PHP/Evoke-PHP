@@ -82,7 +82,7 @@ class Menu implements ViewIface
 	 */
 	public function setLanguage(/* String */ $language)
 	{
-		$this->language = (string) $langauge;
+		$this->language = (string) $language;
 	}
 	
 	/*******************/

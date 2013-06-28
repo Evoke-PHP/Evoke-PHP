@@ -6,6 +6,8 @@
  */
 namespace Evoke\View;
 
+use Evoke\View\Data;
+
 /**
  * Error View
  *
@@ -14,31 +16,24 @@ namespace Evoke\View;
  * @license   MIT
  * @package   View
  */
-class Error implements ViewIface
+class Error extends Data
 {
 	/**
 	 * Protected Properties.
 	 *
-	 * @var string[] $errorParams   Error parameters.
-	 * @var bool     $isDetailed    Whether the error should be detailed.
-	 * @var string   $unknownString String for an unknown part of the error.
+	 * @var string[] $error   Error to get the view of.
+	 * @var string   $unknown String for an unknown part of the error.
 	 */	 
-	protected $errorParams, $isDetailed, $unknownString;
+	protected $error, $unknown;
 
 	/**
-	 * Construct a Error object.
+	 * Construct an Error view.
 	 *
-	 * @param string[] Error parameters.
-	 * @param bool     Whether the error should be detailed.
-	 * @param string   String for an unkown part of the error.
+	 * @param string  String for an unkown part of the error.
 	 */
-	public function __construct(Array        $errorParams,
-	                            /* Bool   */ $isDetailed,
-	                            /* String */ $unknownString = '<Unknown>')
+	public function __construct(/* String */ $unknown = '<Unknown>')
 	{
-		$this->errorParams   = $errorParams;
-		$this->isDetailed    = $isDetailed;
-		$this->unknownString = $unknownString;
+		$this->unknown = $unknown;
 	}
 
 	/******************/
@@ -52,54 +47,36 @@ class Error implements ViewIface
 	 */	
 	public function get()
 	{
-		/// @todo Use data instead of params.
-		
-		$descriptionElements = array(
-			array('div',
-			      array('class' => 'General'),
-			      'An error has occurred. We have been notified. ' .
-			      'We will fix this as soon as possible.'));
-
-		if ($this->isDetailed)
+		if (!isset($this->data))
 		{
-			$params = array_merge(array('file'    => $unknownString,
-			                            'line'    => $unknownString,
-			                            'message' => $unknownString,
-			                            'type'    => $unknownString),
-			                      $this->errorParams,
-			                      $params);
-			
-			$descriptionElements[] =
-				array('div',
-				      array('class' => 'Error'),
-				      array(array('div',
-				                  array('class' => 'Details'),
-				                  array(array('span',
-				                              array('class' => 'Type'),
-				                              $this->getTypeString(
-					                              $params['type'])),
-				                        array('span',
-				                              array('class' => 'File'),
-				                              $params['file']),
-				                        array('span',
-				                              array('class' => 'Line'),
-				                              $params['line']))),
-				            array('p',
-				                  array('class' => 'Message'),
-				                  $params['message'])));
+			throw new LogicException('needs data');
 		}
-
+		
+		$error = array_merge(array('file'    => $this->unknown,
+		                           'line'    => $this->unknown,
+		                           'message' => $this->unknown,
+		                           'type'    => $this->unknown),
+		                     $this->data->getRecord());
+			
 		return array(
 			'div',
-			array('class' => 'Message_Box System'),
+			array('class' => 'Error'),
 			array(array('div',
-			            array('class' => 'Title'),
-			            'Error'),
-			      array('div',
-			            array('class' => 'Description'),
-			            $descriptionElements)));
+			            array('class' => 'Details'),
+			            array(array('span',
+			                        array('class' => 'Type'),
+			                        $this->getTypeString($error['type'])),
+			                  array('span',
+			                        array('class' => 'File'),
+			                        $error['file']),
+			                  array('span',
+			                        array('class' => 'Line'),
+			                        $error['line']))),
+			      array('p',
+			            array('class' => 'Message'),
+			            $error['message'])));
 	}
-
+	
 	/*******************/
 	/* Private Methods */
 	/*******************/
@@ -134,7 +111,7 @@ class Error implements ViewIface
 			return $errorMap[$number];
 		}
 		                  
-		return 'UNKNOWN';
+		return $this->unknown;
 	}
 }
 // EOF
