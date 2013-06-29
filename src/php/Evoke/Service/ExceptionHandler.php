@@ -6,9 +6,10 @@
  */
 namespace Evoke\Service;
 
-use Evoke\HTTP\ResponseIface,
+use Evoke\Netowrk\HTTP\ResponseIface,
 	Evoke\View\ExceptionIface as ViewExceptionIface,
-	Evoke\Writer\WriterIface;
+	Evoke\Writer\PageIface,
+	InvalidArgumentException;
 
 /**
  * Exception Handler
@@ -28,21 +29,21 @@ class ExceptionHandler
 	 * @var bool               $showException Whether to display the exception.
 	 * @var ResponseIface      $response      Response object.
 	 * @var ViewExceptionIface $view          Exception view.
-	 * @var WriterIface        $writer        Writer object.
+	 * @var PageIface          $writer        Page Writer.
 	 */
 	protected $response, $showException, $writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param ResponseIface Response object.
-	 * @param bool          Whether to show the exception.
-	 * @param WriterIface   Writer object.
+	 * @param ResponseIface      Response object.
+	 * @param bool               Whether to show the exception.
+	 * @param PageIface          Page Writer object.
 	 * @param ViewExceptionIface View of the exception (if shown).
 	 */
 	public function __construct(ResponseIface $response,
 	                            /* Bool */    $showException,
-	                            WriterIface   $writer,
+	                            PageIface     $writer,
 	                            ViewException $viewException = NULL)
 	{
 		if ($showException && !isset($viewException))
@@ -51,8 +52,8 @@ class ExceptionHandler
 				'needs Exception view if we are showing the exception.');
 		}
 		
-		$this->showException = $showException;
 		$this->response      = $response;
+		$this->showException = $showException;
 		$this->viewException = $viewException;
 		$this->writer        = $writer;
 	}
@@ -74,12 +75,6 @@ class ExceptionHandler
 	public function handler(\Exception $uncaughtException)
 	{
 		trigger_error($uncaughtException->getMessage(), E_USER_ERROR);
-
-		if (!headers_sent())
-		{
-			header('HTTP/1.1 500 Internal Server Error');
-		}
-
 		$currentBuffer = (string)($this->writer);
 		
 		if (!empty($currentBuffer))
@@ -101,7 +96,7 @@ class ExceptionHandler
 			      array('class' => 'Description'),
 			      'The administrator has been notified.'));
 
-		if ($this->displayException)
+		if ($this->showException)
 		{
 			$this->viewException->setException($uncaughtException);
 			$messageBoxElements[] = $this->viewException->get();
@@ -112,30 +107,10 @@ class ExceptionHandler
 			      array('class' => 'Message_Box System Exception'),
 			      $messageBoxElements));
 		$this->writer->writeEnd();
-
+		
 		$this->response->setStatus(500);
-		$this->response->setBody($this->writer);
+		$this->response->setBody((string)$this->writer);
 		$this->response->send();
-	}
-
-	/**
-	 * Register the exception handler.
-	 *
-	 * @return mixed NULL or the previously defined exception handler function.
-	 */
-	public function register()
-	{
-		return set_exception_handler(array($this, 'handler'));
-	}
-
-	/**
-	 * Unregister the exception handler.
-	 *
-	 * @return bool TRUE (as per restore_exception_handler()).
-	 */
-	public function unregister()
-	{
-		return restore_exception_handler();
 	}
 }
 // EOF
