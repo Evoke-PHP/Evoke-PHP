@@ -7,6 +7,7 @@
 namespace Evoke\Service;
 
 use Evoke\HTTP\ResponseIface,
+	Evoke\View\ExceptionIface as ViewExceptionIface,
 	Evoke\Writer\WriterIface;
 
 /**
@@ -24,37 +25,36 @@ class ExceptionHandler
 	/**
 	 * Properties for the Exception Handler.
 	 *
-	 * @var bool          $messageFullInsecure
-	 * Whether to display a detailed insecure message.
-	 *
-	 * @var int           $messageLengthMax
-	 * The maximum length of exception message to display.
-	 *
-	 * @var ResponseIface $response
-	 * Response object.
-	 *
-	 * @var WriterIface   $writer
-	 * Writer object.
+	 * @var bool               $showException Whether to display the exception.
+	 * @var ResponseIface      $response      Response object.
+	 * @var ViewExceptionIface $view          Exception view.
+	 * @var WriterIface        $writer        Writer object.
 	 */
-	protected $messageFullInsecure, $messageLengthMax, $response, $writer;
+	protected $response, $showException, $writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param bool          Whether to show a detailed insecure message.
-	 * @param int           Maximum length of exception message to show.
 	 * @param ResponseIface Response object.
+	 * @param bool          Whether to show the exception.
 	 * @param WriterIface   Writer object.
+	 * @param ViewExceptionIface View of the exception (if shown).
 	 */
-	public function __construct(/* Bool */    $messageFullInsecure,
-	                            /* Int  */    $messageLengthMax,
-	                            ResponseIface $response,
-	                            WriterIface   $writer)
+	public function __construct(ResponseIface $response,
+	                            /* Bool */    $showException,
+	                            WriterIface   $writer,
+	                            ViewException $viewException = NULL)
 	{
-		$this->messageFullInsecure = $messageFullInsecure;
-		$this->messageLengthMax    = $messageLengthMax;
-		$this->response            = $response;
-		$this->writer              = $writer;
+		if ($showException && !isset($viewException))
+		{
+			throw new InvalidArgumentException(
+				'needs Exception view if we are showing the exception.');
+		}
+		
+		$this->showException = $showException;
+		$this->response      = $response;
+		$this->viewException = $viewException;
+		$this->writer        = $writer;
 	}
    
 	/******************/
@@ -91,42 +91,26 @@ class ExceptionHandler
 			$this->writer->flush();
 		}
 
-		$messageBoxElements = array(
-			array('div', array('class' => 'Title'), 'System Error'),
-			array('div',
-			      array('class' => 'Message'),
-			      'The administrator has been notified.'));
-		
-		// Provide extended details for development servers.
-		if ($this->messageFullInsecure)
-		{
-			$exceptionMessage = (string)($uncaughtException);
-
-			// If the exception is huge, only include the start and end on
-			// screen.
-			if ($this->messageLengthMax > 0 &&
-			    mb_strlen($exceptionMessage) > $this->messageLengthMax)
-			{
-				$halfMessage = $this->messageLengthMax / 2;
-				$exceptionMessage =
-					mb_substr($exceptionMessage, 0, $halfMessage) . "\n\n" .
-					'<<< OUTPUT CUT HERE SEE LOG FOR FULL DETAILS >>>' .
-					"\n\n" . mb_substr($exceptionMessage, -$halfMessage);
-			}
-
-			$description .= "\n\n" . $exceptionMessage;
-			$messageBoxElements[] =
-				array('p', array('class' => 'Description'), $description);
-		}
-
 		$this->writer->writeStart(
 			array('CSS'   => array('/csslib/global.css'),
 			      'Title' => '500 Internal Server Error'));
 
+		$messageBoxElements = array(
+			array('div', array('class' => 'Title'), 'System Error'),
+			array('div',
+			      array('class' => 'Description'),
+			      'The administrator has been notified.'));
+
+		if ($this->displayException)
+		{
+			$this->viewException->setException($uncaughtException);
+			$messageBoxElements[] = $this->viewException->get();
+		}
 		
-		$this->writer->write(array('div',
-		                           array('class' => 'Message_Box System'),
-		                           $messageBoxElements));
+		$this->writer->write(
+			array('div',
+			      array('class' => 'Message_Box System Exception'),
+			      $messageBoxElements));
 		$this->writer->writeEnd();
 
 		$this->response->setStatus(500);
