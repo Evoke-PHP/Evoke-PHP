@@ -1,13 +1,13 @@
 <?php
 /**
- * HTTP URI Trim Rule
+ * URI Trim Rule
  *
  * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Trim Rule
+ * URI Trim Rule
  *
  * A rule to trim characters from the URI.
  *

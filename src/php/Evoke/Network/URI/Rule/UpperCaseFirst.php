@@ -1,13 +1,13 @@
 <?php
 /**
- * HTTP URI Uppercase First Rule
+ * URI Uppercase First Rule
  *
  * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Uppercase First Rule
+ * URI Uppercase First Rule
  *
  * A rule to convert the first letter of each word to upper case.
  * No parameters are matched by this class.

@@ -1,13 +1,13 @@
 <?php
 /**
- * HTTP URI String Replace Rule
+ * URI String Replace Rule
  *
  * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI String Replace Rule
+ * URI String Replace Rule
  *
  * A rule to change strings from the URI so that a controller can be formed.
  * No parameters are matched by this class.

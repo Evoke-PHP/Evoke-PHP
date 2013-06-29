@@ -1,13 +1,13 @@
 <?php
 /**
- * HTTP URI Rule Interface
+ * URI Rule Interface
  *
  * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
 /**
- * HTTP URI Rule Interface
+ * URI Rule Interface
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
