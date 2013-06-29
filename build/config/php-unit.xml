@@ -13,9 +13,6 @@
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">../../src/php</directory>
-	  <exclude>
-        <file>../../src/php/Evoke/Service/Authentication.php</file>
-	  </exclude>
     </whitelist>
   </filter>
   
