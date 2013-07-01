@@ -4,11 +4,20 @@ namespace Evoke_Test\Service;
 use Evoke\Service\ExceptionHandler,
     PHPUnit_Framework_TestCase;
 
-/**
- *  @covers Evoke\Service\ExceptionHandler
- */
 class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 {
+	/******************/
+	/* Data Providers */
+	/******************/
+
+	public function providerConditions()
+	{
+		return ['NoFlush_NoShow' => [FALSE, FALSE],
+		        'NoFlush_DoShow' => [FALSE, TRUE],
+		        'DoFlush_NoSHow' => [TRUE, FALSE],
+		        'DoFlush_DoShow' => [TRUE, TRUE]];
+	}
+	
 	/*********/
 	/* Tests */
 	/*********/
@@ -25,6 +34,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
+			$this->getMock('Evoke\View\MessageBoxIface'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 	}
 
@@ -38,6 +48,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
+			$this->getMock('Evoke\View\MessageBoxIface'),
 			$this->getMock('Evoke\Writer\WriterIface'),
 			$this->getMock('Evoke\View\ExceptionIface'));
 
@@ -54,6 +65,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			FALSE,
+			$this->getMock('Evoke\View\MessageBoxIface'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 
 		$this->assertInstanceOf('Evoke\Service\ExceptionHandler', $object);
@@ -63,10 +75,12 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 	 * The handler can respond to an exception even if the writer isn't empty.
 	 *
 	 * @covers Evoke\Service\ExceptionHandler::handler
+	 * @dataProvider providerConditions
 	 */
-	public function testReponseWithFlush()
+	public function testReponse(/* Bool */ $requiresFlush,
+	                            /* Bool */ $showException)
 	{
-		$this->doTestResponse(true);
+		$this->doTestResponse($requiresFlush, $showException);
 	}
 
 	/**
@@ -83,7 +97,8 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 	/* Private Methods */
 	/*******************/
 
-	private function doTestResponse(/* Bool */ $withFlush)
+	private function doTestResponse(/* Bool */ $requiresFlush,
+	                                /* Bool */ $showException)
 	{
 		$exception = new \Exception('This is it.');
 		
@@ -104,7 +119,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$writerIndex = 0;
 		$writer = $this->getMock('Evoke\Writer\PageIface');
 
-		if ($withFlush)
+		if ($requiresFlush)
 		{
 			$writer
 				->expects($this->at($writerIndex++))
@@ -130,14 +145,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('write')
-			->with(['div',
-			        ['class' => 'Message_Box System Exception'],
-			        [
-				        ['div', ['class' => 'Title'], 'System Error'],
-				        ['div',
-				         ['class' => 'Description'],
-				         'The administrator has been notified.'],
-				        ['div', [], 'View Element']]]);
+			->with(['div', [], 'MBOX is the big wig.']);
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('writeEnd');
@@ -146,19 +154,58 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 			->method('__toString')
 			->with()
 			->will($this->returnValue('whatever the writer says goes.'));
+ 
 		
-		$viewIndex = 0;
-		$view = $this->getMock('Evoke\View\ExceptionIface');
-		$view
-			->expects($this->at($viewIndex++))
-			->method('setException')
-			->with($exception);
-		$view
-			->expects($this->at($viewIndex++))
-			->method('get')
-			->will($this->returnValue(['div', [], 'View Element']));
+		$viewExceptionIndex = 0;
+		$viewException = $this->getMock('Evoke\View\ExceptionIface');
 
-		$object = new ExceptionHandler($response, TRUE, $writer, $view);
+		if ($showException)
+		{
+			$viewException
+				->expects($this->at($viewExceptionIndex++))
+				->method('setException')
+				->with($exception);
+			$viewException
+				->expects($this->at($viewExceptionIndex++))
+				->method('get')
+				->will($this->returnValue(
+					       ['div', [], 'Exception View Element']));
+		}
+		else
+		{
+			$viewException
+				->expects($this->never())
+				->method('setException');
+			$viewException
+				->expects($this->never())
+				->method('get');
+		}
+
+		$viewMessageBoxIndex = 0;
+		$viewMessageBox = $this->getMock('Evoke\View\MessageBoxIface');
+		$viewMessageBox
+			->expects($this->at($viewMessageBoxIndex++))
+			->method('addContent')
+			->with(['div',
+			        ['class' => 'Description'],
+			        'The administrator has been notified.']);
+
+		if ($showException)
+		{
+			$viewMessageBox
+				->expects($this->at($viewMessageBoxIndex++))
+				->method('addContent')
+				->with(['div', [], 'Exception View Element']);
+		}
+
+		$viewMessageBox
+			->expects($this->at($viewMessageBoxIndex++))
+			->method('get')
+			->will($this->returnValue(['div', [], 'MBOX is the big wig.']));
+		
+		$object = new ExceptionHandler(
+			$response, $showException, $viewMessageBox, $writer,
+			$viewException);
 		$object->handler($exception);
 	}
 }

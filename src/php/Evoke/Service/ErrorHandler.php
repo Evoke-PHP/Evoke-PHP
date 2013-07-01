@@ -26,13 +26,25 @@ class ErrorHandler
 	protected $logging;
 
 	/**
+	 * Whether to stop the standard error handler from running after
+	 * handling the error here.
+	 * @var bool
+	 */
+	protected $suppressErrorHandler;
+		
+	/**
 	 * Construct a system error handler.
 	 *
 	 * @param LoggingIface Logging object.
+	 * @param bool         Whether to stop the standard error handler from
+	 *                     running after handling the error here.
 	 */
-	public function __construct(LoggingIface $logging)
+	public function __construct(
+		LoggingIface $logging,
+		/* Bool */   $suppressErrorHandler = false)
 	{
-		$this->logging = $logging;
+		$this->suppressErrorHandler = $suppressErrorHandler;
+		$this->logging              = $logging;
 	}
 	
 	/******************/
@@ -82,30 +94,9 @@ class ErrorHandler
 			throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
 		}
 		
-		// Allow PHP to perform its normal reporting of errors.  We have
-		// augmented it with our own logging of the error.
-		return false;
+		// The return value determines whether the standard error handler is
+		// suppressed or not.
+		return $this->suppressErrorHandler;
 	}
-
-	/**
-	 * Register the error handler.
-	 *
-	 * @return string|null The previously defined error handler as a string (or
-	 *                     null if there is no previous).
-	 */
-	public function register()
-	{
-		return set_error_handler(array($this, 'handler'));
-	}
-
-	/**
-	 * Unregister the error handler.
-	 *
-	 * @return bool TRUE (as per restore_error_handler()).
-	 */
-	public function unregister()
-	{
-		return restore_error_handler();
-	}	
 }
 // EOF

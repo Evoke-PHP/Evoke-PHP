@@ -26,7 +26,7 @@ class Logging implements LoggingIface
 
 	/**
 	 * The Logging objects that are observing the log messages.
-	 * @var Evoke\Service\Log\LoggerIface
+	 * @var LoggerIface[]
 	 */
 	protected $observers = array();
 
@@ -103,12 +103,6 @@ class Logging implements LoggingIface
 		}
 		
 		$this->dateTime->setTimestamp(time());
-
-		if (empty($this->observers))
-		{
-			error_log(__METHOD__ . ' no log observers!  Message: ' . $message .
-			          ' level: ' . $level);
-		}
 		
 		foreach ($this->observers as $observer)
 		{

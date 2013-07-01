@@ -67,16 +67,16 @@ class ShutdownHandler
 	 * @param ResponseIface   Response object.
 	 * @param bool            Whether to show the error (You might not want to
 	 *                        do this for security reasons).
-	 * @param ErrorIface      View for the error.
 	 * @param MessageBoxIface View for the message box.
 	 * @param WriterIface     The writer object to write the fatal message.
+	 * @param ErrorIface      View for the error.
 	 */
 	public function __construct(/* String */    $email,
 	                            ResponseIface   $response,
 	                            /* Bool   */    $showError,
-	                            ErrorIface      $viewError,
 	                            MessageBoxIface $viewMessageBox,
-	                            WriterIface     $writer)
+	                            WriterIface     $writer,
+	                            ErrorIface      $viewError = NULL)
 	{
 		$this->email          = $email;
 		$this->response       = $response;
@@ -97,11 +97,11 @@ class ShutdownHandler
 	{
 		$err = error_get_last();
 
- 
-		if (!isset($err) ||
-		    !in_array($err, array(E_USER_ERROR, E_ERROR, E_PARSE,
-		                          E_CORE_ERROR, E_CORE_WARNING,
-		                          E_COMPILE_ERROR, E_COMPILE_WARNING)))
+		if (!isset($err['type']) ||
+		    !in_array($err['type'],
+		              array(E_USER_ERROR, E_ERROR, E_PARSE,
+		                    E_CORE_ERROR, E_CORE_WARNING,
+		                    E_COMPILE_ERROR, E_COMPILE_WARNING)))
 		{
 			return;
 		}
@@ -115,7 +115,7 @@ class ShutdownHandler
 			      'error in the future.  Useful information such as the ' .
 			      'date, time and what you were doing when the error ' .
 			      'occurred should help us fix this.'));
-		
+
 		if (!empty($this->email))
 		{
 			$this->viewMessageBox->addContent(
@@ -129,22 +129,12 @@ class ShutdownHandler
 			$this->viewError->setError($err);
 			$this->viewMessageBox->addContent($this->viewError->get());
 		}
-
 		
 		$this->writer->write($this->viewMessageBox->get());
-		$this->writer->writeEnd();
 
 		$this->response->setStatus(500);
 		$this->response->setBody((string)$this->writer);
 		$this->response->send();
-	}
-
-	/**
-	 * Register the shutdown handler.
-	 */
-	public function register()
-	{
-		register_shutdown_function(array($this, 'handler'));
 	}
 }
 // EOF

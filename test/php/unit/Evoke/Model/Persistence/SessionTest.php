@@ -125,6 +125,10 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	{
 		unset($_SESSION);
 	}
+
+	/*********/
+	/* Tests */
+	/*********/
 	
     /**
      * Ensure that before a session is created that $_SESSION does
