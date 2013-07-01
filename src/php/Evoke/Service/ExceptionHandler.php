@@ -26,25 +26,28 @@ class ExceptionHandler
 	/**
 	 * Properties for the Exception Handler.
 	 *
-	 * @var bool               $showException Whether to display the exception.
-	 * @var ResponseIface      $response      Response object.
-	 * @var ViewExceptionIface $view          Exception view.
-	 * @var PageIface          $writer        Page Writer.
+	 * @var bool            $showException  Whether to display the exception.
+	 * @var ResponseIface   $response       Response object.
+	 * @var ExceptionIface  $viewException  Exception view.
+	 * @var MessageBoxIface $viewMessageBox MessageBox view.
+	 * @var PageIface       $writer         Page Writer.
 	 */
-	protected $response, $showException, $writer;
+	protected $response, $showException, $viewException, $viewMessageBox, $writer;
 
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param ResponseIface      Response object.
-	 * @param bool               Whether to show the exception.
-	 * @param PageIface          Page Writer object.
-	 * @param ViewExceptionIface View of the exception (if shown).
+	 * @param ResponseIface   Response object.
+	 * @param bool            Whether to show the exception.
+	 * @param MessageBoxIface MessageBox view.
+	 * @param PageIface       Page Writer object.
+	 * @param ExceptionIface  View of the exception (if shown).
 	 */
-	public function __construct(ResponseIface $response,
-	                            /* Bool */    $showException,
-	                            PageIface     $writer,
-	                            ViewException $viewException = NULL)
+	public function __construct(ResponseIface   $response,
+	                            /* Bool */      $showException,
+	                            MessageBoxIface $viewMessageBox,
+	                            PageIface       $writer,
+	                            ExceptionIface  $viewException = NULL)
 	{
 		if ($showException && !isset($viewException))
 		{
@@ -52,10 +55,11 @@ class ExceptionHandler
 				'needs Exception view if we are showing the exception.');
 		}
 		
-		$this->response      = $response;
-		$this->showException = $showException;
-		$this->viewException = $viewException;
-		$this->writer        = $writer;
+		$this->response       = $response;
+		$this->showException  = $showException;
+		$this->viewException  = $viewException;
+		$this->viewMessageBox = $viewMessageBox;
+		$this->writer         = $writer;
 	}
    
 	/******************/
@@ -86,12 +90,7 @@ class ExceptionHandler
 			$this->writer->flush();
 		}
 
-		$this->writer->writeStart(
-			array('CSS'   => array('/csslib/global.css'),
-			      'Title' => '500 Internal Server Error'));
-
-		$messageBoxElements = array(
-			array('div', array('class' => 'Title'), 'System Error'),
+		$this->viewMessageBox->addContent(
 			array('div',
 			      array('class' => 'Description'),
 			      'The administrator has been notified.'));
@@ -99,13 +98,13 @@ class ExceptionHandler
 		if ($this->showException)
 		{
 			$this->viewException->setException($uncaughtException);
-			$messageBoxElements[] = $this->viewException->get();
+			$this->viewMessageBox->addContent($this->viewException->get());
 		}
 		
-		$this->writer->write(
-			array('div',
-			      array('class' => 'Message_Box System Exception'),
-			      $messageBoxElements));
+		$this->writer->writeStart(
+			array('CSS'   => array('/csslib/global.css'),
+			      'Title' => '500 Internal Server Error'));
+		$this->writer->write($this->viewMessageBox->get());
 		$this->writer->writeEnd();
 		
 		$this->response->setStatus(500);

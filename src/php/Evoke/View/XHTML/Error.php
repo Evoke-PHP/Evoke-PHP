@@ -6,7 +6,8 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\Data;
+use Evoke\View\ErrorIface,
+	LogicException;
 
 /**
  * Error View
@@ -16,7 +17,7 @@ use Evoke\View\Data;
  * @license   MIT
  * @package   View\XHTML
  */
-class Error extends Data
+class Error implements ErrorIface
 {
 	/**
 	 * Protected Properties.
@@ -47,16 +48,16 @@ class Error extends Data
 	 */	
 	public function get()
 	{
-		if (!isset($this->data))
+		if (!isset($this->error))
 		{
-			throw new LogicException('needs data');
+			throw new LogicException('needs error');
 		}
 		
 		$error = array_merge(array('file'    => $this->unknown,
 		                           'line'    => $this->unknown,
 		                           'message' => $this->unknown,
 		                           'type'    => $this->unknown),
-		                     $this->data->getRecord());
+		                     $this->error);
 			
 		return array(
 			'div',
@@ -75,6 +76,16 @@ class Error extends Data
 			      array('p',
 			            array('class' => 'Message'),
 			            $error['message'])));
+	}
+
+	/**
+	 * Set the error for the view.
+	 *
+	 * @param mixed[] Error.
+	 */
+	public function setError(Array $error)
+	{
+		$this->error = $error;
 	}
 	
 	/*******************/

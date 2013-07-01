@@ -6,9 +6,6 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\Data,
-	LogicException;
-
 /**
  * Message Box View
  *
@@ -17,14 +14,17 @@ use Evoke\View\Data,
  * @license   MIT
  * @package   View\XHTML
  */
-class MessageBox extends Data
+class MessageBox
 {
 	/**
-	 * Message Box attributes.
-	 * @var mixed[]
+	 * Protected properties.
+	 *
+	 * @var mixed[] $attribs  Attributes.
+	 * @var mixed[] $elements Content elements.
+	 * @var string  $title    Title.
 	 */
-	protected $attribs;
-
+	protected $attribs, $contentElements, $title;
+	
 	/**
 	 * Construct a Box object.
 	 *
@@ -33,7 +33,9 @@ class MessageBox extends Data
 	public function __construct(
 		Array $attribs = array('class' => 'Message_Box Info'))
 	{
-		$this->attribs = $attribs;
+		$this->attribs  = $attribs;
+		$this->elements = array();
+		$this->title    = 'Message Box';
 	}
 
 	/******************/
@@ -41,23 +43,37 @@ class MessageBox extends Data
 	/******************/
 
 	/**
+	 * Add a content element to the message box.
+	 *
+	 * @param mixed Message box element.
+	 */
+	public function addContent($element)
+	{
+		$this->contentElements[] = $element;
+	}
+	
+	/**
 	 * Get the output for the view.
+	 *
+	 * @return mixed[] Output of the view.
 	 */
 	public function get()
 	{
-		if (!isset($this->data['Description'], $this->data['Title']))
-		{
-			throw new LogicException('needs Data with Description and Title');
-		}
-      
-		return array('div',
-		             $this->attribs,
-		             array(array('div',
-		                         array('class' => 'Title'),
-		                         $this->data['Title']),
-		                   array('div',
-		                         array('class' => 'Description'),
-		                         $this->data['Description'])));
+		return array(
+			'div',
+			$this->attribs,
+			array(array('div', array('class' => 'Title'), $this->title),
+			      array('div', array('class' => 'Content'), $this->elements)));
+	}
+	
+	/**
+	 * Set the title for the message box.
+	 *
+	 * @param string Title of the message box.
+	 */
+	public function setTitle(/* String */ $title)
+	{
+		$this->title = $title;
 	}
 }
 // EOF

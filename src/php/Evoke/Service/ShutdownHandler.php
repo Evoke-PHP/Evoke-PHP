@@ -6,7 +6,9 @@
  */
 namespace Evoke\Service;
 
-use Evoke\HTTP\ResponseIface,
+use Evoke\Network\HTTP\ResponseIface,
+	Evoke\View\ErrorIface,
+	Evoke\View\MessageBoxIface,
 	Evoke\Writer\WriterIface;
 
 /**
@@ -23,23 +25,35 @@ class ShutdownHandler
 {
 	
 	/** 
-	 * The administrator's email address.
+	 * Email address to be listed as a contact, or empty for no-one.
 	 * @var string
 	 */
-	protected $administratorEmail;
+	protected $email;
 	
-	/**
-	 * Whether to display a detailed insecure message.
-	 * @var bool
-	 */
-	protected $messageFullInsecure;
-		
 	/**
 	 * Response object.
 	 * @var ResponseIface
 	 */
 	protected $response;
-		
+
+	/**
+	 * Whether to show the error.
+	 * @var bool
+	 */
+	protected $showError;
+
+	/**
+	 * Error view.
+	 * @var ErrorIface
+	 */
+	protected $viewError;
+
+	/**
+	 * MessageBox view.
+	 * @var MessageBoxIface
+	 */
+	protected $viewMessageBox;
+	
 	/**
 	 * Writer object.
 	 * @var WriterIface
@@ -49,21 +63,27 @@ class ShutdownHandler
 	/**
 	 * Construct the System Shutdown handler.
 	 *
-	 * @param string        Administrators Email to use as a contact.
-	 * @param bool          Whether to show detailed logging information (which
-	 *                      is insecure).
-	 * @param ResponseIface Response object.
-	 * @param WriterIface   The writer object to write the fatal message.
+	 * @param string          Email to use as a contact.
+	 * @param ResponseIface   Response object.
+	 * @param bool            Whether to show the error (You might not want to
+	 *                        do this for security reasons).
+	 * @param ErrorIface      View for the error.
+	 * @param MessageBoxIface View for the message box.
+	 * @param WriterIface     The writer object to write the fatal message.
 	 */
-	public function __construct(/* String */  $administratorEmail,
-	                            /* Bool   */  $messageFullInsecure,
-	                            ResponseIface $response,
-	                            WriterIface   $writer)
+	public function __construct(/* String */    $email,
+	                            ResponseIface   $response,
+	                            /* Bool   */    $showError,
+	                            ErrorIface      $viewError,
+	                            MessageBoxIface $viewMessageBox,
+	                            WriterIface     $writer)
 	{
-		$this->administratorEmail  = $administratorEmail;
-		$this->messageFullInsecure = $messageFullInsecure;
-		$this->response            = $response;
-		$this->writer              = $writer;
+		$this->email          = $email;
+		$this->response       = $response;
+		$this->showError      = $showError;
+		$this->viewError      = $viewError;
+		$this->viewMessageBox = $viewMessageBox;
+		$this->writer         = $writer;
 	}
 
 	/******************/
@@ -77,60 +97,45 @@ class ShutdownHandler
 	{
 		$err = error_get_last();
 
-		if (!isset($err))
+ 
+		if (!isset($err) ||
+		    !in_array($err, array(E_USER_ERROR, E_ERROR, E_PARSE,
+		                          E_CORE_ERROR, E_CORE_WARNING,
+		                          E_COMPILE_ERROR, E_COMPILE_WARNING)))
 		{
 			return;
 		}
 
-		$handledErrorTypes = array(
-			E_USER_ERROR      => 'USER ERROR',
-			E_ERROR           => 'ERROR',
-			E_PARSE           => 'PARSE',
-			E_CORE_ERROR      => 'CORE_ERROR',
-			E_CORE_WARNING    => 'CORE_WARNING',
-			E_COMPILE_ERROR   => 'COMPILE_ERROR',
-			E_COMPILE_WARNING => 'COMPILE_WARNING');
+		$this->viewMessageBox->setTitle('Fatal Error');
+		$this->viewMessageBox->addContent(
+			array('p',
+			      array('class' => 'Description'),
+			      'This is an error that we were unable to handle.  Please ' .
+			      'tell us any information that could help us avoid this ' .
+			      'error in the future.  Useful information such as the ' .
+			      'date, time and what you were doing when the error ' .
+			      'occurred should help us fix this.'));
 		
-		if (!isset($handledErrorTypes[$err['type']]))
+		if (!empty($this->email))
 		{
-			return;
+			$this->viewMessageBox->addContent(
+				array('div',
+				      array('class' => 'Contact'),
+				      'Contact: ' . $this->email));
+		}
+ 
+		if ($this->showError)
+		{
+			$this->viewError->setError($err);
+			$this->viewMessageBox->addContent($this->viewError->get());
 		}
 
-		if (!headers_sent())
-		{
-			header('HTTP/1.1 500 Internal Server Error');
-		}
-      
-		$title = 'Fatal Error';
-		$message = 'This is an error that we were unable to handle.  Please ' .
-			'tell us any information that could help us avoid this error in ' .
-			'the future.  Useful information such as the date, time and what ' .
-			'you were doing when the error occurred should help us fix this.';
-
-		if (!empty($this->administratorEmail))
-		{
-			$message .= "<br/>\n<br/>\n" .
-				'Email us at ' . $this->administratorEmail;
-		}
-      
-		if ($this->messageFullInsecure)
-		{
-			$message .= "<br/>\n<br/>\n" .
-				'PHP [' . $handledErrorTypes[$err['type']] . '] ' .
-				$err['message'] . "<br/>\n" .
-				' in file ' . $err['file'] . ' at ' . $err['line'];
-		}
-
-		$this->writer->write(
-			array('div',
-			      array('class' => 'Shutdown_Handler Message_Box System'),
-			      array(array('div', array('class' => 'Title'),       $title),
-			            array('div', array('class' => 'Description'), $message)
-				      )));
+		
+		$this->writer->write($this->viewMessageBox->get());
 		$this->writer->writeEnd();
 
 		$this->response->setStatus(500);
-		$this->response->setBody($this->writer);
+		$this->response->setBody((string)$this->writer);
 		$this->response->send();
 	}
 
