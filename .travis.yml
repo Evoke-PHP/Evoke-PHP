@@ -3,5 +3,4 @@ php:
   - "5.5"
   - "5.4"
   - "5.3"
-script: phpunit --configuration ./build/config/php-unit.xml \
-                --bootstrap test/php/environment/Bootstrap.php
+script: phpunit --configuration ./build/config/php-unit.xml --bootstrap ./test/php/environment/Bootstrap.php
