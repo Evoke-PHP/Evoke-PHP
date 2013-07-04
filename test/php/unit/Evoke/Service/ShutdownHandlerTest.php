@@ -45,7 +45,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	{
 		// Set an error handler to allow an appropriate error to be injected
 		// so that we can test the shutdown handler.
-		$x = set_error_handler(
+		set_error_handler(
 			function ($errNo, $errStr) {
 				return true;
 			});
@@ -80,15 +80,16 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	{
 		// Set an error handler to allow an appropriate error to be injected
 		// so that we can test the shutdown handler.
-		$x = set_error_handler(
+		set_error_handler(
 			function ($errNo, $errStr) {
 				return true;
 			});
 
 		// Inject a parse error E_PARSE.
+		error_reporting(0);
 		eval('$generateParseError =();');
-		restore_error_handler();
-
+		error_reporting(-1);
+		
 		$responseIndex = 0;
 		$response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
 		$response
@@ -159,6 +160,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 			'mail@example.com', $response, TRUE, $viewMessageBox, $writer,
 			$viewError);
 		$object->handler();
+
+		trigger_error('Don\'t leave a E_PARSE as the last error.',
+		              E_USER_WARNING);
+		restore_error_handler();
 	}
 }
 // EOF

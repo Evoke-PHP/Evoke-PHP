@@ -47,7 +47,7 @@ class VarExport extends Data
 	 *
 	 * @param mixed Var to export.
 	 */
-	protected function setVar($var)
+	public function setVar($var)
 	{
 		$this->var = $var;
 	}

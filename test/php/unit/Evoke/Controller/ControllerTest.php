@@ -6,9 +6,6 @@ use Evoke\Controller\Controller,
 
 /**
  * Test the base controller (and the abstract parts of it).
- *
- * @covers Evoke\Controller\Controller
- * @covers Evoke\Controller\ControllerAbstract
  */
 class ControllerTest extends PHPUnit_Framework_TestCase
 {	
@@ -20,6 +17,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	 * Test the construction of a controller.
 	 *
 	 * @covers Evoke\Controller\Controller::__construct
+	 * @covers Evoke\Controller\ControllerAbstract::__construct
 	 */
 	public function test__constructGood()
 	{
@@ -32,6 +30,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Test the execution of a page based controller.
+	 *
+	 * @covers Evoke\Controller\Controller::execute
 	 */
 	public function testExecutePageBased()
 	{
@@ -43,8 +43,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 		$mocks['Response']
 			->expects($this->at(0))
-			->method('setBody')
-			->with($mocks['Writer']);
+			->method('setBody');
+		// ->with('Writer Output');
 		$mocks['Response']
 			->expects($this->at(1))
 			->method('send');
@@ -54,24 +54,45 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->method('get')
 			->will($this->returnValue($viewOutput));
 
-		$mocks['Writer']
+		$writer = $this->getMockBuilder('Evoke\Writer\XHTML')
+			->disableOriginalConstructor()
+			->getMock();
+		$writer
 			->expects($this->at($wIndex++))
-			->method('writeStart')
-			->with($pageSetup);
-		$mocks['Writer']
+			->method('writeStart');
+		/*
+			->with($this->equalTo(['CSS'         => [],
+			                       'Description' => '',
+			                       'Keywords'    => '',
+			                       'JS'          => [],
+			                       'Title'       => '']));
+		*/
+			                       
+		/*
+		$writer
 			->expects($this->at($wIndex++))
 			->method('write')
 			->with($viewOutput);
-		$mocks['Writer']
+		$writer
 			->expects($this->at($wIndex++))
-			->method('WriteEnd');
-		
+			->method('writeEnd');
+		$writer
+			->expects($this->at($wIndex++))
+			->method('__toString')
+			->will($this->returnValue('Writer Output'));
+		*/
 		$object = new Controller(
 			$outputFormat, $pageSetup, [], $mocks['Response'],
-			$mocks['Writer'], $mocks['View']);
+			$writer, $mocks['View']);
 		$object->execute();
 	}
-	 
+
+	/**
+	 * We flush a writer if we require a clean writer.
+	 *
+	 * @covers Evoke\Controller\Controller::execute
+	 * @covers Evoke\Controller\ControllerAbstract::requireCleanWriter
+	 */
 	public function testErrorForRequiredClean()
 	{
 		$errorRecord = [];
@@ -132,13 +153,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	
 	private function getMocks()
 	{
-		$writerMock = $this->getMockBuilder('Evoke\Writer\XHTML')
-			->disableOriginalConstructor()
-			->getMock();
-		
 		return [
 			'Response' => $this->getMock('Evoke\Network\HTTP\ResponseIface'),
-			'Writer'   => $writerMock,
+			'Writer'   => $this->getMock('Evoke\Writer\PageIface'),
 			'View'     => $this->getMock('Evoke\View\ViewIface')];
 	}	
 }

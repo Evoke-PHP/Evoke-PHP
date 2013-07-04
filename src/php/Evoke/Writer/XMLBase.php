@@ -74,15 +74,23 @@ abstract class XMLBase implements WriterIface
 	 */
 	public function __toString()
 	{
-		return $this->xmlWriter->outputMemory(false);
+		return $this->xmlWriter->outputMemory(FALSE);
 	}
-   
+
+	/**
+	 * Reset the buffer that we are writing to.
+	 */
+	public function clean()
+	{
+		$this->xmlWriter->outputMemory(TRUE);
+	}
+	
 	/**
 	 * Flush the memory buffer containing the XHTML that has been written.
 	 */
 	public function flush()
 	{
-		$this->xmlWriter->flush();
+		echo $this->xmlWriter->outputMemory(TRUE);
 	}
 	
 	/**

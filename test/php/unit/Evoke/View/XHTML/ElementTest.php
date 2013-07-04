@@ -5,9 +5,6 @@ use Evoke\Model\Data\Flat,
     Evoke\View\XHTML\Element,
 	PHPUnit_Framework_TestCase;
 
-/**
- *  @covers Evoke\View\XHTML\Element
- */
 class ElementTest extends PHPUnit_Framework_TestCase
 { 
 	/**

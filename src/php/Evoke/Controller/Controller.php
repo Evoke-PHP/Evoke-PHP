@@ -76,7 +76,7 @@ class Controller extends ControllerAbstract
 			$this->writer->writeEnd();
 		}
 
-		$this->response->setBody($this->writer);
+		$this->response->setBody((string)$this->writer);
 		$this->response->send();
 	}
 }

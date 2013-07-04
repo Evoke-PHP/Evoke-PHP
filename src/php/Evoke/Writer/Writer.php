@@ -29,10 +29,6 @@ abstract class Writer implements WriterIface
 	{
 		$this->buffer = '';
 	}
-	
-	/******************/
-	/* Public Methods */
-	/******************/
 
 	/**
 	 * Get the string representation of the buffer that we are writing to.
@@ -42,11 +38,24 @@ abstract class Writer implements WriterIface
 		return $this->buffer;
 	}
 
+	/******************/
+	/* Public Methods */
+	/******************/
+
 	/**
 	 * Reset the buffer that we are writing to.
 	 */
+	public function clean()
+	{
+		$this->buffer = '';
+	}
+
+	/**
+	 * Flush the output buffer (send it and then reset).
+	 */
 	public function flush()
 	{
+		echo $this->buffer;
 		$this->buffer = '';
 	}
 		

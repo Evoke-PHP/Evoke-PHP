@@ -26,6 +26,11 @@ interface WriterIface
 	/**
 	 * Reset the buffer that we are writing to.
 	 */
+	public function clean();
+
+	/**
+	 * Flush the output buffer (send it and then reset).
+	 */
 	public function flush();
 	
 	/**

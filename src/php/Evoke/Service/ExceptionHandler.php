@@ -32,7 +32,8 @@ class ExceptionHandler
 	 * @var MessageBoxIface $viewMessageBox MessageBox view.
 	 * @var PageIface       $writer         Page Writer.
 	 */
-	protected $response, $showException, $viewException, $viewMessageBox, $writer;
+	protected $response, $showException, $viewException, $viewMessageBox,
+		$writer;
 
 	/**
 	 * Construct an Exception Handler object.
