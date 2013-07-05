@@ -21,6 +21,16 @@ class Text extends Writer
 	/******************/
 	/* Public Methods */
 	/******************/
+
+	/**
+	 * Whether the writer is page based or not.
+	 *
+	 * @return bool Whether the writer is page based.
+	 */
+	public function isPageBased()
+	{
+		return FALSE;
+	}
 	
 	/**
 	 * Write text into the buffer.

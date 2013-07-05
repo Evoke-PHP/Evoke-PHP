@@ -22,9 +22,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	public function test__constructGood()
 	{
 		$mocks = $this->getMocks();
-		$object = new Controller('', [], [], $mocks['Response'],
-		                         $mocks['Writer'], $mocks['View']);
-
+		$object = new Controller(
+			[], $mocks['Response'], $mocks['Writer'], $mocks['View']);
 		$this->assertInstanceOf('Evoke\Controller\Controller', $object);
 	}
 
@@ -35,40 +34,37 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testExecutePageBased()
 	{
-		$mocks = $this->getMocks();
-		$outputFormat = 'HTML';
-		$pageSetup = [];
 		$viewOutput = ['div', [], 'View Output'];
-		$wIndex = 0;
 
-		$mocks['Response']
-			->expects($this->at(0))
-			->method('setBody');
-		// ->with('Writer Output');
-		$mocks['Response']
-			->expects($this->at(1))
+		$rIndex = 0;
+		$response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
+		$response
+			->expects($this->at($rIndex++))
+			->method('setBody')
+			->with('Writer Output');
+		$response
+			->expects($this->at($rIndex++))
 			->method('send');
 
-		$mocks['View']
+		$view = $this->getMock('Evoke\View\ViewIface');
+		$view
 			->expects($this->at(0))
 			->method('get')
 			->will($this->returnValue($viewOutput));
 
-		$writer = $this->getMockBuilder('Evoke\Writer\XHTML')
-			->disableOriginalConstructor()
-			->getMock();
+		$wIndex = 0;
+		$writer = $this->getMock('Evoke\Writer\PageIface');
+		$writer
+			->expects($this->at($wIndex++))
+			->method('__toString')
+			->will($this->returnValue(''));
+		$writer
+			->expects($this->at($wIndex++))
+			->method('isPageBased')
+			->will($this->returnValue(TRUE));
 		$writer
 			->expects($this->at($wIndex++))
 			->method('writeStart');
-		/*
-			->with($this->equalTo(['CSS'         => [],
-			                       'Description' => '',
-			                       'Keywords'    => '',
-			                       'JS'          => [],
-			                       'Title'       => '']));
-		*/
-			                       
-		/*
 		$writer
 			->expects($this->at($wIndex++))
 			->method('write')
@@ -80,15 +76,13 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->expects($this->at($wIndex++))
 			->method('__toString')
 			->will($this->returnValue('Writer Output'));
-		*/
-		$object = new Controller(
-			$outputFormat, $pageSetup, [], $mocks['Response'],
-			$writer, $mocks['View']);
+
+		$object = new Controller([], $response, $writer, $view);
 		$object->execute();
 	}
 
 	/**
-	 * We flush a writer if we require a clean writer.
+	 * We clean a writer if we require a clean writer.
 	 *
 	 * @covers Evoke\Controller\Controller::execute
 	 * @covers Evoke\Controller\ControllerAbstract::requireCleanWriter
@@ -99,10 +93,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$errorExpected = [
 			'Number'  => E_USER_WARNING,
 			'Message' => 'Writer is required to be clean, found "UNCLEAN ' .
-			'WRITER CONTENT" flushing and continuing.'];
+			'WRITER CONTENT" cleaning and continuing.'];
 		$mocks = $this->getMocks();
-		$outputFormat = 'TEXT';
-		$pageSetup = [];
 		$uncleanContent = 'UNCLEAN WRITER CONTENT';
 		$viewOutput = 'View Output';
 
@@ -119,12 +111,20 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->method('get')
 			->will($this->returnValue($viewOutput));
 
+		$wIndex = 0;
 		$mocks['Writer']
-			->expects($this->at(0))
+			->expects($this->at($wIndex++))
 			->method('__toString')
 			->will($this->returnValue($uncleanContent));
 		$mocks['Writer']
-			->expects($this->at(1))
+			->expects($this->at($wIndex++))
+			->method('clean');
+		$mocks['Writer']
+			->expects($this->at($wIndex++))
+			->method('isPageBased')
+			->will($this->returnValue(FALSE));			          
+		$mocks['Writer']
+			->expects($this->at($wIndex++))
 			->method('write')
 			->with($viewOutput);
 
@@ -137,8 +137,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			});
 		
 		$object = new Controller(
-			$outputFormat, $pageSetup, [], $mocks['Response'],
-			$mocks['Writer'], $mocks['View']);
+			[], $mocks['Response'], $mocks['Writer'], $mocks['View']);
 		$object->execute();
 
 		$this->assertEquals(

@@ -25,41 +25,26 @@ abstract class ControllerAbstract implements ControllerIface
 	/**
 	 * Abstract Controller properties.
 	 *
-	 * @var string        $outputFormat Output format as an upcase string (JSON,
-	 *                                  XHTML, etc.)
-	 * @var mixed[]       $pageSetup    Setup for page based output formats
-	 *                                  (XHTML, HTML5).
-	 * @var mixed[]       $params       Parameters for the controller.
-	 * @var ResponseIface $response     Response object
-	 * @var WriterIface   $writer       Writer object
+	 * @var mixed[]       $params   Parameters for the controller.
+	 * @var ResponseIface $response Response object
+	 * @var WriterIface   $writer   Writer object
 	 */
-	protected $outputFormat, $pageSetup, $params, $response, $writer;
+	protected $params, $response, $writer;
 	
 	/**
 	 * Construct the Controller.
 	 *
-	 * @param string        The output format to use in uppercase.
-	 * @param mixed[]		Setup for page based output formats.
 	 * @param mixed[]		Parameters.
 	 * @param ResponseIface Response.
 	 * @param WriterIface 	Writer.
 	 */
-	public function __construct(/* String */  $outputFormat,
-	                            Array         $pageSetup,
-	                            Array         $params,
+	public function __construct(Array         $params,
 	                            ResponseIface $response,
 	                            WriterIface   $writer)
 	{
-		$this->outputFormat = $outputFormat;
-		$this->pageSetup    = array_merge(array('CSS'         => array(),
-		                                        'Description' => '',
-		                                        'Keywords'    => '',
-		                                        'JS'          => array(),
-		                                        'Title'       => ''),
-		                                  $pageSetup);		
-		$this->params  	    = $params;
-		$this->response	   	= $response;
-		$this->writer  	    = $writer;
+		$this->params   = $params;
+		$this->response	= $response;
+		$this->writer   = $writer;
 	}
 	
 	/******************/
@@ -76,17 +61,6 @@ abstract class ControllerAbstract implements ControllerIface
 	/*********************/
 
 	/**
-	 * Whether the controller is for a page based output.
-	 *
-	 * @return bool Whether the contoller is to produce a page based ouptut.
-	 */
-	protected function isPageBased()
-	{
-		return !in_array(strtolower($this->outputFormat),
-		                 array('text', 'json'));
-	}
-	
-	/**
 	 * Ensure a clean writer, triggering an error if the buffer is not clear.
 	 */
 	protected function requireCleanWriter()
@@ -97,9 +71,9 @@ abstract class ControllerAbstract implements ControllerIface
 		{
 			trigger_error(
 				'Writer is required to be clean, found "' .	$currentBuffer .
-				'" flushing and continuing.',
+				'" cleaning and continuing.',
 				E_USER_WARNING);
-			$this->writer->flush();
+			$this->writer->clean();
 		}
 	}
 }

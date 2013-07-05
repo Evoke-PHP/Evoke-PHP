@@ -19,17 +19,18 @@ use InvalidArgumentException,
  * @license   MIT
  * @package   Writer
  */
-abstract class XMLBase implements WriterIface
+abstract class XMLBase implements PageIface
 {
 	/**
 	 * XML Base Writer Properties
 	 *
+	 * @var string    $docType   Document type.
 	 * @var string    $language  Language of XML being written.
 	 * @var mixed[]   $pos       Position of the tag, attribs and children in
 	 *                           the element.
 	 * @var XMLWriter $xmlWriter XML Writer object.
 	 */
-	protected $language, $pos, $xmlWriter;
+	protected $docType, $language, $pos, $xmlWriter;
 	
 	/**
 	 * Create an abstract XML Writer.
@@ -37,19 +38,18 @@ abstract class XMLBase implements WriterIface
 	 * @param XMLWriter XMLWriter object.
 	 * @param bool      Whether the XML produced should be indented.
 	 * @param string    The string that should be used to indent the XML.
-	 * @param string    The language of the XML we are writing.
-	 * @param mixed[]   The positions of the components within the XML.
+	 * @param int[]     Position of the tag, attribs & children in the element.
 	 */
 	public function __construct(
 		XMLWriter    $xmlWriter,
 		/* Bool */   $indent       = true,
 		/* String */ $indentString = '   ',
-		/* String */ $language     = 'EN',
-		Array        $pos          = array('Attribs'  => 1,
+		/* int[]  */ $pos          = array('Attribs'  => 1,
 		                                   'Children' => 2,
 		                                   'Tag'      => 0))
 	{
-		$this->language   = $language;
+		$this->docType    = 'XHTML_1_1';
+		$this->language   = 'EN';
 		$this->pos        = $pos;
 		$this->xmlWriter  = $xmlWriter;
 
@@ -91,6 +91,36 @@ abstract class XMLBase implements WriterIface
 	public function flush()
 	{
 		echo $this->xmlWriter->outputMemory(TRUE);
+	}
+
+	/**
+	 * Whether the writer is page based or not.
+	 *
+	 * @return bool Whether the writer is page based.
+	 */
+	public function isPageBased()
+	{
+		return TRUE;
+	}
+	
+	/**
+	 * Set the document type.
+	 *
+	 * @param string Document type as used by writeStartDocument.
+	 */
+	public function setDocType($docType)
+	{
+		$this->docType = $docType;
+	}
+
+	/**
+	 * Set the document language attribute.
+	 *
+	 * @param string Language that the document is in.
+	 */
+	public function setLanguage($language)
+	{
+		$this->language = $language;
 	}
 	
 	/**
@@ -191,9 +221,9 @@ abstract class XMLBase implements WriterIface
 	 *
 	 * @param string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
 	 */
-	protected function writeStartDocument($type)
+	protected function writeStartDocument()
 	{
-		switch (strtoupper($type))
+		switch (strtoupper($this->docType))
 		{
 		case 'XHTML5':
 			$this->xmlWriter->startDTD('html');
@@ -205,7 +235,6 @@ abstract class XMLBase implements WriterIface
 			break;
 				
 		case 'XHTML_1_1':
-		default:
 			$this->xmlWriter->startDTD(
 				'html',
 				'-//W3C//DTD XHTML 1.1//EN',
@@ -217,6 +246,11 @@ abstract class XMLBase implements WriterIface
 			$this->xmlWriter->writeAttribute('lang', $this->language);
 			$this->xmlWriter->writeAttribute('xml:lang', $this->language);
 			break;
+			
+		default:
+			trigger_error('Unknown docType: ' . $this->docType .
+			              ' using XHTML_1_1 instead.', E_USER_WARNING);
+			$this->writeStartDocument('XHTML_1_1');
 		}
 	}
 }

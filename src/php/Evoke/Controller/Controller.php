@@ -32,22 +32,17 @@ class Controller extends ControllerAbstract
 	/**
 	 * Construct the Controller.
 	 *
-	 * @param string        The output format to use in uppercase.
-	 * @param mixed[]		Setup for page based output formats.
 	 * @param mixed[]		Parameters.
 	 * @param ResponseIface Response.
 	 * @param WriterIface 	Writer.
 	 * @param ViewIface     View.
 	 */
-	public function __construct(/* String */  $outputFormat,
-	                            Array         $pageSetup,
-	                            Array         $params,
+	public function __construct(Array         $params,
 	                            ResponseIface $response,
 	                            WriterIface   $writer,
 	                            ViewIface     $view)
 	{
-		parent::__construct(
-			$outputFormat, $pageSetup, $params, $response, $writer);
+		parent::__construct($params, $response, $writer);
 
 		$this->view = $view;
 	}
@@ -62,11 +57,11 @@ class Controller extends ControllerAbstract
 	public function execute()
 	{
 		$this->requireCleanWriter();
-		$pageBased = $this->isPageBased();
-
+		$pageBased = $this->writer->isPageBased();
+		
 		if ($pageBased)
 		{
-			$this->writer->writeStart($this->pageSetup);
+			$this->writer->writeStart();
 		}
 
 		$this->writer->write($this->view->get());

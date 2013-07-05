@@ -16,12 +16,76 @@ namespace Evoke\Writer;
  * @license   MIT
  * @package   Writer
  */
-class XHTML extends XMLBase implements PageIface
+class XHTML extends XMLBase
 {
+	/**
+	 * Protected Properties
+	 *
+	 * @var string   $description Description of the page.
+	 * @var string[] $headCSS     CSS source files for the document head.
+	 * @var string[] $headJS      Javascript source files for the document head.
+	 * @var string   $keywords    Keywords of the page.
+	 * @var string   $title       Title of the page.
+	 */
+	protected $description = '', $headCSS = array(), $headJS = array(),
+		$keywords = '', $title = '';
+	
 	/******************/
 	/* Public Methods */
 	/******************/
-		
+
+	/**
+	 * Add the CSS source file to the list of items to be written in the
+	 * document head.
+	 *
+	 * @param string CSS source file.
+	 */
+	public function addCSS($source)
+	{
+		$this->headCSS[] = (string)$source;
+	}
+
+	/**
+	 * Add the JS source file to the list of items to be written in the
+	 * document head.
+	 *
+	 * @param string JS source file.
+	 */
+	public function addJS($source)
+	{
+		$this->headJS[] = (string)$source;
+	}
+
+	/**
+	 * Set the description for the page.
+	 *
+	 * @param string Description for the page.
+	 */
+	public function setDescription($description)
+	{
+		$this->description = (string)$description;
+	}
+
+	/**
+	 * Set the keywords for the page.
+	 *
+	 * @param string Keywords for the page.
+	 */
+	public function setKeywords($keywords)
+	{
+		$this->keywords = (string)$keywords;
+	}
+	
+	/**
+	 * Set the title for the page.
+	 *
+	 * @param string Title for the page.
+	 */
+	public function setTitle($title)
+	{
+		$this->title = (string)$title;
+	}	
+	
 	/**
 	 * End the html page.
 	 */
@@ -33,31 +97,22 @@ class XHTML extends XMLBase implements PageIface
 
 	/**
 	 * Write the DTD, html head and start the body of the document.
-	 *
-	 * @param mixed[] The setup for the start of the document.
 	 */
-	public function writeStart(Array $setup=array())
+	public function writeStart()
 	{
-		$setup += array('CSS'         => array(),
-		                'Description' => '',
-		                'Doc_Type'    => 'XHTML_1_1',
-		                'Keywords'    => '',
-		                'JS'          => array(),
-		                'Title'       => '');
-		
-		$this->writeStartDocument($setup['Doc_Type']);
+		$this->writeStartDocument();
       
 		$this->xmlWriter->startElement('head');
-		$this->xmlWriter->writeElement('title', $setup['Title']);
+		$this->xmlWriter->writeElement('title', $this->title);
 		
-		$this->write(array('meta', array('content' => $setup['Title'],
+		$this->write(array('meta', array('content' => $this->title,
 		                                 'name'    => 'title')));
-		$this->write(array('meta', array('content' => $setup['Description'],
+		$this->write(array('meta', array('content' => $this->description,
 		                                 'name'    => 'description')));
-		$this->write(array('meta', array('content' => $setup['Keywords'],
+		$this->write(array('meta', array('content' => $this->keywords,
 		                                 'name'    => 'keywords')));
-		$this->writeCSS($setup['CSS']);
-		$this->writeJS($setup['JS']);
+		$this->writeCSS($this->headCSS);
+		$this->writeJS($this->headJS);
 		$this->xmlWriter->endElement(); // head
 
 		$this->xmlWriter->startElement('body');
