@@ -1,57 +1,64 @@
 <?php
 /**
- * XML Base Writer
+ * XML Writer
  *
  * @package Writer
  */
 namespace Evoke\Writer;
 
-use InvalidArgumentException,
+use DomainException,
+	InvalidArgumentException,
 	XMLWriter;
 
 /**
- * XMLBase
+ * XML Writer
  *
- * Base class for writing XML elements.
+ * Writer for XML elements.
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
  * @package   Writer
  */
-abstract class XMLBase implements PageIface
+class XML implements PageIface
 {
 	/**
-	 * XML Base Writer Properties
+	 * Protected Properties
 	 *
 	 * @var string    $docType   Document type.
+	 * @var bool      $indent    Whether we indent non-inline elements.
 	 * @var string    $language  Language of XML being written.
 	 * @var mixed[]   $pos       Position of the tag, attribs and children in
 	 *                           the element.
 	 * @var XMLWriter $xmlWriter XML Writer object.
 	 */
-	protected $docType, $language, $pos, $xmlWriter;
+	protected $docType, $indent, $language, $pos, $xmlWriter;
 	
 	/**
-	 * Create an abstract XML Writer.
+	 * Create an XML Writer.
 	 *
 	 * @param XMLWriter XMLWriter object.
+	 * @param string    Document type.
+	 * @param string    Language.
 	 * @param bool      Whether the XML produced should be indented.
 	 * @param string    The string that should be used to indent the XML.
 	 * @param int[]     Position of the tag, attribs & children in the element.
 	 */
 	public function __construct(
 		XMLWriter    $xmlWriter,
-		/* Bool */   $indent       = true,
+		/* String */ $docType      = 'XHTML_1_1',
+		/* String */ $language     = 'EN',
+		/* Bool */   $indent       = TRUE,
 		/* String */ $indentString = '   ',
 		/* int[]  */ $pos          = array('Attribs'  => 1,
 		                                   'Children' => 2,
 		                                   'Tag'      => 0))
 	{
-		$this->docType    = 'XHTML_1_1';
-		$this->language   = 'EN';
-		$this->pos        = $pos;
-		$this->xmlWriter  = $xmlWriter;
+		$this->docType   = $docType;
+		$this->indent    = $indent;
+		$this->language  = $language;
+		$this->pos       = $pos;
+		$this->xmlWriter = $xmlWriter;
 
 		$this->xmlWriter->openMemory();
 			
@@ -104,26 +111,6 @@ abstract class XMLBase implements PageIface
 	}
 	
 	/**
-	 * Set the document type.
-	 *
-	 * @param string Document type as used by writeStartDocument.
-	 */
-	public function setDocType($docType)
-	{
-		$this->docType = $docType;
-	}
-
-	/**
-	 * Set the document language attribute.
-	 *
-	 * @param string Language that the document is in.
-	 */
-	public function setLanguage($language)
-	{
-		$this->language = $language;
-	}
-	
-	/**
 	 * Write XML elements into the memory buffer.
 	 *
 	 * @param mixed[] Array accessible value for the xml to be written of the
@@ -167,10 +154,13 @@ abstract class XMLBase implements PageIface
 		$children = isset($xml[$this->pos['Children']]) ?
 			$xml[$this->pos['Children']] : array();
 
-		$inlineElement = (preg_match('(^(strong|em|pre|code)$)i', $tag));
+		// Whether we are normally indenting and we see an element that should
+		// be inline.
+		$specialInlineElement =
+			($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
 
 		// Toggle the indent off.
-		if ($inlineElement)
+		if ($specialInlineElement)
 		{
 			$this->xmlWriter->setIndent(false);
 		}
@@ -205,27 +195,29 @@ abstract class XMLBase implements PageIface
 			$this->xmlWriter->endElement();
 		}
 
-		// Toggle the indent back on.
-		if ($inlineElement)
+		if ($specialInlineElement)
 		{
+			// Toggle the indent back on.
 			$this->xmlWriter->setIndent(true);
 		}
 	}
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
+	/**
+	 * Write the End of the document.
+	 */
+	public function writeEnd()
+	{
+		$this->xmlWriter->endElement();
+	}
 	
 	/**
-	 * Write the start of the document based on the type.
-	 *
-	 * @param string The basic doc type ('XHTML5', 'XHTML_1_1', 'XML').
+	 * Write the start of the document based on the doc type.
 	 */
-	protected function writeStartDocument()
+	public function writeStart()
 	{
 		switch (strtoupper($this->docType))
 		{
-		case 'XHTML5':
+		case 'HTML5':
 			$this->xmlWriter->startDTD('html');
 			$this->xmlWriter->endDTD();
 			break;
@@ -248,9 +240,7 @@ abstract class XMLBase implements PageIface
 			break;
 			
 		default:
-			trigger_error('Unknown docType: ' . $this->docType .
-			              ' using XHTML_1_1 instead.', E_USER_WARNING);
-			$this->writeStartDocument('XHTML_1_1');
+			throw new DomainException('Unknown docType');
 		}
 	}
 }
