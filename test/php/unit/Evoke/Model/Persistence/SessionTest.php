@@ -209,8 +209,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function testEnsureSessionStartAfterHeadersSentException()
     {
 	    // Need to install runkit to modify PHP_SAPI to non cli to test this.
-	    $this->assertTrue(
-		    FALSE, 'Need to install runkit, but it fails to compile.');
+	    $this->markTestIncomplete(
+		    'Need to install runkit, but it fails to compile.');
     }
 
     /**

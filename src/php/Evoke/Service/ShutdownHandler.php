@@ -22,7 +22,7 @@ use Evoke\Network\HTTP\ResponseIface,
  * @package   Service
  */
 class ShutdownHandler
-{	
+{
 	/** 
 	 * Email address to be listed as a contact, or empty for no-one.
 	 * @var string
