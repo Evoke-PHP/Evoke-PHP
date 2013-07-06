@@ -4,9 +4,6 @@ namespace Evoke_Test\Model\Persistence;
 use Evoke\Model\Persistence\Session,
     PHPUnit_Framework_TestCase;
 
-/**
- *  @covers Evoke\Model\Persistence\Session
- */
 class SessionTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -73,14 +70,20 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	public function providerDomainValue()
 	{
 		return [
-			'Domain_Empty_Value_NULL' => [
+			'Domain_Empty_Value_NULL'     => [
 				'Domain' => [],
 				'Value'  => NULL],
-			'Domain_Empty_Value_Array' => [
+			'Domain_Empty_Value_Array'    => [
 				'Domain' => [],
 				'Value'  => ['Arr_Val']],
-			'Domain_Empty_Value_String' => [
+			'Domain_Empty_Value_String'   => [
 				'Domain' => [],
+				'Value'  => 'Str_Val'],
+			'Domain_Leveled_Value_String' => [
+				'Domain' => ['One', 'Two'],
+				'Value'  => 'Str_Val'],
+			'Domain_Leveled_Value_Array'  => [
+				'Domain' => ['One', 'Two'],
 				'Value'  => 'Str_Val']
 			];
 			
@@ -110,8 +113,26 @@ class SessionTest extends PHPUnit_Framework_TestCase
 				'Expected' => NULL,
 				'Offset'   => ['One', 'Fifty']
 				]
+			];		
+	}
+
+	public function providerIsEqual()
+	{
+		// $session, $domain, $key, $value, $equality
+		return [
+			'Empty' => [
+				'Session'  => [],
+				'Domain'   => [],
+				'Key'      => '',
+				'Value'    => '',
+				'Equality' => FALSE],
+			'Root' =>  [
+				'Session'  => ['K' => 'Val'],
+				'Domain'   => [],
+				'Key'      => 'K',
+				'Value'    => 'Val',
+				'Equality' => TRUE]
 			];
-			
 	}
 	
 	/***********/
@@ -149,6 +170,21 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $this->assertInstanceOf('Evoke\Model\Persistence\Session', $object);
     }
 
+    /**
+     * Values can be added to the session.
+     *
+     * @covers Evoke\Model\Persistence\Session::addValue
+     */
+    public function testAddValue()
+    {
+	    $object = new Session;
+	    $object->addValue(1);
+	    $object->addValue(2);
+	    $object->addValue(77);
+
+	    $this->assertSame([1, 2, 77], $_SESSION);
+    }
+    
     /**
      * Check that data can be set for a session subdomain and part of it can be
      * deleted.
@@ -227,20 +263,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    
 	    $this->assertEquals($expected, $object->getAtOffset($offset));
     }
-    
-    /**
-     * Ensure that keys can be set and retrieved.
-     *
-     * @covers Evoke\Model\Persistence\Session::get
-     * @covers Evoke\Model\Persistence\Session::set
-     */
-    public function testKeyGetSet()
-    {
-	    $object = new Session;
-	    $object->set('Test_Key', 'Test_Value');
-	    
-	    $this->assertEquals('Test_Value', $object->get('Test_Key'));
-    }
 
     /**
      * Ensure that data can be set on a subdomain and can then be retrieved.
@@ -271,6 +293,105 @@ class SessionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get the session ID.
+     *
+     * @covers Evoke\Model\Persistence\Session::getID
+     */
+    public function testGetID()
+    {
+	    $object = new Session;
+	    $this->assertSame('CLI_SESSION', $object->getID());
+    }
+
+    /**
+     * Values in the session domain can be incremented.
+     *
+     * @covers Evoke\Model\Persistence\Session::getAccess
+     * @covers Evoke\Model\Persistence\Session::increment
+     */
+    public function testIncrement()
+    {
+	    $object = new Session(['A', 'B']);
+	    $object->setData(['C' => 1]);
+	    
+	    $object->increment('C');
+	    $this->assertSame(2, $_SESSION['A']['B']['C']);
+
+	    $object->increment('C', 3);
+	    $this->assertSame(5, $_SESSION['A']['B']['C']);
+
+	    $object->increment('C', -1);
+	    $this->assertSame(4, $_SESSION['A']['B']['C']);
+    }
+
+    /**
+     * We can determine if the session domain is empty.
+     *
+     * @covers Evoke\Model\Persistence\Session::isEmpty
+     */
+    public function testIsEmpty()
+    {
+	    $object = new Session(['A', 'B']);
+
+	    $this->assertTrue($object->isEmpty(), 'Domain should be empty.');
+
+	    $object->addValue(5);
+	    $this->assertFalse($object->isEmpty(), 'Domain should not be empty.');
+    }
+
+    /**
+     * We can determine if a key is equal to a value.
+     *
+     * @covers       Evoke\Model\Persistence\Session::isEqual
+     * @dataProvider providerIsEqual
+     */
+    public function  testIsEqual($session, $domain, $key, $value, $equality)
+    {
+	    $_SESSION =  $session;
+	    $object = new Session($domain);
+	    $this->assertSame($equality, $object->isEqual($key, $value));
+    }
+
+    /**
+     * We can determine if a key is set.
+     *
+     * @covers Evoke\Model\Persistence\Session::issetKey
+     */
+    public function testIssetKey()
+    {
+	    $_SESSION = ['a' => ['b' => 'c', 'd' => 'e']];
+	    $object = new Session(['a']);
+	    $this->assertTrue($object->issetKey('b'));
+	    $this->assertFalse($object->issetKey('e'));
+    }
+
+    /**
+     * Can count the number of keys in the session.
+     *
+     * @covers Evoke\Model\Persistence\Session::keyCount
+     */
+    public function testKeyCount()
+    {
+	    $_SESSION = ['d' => ['a', 'b', 'c', 'd', 'e']];
+	    $object = new Session(['d']);
+	    $this->assertSame(5, $object->keyCount());
+    }
+    
+    /**
+     * Ensure that keys can be set and retrieved.
+     *
+     * @covers Evoke\Model\Persistence\Session::get
+     * @covers Evoke\Model\Persistence\Session::set
+     */
+    public function testKeyGetSet()
+    {
+	    $object = new Session;
+	    $object->set('Test_Key', 'Test_Value');
+	    
+	    $this->assertEquals('Test_Value', $object->get('Test_Key'));
+    }
+
+    /**
      * Check that a session can be removed, but leaves the hierarchy above the
      * session domain intact.
      *
@@ -296,6 +417,34 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    	    
 	    $object->remove();
 	    $this->assertEquals($expected, $_SESSION);
+    }
+
+    /**
+     * The session can be reset.
+     *
+     * @covers Evoke\Model\Persistence\Session::reset
+     */
+    public function testReset()
+    {
+	    $_SESSION = ['a' => ['b' => 'c']];
+	    $object = new Session(['a']);
+	    $object->reset();
+
+	    $this->assertSame(['a' => []], $_SESSION);
+    }
+
+    /**
+     * A specific key can be unset.
+     *
+     * @covers Evoke\Model\Persistence\Session::unsetKey
+     */
+    public function testUnsetKey()
+    {
+	    $_SESSION = ['a' => ['b' => 'c', 'd' => 'e', 'f' => 'g']];
+	    $object = new Session(['a']);
+	    $object->unsetKey('d');
+	    
+	    $this->assertSame(['a' => ['b' => 'c', 'f' => 'g']], $_SESSION);
     }
 }
 // EOF

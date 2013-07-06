@@ -213,7 +213,7 @@ class Session implements SessionIface
 	 */
 	public function increment($key, $offset=1)
 	{
-		$session = $this->getAccess();
+		$session =& $this->getAccess();
 		$session[$key] += $offset;
 	}
    
