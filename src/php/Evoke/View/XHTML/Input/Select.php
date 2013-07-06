@@ -7,8 +7,7 @@
 namespace Evoke\View\XHTML\Input;
 
 use Evoke\View\Data,
-	LogicException,
-	RuntimeException;
+	LogicException;
 
 /**
  * Select Input View
@@ -23,12 +22,13 @@ class Select extends Data
 	/**
 	 * Protected properties.
 	 *
-	 * @var string[] $attribs       Attributes for the select element.
-	 * @var string   $fieldText     Field in the data for the option text.
-	 * @var string   $fieldValue    Field in the data for the option value.
-	 * @var string[] $optionAttribs Attributes for each select option.
+	 * @var string[]   $attribs       Attributes for the select element.
+	 * @var string     $fieldText     Field in the data for the option text.
+	 * @var string     $fieldValue    Field in the data for the option value.
+	 * @var string[]   $optionAttribs Attributes for each select option.
+	 * @var mixed|null $selectedValue Value that is selected or NULL for none.
 	 */
-	protected $attribs, $fieldText, $fieldValue, $optionAttribs;
+	protected $attribs, $fieldText, $fieldValue, $optionAttribs, $selectedValue;
 
 	/**
 	 * Construct a Select view.
@@ -62,9 +62,8 @@ class Select extends Data
 	{
 		if (empty($this->data))
 		{
-			throw new RuntimeException(
-				__METHOD__ . ' cannot set select element without having ' .
-				'options to select from (The XHTML would be invalid).');
+			throw new LogicException(
+				'Select element must have options to be valid XHTML.');
 		}
 
 		if (!isset($this->data[$this->fieldText],
@@ -83,8 +82,8 @@ class Select extends Data
 			$optionAttribs = array_merge($this->optionAttribs,
 			                             array('value' => $value));
 	 
-			if (isset($this->params['Selected']) &&
-			    $value == $this->params['Selected'])
+			if (isset($this->selectedValue) &&
+			    $value == $this->selectedValue)
 			{
 				$optionAttribs['selected'] = 'selected';
 			}
@@ -94,6 +93,16 @@ class Select extends Data
 		}
 
 		return array('select', $this->attribs, $optionElements);
+	}
+
+	/**
+	 * Set the value that has been selected from the options.
+	 *
+	 * @param mixed The selected value.
+	 */
+	public function setSelected($selectedValue)
+	{
+		$this->selectedValue = $selectedValue;
 	}
 }
 // EOF

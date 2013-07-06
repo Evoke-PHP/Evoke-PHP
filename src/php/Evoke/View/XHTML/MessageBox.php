@@ -33,9 +33,9 @@ class MessageBox
 	public function __construct(
 		Array $attribs = array('class' => 'Message_Box Info'))
 	{
-		$this->attribs  = $attribs;
-		$this->elements = array();
-		$this->title    = 'Message Box';
+		$this->attribs         = $attribs;
+		$this->contentElements = array();
+		$this->title           = 'Message Box';
 	}
 
 	/******************/
@@ -63,7 +63,9 @@ class MessageBox
 			'div',
 			$this->attribs,
 			array(array('div', array('class' => 'Title'), $this->title),
-			      array('div', array('class' => 'Content'), $this->elements)));
+			      array('div',
+			            array('class' => 'Content'),
+			            $this->contentElements)));
 	}
 	
 	/**
