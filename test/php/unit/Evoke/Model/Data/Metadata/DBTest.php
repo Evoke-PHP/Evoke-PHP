@@ -128,7 +128,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 			      'Joint_Data' => [
 				      'List_ID=T2nd.List_ID' => []]]];
 		
-		$this->assertEquals($expectedData, $object->arrangeFlatData($data));			
+		$this->assertSame($expectedData, $object->arrangeFlatData($data));			
 	}
 
 	/**
@@ -140,7 +140,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetJoinID($expected, $join, $object)
 	{
-		$this->assertEquals($expected, $object->getJoinID($join));
+		$this->assertSame($expected, $object->getJoinID($join));
 	}
 
 	/**

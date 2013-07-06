@@ -200,7 +200,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $object->setData($data);
 	    $object->deleteAtOffset($deleteOffset);
 	    
-	    $this->assertEquals($expected, $_SESSION);
+	    $this->assertSame($expected, $_SESSION);
     }
     
     /**
@@ -213,7 +213,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $domain = ['L1', 'L2', 'L3'];
 
 	    $object = new Session($domain);
-	    $this->assertEquals(['L1' => ['L2' => ['L3' => []]]],
+	    $this->assertSame(['L1' => ['L2' => ['L3' => []]]],
 	                        $_SESSION,
 	                        'Ensure domain created from empty.');
     }
@@ -229,7 +229,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $_SESSION = ['A1' => ['A2' => 'A2 Val']];
 	    
 	    $object = new Session($domain);
-	    $this->assertEquals(
+	    $this->assertSame(
 		    ['A1' => ['A2' => 'A2 Val'],
 		     'L1' => ['L2' => ['L3' => []]]],
 		    $_SESSION,
@@ -261,7 +261,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $object = new Session($domain);
 	    $object->setData($data);
 	    
-	    $this->assertEquals($expected, $object->getAtOffset($offset));
+	    $this->assertSame($expected, $object->getAtOffset($offset));
     }
 
     /**
@@ -276,7 +276,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $object = new Session($domain);
 	    $object->setData($value);
 
-	    $this->assertEquals($value, $object->getCopy());
+	    $this->assertSame($value, $object->getCopy());
     }
 
     /**
@@ -289,7 +289,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $domain = ['Lev_1', 'Lev_2', 'Lev_3', 'Lev_4'];
 	    $object = new Session($domain);
 
-	    $this->assertEquals($domain, $object->getFlatDomain());
+	    $this->assertSame($domain, $object->getFlatDomain());
     }
 
     /**
@@ -388,7 +388,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    $object = new Session;
 	    $object->set('Test_Key', 'Test_Value');
 	    
-	    $this->assertEquals('Test_Value', $object->get('Test_Key'));
+	    $this->assertSame('Test_Value', $object->get('Test_Key'));
     }
 
     /**
@@ -416,7 +416,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	    }
 	    	    
 	    $object->remove();
-	    $this->assertEquals($expected, $_SESSION);
+	    $this->assertSame($expected, $_SESSION);
     }
 
     /**

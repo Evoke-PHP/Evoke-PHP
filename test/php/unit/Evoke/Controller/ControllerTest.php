@@ -140,7 +140,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			[], $mocks['Response'], $mocks['Writer'], $mocks['View']);
 		$object->execute();
 
-		$this->assertEquals(
+		$this->assertSame(
 			$errorExpected, $errorRecord,
 			'Warnings should be emitted when a clean writer is required but ' .
 			'not provided.');

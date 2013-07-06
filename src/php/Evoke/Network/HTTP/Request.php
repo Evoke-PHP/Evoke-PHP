@@ -309,7 +309,8 @@ EOP;
 		{
 			// The quality value defaults to 1.
 			$qFactor =
-				empty($matches['Q_Factor'][$i]) ? 1 : $matches['Q_Factor'][$i];
+				empty($matches['Q_Factor'][$i]) ? 1.0 :
+				$matches['Q_Factor'][$i] + 0.0; // Make it float.
 			
 			$acceptLanguages[] = array('Language' => $matches['Language'][$i],
 			                           'Q_Factor' => $qFactor);

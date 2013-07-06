@@ -60,8 +60,8 @@ class FlatTest extends PHPUnit_Framework_TestCase
 		foreach ($object as $testKey => $testData)
 		{
 			$key = 'K' . $count++;
-			$this->assertEquals($key, $testKey);
-			$this->assertEquals($rawData[$key], $testData->getRecord());
+			$this->assertSame($key, $testKey);
+			$this->assertSame($rawData[$key], $testData->getRecord());
 		}
 	}
 	
@@ -79,7 +79,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
 		$object = new Flat;
 		$object->setData($rawData);
 		
-		$this->assertEquals(1, $object['One']);
+		$this->assertSame(1, $object['One']);
 	}
 
 	/**

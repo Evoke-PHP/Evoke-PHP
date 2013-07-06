@@ -19,6 +19,12 @@ use LogicException;
 class FormBuilder implements FormBuilderIface
 {
 	/**
+	 * Attributes for the form.
+	 * @var mixed[]
+	 */
+	protected $attribs;
+	
+	/**
 	 * Children of the form.
 	 * @var mixed[]
 	 */
@@ -32,8 +38,7 @@ class FormBuilder implements FormBuilderIface
 	public function __construct(Array $attribs = array('action' => '',
 	                                                   'method' => 'POST'))
 	{
-		$this->params['Attribs'] = $attribs;
-		$this->params['Tag']     = 'form';
+		$this->attribs = $attribs;
 	}
 	
 	/******************/
@@ -60,8 +65,8 @@ class FormBuilder implements FormBuilderIface
     {
         $this->add(
             array('input',
-                  array('type' => 'file',
-                        'name' => $name) +
+                  array('name' => $name,
+                        'type' => 'file') +
                   $otherAttribs));
     }
     
@@ -73,8 +78,8 @@ class FormBuilder implements FormBuilderIface
 	 */
 	public function addHidden($name, $value)
 	{
-		$this->add(array('input', array('type'  => 'hidden',
-		                                'name'  => $name,
+		$this->add(array('input', array('name'  => $name,
+		                                'type'  => 'hidden',
 		                                'value' => $value)));
 	}
 	
@@ -115,8 +120,8 @@ class FormBuilder implements FormBuilderIface
 	 */
 	public function addSubmit($name, $value)
 	{
-		$this->add(array('input', array('type'  => 'submit',
-		                                'name'  => $name,
+		$this->add(array('input', array('name'  => $name,
+		                                'type'  => 'submit',
 		                                'value' => $value)));
 	}
 	
@@ -156,9 +161,9 @@ class FormBuilder implements FormBuilderIface
 	                            Array        $otherAttribs = array())
 	{
 		$this->add(array('textarea',
-		                 $otherAttribs + array('name' => $name,
-		                                       'rows' => $rows,
-		                                       'cols' => $cols),
+		                 $otherAttribs + array('cols' => $cols,
+		                                       'name' => $name,
+		                                       'rows' => $rows),
 		                 $value));
 	}
 	
@@ -169,7 +174,7 @@ class FormBuilder implements FormBuilderIface
 	 */
 	public function get()
 	{
-		return array('form', $this->params['Attribs'], $this->children);
+		return array('form', $this->attribs, $this->children);
 	}
 
 	/**
@@ -179,7 +184,7 @@ class FormBuilder implements FormBuilderIface
 	 */
 	public function setAction(/* String */ $action)
 	{
-		$this->params['Attribs']['action'] = $action;
+		$this->attribs['action'] = $action;
 	}
 	
 	/**
@@ -189,7 +194,7 @@ class FormBuilder implements FormBuilderIface
 	 */
 	public function setMethod(/* String */ $method)
 	{
-		$this->params['Attribs']['method'] = $method;
+		$this->attribs['method'] = $method;
 	}
 }
 // EOF

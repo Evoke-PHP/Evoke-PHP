@@ -53,7 +53,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 			'Two'     => ['Header'       => 'text/html; q=0.1, text/plain',
 			              'Parsed_Value' =>
 			              [['Params'   => [],
-			                'Q_Factor' => 1,
+			                'Q_Factor' => 1.0,
 			                'Subtype'  => 'plain',
 			                'Type'     => 'text'],
 			               ['Params'   => [],
@@ -114,7 +114,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	{
 		$_SERVER['REQUEST_METHOD'] = 'ANY_VALUE';
 		$object = new Request;		
-		$this->assertEquals('ANY_VALUE', $object->getMethod());
+		$this->assertSame('ANY_VALUE', $object->getMethod());
 	}
 
 	/**
@@ -133,7 +133,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 			});
 				
 		$object = new Request;
-		$this->assertEquals('GET', $object->getMethod());
+		$this->assertSame('GET', $object->getMethod());
 		$this->assertTrue(
 			$errorHandlerRun,
 			'Error needs to be generated for missing HTTP Method.');
@@ -149,7 +149,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	{
 		$_REQUEST = ['Test_Key' => 'Test_Val'];
 		$object = new Request;
-		$this->assertEquals('Test_Val', $object->getQueryParam('Test_Key'));
+		$this->assertSame('Test_Val', $object->getQueryParam('Test_Key'));
 	}
 
 	/**
@@ -174,7 +174,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 		$params = ['One' => 1, 'Two' => 2, 'Three' => 3];
 		$_REQUEST = $params;
 		$object = new Request;
-		$this->assertEquals($params, $object->getQueryParams());
+		$this->assertSame($params, $object->getQueryParams());
 	}
 
 	/**
@@ -186,7 +186,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	public function testGetQueryParamsNone()
 	{
 		$object = new Request;
-		$this->assertEquals([], $object->getQueryParams());
+		$this->assertSame([], $object->getQueryParams());
 	}
 	
 	/**
@@ -199,7 +199,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 		$uri = 'http://example.com/index.php?A=1&B=2';
 		$_SERVER['REQUEST_URI'] = $uri;
 		$object = new Request;
-		$this->assertEquals($uri, $object->getURI());
+		$this->assertSame($uri, $object->getURI());
 	}
 
 	/**
@@ -212,7 +212,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	{
 		$_REQUEST = $params;
 		$object = new Request;
-		$this->assertEquals($expected, $object->issetQueryParam($key));
+		$this->assertSame($expected, $object->issetQueryParam($key));
 	}
 
 	/**
@@ -225,7 +225,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	{
 		$_SERVER = ['HTTP_ACCEPT' => $header];
 		$object = new Request;
-		$this->assertEquals($validity, $object->isValidAccept());
+		$this->assertSame($validity, $object->isValidAccept());
 	}
 
 	/**
@@ -238,7 +238,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	{
 		$_SERVER = ['HTTP_ACCEPT_LANGUAGE' => $header];
 		$object = new Request;
-		$this->assertEquals($validity, $object->isValidAcceptLanguage());
+		$this->assertSame($validity, $object->isValidAcceptLanguage());
 	}
 
 	/**
@@ -254,7 +254,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 		$_SERVER = ['HTTP_ACCEPT' => $header];
 		$object = new Request;
 
-		$this->assertEquals($parsedValue, $object->parseAccept());
+		$this->assertSame($parsedValue, $object->parseAccept());
 	}
 
 	/**
@@ -270,7 +270,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
 		$_SERVER = ['HTTP_ACCEPT_LANGUAGE' => $header];
 		$object = new Request;
 
-		$this->assertEquals($parsedValue, $object->parseAcceptLanguage());
+		$this->assertSame($parsedValue, $object->parseAcceptLanguage());
 	}
 }
 // EOF

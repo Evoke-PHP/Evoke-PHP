@@ -38,7 +38,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 		$object = new Text;
 		$object->write('SOMETHING');
 		$object->clean();
-		$this->assertEquals('', (string)$object);
+		$this->assertSame('', (string)$object);
 	}
 	
 	/**
@@ -58,8 +58,8 @@ class TextTest extends PHPUnit_Framework_TestCase
 		$output = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertEquals('Something to Flush', $output);
-		$this->assertEquals('', (string)$object);
+		$this->assertSame('Something to Flush', $output);
+		$this->assertSame('', (string)$object);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	public function testStartsEmpty()
 	{
 		$object = new Text;
-		$this->assertEquals('', (string)$object);
+		$this->assertSame('', (string)$object);
 	}
 
 	/**
@@ -94,7 +94,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	{
 		$object = new Text;
 		$object->write('YO DUDE');
-		$this->assertEquals('YO DUDE', (string)$object);
+		$this->assertSame('YO DUDE', (string)$object);
 	}	
 }
 // EOF

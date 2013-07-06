@@ -30,7 +30,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object->add($formData[0]);
 		$object->add($formData[1]);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form', ['action' => '/yodude', 'method' => 'GET'], $formData],
 			$object->get());
 	}
@@ -45,14 +45,14 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addFile('filename', ['class' => 'Special']);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [
 				 ['input',
-				  ['class' => 'Special',
-				   'name' => 'filename',
-				   'type' => 'file']]]],
+				  ['name' => 'filename',
+				   'type' => 'file',
+				   'class' => 'Special']]]],
 			$object->get());
 	}
 
@@ -66,7 +66,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addHidden('nameField', 'valueField');
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [['input',
@@ -87,7 +87,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addInput(['class' => 'Special', 'type' => 'generic'], 'Val');
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [
@@ -107,7 +107,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addLabel('forField', 'textField');
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [['label', ['for' => 'forField'], 'textField']]],
@@ -124,7 +124,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addSubmit('nameField', 'valueField');
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [['input',
@@ -144,7 +144,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addText('nameField', 'valueField', 47, ['class' => 'Special']);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [['input',
@@ -166,7 +166,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object = new FormBuilder;
 		$object->addTextArea('nameField', 'valueField', 85, 7, ['class' => 'Special']);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'POST'],
 			 [['textarea',
@@ -189,7 +189,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object->setAction('/Test/Value');
 		$object->add(['div', [], 'Non-Empty-Form']);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '/Test/Value', 'method' => 'POST'],
 			 [['div', [], 'Non-Empty-Form']]],
@@ -207,7 +207,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
 		$object->setMethod('PUT');
 		$object->add(['div', [], 'Non-Empty-Form']);
 
-		$this->assertEquals(
+		$this->assertSame(
 			['form',
 			 ['action' => '', 'method' => 'PUT'],
 			 [['div', [], 'Non-Empty-Form']]],

@@ -32,7 +32,7 @@ class JSONTest extends PHPUnit_Framework_TestCase
 		$object = new JSON;
 		$object->write(['One' => 1, 'Two' => 'Dos']);
 
-		$this->assertEquals('{"One":1,"Two":"Dos"}', (string)$object);
+		$this->assertSame('{"One":1,"Two":"Dos"}', (string)$object);
 	}
 }
 // EOF

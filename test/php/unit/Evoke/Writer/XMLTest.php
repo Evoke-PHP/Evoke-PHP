@@ -74,7 +74,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue('Whatever'));		
 		
 		$object = new XML($xmlWriter, 'XHTML_1_1', 'EN', FALSE);
-		$this->assertEquals('Whatever', (string)$object);
+		$this->assertSame('Whatever', (string)$object);
 	}
 
 	/**
@@ -101,7 +101,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		
 		$object = new XML($xmlWriter, 'XML', 'ES', FALSE);
 		$object->clean();
-		$this->assertEquals('', (string)$object);
+		$this->assertSame('', (string)$object);
 	}
 
 	/**
@@ -134,8 +134,8 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$flushed = ob_get_contents();
 		ob_end_clean();
 		
-		$this->assertEquals('Flush Whatever', $flushed);
-		$this->assertEquals('', (string)$object);
+		$this->assertSame('Flush Whatever', $flushed);
+		$this->assertSame('', (string)$object);
 
 	}
 
@@ -292,7 +292,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		                ['class' => 'Test'],
 		                [
 			                ['span', [], 'Span_Text']]]);
-		$this->assertEquals($expectedOutput, (string)($object));
+		$this->assertSame($expectedOutput, (string)($object));
 	}
 
 	/**

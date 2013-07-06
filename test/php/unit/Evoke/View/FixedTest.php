@@ -42,7 +42,7 @@ class FixedTest extends PHPUnit_Framework_TestCase
 	public function testX($value)
 	{
 		$object = new Fixed($value);
-		$this->assertEquals($value, $object->get());
+		$this->assertSame($value, $object->get());
 	}
 }
 // EOF

@@ -33,7 +33,7 @@ class VarExportTest extends PHPUnit_Framework_TestCase
 	{
 		$object = new VarExport;
 		$object->setVar($value);
-		$this->assertEquals(
+		$this->assertSame(
 			['div', ['class' => 'Var_Export'], var_export($value, true)],
 			$object->get());
 	}
