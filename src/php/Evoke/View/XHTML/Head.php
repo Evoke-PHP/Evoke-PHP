@@ -6,6 +6,8 @@
  */
 namespace Evoke\View\XHTML;
 
+use Evoke\View\ViewIface;
+
 /**
  * XHTML Head View
  *
@@ -25,7 +27,7 @@ class Head implements ViewIface
 	 * @var string   $keywords    Keywords of the page.
 	 * @var string   $title       Title of the page.
 	 */
-	protected $description, $css, $js,	$keywords, $title;
+	protected $description, $cssSources, $jsSources, $keywords, $title;
 
 	/**
 	 * Construct a Head object.
@@ -39,41 +41,19 @@ class Head implements ViewIface
 	public function __construct(/* string */ $description,
 	                            /* string */ $keywords,
 	                            /* string */ $title,
-	                            Array        $css = array(),
-	                            Array        $js  = array())
+	                            Array        $cssSources = array(),
+	                            Array        $jsSources  = array())
 	{
 		$this->description = $description;
 		$this->keywords    = $keywords;
 		$this->title       = $title;
-		$this->css         = $css;
-		$this->js          = $js;
+		$this->cssSources  = $cssSources;
+		$this->jsSources   = $jsSources;
 	}
 	
 	/******************/
 	/* Public Methods */
 	/******************/
-
-	/**
-	 * Add the CSS source file to the list of items to be written in the
-	 * document head.
-	 *
-	 * @param string CSS source file.
-	 */
-	public function addCSS($source)
-	{
-		$this->css[] = (string)$source;
-	}
-
-	/**
-	 * Add the JS source file to the list of items to be written in the
-	 * document head.
-	 *
-	 * @param string JS source file.
-	 */
-	public function addJS($source)
-	{
-		$this->js[] = (string)$source;
-	}
 
 	/**
 	 * Get the output from the view.
@@ -91,7 +71,7 @@ class Head implements ViewIface
 			array('meta', array('content' => $this->keywords,
 			                    'name'    => 'keywords')));
 
-		foreach ($this->css as $cssSrc)
+		foreach ($this->cssSources as $cssSrc)
 		{
 			$headElements[] = array(
 				'link',
@@ -100,45 +80,15 @@ class Head implements ViewIface
 				      'rel'  => 'stylesheet'));
 		}
 
-		foreach ($this->js as $jsSrc)
+		foreach ($this->jsSources as $jsSrc)
 		{
 			$headElements[] = array(
 				'script',
 				array('type' => 'text/javascript',
-				      'src'  => $js));
+				      'src'  => $jsSrc));
 		}
 
 		return array('head', array(), $headElements);
-	}
-	
-	/**
-	 * Set the description for the page.
-	 *
-	 * @param string Description for the page.
-	 */
-	public function setDescription($description)
-	{
-		$this->description = (string)$description;
-	}
-
-	/**
-	 * Set the keywords for the page.
-	 *
-	 * @param string Keywords for the page.
-	 */
-	public function setKeywords($keywords)
-	{
-		$this->keywords = (string)$keywords;
-	}
-	
-	/**
-	 * Set the title for the page.
-	 *
-	 * @param string Title for the page.
-	 */
-	public function setTitle($title)
-	{
-		$this->title = (string)$title;
 	}
 }
 // EOF
