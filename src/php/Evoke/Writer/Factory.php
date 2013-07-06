@@ -30,21 +30,29 @@ class Factory
 	 */
 	public function create(/* String */ $outputFormat)
 	{
-		$classname = 'Evoke\Writer\\' . $outputFormat;
+		$upperOutputFormat = strtoupper($outputFormat);
 		
-		if (!class_exists($classname))
+		switch ($upperOutputFormat)
 		{
-			throw new DomainException('No writer for classname: ' . $classname);
+		case 'JSON':
+			return new JSON;
+		case 'TEXT':
+			return new Text;
 		}
 
-		switch ($outputFormat)
+		$xmlWriter = new XMLWriter;
+
+		switch ($upperOutputFormat)
 		{
 		case 'HTML5':
+			return new XML($xmlWriter, 'HTML5');
 		case 'XHTML':
+			return new XML($xmlWriter, 'XHTML_1_1');
 		case 'XML':
-			return new $classname(new XMLWriter);
+			return new XML($xmlWriter, 'XML');
 		default:
-			return new $classname;
+			throw new DomainException(
+				'No writer for output format: ' . $outputFormat);
 		}
 	}
 }
