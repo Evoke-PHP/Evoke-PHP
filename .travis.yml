@@ -1,4 +1,5 @@
 language: php
 php:
   - "5.4"
+before-script: pear install bovigo/vfsStream-beta
 script: phpunit --configuration ./build/config/php-unit.xml --bootstrap ./test/php/environment/Bootstrap.php
