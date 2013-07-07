@@ -29,8 +29,8 @@ class PSR0Namespace implements AutoloadIface
 	/**
 	 * Private Properties
 	 *
-	 * @var int $nsWithSlashLen Length of the namespace with slash.                                 
 	 * @var int $nameMinLen     Minimum length of name required to load.
+	 * @var int $nsWithSlashLen Length of the namespace with slash.
 	 */
 	private $nameMinLen, $nsWithSlashLen;
 	
