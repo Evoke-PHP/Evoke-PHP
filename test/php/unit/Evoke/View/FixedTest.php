@@ -39,7 +39,7 @@ class FixedTest extends PHPUnit_Framework_TestCase
 	 * @covers       Evoke\View\Fixed::get
 	 * @dataProvider providerFixed
 	 */
-	public function testX($value)
+	public function testGetView($value)
 	{
 		$object = new Fixed($value);
 		$this->assertSame($value, $object->get());

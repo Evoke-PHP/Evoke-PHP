@@ -2,7 +2,7 @@
 /**
  * StaticMap Autoload
  *
- * @package Service
+ * @package Service\Autoload
  */
 namespace Evoke\Service\Autoload;
 
@@ -16,9 +16,9 @@ use RuntimeException;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   Service
+ * @package   Service\Autoload
  */
-class StaticMap extends Autoload
+class StaticMap implements AutoloadIface
 {
 	/**
 	 * The static map of classnames to filenames.

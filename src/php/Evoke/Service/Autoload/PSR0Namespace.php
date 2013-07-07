@@ -2,7 +2,7 @@
 /**
  * PSR0Namespace Autoload
  *
- * @package Service
+ * @package Service\Autoload
  */
 namespace Evoke\Service\Autoload;
 
@@ -12,19 +12,28 @@ namespace Evoke\Service\Autoload;
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   Service
+ * @package   Service\Autoload
  */
-class PSR0Namespace extends Autoload
+class PSR0Namespace implements AutoloadIface
 {
 	/**
 	 * Protected Properties
 	 * 
-	 * @var string $baseDir   Base directory for the files.
-	 * @var string $extension File extension to use.
-	 * @var string $namespace Base namespace that we are autoloading.
+	 * @var string $baseDir     Base directory for the files.
+	 * @var string $extension   File extension to use.
+	 * @var string $nsWithSlash Base namespace that we are autoloading with
+	 *                          slash at the end.
 	 */
-	protected $baseDir, $extension, $namespace;
+	protected $baseDir, $extension, $nsWithSlash;
 
+	/**
+	 * Private Properties
+	 *
+	 * @var int $nsWithSlashLen Length of the namespace with slash.                                 
+	 * @var int $nameMinLen     Minimum length of name required to load.
+	 */
+	private $nameMinLen, $nsWithSlashLen;
+	
 	/**
 	 * Construct an Autoload object.
 	 *
@@ -36,9 +45,12 @@ class PSR0Namespace extends Autoload
 	                            /* String */ $namespace,
 	                            /* String */ $extension='.php')
 	{
-		$this->baseDir   = rtrim($baseDir, DIRECTORY_SEPARATOR);
-		$this->extension = $extension;
-		$this->namespace = $namespace;
+		$this->baseDir     = rtrim($baseDir, DIRECTORY_SEPARATOR);
+		$this->extension   = $extension;
+		$this->nsWithSlash = rtrim($namespace, '\\') . '\\';
+
+		$this->nsWithSlashLen = strlen($this->nsWithSlash);
+		$this->nameMinLen     = $this->nsWithSlashLen + 1;
 	}
 
 	/******************/
@@ -53,30 +65,23 @@ class PSR0Namespace extends Autoload
 	public function load(/* String */ $name)
 	{
 		// Only handle the specified namespace (and its subnamespaces).
-		if (substr($name, 0, strlen($this->namespace)) !== $this->namespace)
+		if (strlen($name) >= $this->nameMinLen &&
+		    substr($name, 0, $this->nsWithSlashLen) !== $this->nsWithSlash)
 		{
 			return;
 		}
 
-		$filename = $this->baseDir . DIRECTORY_SEPARATOR;
+		// Name has a slash because we checked it against nsWithSlash.
 		$lastSlash = strrpos($name, '\\');
-      
-		if ($lastSlash === false)
-		{
-			$filename .= str_replace('_', DIRECTORY_SEPARATOR, $name);
-		}
-		else
-		{
-			$namespace = substr($name, 0, $lastSlash + 1);
-			$className = substr($name, $lastSlash + 1);
-			$filename .= str_replace('\\', DIRECTORY_SEPARATOR, $namespace) .
-				str_replace('_', DIRECTORY_SEPARATOR, $className);
-		}
-
-		$filename .= $this->extension;
+		$namespace = substr($name, 0, $lastSlash + 1);
+		$className = substr($name, $lastSlash + 1);
+		$filename = $this->baseDir . DIRECTORY_SEPARATOR .
+			str_replace('\\', DIRECTORY_SEPARATOR, $namespace) .
+			str_replace('_', DIRECTORY_SEPARATOR, $className) .
+			$this->extension;
 
 		if (file_exists($filename))
-		{
+		{	
 			require $filename;
 		}
 	}	
