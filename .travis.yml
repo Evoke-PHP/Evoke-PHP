@@ -3,8 +3,6 @@ php:
   - "5.4"
 
 before-script:
- - pear channel-discover pear.bovigo.org
- - pear install bovigo/vfsStream-beta
- - phpenv rehash
+  - composer update -d ./test/php/environment
 
 script: phpunit --configuration ./build/config/php-unit.xml --bootstrap ./test/php/environment/Bootstrap.php

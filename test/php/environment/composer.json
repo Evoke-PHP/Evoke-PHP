@@ -1,0 +1,16 @@
+{
+    "description": "Evoke-PHP Testing",
+    "name": "Evoke-PHP Testing",
+    "minimum-stability": "dev",
+
+    "require": {
+		"mikey179/vfsStream": "v1.2.0"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Evoke": "../../../src/php",
+			"org/bovigo/vfs": "vendor/mikey179/vfsStream/src/main/php/"
+		}
+    }
+}

@@ -1,11 +1,9 @@
 <?php
 namespace Evoke_Test\Service\Autoload;
 
-require_once 'vfsStream/vfsStream.php';
-
 use Evoke\Service\Autoload\PSR0Namespace,
 	PHPUnit_Framework_TestCase,
-	vfsStream;
+	org\bovigo\vfs\vfsStream;
 
 class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 {

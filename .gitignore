@@ -2,3 +2,6 @@
 build
 docs/doxygen/html/*
 test/*/coverage
+test/php/environment/composer.lock
+test/php/environment/composer-temp.phar
+test/php/environment/vendor

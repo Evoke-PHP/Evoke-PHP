@@ -178,6 +178,11 @@
 		  depends     = "prepare"
 		  description = "Run unit tests with PHPUnit">
 
+	<exec executable = "composer" passthru = "true">
+	  <arg value = "update"/>
+	  <arg value = "-d"/>
+	  <arg value = "${project.php_test}/../environment"/>
+	</exec>
 
 	<exec executable = "phpunit" passthru = "true">
 	  <arg value = "-c"/>
