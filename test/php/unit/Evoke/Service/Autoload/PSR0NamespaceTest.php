@@ -28,21 +28,21 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
 	 */
 	public function testLoadExists()
-	{
+	{		
 		vfsStream::setup(
-			'testPSRLoadExists',
+			'root',
 			NULL,
-			['dir' =>
-			 ['NS' =>
-			  ['A' =>
-			   ['B.php' => '<?php class BPSRLoadExists_XYZ {}',
-			    'C.php' => '<?php']]]]);
+			['PSR0NamespaceTestNS' =>
+			 ['A' =>
+			  ['B.php' => '<?php namespace PSR0NamespaceTestNS\A; class B {}',
+			   'C.php' => '<?php']]]);
 
-		$object = new PSR0Namespace(vfsStream::url('dir'), 'NS');
+		$object = new PSR0Namespace(vfsStream::url('root'),
+		                            'PSR0NamespaceTestNS');
 
-		$this->assertFalse(class_exists('BPSRLoadExists_XYZ', FALSE));
-		$object->load('NS\A\B');
-		$this->assertTrue(class_exists('BPSRLoadExists_XYZ', FALSE));
+		$this->assertFalse(class_exists('PSR0NamespaceTestNS\A\B', FALSE));
+		$object->load('PSR0NamespaceTestNS\A\B');
+		$this->assertTrue(class_exists('PSR0NamespaceTestNS\A\B', FALSE));
 	}
 
 	/**
@@ -53,15 +53,14 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	public function testLoadNonExistant()
 	{
 		vfsStream::setup(
-			'testPSRLoadNonExistant',
+			'root',
 			NULL,
-			['dir' =>
-			 ['NS' =>
-			  ['A' =>
-			   ['B.php' => '<?php class BPSRLoadExists_XYZ {}',
-			    'C.php' => '<?php']]]]);
+			['NS' =>
+			 ['A' =>
+			  ['B.php' => '<?php class BPSRLoadExists_XYZ {}',
+			   'C.php' => '<?php']]]);
 
-		$object = new PSR0Namespace(vfsStream::url('dir'), 'NS');
+		$object = new PSR0Namespace(vfsStream::url('root'), 'NS');
 		$object->load('NS\A\D');
 		$this->assertFalse(class_exists('NS\A\D', FALSE));
 	}
@@ -74,17 +73,16 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	public function testLoadOutside()
 	{
 		vfsStream::setup(
-			'testPSRLoadOutside',
+			'root',
 			NULL,
-			['dir' =>
-			 ['NS' =>
-			  ['A' =>
-			   ['B.php' => '<?php class BPSRLoadExists_XYZ {}',
-			    'C.php' => '<?php']]]]);
+			['NS' =>
+			 ['A' =>
+			  ['B.php' => '<?php class BPSRLoadExists_XYZ {}',
+			   'C.php' => '<?php']]]);
 
-		$object = new PSR0Namespace(vfsStream::url('dir'), 'NS');
-		$object->load('BS\A\D');
-		$this->assertFalse(class_exists('BS\A\D', FALSE));
+		$object = new PSR0Namespace(vfsStream::url('root'), 'NS');
+		$object->load('NS\A\D');
+		$this->assertFalse(class_exists('NS\A\D', FALSE));
 	}
 
 	

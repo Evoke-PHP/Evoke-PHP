@@ -7,18 +7,6 @@ use Evoke\Service\Autoload\StaticMap,
 
 class StaticMapTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
-
-	public function providerLoadExisting()
-	{
-		return [
-			'Flat' => ['Filesystem' => ['a.php' => '<?php class LoadExistingA_ZXY {}', 'b.php' => '<?php $b = 2'],
-			           'Classname'  => 'LoadExistingA_ZXY',
-			           'Map'        => ['LoadExistingA_ZXY' => vfsStream::url('a.php'), 'B' => '/b.php']]];
-	}
-	
 	/*********/
 	/* Tests */
 	/*********/
@@ -37,17 +25,23 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 	/**
 	 * We load the class if it exists.
 	 *
-	 * @covers       Evoke\Service\Autoload\StaticMap::load
-	 * @dataProvider providerLoadExisting
+	 * @covers Evoke\Service\Autoload\StaticMap::load
 	 */
-	public function testLoadExisting(
-		Array $filesystem, /* String */ $classname, Array $map)
+	public function testLoadExisting()
 	{
-		vfsStream::setup('testLoadExisting', NULL, $filesystem);
-		$object = new StaticMap($map);
-		$object->load($classname);
+		$classToLoad = 'StaticMapTestLoadExistingA_ZXY';
+		vfsStream::setup(
+			'root',
+	        NULL,
+	        ['a.php' => '<?php class ' . $classToLoad . ' {}',
+	         'b.php' => '<?php class B {}']);
 
-		$this->assertTrue(class_exists($classname, FALSE));
+        $object = new StaticMap(
+	        ['B'          => vfsStream::url('/b.php'),
+	         $classToLoad => vfsStream::url('root/a.php')]);
+        $object->load($classToLoad);
+
+		$this->assertTrue(class_exists($classToLoad, FALSE));
 	}
 
 	/**
@@ -59,7 +53,7 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 	public function testLoadNonExistant()
 	{
 		vfsStream::setup(
-			'testLoadNonExistant',
+			'root',
 			NULL,
 			array('a.php' => '<?php'));
 		$object = new StaticMap(['A' => vfsStream::url('a.php'),
@@ -75,13 +69,14 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 	public function testLoadUncovered()
 	{
 		vfsStream::setup(
-			'testLoadUncovered',
+			'StaticMapTestLoadUncovered',
 			NULL,
 			array('a.php' => '<?php'));
 		$object = new StaticMap(['A' => vfsStream::url('a.php'),
 		                         'B' => vfsStream::url('Covered.php')]);
-		$object->load('TestLoadUncoveredC_XYZ');
-		$this->assertFalse(class_exists('TestLoadUncoveredC_XYZ', FALSE));
+		$object->load('StaticMapTestLoadUncoveredC_XYZ');
+		$this->assertFalse(class_exists('StaticMapTestLoadUncoveredC_XYZ',
+		                                FALSE));
 	}	
 }
 // EOF
