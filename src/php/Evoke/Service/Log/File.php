@@ -7,7 +7,7 @@
 namespace Evoke\Service\Log;
 
 use DateTime,
-	Evoke\Persistence\FilesystemIface;
+	RuntimeException;
 
 /**
  * File Logger
@@ -44,12 +44,6 @@ class File implements LoggerIface
 	protected $filename;
 	
 	/**
-	 * Filesystem
-	 * @var Evoke\Persistence\FilesystemIface
-	 */
-	protected $filesystem;
-
-	/**
 	 * Whether the file is locked when writing to the file.
 	 * @var bool
 	 */
@@ -71,14 +65,12 @@ class File implements LoggerIface
 	 * Construct a File Logger object.
 	 *
 	 * @param string          The filename for the log.
-	 * @param FilesystemIface Filesystem object
 	 * @param bool       	  Whether to append to the file.
 	 * @param int(octal) 	  The directory mode for the log file.
 	 * @param int(octal) 	  Permissions to set the file to
 	 * @param bool       	  Whether to lock the file for writing.
 	 */
 	public function __construct(/* String */      $filename,
-	                            FilesystemIface   $filesystem,
 	                            /* Bool */        $append   = true,
 	                            /* Int (octal) */ $dirMode  = 0700,
 	                            /* Int (octal) */ $fileMode = 0640,
@@ -87,7 +79,6 @@ class File implements LoggerIface
 		$this->append     = $append;
 		$this->dirMode    = $dirMode;
 		$this->filename   = $filename;
-		$this->filesystem = $filesystem;
 		$this->fileMode   = $fileMode;
 		$this->locking    = $locking;
 	}
@@ -117,13 +108,13 @@ class File implements LoggerIface
 		// Write to the file, with or without file locking.
 		if ($this->locking)
 		{
-			$this->filesystem->flock($this->filePointer, LOCK_EX);
-			$this->filesystem->fwrite($this->filePointer, $entry);
-			$this->filesystem->flock($this->filePointer, LOCK_UN);
+			flock($this->filePointer, LOCK_EX);
+			fwrite($this->filePointer, $entry);
+			flock($this->filePointer, LOCK_UN);
 		}
 		else
 		{
-			$this->filesystem->fwrite($this->filePointer, $entry);
+			fwrite($this->filePointer, $entry);
 		}
 	}
    
@@ -142,7 +133,7 @@ class File implements LoggerIface
 
 		if (!is_dir($dir))
 		{
-			$this->filesystem->mkdir(dirname($dir), $this->dirMode, true);
+			mkdir(dirname($dir), $this->dirMode, true);
 		}
             
 		if ($this->append)
@@ -151,9 +142,18 @@ class File implements LoggerIface
 		}
 
 		// Open the log file and ensure it is at the right chmod level.
-		$this->filePointer =
-			$this->filesystem->fopen($this->filename, $writeMode);
-		$this->filesystem->chmod($this->filename, $this->fileMode);
+		$this->filePointer = fopen($this->filename, $writeMode);
+
+		if ($this->filePointer == false)
+		{
+			throw new RuntimeException('Cannot open log file.');
+		}
+
+		if (!chmod($this->filename, $this->fileMode))
+		{
+			throw new RuntimeException('Cannot chmod log file.');
+		}
+		
 		$this->opened = true;
 	}
 }

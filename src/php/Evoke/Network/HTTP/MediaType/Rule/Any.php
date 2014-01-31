@@ -28,7 +28,7 @@ class Any extends Rule
 	 * @param  mixed[] The media type we are checking for a match against.
 	 * @return bool True.
 	 */
-	public function isMatch($mediaType)
+	public function isMatch(Array $mediaType)
 	{
 		return true;
 	}

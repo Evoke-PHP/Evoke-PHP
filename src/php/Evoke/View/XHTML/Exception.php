@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\ViewIface,
+use Evoke\View\ExceptionIface,
 	LogicException;
 
 /**
@@ -17,7 +17,7 @@ use Evoke\View\ViewIface,
  * @license MIT
  * @package View\XHTML
  */
-class Exception implements ViewIface
+class Exception implements ExceptionIface
 {
 	/**
 	 * The exception that we are viewing.

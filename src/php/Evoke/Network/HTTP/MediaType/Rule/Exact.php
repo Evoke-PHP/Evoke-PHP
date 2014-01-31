@@ -58,7 +58,7 @@ class Exact extends Match
 	 * @param mixed[] The media type we are checking against.
 	 * @return bool Whether the rule matches.
 	 */
-	public function isMatch($mediaType)
+	public function isMatch(Array $mediaType)
 	{
 		if (!is_array($mediaType))
 		{

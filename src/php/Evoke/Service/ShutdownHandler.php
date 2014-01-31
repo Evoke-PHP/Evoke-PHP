@@ -9,7 +9,8 @@ namespace Evoke\Service;
 use Evoke\Network\HTTP\ResponseIface,
 	Evoke\View\ErrorIface,
 	Evoke\View\MessageBoxIface,
-	Evoke\Writer\WriterIface;
+	Evoke\Writer\WriterIface,
+	InvalidArgumentException;
 
 /**
  * Shutdown Handler
@@ -77,6 +78,12 @@ class ShutdownHandler
 	                            WriterIface     $writer,
 	                            ErrorIface      $viewError = NULL)
 	{
+		if ($showError && !isset($viewError))
+		{
+			throw new InvalidArgumentException(
+				'needs Error view if we are showing the error.');
+		}
+
 		$this->email          = $email;
 		$this->response       = $response;
 		$this->showError      = $showError;

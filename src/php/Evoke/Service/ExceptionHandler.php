@@ -6,8 +6,9 @@
  */
 namespace Evoke\Service;
 
-use Evoke\Netowrk\HTTP\ResponseIface,
-	Evoke\View\ExceptionIface as ViewExceptionIface,
+use Evoke\Network\HTTP\ResponseIface,
+	Evoke\View\MessageBoxIface,
+	Evoke\View\ExceptionIface,
 	Evoke\Writer\PageIface,
 	InvalidArgumentException;
 

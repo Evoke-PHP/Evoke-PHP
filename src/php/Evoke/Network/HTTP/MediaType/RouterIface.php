@@ -6,7 +6,7 @@
  */
 namespace Evoke\Network\HTTP\MediaType;
 
-use Rule\RuleIface;
+use Evoke\Network\HTTP\MediaType\Rule\RuleIface;
 
 /**
  * HTTP Media Type Router Interface

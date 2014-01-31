@@ -8,7 +8,7 @@ namespace Evoke\Network\HTTP\MediaType;
 
 use Evoke\Network\HTTP\RequestIface,
 	OutOfBoundsException,
-	Rule\RuleIface;
+	Evoke\Network\HTTP\MediaType\Rule\RuleIface;
 
 /**
  * HTTP Media Type Router Interface
