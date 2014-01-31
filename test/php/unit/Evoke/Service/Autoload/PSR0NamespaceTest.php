@@ -66,6 +66,27 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Try to load a class with a namespace length the same as defined, but
+	 * different.
+	 *
+	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
+	 */
+	public function testLoadSameLengthButDifferent()
+	{
+		vfsStream::setup(
+			'root',
+			NULL,
+			['NS' =>
+			 ['A' =>
+			  ['B.php' => '<?php namespace NS\A; class B {}',
+			   'C.php' => '<?php']]]);
+
+		$object = new PSR0Namespace(vfsStream::url('root'), 'NS');
+		$object->load('WS\A\B');
+		$this->assertFalse(class_exists('WS\A\B', FALSE));
+	}
+	
+	/**
 	 * Try to load a class that is outside the namespace.
 	 *
 	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
