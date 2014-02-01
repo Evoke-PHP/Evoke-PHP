@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\Data;
+use Evoke\View\ViewIface;
 
 /**
  * Variable Export View
@@ -18,7 +18,7 @@ use Evoke\View\Data;
  * @license   MIT
  * @package   View\XHTML
  */
-class VarExport extends Data
+class VarExport implements ViewIface
 {
 	/**
 	 * Variable to export.

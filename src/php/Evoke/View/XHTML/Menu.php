@@ -4,9 +4,9 @@
  *
  * @package View\XHTML\Control
  */
-namespace Evoke\View\XHTML\Control;
+namespace Evoke\View\XHTML;
 
-use Evoke\Model\Data\Menu as DataMenu,
+use Evoke\Model\Data\MenuIface as DataMenu,
 	Evoke\View\ViewIface,
 	LogicException;
 
@@ -23,10 +23,9 @@ class Menu implements ViewIface
 	/**
 	 * Protected properties.
 	 *
-	 * @var DataMenu $data     Menu data.
-	 * @var string   $language Language of the menu.
+	 * @var DataMenu $data Menu data.
 	 */
-	protected $data, $language;
+	protected $data;
 
 	/******************/
 	/* Public Methods */
@@ -41,14 +40,9 @@ class Menu implements ViewIface
 	{
 		if (!$this->data instanceof DataMenu)
 		{
-			throw new LogicException('needs data as Data\Menu');
+			throw new LogicException('needs data as Data\MenuIface');
 		}
-		
-		if (!isset($this->language))
-		{
-			throw new LogicException('needs language.');
-		}
-		
+
 		$menus = $this->data->getMenu();
 		$menusElements = array();
 		
@@ -60,9 +54,7 @@ class Menu implements ViewIface
 				$this->buildMenu($menu['Items'][0]['Children']));
 		}
 
-		return (count($menusElements) > 1) ?
-			array('div', array('class' => 'Menus'), $menusElements) :
-			reset($menusElements);
+		return array('div', array('class' => 'Menus'), $menusElements);
 	}
 
 	/**
@@ -73,16 +65,6 @@ class Menu implements ViewIface
 	public function setData(DataMenu $dataMenu)
 	{
 		$this->data = $dataMenu;
-	}
-
-	/**
-	 * Set the language of the menu.
-	 *
-	 * @param string Language of the menu.
-	 */
-	public function setLanguage(/* String */ $language)
-	{
-		$this->language = (string) $language;
 	}
 	
 	/*******************/
@@ -109,7 +91,7 @@ class Menu implements ViewIface
 					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $this->params['Language']]),
+					            $menuItem['Text']),
 					      array('ul',
 					            array(),
 					            $this->buildMenu(
@@ -122,7 +104,7 @@ class Menu implements ViewIface
 					array('class' => 'Menu_Item Level_' . $level),
 					array(array('a',
 					            array('href' => $menuItem['Href']),
-					            $menuItem['Text_' . $this->params['Language']])
+					            $menuItem['Text'])
 						));
 			}
 		}
