@@ -20,12 +20,6 @@ use DateTime,
 class File implements LoggerIface
 {
 	/**
-	 * Whether the file should be appended to.
-	 * @var bool	 
-	 */
-	protected $append;
-
-	/**
 	 * The mode for any created directories.
 	 * @var int (octal)
 	 */
@@ -65,18 +59,15 @@ class File implements LoggerIface
 	 * Construct a File Logger object.
 	 *
 	 * @param string          The filename for the log.
-	 * @param bool       	  Whether to append to the file.
 	 * @param int(octal) 	  The directory mode for the log file.
 	 * @param int(octal) 	  Permissions to set the file to
 	 * @param bool       	  Whether to lock the file for writing.
 	 */
 	public function __construct(/* String */      $filename,
-	                            /* Bool */        $append   = true,
 	                            /* Int (octal) */ $dirMode  = 0700,
 	                            /* Int (octal) */ $fileMode = 0640,
 	                            /* Bool */        $locking  = true)
 	{
-		$this->append     = $append;
 		$this->dirMode    = $dirMode;
 		$this->filename   = $filename;
 		$this->fileMode   = $fileMode;
@@ -123,30 +114,27 @@ class File implements LoggerIface
 	/*******************/
 
 	/**
-	 * Open the log file for output. Creating directories, files as appropriate.
-	 * Use the modes from setup for the directory, file and append settings.
+	 * Open the log file for output. Creating directories and the log file if
+	 * required using the correct mode.
 	 */
 	private function open()
 	{
-		$writeMode = 'w';
 		$dir = dirname($this->filename);
 
-		if (!is_dir($dir))
+		if (!is_dir($dir) &&
+		    !mkdir(dirname($dir), $this->dirMode, true))
 		{
-			mkdir(dirname($dir), $this->dirMode, true);
+			throw new RuntimeException('Cannot make log directory.');
 		}
-            
-		if ($this->append)
+		
+		if (!chmod($dir, $this->dirMode))
 		{
-			$writeMode = 'a';
+			throw new RuntimeException('Cannot chmod log directory.');
 		}
 
-		// Open the log file and ensure it is at the right chmod level.
-		$this->filePointer = fopen($this->filename, $writeMode);
-
-		if ($this->filePointer == false)
+		if (!touch($this->filename))
 		{
-			throw new RuntimeException('Cannot open log file.');
+			throw new RuntimeException('Cannot touch log file.');
 		}
 
 		if (!chmod($this->filename, $this->fileMode))
@@ -154,6 +142,14 @@ class File implements LoggerIface
 			throw new RuntimeException('Cannot chmod log file.');
 		}
 		
+		// Open the log file for appending.
+		$this->filePointer = fopen($this->filename, 'a');
+
+		if ($this->filePointer == false)
+		{
+			throw new RuntimeException('Cannot open log file.');
+		}
+
 		$this->opened = true;
 	}
 }
