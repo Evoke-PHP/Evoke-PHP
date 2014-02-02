@@ -86,6 +86,73 @@ class FileTest extends PHPUnit_Framework_TestCase
 		$object = new File(vfsStream::url('Root/UNOPENABLE'), 0700, 0400);
 		$object->log(new DateTime, 'Message', 'TEST');
 	}
+	/**
+	 * Can't chmod log dir.
+	 *
+	 * @covers                   Evoke\Service\Log\File::open
+	 * @expectedException        RuntimeException
+	 * @expectedExceptionMessage Cannot chmod log directory.
+	 */
+	public function testCantChmodLogDir()
+	{
+		TestWrapper::setCallback(
+			'mkdir',
+			function($path, $mode, $options)
+			{
+				return true;
+			});
+		
+		TestWrapper::setCallback(
+			'stream_metadata',
+			function($path, $option, $value)
+			{
+				// Make chmod fail.
+				if ($option === STREAM_META_ACCESS &&
+					$path === 'test://DIR')
+				{
+					return false;
+				}
+				
+				return true;
+			});
+
+		TestWrapper::setCallback(
+			'url_stat',
+			function($path, $flags)
+			{
+				return [
+					'dev' => 2055,
+					'ino' => 1573894,
+					'mode' => 16872,
+					'nlink' => 1,
+					'uid' => 1000,
+					'gid' => 1000,
+					'rdev' => 0,
+					'size' => 1,
+					'atime' => 1300000000,
+					'mtime' => 1300000000,
+					'ctime' => 1300000000,
+					'blksize' => 4096,
+					'blocks' => 1];
+			});			
+
+		if (!stream_wrapper_register(
+			    'test', '\Evoke_Test\Service\Log\TestWrapper'))
+		{
+			throw new \ErrorException('Cannot register test stream.');
+		}
+
+		try
+		{
+			$object = new File('test://DIR/log');
+			$object->log(new DateTime, 'Message', 'Level');
+		}
+		catch (\Exception $e)
+		{
+			stream_wrapper_unregister('test');
+			throw $e;
+		}
+	}
 	
 	/**
 	 * Can't chmod log file.
@@ -96,15 +163,63 @@ class FileTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCantChmodLogFile()
 	{
-		$fs = vfsStream::setup('Root', 0700);
-		vfsStream::newFile('UNCHMODABLE', 0000)
-			->chown(1)
-			->at($fs);
+		TestWrapper::setCallback(
+			'mkdir',
+			function($path, $mode, $options)
+			{
+				return true;
+			});
+		
+		TestWrapper::setCallback(
+			'stream_metadata',
+			function($path, $option, $value)
+			{
+				// Make chmod fail.
+				if ($option === STREAM_META_ACCESS &&
+					$path === 'test://DIR/log')
+				{
+					return false;
+				}
+				
+				return true;
+			});
 
-		$object = new File(vfsStream::url('Root/UNCHMODABLE'),
-		                   0700,
-		                   0777);
-		$object->log(new DateTime, 'Message', 'TEST');
+		TestWrapper::setCallback(
+			'url_stat',
+			function($path, $flags)
+			{
+				return [
+					'dev' => 2055,
+					'ino' => 1573894,
+					'mode' => 16872,
+					'nlink' => 1,
+					'uid' => 1000,
+					'gid' => 1000,
+					'rdev' => 0,
+					'size' => 1,
+					'atime' => 1300000000,
+					'mtime' => 1300000000,
+					'ctime' => 1300000000,
+					'blksize' => 4096,
+					'blocks' => 1];
+			});			
+
+		if (!stream_wrapper_register(
+			    'test', '\Evoke_Test\Service\Log\TestWrapper'))
+		{
+			throw new \ErrorException('Cannot register test stream.');
+		}
+
+		try
+		{
+			$object = new File('test://DIR/log');
+			$object->log(new DateTime, 'Message', 'Level');
+		}
+		catch (\Exception $e)
+		{
+			stream_wrapper_unregister('test');
+			throw $e;
+		}
 	}
 
 	/**
@@ -125,13 +240,13 @@ class FileTest extends PHPUnit_Framework_TestCase
 		
 		TestWrapper::setCallback(
 			'stream_metadata',
-			function($path, $options, $value)
+			function($path, $option, $value)
 			{
-				if ($options == STREAM_META_TOUCH)
+				if ($option === STREAM_META_TOUCH)
 				{
 					return false;
 				}
-
+				
 				return true;
 			});
 
@@ -139,28 +254,38 @@ class FileTest extends PHPUnit_Framework_TestCase
 			'url_stat',
 			function($path, $flags)
 			{
-				return true;
+				return [
+					'dev' => 2055,
+					'ino' => 1573894,
+					'mode' => 16872,
+					'nlink' => 1,
+					'uid' => 1000,
+					'gid' => 1000,
+					'rdev' => 0,
+					'size' => 1,
+					'atime' => 1300000000,
+					'mtime' => 1300000000,
+					'ctime' => 1300000000,
+					'blksize' => 4096,
+					'blocks' => 1];
 			});
 		
-		if (!stream_wrapper_register('test', 'Evoke_Test\Service\Log\TestWrapper'))
+		if (!stream_wrapper_register(
+			    'test', '\Evoke_Test\Service\Log\TestWrapper'))
 		{
 			throw new \ErrorException('Cannot register test stream.');
 		}
 		
-		$object = new File('test://log.txt');
-		$object->log(new DateTime, 'Message', 'Level');
-		
-		/*
-		$fs = vfsStream::setup('Root', 0700);
-		vfsStream::newFile('YOU_CANT_TOUCH_THIS', 0000)->chown(1)->at($fs);
-		flock(vfsStream::url('Root/YOU_CANT_TOUCH_THIS'), LOCK_EX);
-
-		$object = new File(vfsStream::url('Root/YOU_CANT_TOUCH_THIS'),
-		                   0700,
-		                   0777);
-		$object->log(new DateTime, 'Message', 'TEST');
-		*/
-		
+		try
+		{
+			$object = new File('test://DIR/log');
+			$object->log(new DateTime, 'Message', 'Level');
+		}
+		catch (\Exception $e)
+		{
+			stream_wrapper_unregister('test');
+			throw $e;
+		}
 	}
 
 	/**
@@ -176,7 +301,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 		$object = new File(vfsStream::url('LOG_DIR/any.txt'));
 		$object->log(new DateTime, 'Msg', 'Lvl');
 
-		// $this->assertSame(0700, $fs->getPermissions());
 		$this->assertSame(0640, $fs->getChild('any.txt')->getPermissions());
 	}
 	
