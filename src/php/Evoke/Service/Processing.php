@@ -6,6 +6,8 @@
  */
 namespace Evoke\Service;
 
+use DomainException;
+
 /**
  * Processing
  *
@@ -37,34 +39,33 @@ class Processing implements ProcessingIface
 	 * Whether a key is required to match for processing.
 	 * @var bool
 	 */
-	protected $matchRequired;
+	protected $matchRequired = false;
 
 	/**
 	 * Whether only a single request type can be processed at a time.
 	 * @var bool
 	 */
-	protected $uniqueMatchRequired;
+	protected $uniqueMatchRequired = true;
 
-	/**
-	 * Construct a Processing object.
-	 *
-	 * @param bool Whether a match is required.
-	 * @param bool Whether a unique match is required.
-	 */
-	public function __construct(/* Bool */ $matchRequired       = false,
-	                            /* Bool */ $uniqueMatchRequired = true)
-	{
-		$this->matchRequired       = $matchRequired;
-		$this->uniqueMatchRequired = $uniqueMatchRequired;
-	}
 
 	/******************/
 	/* Public Methods */
 	/******************/
 
-	public function appendCallback(/* String */ $processingKey,
-	                               callable     $callback)
+	/**
+	 * Add a callback to the request key's list of callbacks.
+	 *
+	 * @param string   The request key for the matching.
+	 * @param callable The callback that is being added.
+	 */
+	public function addCallback(/* String */ $processingKey,
+	                            callable     $callback)
 	{
+		if (!is_array($this->callbacks[$processingKey]))
+		{
+			$this->callbacks[$processingKey] = array();
+		}
+		
 		$this->callbacks[$processingKey][] = $callback;
 	}
 	
@@ -73,13 +74,21 @@ class Processing implements ProcessingIface
 	 */
 	public function process()
 	{
-		$matchedKeys = array_intersect_key($this->callbacks, $this->data);
-	
+		if (empty($this->data))
+		{
+			$matchedKeys = empty($this->callbacks['']) ?
+				array() : array('' => $this->callbacks['']);
+		}
+		else
+		{
+			$matchedKeys = array_intersect_key($this->callbacks, $this->data);
+		}
+		
 		if ($this->matchRequired && (count($matchedKeys) === 0))
 		{
 			throw new DomainException(
-				'Match_Required processing request with keys: ' .
-				implode(' ', array_keys($this->data)) .
+				'Match required processing request with keys: ' .
+				implode(', ', array_keys($this->data)) .
 				' recognized keys are: ' .
 				implode(' ', array_keys($this->callbacks)));
 		}
@@ -87,11 +96,11 @@ class Processing implements ProcessingIface
 		{
 			throw new DomainException(
 				'Unique match required processing request with keys: ' .
-				implode(' ', array_keys($this->data)) .
+				implode(', ', array_keys($this->data)) .
 				' recognized keys are: ' .
-				implode(' ', array_keys($this->callbacks)),
+				implode(', ', array_keys($this->callbacks)) .
 				' matched keys are: ' .
-				implode(' ', $matchedKeys));
+				implode(', ', array_keys($matchedKeys)));
 		}
 
 		foreach ($matchedKeys as $key => $callbacks)
@@ -116,5 +125,25 @@ class Processing implements ProcessingIface
 	{
 		$this->data = $data;
 	}
+
+	/**
+	 * Set whether a match is required when processing the data.
+	 *
+	 * @param bool Whether a match is required.
+	 */
+	public function setMatchRequired($matchRequired = true)
+	{
+		$this->matchRequired = $matchRequired;
+	}
+
+	/**
+	 * Set whether a unique match is required when processing the data.
+	 *
+	 * @param bool Whether a unique match is required.
+	 */
+	public function setUniqueMatchRequired($uniqueMatchRequired = true)
+	{
+		$this->uniqueMatchRequired = $uniqueMatchRequired;
+	}	
 }
 // EOF

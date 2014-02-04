@@ -36,6 +36,21 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Service\ShutdownHandler::__construct
+	 * @expectedException InvalidArgumentException
+	 * @expectedExceptionMessage needs Error view if we are showing the error
+	 */
+	public function testConstructionWithInvalidParameters()
+	{
+		$object = new ShutdownHandler(
+			'a@b.com',
+			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
+			TRUE,
+			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\Writer\WriterIface'));
+	}
+	
+	/**
 	 * The shutdown does not display errors that would not have caused the
 	 * shutdown.
 	 *
