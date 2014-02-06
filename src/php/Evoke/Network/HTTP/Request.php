@@ -23,6 +23,8 @@ use LogicException;
 class Request implements RequestIface
 {
 	// @codingStandardsIgnoreStart
+	// The following breaks line length limits, but it aids readability too
+	// much to split the long lines.	
 	/**
 	 * Regexp subpatterns for the HTTP ACCEPT header.
 	 * This depends on PATTERNS_GENERAL or something equivalent being defined.

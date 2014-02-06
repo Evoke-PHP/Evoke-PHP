@@ -6,8 +6,6 @@
  */
 namespace Evoke\Network\URI;
 
-use Evoke\Network\RequestIface;
-
 /**
  * URI Router Interface
  *
@@ -21,26 +19,10 @@ use Evoke\Network\RequestIface;
 class Router implements RouterIface
 {
 	/**
-	 *  Request Object.
-	 *  @var RequestIface
-	 */
-	protected $request;
-
-	/**
 	 * Rules that the router uses to route.
 	 * @var Rule\RuleIface[]
 	 */
 	protected $rules = array();
-
-	/**
-	 * Create a URI Router that routes the request to a response.
-	 *
-	 * @param RequestIface The request to route.
-	 */
-	public function __construct(RequestIface $request)
-	{
-		$this->request = $request;
-	}
 	
 	/******************/
 	/* Public Methods */
@@ -59,14 +41,15 @@ class Router implements RouterIface
 	/**
 	 * Route the URI to the controller and parameters that should respond to it.
 	 *
+	 * @param string The URI that we are routing.
 	 * @return mixed[] The class and parameters that should respond to the URI
 	 *                 (generally this should be a Controller class).
 	 */
-	public function route()
+	public function route($uri)
 	{
 		// The controller starts as the request URI and is refined by the
 		// mappers until it is the correct controller.
-		$controller = $this->request->getURI();
+		$controller = $uri;
 		$params = array();
       
 		foreach ($this->rules as $rule)

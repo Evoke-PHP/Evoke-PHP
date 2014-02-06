@@ -19,7 +19,7 @@ namespace Evoke\Network\URI\Rule;
 class Trim extends Rule
 {
 	/**
-	 * Characters to trim from the the URI@
+	 * Characters to trim from the URI.
 	 * @var string
 	 */
 	protected $characters;
