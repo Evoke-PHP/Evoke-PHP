@@ -59,24 +59,21 @@ class RegexNamed extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri with the match replaced.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return preg_replace($this->match, $this->replacement, $uri);
+		return preg_replace($this->match, $this->replacement, $this->uri);
 	}
 
 	/**
 	 * Get any parameters.
 	 *
-	 * @param string The URI to get the parameters from.
-	 *
 	 * @return mixed[] Named parameters from the URI subpattern matches.
 	 */
-	public function getParams($uri)
+	public function getParams()
 	{
-		preg_match($this->match, $uri, $params);
+		preg_match($this->match, $this->uri, $params);
 
 		// Return only the named parameters rather than the numbered ones. 
 		foreach (array_keys($params) as $key)
@@ -93,12 +90,11 @@ class RegexNamed extends Rule
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		$result = preg_match($this->match, $uri);
+		$result = preg_match($this->match, $this->uri);
 
 		return $result !== false && $result > 0;
 	}

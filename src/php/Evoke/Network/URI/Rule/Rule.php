@@ -6,6 +6,8 @@
  */
 namespace Evoke\Network\URI\Rule;
 
+use InvalidArgumentException;
+
 /**
  * URI Rule Interface
  *
@@ -26,6 +28,12 @@ abstract class Rule implements RuleIface
 	protected $authoritative;
 
 	/**
+	 * The URI that the rule is acting upon.
+	 * @var string
+	 */
+	protected $uri;
+	
+	/**
 	 * Construct the URI Rule.
 	 *
 	 * @param bool Whether the rule can definitely give the final route for all
@@ -43,10 +51,9 @@ abstract class Rule implements RuleIface
 	/**
 	 * Get the parameters for the URI.
 	 *
-	 * @param string The URI.
 	 * @return [] Empty Array. (By default no parameters are captured)
 	 */	
-	public function getParams($uri)
+	public function getParams()
 	{
 		return array();
 	}
@@ -60,6 +67,21 @@ abstract class Rule implements RuleIface
 	public function isAuthoritative()
 	{
 		return $this->authoritative;
+	}
+
+	/**
+	 * Set the URI that the rule is acting upon.
+	 *
+	 * @param string The value to set the URI to.
+	 */
+	public function setURI($uri)
+	{
+		if (!is_string($uri))
+		{
+			throw new InvalidArgumentException('needs URI as string.');
+		}
+		
+		$this->uri = $uri;
 	}
 }
 // EOF

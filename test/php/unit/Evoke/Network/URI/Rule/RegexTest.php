@@ -39,9 +39,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 			];
 	}
 
-	/**
-	 * Data provider for testGetParams.
-	 */
 	public function providerGetParams()
 	{
 		return [
@@ -61,6 +58,26 @@ class RegexTest extends PHPUnit_Framework_TestCase
 				'Authoritative' => true,
 				'Uri'           => 'KOneVab',
 				'Expected'      => ['One' => 'hab']]
+			];
+	}
+
+	public function providerIsMatch()
+	{
+		return [
+			'Matches'   => [
+				'Controller' => ['Match'   => '/DC/',
+				                 'Replace' => 'X'],
+				'Match'      => '/Will_M[at]*ch/',
+				'Params'     => [],
+				'Uri'        => 'this/Will_Match',
+				'Expected'   => true],
+			'Unmatched' => [
+				'Controller' => ['Match'   => '/DC/',
+				                 'Replace' => 'X'],
+				'Match'      => '/Wont_M[at][at]ch/',
+				'Params'     => [],
+				'Uri'        => 'this/Wont_MXZch',
+				'Expected'   => false]
 			];
 	}
 
@@ -106,9 +123,10 @@ class RegexTest extends PHPUnit_Framework_TestCase
 		                     'Replace' => 'bar'],
 		                    'any',
 		                    []);
+		$object->setURI('this/foo/isFofoo');
 		
 		$this->assertSame('this/bar/isFobar',
-		                  $object->getController('this/foo/isFofoo'));
+		                  $object->getController());
 	}
 
 	/**
@@ -122,25 +140,22 @@ class RegexTest extends PHPUnit_Framework_TestCase
 		$controller, $match, $params, $authoritative, $uri, $expected)
 	{
 		$object = new Regex($controller, $match, $params, $authoritative);
-		$this->assertSame($expected, $object->getParams($uri));
+		$object->setURI($uri);
+		$this->assertSame($expected, $object->getParams());
 	}
 
 	/**
 	 * Test the matches for the regex.
 	 *
-	 * @depends test__constructGood
-	 * @covers  Evoke\Network\URI\Rule\Regex::isMatch
+	 * @depends      test__constructGood
+	 * @covers       Evoke\Network\URI\Rule\Regex::isMatch
+	 * @dataProvider providerIsMatch
 	 */
-	public function testIsMatch(
-		$match, $replacement, Array $params, $authoritative, $uri, $expected)
+	public function testIsMatch($controller, $match, $params, $uri, $expected)
 	{
-		$object = new Regex(['Match'   => '/foo/',
-		                     'Replace' => 'bar'],
-		                    'any',
-		                    []);
-
-		$this->assertFalse($object->isMatch('nohasit'));
-		$this->assertTrue($object->isMatch('oh_foo_yeah'));
+		$object = new Regex($controller, $match, $params);		
+		$object->setURI($uri);
+		$this->assertSame($expected, $object->isMatch());
 	}
 }
 // EOF

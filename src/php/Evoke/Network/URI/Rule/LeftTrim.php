@@ -46,23 +46,22 @@ class LeftTrim extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri trimmed appropriately.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return ltrim($uri, $this->characters);
+		return ltrim($this->uri, $this->characters);
 	}
 	
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI to determine the match from.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		return isset($uri[0]) && (strpos($this->characters, $uri[0]) !== false);
+		return isset($this->uri[0]) &&
+			(strpos($this->characters, $this->uri[0]) !== false);
 	}   
 }
 // EOF

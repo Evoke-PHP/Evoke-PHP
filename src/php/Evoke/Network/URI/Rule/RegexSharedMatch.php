@@ -77,28 +77,26 @@ class RegexSharedMatch extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri with the match replaced.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return preg_replace($this->match, $this->replacement, $uri);
+		return preg_replace($this->match, $this->replacement, $this->uri);
 	}
 
 	/**
 	 * Get any parameters.
 	 *
-	 * @param string The URI to get the parameters from.
 	 * @return mixed[] Parameters from the URI.
 	 */
-	public function getParams($uri)
+	public function getParams()
 	{
 		$params = array();
 
 		foreach ($this->params as $paramSpec)
 		{
-			$params[preg_replace($this->match, $paramSpec['Key'], $uri)] =
-				preg_replace($this->match, $paramSpec['Value'], $uri);
+			$params[preg_replace($this->match, $paramSpec['Key'], $this->uri)] =
+				preg_replace($this->match, $paramSpec['Value'], $this->uri);
 		}
 
 		return $params;		
@@ -107,12 +105,11 @@ class RegexSharedMatch extends Rule
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		$result = preg_match($this->match, $uri);
+		$result = preg_match($this->match, $this->uri);
 		
 		return $result !== false && $result > 0;
 	}

@@ -147,8 +147,8 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 	public function testGetController()
 	{
 		$obj = new RegexSharedMatch('/foo/', 'bar');
-		$this->assertSame('this/bar/isFobar',
-		                  $obj->getController('this/foo/isFofoo'));
+		$obj->setURI('this/foo/isFofoo');
+		$this->assertSame('this/bar/isFobar', $obj->getController());
 	}
 
 	/**
@@ -159,9 +159,10 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 	public function testGetParams(
 		$match, $replacement, Array $params, $authoritative, $uri, $expected)
 	{
-		$obj = new RegexSharedMatch($match, $replacement, $params, $authoritative);
-		$this->assertSame(
-			$expected, $obj->getParams($uri), 'unexpected value.');
+		$obj = new RegexSharedMatch(
+			$match, $replacement, $params, $authoritative);
+		$obj->setURI($uri);
+		$this->assertSame($expected, $obj->getParams(), 'unexpected value.');
 	}
 
 	/**
@@ -176,7 +177,8 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
 	{
 		$obj = new RegexSharedMatch(
 			$match, $replacement, $params, $authoritative);
-		$this->assertSame($expected, $obj->isMatch($uri), 'unexpected value.');
+		$obj->setURI($uri);
+		$this->assertSame($expected, $obj->isMatch(), 'unexpected value.');
 	}
 }
 // EOF

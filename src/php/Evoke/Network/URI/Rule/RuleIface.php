@@ -19,18 +19,16 @@ interface RuleIface
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri mapped towards the controller with the rule.
 	 */	
-	public function getController($uri);
+	public function getController();
 
 	/**
 	 * Return the parameters for the URI.
 	 *
-	 * @param string The URI.
-	 * @return mixed[] The parameters for the class.
+	 * @return mixed[] The parameters found using the rule.
 	 */
-	public function getParams($uri);
+	public function getParams();
 	
 	/**
 	 * Check whether the rule is authoritative.
@@ -43,10 +41,15 @@ interface RuleIface
 	/**
 	 * Check to see if the rule matches.
 	 *
-	 * @param string The URI to check for a match.
 	 * @return bool Whether the rule matches.
 	 */
-	public function isMatch($uri);
+	public function isMatch();
 	
+	/**
+	 * Set the URI that the rule is acting upon.
+	 *
+	 * @param string The URI that the rule should act upon.
+	 */
+	public function setURI($uri);
 }
 // EOF

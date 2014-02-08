@@ -47,18 +47,19 @@ class Router implements RouterIface
 	 */
 	public function route($uri)
 	{
-		// The controller starts as the request URI and is refined by the
-		// mappers until it is the correct controller.
-		$controller = $uri;
+		// The URI that is routed is continually refined from the initial URI by
+		// the rules.
+		$refinedURI = $uri;
 		$params = array();
       
 		foreach ($this->rules as $rule)
 		{
-			if ($rule->isMatch($controller))
+			$rule->setURI($refinedURI);
+			
+			if ($rule->isMatch())
 			{
-				// Set the parameters before updating the controller.
-				$params += $rule->getParams($controller);
-				$controller = $rule->getController($controller);
+				$refinedURI = $rule->getController();
+				$params += $rule->getParams();
 
 				if ($rule->isAuthoritative())
 				{
@@ -67,7 +68,7 @@ class Router implements RouterIface
 			}
 		}
 
-		return array('Controller' => $controller,
+		return array('Controller' => $refinedURI,
 		             'Params'     => $params);
 	}
 }

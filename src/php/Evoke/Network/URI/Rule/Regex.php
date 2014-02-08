@@ -51,7 +51,7 @@ class Regex extends Rule
 	 *                 replacement.
 	 * @param bool     Whether the rule is authoritative.
 	 */
-	public function __construct(Array $controller,
+	public function __construct(Array        $controller,
 	                            /* string */ $match,
 	                            Array        $params,
 	                            /* bool   */ $authoritative)
@@ -89,37 +89,35 @@ class Regex extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri with the match replaced.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
 		return preg_replace($this->controller['Match'],
 		                    $this->controller['Replace'],
-		                    $uri);
+		                    $this->uri);
 	}
 
 	/**
 	 * Get any parameters.
 	 *
-	 * @param string The URI to get the parameters from.
 	 * @return mixed[] Parameters from the URI.
 	 */
-	public function getParams($uri)
+	public function getParams()
 	{
 		$paramsFound = array();
 		
 		foreach ($this->params as $param)
 		{
-			if (preg_match($param['Key']['Match'], $uri) &&
-			    preg_match($param['Value']['Match'], $uri))
+			if (preg_match($param['Key']['Match'], $this->uri) &&
+			    preg_match($param['Value']['Match'], $this->uri))
 			{
 				$paramsFound[preg_replace($param['Key']['Match'],
 				                          $param['Key']['Replace'],
-				                          $uri)]
+				                          $this->uri)]
 					= preg_replace($param['Value']['Match'],
 					               $param['Value']['Replace'],
-					               $uri);
+					               $this->uri);
 			}
 		}
 
@@ -129,12 +127,11 @@ class Regex extends Rule
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		return preg_match($this->controller['Match'], $uri) > 0;
+		return preg_match($this->match, $this->uri) > 0;
 	}	
 }
 // EOF

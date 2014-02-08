@@ -46,27 +46,21 @@ class Trim extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri trimmed appropriately.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return trim($uri, $this->characters);
+		return trim($this->uri, $this->characters);
 	}
 
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI to determine the match from.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		return (
-			preg_match(
-				'/^[' . preg_quote($this->characters, '/') . ']+/', $uri) ||
-			preg_match(
-				'/[' . preg_quote($this->characters, '/') . ']+$/', $uri));
+		return trim($this->uri, $this->characters) !== $this->uri;
 	}	
 }
 // EOF

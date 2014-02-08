@@ -25,8 +25,8 @@ class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 	public function testGetController()
 	{
 		$obj = new UpperCaseFirst(['_', ' ']);
-		$this->assertSame('First LETTER_Uppercased',
-		                  $obj->getController('first LETTER_uppercased'));
+		$obj->setURI('first LETTER_uppercased');
+		$this->assertSame('First LETTER_Uppercased', $obj->getController());
 	}
 
 	/**
@@ -35,7 +35,8 @@ class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 	public function testIsMatchFalse()
 	{
 		$obj = new UpperCaseFirst(['/']);
-		$this->assertFalse($obj->isMatch('thisDontMatch'));
+		$obj->setURI('thisDontMatch');
+		$this->assertFalse($obj->isMatch());
 	}
 
 	/**
@@ -44,7 +45,8 @@ class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 	public function testIsMatchTrue()
 	{
 		$obj = new UpperCaseFirst(['/']);
-		$this->assertTrue($obj->isMatch('this/matches'));
+		$obj->setURI('this/matches');
+		$this->assertTrue($obj->isMatch());
 	}
 }
 // EOF

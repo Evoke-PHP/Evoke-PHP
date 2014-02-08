@@ -56,23 +56,21 @@ class StrReplace extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri with the string replacements made.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return str_replace($this->match, $this->replacement, $uri);
+		return str_replace($this->match, $this->replacement, $this->uri);
 	}
 	
 	/**
-	 * Check the uri to see if it matches. Only 1 sub-rule needs to match.
+	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
-		return strpos($uri, $this->match) !== false;
+		return strpos($this->uri, $this->match) !== false;
 	}
 }
 // EOF

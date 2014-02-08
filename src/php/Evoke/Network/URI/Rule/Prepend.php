@@ -47,21 +47,19 @@ class Prepend extends Rule
 	/**
 	 * Get the controller.
 	 *
-	 * @param string The URI to get the controller from.
 	 * @return string The uri with the string prepended.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		return $this->str . $uri;
+		return $this->str . $this->uri;
 	}
 	
 	/**
 	 * The prepend rule always matches.
 	 *
-	 * @param string The URI to determine the match from.
 	 * @return bool TRUE.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
 		return true;
 	}

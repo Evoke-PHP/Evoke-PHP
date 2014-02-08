@@ -47,12 +47,11 @@ class UppercaseFirst extends Rule
 	/**
 	 * Get the controller with each word starting in upper case.
 	 *
-	 * @param string The URI.
 	 * @return string The string representing the Controller.
 	 */
-	public function getController($uri)
+	public function getController()
 	{
-		$controller = $uri;
+		$controller = $this->uri;
 		
 		foreach ($this->delimiters as $delimiter)
 		{
@@ -72,14 +71,13 @@ class UppercaseFirst extends Rule
 	/**
 	 * Check the uri to see if it matches.
 	 *
-	 * @param string The URI.
 	 * @return bool Whether the uri is matched.
 	 */
-	public function isMatch($uri)
+	public function isMatch()
 	{
 		foreach ($this->delimiters as $delimiter)
 		{
-			if (strpos($uri, $delimiter) !== false)
+			if (strpos($this->uri, $delimiter) !== false)
 			{
 				return true;
 			}

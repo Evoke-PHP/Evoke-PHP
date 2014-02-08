@@ -25,8 +25,8 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 	public function testGetController()
 	{
 		$object = new RegexNamed('/match/', 'replacement');
-		$this->assertSame('uri/replacementes/ok',
-		                  $object->getController('uri/matches/ok'));
+		$object->setURI('uri/matches/ok');
+		$this->assertSame('uri/replacementes/ok', $object->getController());
 	}
 
 	/**
@@ -35,8 +35,8 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 	public function testGetParams()
 	{
 		$object = new RegexNamed('/m(...)a(?<Named>N.*)fin/', 'rep');
-		$this->assertSame(['Named' => 'NamedMatch'],
-		                  $object->getParams('m123aNamedMatchfin'));
+		$object->setURI('m123aNamedMatchfin');
+		$this->assertSame(['Named' => 'NamedMatch'], $object->getParams());
 	}
 
 	/**
@@ -45,7 +45,8 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 	public function testIsMatchFalse()
 	{
 		$object = new RegexNamed('/m(...)a(?<Named>N.*)fin/', 'rep');
-		$this->assertFalse($object->isMatch('maNamedNoMatchFun'));
+		$object->setURI('maNamedNoMatchFun');
+		$this->assertFalse($object->isMatch());
 	}
 
 	/**
@@ -54,7 +55,8 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 	public function testIsMatchTrue()
 	{
 		$object = new RegexNamed('/m\d[A-G]/', 'rep');
-		$this->assertTrue($object->isMatch('m1G'));
+		$object->setURI('m1G');
+		$this->assertTrue($object->isMatch());
 	}
 
 }

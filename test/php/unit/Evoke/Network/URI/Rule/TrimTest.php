@@ -68,7 +68,8 @@ class TrimTest extends PHPUnit_Framework_TestCase
 	public function testGetController($characters, $expected, $uri)
 	{
 		$obj = new Trim($characters);
-		$this->assertSame($expected, $obj->getController($uri));
+		$obj->setURI($uri);
+		$this->assertSame($expected, $obj->getController());
 	}
 
 	/**
@@ -78,7 +79,8 @@ class TrimTest extends PHPUnit_Framework_TestCase
 	public function testIsMatch($characters, $expected, $uri)
 	{
 		$obj = new Trim($characters);
-		$this->assertSame($expected, $obj->isMatch($uri));
+		$obj->setURI($uri);
+		$this->assertSame($expected, $obj->isMatch());
 	}  
 }
 // EOF
