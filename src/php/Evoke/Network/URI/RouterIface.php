@@ -24,7 +24,9 @@ interface RouterIface
 
 	/**
 	 * Perform the routing based on the added rules.
+	 *
+	 * @param string The URI to route.
 	 */
-	public function route();
+	public function route($uri);
 }
 // EOF
