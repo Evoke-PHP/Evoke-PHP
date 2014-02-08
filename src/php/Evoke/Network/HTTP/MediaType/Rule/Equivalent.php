@@ -50,24 +50,19 @@ class Equivalent extends Match
 	/**
 	 * Check to see if the rule matches.
 	 *
-	 * @param mixed[] The media type we are checking against.
 	 * @return bool Whether the rule matches.
 	 */
-	public function isMatch(Array $mediaType)
+	public function isMatch()
 	{
-		if (!is_array($mediaType))
-		{
-			throw new InvalidArgumentException(
-				__METHOD__ . ' requires mediaType as array.');
-		}		
+		$mType = $this->mediaType;
 		
 		foreach ($this->ignoredFields as $ignored)
 		{
-			unset($mediaType[$ignored]);
+			unset($mType[$ignored]);
 		}
 
 		// Only an equivalent test of == is used as we don't care about types.
-		return $mediaType == $this->match;
+		return $mType == $this->match;
 	}
 }
 // EOF

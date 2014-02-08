@@ -45,12 +45,11 @@ class Match extends Rule
 	/**
 	 * Check to see if the rule matches.
 	 *
-	 * @param mixed[] The media type we are checking against.
 	 * @return bool Whether the rule matches.
 	 */
-	public function isMatch(Array $mediaType)
+	public function isMatch()
 	{
-		return $mediaType === $this->match;
+		return $this->mediaType === $this->match;
 	}
 }
 // EOF

@@ -1,0 +1,68 @@
+<?php
+namespace Evoke_Test\Network\HTTP\MediaType\Rule;
+
+use Evoke\Network\HTTP\MediaType\Rule\Equivalent,
+	PHPUnit_Framework_TestCase;
+
+class EquivalentTest extends PHPUnit_Framework_TestCase
+{
+	/******************/
+	/* Data Providers */
+	/******************/
+
+	public function providerIsMatch()
+	{
+		return ['Matches'   =>
+		        ['Output_Format'  => 'DC',
+		         'Match'          => 
+		         ['Type'    => 'TEXT',
+		          'Subtype' => 'HTML',
+		          'Params' => ['A' => 1, 'B' => 2]],
+		         'Ignored_Fields' => ['Q_Factor'],
+		         'Media_Type'     =>
+		         ['Type'    => 'TEXT',
+		          'Subtype' => 'HTML',
+		          'Params'  => ['A' => '1', 'B' => '2']],
+		         'Expected'       => true],
+		        'Unmatched' =>
+		        ['Output_Format'  => 'DC',
+		         'Match'          => 
+		         ['Type'    => 'TEXT',
+		          'Subtype' => 'HTML',
+		          'Params' => ['A' => 1, 'B' => 2]],
+		         'Ignored_Fields' => ['Q_Factor'],
+		         'Media_Type'     =>
+		         ['Type'    => 'TEXT',
+		          'Subtype' => 'XML',
+		          'Params'  => ['A' => 9, 'B' => 7]],
+		         'Expected'       => false]
+			];
+	}
+
+	/*********/
+	/* Tests */
+	/*********/
+
+	/**
+	 * @covers Evoke\Network\HTTP\MediaType\Rule\Equivalent::__construct
+	 */
+	public function testCreate()
+	{
+		$obj = new Equivalent('Output', ['Match']);
+		$this->assertInstanceOf('Evoke\Network\HTTP\MediaType\Rule\Equivalent',
+		                        $obj);
+	}
+
+	/**
+	 * @covers Evoke\Network\HTTP\MediaType\Rule\Equivalent::isMatch
+	 * @dataProvider providerIsMatch
+	 */
+	public function testIsMatch(
+		$outputFormat, $match, $ignoredFields, $mediaType, $expected)
+	{
+		$obj = new Equivalent($outputFormat, $match, $ignoredFields);
+		$obj->setMediaType($mediaType);
+		$this->assertSame($expected, $obj->isMatch());
+	}
+}
+// EOF

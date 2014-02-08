@@ -54,10 +54,10 @@ class Router implements RouterIface
 	{
 		foreach ($acceptedMediaTypes as $mediaType)
 		{
-			$rule->setMediaType($mediaType);
-
 			foreach ($this->rules as $rule)
 			{
+				$rule->setMediaType($mediaType);
+				
 				if ($rule->isMatch())
 				{
 					return $rule->getOutputFormat();
@@ -66,7 +66,7 @@ class Router implements RouterIface
 		}
 
 		throw new OutOfBoundsException(
-			__METHOD__ . ' no output formats match the Accepted Media Types.');
+			'no output formats match the Accepted Media Types.');
 	}
 }
 // EOF
