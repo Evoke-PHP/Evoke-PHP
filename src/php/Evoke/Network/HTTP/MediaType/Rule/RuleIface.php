@@ -19,17 +19,22 @@ interface RuleIface
 	/**
 	 * Get the output format for the media type.
 	 *
-	 * @param mixed[] The media type.
+	 * @return string The output format.
 	 */
-	public function getOutputFormat(Array $mediaType);
+	public function getOutputFormat();
 
 	/**
 	 * Check to see if the rule matches.
 	 *
-	 * @param mixed[] The input to check for a match.
 	 * @return bool Whether the rule matches.
 	 */
-	public function isMatch(Array $mediaType);
-	
+	public function isMatch();
+
+	/**
+	 * Set the media type that the rule is checked against.
+	 *
+	 * @param mixed[] The media type.
+	 */	
+	public function setMediaType(Array $mediaType);
 }
 // EOF

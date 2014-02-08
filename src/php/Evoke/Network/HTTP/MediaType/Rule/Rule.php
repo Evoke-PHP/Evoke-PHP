@@ -17,6 +17,11 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
 abstract class Rule implements RuleIface
 {
 	/**
+	 * The media type that the rule is checked against.
+	 */
+	protected $mediaType = array();
+	
+	/**
 	 * The output format.
 	 * @var string
 	 */
@@ -39,11 +44,21 @@ abstract class Rule implements RuleIface
 	/**
 	 * Get the output format for the media type.
 	 *
-	 * @param mixed[] The media type.
+	 * @return string The output format.
 	 */
-	public function getOutputFormat(Array $mediaType)
+	public function getOutputFormat()
 	{
 		return $this->outputFormat;
+	}
+
+	/**
+	 * Set the media type that the rule is checked against.
+	 *
+	 * @param mixed[] The media type.
+	 */
+	public function setMediaType(Array $mediaType)
+	{
+		$this->mediaType = $mediaType;
 	}
 }
 // EOF

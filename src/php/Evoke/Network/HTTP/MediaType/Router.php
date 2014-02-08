@@ -23,28 +23,10 @@ use Evoke\Network\HTTP\RequestIface,
 class Router implements RouterIface
 {
 	/**
-	 * Request Object.
-	 * @var RequestIface
-	 */
-	protected $request;
-
-	/**
 	 * Rules that the router uses to route.
 	 * @var RuleIface[]
 	 */
-	protected $rules;
-
-	/**
-	 * Construct a media type router that determines the output format based on
-	 * the acceptable media types.
-	 *
-	 * @param RequestIface Request object.
-	 */
-	public function __construct(RequestIface $request)
-	{
-		$this->request = $request;
-		$this->rules   = array();
-	}	
+	protected $rules = array();
 	
 	/******************/
 	/* Public Methods */
@@ -63,21 +45,22 @@ class Router implements RouterIface
 	/**
 	 * Select the output format (that responds to the routed MediaType).
 	 *
+	 * @param  mixed[] The accepted media types.
 	 * @return string The output format.
 	 * @throws OutOfBoundsException When no output format can be chosen that
 	 *                              matches the Accepted Media Types.
 	 */
-	public function route()
+	public function route(Array $acceptedMediaTypes)
 	{
-		$acceptedMediaTypes = $this->request->parseAccept();
-		
 		foreach ($acceptedMediaTypes as $mediaType)
 		{
+			$rule->setMediaType($mediaType);
+
 			foreach ($this->rules as $rule)
 			{
-				if ($rule->isMatch($mediaType))
+				if ($rule->isMatch())
 				{
-					return $rule->getOutputFormat($mediaType);
+					return $rule->getOutputFormat();
 				}
 			}
 		}
