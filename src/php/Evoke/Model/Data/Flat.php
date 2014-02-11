@@ -55,7 +55,7 @@ class Flat implements DataIface
 	 * Get the current record as a simple array (without iterator or class
 	 * properties).
 	 *
-	 * @return mixed[] The record that we are managing.
+	 * @return mixed[] The current record as a simple array.
 	 */
 	public function getRecord()
 	{

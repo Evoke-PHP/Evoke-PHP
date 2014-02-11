@@ -114,30 +114,24 @@ abstract class Decorator implements DataIface
 	}
 
 	/**
-	 * We are required to make these available to complete the interface,
-	 * but we don't want the element to change, so this should never be called.
+	 * Set the value at the offset.
 	 *
 	 * @param mixed Offset.
 	 * @param mixed Value.
-	 *
-	 * @throw RuntimeException *** ALWAYS ***
 	 */
 	public function offsetSet($offset, $value)
 	{
-		return $this->data->offsetSet($offset, $value);
+		$this->data->offsetSet($offset, $value);
 	}
 
 	/**
-	 * We are required to make these available to complete the interface,
-	 * but we don't want the element to change, so this should never be called.
+	 * Unset the value at the offset
 	 *
 	 * @param mixed Offset.
-	 *
-	 * @throw RuntimeException *** ALWAYS ***
 	 */
 	public function offsetUnset($offset)
 	{
-		return $this->data->offsetUnset($offset);
+		$this->data->offsetUnset($offset);
 	}
 	
 	/**
