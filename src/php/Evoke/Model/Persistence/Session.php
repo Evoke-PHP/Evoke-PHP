@@ -6,6 +6,8 @@
  */
 namespace Evoke\Model\Persistence;
 
+use RuntimeException;
+
 /**
  * Session
  *
@@ -27,7 +29,7 @@ class Session implements SessionIface
 	 * @var string[]
 	 */
 	protected $domain;
-
+	
 	/**
 	 * Construct the persistence for a session domain.
 	 *
@@ -89,7 +91,7 @@ class Session implements SessionIface
 		{
 			// If we are run from the command line interface then we do not care
 			// about headers sent using the session_start.
-			if (PHP_SAPI === 'cli')
+			if (php_sapi_name() === 'cli')
 			{
 				$_SESSION = array();
 			}
@@ -97,14 +99,13 @@ class Session implements SessionIface
 			{
 				if (!session_start())
 				{
-					throw new RuntimeException(
-						__METHOD__ . ' session_start failed.');
+					throw new RuntimeException('session_start failed.');
 				}
 			}
 			else
 			{
 				throw new RuntimeException(
-					__METHOD__ . ' Session started after headers sent.');
+					'session started after headers sent.');
 			}
 		}
       

@@ -140,6 +140,35 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	/***********/
 
 	/**
+	 * Check that the runkit extension is available.
+	 *
+	 * @return bool Whether the runkit extension is available.
+	 */
+	protected function hasRunkit()
+	{
+		return function_exists('runkit_function_rename') &&
+			function_exists('runkit_function_add');
+	}
+	
+	/**
+	 * Install session function using runkit.
+	 */
+	protected function installRunkit($functionName, $code)
+	{
+		runkit_function_rename($functionName, 'TEST_SAVED_' . $functionName);
+		runkit_function_add($functionName, '', $code);
+	}
+
+	/**
+	 * Restore session function using runkit.
+	 */
+	protected function restoreRunkit($functionName)
+	{		
+		runkit_function_remove($functionName);
+		runkit_function_rename('TEST_SAVED_' . $functionName, $functionName);
+	}
+	
+	/**
 	 * Test tear down.
 	 */
 	public function tearDown()
@@ -237,18 +266,93 @@ class SessionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Ensure exception thrown for non cli session start after the
-     * headers have already been sent.
-     *
-     * @covers Evoke\Model\Persistence\Session::ensure
+     * @covers                   Evoke\Model\Persistence\Session::ensure
+     * @expectedException        RuntimeException
+     * @expectedExceptionMessage session_start failed
      */
-    public function testEnsureSessionStartAfterHeadersSentException()
+    public function testEnsureFailedSessionStart()
     {
-	    // Need to install runkit to modify PHP_SAPI to non cli to test this.
-	    $this->markTestIncomplete(
-		    'Need to install runkit, but it fails to compile.');
+	    if (!$this->hasRunkit())
+	    {
+		    $this->markTestIncomplete(
+			    'PHP runkit extension is required for this test.');
+		    return;
+	    }
+
+	    $this->installRunkit('php_sapi_name', 'return "TEST_VALUE";');
+	    $this->installRunkit('headers_sent',  'return false;');
+	    $this->installRunkit('session_start', 'return false;');
+	    
+	    try
+	    {
+		    $domain = ['L1', 'L2', 'L3'];
+		    $object = new Session($domain, false);
+	    }
+	    catch (\Exception $e)
+	    {
+		    $this->restoreRunkit('php_sapi_name');
+		    $this->restoreRunkit('headers_sent');
+		    $this->restoreRunkit('session_start');
+		    throw $e;
+	    }
     }
 
+    /**
+     * @covers Evoke\Model\Persistence\Session::ensure
+     */
+    public function testEnsureGoodSessionStart()
+    {
+	    if (!$this->hasRunkit())
+	    {
+		    $this->markTestIncomplete(
+			    'PHP runkit extension is required for this test.');
+		    return;
+	    }
+
+	    $this->installRunkit('php_sapi_name', 'return "TEST_VALUE";');
+	    $this->installRunkit('headers_sent',  'return false;');
+	    $this->installRunkit('session_start', '$_SESSION = []; return true;');
+
+	    $domain = ['L1', 'L2', 'L3'];
+	    $object = new Session($domain, false);
+	    $this->assertSame(['L1' => ['L2' => ['L3' => []]]],
+	                      $_SESSION);
+
+	    $this->restoreRunkit('php_sapi_name');
+	    $this->restoreRunkit('headers_sent');
+	    $this->restoreRunkit('session_start');
+    }
+
+    /**
+     * @covers                   Evoke\Model\Persistence\Session::ensure
+     * @expectedException        RuntimeException
+     * @expectedExceptionMessage session started after headers sent.
+     */
+    public function testEnsureHeadersAlreadySentException()
+    {
+	    if (!$this->hasRunkit())
+	    {
+		    $this->markTestIncomplete(
+			    'PHP runkit extension is required for this test.');
+		    return;
+	    }
+
+	    $this->installRunkit('php_sapi_name', 'return "NON_CLI";');
+	    $this->installRunkit('headers_sent',  'return true;');
+	    
+	    try
+	    {
+		    $domain = ['L1', 'L2', 'L3'];
+		    $object = new Session($domain, false);
+	    }
+	    catch (\Exception $e)
+	    {
+		    $this->restoreRunkit('php_sapi_name');
+		    $this->restoreRunkit('headers_sent');
+		    throw $e;
+	    }
+    }
+    
     /**
      * Ensure that data can be retrieved at an offset.
      *
