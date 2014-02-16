@@ -6,7 +6,7 @@
  */
 namespace Evoke\Model\Mapper;
 
-use Evoke\Persistence\SessionManagerIface,
+use Evoke\Model\Persistence\SessionIface,
 	RuntimeException;
 
 /**
@@ -17,23 +17,22 @@ use Evoke\Persistence\SessionManagerIface,
  * @license   MIT
  * @package   Model\Mapper
  */
-class Session implements MapperIface
+class Session
 {
 	/**
-	 * Session Manager
-	 * @var Evoke\Persistence\SessionManagerIface
+	 * Session
+	 * @var Evoke\Model\Persistence\SessionIface
 	 */
-	protected $sessionManager;
+	protected $session;
 
 	/**
 	 * Construct a Session Mapper.
 	 *
-	 * @param Evoke\Persistence\SessionManagerIface
-	 *        The Session Manager for the part of the session we are mapping.
+	 * @param SessionIface The session that we are mapping.
 	 */
-	public function __construct(SessionManagerIface $sessionManager)
+	public function __construct(SessionIface $session)
 	{
-		$this->sessionManager = $sessionManager;
+		$this->session = $session;
 	}
 
 	/******************/
@@ -47,7 +46,7 @@ class Session implements MapperIface
 	 */
 	public function create(Array $data = array())
 	{
-		$this->sessionManager->setData($data);
+		$this->session->setData($data);
 	}
 
 	/**
@@ -57,7 +56,7 @@ class Session implements MapperIface
 	 */
 	public function delete(Array $params = array())
 	{
-		$this->sessionManager->deleteAtOffset($params);
+		$this->session->deleteAtOffset($params);
 	}
 
 	/**
@@ -67,7 +66,7 @@ class Session implements MapperIface
 	 */
 	public function read(Array $params = array())
 	{
-		$session = $this->sessionManager->getAccess();
+		$session = $this->session->getAccess();
 
 		foreach ($params as $sessionOffset)
 		{
@@ -92,7 +91,7 @@ class Session implements MapperIface
 	public function update(Array $old = array(),
 	                       Array $new = array())
 	{
-		$session = $this->sessionManager->getAccess();
+		$session = $this->session->getAccess();
 		
 		// Ensure the the session has not been modified from the old values.
 		if ($session != $old)
@@ -101,7 +100,7 @@ class Session implements MapperIface
 				'Session has been modified before update.');
 		}
 
-		$this->sessionManager->setData($new);
+		$this->session->setData($new);
 	}
 }
 // EOF

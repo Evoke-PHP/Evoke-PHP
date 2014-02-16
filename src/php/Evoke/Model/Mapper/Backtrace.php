@@ -16,7 +16,7 @@ use RuntimeException;
  * @license MIT
  * @package Model\Mapper
  */
-class Backtrace implements ReadIface
+class Backtrace
 {
 	/** 
 	 * The number of levels up the stack to start the backtrace from.

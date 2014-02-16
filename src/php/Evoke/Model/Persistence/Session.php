@@ -322,7 +322,7 @@ class Session implements SessionIface
 	/**
 	 * Set the session to the specified data.
 	 *
-	 * @param mixed[]|mixed The new data to set the session to.
+	 * @param mixed The new data to set the session to.
 	 */
 	public function setData($data)
 	{
