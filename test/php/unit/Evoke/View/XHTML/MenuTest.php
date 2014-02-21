@@ -26,8 +26,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Requires menu data but given an incorrect type.
 	 *
-	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::setData
+	 * @covers            Evoke\View\XHTML\Menu::get
+	 * @covers            Evoke\View\XHTML\Menu::set
 	 * @expectedException ErrorException
 	 */
 	public function testRequiresDataMenu()
@@ -39,7 +39,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 
 		try
 		{
-			$obj->setData(34);
+			$obj->set(34);
 		}
 		catch (\ErrorException $e)
 		{
@@ -51,37 +51,42 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Empty Menus.
+	 * Empty Menu.
 	 *
 	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::setData
+	 * @covers Evoke\View\XHTML\Menu::set
 	 */
 	public function testGetEmptyMenu()
 	{
-		$mockData = $this->getMock('Evoke\Model\Data\MenuIface');
-		$mockData
+		$mockTree = $this->getMock('Evoke\Model\Data\TreeIface');
+		$mockTree
 			->expects($this->at(0))
-			->method('getMenu')
+			->method('getValue')
 			->with()
-			->will($this->returnValue([]));
+			->will($this->returnValue('Empty_Menu'));
+		$mockTree
+			->expects($this->at($tIndex++))
+			->method('hasChildren')
+			->with()
+			->will($this->returnValue(false));
 		
 		$obj = new Menu;
-		$obj->setData($mockData);
-		$this->assertSame(['div', ['class' => 'Menus'], []],
+		$obj->set($mockTree);
+		$this->assertSame(['div', ['class' => 'Empty_Menu'], []],
 		                  $obj->get());
 	}
-
 	
 	/**
 	 * Single Level Menu.
 	 *
 	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::setData
+	 * @covers Evoke\View\XHTML\Menu::set
 	 * @covers Evoke\View\XHTML\Menu::buildMenu
 	 */
 	public function testGetSingleLevelMenu()
 	{
-		$mockData = $this->getMock('Evoke\Model\Data\MenuIface');
+		/*
+		$mockData = $this->getMock('Evoke\Model\Data\TreeIface');
 		$mockData
 			->expects($this->at(0))
 			->method('getMenu')
@@ -94,7 +99,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 							          'Text' => 'SL_Text']]]]]]));
 		
 		$obj = new Menu;
-		$obj->setData($mockData);
+		$obj->set($mockData);
 		$this->assertSame(
 			['div',
 			 ['class' => 'Menus'],
@@ -106,18 +111,20 @@ class MenuTest extends PHPUnit_Framework_TestCase
 			       ['href' => 'SL_Href'],
 			       'SL_Text']]]]]]],			                     
 			$obj->get());
+		*/
 	}
 
 	/**
 	 * Multi Level Menu.
 	 *
 	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::setData
+	 * @covers Evoke\View\XHTML\Menu::set
 	 * @covers Evoke\View\XHTML\Menu::buildMenu
 	 */
 	public function testGetMultiLevelMenu()
 	{
-		$mockData = $this->getMock('Evoke\Model\Data\MenuIface');
+		/*
+		$mockData = $this->getMock('Evoke\Model\Data\TreeIface');
 		$mockData
 			->expects($this->at(0))
 			->method('getMenu')
@@ -152,6 +159,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 			           ['href' => 'HSub1'],
 			           'TSub1']]]]]]]]]]],
 			$obj->get());
+		*/
 	}	
 }
 // EOF

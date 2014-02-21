@@ -30,15 +30,15 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers Evoke\View\XHTML\Error::get
 	 * @covers Evoke\View\XHTML\Error::getTypeString
-	 * @covers Evoke\View\XHTML\Error::setError
+	 * @covers Evoke\View\XHTML\Error::set
 	 */
 	public function testGetView()
 	{
 		$object = new Error('<UNK>');
-		$object->setError(['file' => 'FILE',
-		                   'line' => 245,
-		                   'type' => E_USER_ERROR]);
-
+		$object->set(['file' => 'FILE',
+		              'line' => 245,
+		              'type' => E_USER_ERROR]);
+		
 		$this->assertSame(
 			['div',
 			 ['class' => 'Error'],
@@ -56,16 +56,16 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers Evoke\View\XHTML\Error::get
 	 * @covers Evoke\View\XHTML\Error::getTypeString
-	 * @covers Evoke\View\XHTML\Error::setError
+	 * @covers Evoke\View\XHTML\Error::set
 	 */
 	public function testUnknownError()
 	{
 		$object = new Error('WHO KNOWS');
-		$object->setError(['file'    => 'F',
-		                   'line'    => 2,
-		                   'message' => 'BLAH',
-		                   'type'    => -1]);
-
+		$object->set(['file'    => 'F',
+		              'line'    => 2,
+		              'message' => 'BLAH',
+		              'type'    => -1]);
+		
 		$this->assertSame(
 			['div',
 			 ['class' => 'Error'],

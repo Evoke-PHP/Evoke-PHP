@@ -34,7 +34,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
-			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\View\XHTML\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 	}
 
@@ -48,9 +48,9 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
-			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\View\XHTML\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'),
-			$this->getMock('Evoke\View\ExceptionIface'));
+			$this->getMock('Evoke\View\XHTML\Exception'));
 
 		$this->assertInstanceOf('Evoke\Service\ExceptionHandler', $object);
 	}
@@ -157,13 +157,13 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
  
 		
 		$viewExceptionIndex = 0;
-		$viewException = $this->getMock('Evoke\View\ExceptionIface');
+		$viewException = $this->getMock('Evoke\View\XHTML\Exception');
 
 		if ($showException)
 		{
 			$viewException
 				->expects($this->at($viewExceptionIndex++))
-				->method('setException')
+				->method('set')
 				->with($exception);
 			$viewException
 				->expects($this->at($viewExceptionIndex++))
@@ -175,14 +175,14 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		{
 			$viewException
 				->expects($this->never())
-				->method('setException');
+				->method('set');
 			$viewException
 				->expects($this->never())
 				->method('get');
 		}
 
 		$viewMessageBoxIndex = 0;
-		$viewMessageBox = $this->getMock('Evoke\View\MessageBoxIface');
+		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
 		$viewMessageBox
 			->expects($this->at($viewMessageBoxIndex++))
 			->method('addContent')

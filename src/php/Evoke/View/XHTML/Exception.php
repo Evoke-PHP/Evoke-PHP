@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\ExceptionIface,
+use Evoke\View\ViewIface,
 	LogicException;
 
 /**
@@ -17,7 +17,7 @@ use Evoke\View\ExceptionIface,
  * @license MIT
  * @package View\XHTML
  */
-class Exception implements ExceptionIface
+class Exception implements ViewIface
 {
 	/**
 	 * The exception that we are viewing.
@@ -59,7 +59,7 @@ class Exception implements ExceptionIface
 	 *
 	 * @param \Exception The exception for the view.	 
 	 */
-	public function setException(\Exception $exception)
+	public function set(\Exception $exception)
 	{
 		$this->exception = $exception;
 	}

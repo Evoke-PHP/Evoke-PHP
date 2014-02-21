@@ -9,71 +9,81 @@ use Evoke\Model\Data\Flat,
  *  @covers Evoke\View\XHTML\Backtrace
  */
 class BacktraceTest extends PHPUnit_Framework_TestCase
-{ 
-	/**
-	 * Ensure the backtrace elements are formatted correctly.
-	 *
-	 * @covers Evoke\View\XHTML\Backtrace::get
-	 */
-	public function testBacktraceElements()
-	{
-		$data = new Flat;
-		$data->setData(
-			array(0 => array('Class'    => 'Funky',
-			                 'File'     => 'Funk.php',
-			                 'Function' => 'funkItUp',
-			                 'Line'     => 78,
-			                 'Type'     => 'typed'),
-			      1 => array('Class'    => 'Boogie',
-			                 'File'     => 'Boog.php',
-			                 'Function' => 'boogieItUp',
-			                 'Type'     => 'btyped')));
-		$obj = new Backtrace;
-        $obj->setData($data);
+{
+	/******************/
+	/* Data Providers */
+	/******************/
 
-		$this->assertSame(
-			['ol',
-			 ['class' => 'Backtrace'],
-			 [
-				 ['li',
-				  [],
-				  [
-					  ['span', ['class' => 'File'],     'Funk.php'],
-					  ['span', ['class' => 'Line'],     '(78)'],
-					  ['span', ['class' => 'Class'],    'Funky'],
-					  ['span', ['class' => 'Type'],     'typed'],
-					  ['span', ['class' => 'Function'], 'funkItUp']
-					  ]],
-				 ['li',
-				  [],
-				  [
-					  ['span', ['class' => 'File'],     'Boog.php'],
-					  ['span', ['class' => 'Class'],    'Boogie'],
-					  ['span', ['class' => 'Type'],     'btyped'],
-					  ['span', ['class' => 'Function'], 'boogieItUp']
-					  ]]]],
-			$obj->get());
+	public function providerGoodBacktraceElements()
+	{
+		return [
+			'One_Level' =>
+			['Backtrace' => [['class'    => 'One',
+			                  'file'     => 'one.php',
+			                  'function' => 'oneUp',
+			                  'line'     => 111,
+			                  'type'     => 'one_type']],
+			 'Expected'  =>
+			 ['ol',
+			  ['class' => 'Backtrace'],
+			  [['li',
+			    [],
+			    [['span', ['class' => 'File'], 'one.php'],
+			     ['span', ['class' => 'Line'], '(111)'],
+			     ['span', ['class' => 'Class'], 'One'],
+			     ['span', ['class' => 'Type'], 'one_type'],
+			     ['span', ['class' => 'Function'], 'oneUp']]]]]],
+			'Two_Level' =>
+			['Backtrace' => [['class'    => 'Funky',
+			                  'file'     => 'Funk.php',
+			                  'function' => 'funkItUp',
+			                  'line'     => 78,
+			                  'type'     => 'typed'],
+			                 ['class'    => 'Boogie',
+			                  'file'     => 'Boog.php',
+			                  'function' => 'boogieItUp',
+			                  'type'     => 'btyped']],
+			 'Expected'  =>
+			 ['ol',
+			  ['class' => 'Backtrace'],
+			  [['li',
+			    [],
+			    [['span', ['class' => 'File'],     'Funk.php'],
+			     ['span', ['class' => 'Line'],     '(78)'],
+			     ['span', ['class' => 'Class'],    'Funky'],
+			     ['span', ['class' => 'Type'],     'typed'],
+			     ['span', ['class' => 'Function'], 'funkItUp']]],
+			   ['li',
+			    [],
+			    [['span', ['class' => 'File'],     'Boog.php'],
+			     ['span', ['class' => 'Class'],    'Boogie'],
+			     ['span', ['class' => 'Type'],     'btyped'],
+			     ['span', ['class' => 'Function'], 'boogieItUp']]]]]
+				]];
+	}
+
+	/*********/
+	/* Tests */
+	/*********/
+	
+	/**
+	 * @covers 		 Evoke\View\XHTML\Backtrace::get
+	 * @covers 		 Evoke\View\XHTML\Backtrace::set
+	 * @dataProvider providerGoodBacktraceElements
+	 */
+	public function testGoodBacktraceElements($backtrace, $expected)
+	{
+		$obj = new Backtrace;
+		$obj->set($backtrace);
+		$this->assertSame($expected, $obj->get());
 	}
 
 	/**
-	 * Ensure that the view of an empty backtrace is good.
-	 *
-	 * @covers Evoke\View\XHTML\Backtrace::get
+	 * @covers 					 Evoke\View\XHTML\Backtrace::get
+	 * @expectedException        LogicException
+	 * @expectedExceptionMessage needs backtrace.
 	 */
 	public function testGetEmtpy()
-	{
-		$obj = new Backtrace;
-        $obj->setData($this->getMock('Evoke\Model\Data\DataIface'));
-		$this->assertSame(['ol', ['class' => 'Backtrace'], []],	$obj->get());
-	}
-
-	/**
-	 * Ensure that trying to get the view with the data unset throws.
-	 *
-	 * @covers            Evoke\View\XHTML\Backtrace::get
-	 * @expectedException LogicException
-	 */
-	public function testUnsetData()
 	{
 		$obj = new Backtrace;
 		$obj->get();

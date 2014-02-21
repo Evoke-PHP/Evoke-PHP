@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML\Input;
 
-use Evoke\View\Data,
+use InvalidArgumentException,
 	LogicException;
 
 /**
@@ -17,7 +17,7 @@ use Evoke\View\Data,
  * @license   MIT
  * @package   View\XHTML
  */
-class Select extends Data
+class Select
 {
 	/**
 	 * Protected properties.
@@ -26,9 +26,11 @@ class Select extends Data
 	 * @var string     $fieldText     Field in the data for the option text.
 	 * @var string     $fieldValue    Field in the data for the option value.
 	 * @var string[]   $optionAttribs Attributes for each select option.
+	 * @var mixed[]    $options       Options for the select.
 	 * @var mixed|null $selectedValue Value that is selected or NULL for none.
 	 */
-	protected $attribs, $fieldText, $fieldValue, $optionAttribs, $selectedValue;
+	protected $attribs, $fieldText, $fieldValue, $optionAttribs, $options,
+		$selectedValue;
 
 	/**
 	 * Construct a Select view.
@@ -60,30 +62,30 @@ class Select extends Data
 	 */    
 	public function get()
 	{
-		if (empty($this->data))
+		if (empty($this->options))
 		{
 			throw new LogicException(
 				'Select element must have options to be valid XHTML.');
 		}
 
-		if (!isset($this->data[$this->fieldText],
-		           $this->data[$this->fieldValue]))
-		{
-			throw new LogicException(
-				'needs Data with TextField: ' . $this->fieldText .
-				' and ValueField: ' . $this->fieldValue);
-		}
-
 		$optionElements = array();
 
-		foreach ($this->data as $record)
+		foreach ($this->options as $record)
 		{
-			$value = $record[$this->fieldValue];
-			$optionAttribs = array_merge($this->optionAttribs,
-			                             array('value' => $value));
+			if (!isset($record[$this->fieldText],
+			           $record[$this->fieldValue]))
+			{
+				throw new LogicException(
+					'Option needs TextField: ' . $this->fieldText .
+					' and ValueField: ' . $this->fieldValue);
+			}
+			
+			$optionAttribs = array_merge(
+				$this->optionAttribs,
+				array('value' => $record[$this->fieldValue]));
 	 
 			if (isset($this->selectedValue) &&
-			    $value == $this->selectedValue)
+			    $record[$this->fieldValue] == $this->selectedValue)
 			{
 				$optionAttribs['selected'] = 'selected';
 			}
@@ -95,6 +97,26 @@ class Select extends Data
 		return array('select', $this->attribs, $optionElements);
 	}
 
+	/**
+	 * Set the options that we are selecting between.
+	 *
+	 * @param mixed[] The options to select between.
+	 */
+	public function setOptions($options)
+	{
+		if (empty($options))
+		{
+			throw new InvalidArgumentException(
+				'needs options to be valid XHTML');
+		}
+		elseif (!is_array($options) && !$options instanceof Traversable)
+		{
+			throw new InvalidArgumentException('needs traversable options.');
+		}
+		
+		$this->options = $options;
+	}
+	
 	/**
 	 * Set the value that has been selected from the options.
 	 *

@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\Data,
+use Evoke\View\ViewIface,
 	LogicException;
 
 /**
@@ -17,8 +17,14 @@ use Evoke\View\Data,
  * @license   MIT
  * @package   View\XHTML
  */
-class Backtrace extends Data
+class Backtrace implements ViewIface
 {
+	/**
+	 * Backtrace data.
+	 * @var mixed[]
+	 */
+	protected $backtrace;
+	
 	/******************/
 	/* Public Methods */
 	/******************/
@@ -30,50 +36,60 @@ class Backtrace extends Data
 	 */
 	public function get()
 	{
-		if (!isset($this->data))
+		if (empty($this->backtrace))
 		{
-			throw new LogicException('needs data');
+			throw new LogicException('needs backtrace.');
 		}
 		
 		$listItems = array();
 		
-		foreach ($this->data as $info)
+		foreach ($this->backtrace as $info)
 		{
 			$infoElements = array(
 				array('span',
 				      array('class' => 'File'),
-				      empty($info['File']) ? '<internal>' : $info['File']));
+				      empty($info['file']) ? '<internal>' : $info['file']));
 		
-			if (isset($info['Line']))
+			if (isset($info['line']))
 			{
 				$infoElements[] = array(
 					'span',
 					array('class' => 'Line'),
-					'(' . $info['Line'] . ')');
+					'(' . $info['line'] . ')');
 			}
 			
-			if (isset($info['Class']))
+			if (isset($info['class']))
 			{
 				$infoElements[] = array(
-					'span',	array('class' => 'Class'), $info['Class']);
+					'span',	array('class' => 'Class'), $info['class']);
 			}
 			
-			if (isset($info['Type']))
+			if (isset($info['type']))
 			{
 				$infoElements[] = array(
-					'span',	array('class' => 'Type'), $info['Type']);
+					'span',	array('class' => 'Type'), $info['type']);
 			}
 			
-			if (isset($info['Function']))
+			if (isset($info['function']))
 			{
 				$infoElements[] = array(
-					'span',	array('class' => 'Function'), $info['Function']);
+					'span',	array('class' => 'Function'), $info['function']);
 			}
 			
 			$listItems[] = array('li', array(), $infoElements);
 		}
 
 		return array('ol', array('class' => 'Backtrace'), $listItems);
+	}
+
+	/**
+	 * Set the backtrace data.
+	 *
+	 * @param mixed[] The backtrace data.
+	 */
+	public function set(Array $backtrace)
+	{
+		$this->backtrace = $backtrace;
 	}
 }
 // EOF

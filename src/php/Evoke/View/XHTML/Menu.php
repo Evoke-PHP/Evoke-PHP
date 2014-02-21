@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\Model\Data\MenuIface as DataMenu,
+use Evoke\Model\Data\TreeIface as Tree,
 	Evoke\View\ViewIface,
 	LogicException;
 
@@ -23,9 +23,9 @@ class Menu implements ViewIface
 	/**
 	 * Protected properties.
 	 *
-	 * @var DataMenu $data Menu data.
+	 * @var Tree $tree Tree data.
 	 */
-	protected $data;
+	protected $tree;
 
 	/******************/
 	/* Public Methods */
@@ -34,37 +34,47 @@ class Menu implements ViewIface
 	/**
 	 * Get the view of the menu.
 	 *
-	 * @return mixed[] The view data.
+	 * @return mixed[] The view tree.
 	 */
 	public function get()
 	{
-		if (!$this->data instanceof DataMenu)
+		if (!isset($this->tree))
 		{
-			throw new LogicException('needs data as Data\MenuIface');
+			throw new LogicException('needs tree to be set.');
 		}
 
-		$menus = $this->data->getMenu();
-		$menusElements = array();
-		
-		foreach ($menus as $menu)
+		return array('div',
+		             array('class' => 'Menu ' . $this->tree->get()),
+		             array($this->getMenu($this->tree)));
+	}
+
+	protected function getMenu(TreeIface $node, $level)
+	{
+		return [];
+		             
+		/*
+		while ($treeNode->hasChildren())foreach ($menus as $menu)
 		{
-			$menusElements[] = array(
+			$menuElements[] = array(
 				'ul',
 				array('class' => 'Menu ' . $menu['Name']),
 				$this->buildMenu($menu['Items'][0]['Children']));
 		}
 
-		return array('div', array('class' => 'Menus'), $menusElements);
+		return array('div',
+		             array('class' => 'Menu ' . $this->tree->get()),
+		             $menuElements);
+		*/
 	}
 
 	/**
 	 * Set the menu data.
 	 *
-	 * @param DataMenu Menu data.
+	 * @param Tree Menu data.
 	 */
-	public function setData(DataMenu $dataMenu)
+	public function set(Tree $tree)
 	{
-		$this->data = $dataMenu;
+		$this->tree = $tree;
 	}
 	
 	/*******************/

@@ -26,13 +26,13 @@ class VarExportTest extends PHPUnit_Framework_TestCase
 	 * We can set a variable and the view exports it.
 	 *
 	 * @covers       Evoke\View\XHTML\VarExport::get
-	 * @covers       Evoke\View\XHTML\VarExport::setVar
+	 * @covers       Evoke\View\XHTML\VarExport::set
 	 * @dataProvider providerVar
 	 */
 	public function testVarExport()
 	{
 		$object = new VarExport;
-		$object->setVar($value);
+		$object->set($value);
 		$this->assertSame(
 			['div', ['class' => 'Var_Export'], var_export($value, true)],
 			$object->get());

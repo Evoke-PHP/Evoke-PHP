@@ -29,7 +29,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 			'mail@example.com',
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			FALSE,
-			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\View\XHTML\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 		
 		$this->assertInstanceOf('Evoke\Service\ShutdownHandler', $object);
@@ -46,7 +46,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 			'a@b.com',
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
-			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\View\XHTML\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 	}
 	
@@ -69,7 +69,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 		trigger_error('Non shutdown type error.', E_USER_ERROR);
 		restore_error_handler();
 		
-		$viewMessageBox = $this->getMock('Evoke\View\MessageBoxIface');
+		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
 		$viewMessageBox
 			->expects($this->never())
 			->method('setTitle');
@@ -120,17 +120,17 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 			->method('send');			
 		
 		$viewErrorIndex = 0;
-		$viewError = $this->getMock('Evoke\View\ErrorIface');
+		$viewError = $this->getMock('Evoke\View\XHTML\Error');
 		$viewError
 			->expects($this->at($viewErrorIndex++))
-			->method('setError');
+			->method('set');
 		$viewError
 			->expects($this->at($viewErrorIndex++))
 			->method('get')
 			->will($this->returnValue(['div', [], 'View Error']));
 		
 		$viewMessageBoxIndex = 0;
-		$viewMessageBox = $this->getMock('Evoke\View\MessageBoxIface');
+		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
 		$viewMessageBox
 			->expects($this->at($viewMessageBoxIndex++))
 			->method('setTitle')

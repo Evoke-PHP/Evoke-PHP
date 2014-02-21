@@ -14,7 +14,7 @@ namespace Evoke\Model\Data;
  * @license   MIT
  * @package   Model\Data
  */
-interface TreeIface
+interface TreeIface extends \RecursiveIterator
 {
 	/**
 	 * Add a node to the tree.
@@ -24,26 +24,12 @@ interface TreeIface
 	public function add(TreeIface $node);
 
 	/**
-	 * Get the value of the node.
+	 * Get the value of the current node.
 	 *
-	 * @return mixed The value that the node has been set to.
+	 * @return mixed The value of the current node.
 	 */
-	public function get();
-
-	/**
-	 * Get the children of the node.
-	 *
-	 * @return TreeIface[]
-	 */
-	public function getChildren();
+	public function get();   
 	
-	/**
-	 * Return whether the node has any children.
-	 *
-	 * @return bool Whether the node has any children.
-	 */
-	public function hasChildren();
-
 	/**
 	 * Set the value of the node.
 	 *

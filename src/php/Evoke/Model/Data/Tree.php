@@ -23,6 +23,12 @@ class Tree implements TreeIface
 	protected $children = array();
 
 	/**
+	 * The position of the iterator.
+	 * @var int
+	 */
+	protected $position = 0;
+	
+	/**
 	 * The value of the current node.
 	 * @var mixed
 	 */
@@ -43,15 +49,25 @@ class Tree implements TreeIface
 	}
 
 	/**
-	 * Get the value of the node.
+	 * Get the current item we are iterating over.
 	 *
-	 * @return mixed The value that the node has been set to.
+	 * @return TreeIface The current node that we are iterating over.
+	 */
+	public function current()
+	{
+		return $this->children[$this->position];
+	}
+
+	/**
+	 * Get the value of the current node.
+	 *
+	 * @return mixed The value of the current node.
 	 */
 	public function get()
 	{
 		return $this->value;
 	}
-
+	
 	/**
 	 * Get the children of the node.
 	 *
@@ -59,7 +75,7 @@ class Tree implements TreeIface
 	 */
 	public function getChildren()
 	{
-		return $this->children;
+		return $this->children[$this->position];
 	}
 
 	/**
@@ -71,7 +87,27 @@ class Tree implements TreeIface
 	{
 		return !empty($this->children);
 	}
+	
+	public function key()
+	{
+		return $this->position;
+	}
+	
+	public function next()
+	{
+		$this->position++;
+	}
+	
+	public function rewind()
+	{
+		$this->position = 0;
+	}
 
+	public function valid()
+	{
+		return $this->position < count($this->children);
+	}
+	
 	/**
 	 * Set the value of the node.
 	 *

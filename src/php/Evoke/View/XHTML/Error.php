@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\ErrorIface,
+use Evoke\View\ViewIface,
 	LogicException;
 
 /**
@@ -17,7 +17,7 @@ use Evoke\View\ErrorIface,
  * @license   MIT
  * @package   View\XHTML
  */
-class Error implements ErrorIface
+class Error implements ViewIface
 {
 	/**
 	 * Protected Properties.
@@ -83,7 +83,7 @@ class Error implements ErrorIface
 	 *
 	 * @param mixed[] Error.
 	 */
-	public function setError(Array $error)
+	public function set(Array $error)
 	{
 		$this->error = $error;
 	}

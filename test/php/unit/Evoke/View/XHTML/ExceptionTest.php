@@ -14,13 +14,13 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 	 * Get the view.
 	 *
 	 * @covers Evoke\View\XHTML\Exception::get
-	 * @covers Evoke\View\XHTML\Exception::setException
+	 * @covers Evoke\View\XHTML\Exception::set
 	 */
 	public function testGetView()
 	{
 		$testException = new \Exception('Created in test.');
 		$object = new Exception;
-		$object->setException($testException);
+		$object->set($testException);
 		$expected = ['div',
 		             ['class' => 'Exception'],
 		             [['div', ['class' => 'Type'], 'Exception'],
@@ -36,7 +36,7 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 	 * @covers            Evoke\View\XHTML\Exception::get
 	 * @expectedException LogicException
 	 */
-	public function testX()
+	public function testUnsetException()
 	{
 		$object = new Exception;
 		$object->get();

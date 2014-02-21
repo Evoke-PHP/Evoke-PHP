@@ -7,8 +7,8 @@
 namespace Evoke\Service;
 
 use Evoke\Network\HTTP\ResponseIface,
-	Evoke\View\MessageBoxIface,
-	Evoke\View\ExceptionIface,
+	Evoke\View\XMTHL\MessageBox,
+	Evoke\View\XHTML\Exception,
 	Evoke\Writer\PageIface,
 	InvalidArgumentException;
 
@@ -27,11 +27,11 @@ class ExceptionHandler
 	/**
 	 * Properties for the Exception Handler.
 	 *
-	 * @var bool            $showException  Whether to display the exception.
-	 * @var ResponseIface   $response       Response object.
-	 * @var ExceptionIface  $viewException  Exception view.
-	 * @var MessageBoxIface $viewMessageBox MessageBox view.
-	 * @var PageIface       $writer         Page Writer.
+	 * @var ResponseIface $response       Response object.
+	 * @var bool          $showException  Whether to display the exception.
+	 * @var Exception     $viewException  Exception view.
+	 * @var MessageBox    $viewMessageBox MessageBox view.
+	 * @var PageIface     $writer         Page Writer.
 	 */
 	protected $response, $showException, $viewException, $viewMessageBox,
 		$writer;
@@ -39,17 +39,17 @@ class ExceptionHandler
 	/**
 	 * Construct an Exception Handler object.
 	 *
-	 * @param ResponseIface   Response object.
-	 * @param bool            Whether to show the exception.
-	 * @param MessageBoxIface MessageBox view.
-	 * @param PageIface       Page Writer object.
-	 * @param ExceptionIface  View of the exception (if shown).
+	 * @param ResponseIface Response object.
+	 * @param bool          Whether to show the exception.
+	 * @param MessageBox    MessageBox view.
+	 * @param PageIface     Page Writer object.
+	 * @param Exception     View of the exception (if shown).
 	 */
-	public function __construct(ResponseIface   $response,
-	                            /* Bool */      $showException,
-	                            MessageBoxIface $viewMessageBox,
-	                            PageIface       $writer,
-	                            ExceptionIface  $viewException = NULL)
+	public function __construct(ResponseIface $response,
+	                            /* Bool */    $showException,
+	                            MessageBox    $viewMessageBox,
+	                            PageIface     $writer,
+	                            Exception     $viewException = NULL)
 	{
 		if ($showException && !isset($viewException))
 		{
@@ -99,7 +99,7 @@ class ExceptionHandler
 
 		if ($this->showException)
 		{
-			$this->viewException->setException($uncaughtException);
+			$this->viewException->set($uncaughtException);
 			$this->viewMessageBox->addContent($this->viewException->get());
 		}
 		

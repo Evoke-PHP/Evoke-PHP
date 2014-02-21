@@ -7,8 +7,8 @@
 namespace Evoke\Service;
 
 use Evoke\Network\HTTP\ResponseIface,
-	Evoke\View\ErrorIface,
-	Evoke\View\MessageBoxIface,
+	Evoke\View\XHTML\Error,
+	Evoke\View\XHTML\MessageBox,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -71,12 +71,12 @@ class ShutdownHandler
 	 * @param WriterIface     The writer object to write the fatal message.
 	 * @param ErrorIface      View for the error.
 	 */
-	public function __construct(/* String */    $email,
-	                            ResponseIface   $response,
-	                            /* Bool   */    $showError,
-	                            MessageBoxIface $viewMessageBox,
-	                            WriterIface     $writer,
-	                            ErrorIface      $viewError = NULL)
+	public function __construct(/* String */  $email,
+	                            ResponseIface $response,
+	                            /* Bool   */  $showError,
+	                            MessageBox    $viewMessageBox,
+	                            WriterIface   $writer,
+	                            Error         $viewError = NULL)
 	{
 		if ($showError && !isset($viewError))
 		{
@@ -132,7 +132,7 @@ class ShutdownHandler
  
 		if ($this->showError)
 		{
-			$this->viewError->setError($err);
+			$this->viewError->set($err);
 			$this->viewMessageBox->addContent($this->viewError->get());
 		}
 		

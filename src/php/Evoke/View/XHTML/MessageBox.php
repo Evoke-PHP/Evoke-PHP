@@ -6,7 +6,7 @@
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\View\MessageBoxIface;
+use Evoke\View\ViewIface;
 
 /**
  * Message Box View
@@ -16,7 +16,7 @@ use Evoke\View\MessageBoxIface;
  * @license   MIT
  * @package   View\XHTML
  */
-class MessageBox implements MessageBoxIface
+class MessageBox implements ViewIface
 {
 	/**
 	 * Protected properties.
