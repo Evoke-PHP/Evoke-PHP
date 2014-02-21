@@ -77,6 +77,28 @@ class SelectTest extends PHPUnit_Framework_TestCase
 			   'Two']]],
 			$object->get());
 	}
+
+	/** 
+	 * @covers            		 Evoke\View\XHTML\Input\Select::setOptions
+	 * @expectedException 		 InvalidArgumentException
+	 * @expectedExceptionMessage needs options to be valid XHTML
+	 */
+	public function testEmptyOptionsAreNotValidXHTML()
+	{
+		$obj = new Select('T_Field');
+		$obj->setOptions([]);
+	}
+
+	/** 
+	 * @covers            		 Evoke\View\XHTML\Input\Select::setOptions
+	 * @expectedException 		 InvalidArgumentException
+	 * @expectedExceptionMessage needs traversable options.
+	 */
+	public function testNonTraversableOptionsAreInvalid()
+	{
+		$obj = new Select('T_Field');
+		$obj->setOptions("Non Traversable");
+	}
 	
 	/**
 	 * Unset data throws.
