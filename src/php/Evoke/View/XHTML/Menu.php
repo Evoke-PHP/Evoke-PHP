@@ -2,13 +2,14 @@
 /**
  * Menu Control View
  *
- * @package View\XHTML\Control
+ * @package View\XHTML
  */
 namespace Evoke\View\XHTML;
 
-use Evoke\Model\Data\TreeIface as Tree,
+use Evoke\Model\Data\TreeIface,
 	Evoke\View\ViewIface,
-	LogicException;
+	LogicException,
+	RecursiveIteratorIterator;
 
 /**
  * Menu Control View
@@ -16,14 +17,14 @@ use Evoke\Model\Data\TreeIface as Tree,
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2012 Paul Young
  * @license   MIT
- * @package   View\XHTML\Control
+ * @package   View\XHTML
  */
 class Menu implements ViewIface
 {
 	/**
 	 * Protected properties.
 	 *
-	 * @var Tree $tree Tree data.
+	 * @var TreeIface $tree Tree data.
 	 */
 	protected $tree;
 
@@ -43,83 +44,88 @@ class Menu implements ViewIface
 			throw new LogicException('needs tree to be set.');
 		}
 
-		return array('div',
-		             array('class' => 'Menu ' . $this->tree->get()),
-		             array($this->getMenu($this->tree)));
-	}
-
-	protected function getMenu(TreeIface $node, $level)
-	{
-		return [];
-		             
-		/*
-		while ($treeNode->hasChildren())foreach ($menus as $menu)
+		$menuClass = 'Menu ' . $this->tree->get();
+		$menuItems = array();
+		
+		if ($this->tree->hasChildren())
 		{
-			$menuElements[] = array(
-				'ul',
-				array('class' => 'Menu ' . $menu['Name']),
-				$this->buildMenu($menu['Items'][0]['Children']));
+			$menuItems = $this->getMenu($this->tree);
 		}
-
-		return array('div',
-		             array('class' => 'Menu ' . $this->tree->get()),
-		             $menuElements);
-		*/
+		else
+		{
+			$menuClass .= ' Empty';
+		}
+		
+		return array('ul', array('class' => $menuClass), $menuItems);
 	}
 
 	/**
 	 * Set the menu data.
 	 *
-	 * @param Tree Menu data.
+	 * @param TreeIface Menu data.
 	 */
-	public function set(Tree $tree)
+	public function set(TreeIface $tree)
 	{
 		$this->tree = $tree;
 	}
-	
-	/*******************/
-	/* Private Methods */
-	/*******************/
+
+	/*********************/
+	/* Protected Methods */
+	/*********************/
 
 	/**
-	 * Build the menu elements.
+	 * Get the menu.
 	 *
-	 * @param mixed[] The data for the menu items.
-	 * @param int     The current level of the menu items.
-	 * @return mixed[] The menu elements.
+	 * @param TreeIface The tree that specified the menu.
+	 * @return mixed[] XHTML menu.
 	 */
-	private function buildMenu(Array $data, $level = 0)
+	protected function getMenu(TreeIface $tree)
 	{
+		$childrenPosition = 2;
+		$currentDepth = 0;
+		$iterator = new RecursiveIteratorIterator(
+			$tree, RecursiveIteratorIterator::SELF_FIRST);
 		$menu = array();
+		$menuPtr =& $menu;
+		$levelPointers = array();
 
-		foreach ($data as $menuItem)
+		foreach ($iterator as $key => $node)
 		{
-			if (!empty($menuItem['Children']))
+			$newDepth = $iterator->getDepth();
+			$depthChange = $newDepth - $currentDepth;
+			$currentDepth = $newDepth;
+			$menuPtr =& $menu;
+			
+			// Set the pointer to the correct depth of the tree.
+			for ($i = 0; $i < $currentDepth; $i++)
 			{
-				$menu[] = array(
-					'li',
-					array('class' => 'Menu_Item Level_' . $level),
-					array(array('a',
-					            array('href' => $menuItem['Href']),
-					            $menuItem['Text']),
-					      array('ul',
-					            array(),
-					            $this->buildMenu(
-						            $menuItem['Children'], ++$level))));
+				// Go to the last list item elements children.
+				end($menuPtr);
+				$endKey = key($menuPtr);
+				$menuPtr =& $menuPtr[$endKey][$childrenPosition];
+
+				// Build the sub level if it hasn't been built already.
+				if ($depthChange > 0 && $i == $currentDepth - 1)
+				{
+					$menuPtr[] = array('ul', array(), array());
+				}
+
+				// Go to the last unordered list elements children. This is
+				// always in position 1 just after the li.
+				$menuPtr =& $menuPtr[1][$childrenPosition];
 			}
-			else
-			{
-				$menu[] = array(
-					'li',
-					array('class' => 'Menu_Item Level_' . $level),
-					array(array('a',
-					            array('href' => $menuItem['Href']),
-					            $menuItem['Text'])
-						));
-			}
+
+			$menuItem = $node->get();
+			$menuPtr[] = array(
+				'li',
+				array('class' => 'Menu_Item Level_' . $currentDepth),
+				array(array('a',
+				            array('href' => $menuItem['Href']),
+				            $menuItem['Text'])
+					));
 		}
-      
+		
 		return $menu;
-	}
+	}	
 }
 // EOF
