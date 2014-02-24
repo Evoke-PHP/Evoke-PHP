@@ -131,11 +131,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 			->method('current')
 			->with()
 			->will($this->returnValue($mockChildTree));
-		$mockTree
-			->expects($this->at($tIndex++))
-			->method('key')
-			->with()
-			->will($this->returnValue(0));
 		
 		$obj = new Menu;
 		$obj->set($mockTree);

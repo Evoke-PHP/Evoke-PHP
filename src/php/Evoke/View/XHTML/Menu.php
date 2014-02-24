@@ -87,9 +87,8 @@ class Menu implements ViewIface
 			$tree, RecursiveIteratorIterator::SELF_FIRST);
 		$menu = array();
 		$menuPtr =& $menu;
-		$levelPointers = array();
 
-		foreach ($iterator as $key => $node)
+		foreach ($iterator as $node)
 		{
 			$newDepth = $iterator->getDepth();
 			$depthChange = $newDepth - $currentDepth;
