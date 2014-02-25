@@ -50,54 +50,54 @@ class Session
 	}
 
 	/**
-	 * Delete some data from storage.
+	 * Delete some data from the session.
 	 *
 	 * @param mixed[] The offset in the data to delete.
 	 */
-	public function delete(Array $params = array())
+	public function delete(Array $offset = array())
 	{
-		$this->session->deleteAtOffset($params);
+		$this->session->deleteAtOffset($offset);
 	}
 
 	/**
 	 * Get the data from the session.
 	 *
-	 * @params The offset in the data to fetch.
+	 * @params mixed[]      The offset in the data to fetch.
+	 * @return mixed[]|null Session data or null if the offset does not exist.
 	 */
-	public function read(Array $params = array())
+	public function read(Array $offset = array())
 	{
-		$session = $this->session->getAccess();
+		$session = $this->session->getCopy();
 
-		foreach ($params as $sessionOffset)
+		foreach ($offset as $offsetPart)
 		{
-			if (!isset($session[$sessionOffset]))
+			if (!isset($session[$offsetPart]))
 			{
 				$session = NULL;
 				break;
 			}
 			
-			$session =& $session[$sessionOffset];
+			$session =& $session[$offsetPart];
 		}
 
 		return $session;
 	}
 
 	/**
-	 * Update some data from the storage mechanism.
+	 * Update some data from the session.
 	 *
-	 * @param mixed[] The old data from storage.
+	 * @param mixed[] The old data from session.
 	 * @param mixed[] The new data to set it to.
 	 */
-	public function update(Array $old = array(),
-	                       Array $new = array())
+	public function update(Array $old, Array $new)
 	{
-		$session = $this->session->getAccess();
+		$session = $this->session->getCopy();
 		
 		// Ensure the the session has not been modified from the old values.
-		if ($session != $old)
+		if ($session !== $old)
 		{
 			throw new RuntimeException(
-				'Session has been modified before update.');
+				'Session update data has already been modified.');
 		}
 
 		$this->session->setData($new);

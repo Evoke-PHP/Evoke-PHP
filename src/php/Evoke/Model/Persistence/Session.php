@@ -174,7 +174,6 @@ class Session implements SessionIface
 	 */
 	public function getCopy()
 	{
-		// Set currentDomain to reference $_SESSION.
 		$currentDomain = $_SESSION;
 
 		foreach($this->domain as $subdomain)
