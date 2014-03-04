@@ -29,12 +29,12 @@ use PDO;
  * @package Model\Mapper\DB
  */
 class Table
-{	
+{
 	/** 
 	 * The PDO database connection.
 	 * @var PDO
 	 */
-	protected $db;
+	protected $pdo;
 	
 	/**
 	 * Table name.
@@ -48,9 +48,9 @@ class Table
 	 * @param PDO    Database connection.
 	 * @param string Table name for the database table we are mapping.
 	 */
-	public function __construct(PDO $db, $tableName)
+	public function __construct(PDO $pdo, $tableName)
 	{
-		$this->db        = $db;
+		$this->pdo       = $pdo;
 		$this->tableName = $tableName;
 	}
 
@@ -68,7 +68,7 @@ class Table
 		$sql = 'INSERT ' . $this->tableName . ' SET ' .
 			$this->placeholdersKeyed($record, '=', ',');
 
-		$stmt = $this->db->prepare($sql);
+		$stmt = $this->pdo->prepare($sql);
 		$stmt->execute($record);
 	}
 
@@ -82,7 +82,7 @@ class Table
 		$sql = 'INSERT ' . $this->tableName . ' SET ' .
 			$this->placeholdersKeyed(reset($data), '=', ',');
 
-		$stmt = $this->db->prepare($sql);
+		$stmt = $this->pdo->prepare($sql);
 
 		foreach ($data as $record)
 		{
@@ -106,7 +106,7 @@ class Table
 			$sql .= ' LIMIT ' . $limit;
 		}
 
-		$stmt = $this->db->prepare($sql);
+		$stmt = $this->pdo->prepare($sql);
 		$stmt->execute($conditions);
 	}
 			
@@ -144,7 +144,7 @@ class Table
 			$sql .= ' LIMIT ' . $limit;
 		}
 
-		$stmt = $this->db->prepare($sql);
+		$stmt = $this->pdo->prepare($sql);
 
 		if (empty($conditions))
 		{
@@ -186,7 +186,7 @@ class Table
 			$sql .= ' LIMIT ' . $limit;
 		}
 		
-		$statement = $this->db->prepare($sql);
+		$statement = $this->pdo->prepare($sql);
 		$params = array_merge(array_values($newRecord),
 		                      array_values($oldMatch));
 		$statement->execute($params);
