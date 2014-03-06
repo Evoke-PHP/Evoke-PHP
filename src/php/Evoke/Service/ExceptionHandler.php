@@ -7,8 +7,8 @@
 namespace Evoke\Service;
 
 use Evoke\Network\HTTP\ResponseIface,
-	Evoke\View\XMTHL\MessageBox,
 	Evoke\View\XHTML\Exception,
+	Evoke\View\XHTML\MessageBox,
 	Evoke\Writer\PageIface,
 	InvalidArgumentException;
 
