@@ -54,36 +54,40 @@ class TreeBuilder
 	public function build(Array $mptt)
 	{
 		$rootNode = new Tree;
-		$rootNode->set($mptt[0]);
 		$level = 0;
 		$treePtrs = array();
 		$children = array();
 		$children[$level] =
 			($mptt[0][$this->right] - $mptt[0][$this->left] - 1) / 2;
+
+		unset($mptt[0][$this->left], $mptt[0][$this->right]);
+		$rootNode->set($mptt[0]);
+
 		$treePtrs[$level++] =& $rootNode;
 		
 		for ($i = 1; $i < count($mptt); ++$i)
 		{
 			$node = new Tree;
+			$childNodes = ($mptt[$i][$this->right] -
+			               $mptt[$i][$this->left] - 1) / 2;
+			unset($mptt[$i][$this->left], $mptt[$i][$this->right]);
 			$node->set($mptt[$i]);
 			$treePtrs[$level - 1]->add($node);
 			
-			// We have processed the node, update the child counts.
+			// We have processed the node, update the child counts, removing
+			// a level if it has been fully processed.
 			for ($lev = $level - 1; $lev >= 0; --$lev)
 			{
-				--$children[$lev];
-			}
-			
-			while ($level > 0 && $children[$level - 1] === 0)
-			{
-				unset($children[--$level]);
+				if (--$children[$lev] === 0)
+				{
+					unset($children[--$level]);
+				}
 			}
 			
 			// If we have children update the tree pointers and level.
-			if ($mptt[$i][$this->right] - $mptt[$i][$this->left] > 1)
+			if ($childNodes > 0)
 			{
-				$children[$level] = (($mptt[$i][$this->right] -
-				                      $mptt[$i][$this->left] - 1) / 2);
+				$children[$level] = $childNodes;
 				$treePtrs[$level++] =& $node;
 			}
 			
