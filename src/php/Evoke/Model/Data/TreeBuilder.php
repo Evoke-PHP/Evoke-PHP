@@ -64,8 +64,9 @@ class TreeBuilder
 		$rootNode->set($mptt[0]);
 
 		$treePtrs[$level++] =& $rootNode;
+		$mpttItems = count($mptt);
 		
-		for ($i = 1; $i < count($mptt); ++$i)
+		for ($i = 1; $i < $mpttItems; ++$i)
 		{
 			$node = new Tree;
 			$childNodes = ($mptt[$i][$this->right] -
