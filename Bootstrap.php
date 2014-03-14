@@ -19,6 +19,10 @@ use DateTime,
  * Bootstrap
  *
  * Example function for initializing a system.
+ *
+ * @param bool   Whether this is a development server.
+ * @param string The filename of the log file to use.
+ * @return HTTP\Response
  */
 function bootstrap($isDevelopmentServer, $logFile)
 {
@@ -28,7 +32,7 @@ function bootstrap($isDevelopmentServer, $logFile)
 		/* Autoload */
 		/************/
 		$component = 'Autoload';
-		$evokeDir = './src/php/';
+		$evokeDir = __DIR__ . '/src/php/';
 		$autoloadDir = $evokeDir . 'Evoke/Service/Autoload/';
 		require $autoloadDir . 'AutoloadIface.php';
 		require $autoloadDir . 'PSR0Namespace.php';
@@ -44,6 +48,12 @@ function bootstrap($isDevelopmentServer, $logFile)
 		$logging = new Service\Log\Logging(new DateTime);
 		$logging->attach(new Service\Log\File($logFile));
 
+		/************/
+		/* Response */
+		/************/
+		$component = 'Response';
+		$response = new HTTP\Response;
+
 		/********************/
 		/* Shutdown Handler */
 		/********************/
@@ -51,7 +61,6 @@ function bootstrap($isDevelopmentServer, $logFile)
 		$viewShutdownMessageBox = new View\XHTML\MessageBox(
 			['class' => 'Message_Box Shutdown']);
 		$viewError = new View\XHTML\Error;
-		$response = new HTTP\Response;
 		$xhtmlWriter = new Writer\XML(new XMLWriter);
 		$shutdownHandler = new Service\ShutdownHandler(
 			'admin@bigthrow.com.au', $response, $isDevelopmentServer,
@@ -76,6 +85,8 @@ function bootstrap($isDevelopmentServer, $logFile)
 		$component = 'Error Handler';
 		$errorHandler = new Service\ErrorHandler($logging);
 		set_error_handler([$errorHandler, 'handler']);
+
+		return $response;
 	}
 	catch(\Exception $e)
 	{
