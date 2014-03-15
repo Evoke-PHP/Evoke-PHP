@@ -73,19 +73,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * Construct an object.
-	 *
-	 * @covers Evoke\Model\Data\TreeBuilder::__construct
-	 */
-	public function testConstruct()
-	{
-		$obj = new TreeBuilder;
-		$this->assertInstanceOf('Evoke\Model\Data\TreeBuilder', $obj);
-	}
-
-	/**
-	 *
-	 *
 	 * @covers       Evoke\Model\Data\TreeBuilder::build
 	 * @dataProvider providerBuild
 	 */
@@ -95,5 +82,50 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($expected, $obj->build($mptt));
 	}
+	
+	/**
+	 * @covers Evoke\Model\Data\TreeBuilder::__construct
+	 */
+	public function testConstruct()
+	{
+		$obj = new TreeBuilder;
+		$this->assertInstanceOf('Evoke\Model\Data\TreeBuilder', $obj);
+	}
+
+	/**
+	 * @covers                   Evoke\Model\Data\TreeBuilder::build
+	 * @expectedException        InvalidArgumentException
+	 * @expectedExceptionMessage needs MPTT root with Left and Right fields.
+	 */
+	public function testInvalidRootNode()
+	{
+		$obj = new TreeBuilder;
+		$obj->build([['Root_Node' => 'Bad']]);
+	}
+
+	/**
+	 * @covers                   Evoke\Model\Data\TreeBuilder::build
+	 * @expectedException        InvalidArgumentException
+	 * @expectedExceptionMessage needs MPTT entries to build tree.
+	 */
+	public function testInvalidEmpty()
+	{
+		$obj = new TreeBuilder;
+		$obj->build([]);
+	}
+
+	/**
+	 * @covers                   Evoke\Model\Data\TreeBuilder::build
+	 * @expectedException        InvalidArgumentException
+	 * @expectedExceptionMessage
+	 * needs MPTT data at 1 with Left and Right fields.
+	 */
+	public function testInvalidEntry()
+	{
+		$obj = new TreeBuilder;
+		$obj->build(
+			[['Left' => 0, 'Right' => 3],
+			 ['Left' => 1, 'Rong' => 2]]);
+	}	
 }
 // EOF
