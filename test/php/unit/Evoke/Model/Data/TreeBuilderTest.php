@@ -44,27 +44,27 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 		$binaryTree->add($bT1);		
 		
 		return ['Root_Only' =>
-		        ['Mptt'     => [['Left'  => 0,
-		                         'Right' => 1,
+		        ['Mptt'     => [['Lft'  => 0,
+		                         'Rgt' => 1,
 		                         'Value' => 'V']],
 		         'Expected' => $rootOnly],
 		        'Binary'    =>
 		        ['Mptt'     =>
-		         [['Left' => 0,  'Right' => 29, 'V' => 'Root_Node'],
-		          ['Left' => 1,  'Right' => 14, 'V' => '0'],
-		          ['Left' => 2,  'Right' => 7,  'V' => '00'],
-		          ['Left' => 3,  'Right' => 4,  'V' => '000'],
-		          ['Left' => 5,  'Right' => 6,  'V' => '001'],
-		          ['Left' => 8,  'Right' => 13, 'V' => '01'],
-		          ['Left' => 9,  'Right' => 10, 'V' => '010'],
-		          ['Left' => 11, 'Right' => 12, 'V' => '011'],
-		          ['Left' => 15, 'Right' => 28, 'V' => '1'],
-		          ['Left' => 16, 'Right' => 21, 'V' => '10'],
-		          ['Left' => 17, 'Right' => 18, 'V' => '100'],
-		          ['Left' => 19, 'Right' => 20, 'V' => '101'],
-		          ['Left' => 22, 'Right' => 27, 'V' => '11'],
-		          ['Left' => 23, 'Right' => 24, 'V' => '110'],
-		          ['Left' => 25, 'Right' => 26, 'V' => '111']],
+		         [['Lft' => 0,  'Rgt' => 29, 'V' => 'Root_Node'],
+		          ['Lft' => 1,  'Rgt' => 14, 'V' => '0'],
+		          ['Lft' => 2,  'Rgt' => 7,  'V' => '00'],
+		          ['Lft' => 3,  'Rgt' => 4,  'V' => '000'],
+		          ['Lft' => 5,  'Rgt' => 6,  'V' => '001'],
+		          ['Lft' => 8,  'Rgt' => 13, 'V' => '01'],
+		          ['Lft' => 9,  'Rgt' => 10, 'V' => '010'],
+		          ['Lft' => 11, 'Rgt' => 12, 'V' => '011'],
+		          ['Lft' => 15, 'Rgt' => 28, 'V' => '1'],
+		          ['Lft' => 16, 'Rgt' => 21, 'V' => '10'],
+		          ['Lft' => 17, 'Rgt' => 18, 'V' => '100'],
+		          ['Lft' => 19, 'Rgt' => 20, 'V' => '101'],
+		          ['Lft' => 22, 'Rgt' => 27, 'V' => '11'],
+		          ['Lft' => 23, 'Rgt' => 24, 'V' => '110'],
+		          ['Lft' => 25, 'Rgt' => 26, 'V' => '111']],
 		         'Expected' => $binaryTree]];
 	}
 	
@@ -95,7 +95,7 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers                   Evoke\Model\Data\TreeBuilder::build
 	 * @expectedException        InvalidArgumentException
-	 * @expectedExceptionMessage needs MPTT root with Left and Right fields.
+	 * @expectedExceptionMessage needs MPTT root with Lft and Rgt fields.
 	 */
 	public function testInvalidRootNode()
 	{
@@ -118,14 +118,14 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	 * @covers                   Evoke\Model\Data\TreeBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage
-	 * needs MPTT data at 1 with Left and Right fields.
+	 * needs MPTT data at 1 with Lft and Rgt fields.
 	 */
 	public function testInvalidEntry()
 	{
 		$obj = new TreeBuilder;
 		$obj->build(
-			[['Left' => 0, 'Right' => 3],
-			 ['Left' => 1, 'Rong' => 2]]);
+			[['Lft' => 0, 'Rgt' => 3],
+			 ['Lft' => 1, 'Rong' => 2]]);
 	}	
 }
 // EOF
