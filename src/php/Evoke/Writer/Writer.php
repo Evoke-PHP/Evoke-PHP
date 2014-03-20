@@ -60,13 +60,6 @@ abstract class Writer implements WriterIface
 	}
 		
 	/**
-	 * Write data into the buffer.
-	 *
-	 * @param mixed The data to write into the buffer.
-	 */
-	abstract public function write($data);
-
-	/**
 	 * By default nothing is required to be initialized on write start.
 	 */
 	public function writeStart()
