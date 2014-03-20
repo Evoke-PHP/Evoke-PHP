@@ -50,10 +50,11 @@ class TreeBuilder
 	/**
 	 * Build a tree from Modified Preorder Tree Traversal data.
 	 *
+	 * @param string  The name of the tree.
 	 * @param mixed[] The Modified Preorder Tree Traversal data.
 	 * @return Tree The tree.
 	 */
-	public function build(Array $mptt)
+	public function build($treeName, Array $mptt)
 	{
 		$mpttItems = count($mptt);
 
@@ -79,7 +80,7 @@ class TreeBuilder
 			($mptt[0][$this->right] - $mptt[0][$this->left] - 1) / 2;
 
 		unset($mptt[0][$this->left], $mptt[0][$this->right]);
-		$rootNode->set($mptt[0]);
+		$rootNode->set($treeName);
 
 		$treePtrs[$level++] =& $rootNode;
 		

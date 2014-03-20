@@ -14,7 +14,7 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	public function providerBuild()
 	{
 		$rootOnly = new Tree;
-		$rootOnly->set(['Value' => 'V']);
+		$rootOnly->set('Root_Only');
 
 		$bTItems = ['0', '00', '000', '001', '01', '010', '011',
 		            '1', '10', '100', '101', '11', '110', '111'];
@@ -39,18 +39,20 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 		}
 		
 		$binaryTree = new Tree;
-		$binaryTree->set(['V' => 'Root_Node']);
+		$binaryTree->set('Binary_Tree');
 		$binaryTree->add($bT0);
 		$binaryTree->add($bT1);		
 		
 		return ['Root_Only' =>
-		        ['Mptt'     => [['Lft'  => 0,
+		        ['Tree_Name' => 'Root_Only',
+		         'Mptt'      => [['Lft'  => 0,
 		                         'Rgt' => 1,
-		                         'Value' => 'V']],
-		         'Expected' => $rootOnly],
+		                         'Value' => 'ROOT_ITEM']],
+		         'Expected'  => $rootOnly],
 		        'Binary'    =>
-		        ['Mptt'     =>
-		         [['Lft' => 0,  'Rgt' => 29, 'V' => 'Root_Node'],
+		        ['Tree_Name' => 'Binary_Tree',
+		         'Mptt'      =>
+		         [['Lft' => 0,  'Rgt' => 29, 'V' => 'ROOT_ITEM'],
 		          ['Lft' => 1,  'Rgt' => 14, 'V' => '0'],
 		          ['Lft' => 2,  'Rgt' => 7,  'V' => '00'],
 		          ['Lft' => 3,  'Rgt' => 4,  'V' => '000'],
@@ -65,7 +67,7 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 		          ['Lft' => 22, 'Rgt' => 27, 'V' => '11'],
 		          ['Lft' => 23, 'Rgt' => 24, 'V' => '110'],
 		          ['Lft' => 25, 'Rgt' => 26, 'V' => '111']],
-		         'Expected' => $binaryTree]];
+		         'Expected'  => $binaryTree]];
 	}
 	
 	/*********/
@@ -76,11 +78,11 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	 * @covers       Evoke\Model\Data\TreeBuilder::build
 	 * @dataProvider providerBuild
 	 */
-	public function testBuild($mptt, $expected)
+	public function testBuild($treeName, $mptt, $expected)
 	{
 		$obj = new TreeBuilder;
 
-		$this->assertEquals($expected, $obj->build($mptt));
+		$this->assertEquals($expected, $obj->build($treeName, $mptt));
 	}
 	
 	/**
@@ -100,7 +102,7 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	public function testInvalidRootNode()
 	{
 		$obj = new TreeBuilder;
-		$obj->build([['Root_Node' => 'Bad']]);
+		$obj->build('Tree_Name', [['Root_Node' => 'Bad']]);
 	}
 
 	/**
@@ -111,7 +113,7 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	public function testInvalidEmpty()
 	{
 		$obj = new TreeBuilder;
-		$obj->build([]);
+		$obj->build('Tree_Name', []);
 	}
 
 	/**
@@ -123,9 +125,9 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	public function testInvalidEntry()
 	{
 		$obj = new TreeBuilder;
-		$obj->build(
-			[['Lft' => 0, 'Rgt' => 3],
-			 ['Lft' => 1, 'Rong' => 2]]);
+		$obj->build('Tree_Name',
+		            [['Lft' => 0, 'Rgt' => 3],
+		             ['Lft' => 1, 'Rong' => 2]]);
 	}	
 }
 // EOF
