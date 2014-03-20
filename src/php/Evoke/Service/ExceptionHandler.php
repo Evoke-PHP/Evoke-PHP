@@ -9,7 +9,7 @@ namespace Evoke\Service;
 use Evoke\Network\HTTP\ResponseIface,
 	Evoke\View\XHTML\Exception,
 	Evoke\View\XHTML\MessageBox,
-	Evoke\Writer\PageIface,
+	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
 /**
@@ -31,7 +31,7 @@ class ExceptionHandler
 	 * @var bool          $showException  Whether to display the exception.
 	 * @var Exception     $viewException  Exception view.
 	 * @var MessageBox    $viewMessageBox MessageBox view.
-	 * @var PageIface     $writer         Page Writer.
+	 * @var WriterIface   $writer         Writer.
 	 */
 	protected $response, $showException, $viewException, $viewMessageBox,
 		$writer;
@@ -42,13 +42,13 @@ class ExceptionHandler
 	 * @param ResponseIface Response object.
 	 * @param bool          Whether to show the exception.
 	 * @param MessageBox    MessageBox view.
-	 * @param PageIface     Page Writer object.
+	 * @param WriterIface   Writer object.
 	 * @param Exception     View of the exception (if shown).
 	 */
 	public function __construct(ResponseIface $response,
 	                            /* Bool */    $showException,
 	                            MessageBox    $viewMessageBox,
-	                            PageIface     $writer,
+	                            WriterIface   $writer,
 	                            Exception     $viewException = NULL)
 	{
 		if ($showException && !isset($viewException))
