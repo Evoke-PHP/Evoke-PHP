@@ -46,11 +46,13 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers Evoke\Writer\Text::write
 	 * @covers Evoke\Writer\Writer::flush
+	 * @covers Evoke\Writer\Writer::writeStart
 	 * @covers Evoke\Writer\Writer::__toString
 	 */
 	public function testFlush()
 	{
 		$object = new Text;
+		$object->writeStart();
 		$object->write('Something to Flush');
 
 		ob_start();
@@ -63,24 +65,15 @@ class TextTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Knows that it isn't page based.
-	 *
-	 * @covers Evoke\Writer\Text::isPageBased
-	 */
-	public function testIsPageBased()
-	{
-		$object = new Text;
-		$this->assertFalse($object->isPageBased(), 'Should not be page based.');
-	}
-
-	/**
-	 * Buffer starts empty.
+	 * Buffer starts empty even after initialization.
 	 *
 	 * @covers Evoke\Writer\Writer::__toString
+	 * @covers Evoke\Writer\Writer::writeStart
 	 */
 	public function testStartsEmpty()
 	{
 		$object = new Text;
+		$object->writeStart();
 		$this->assertSame('', (string)$object);
 	}
 

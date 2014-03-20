@@ -32,13 +32,6 @@ interface WriterIface
 	 * Flush the output buffer (send it and then reset).
 	 */
 	public function flush();
-
-	/**
-	 * Whether the writer is page based or not.
-	 *
-	 * @return bool Whether the writer is page based.
-	 */
-	public function isPageBased();
 	
 	/**
 	 * Write the data into the buffer.
@@ -46,5 +39,10 @@ interface WriterIface
 	 * @param mixed The data to be written.
 	 */
 	public function write($data);
+
+	/**
+	 * Start the writing initializing the document if necessary.
+	 */
+	public function writeStart();
 }
 // EOF

@@ -21,16 +21,6 @@ class JSON extends Writer
 	/******************/
 	/* Public Methods */
 	/******************/
-
-	/**
-	 * Whether the writer is page based or not.
-	 *
-	 * @return bool Whether the writer is page based.
-	 */
-	public function isPageBased()
-	{
-		return FALSE;
-	}
 	
 	/**
 	 * Write the data in JSON format into the buffer.

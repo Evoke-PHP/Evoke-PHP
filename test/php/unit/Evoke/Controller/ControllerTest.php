@@ -28,11 +28,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test the execution of a page based controller.
+	 * Test the execution of the controller.
 	 *
 	 * @covers Evoke\Controller\Controller::execute
 	 */
-	public function testExecutePageBased()
+	public function testExecute()
 	{
 		$viewOutput = ['div', [], 'View Output'];
 
@@ -53,15 +53,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue($viewOutput));
 
 		$wIndex = 0;
-		$writer = $this->getMock('Evoke\Writer\PageIface');
+		$writer = $this->getMock('Evoke\Writer\WriterIface');
 		$writer
 			->expects($this->at($wIndex++))
 			->method('__toString')
 			->will($this->returnValue(''));
-		$writer
-			->expects($this->at($wIndex++))
-			->method('isPageBased')
-			->will($this->returnValue(TRUE));
 		$writer
 			->expects($this->at($wIndex++))
 			->method('writeStart');
@@ -69,9 +65,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->expects($this->at($wIndex++))
 			->method('write')
 			->with($viewOutput);
-		$writer
-			->expects($this->at($wIndex++))
-			->method('writeEnd');
 		$writer
 			->expects($this->at($wIndex++))
 			->method('__toString')
@@ -121,8 +114,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 			->method('clean');
 		$mocks['Writer']
 			->expects($this->at($wIndex++))
-			->method('isPageBased')
-			->will($this->returnValue(FALSE));			          
+			->method('writeStart')
+			->with();
 		$mocks['Writer']
 			->expects($this->at($wIndex++))
 			->method('write')
@@ -154,7 +147,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	{
 		return [
 			'Response' => $this->getMock('Evoke\Network\HTTP\ResponseIface'),
-			'Writer'   => $this->getMock('Evoke\Writer\PageIface'),
+			'Writer'   => $this->getMock('Evoke\Writer\WriterIface'),
 			'View'     => $this->getMock('Evoke\View\ViewIface')];
 	}	
 }

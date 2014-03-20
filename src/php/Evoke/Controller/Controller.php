@@ -57,20 +57,8 @@ class Controller extends ControllerAbstract
 	public function execute()
 	{
 		$this->requireCleanWriter();
-		$pageBased = $this->writer->isPageBased();
-		
-		if ($pageBased)
-		{
-			$this->writer->writeStart();
-		}
-
+		$this->writer->writeStart();
 		$this->writer->write($this->view->get());
-
-		if ($pageBased)
-		{
-			$this->writer->writeEnd();
-		}
-
 		$this->response->setBody((string)$this->writer);
 		$this->response->send();
 	}

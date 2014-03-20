@@ -11,17 +11,6 @@ class JSONTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * Knows that it isn't page based.
-	 *
-	 * @covers Evoke\Writer\JSON::isPageBased
-	 */
-	public function testIsPageBased()
-	{
-		$object = new JSON;
-		$this->assertFalse($object->isPageBased(), 'Should not be page based.');
-	}
-
-	/**
 	 * Write JSON data.
 	 *
 	 * @covers Evoke\Writer\JSON::write

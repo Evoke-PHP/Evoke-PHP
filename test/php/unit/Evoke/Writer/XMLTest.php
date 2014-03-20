@@ -140,17 +140,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * XML is Page Based.
-	 *
-	 * @covers Evoke\Writer\XML::isPageBased
-	 */
-	public function testIsPageBased()
-	{
-		$object = new XML($this->getMock('XMLWriter'));
-		$this->assertTrue($object->isPageBased(), 'XML is page based.');
-	}
-
-	/**
 	 * Start the document with default values.
 	 *
 	 * @covers Evoke\Writer\XML::writeStart

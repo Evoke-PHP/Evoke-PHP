@@ -20,7 +20,7 @@ use DomainException,
  * @license   MIT
  * @package   Writer
  */
-class XML implements PageIface
+class XML implements WriterIface
 {
 	/**
 	 * Protected Properties
@@ -98,16 +98,6 @@ class XML implements PageIface
 	public function flush()
 	{
 		echo $this->xmlWriter->outputMemory(TRUE);
-	}
-
-	/**
-	 * Whether the writer is page based or not.
-	 *
-	 * @return bool Whether the writer is page based.
-	 */
-	public function isPageBased()
-	{
-		return TRUE;
 	}
 	
 	/**

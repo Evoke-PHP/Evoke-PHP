@@ -117,7 +117,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 			->method('send');
 		
 		$writerIndex = 0;
-		$writer = $this->getMock('Evoke\Writer\PageIface');
+		$writer = $this->getMock('Evoke\Writer\WriterIface');
 
 		if ($requiresFlush)
 		{
@@ -141,14 +141,20 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		
 		$writer
 			->expects($this->at($writerIndex++))
-			->method('writeStart');		   
+			->method('writeStart')
+			->with();
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('write')
-			->with(['div', [], 'MBOX is the big wig.']);
-		$writer
-			->expects($this->at($writerIndex++))
-			->method('writeEnd');
+			->with(
+				['html',
+				 [],
+				 [['head',
+				   [],
+				   [['title', [], ['Uncaught Exception']]]],
+				  ['body',
+				   [],
+				   [['div', [], 'MBOX is the big wig.']]]]]);
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('__toString')

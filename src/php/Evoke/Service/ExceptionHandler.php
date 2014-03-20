@@ -102,12 +102,17 @@ class ExceptionHandler
 			$this->viewException->set($uncaughtException);
 			$this->viewMessageBox->addContent($this->viewException->get());
 		}
-		
-		$this->writer->writeStart(
-			array('CSS'   => array('/csslib/global.css'),
-			      'Title' => '500 Internal Server Error'));
-		$this->writer->write($this->viewMessageBox->get());
-		$this->writer->writeEnd();
+
+		$this->writer->writeStart();
+		$this->writer->write(
+			['html',
+			 [],
+			 [['head',
+			   [],
+			   [['title', [], ['Uncaught Exception']]]],
+			  ['body',
+			   [],
+			   [$this->viewMessageBox->get()]]]]);
 		
 		$this->response->setStatus(500);
 		$this->response->setBody((string)$this->writer);
