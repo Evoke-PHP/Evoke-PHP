@@ -44,10 +44,10 @@ use Metadata\MetadataIface,
  *                          |                         +===============+
  *                          |   +===========+
  *                   	    |   | Size      |
- *                   	    |   +-----------+
- *                   	    `-->| PK | ID   |
- *                   	        |    | Name |
- *                   	        +===========+
+ *                          |   +-----------+
+ *                          `-->| PK | ID   |
+ *                              |    | Name |
+ *                              +===========+
  * </pre>
  *
  * SQL Syntax:
@@ -149,6 +149,17 @@ class Data extends Flat
 		
 		throw new OutOfBoundsException('no data container for join: ' . $join);
 	}
+
+	/**
+	 * Set the data that we are managing.
+	 *
+	 * @param mixed[] The data we want to manage.
+	 */
+	public function setData(Array $data)
+	{
+		$this->data = $this->metadata->arrangeFlatData($data);
+		$this->rewind();
+	}   
 
 	/*********************/
 	/* Protected Methods */

@@ -102,7 +102,8 @@ class DataTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Model\Data\Data::setRecord
+	 * @covers Evoke\Model\Data\Data::setData
+	 * @covers Evoke\Model\Data\Data::setRecord
 	 */
 	public function testSetData()
 	{
@@ -117,6 +118,32 @@ class DataTest extends PHPUnit_Framework_TestCase
 		            ['J2_ID' => 2, 'Value' => 'Two']];
 		$j3Data = [['J3_ID' => 3, 'Text' => 'Three']];
 
+		$flatResults =
+			[['M.Main_Record' => 'One',
+			  'J1.J1_ID'      => 1,
+			  'J1.Value'      => '1',
+			  'J2.J2_ID'      => 1,
+			  'J2.Value'      => '21'],
+			 ['M.Main_Record' => 'One',
+			  'J1.J1_ID'      => 1,
+			  'J1.Value'      => 'One',
+			  'J2.J2_ID'      => 1,
+			  'J2.Value'      => '21'],
+			 ['M.Main_Record' => 'One',
+			  'J1.J1_ID'      => 1,
+			  'J1.Value'      => '1',
+			  'J2.J2_ID'      => 1,
+			  'J2.Value'      => 'TwoOne',
+			  'J3.J3_ID'      => 3,
+			  'J3.Text'       => 'Three'],
+			 ['M.Main_Record' => 'One',
+			  'J1.J1_ID'      => 1,
+			  'J1.Value'      => '1',
+			  'J2.J2_ID'      => 1,
+			  'J2.Value'      => 'TwoOne',
+			  'J3.J3_ID'      => 3,
+			  'J3.Text'       => 'Three']];			  
+		
 		$data = [['Main_Record' => 'One',
 		          'Joint_Data'  => [
 			          'J1' => $j1Data1,
@@ -157,10 +184,17 @@ class DataTest extends PHPUnit_Framework_TestCase
 			->method('setData')
 			->with($j3Data);
 
+		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
+		$metadata
+			->expects($this->at(0))
+			->method('arrangeFlatData')
+			->with($flatResults)
+			->will($this->returnValue($data));
+		
 		$obj = new Data(
-			$this->getMock('Evoke\Model\Data\Metadata\MetadataIface'),
+			$metadata,
 			['J1' => $j1, 'J2' => $j2, 'J3' => $j3]);
-		$obj->setData($data);
+		$obj->setData($flatResults);
 		$obj->next();
 	}
 }
