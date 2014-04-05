@@ -1,22 +1,22 @@
 <?php
 /**
- * DBBuilder
+ * DB Data Builder
  *
- * @package Model\Data\Metadata
+ * @package Model\Data
  */
-namespace Evoke\Model\Data\Metadata;
+namespace Evoke\Model\Data;
 
 use InvalidArgumentException;
 
 /**
- * DBBuilder
+ * DB Data Builder
  *
  * @author    Paul Young <evoke@youngish.homelinux.org>
  * @copyright Copyright (c) 2013 Paul Young
  * @license   MIT
- * @package   Model\Data\Metadata
+ * @package   Model\Data
  */
-class DBBuilder
+class DBDataBuilder
 {
 	/******************/
 	/* Public Methods */
@@ -64,11 +64,11 @@ class DBBuilder
 			$metadataPrimaryKeys = $primaryKeys[$tableAlias];
 		}
 		
-		return new DB($metadataFields,
-		              $metadataJoins,
-		              $metadataPrimaryKeys,
-		              $tableAlias,
-		              $tableName);
+		return new Metadata\DB($metadataFields,
+		                       $metadataJoins,
+		                       $metadataPrimaryKeys,
+		                       $tableAlias,
+		                       $tableName);
 	}
 	
 }

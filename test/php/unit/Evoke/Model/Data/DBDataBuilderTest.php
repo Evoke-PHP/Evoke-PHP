@@ -2,10 +2,10 @@
 namespace Evoke_Test\Model\Data\Metadata;
 
 use Evoke\Model\Data\Metadata\DB,
-	Evoke\Model\Data\Metadata\DBBuilder,
+	Evoke\Model\Data\DBDataBuilder,
 	PHPUnit_Framework_TestCase;
 
-class DBBuilderTest extends PHPUnit_Framework_TestCase
+class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
 	/* Data Providers */
@@ -81,7 +81,7 @@ class DBBuilderTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * @covers       Evoke\Model\Data\Metadata\DBBuilder::build
+	 * @covers       Evoke\Model\Data\DBDataBuilder::build
 	 * @dataProvider providerBuild
 	 */
 	public function testBuild(DB    $expected,
@@ -91,7 +91,7 @@ class DBBuilderTest extends PHPUnit_Framework_TestCase
 	                          /* String */ $tableName,
 	                          /* String */ $tableAlias = NULL)
 	{
-		$obj = new DBBuilder;
+		$obj = new DBDataBuilder;
 		$this->assertEquals($expected,
 		                    $obj->build($fields,
 		                                $joins,
@@ -101,13 +101,13 @@ class DBBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\Metadata\DBBuilder::build
+	 * @covers                   Evoke\Model\Data\DBDataBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage Joins must have Parent and Table.
 	 */
 	public function testMissingJoinParent()
 	{
-		$obj = new DBBuilder;
+		$obj = new DBDataBuilder;
 		$obj->build(['ID'],
 		            ['T' => ['Table' => 'Set']],
 		            [],
@@ -115,13 +115,13 @@ class DBBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\Metadata\DBBuilder::build
+	 * @covers                   Evoke\Model\Data\DBDataBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage Joins must have Parent and Table.
 	 */
 	public function testMissingJoinTable()
 	{
-		$obj = new DBBuilder;
+		$obj = new DBDataBuilder;
 		$obj->build(['ID'],
 		            ['T' => ['Parent' => 'Set']],
 		            [],
