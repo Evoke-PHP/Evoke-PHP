@@ -101,7 +101,7 @@ class DBDataBuilder
 					$join['Alias'] : $join['Table'];
 
 				$dataJoins[$join['Parent']] = $this->buildData(
-					$fields, $joins, $primaryKeys, $joins['Table'], $alias);
+					$fields, $joins, $primaryKeys, $join['Table'], $alias);
 			}
 		}	
 
