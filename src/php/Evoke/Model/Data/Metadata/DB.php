@@ -9,8 +9,7 @@ namespace Evoke\Model\Data\Metadata;
 use DomainException;
 
 /**
- * DB Metadata
- * ===========
+ * <h1>DB Metadata</h1>
  *
  * Describe the data for a database.  Relational databases contain special
  * information that describes the data stored in them.

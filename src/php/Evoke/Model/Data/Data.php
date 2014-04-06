@@ -6,7 +6,7 @@
  */
 namespace Evoke\Model\Data;
 
-use Metadata\MetadataIface,
+use Evoke\Model\Data\Metadata\MetadataIface,
 	OutOfBoundsException;
 
 /**
