@@ -34,7 +34,8 @@ class DBDataBuilder
 	 * structure from flat metadata.
 	 *
 	 * @param mixed[]      Array of Table Aliases to fields.
-	 * @param mixed[]      Array of Table Aliases to Join specifcations of the form:
+	 * @param mixed[]      Array of Table Aliases to Join specifcations of the
+	 *                     form:
 	 * <pre><code>
 	 *    ['Alias'  => 'a',
 	 *     'Parent' => 'c',
@@ -51,7 +52,7 @@ class DBDataBuilder
 	                      /* String */ $tableName,
 	                      /* String */ $tableAlias = NULL)
 	{
-		if (empty($metadataCache))
+		if (empty($this->metadataCache))
 		{
 			$this->fillMetadataCache(
 				$fields, $joins, $primaryKeys, $tableName, $tableAlias);
@@ -130,16 +131,13 @@ class DBDataBuilder
 	                                     /* String */ $tableName,
 	                                     /* String */ $tableAlias = NULL)
 	{
-		$metadataFields = array();
-		$metadataJoins = array();
-		$metadataPrimaryKeys = array();
 		$tableAlias = $tableAlias ?: $tableName;
+		$metadataFields = empty($fields[$tableAlias]) ?
+			array() : $fields[$tableAlias];
+		$metadataPrimaryKeys = empty($primaryKeys[$tableAlias]) ?
+			array() : $primaryKeys[$tableAlias];
+		$metadataJoins = array();
 		
-		if (!empty($fields[$tableAlias]))
-		{
-			$metadataFields = $fields[$tableAlias];
-		}
-
 		if (!empty($joins[$tableAlias]))
 		{
 			foreach ($joins[$tableAlias] as $join)
@@ -163,11 +161,6 @@ class DBDataBuilder
 			}
 		}
 
-		if (!empty($primaryKeys[$tableAlias]))
-		{
-			$metadataPrimaryKeys = $primaryKeys[$tableAlias];
-		}
-		
 		$this->metadataCache[$tableAlias] = new DB($metadataFields,
 		                                           $metadataJoins,
 		                                           $metadataPrimaryKeys,
