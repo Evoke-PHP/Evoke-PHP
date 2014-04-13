@@ -20,66 +20,27 @@ use Evoke\Model\Data\Metadata\MetadataIface,
  *
  * ###Joins
  * 
- *
  * Joins provide a way of representing trees of data commonly found in
  * relational databases and many other real world situations.  They allow us to
  * work with a hierarchy of information considering each part in the hierarchy
  * as a separate data unit.
  *
- * ###Example
+ * A Data object is a tree of data combined with its metadata. At each level
+ * throughout the tree the correct Data and Metadata objects represent the
+ * tree at that level.  This is a tree of descending trees for both the
+ * metadata which is itself a tree of descending trees and the data.  If you
+ * aren't scared of that then seek professional help.
  *
- * Example from a relational database:
- *    List of products, each of a particular size with a set of related images.
- * 
- * SQL structure (PK = Primary Key, FK = Foreign Key):
- * <pre>
- *   +====================+     
- *   | Product            |     +===============+
- *   +--------------------+     | Image_List    |
- *   | PK | ID            |     +---------------+     +===============+
- *   |    | Name          |     | PK | ID       |     | Image         |
- *   | FK | Image_List_ID |---->|    | List_ID  |     +---------------+
- *   | FK | Size_ID       |-.   | FK | Image_ID |---->| PK | ID       |
- *   +====================+ |   +===============+     |    | Filename |
- *                          |                         +===============+
- *                          |   +===========+
- *                   	    |   | Size      |
- *                          |   +-----------+
- *                          `-->| PK | ID   |
- *                              |    | Name |
- *                              +===========+
- * </pre>
- *
- * SQL Syntax:
- *
- * <code><pre>
- * 'SELECT * FROM Product
- *  LEFT JOIN Image_List AS IL ON Product.Image_List_ID=IL.List_ID
- *  LEFT JOIN Image      AS I  ON IL.Image_ID=I.ID
- *  LEFT JOIN Size       AS S  ON Product.Size_ID=Size.ID;'
- * </pre></code>
- *
- * Product Joins:
- * <pre><code>
- * [
- *     'Image_List_ID=IL.List_ID' => $dataImageList,
- *     'Size_ID.ID=S.ID'          => $dataSize
- * ]
- * </code></pre>
- *
- * Image_List Joins:
- * <pre><code>
- * ['Image_ID=I.ID' => $dataImage]
- * </code></pre>
- *
- * The above is an abstract representation of the joins that would
- * represent the data.
+ * Use `Evoke\Model\Data\DBDataBuilder::build()` to build Data easily.
  *
  * ###Usage
  *
+ * This is an exmaple of using Data for products each with a set of images.
+ * Further details can be seen by looking at `Evoke\Model\Data\Metadata\DB`.
+ *
  * <pre><code>
- * $data = new Data($metadataProduct,
- *                  $joinsProduct);
+ * $data = $dbDataBuilder->build(* See DBDataBuilder for parameters to pass *);
+ * $data->setData(* Flat results that get organised by data and metadata *);
  *
  * // Traverse over each record in the data.
  * foreach ($data as $product)
@@ -89,11 +50,10 @@ use Evoke\Model\Data\Metadata\MetadataIface,
  *
  *     // Access joint data (with ->).  The joint data is itself a data object
  *     // The name used after -> is determined by the metadata object.  We are
- *     // assuming that we can use lowerCamelCase and that '_ID' is removed
- *     // automatically at the end.
+ *     // assuming that we can use lowerCamelCase thanks to the metadata.
  *     foreach ($product->imageList as $imageList)
  *     {
- *         $y = $imageList['Image_ID'];
+ *         $y = $imageList['Image'];
  *         $image = $imageList->image;
  *     }
  * }
