@@ -17,7 +17,7 @@ use DomainException;
  * the callback array to determine the processing that should be done.
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2013 Paul Young
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Service
  */

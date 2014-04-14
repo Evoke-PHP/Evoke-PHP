@@ -9,8 +9,8 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
 /**
  * HTTP Media Type Rule Interface
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\HTTP\MediaType\Rule
  */

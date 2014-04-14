@@ -13,8 +13,8 @@ use Evoke\View\ViewIface;
  *
  * This view is useful for a quick view of data being passed to a view.
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   View\XHTML
  */

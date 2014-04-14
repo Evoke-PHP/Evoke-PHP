@@ -16,8 +16,8 @@ use InvalidArgumentException;
  * there are more complex requirements such as optional parameters then the
  * RegexTwoLevel rule should be used.
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\URI\Rule
  */

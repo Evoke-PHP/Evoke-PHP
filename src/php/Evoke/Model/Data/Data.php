@@ -10,8 +10,6 @@ use Evoke\Model\Data\Metadata\MetadataIface,
 	OutOfBoundsException;
 
 /**
- * <h1>Data</h1>
- *
  * Provide access to joint data via class properties according to metadata.
  *
  * By understanding data (using metadata) we can access the hierarchy of the
@@ -59,8 +57,8 @@ use Evoke\Model\Data\Metadata\MetadataIface,
  * }
  * </code></pre>
  * 
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Model\Data
  */

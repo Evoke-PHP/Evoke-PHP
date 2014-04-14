@@ -8,8 +8,8 @@ namespace Evoke\Network\URI;
 /**
  * URI Router Interface
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\URI
  */

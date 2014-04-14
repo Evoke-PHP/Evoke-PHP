@@ -17,8 +17,8 @@ use Evoke\Network\HTTP\ResponseIface,
  *
  * The system shutdown handler called upon every shutdown if it is registered.
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Service
  */

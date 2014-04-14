@@ -13,8 +13,8 @@ use RuntimeException;
  *
  * Provide persistence for a session domain.
  *
- * @author Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license MIT
  * @package Model\Persistence
  */

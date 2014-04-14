@@ -11,8 +11,8 @@ namespace Evoke\Writer;
  *
  * The interface to an object that writes (using a buffer).
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Writer
  */

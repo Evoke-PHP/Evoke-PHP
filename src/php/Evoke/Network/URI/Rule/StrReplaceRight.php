@@ -9,8 +9,8 @@ namespace Evoke\Network\URI\Rule;
 /**
  * StrReplaceRight
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2013 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\URI\Rule
  */

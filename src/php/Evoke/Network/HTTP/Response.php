@@ -22,8 +22,8 @@ use InvalidArgumentException,
  * @link      http://tools.ietf.org/html/rfc1945
  * @link      http://www.w3.org/Protocols/rfc2616/rfc2616.html
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\HTTP
  */

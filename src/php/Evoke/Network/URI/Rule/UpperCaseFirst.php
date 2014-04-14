@@ -12,8 +12,8 @@ namespace Evoke\Network\URI\Rule;
  * A rule to convert the first letter of each word to upper case.
  * No parameters are matched by this class.
  *
- * @author    Paul Young <evoke@youngish.homelinux.org>
- * @copyright Copyright (c) 2012 Paul Young
+ * @author    Paul Young <evoke@youngish.org>
+ * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
  * @package   Network\URI\Rule
  */
