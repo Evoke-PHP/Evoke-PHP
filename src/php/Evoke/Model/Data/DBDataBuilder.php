@@ -6,8 +6,8 @@
  */
 namespace Evoke\Model\Data;
 
-use Evoke\Model\Data\Metadata\DB,
-	InvalidArgumentException;
+use DomainException,
+    Evoke\Model\Data\Metadata\DB;
 
 /**
  * DB Data Builder
@@ -24,42 +24,50 @@ class DBDataBuilder
 	 * @var DB[]
 	 */
 	protected $metadataCache = array();
-	
+
+    /**
+     * Separator
+     * @var string
+     */
+    protected $separator;
+
+    /**
+     * Construct a DBDataBuilder object.
+     *
+     * @param string Separator between the Child Table and Field in a join.
+     */
+    public function __construct(/* string */ $separator = '_T_')
+    {
+        $this->separator = $separator;
+    }
+    
 	/******************/
 	/* Public Methods */
 	/******************/
 
 	/**
 	 * Build hierarchical DB Data containers and the associated metadata
-	 * structure from flat metadata.
+     * structure from flat metadata. All table names should be as per the
+     * possibly aliased result data that will be used with the object.
 	 *
-	 * @param mixed[]      Array of Table Aliases to fields.
-	 * @param mixed[]      Array of Table Aliases to Join specifcations of the
-	 *                     form:
-	 * <pre><code>
-	 *    ['Alias'  => 'a',
-	 *     'Parent' => 'c',
-	 *     'Table'  => 'd']
-	 * </code></pre>
-	 * @param mixed[]      Array of Table Aliases to primary keys.
-	 * @param string       Name of the table.
-	 * @param string|null  Alias of the table or NULL if the table name is to be
-	 *                     used.
+	 * @param mixed[] $fields      Array of table names to fields.
+	 * @param mixed[] $joins
+     * Array of table names to join specifcations of the form:
+	 *     <Parent_Field>=<Child_Table><Separator><Child_Field>
+	 * @param mixed[] $primaryKeys Array of Table Aliases to primary keys.
+	 * @param string  $tableName   Name of the table.
 	 */
-	public function build(Array $fields,
-	                      Array $joins,
-	                      Array $primaryKeys,
-	                      /* String */ $tableName,
-	                      /* String */ $tableAlias = NULL)
+	public function build(Array        $fields,
+                          Array        $joins,
+	                      Array        $primaryKeys,
+	                      /* string */ $tableName)
 	{
 		if (empty($this->metadataCache))
 		{
-			$this->fillMetadataCache(
-				$fields, $joins, $primaryKeys, $tableName, $tableAlias);
+			$this->fillMetadataCache($fields, $joins, $primaryKeys, $tableName);
 		}
 
-		return $this->buildData(
-			$fields, $joins, $primaryKeys, $tableName, $tableAlias);
+		return $this->buildData($fields, $joins, $primaryKeys, $tableName);
 	}
 
 	/*********************/
@@ -69,103 +77,91 @@ class DBDataBuilder
 	/**
 	 * Build the data using the metadata cache.
 	 *
-	 * @param mixed[]      Array of Table Aliases to fields.
-	 * @param mixed[]      Array of Table Aliases to Join specifcations of the
-	 *                     form:
-	 * <pre><code>
-	 *    ['Alias'  => 'a',
-	 *     'Parent' => 'c',
-	 *     'Table'  => 'd']
-	 * </code></pre>
-	 * @param mixed[]      Array of Table Aliases to primary keys.
-	 * @param string       Name of the table.
-	 * @param string|null  Alias of the table or NULL if the table name is to be
-	 *                     used.
+	 * @param mixed[] $fields      Array of table names to fields.
+	 * @param mixed[] $joins
+     * Array of table names to join specifcations of the form:
+	 *     <Parent_Field>=<Child_Table><Separator><Child_Field>
+	 * @param mixed[] $primaryKeys Array of Table Aliases to primary keys.
+	 * @param string  $tableName   Name of the table.
 	 */
 	protected function buildData(Array $fields,
 	                             Array $joins,
 	                             Array $primaryKeys,
-	                             /* String */ $tableName,
-	                             /* String */ $tableAlias = NULL)
+	                             /* String */ $tableName)
 	{
 		$dataJoins = array();
-		$tableAlias = $tableAlias ?: $tableName;
 
-		if (isset($joins[$tableAlias]))
+		if (isset($joins[$tableName]))
 		{
-			foreach ($joins[$tableAlias] as $join)
+			foreach ($joins[$tableName] as $join)
 			{
-				// We are already sure that the join has a Parent and Table due
-				// to the fillMetadataCache which runs before this method.
-				$alias = isset($join['Alias']) ?
-					$join['Alias'] : $join['Table'];
-
-				$dataJoins[$join['Parent']] = $this->buildData(
-					$fields, $joins, $primaryKeys, $join['Table'], $alias);
+                $dataJoins[$join] = $this->buildData(
+                    $fields, $joins, $primaryKeys, $this->getChildTable($join));
 			}
 		}	
 
-		return new Data($this->metadataCache[$tableAlias],
-		                $dataJoins);
+		return new Data($this->metadataCache[$tableName], $dataJoins);
 	}
 
 	/**
 	 * Fill the metadata cache following all of the joins in the flat metadata.
 	 *
-	 * @param mixed[]      Array of Table Aliases to fields.
-	 * @param mixed[]      Array of Table Aliases to Join specifcations of the
-	 *                     form:
-	 * <pre><code>
-	 *    ['Alias'  => 'a',
-	 *     'Parent' => 'c',
-	 *     'Table'  => 'd']
-	 * </code></pre>
-	 * @param mixed[]      Array of Table Aliases to primary keys.
-	 * @param string       Name of the table.
-	 * @param string|null  Alias of the table or NULL if the table name is to be
-	 *                     used.
+	 * @param mixed[] $fields      Array of table names to fields.
+	 * @param mixed[] $joins
+     * Array of table names to join specifcations of the form:
+	 *     <Parent_Field>=<Child_Table><Separator><Child_Field>
+	 * @param mixed[] $primaryKeys Array of Table Aliases to primary keys.
+	 * @param string  $tableName   Name of the table.
 	 */
 	protected function fillMetadataCache(Array $fields,
 	                                     Array $joins,
 	                                     Array $primaryKeys,
-	                                     /* String */ $tableName,
-	                                     /* String */ $tableAlias = NULL)
+	                                     /* String */ $tableName)
 	{
-		$tableAlias = $tableAlias ?: $tableName;
-		$metadataFields = empty($fields[$tableAlias]) ?
-			array() : $fields[$tableAlias];
-		$metadataPrimaryKeys = empty($primaryKeys[$tableAlias]) ?
-			array() : $primaryKeys[$tableAlias];
 		$metadataJoins = array();
 		
-		if (!empty($joins[$tableAlias]))
+		if (!empty($joins[$tableName]))
 		{
-			foreach ($joins[$tableAlias] as $join)
+			foreach ($joins[$tableName] as $join)
 			{
-				if (!isset($join['Parent'], $join['Table']))
-				{
-					throw new InvalidArgumentException(
-						'Joins must have Parent and Table.');
-				}
-
-				$alias = isset($join['Alias']) ?
-					$join['Alias'] : $join['Table'];
-
-				if (!isset($this->metadataCache[$alias]))
+                $joinTable = $this->getChildTable($join);
+                
+				if (!isset($this->metadataCache[$joinTable]))
 				{
 					$this->fillMetadataCache(
-						$fields, $joins, $primaryKeys, $join['Table'], $alias);
+						$fields, $joins, $primaryKeys, $joinTable);
 				}
 
-				$metadataJoins[$join['Parent']] = $this->metadataCache[$alias];
+				$metadataJoins[$join] = $this->metadataCache[$joinTable];
 			}
 		}
 
-		$this->metadataCache[$tableAlias] = new DB($metadataFields,
-		                                           $metadataJoins,
-		                                           $metadataPrimaryKeys,
-		                                           $tableAlias,
-		                                           $tableName);
+		$this->metadataCache[$tableName] = new DB(
+            empty($fields[$tableName]) ? array() : $fields[$tableName],
+            $metadataJoins,
+            empty($primaryKeys[$tableName]) ?
+            array() : $primaryKeys[$tableName],
+            $tableName);
 	}
+
+    /**
+     * Get the child table from the join which is between = and the separator.
+     *
+     * @param string The join to get the child table from.
+     * @return string The child table of the join.
+     * @throws DomainException If the join does not contain a child table.
+     */
+    protected function getChildTable($join)
+    {
+        if (preg_match('~=(.*)' . preg_quote($this->separator) . '~',
+                       $join,
+                       $match))
+        {
+            return $match[1];
+        }
+
+        throw new DomainException('Missing child table in join: ' . $join);
+    }
+    
 }
 // EOF

@@ -17,73 +17,59 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 		$t2Metadata = new DB(['ID', 'N2'],
 		                     [],
 		                     ['ID'],
-		                     'T2',
 		                     'T2');
 
 		$mlaMetadata3 = new DB(['ID', 'N3'],
 		                       [],
 		                       ['ID'],
-		                       'T3Aliased',
 		                       'T3');
 		$mlaMetadata2 = new DB(['ID', 'N2'],
-		                       ['N3' => $mlaMetadata3],
+		                       ['N3=T3_T_ID' => $mlaMetadata3],
 		                       ['ID'],
-		                       'T2',
 		                       'T2');
 
 		return [
-			'Single_Table'        => [
+			'Single_Table'   => [
 				'Expected'             => new Data(
 					new DB(['ID', 'Name'],
 					       [],
 					       ['ID'],
-					       'Single',
 					       'Single'),
 					[]),
 				'Fields'               => ['Single' => ['ID', 'Name']],
 				'Joins'                => [],
 				'Primary_Keys'         => ['Single' => ['ID']],
 				'Table_Name'           => 'Single'],
-			'Multiple_Table'      => [
+			'Multiple_Table' => [
 				'Expected'             => new Data(
 					new DB(['ID', 'N1'],
-					       ['N2' => $t2Metadata],
+					       ['N2=T2_T_ID' => $t2Metadata],
 					       ['ID'],
-					       'T1',
 					       'T1'),
-					['N2' => new Data($t2Metadata, [])]),
+					['N2=T2_T_ID' => new Data($t2Metadata, [])]),
 				'Fields'               => ['T1' => ['ID', 'N1'],
 				                           'T2' => ['ID', 'N2']],
-				'Joins'                => ['T1' => [['Parent' => 'N2',
-				                                     'Table'  => 'T2',
-				                                     'Alias'  => 'T2',
-				                                     'Child'  => 'ID']]],
+				'Joins'                => ['T1' => ['N2=T2_T_ID']],
 				'Primary_Keys'         => ['T1' => ['ID'],
 				                           'T2' => ['ID']],
 				'Table_Name'           => 'T1'],
-			'Multi_Level_Aliased' => [
+			'Multi_Level'    => [
 				'Expected'             => new Data(
 					new DB(['ID', 'N1'],
-					       ['N2' => $mlaMetadata2],
+					       ['N2=T2_T_ID' => $mlaMetadata2],
 					       ['ID'],
-					       'T1',
 					       'T1'),
-					['N2' => new Data($mlaMetadata2,
-					                  ['N3' => new Data($mlaMetadata3, [])])]),
-				'Fields'               => ['T1'        => ['ID', 'N1'],
-				                           'T2'        => ['ID', 'N2'],
-				                           'T3Aliased' => ['ID', 'N3']],
-				'Joins'                => ['T1' => [['Parent' => 'N2',
-				                                     'Table'  => 'T2',
-				                                     'Alias'  => 'T2',
-				                                     'Child'  => 'ID']],
-				                           'T2' => [['Parent' => 'N3',
-				                                     'Table'  => 'T3',
-				                                     'Alias'  => 'T3Aliased',
-				                                     'Child'  => 'ID']]],
-				'Primary_Keys'         => ['T1'        => ['ID'],
-				                           'T2'        => ['ID'],
-				                           'T3Aliased' => ['ID']],
+					['N2=T2_T_ID' => new Data(
+                            $mlaMetadata2,
+                            ['N3=T3_T_ID' => new Data($mlaMetadata3, [])])]),
+				'Fields'               => ['T1' => ['ID', 'N1'],
+				                           'T2' => ['ID', 'N2'],
+				                           'T3' => ['ID', 'N3']],
+				'Joins'                => ['T1' => ['N2=T2_T_ID'],
+				                           'T2' => ['N3=T3_T_ID']],
+				'Primary_Keys'         => ['T1' => ['ID'],
+				                           'T2' => ['ID'],
+				                           'T3' => ['ID']],
 				'Table_Name'           => 'T1']];
 	}
 	
@@ -95,6 +81,7 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 	 * @covers       Evoke\Model\Data\DBDataBuilder::build
 	 * @covers       Evoke\Model\Data\DBDataBuilder::buildData
 	 * @covers       Evoke\Model\Data\DBDataBuilder::fillMetadataCache
+     * @covers       Evoke\Model\Data\DBDataBuilder::getChildTable
 	 * @dataProvider providerBuild
 	 */
 	public function testBuild(Data  $expected,
@@ -104,7 +91,7 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 	                          /* String */ $tableName,
 	                          /* String */ $tableAlias = NULL)
 	{
-		$obj = new DBDataBuilder;
+		$obj = new DBDataBuilder();
 		$this->assertEquals($expected,
 		                    $obj->build($fields,
 		                                $joins,
@@ -113,34 +100,45 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 		                                $tableAlias));
 	}
 
+    /**
+     * @covers Evoke\Model\Data\DBDataBuilder::__construct
+     * @covers Evoke\Model\Data\DBDataBuilder::build
+	 * @covers Evoke\Model\Data\DBDataBuilder::buildData
+     * @covers Evoke\Model\Data\DBDataBuilder::getChildTable
+     */
+    public function testCreateWithDifferentSeparator()
+    {
+		$t2Metadata = new DB(['ID', 'N2'],
+		                     [],
+		                     ['ID'],
+		                     'T2');
+
+        $obj = new DBDataBuilder('*SEP*');
+        $this->assertEquals(
+            new Data(new DB(['ID', 'N1'],
+                            ['N2=T2*SEP*ID' => $t2Metadata],
+                            ['ID'],
+                            'T1'),
+                     ['N2=T2*SEP*ID' => new Data($t2Metadata, [])]),
+            $obj->build(['T1' => ['ID', 'N1'], 'T2' => ['ID', 'N2']],
+                        ['T1' => ['N2=T2*SEP*ID']],
+                        ['T1' => ['ID'], 'T2' => ['ID']],
+                        'T1'));
+    }
+    
 	/**
 	 * @covers Evoke\Model\Data\DBDataBuilder::build
 	 * @covers Evoke\Model\Data\DBDataBuilder::buildData
 	 * @covers Evoke\Model\Data\DBDataBuilder::fillMetadataCache	 
-	 * @expectedException        InvalidArgumentException
-	 * @expectedExceptionMessage Joins must have Parent and Table.
+     * @covers Evoke\Model\Data\DBDataBuilder::getChildTable
+	 * @expectedException        DomainException
+	 * @expectedExceptionMessage Missing child table in join: T1=Missing
 	 */
-	public function testMissingJoinParent()
+	public function testJoinMissingChildTable()
 	{
 		$obj = new DBDataBuilder;
 		$obj->build(['ID'],
-		            ['T' => ['Table' => 'Set']],
-		            [],
-		            'T');
-	}
-
-	/**
-	 * @covers Evoke\Model\Data\DBDataBuilder::build
-	 * @covers Evoke\Model\Data\DBDataBuilder::buildData
-	 * @covers Evoke\Model\Data\DBDataBuilder::fillMetadataCache
-	 * @expectedException        InvalidArgumentException
-	 * @expectedExceptionMessage Joins must have Parent and Table.
-	 */
-	public function testMissingJoinTable()
-	{
-		$obj = new DBDataBuilder;
-		$obj->build(['ID'],
-		            ['T' => ['Parent' => 'Set']],
+		            ['T' => ['T1=Missing']],
 		            [],
 		            'T');
 	}
