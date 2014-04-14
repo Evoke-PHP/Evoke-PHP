@@ -279,11 +279,9 @@ class DB implements MetadataIface
 	 * Arrange a set of results for the database according to the Join tree.
 	 *
 	 * @param mixed[] The flat result data.
-	 * @param mixed[] The data already processed from the results.
-	 *
-	 * @returns mixed[] The data arranged into a hierarchy by the joins.
+	 * @return mixed[] The data arranged into a hierarchy by the joins.
 	 */
-	public function arrangeFlatData(Array $results, Array $data=array())
+	public function arrangeFlatData(Array $results)
 	{
 		$splitResults = array();
 
