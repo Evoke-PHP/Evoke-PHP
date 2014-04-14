@@ -22,19 +22,17 @@ interface MetadataIface
 	 * Arrange a set of results according to the Join tree.
 	 *
 	 * @param mixed[] The flat result data.
-	 * @param mixed[] The data already processed from the results.
-	 *
-	 * @returns mixed[] The data arranged into a hierarchy by the joins.
+	 * @return mixed[] The data arranged into a hierarchy by the joins.
 	 */
-	public function arrangeFlatData(Array $results, Array $data=array());
+	public function arrangeFlatData(Array $results);
 
 	/**
 	 * Get the join ID for the specified join or throw an exception if it can't
 	 * be found uniquely.
 	 *
 	 * @param string Join to get the ID for.
-	 *
-	 * @throws DomainException
+	 * @return string The full uniquely matched join ID.
+	 * @throws DomainException If the join cannot be found uniquely.
 	 */
 	public function getJoinID($join);
 	
