@@ -2,15 +2,15 @@
 
 _Bring out your best ideas_
 
-_Evoke PHP_ is a library of independent objects that forms a framework for web development.  _Built for developers_, Evoke PHP provides you with useful objects whilst allowing you to control every aspect of your development.
+_Evoke PHP_ is a library of independent objects. The library encourages a
+layered architecture that produces maintainable solutions to complex problems.
 
 ###Status: ALPHA###
 [![Build Status](https://secure.travis-ci.org/Evoke-PHP/Evoke-PHP.png?branch=master)](http://travis-ci.org/Evoke-PHP/Evoke-PHP)
 
-Evoke PHP is usable but still under devlopment.
+Evoke PHP is usable but still under development.
 Parts of the API are changing.
-Little unit testing has been done.
-Please contact me for guidance on using Evoke (see email below).
+Full code coverage from the unit tests.
 
 ## Features
 * PHP 5.4+
@@ -18,29 +18,23 @@ Please contact me for guidance on using Evoke (see email below).
 * Loosely Coupled
 * Namespaced
 * Autoloader
-* MVC
+* MVC Architecture
 * Layered Architecture
+* Documented Source
 
 ## Why choose Evoke PHP
-* You like writing beautiful code.
-* Easy learning curve
-* No forced structure (Develop the way you want to)
+* No forced structure (Develop the way you want to, Evoke PHP is not a framework!)
+* Easy learning curve (Use what you want)
 * Open Source MIT License
 
 ## Code
 The master repository for the code is on github.
 
-## Website
-EvokePHP(http://www.evokephp.com)
-You can view the complete documentation for the library here.
-
 ## Documentation
-Full documentation is available on the website.  The documentation can also be built from the source code using doxygen.
+The documentation can be built using phpdocumentor2.
 
 ## License
 Evoke-PHP is released under the MIT License.  See the LICENSE file.
 
 ## Contact
-Questions or comments are encouraged.  Join the team.  I would like to add your name here!
-Paul Young
-evoke@youngish.homelinux.org
+Contact me by email: evoke@youngish.org
