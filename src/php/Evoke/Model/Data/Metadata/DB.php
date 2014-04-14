@@ -88,7 +88,7 @@ use DomainException,
  * The Metadata starting from the leaves would be:
  *
  * <pre><code>
-   // Order of parameters: Fields, Joins, Primary Keys, Table Name, Table Alias
+   // Order of parameters: Fields, Joins, Primary Keys, Table Name
    $imageMetadata = new DB(
 	   ['Name'],
 	   [],
@@ -225,13 +225,7 @@ class DB implements MetadataIface
 	protected $separator;
 
 	/**
-	 * TableAlias
-	 * @var string
-	 */
-	protected $tableAlias;
-
-	/**
-	 * TableName
+	 * Table name as referred to in the aliased results.
 	 * @var string
 	 */
 	protected $tableName;
@@ -242,8 +236,7 @@ class DB implements MetadataIface
 	 * @param string[]    Fields for the database table.
 	 * @param mixed[]     Joins from the database table.
 	 * @param string[]    Primary keys for the database table.
-	 * @param string      Table Name.
-	 * @param string|null Table Alias.
+	 * @param string      Table Name as aliased in any results.
 	 * @param string      Field to use for joining data.
 	 * @param string      Separator between child table and fields.
 	 *
@@ -253,7 +246,6 @@ class DB implements MetadataIface
 								Array        $joins,
 								Array        $primaryKeys,
 								/* string */ $tableName,
-								/* string */ $tableAlias = NULL,
 								/* string */ $jointKey   = 'Joint_Data',
 								/* string */ $separator  = '_T_')
 	{
@@ -267,7 +259,6 @@ class DB implements MetadataIface
 		$this->jointKey    = $jointKey;
 		$this->primaryKeys = $primaryKeys;
 		$this->separator   = $separator;
-		$this->tableAlias  = $tableAlias ?: $tableName;
 		$this->tableName   = $tableName;
 	}
 
@@ -306,14 +297,14 @@ class DB implements MetadataIface
 	{
 		foreach ($splitResults as $splitResult)
 		{
-			if (!empty($splitResult[$this->tableAlias]) &&
-				$this->isResult($splitResult[$this->tableAlias]))
+			if (!empty($splitResult[$this->tableName]) &&
+				$this->isResult($splitResult[$this->tableName]))
 			{
-				$rowID = $this->getRowID($splitResult[$this->tableAlias]);
+				$rowID = $this->getRowID($splitResult[$this->tableName]);
 
 				if (!isset($data[$rowID]))
 				{
-					$data[$rowID] = $splitResult[$this->tableAlias];
+					$data[$rowID] = $splitResult[$this->tableName];
 				}
 
 				// If this result could contain information for referenced
@@ -416,7 +407,7 @@ class DB implements MetadataIface
 			{
 				throw new DomainException(
 					'Missing Primary Key: ' . $key . ' for table: ' .
-					$this->tableAlias);
+					$this->tableName);
 			}
 
 			$rowID .= (empty($rowID) ? '' : '_') . $data[$key];

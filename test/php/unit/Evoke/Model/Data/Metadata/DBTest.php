@@ -106,13 +106,11 @@ class DBTest extends PHPUnit_Framework_TestCase
 		$metadataTwo = new DB(['Dos', 'List_ID', 'Two'],
 		                      [],
 		                      ['Dos'],
-		                      'Second',
 		                      'T2nd');
 		
 		$object = new DB(['Uno', 'One', 'List_ID'],
 		                 ['List_ID' => $metadataTwo],
 		                 ['Uno'],
-		                 'First',
 		                 'T1st');
 
 		$data = [
