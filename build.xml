@@ -15,11 +15,11 @@
 			description = "The directory for build configuration."
 			value       = "${project.build}/config"/>
 
-  <property name        = "project.php_source"
+  <property name        = "project.source"
 			description = "The directory for the PHP source files."
 			value       = "${project.basedir}/src"/>
 
-  <property name        = "project.php_test"
+  <property name        = "project.test"
 			description = "The directory for the PHP test files."
 			value       = "${project.basedir}/test/unit"/>
 
@@ -28,11 +28,11 @@
 			value       = "${project.build}/reports"/>
 
   <!-- File sets used in targets. -->
-  <fileset id = "php_src" dir = "${project.php_source}">
+  <fileset id = "src" dir = "${project.source}">
 	<include name="**/*.php"/>
   </fileset>
 
-  <fileset id = "php_test" dir = "${project.php_test}">
+  <fileset id = "tst" dir = "${project.test}">
 	<include name="**/*.php"/>
   </fileset>
 
@@ -44,7 +44,7 @@
 
   <target name        = "check-build-sanity"
 		  description = "Check to see whether a build can be made."
-		  depends     = "php-lint"/>
+		  depends     = "lint"/>
 
   <target name        = "clean"
 		  description = "Remove all of the build artefacts.">
@@ -53,72 +53,72 @@
 
   <target name        = "create-reports"
 		  description = "Create reports on the build."
-		  depends     = "php-loc,
-						 php-code-sniffer,
-						 php-copy-paste-detector,
-						 php-depend,
-						 php-documentor,
-						 php-mess-detector,
-						 php-unit"/>
+		  depends     = "loc,
+						 code-sniffer,
+						 copy-paste-detector,
+						 depend,
+						 documentor,
+						 mess-detector,
+						 unit"/>
 
   <target name        = "prepare"
 		  description = "Prepare the build directory to receive reports etc."
 		  depends     = "clean">
-	<mkdir dir = "${project.reports}/php"/>
+	<!-- Do NOTHING <mkdir dir = "${project.reports}/php"/> -->
   </target>
   
   <!-- Sub Target definitions -->
-  <target name="php-code-sniffer"
+  <target name="code-sniffer"
 		  description="Detect coding standard violations.  Output to the Command line.">
 	<exec executable = "phpcs" passthru = "true">
-	  <arg value = "--report-checkstyle=${project.reports}/php/code-sniffer-checkstyle.xml"/>
-	  <arg value = "--standard=${project.config}/php-code-sniffer.xml"/>
+	  <arg value = "--report-checkstyle=${project.reports}/code-sniffer-checkstyle.xml"/>
+	  <arg value = "--standard=${project.config}/code-sniffer.xml"/>
 	  <arg value = "--tab-width=4"/>
 	  <arg value = "-p"/>
-	  <arg path  = "${project.php_source}"/>
+	  <arg path  = "${project.source}"/>
 	</exec>
   </target>
 
-  <target name = "php-copy-paste-detector">
+  <target name = "copy-paste-detector">
 	<phpcpd>
-	  <fileset refid = "php_src"/>
-	  <formatter type= "pmd" outfile = "${project.reports}/php/copy-paste-detector.xml"/>
+	  <fileset refid = "src"/>
+	  <formatter type= "pmd" outfile = "${project.reports}/copy-paste-detector.xml"/>
 	</phpcpd>
   </target>
 
-  <target name        = "php-depend"
-		  depends     = "prepare, php-unit"
+  <target name        = "depend"
+		  depends     = "prepare, unit"
           description = "Calculate software metrics using PHP_Depend">
 	<phpdepend>
-	  <fileset refid = "php_src"/>
+	  <fileset refid = "src"/>
 
 	  <logger type    = "jdepend-chart"
-			  outfile = "${project.reports}/php/depend-chart"/>
+			  outfile = "${project.reports}/depend-chart"/>
 	  <logger type    = "jdepend-xml"
-			  outfile = "${project.reports}/php/depend.xml"/>
+			  outfile = "${project.reports}/depend.xml"/>
 	  <logger type    = "overview-pyramid"
-			  outfile = "${project.reports}/php/depend-overview-pyramid"/>
+			  outfile = "${project.reports}/depend-overview-pyramid"/>
 	  <logger type    = "phpunit-xml"
-			  outfile = "${project.reports}/php/depend-phpunit.xml"/>
+			  outfile = "${project.reports}/depend-phpunit.xml"/>
 	  <logger type    = "summary-xml"
-			  outfile = "${project.reports}/php/depend-summary.xml"/>
+			  outfile = "${project.reports}/depend-summary.xml"/>
 	</phpdepend>
   </target>
 
-  <target name        = "php-documentor-update"
+  <target name        = "documentor-update"
 		  description = "Update API documentation using phpDocumentor">
 	<!-- This comment should work, but fails miserably due to a bad phpdoc2 task
 		 implementation or my current configuration.
 		 <phpdoc2 destdir = "dox">
-		   <fileset refid = "php_src"/>
+		   <fileset refid = "src"/>
 		 </phpdoc2>
 	-->
 	<exec executable="phpdoc" passthru="true">
 	  <arg value = "run"/>
 	  <arg value = "-d"/>
-	  <arg path  = "${project.php_source}"/>
+	  <arg path  = "${project.source}"/>
 	  <arg value = "-t"/>
-	  <arg path  = "${project.reports}/php/doc"/>
+	  <arg path  = "${project.reports}/doc"/>
 	  <arg value = "--title"/>
 	  <arg value = "Evoke-PHP"/>
 	  <arg value = "--defaultpackagename"/>
@@ -129,72 +129,72 @@
 	</exec>
   </target>
 
-  <target name        = "php-documentor"
-		  depends     = "prepare, php-documentor-update"
+  <target name        = "documentor"
+		  depends     = "prepare, documentor-update"
 		  description = "Generate API documentation using phpDocumentor"/>  
   
-  <target name        = "php-lint"
-		  depends     = "php-lint-src, php-lint-test"
+  <target name        = "lint"
+		  depends     = "lint-src, lint-test"
 		  description = "Syntax check the source and test files."/>
 
-  <target name        = "php-lint-src"
+  <target name        = "lint-src"
 		  description = "Syntax check the php source files">
 	<phplint deprecatedAsError = "true">
-	  <fileset refid = "php_src"/>
+	  <fileset refid = "src"/>
 	</phplint>
   </target>
 	
-  <target name        = "php-lint-test"
+  <target name        = "lint-test"
 		  description = "Syntax check the php test files.">
 	<phplint deprecatedAsError = "true">
-	  <fileset refid = "php_test"/>
+	  <fileset refid = "tst"/>
 	</phplint>
   </target>
 
-  <target name        = "php-loc"
+  <target name        = "loc"
 		  depends     = "prepare"
 		  description = "Measure project size using PHPLOC">
 	<PHPLoc reportType      = "csv"
 			reportName      = "loc"
-			reportDirectory = "${project.reports}/php">
-	  <fileset refid = "php_src"/>
-	  <fileset refid = "php_test"/>
+			reportDirectory = "${project.reports}">
+	  <fileset refid = "src"/>
+	  <fileset refid = "tst"/>
 	</PHPLoc>	
   </target>
 
-  <target name        = "php-mess-detector"
+  <target name        = "mess-detector"
 		  depends     = "prepare"
 		  description = "Perform project mess detection using PHPMD and print
 						 human readable output. Intended for usage on the
 						 command line before committing.">
 
 	<phpmd rulesets="codesize,controversial,design,naming,unusedcode">
-	  <fileset refid = "php_src"/>
-	  <formatter type="xml" outfile="${project.reports}/php/mess-detector.xml"/>
+	  <fileset refid = "src"/>
+	  <formatter type="xml" outfile="${project.reports}/mess-detector.xml"/>
 	</phpmd>
   </target>
 
-  <target name        = "php-unit"
+  <target name        = "unit"
 		  depends     = "prepare"
 		  description = "Run unit tests with PHPUnit">
 
 	<exec executable = "composer" passthru = "true">
 	  <arg value = "update"/>
 	  <arg value = "-d"/>
-	  <arg value = "${project.php_test}/../environment"/>
+	  <arg value = "${project.test}/../environment"/>
 	</exec>
 
 	<exec executable = "phpunit" passthru = "true">
 	  <arg value = "-c"/>
-	  <arg file  = "${project.config}/php-unit.xml"/>
+	  <arg file  = "${project.config}/unit.xml"/>
 	  <arg value = "--bootstrap"/>
-	  <arg file  = "${project.php_test}/../environment/Bootstrap.php"/>
+	  <arg file  = "${project.test}/../environment/Bootstrap.php"/>
 	  <arg value = "--log-junit"/>
-	  <arg value = "${project.reports}/php/unit-junit.xml"/>
+	  <arg value = "${project.reports}/unit-junit.xml"/>
 	  <arg value = "--coverage-html"/>
-	  <arg value = "${project.reports}/php/unit-coverage"/>
+	  <arg value = "${project.reports}/unit-coverage"/>
 	  <arg value = "--coverage-clover"/>
-	  <arg value = "${project.reports}/php/unit-clover.xml"/>
+	  <arg value = "${project.reports}/unit-clover.xml"/>
 	</exec>
   </target>
 </project>

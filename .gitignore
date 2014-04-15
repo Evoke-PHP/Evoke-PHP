@@ -2,5 +2,4 @@
 build/reports
 test/coverage
 test/environment/composer.lock
-test/environment/composer-temp.phar
 test/environment/vendor
