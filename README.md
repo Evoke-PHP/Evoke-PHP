@@ -8,9 +8,9 @@ layered architecture that produces maintainable solutions to complex problems.
 ###Status: ALPHA###
 [![Build Status](https://secure.travis-ci.org/Evoke-PHP/Evoke-PHP.png?branch=master)](http://travis-ci.org/Evoke-PHP/Evoke-PHP)
 
-Evoke PHP is usable but still under development.
-Parts of the API are changing.
-Full code coverage from the unit tests.
+* Evoke PHP is still being developed.
+* API changes are still likely.
+* Unit test code coverage is 100%.
 
 ## Features
 * PHP 5.4+
