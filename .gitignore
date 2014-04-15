@@ -1,7 +1,6 @@
 .directory
 build/reports
-docs/doxygen/html/*
-test/*/coverage
-test/php/environment/composer.lock
-test/php/environment/composer-temp.phar
-test/php/environment/vendor
+test/coverage
+test/environment/composer.lock
+test/environment/composer-temp.phar
+test/environment/vendor
