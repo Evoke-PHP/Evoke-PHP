@@ -4,6 +4,6 @@ php:
 
 before_script:
         - composer self-update
-        - composer install -d ./test/php/environment
+        - composer install -d ./test/environment
 
-script: phpunit --configuration ./build/config/php-unit.xml --bootstrap ./test/php/environment/Bootstrap.php
+script: phpunit --configuration ./build/config/php-unit.xml --bootstrap ./test/environment/Bootstrap.php

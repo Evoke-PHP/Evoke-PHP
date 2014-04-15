@@ -12,7 +12,7 @@
          verbose                            = "true">
   <filter>
 	<whitelist addUncoveredFilesFromWhitelist="true">
-	  <directory suffix=".php">../../../src/php</directory>
+	  <directory suffix=".php">../../../src</directory>
 	</whitelist>
   </filter>
   

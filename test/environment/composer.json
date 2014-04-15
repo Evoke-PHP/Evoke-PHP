@@ -9,7 +9,7 @@
 
     "autoload": {
         "psr-0": {
-            "Evoke": "../../../src/php",
+            "Evoke": "../../../src",
 			"org/bovigo/vfs": "vendor/mikey179/vfsStream/src/main/php/"
 		}
     }
