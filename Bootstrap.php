@@ -63,7 +63,7 @@ function bootstrap($isDevelopmentServer, $logFile)
 		$viewError = new View\XHTML\Error;
 		$xhtmlWriter = new Writer\XML(new XMLWriter);
 		$shutdownHandler = new Service\ShutdownHandler(
-			'admin@bigthrow.com.au', $response, $isDevelopmentServer,
+			'admin@example.com', $response, $isDevelopmentServer,
 			$viewShutdownMessageBox, $xhtmlWriter, $viewError);
 		register_shutdown_function([$shutdownHandler, 'handler']);
 
