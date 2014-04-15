@@ -60,12 +60,6 @@
 						 documentor,
 						 mess-detector,
 						 unit"/>
-
-  <target name        = "prepare"
-		  description = "Prepare the build directory to receive reports etc."
-		  depends     = "clean">
-	<!-- Do NOTHING <mkdir dir = "${project.reports}/php"/> -->
-  </target>
   
   <!-- Sub Target definitions -->
   <target name="code-sniffer"
@@ -87,7 +81,7 @@
   </target>
 
   <target name        = "depend"
-		  depends     = "prepare, unit"
+		  depends     = "clean, unit"
           description = "Calculate software metrics using PHP_Depend">
 	<phpdepend>
 	  <fileset refid = "src"/>
@@ -130,7 +124,7 @@
   </target>
 
   <target name        = "documentor"
-		  depends     = "prepare, documentor-update"
+		  depends     = "clean, documentor-update"
 		  description = "Generate API documentation using phpDocumentor"/>  
   
   <target name        = "lint"
@@ -152,7 +146,7 @@
   </target>
 
   <target name        = "loc"
-		  depends     = "prepare"
+		  depends     = "clean"
 		  description = "Measure project size using PHPLOC">
 	<PHPLoc reportType      = "csv"
 			reportName      = "loc"
@@ -163,7 +157,7 @@
   </target>
 
   <target name        = "mess-detector"
-		  depends     = "prepare"
+		  depends     = "clean"
 		  description = "Perform project mess detection using PHPMD and print
 						 human readable output. Intended for usage on the
 						 command line before committing.">
@@ -175,7 +169,7 @@
   </target>
 
   <target name        = "unit"
-		  depends     = "prepare"
+		  depends     = "clean"
 		  description = "Run unit tests with PHPUnit">
 
 	<exec executable = "composer" passthru = "true">
