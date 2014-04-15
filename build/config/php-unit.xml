@@ -12,13 +12,13 @@
          verbose                            = "true">
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">../../src/php</directory>
+      <directory suffix=".php">../../src</directory>
     </whitelist>
   </filter>
   
   <testsuites>
     <testsuite name="Evoke-PHP">
-      <directory>../../test/php/unit</directory>
+      <directory>../../test/unit</directory>
     </testsuite>
   </testsuites>
 </phpunit>
