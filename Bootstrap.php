@@ -32,7 +32,7 @@ function bootstrap($isDevelopmentServer, $logFile)
 		/* Autoload */
 		/************/
 		$component = 'Autoload';
-		$evokeDir = __DIR__ . '/src/php/';
+		$evokeDir = __DIR__ . '/src/';
 		$autoloadDir = $evokeDir . 'Evoke/Service/Autoload/';
 		require $autoloadDir . 'AutoloadIface.php';
 		require $autoloadDir . 'PSR0Namespace.php';
