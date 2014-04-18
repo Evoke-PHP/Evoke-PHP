@@ -67,7 +67,7 @@ class Data extends Flat
 	/**
 	 * Properties for the data.
 	 *
-	 * @var DataIface[]   $joins    Joins for the data.
+	 * @var Data[]        $joins    Joins for the data.
 	 * @var string        $jointKey Field used to join the data in a record.
 	 * @var MetadataIface $metadata Description of the data we are modelling.
 	 */
@@ -77,7 +77,7 @@ class Data extends Flat
 	 * Construct a Data model.
 	 *
 	 * @param MetadataIface Description of the data we are modelling.
-	 * @param DataIface[]   Joins for the data.
+	 * @param Data[]        Joins for the data.
 	 * @param string        Field used to join the data in a record.
 	 */
 	public function __construct(MetadataIface $metadata,
@@ -94,7 +94,7 @@ class Data extends Flat
 	 * 
 	 * @param string Join name that identifies the joint data uniquely in the
 	 *               metadata.
-	 * @return DataIface The joint data.
+	 * @return Data The joint data.
 	 */
 	public function __get($join)
 	{
@@ -122,6 +122,17 @@ class Data extends Flat
 	/*********************/
 	/* Protected Methods */
 	/*********************/
+    
+    /**
+     * Set data that has already been arranged by metadata.
+     *
+     * @param mixed[] The data that has already been arranged.
+     */
+    protected function setArrangedData(Array $arrangedData)
+    {
+        $this->data = $arrangedData;
+        $this->rewind();
+    }
 
 	/**
 	 * Set all of the Joint Data from the current record into the data
@@ -135,11 +146,11 @@ class Data extends Flat
 		{
 			if (isset($record[$this->jointKey][$joinID]))
 			{
-				$data->setData($record[$this->jointKey][$joinID]);
+				$data->setArrangedData($record[$this->jointKey][$joinID]);
 			}
 			else
 			{
-				$data->setData(array());
+				$data->setArrangedData(array());
 			}
 		}
 	}

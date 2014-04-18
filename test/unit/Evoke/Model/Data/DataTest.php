@@ -6,14 +6,26 @@ use Evoke\Model\Data\Data,
 
 class DataTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
+    /*******************/
+    /* Private Methods */
+    /*******************/
+
+    private function getDataMock()
+    {
+        return $this->getMockBuilder('Evoke\Model\Data\Data')
+            ->disableOriginalConstructor()
+            ->setMethods(['setData', 'setArrangedData'])
+            ->getMock();
+    }
+
+    /******************/
 	/* Data Providers */
 	/******************/
 
 	public function providerCreate()
 	{
 		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
-		$join = $this->getMock('Evoke\Model\Data\DataIface');
+		$join = $this->getDataMock();
 
 		return ['Simple'          => [$metadata],
 		        'Two_Specified'   => [$metadata, ['J' => $join]],
@@ -29,8 +41,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 			->method('getJoinID')
 			->with('Join_Name')
 			->will($this->returnValue('Found_Join_ID'));
-		$simpleJoin = $this->getMock(
-			'Evoke\Model\Data\DataIface');
+		$simpleJoin = $this->getDataMock();
 
 		return ['Simple' =>
 		        ['Metdata'   => $simpleMetadata,
@@ -101,6 +112,31 @@ class DataTest extends PHPUnit_Framework_TestCase
 		$obj->join;
 	}
 
+    /**
+     * @covers Evoke\Model\Data\Data::setArrangedData
+     * @covers Evoke\Model\Data\Data::setData
+     */
+    public function testSetArrangedData()
+    {
+		$metadataObjectUnderTest = $this->getMock(
+            'Evoke\Model\Data\Metadata\MetadataIface');
+		$metadataObjectUnderTest
+			->expects($this->never())
+			->method('arrangeFlatData');
+        $metadataOuter = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
+		$metadataOuter
+			->expects($this->once())
+			->method('arrangeFlatData');
+        
+        $objectUnderTest = new Data($metadataObjectUnderTest);
+        $outer = new Data($metadataOuter,
+                          ['J1' => $objectUnderTest]);
+        $outer->setData(
+            [['Any'        => 'OK',
+              'Joint_Data' => [
+                  'J1' => ['This data is set in objectUnderTest.']]]]);
+    }        
+    
 	/**
 	 * @covers Evoke\Model\Data\Data::setData
 	 * @covers Evoke\Model\Data\Data::setRecord
@@ -154,34 +190,34 @@ class DataTest extends PHPUnit_Framework_TestCase
 			          'J2' => $j2Data2,
 			          'J3' => $j3Data]]];
 
-		$j1 = $this->getMock('Evoke\Model\Data\DataIface');
+		$j1 = $this->getDataMock();
 		$j1
 			->expects($this->at(0))
-			->method('setData')
+			->method('setArrangedData')
 			->with($j1Data1);
 		$j1
 			->expects($this->at(1))
-			->method('setData')
+			->method('setArrangedData')
 			->with($j1Data2);
 
-		$j2 = $this->getMock('Evoke\Model\Data\DataIface');
+		$j2 = $this->getDataMock();
 		$j2
 			->expects($this->at(0))
-			->method('setData')
+			->method('setArrangedData')
 			->with($j2Data1);
 		$j2
 			->expects($this->at(1))
-			->method('setData')
+			->method('setArrangedData')
 			->with($j2Data2);
 
-		$j3 = $this->getMock('Evoke\Model\Data\DataIface');
+		$j3 = $this->getDataMock();
 		$j3
 			->expects($this->at(0))
-			->method('setData')
+			->method('setArrangedData')
 			->with([]);
 		$j3
 			->expects($this->at(1))
-			->method('setData')
+			->method('setArrangedData')
 			->with($j3Data);
 
 		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
