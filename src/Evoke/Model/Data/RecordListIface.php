@@ -14,7 +14,7 @@ namespace Evoke\Model\Data;
  * @license   MIT
  * @package   Model\Data
  */
-interface RecordListIface extends DataIface
+interface RecordListIface extends FlatIface
 {
 	/**
 	 * Reset the selection of the specified record in the data.

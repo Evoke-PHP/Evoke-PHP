@@ -14,20 +14,20 @@ namespace Evoke\Model\Data;
  * @license MIT
  * @package Model
  */
-abstract class Decorator implements DataIface
+abstract class Decorator implements FlatIface
 {
 	/**
 	 * Data
-	 * @var DataIface
+	 * @var FlatIface
 	 */
 	protected $data;
 
 	/**
 	 * Construct a Decorator object for Data.
 	 *
-	 * @param DataIface Data.
+	 * @param FlatIface Data.
 	 */
-	public function __construct(DataIface $data)
+	public function __construct(FlatIface $data)
 	{
 		$this->data = $data;
 	}

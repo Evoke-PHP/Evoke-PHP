@@ -39,7 +39,7 @@ use BadMethodCallException;
  *
  * @SuppressWarnings(PHPMD.TooManyMethods) - We need a lot.
  */
-class Flat implements DataIface
+class Flat implements FlatIface
 {
 	/**
 	 * The data that is being modelled.
@@ -92,7 +92,7 @@ class Flat implements DataIface
 	 * reference access).  This is just the object as the object implements the
 	 * iterator and references.
 	 *
-	 * @return DataIface
+	 * @return FlatIface
 	 */
 	public function current()
 	{
@@ -113,7 +113,7 @@ class Flat implements DataIface
 	 * Get the next record of data. Set the next record within the Data object
 	 * and return the object.
 	 *
-	 * @return DataIface|bool Return the next data object, or boolean false.
+	 * @return FlatIface|bool Return the next data object, or boolean false.
 	 */
 	public function next()
 	{
