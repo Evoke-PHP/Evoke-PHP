@@ -80,7 +80,7 @@ class ExceptionHandler
 	 */
 	public function handler(\Exception $uncaughtException)
 	{
-		trigger_error($uncaughtException->getMessage(), E_USER_ERROR);
+		trigger_error($uncaughtException->getMessage(), E_USER_WARNING);
 		$currentBuffer = (string)($this->writer);
 		
 		if (!empty($currentBuffer))
