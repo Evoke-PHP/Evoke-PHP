@@ -25,26 +25,26 @@ abstract class ControllerAbstract implements ControllerIface
 	/**
 	 * Abstract Controller properties.
 	 *
-	 * @var mixed[]       $params   Parameters for the controller.
-	 * @var ResponseIface $response Response object
-	 * @var WriterIface   $writer   Writer object
+	 * @var string        $outputFormat Output format required.
+	 * @var mixed[]       $params       Parameters for the controller.
+	 * @var ResponseIface $response     Response object
 	 */
-	protected $params, $response, $writer;
+	protected $outputFormat, $params, $response;
 	
 	/**
 	 * Construct the Controller.
 	 *
+	 * @param string        Output format.
 	 * @param mixed[]		Parameters.
 	 * @param ResponseIface Response.
-	 * @param WriterIface 	Writer.
 	 */
-	public function __construct(Array         $params,
-	                            ResponseIface $response,
-	                            WriterIface   $writer)
+	public function __construct(/* String */  $outputFormat,
+	                            Array         $params,
+	                            ResponseIface $response)
 	{
-		$this->params   = $params;
-		$this->response	= $response;
-		$this->writer   = $writer;
+		$this->outputFormat = $outputFormat;
+		$this->params       = $params;
+		$this->response	    = $response;
 	}
 	
 	/******************/
@@ -55,26 +55,5 @@ abstract class ControllerAbstract implements ControllerIface
 	 * Execute the controller.
 	 */
 	abstract public function execute();
-
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-
-	/**
-	 * Ensure a clean writer, triggering an error if the buffer is not clear.
-	 */
-	protected function requireCleanWriter()
-	{
-		$currentBuffer = (string)($this->writer);
-
-		if (!empty($currentBuffer))
-		{
-			trigger_error(
-				'Writer is required to be clean, found "' .	$currentBuffer .
-				'" cleaning and continuing.',
-				E_USER_WARNING);
-			$this->writer->clean();
-		}
-	}
 }
 // EOF
