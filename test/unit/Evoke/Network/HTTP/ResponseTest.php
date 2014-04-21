@@ -9,16 +9,68 @@ use Evoke\Network\HTTP\Response,
  */
 class ResponseTest extends PHPUnit_Framework_TestCase
 {
+	protected static $headers;
+	
+	/***********/
+	/* Fixture */
+	/***********/
+
+	/**
+	 * Add a header so that we can keep track of the headers set.
+	 */
+    public static function addHeader($header)
+    {
+	    self::$headers[] = $header;
+    }
+
+
+	protected function replaceHeaderFunctions()
+	{
+		runkit_function_rename('header',       'TEST_SAVED_header');
+		runkit_function_rename('headers_sent', 'TEST_SAVED_headers_sent');
+		runkit_function_add(
+			'header',
+			'$str',
+			'Evoke_Test\Network\HTTP\ResponseTest::addHeader($str);');
+		runkit_function_add(
+			'headers_sent',
+			'',
+			'return false;');
+	}
+
+	protected function restoreHeaderFunctions()
+	{
+        runkit_function_remove('header');
+        runkit_function_remove('headers_sent');
+		runkit_function_rename('TEST_SAVED_header',       'header');
+		runkit_function_rename('TEST_SAVED_headers_sent', 'headers_sent');
+	}
+
+	/**
+     * Check that the runkit extension is available.
+     *
+     * @return bool Whether the runkit extension is available.
+     */
+    protected function hasRunkit()
+    {
+        return function_exists('runkit_function_rename') &&
+            function_exists('runkit_function_add');
+    }
+    
+    public function setUp()
+    {
+	    self::$headers = [];
+    }
+    
 	/******************/
 	/* Data Providers */
 	/******************/
 
 	public function providerCreate()
 	{
-		return [
-			'Null'                => [NULL],
-			'1.0'                 => ['1.0'],
-			'Hypothetical_Future' => ['25.987']];
+		return ['Null'                => [NULL],
+		        '1.0'                 => ['1.0'],
+		        'Hypothetical_Future' => ['25.987']];
 	}
 	
 	/*********/
@@ -64,7 +116,15 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testBodyBeginsEmpty()
 	{
-		$response = new Response;
+        if (!$this->hasRunkit())
+        {
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+        }
+
+        $this->replaceHeaderFunctions();
+        $response = new Response;
 		$response->setStatus(200);
 
 		ob_start();
@@ -72,8 +132,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 		$content = ob_get_contents();
 		ob_end_clean();
 
+		$this->restoreHeaderFunctions();
 		$this->assertSame('', $content);
-		$this->assertSame([], xdebug_get_headers());
+		$this->assertSame(['HTTP/1.1 200 OK'], self::$headers);
 	}
 
 	/**
@@ -85,14 +146,25 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testHeaderFields()
 	{
+        if (!$this->hasRunkit())
+        {
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+        }
+
+        $this->replaceHeaderFunctions();
 		$response = new Response;
 		$response->setStatus(301);
 		$response->setHeader('Location', '/foo');
 		$response->setHeader('Any', 'Value');
 		$response->send();
+		$this->restoreHeaderFunctions();
 
-		$this->assertSame(['LOCATION: /foo', 'ANY: Value'],
-		                  xdebug_get_headers());
+		$this->assertSame(['HTTP/1.1 301 Moved Permanently',
+		                   'LOCATION: /foo',
+		                   'ANY: Value'],
+		                  self::$headers);
 	}
 
 	/**
@@ -115,7 +187,15 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSendBody()
 	{
-		$response = new Response;
+        if (!$this->hasRunkit())
+        {
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+        }
+
+        $this->replaceHeaderFunctions();
+        $response = new Response;
 		$response->setStatus(200);
 		$response->setBody('This is the body');
 
@@ -123,7 +203,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 		$response->send();
 		$contents = ob_get_contents();
 		ob_end_clean();
+		$this->restoreHeaderFunctions();
 
+		$this->assertSame(['HTTP/1.1 200 OK'], self::$headers);
 		$this->assertSame('This is the body', $contents);
 	}
 	
@@ -134,19 +216,34 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetCache()
 	{
-		$response = new Response;
-		$response->setStatus(200);
-		$response->setCache(1, 2, 3, 4); // One day, 2 hours, 3 minutes, 4 secs.
-		$age = ((26 * 60) + 3) * 60 + 4;
-		$response->send();
+        if (!$this->hasRunkit())
+        {
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+        }
 
-		$headers = xdebug_get_headers();
-		
-		$this->assertSame('PRAGMA: public', $headers[0]);
-		$this->assertSame('CACHE-CONTROL: must-revalidate maxage=93784',
-		                  $headers[1]);
-		$this->assertStringStartsWith(
-			'EXPIRES: ', $headers[2], 'Need expiration header.');
+        $this->replaceHeaderFunctions();
+        runkit_function_rename('time', 'TEST_SAVED_time');
+        runkit_function_add(
+	        'time',
+	        '',
+	        "return strtotime('1 Jan 2010 12:00 GMT');");
+        $response = new Response;
+		$response->setStatus(200);
+		$response->setCache(1, 2, 3, 4); // 1 day, 2 hours, 3 minutes, 4 secs.
+		$age = (((((1 * 24) + 2) * 60) + 3) * 60) + 4;
+		$response->send();
+		$this->restoreHeaderFunctions();
+
+		$this->assertSame(
+			['HTTP/1.1 200 OK',
+			 'PRAGMA: public',
+			 'CACHE-CONTROL: must-revalidate maxage=' . $age,
+			 'EXPIRES: Sat, 02 Jan 2010 14:03:04 GMT'],
+			self::$headers);
+		runkit_function_remove('time');
+		runkit_function_rename('TEST_SAVED_time', 'time');
 	}
 }
 // EOF

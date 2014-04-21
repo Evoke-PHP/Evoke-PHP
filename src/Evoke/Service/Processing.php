@@ -61,7 +61,7 @@ class Processing implements ProcessingIface
 	public function addCallback(/* String */ $processingKey,
 	                            callable     $callback)
 	{
-		if (!is_array($this->callbacks[$processingKey]))
+		if (!isset($this->callbacks[$processingKey]))
 		{
 			$this->callbacks[$processingKey] = array();
 		}

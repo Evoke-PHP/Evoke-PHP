@@ -9,10 +9,6 @@ class PDOStatementMock extends \PDOStatement { public function __construct() {} 
 
 class TableTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
-
 	/*********/
 	/* Tests */
 	/*********/
@@ -22,7 +18,8 @@ class TableTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testConstruct()
 	{
-		$obj = new Table($this->getMock('PDOMock'));
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
+		$obj = new Table($pdo, 'TableName');
 		$this->assertInstanceOf('Evoke\Model\Mapper\DB\Table', $obj);
 	}
 	
@@ -38,8 +35,8 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->expects($this->once())
 			->method('execute')
 			->with($record);
-		
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('INSERT TNAME SET F1=?,F2=?,F3=?')
@@ -62,7 +59,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->method('execute')
 			->with($record);
 		
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('INSERT NEWTABLE SET F1=?,F2=?,F3=?')
@@ -92,7 +89,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 				->with($data[$i]);
 		}
 		
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('INSERT TNAME SET F1=?,F2=?,F3=?')
@@ -115,7 +112,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->method('execute')
 			->with($conditions);
 
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('DELETE FROM DT WHERE ID=?')
@@ -139,7 +136,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->method('execute')
 			->with($conditions);
 
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('DELETE FROM DT WHERE ID=? LIMIT 4')
@@ -167,7 +164,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->with(\PDO::FETCH_NAMED)
 			->will($this->returnValue($readData));
 
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('SELECT F1,F2,F3 FROM ST')
@@ -196,7 +193,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->with(\PDO::FETCH_NAMED)
 			->will($this->returnValue([$readData[0]]));
 
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('SELECT F1,F2,F3 FROM ST WHERE F2=? AND F4=? ORDER BY F4 DESC LIMIT 3')
@@ -220,7 +217,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->method('execute')
 			->with(['Foo', 1]);			
 		
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('UPDATE UT SET Text=? WHERE ID=?')
@@ -242,7 +239,7 @@ class TableTest extends PHPUnit_Framework_TestCase
 			->method('execute')
 			->with(['Foo', 1]);			
 		
-		$pdo = $this->getMock('PDOMock', ['prepare']);
+		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
 		$pdo->expects($this->once())
 			->method('prepare')
 			->with('UPDATE UT SET Text=? WHERE ID=? LIMIT 2')

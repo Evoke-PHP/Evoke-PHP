@@ -131,7 +131,7 @@ EOP;
 	 */
 	public function getQueryParams()
 	{
-		return $_REQUEST ?: array();
+		return isset($_REQUEST) ? $_REQUEST : array();
 	}
 
 	/**

@@ -197,7 +197,7 @@ class XML implements WriterIface
 	 */
 	public function writeEnd()
 	{
-		$this->xmlWriter->endElement();
+		$this->xmlWriter->endDocument();
 	}
 	
 	/**
@@ -210,6 +210,7 @@ class XML implements WriterIface
 		case 'HTML5':
 			$this->xmlWriter->startDTD('html');
 			$this->xmlWriter->endDTD();
+			$this->xmlWriter->startElement('html');
 			break;
 
 		case 'XML':

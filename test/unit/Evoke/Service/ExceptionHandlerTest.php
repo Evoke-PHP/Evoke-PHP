@@ -6,6 +6,30 @@ use Evoke\Service\ExceptionHandler,
 
 class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 {
+	protected $errors = [];
+	protected $savedErrorReporting;
+	
+	/***********/
+	/* Fixture */
+	/***********/
+
+	public function handleErrorByRecordingItForTest($errno, $errstr)
+	{
+		$this->errors[] = [$errno, $errstr];
+	}
+
+	public function setUp()
+	{
+		$this->errors = [];
+		$this->savedErrorReporting = set_error_handler(
+			[$this, 'handleErrorByRecordingItForTest']);
+	}
+	
+	public function tearDown()
+	{
+		restore_error_handler();
+	}
+
 	/******************/
 	/* Data Providers */
 	/******************/
@@ -65,43 +89,54 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			FALSE,
-			$this->getMock('Evoke\View\MessageBoxIface'),
+			$this->getMock('Evoke\View\XHTML\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 
 		$this->assertInstanceOf('Evoke\Service\ExceptionHandler', $object);
 	}
-
+	
 	/**
-	 * The handler can respond to an exception even if the writer isn't empty.
-	 *
-	 * @covers Evoke\Service\ExceptionHandler::handler
+	 * @covers       Evoke\Service\ExceptionHandler::handler
 	 * @dataProvider providerConditions
 	 */
-	public function testReponse(/* Bool */ $requiresFlush,
-	                            /* Bool */ $showException)
-	{
-		$this->doTestResponse($requiresFlush, $showException);
-	}
-
-	/**
-	 * The handler can respond to an exception.
-	 *
-	 * @covers Evoke\Service\ExceptionHandler::handler
-	 */
-	public function testReponseWithoutFlush()
-	{
-		$this->doTestResponse(false);
-	}
-
-	/*******************/
-	/* Private Methods */
-	/*******************/
-
-	private function doTestResponse(/* Bool */ $requiresFlush,
-	                                /* Bool */ $showException)
+	public function testHandleExceptionTriggersCorrectErrors(
+		$requiresFlush, $showException)
 	{
 		$exception = new \Exception('This is it.');
+		$expectedErrors = [[E_USER_WARNING, 'This is it.']];
+		$response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
+		$writer = $this->getMock('Evoke\Writer\WriterIface');
+		$viewException = $this->getMock('Evoke\View\XHTML\Exception');
+		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
+
+		if ($requiresFlush)
+		{
+			$writer
+				->expects($this->at(0))
+				->method('__toString')
+				->will($this->returnValue('NOT_EMPTY'));
+			
+			$expectedErrors[] =
+				[E_USER_WARNING,
+				 'Bufffer needs to be flushed in exception handler for ' .
+				 'clean error page.  Buffer was: NOT_EMPTY'];
+		}
 		
+		$object = new ExceptionHandler(
+			$response, $showException, $viewMessageBox, $writer,
+			$viewException);
+		$object->handler($exception);
+
+		$this->assertSame($expectedErrors, $this->errors);
+	}
+	
+	/**
+	 * @covers       Evoke\Service\ExceptionHandler::handler
+	 * @dataProvider providerConditions
+	 */
+	public function testHandleException($requiresFlush, $showException)
+	{
+		$exception = new \Exception('This is it.');		
 		$responseIndex = 0;
 		$response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
 		$response
@@ -146,15 +181,19 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('write')
-			->with(
-				['html',
-				 [],
-				 [['head',
-				   [],
-				   [['title', [], ['Uncaught Exception']]]],
-				  ['body',
-				   [],
-				   [['div', [], 'MBOX is the big wig.']]]]]);
+			->with(['head',
+			        [],
+			        [['title', [], ['Uncaught Exception']]]]);
+		$writer
+			->expects($this->at($writerIndex++))
+			->method('write')
+			->with(['body',
+			        [],
+			        [['div', [], 'MBOX is the big wig.']]]);
+		$writer
+			->expects($this->at($writerIndex++))
+			->method('writeEnd')
+			->with();		
 		$writer
 			->expects($this->at($writerIndex++))
 			->method('__toString')

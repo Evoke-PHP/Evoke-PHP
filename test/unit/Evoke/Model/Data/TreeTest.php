@@ -12,8 +12,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
 
 	public function providerGetChildren()
 	{
-		return ['None' => [[]],
-		        'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
+		return ['One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
 		        'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
 		                    $this->getMock('Evoke\Model\Data\TreeIface'),
 		                    $this->getMock('Evoke\Model\Data\TreeIface')]]];
@@ -88,7 +87,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
 	 * @covers       Evoke\Model\Data\Tree::getChildren
 	 * @dataProvider providerGetChildren
 	 */
-	public function testGetChildren(Array $children, $expected)
+	public function testGetChildren(Array $children)
 	{
 		$obj = new Tree;
 
@@ -97,7 +96,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
 			$obj->add($child);
 		}
 
-		$this->assertSame($children[0], $obj->getChildren());
+		$this->assertSame(reset($children), $obj->getChildren());
 	}
 	
 	/**

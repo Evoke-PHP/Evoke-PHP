@@ -9,6 +9,31 @@ use Evoke\Network\HTTP\Request,
  */
 class RequestTest extends PHPUnit_Framework_TestCase
 {
+	protected static $savedRequest;
+	protected static $savedServer;
+	
+	/***********/
+	/* Fixture */
+	/***********/
+
+	public static function setUpBeforeClass()
+	{
+		self::$savedRequest = $_REQUEST;
+		self::$savedServer  = $_SERVER;
+	}
+	
+	public function tearDown()
+	{
+		unset($_REQUEST);
+		unset($_SERVER);
+	}
+
+	public static function tearDownAfterClass()
+	{
+		$_REQUEST = self::$savedRequest;
+		$_SERVER  = self::$savedServer;
+	}
+	
 	/******************/
 	/* Data Providers */
 	/******************/
@@ -89,16 +114,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 			                'Q_Factor' => 0.9]]],
 			'Invalid' => ['Header'       => '12-34',
 			              'Parsed_Value' => []]];
-	}
-	
-	/***********/
-	/* Fixture */
-	/***********/
-	
-	public function tearDown()
-	{
-		unset($_REQUEST);
-		unset($_SERVER);
 	}
 	
 	/*********/

@@ -123,19 +123,22 @@ class DataTest extends PHPUnit_Framework_TestCase
 		$metadataObjectUnderTest
 			->expects($this->never())
 			->method('arrangeFlatData');
+
+		$flatResults = [['Dont_Care' => 'Mock Arranges This']];
+		$arrangedData = [['Any'        => 'OK',
+		                  'Joint_Data' => ['J1' => [['F1' => 'Arranged']]]]];
         $metadataOuter = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
 		$metadataOuter
 			->expects($this->once())
-			->method('arrangeFlatData');
+			->method('arrangeFlatData')
+			->with($flatResults)
+			->will($this->returnValue($arrangedData));
         
         $objectUnderTest = new Data($metadataObjectUnderTest);
         $outer = new Data($metadataOuter,
                           ['J1' => $objectUnderTest]);
-        $outer->setData(
-            [['Any'        => 'OK',
-              'Joint_Data' => [
-                  'J1' => ['This data is set in objectUnderTest.']]]]);
-    }        
+        $outer->setData($flatResults);
+    }
     
 	/**
 	 * @covers Evoke\Model\Data\Data::setData

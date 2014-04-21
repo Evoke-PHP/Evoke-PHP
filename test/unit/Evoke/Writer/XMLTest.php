@@ -140,6 +140,27 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Write the end of a document.
+	 *
+	 * @covers Evoke\Writer\XML::writeEnd	 
+	 */
+	public function testWriteEnd()
+	{
+		$xIndex = 0;
+		$xmlWriter = $this->getMock('XMLWriter');
+		$xmlWriter
+			->expects($this->at($xIndex++))
+			->method('openMemory');
+		$xmlWriter
+			->expects($this->at($xIndex++))
+			->method('endDocument')
+			->with();
+		
+		$object = new XML($xmlWriter, 'XML', 'EN', false);
+		$object->writeEnd();		
+	}
+	
+	/**
 	 * Start the document with default values.
 	 *
 	 * @covers Evoke\Writer\XML::writeStart
@@ -234,40 +255,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$object->writeStart();
 	}
 	
-	/**
-	 * Write the end of a document.
-	 *
-	 * @covers Evoke\Writer\XML::writeEnd	 
-	 */
-	public function testWriteEnd()
-	{
-		$xmlWriter = $this->getMock('XMLWriter');
-		$xmlWriter
-			->expects($this->any())
-			->method('endDocument')
-			->with();
-		
-		$object = new XML($xmlWriter);
-		$object->writeEnd();		
-	}
-
-	/**
-	 * Write the start of a document.
-	 *
-	 * @covers Evoke\Writer\XML::writeStart
-	 */
-	public function testWriteStart()
-	{
-		$xmlWriter = $this->getMock('XMLWriter');
-		$xmlWriter
-			->expects($this->any())
-			->method('startDocument')
-			->with('1.0', 'UTF-8');
-		
-		$object = new XML($xmlWriter);
-		$object->writeStart();
-	}
-
 	/**
 	 * Write XML.
 	 *

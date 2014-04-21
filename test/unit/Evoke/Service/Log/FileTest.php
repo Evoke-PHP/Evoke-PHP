@@ -5,7 +5,8 @@ use DateTime,
 	Evoke\Service\Log\File,
 	PHPUnit_Framework_TestCase,
 	org\bovigo\vfs\vfsStream,
-	org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
+	org\bovigo\vfs\visitor\vfsStreamStructureVisitor,
+	RuntimeException;
 
 class TestWrapper
 {
@@ -38,10 +39,31 @@ class TestWrapper
 
 class FileTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
+    protected $errors = [];
+    protected $savedErrorReporting;
+    
+    /***********/
+    /* Fixture */
+    /***********/
 
+    public function handleErrorByRecordingItForTest($errno, $errstr)
+    {
+        $this->errors[] = [$errno, $errstr];
+        // echo "\n" . $errno . "\n";
+    }
+
+    public function setUp()
+    {
+        $this->errors = [];
+        $this->savedErrorReporting = set_error_handler(
+	        [$this, 'handleErrorByRecordingItForTest']);
+    }
+    
+    public function tearDown()
+    {
+	    restore_error_handler();
+    }
+	
 	/*********/
 	/* Tests */
 	/*********/
@@ -67,9 +89,20 @@ class FileTest extends PHPUnit_Framework_TestCase
 	public function testCantMakeLogDir()
 	{
 		$fs = vfsStream::setup('Root', 0000);
-				
+
 		$object = new File(vfsStream::url('Root/UNWRITEABLE/log.txt'));
-		$object->log(new DateTime, 'Message', 'TEST');
+
+		try
+		{
+			$object->log(new DateTime, 'Message', 'TEST');
+		}
+		catch (RuntimeException $e)
+		{
+			$this->assertSame(
+				[[E_USER_WARNING, 'mkdir(): Path vfs://Root exists']],
+				$this->errors);
+			throw $e;
+		}
 	}
 	
 	/**
@@ -86,6 +119,7 @@ class FileTest extends PHPUnit_Framework_TestCase
 		$object = new File(vfsStream::url('Root/UNOPENABLE'), 0700, 0400);
 		$object->log(new DateTime, 'Message', 'TEST');
 	}
+	
 	/**
 	 * Can't chmod log dir.
 	 *
@@ -359,7 +393,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 			$testDate->format('Y-M-d@H:i:sP') . ' [NOTICE] Please be on time.' .
 			"\n",
 			$fs->getChild('l.txt')->getContent());
-	}
-	
+	}	
 }
 // EOF

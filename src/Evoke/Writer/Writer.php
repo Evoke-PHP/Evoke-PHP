@@ -58,9 +58,17 @@ abstract class Writer implements WriterIface
 		echo $this->buffer;
 		$this->buffer = '';
 	}
-		
+
 	/**
-	 * By default nothing is required to be initialized on write start.
+	 * By default nothing is required to end a document.
+	 */
+	public function writeEnd()
+	{
+
+	}
+	
+	/**
+	 * By default nothing is required to start a document.
 	 */
 	public function writeStart()
 	{

@@ -29,7 +29,7 @@ class VarExportTest extends PHPUnit_Framework_TestCase
 	 * @covers       Evoke\View\XHTML\VarExport::set
 	 * @dataProvider providerVar
 	 */
-	public function testVarExport()
+	public function testVarExport($value)
 	{
 		$object = new VarExport;
 		$object->set($value);

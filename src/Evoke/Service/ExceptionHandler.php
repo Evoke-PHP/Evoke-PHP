@@ -105,14 +105,14 @@ class ExceptionHandler
 
 		$this->writer->writeStart();
 		$this->writer->write(
-			['html',
+			['head',
 			 [],
-			 [['head',
-			   [],
-			   [['title', [], ['Uncaught Exception']]]],
-			  ['body',
-			   [],
-			   [$this->viewMessageBox->get()]]]]);
+			 [['title', [], ['Uncaught Exception']]]]);
+		$this->writer->write(
+			['body',
+			 [],
+			 [$this->viewMessageBox->get()]]);
+		$this->writer->writeEnd();
 		
 		$this->response->setStatus(500);
 		$this->response->setBody((string)$this->writer);

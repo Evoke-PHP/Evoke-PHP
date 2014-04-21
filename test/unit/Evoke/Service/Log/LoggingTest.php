@@ -29,9 +29,9 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCanLogToAttached()
 	{
-		$dateTime = $this->getMock('DateTime');
+		$dateTime = new \DateTime;
 		$expectedMessage = 'This is the message.';
-		$expectedLevel = 'User Error';
+		$expectedLevel = 'User Notice';
 		$object = new Logging($dateTime);
 
 		for ($i = 0; $i < 3; $i++)
@@ -45,7 +45,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 			$object->attach($observer);
 		}
 
-		$object->log('This is the message.', E_USER_ERROR);
+		$object->log('This is the message.', E_USER_NOTICE);
 	}
 
 	/**
@@ -74,9 +74,9 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDontLogToDetached()
 	{
-		$dateTime = $this->getMock('DateTime');
+		$dateTime = new \DateTime;
 		$expectedMessage = 'This is the message.';
-		$expectedLevel = 'User Error';
+		$expectedLevel = 'User Notice';
 		$detached = 3;
 		$object = new Logging($dateTime);
 		$observers = [];
@@ -102,7 +102,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 		}
 
 		$object->detach($observers[$detached]);
-		$object->log('This is the message.', E_USER_ERROR);		
+		$object->log('This is the message.', E_USER_NOTICE);
 	}
 }
 // EOF

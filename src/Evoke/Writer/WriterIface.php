@@ -41,7 +41,12 @@ interface WriterIface
 	public function write($data);
 
 	/**
-	 * Start the writing initializing the document if necessary.
+	 * End the writing of a document.
+	 */
+	public function writeEnd();
+	
+	/**
+	 * Start the writing of a document.
 	 */
 	public function writeStart();
 }

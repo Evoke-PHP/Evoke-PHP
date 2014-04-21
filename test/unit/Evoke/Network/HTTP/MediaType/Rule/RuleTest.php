@@ -28,7 +28,7 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreate()
 	{
-		$obj = new Test_Rule_Extended;
+		$obj = new Test_Rule_Extended('Output_Format');
 		$this->assertInstanceOf('Evoke\Network\HTTP\MediaType\Rule\Rule', $obj);
 	}
 
@@ -47,8 +47,12 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	public function testSetMediaType()
 	{
 		$obj = new Test_Rule_Extended('DC');
-		$obj->setMediaType('TV');
-		$this->assertSame('TV', $obj->getMediaType());
+		$mediaType = ['Params'   => [],
+		              'Q_Factor' => '1.0',
+		              'Subtype'  => 'TV',
+		              'Type'     => 'Screen'];
+		$obj->setMediaType($mediaType);
+		$this->assertSame($mediaType, $obj->getMediaType());
 	}
 			
 }

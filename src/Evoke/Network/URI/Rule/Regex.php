@@ -54,7 +54,7 @@ class Regex extends Rule
 	public function __construct(Array        $controller,
 	                            /* string */ $match,
 	                            Array        $params,
-	                            /* bool   */ $authoritative)
+	                            /* bool   */ $authoritative = false)
 	{
 		parent::__construct($authoritative);
 		$invalidArgs = false;

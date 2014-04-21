@@ -47,7 +47,7 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetParams()
 	{
-		$obj = new Test_Rule_Extended();
+		$obj = new Test_Rule_Extended(true);
 		$this->assertSame([], $obj->getParams());
 	}
 		
@@ -68,7 +68,7 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetURI($uri)
 	{
-		$obj = new Test_Rule_Extended;
+		$obj = new Test_Rule_Extended(true);
 		$obj->setURI($uri);
 		$this->assertSame($uri, $obj->getController());
 	}
@@ -81,7 +81,7 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetURINonString($uriNonString)
 	{
-		$obj = new Test_Rule_Extended;
+		$obj = new Test_Rule_Extended(true);
 		$obj->setURI($uriNonString);
 	}
 }
