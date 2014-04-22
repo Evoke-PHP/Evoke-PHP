@@ -181,14 +181,6 @@
 	<exec executable = "phpunit" passthru = "true">
 	  <arg value = "-c"/>
 	  <arg file  = "${project.config}/unit.xml"/>
-	  <arg value = "--bootstrap"/>
-	  <arg file  = "${project.test}/../environment/Bootstrap.php"/>
-	  <arg value = "--log-junit"/>
-	  <arg value = "${project.reports}/unit-junit.xml"/>
-	  <arg value = "--coverage-html"/>
-	  <arg value = "${project.reports}/unit-coverage"/>
-	  <arg value = "--coverage-clover"/>
-	  <arg value = "${project.reports}/unit-clover.xml"/>
 	</exec>
   </target>
 
