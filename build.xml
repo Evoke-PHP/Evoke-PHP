@@ -191,4 +191,13 @@
 	  <arg value = "${project.reports}/unit-clover.xml"/>
 	</exec>
   </target>
+
+  <target name        = "unit-quick"
+		  depends     = ""
+		  description = "Run unit tests with PHPUnit without logging">
+	<exec executable = "phpunit" passthru = "true">
+	  <arg value = "-c"/>
+	  <arg file  = "${project.config}/unit-quick.xml"/>
+	</exec>
+  </target>
 </project>
