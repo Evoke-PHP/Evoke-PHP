@@ -4,16 +4,12 @@ namespace Evoke_Test\Service;
 use Evoke\Service\ShutdownHandler,
     PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Service\ShutdownHandler
+ * @uses   Evoke\View\XHTML\MessageBox
+ */
 class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 {
-	/***********/
-	/* Fixture */
-	/***********/
-
-	public function tearDown()
-	{
-	}
-
 	/*********/
 	/* Tests */
 	/*********/
@@ -21,7 +17,6 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	/**
 	 * We can create an object.
 	 *
-	 * @covers Evoke\Service\ShutdownHandler::__construct
 	 */
 	public function testCreate()
 	{
@@ -36,7 +31,6 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Service\ShutdownHandler::__construct
 	 * @expectedException InvalidArgumentException
 	 * @expectedExceptionMessage needs Error view if we are showing the error
 	 */
@@ -53,8 +47,6 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	/**
 	 * The shutdown does not display errors that would not have caused the
 	 * shutdown.
-	 *
-	 * @covers Evoke\Service\ShutdownHandler::handler
 	 */
 	public function testShutdownNormal()
 	{
@@ -89,7 +81,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
 	/**
 	 * The shutdown can display an error that is handled by it, e.g E_PARSE.
 	 *
-	 * @covers Evoke\Service\ShutdownHandler::handler
+	 * @uses Evoke\View\XHTML\Error
 	 */
 	public function testShutdownUsefulHandler()
 	{

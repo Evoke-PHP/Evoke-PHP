@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Model\Data\Metadata;
+namespace Evoke_Test\Model\Data;
 
 use Evoke\Model\Data\Data,
 	Evoke\Model\Data\Metadata\DB,
@@ -78,11 +78,10 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * @covers       Evoke\Model\Data\DBDataBuilder::build
-	 * @covers       Evoke\Model\Data\DBDataBuilder::buildData
-	 * @covers       Evoke\Model\Data\DBDataBuilder::fillMetadataCache
-     * @covers       Evoke\Model\Data\DBDataBuilder::getChildTable
+	 * @covers       Evoke\Model\Data\DBDataBuilder
 	 * @dataProvider providerBuild
+     * @uses         Evoke\Model\Data\Metadata\DB::__construct
+	 * @uses         Evoke\Model\Data\Data::__construct
 	 */
 	public function testBuild(Data  $expected,
 	                          Array $fields,
@@ -101,10 +100,9 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
     /**
-     * @covers Evoke\Model\Data\DBDataBuilder::__construct
-     * @covers Evoke\Model\Data\DBDataBuilder::build
-	 * @covers Evoke\Model\Data\DBDataBuilder::buildData
-     * @covers Evoke\Model\Data\DBDataBuilder::getChildTable
+     * @covers Evoke\Model\Data\DBDataBuilder
+     * @uses   Evoke\Model\Data\Metadata\DB::__construct
+	 * @uses   Evoke\Model\Data\Data::__construct
      */
     public function testCreateWithDifferentSeparator()
     {
@@ -127,10 +125,7 @@ class DBDataBuilderTest extends PHPUnit_Framework_TestCase
     }
     
 	/**
-	 * @covers Evoke\Model\Data\DBDataBuilder::build
-	 * @covers Evoke\Model\Data\DBDataBuilder::buildData
-	 * @covers Evoke\Model\Data\DBDataBuilder::fillMetadataCache	 
-     * @covers Evoke\Model\Data\DBDataBuilder::getChildTable
+	 * @covers Evoke\Model\Data\DBDataBuilder
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Missing child table in join: T1=Missing
 	 */

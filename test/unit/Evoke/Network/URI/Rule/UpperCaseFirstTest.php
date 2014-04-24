@@ -4,24 +4,22 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\UpperCaseFirst,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\UpperCaseFirst
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\UpperCaseFirst::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new UpperCaseFirst(['_']);
 		$this->assertInstanceOf('Evoke\Network\URI\Rule\UpperCaseFirst', $obj);
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\UpperCaseFirst::getController
-	 */
 	public function testGetController()
 	{
 		$obj = new UpperCaseFirst(['_', ' ']);
@@ -29,9 +27,6 @@ class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('First LETTER_Uppercased', $obj->getController());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\UpperCaseFirst::isMatch
-	 */
 	public function testIsMatchFalse()
 	{
 		$obj = new UpperCaseFirst(['/']);
@@ -39,9 +34,6 @@ class UpperCaseFirstTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($obj->isMatch());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\UpperCaseFirst::isMatch
-	 */
 	public function testIsMatchTrue()
 	{
 		$obj = new UpperCaseFirst(['/']);

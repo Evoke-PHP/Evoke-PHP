@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\LeftTrim,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\LeftTrim
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class LeftTrimTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -56,9 +60,6 @@ class LeftTrimTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\LeftTrim::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new LeftTrim("chars");
@@ -66,7 +67,6 @@ class LeftTrimTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\URI\Rule\LeftTrim::getController
 	 * @dataProvider providerGetController
 	 */
 	public function testGetController($characters, $expected, $uri)
@@ -77,7 +77,6 @@ class LeftTrimTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\URI\Rule\LeftTrim::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($characters, $expected, $uri)

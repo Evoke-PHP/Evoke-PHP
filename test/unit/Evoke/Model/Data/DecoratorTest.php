@@ -26,6 +26,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::current
 	 */
 	public function testCurrent()
@@ -42,6 +43,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::getRecord
 	 */
 	public function testGetRecord()
@@ -59,6 +61,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::isEmpty
 	 */
 	public function testIsEmpty()
@@ -76,6 +79,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::key
 	 */
 	public function testKey()
@@ -93,6 +97,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::next
 	 */
 	public function testNext()
@@ -110,6 +115,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::offsetExists
 	 */
 	public function testOffsetExists()
@@ -127,6 +133,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}	
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::offsetGet
 	 */
 	public function testOffsetGet()
@@ -144,6 +151,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}	
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::offsetSet
 	 */
 	public function testOffsetSet()
@@ -160,6 +168,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}	
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::offsetUnset
 	 */
 	public function testOffsetUnset()
@@ -175,6 +184,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}	
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::rewind
 	 */
 	public function testRewind()
@@ -190,6 +200,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}	
 	
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::setData
 	 */
 	public function testSetData()
@@ -207,6 +218,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers Evoke\Model\Data\Decorator::__construct
 	 * @covers Evoke\Model\Data\Decorator::valid
 	 */
 	public function testValid()

@@ -5,22 +5,17 @@ use Evoke\Writer\Text,
 	PHPUnit_Framework_TestCase;
 
 /**
- * Text Writer and Abstract Writer test.
+ * @covers Evoke\Writer\Text
+ * @uses   Evoke\Writer\Writer
  */
 class TextTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
-
 	/*********/
 	/* Tests */
 	/*********/
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\Writer\Writer::__construct
 	 */
 	public function testCreate()
 	{
@@ -30,8 +25,6 @@ class TextTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * The writer can be cleaned. 
-	 *
-	 * @covers Evoke\Writer\Writer::clean
 	 */
 	public function testClean()
 	{
@@ -43,11 +36,6 @@ class TextTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Flushing sends the output and cleans the buffer.
-	 *
-	 * @covers Evoke\Writer\Text::write
-	 * @covers Evoke\Writer\Writer::flush
-	 * @covers Evoke\Writer\Writer::writeStart
-	 * @covers Evoke\Writer\Writer::__toString
 	 */
 	public function testFlush()
 	{
@@ -66,9 +54,6 @@ class TextTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Buffer starts empty even after initialization.
-	 *
-	 * @covers Evoke\Writer\Writer::__toString
-	 * @covers Evoke\Writer\Writer::writeStart
 	 */
 	public function testStartsEmpty()
 	{
@@ -79,9 +64,6 @@ class TextTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Text can be added to the writer and returned.
-	 *
-	 * @covers Evoke\Writer\Text::write
-	 * @covers Evoke\Writer\Writer::__toString
 	 */
 	public function testTextWriting()
 	{

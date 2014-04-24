@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\HTTP\MediaType\Rule;
 use Evoke\Network\HTTP\MediaType\Rule\Match,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\HTTP\MediaType\Rule\Match
+ * @uses   Evoke\Network\HTTP\MediaType\Rule\Rule
+ */
 class MatchTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -36,9 +40,6 @@ class MatchTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Match::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Match('OutputFormat', ['DC']);
@@ -47,7 +48,6 @@ class MatchTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Network\HTTP\MediaType\Rule\Match::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($outputFormat, $match, $mediaType, $expected)

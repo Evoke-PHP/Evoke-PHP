@@ -153,4 +153,4 @@ class File implements LoggerIface
 		$this->opened = true;
 	}
 }
-// EOF 
+// EOF

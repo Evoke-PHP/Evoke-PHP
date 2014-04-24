@@ -4,6 +4,9 @@ namespace Evoke_Test\Service;
 use Evoke\Service\ErrorHandler,
     PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Service\ErrorHandler
+ */
 class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 {
 	protected $savedErrorReporting;
@@ -28,8 +31,6 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We can create an object.
-	 *
-	 * @covers Evoke\Service\ErrorHandler::__construct
 	 */
 	public function testCreate()
 	{
@@ -40,8 +41,6 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Non reportable errors should not be reported.
-	 *
-	 * @covers Evoke\Service\ErrorHandler::handler
 	 */
 	public function testNonReportableError()
 	{
@@ -64,7 +63,6 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Recoverable errors are logged and converted to an ErrorException.
 	 *
-	 * @covers            Evoke\Service\ErrorHandler::handler
 	 * @expectedException ErrorException
 	 */
 	public function testRecoverAfterLogging()
@@ -84,8 +82,6 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * We can report a complex error (with context).
-	 *
-	 * @covers Evoke\Service\ErrorHandler::handler
 	 */
 	public function testReportComplex()
 	{
@@ -105,8 +101,6 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * We can report a simple error (without context).
-	 *
-	 * @covers Evoke\Service\ErrorHandler::handler
 	 */
 	public function testReportSimple()
 	{

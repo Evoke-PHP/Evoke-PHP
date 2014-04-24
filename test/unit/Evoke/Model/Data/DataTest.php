@@ -4,6 +4,10 @@ namespace Evoke_Test\Model\Data;
 use Evoke\Model\Data\Data,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Model\Data\Data
+ * @uses   Evoke\Model\Data\Flat
+ */
 class DataTest extends PHPUnit_Framework_TestCase
 {
     /*******************/
@@ -58,7 +62,6 @@ class DataTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * @covers       Evoke\Model\Data\Data::__construct
 	 * @dataProvider providerCreate
 	 */
 	public function testCreate()
@@ -85,7 +88,6 @@ class DataTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Model\Data\Data::__get
 	 * @dataProvider providerGetJointData
 	 */
 	public function testGetJointData($metadata, $joins, $joinName, $expected)
@@ -95,7 +97,6 @@ class DataTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\Data::__get
 	 * @expectedException        OutOfBoundsException
 	 * @expectedExceptionMessage no data container for join: join
 	 */
@@ -112,10 +113,6 @@ class DataTest extends PHPUnit_Framework_TestCase
 		$obj->join;
 	}
 
-    /**
-     * @covers Evoke\Model\Data\Data::setArrangedData
-     * @covers Evoke\Model\Data\Data::setData
-     */
     public function testSetArrangedData()
     {
 		$metadataObjectUnderTest = $this->getMock(
@@ -140,10 +137,6 @@ class DataTest extends PHPUnit_Framework_TestCase
         $outer->setData($flatResults);
     }
     
-	/**
-	 * @covers Evoke\Model\Data\Data::setData
-	 * @covers Evoke\Model\Data\Data::setRecord
-	 */
 	public function testSetData()
 	{
 		$j1Data1 = [['J1_ID' => 1, 'Value' => '1'],

@@ -4,6 +4,9 @@ namespace Evoke_Test\Network\HTTP\MediaType;
 use Evoke\Network\HTTP\MediaType\Router,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\HTTP\MediaType\Router
+ */
 class RouterTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -14,10 +17,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Router::addRule
-	 * @covers Evoke\Network\HTTP\MediaType\Router::route
-	 */
 	public function testSingleRule()
 	{
 		$rIndex = 0;
@@ -44,10 +43,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
 		                  $obj->route([['InitialMediaType']]));
 	}
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Router::addRule
-	 * @covers Evoke\Network\HTTP\MediaType\Router::route
-	 */
 	public function testTwoRules()
 	{
 		$rIndex = 0;
@@ -118,8 +113,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Network\HTTP\MediaType\Router::addRule
-	 * @covers                   Evoke\Network\HTTP\MediaType\Router::route
 	 * @expectedException        OutOfBoundsException
 	 * @expectedExceptionMessage no output formats match
 	 */

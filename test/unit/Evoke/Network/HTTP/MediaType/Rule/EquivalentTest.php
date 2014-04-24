@@ -4,6 +4,11 @@ namespace Evoke_Test\Network\HTTP\MediaType\Rule;
 use Evoke\Network\HTTP\MediaType\Rule\Equivalent,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\HTTP\MediaType\Rule\Equivalent
+ * @uses   Evoke\Network\HTTP\MediaType\Rule\Match
+ * @uses   Evoke\Network\HTTP\MediaType\Rule\Rule
+ */ 
 class EquivalentTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -43,9 +48,6 @@ class EquivalentTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Equivalent::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Equivalent('Output', ['Match']);
@@ -54,7 +56,6 @@ class EquivalentTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Equivalent::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch(

@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\Prepend,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\Prepend
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class PrependTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -24,9 +28,6 @@ class PrependTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Prepend::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Prepend('Prepend_String');
@@ -34,7 +35,6 @@ class PrependTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Network\URI\Rule\Prepend::getController
 	 * @dataProvider providerGetController
 	 */
 	public function testGetController($prepend, $uri, $expected)
@@ -44,9 +44,6 @@ class PrependTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($expected, $obj->getController());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Prepend::isMatch
-	 */
 	public function testIsMatch()
 	{
 		$obj = new Prepend('anyPrep');

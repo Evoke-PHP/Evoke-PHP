@@ -4,6 +4,10 @@ namespace Evoke_Test\Writer;
 use Evoke\Writer\Factory,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Writer\Factory
+ * @uses   Evoke\Writer\Writer
+ */
 class FactoryTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,8 +16,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create a JSON writer.
-	 *
-	 * @covers Evoke\Writer\Factory::create
 	 */
 	public function testCreateJSON()
 	{
@@ -24,7 +26,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Create a HTML writer.
 	 *
-	 * @covers Evoke\Writer\Factory::create
+	 * @uses Evoke\Writer\XML
 	 */
 	public function testCreateHTML()
 	{
@@ -34,8 +36,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create a Text writer.
-	 *
-	 * @covers Evoke\Writer\Factory::create
 	 */
 	public function testCreateText()
 	{
@@ -46,7 +46,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Create an XHTML writer.
 	 *
-	 * @covers Evoke\Writer\Factory::create
+	 * @uses Evoke\Writer\XML
 	 */
 	public function testCreateXHTML()
 	{
@@ -57,7 +57,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Create an XML writer.
 	 *
-	 * @covers Evoke\Writer\Factory::create
+	 * @uses Evoke\Writer\XML
 	 */
 	public function testCreateXML()
 	{
@@ -68,7 +68,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Creating an unkown writer throws
 	 *
-	 * @covers            Evoke\Writer\Factory::create
 	 * @expectedException DomainException
 	 */
 	public function testCreateUnknown()

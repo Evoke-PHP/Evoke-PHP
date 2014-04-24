@@ -4,6 +4,9 @@ namespace Evoke_Test\Model\Mapper;
 use Evoke\Model\Mapper\Session,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Model\Mapper\Session
+ */
 class SessionTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -54,7 +57,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * @covers Evoke\Model\Mapper\Session::__construct
+	 * @uses Evoke\Model\Persistence\SessionIface
 	 */
 	public function testConstruct()
 	{
@@ -63,9 +66,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Evoke\Model\Mapper\Session', $obj);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\Session::create
-	 */
 	public function testCreate()
 	{
 		$data = ['Any' => 'old', 2 => 'Data', []];
@@ -79,9 +79,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$obj->create($data);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\Session::create
-	 */
 	public function testCreateNoParamGiven()
 	{
 		$mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
@@ -94,9 +91,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$obj->create();
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\Session::delete
-	 */
 	public function testDelete()
 	{
 		$offset = ['Any', 'Offset'];
@@ -110,9 +104,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$obj->delete($offset);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\Session::delete
-	 */
 	public function testDeleteNoParamGiven()
 	{
 		$mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
@@ -126,7 +117,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Model\Mapper\Session::read
 	 * @dataProvider providerRead
 	 */
 	public function testRead($sessionData, $offset, $readData)
@@ -142,9 +132,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($readData, $obj->read($offset));			       
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\Session::read
-	 */
 	public function testReadNoParams()
 	{
 		$sessionData = [[1], '2' => 3];
@@ -160,7 +147,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Mapper\Session::update
 	 * @expectedException        RuntimeException
 	 * @expectedExceptionMessage Session update data has already been modified.
 	 */
@@ -178,7 +164,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Model\Mapper\Session::update
 	 * @dataProvider providerUpdateSuccess
 	 */
 	public function testUpdateSuccess($old, $new)

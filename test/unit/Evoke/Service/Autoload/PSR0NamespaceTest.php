@@ -5,6 +5,10 @@ use Evoke\Service\Autoload\PSR0Namespace,
 	PHPUnit_Framework_TestCase,
 	org\bovigo\vfs\vfsStream;
 
+/**
+ * @covers Evoke\Service\Autoload\PSR0Namespace
+ * @uses   Evoke\Service\Autoload\AutoloadIface
+ */
 class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -13,8 +17,6 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\Service\Autoload\PSR0Namespace::__construct
 	 */
 	public function testCreate()
 	{
@@ -24,8 +26,6 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Load a class that exists.
-	 *
-	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
 	 */
 	public function testLoadExists()
 	{		
@@ -47,8 +47,6 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Try to load a class that is outside the namespace.
-	 *
-	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
 	 */
 	public function testLoadNonExistant()
 	{
@@ -68,8 +66,6 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Try to load a class with a namespace length the same as defined, but
 	 * different.
-	 *
-	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
 	 */
 	public function testLoadSameLengthButDifferent()
 	{
@@ -88,8 +84,6 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Try to load a class that is outside the namespace.
-	 *
-	 * @covers Evoke\Service\Autoload\PSR0Namespace::load
 	 */
 	public function testLoadOutside()
 	{
@@ -105,7 +99,5 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
 		$object->load('NS\A\D');
 		$this->assertFalse(class_exists('NS\A\D', FALSE));
 	}
-
-	
 }
 // EOF

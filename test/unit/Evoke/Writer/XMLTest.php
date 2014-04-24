@@ -5,7 +5,7 @@ use Evoke\Writer\XML,
 	PHPUnit_Framework_TestCase;
 
 /**
- * Test the base controller (and the abstract parts of it).
+ * @covers       Evoke\Writer\XML
  */
 class XMLTest extends PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Create the object.
 	 *
-	 * @covers       Evoke\Writer\XML::__construct
 	 * @dataProvider providerConstruct
 	 */
 	public function test__construct($indent, $indentString = '   ')
@@ -57,8 +56,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Converts to a string.
-	 *
-	 * @covers Evoke\Writer\XML::__toString
 	 */
 	public function testConvertsToAString()
 	{
@@ -77,11 +74,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('Whatever', (string)$object);
 	}
 
-	/**
-	 * Cleanable.
-	 *
-	 * @covers Evoke\Writer\XML::clean
-	 */
 	public function testCleanable()
 	{
 		$xIndex = 0;
@@ -104,12 +96,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('', (string)$object);
 	}
 
-	/**
-	 * Flushes to the output.
-	 *
-	 * @covers Evoke\Writer\XML::__toString
-	 * @covers Evoke\Writer\XML::flush
-	 */
 	public function testFlush()
 	{
 		$xIndex = 0;
@@ -139,11 +125,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 
 	}
 
-	/**
-	 * Write the end of a document.
-	 *
-	 * @covers Evoke\Writer\XML::writeEnd	 
-	 */
 	public function testWriteEnd()
 	{
 		$xIndex = 0;
@@ -160,11 +141,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$object->writeEnd();		
 	}
 	
-	/**
-	 * Start the document with default values.
-	 *
-	 * @covers Evoke\Writer\XML::writeStart
-	 */
 	public function testWriteStartDefault()
 	{
 		$xIndex = 0;
@@ -204,11 +180,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$object->writeStart();
 	}
 
-	/**
-	 * Start an HTML5 document.
-	 *
-	 * @covers Evoke\Writer\XML::writeStart
-	 */
 	public function testWriteStartHTML5()
 	{
 		$xIndex = 3;
@@ -228,7 +199,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Writing the start of an unknown type of document throws.
 	 *
-	 * @covers Evoke\Writer\XML::writeStart
 	 * @expectedException DomainException
 	 */
 	public function testWriteStartUnknown()
@@ -237,11 +207,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$object->writeStart();
 	}
 	
-	/**
-	 * Start an XML document.
-	 *
-	 * @covers Evoke\Writer\XML::writeStart
-	 */
 	public function testWriteStartXML()
 	{
 		$xIndex = 3;
@@ -255,11 +220,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 		$object->writeStart();
 	}
 	
-	/**
-	 * Write XML.
-	 *
-	 * @covers Evoke\Writer\XML::write
-	 */
 	public function testWriteXML()
 	{
 		$expectedOutput = '<div class="Test"><span>Span_Text</span></div>';
@@ -274,7 +234,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Writing a bad attrib throws.
 	 *
-	 * @covers            Evoke\Writer\XML::write
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testWriteXMLBadAttribs()
@@ -286,7 +245,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Writing a bad tag throws.
 	 *
-	 * @covers            Evoke\Writer\XML::write
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testWriteXMLBadTag()
@@ -297,8 +255,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Writing an inline element turns off indenting during the write.
-	 *
-	 * @covers Evoke\Writer\XML::write
 	 */
 	public function testWriteXMLInlineIndent()
 	{

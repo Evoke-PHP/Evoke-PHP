@@ -5,7 +5,8 @@ use Evoke\Network\URI\Rule\Regex,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\Network\URI\Rule\Regex
+ * @covers Evoke\Network\URI\Rule\Regex
+ * @uses   Evoke\Network\URI\Rule\Rule
  */
 class RegexTest extends PHPUnit_Framework_TestCase
 {
@@ -88,7 +89,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that the constructor builds the expected object.
 	 *
-	 * @covers       \Evoke\Network\URI\Rule\Regex::__construct
 	 * @dataProvider providerGood
 	 */
 	public function test__constructGood(
@@ -101,7 +101,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that Invalid Param specs to the constructor raise IAE.
 	 *
-	 * @covers            Evoke\Network\URI\Rule\Regex::__construct
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider      providerInvalidArguments
 	 */
@@ -114,8 +113,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we get the expected controller.
 	 *
-	 *  @depends      test__constructGood
-	 *  @covers       Evoke\Network\URI\Rule\Regex::getController
+	 *  @depends test__constructGood
 	 */
 	public function testGetController()
 	{
@@ -132,7 +130,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we get the expected parameters.
 	 *
-	 * @covers       Evoke\Network\URI\Rule\Regex::getParams
 	 * @depends      test__constructGood
 	 * @dataProvider providerGetParams
 	 */
@@ -148,7 +145,6 @@ class RegexTest extends PHPUnit_Framework_TestCase
 	 * Test the matches for the regex.
 	 *
 	 * @depends      test__constructGood
-	 * @covers       Evoke\Network\URI\Rule\Regex::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($controller, $match, $params, $uri, $expected)

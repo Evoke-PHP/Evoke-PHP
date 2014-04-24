@@ -44,7 +44,7 @@ abstract class ControllerAbstract implements ControllerIface
 	{
 		$this->outputFormat = $outputFormat;
 		$this->params       = $params;
-		$this->response	    = $response;
+		$this->response     = $response;
 	}
 	
 	/******************/

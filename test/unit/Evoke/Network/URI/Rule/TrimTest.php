@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\Trim,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\Trim
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class TrimTest extends PHPUnit_Framework_TestCase
 {
 	public function providerGetController()
@@ -52,9 +56,6 @@ class TrimTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Trim::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Trim("chars");
@@ -62,7 +63,6 @@ class TrimTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\URI\Rule\Trim::getController
 	 * @dataProvider providerGetController
 	 */
 	public function testGetController($characters, $expected, $uri)
@@ -73,7 +73,6 @@ class TrimTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\URI\Rule\Trim::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($characters, $expected, $uri)

@@ -5,6 +5,10 @@ use Evoke\Model\Data\TreeBuilder,
 	Evoke\Model\Data\Tree,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Model\Data\TreeBuilder
+ * @uses   Evoke\Model\Data\Tree
+ */
 class TreeBuilderTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -75,7 +79,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
-	 * @covers       Evoke\Model\Data\TreeBuilder::build
 	 * @dataProvider providerBuild
 	 */
 	public function testBuild($treeName, $mptt, $expected)
@@ -85,9 +88,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $obj->build($treeName, $mptt));
 	}
 	
-	/**
-	 * @covers Evoke\Model\Data\TreeBuilder::__construct
-	 */
 	public function testConstruct()
 	{
 		$obj = new TreeBuilder;
@@ -95,7 +95,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\TreeBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage needs MPTT root with Lft and Rgt fields.
 	 */
@@ -106,7 +105,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\TreeBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage needs MPTT entries to build tree.
 	 */
@@ -117,7 +115,6 @@ class TreeBuilderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\TreeBuilder::build
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage
 	 * needs MPTT data at 1 with Lft and Rgt fields.

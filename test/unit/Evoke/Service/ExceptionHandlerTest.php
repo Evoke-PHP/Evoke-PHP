@@ -4,6 +4,10 @@ namespace Evoke_Test\Service;
 use Evoke\Service\ExceptionHandler,
     PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Service\ExceptionHandler
+ * @uses   Evoke\View\XHTML\MessageBox
+ */
 class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 {
 	protected $errors = [];
@@ -50,7 +54,6 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 	 * An exception is thrown if we are trying to show the exception without a
 	 * view.
 	 *
-	 * @covers            Evoke\Service\ExceptionHandler::__construct
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testCreateBad()
@@ -64,8 +67,6 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * An object can be created.
-	 *
-	 * @covers Evoke\Service\ExceptionHandler::__construct
 	 */
 	public function testCreateWithView()
 	{
@@ -81,8 +82,6 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * A view is only required if we are showing the exception.
-	 *
-	 * @covers Evoke\Service\ExceptionHandler::__construct
 	 */
 	public function testCreateWithoutView()
 	{
@@ -96,7 +95,6 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Service\ExceptionHandler::handler
 	 * @dataProvider providerConditions
 	 */
 	public function testHandleExceptionTriggersCorrectErrors(
@@ -131,7 +129,6 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Service\ExceptionHandler::handler
 	 * @dataProvider providerConditions
 	 */
 	public function testHandleException($requiresFlush, $showException)

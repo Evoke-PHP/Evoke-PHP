@@ -37,6 +37,9 @@ class TestWrapper
 	}
 }
 
+/**
+ * @covers Evoke\Service\Log\File
+ */
 class FileTest extends PHPUnit_Framework_TestCase
 {
     protected $errors = [];
@@ -70,8 +73,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\Service\Log\File::__construct
 	 */
 	public function test__Construct()
 	{
@@ -82,7 +83,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Can't make log directory.
 	 *
-	 * @covers                   Evoke\Service\Log\File::open
 	 * @expectedException        RuntimeException
 	 * @expectedExceptionMessage Cannot make log directory.
 	 */
@@ -108,7 +108,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Can't open log file.
 	 *
-	 * @covers                   Evoke\Service\Log\File::open
 	 * @expectedException        RuntimeException
 	 * @expectedExceptionMessage Cannot open log file.
 	 */
@@ -123,7 +122,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Can't chmod log dir.
 	 *
-	 * @covers                   Evoke\Service\Log\File::open
 	 * @expectedException        RuntimeException
 	 * @expectedExceptionMessage Cannot chmod log directory.
 	 */
@@ -191,7 +189,6 @@ class FileTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Can't chmod log file.
 	 *
-	 * @covers                   Evoke\Service\Log\File::open
 	 * @expectedException        RuntimeException
 	 * @expectedExceptionMessage Cannot chmod log file.
 	 */

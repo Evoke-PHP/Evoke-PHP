@@ -4,6 +4,9 @@ namespace Evoke_Test\View\XHTML;
 use Evoke\View\XHTML\Head,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\XHTML\Head
+ */
 class HeadTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,8 +15,6 @@ class HeadTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\View\XHTML\Head::__construct
 	 */
 	public function testCreate()
 	{
@@ -23,9 +24,6 @@ class HeadTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Get the view of the head.
-	 *
-	 * @covers Evoke\View\XHTML\Head::__construct
-	 * @covers Evoke\View\XHTML\Head::get
 	 */
 	public function testGetView()
 	{

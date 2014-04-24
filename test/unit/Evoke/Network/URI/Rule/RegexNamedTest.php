@@ -4,24 +4,22 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\RegexNamed,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\RegexNamed
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class RegexNamedTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\RegexNamed::__construct
-	 */
 	public function testCreate()
 	{
 		$object = new RegexNamed('/match/', 'replacement');
 		$this->assertInstanceOf('Evoke\Network\URI\Rule\RegexNamed', $object);
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\RegexNamed::getController
-	 */
 	public function testGetController()
 	{
 		$object = new RegexNamed('/match/', 'replacement');
@@ -29,9 +27,6 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('uri/replacementes/ok', $object->getController());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\RegexNamed::getParams
-	 */
 	public function testGetParams()
 	{
 		$object = new RegexNamed('/m(...)a(?<Named>N.*)fin/', 'rep');
@@ -39,9 +34,6 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 		$this->assertSame(['Named' => 'NamedMatch'], $object->getParams());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\RegexNamed::isMatch
-	 */
 	public function testIsMatchFalse()
 	{
 		$object = new RegexNamed('/m(...)a(?<Named>N.*)fin/', 'rep');
@@ -49,9 +41,6 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($object->isMatch());
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\RegexNamed::isMatch
-	 */
 	public function testIsMatchTrue()
 	{
 		$object = new RegexNamed('/m\d[A-G]/', 'rep');

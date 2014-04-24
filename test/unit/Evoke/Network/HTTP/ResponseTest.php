@@ -2,10 +2,11 @@
 namespace Evoke_Test\Network\HTTP;
 
 use Evoke\Network\HTTP\Response,
+	LogicException,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @runTestsInSeparateProcesses
+ * @covers Evoke\Network\HTTP\Response
  */
 class ResponseTest extends PHPUnit_Framework_TestCase
 {
@@ -80,7 +81,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Can't create a response that doesn't match a valid HTTP spec.
 	 *
-	 * @covers            Evoke\Network\HTTP\Response::__construct
 	 * @expectedException InvalidArgumentException
 	 */
 	public function testCantCreateInvalidHTTPResponse()
@@ -91,7 +91,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Create a response.
 	 *
-	 * @covers Evoke\Network\HTTP\Response::__construct
 	 * @dataProvider providerCreate
 	 */	  
 	public function testCreate($httpVersion)
@@ -110,9 +109,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
 	/*
 	 * The response body is initially blank.
-	 *                       
-	 * @covers Evoke\Network\HTTP\Response::send
-	 * @covers Evoke\Network\HTTP\Response::setStatus
 	 */
 	public function testBodyBeginsEmpty()
 	{
@@ -138,11 +134,47 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * The header fields can be set.
+	 * We can't send if the headers have already been sent.
 	 *
-	 * @covers Evoke\Network\HTTP\Response::send
-	 * @covers Evoke\Network\HTTP\Response::setHeader
-	 * @covers Evoke\Network\HTTP\Response::setStatus
+	 * @expectedException        LogicException
+	 * @expectedExceptionMessage Headers have already been sent
+	 */
+	public function testCantSendAfterHeadersSent()
+	{
+        if (!$this->hasRunkit())
+        {
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+        }
+
+        runkit_function_rename('header',       'TEST_SAVED_header');
+		runkit_function_rename('headers_sent', 'TEST_SAVED_headers_sent');
+		runkit_function_add(
+			'header',
+			'$str',
+			'Evoke_Test\Network\HTTP\ResponseTest::addHeader($str);');
+		runkit_function_add(
+			'headers_sent',
+			'',
+			'return true;');
+		
+		$object = new Response;
+		$object->setStatus(200);
+
+		try
+		{
+			$object->send();
+		}
+		catch (LogicException $e)
+		{
+			$this->restoreHeaderFunctions();
+			throw $e;
+		}
+	}
+
+	/**
+	 * The header fields can be set.
 	 */
 	public function testHeaderFields()
 	{
@@ -170,7 +202,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	/**
 	 * We need a status code to send a response.
 	 *
-	 * @covers            Evoke\Network\HTTP\Response::send
 	 * @expectedException LogicException
 	 */
 	public function testNeedStatusCode()
@@ -181,9 +212,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * We can send a response with the body.
-	 *
-	 * @covers Evoke\Network\HTTP\Response::send
-	 * @covers Evoke\Network\HTTP\Response::setBody
 	 */
 	public function testSendBody()
 	{
@@ -211,8 +239,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * We can set the caching easily.
-	 *
-	 * @covers Evoke\Network\HTTP\Response::setCache
 	 */
 	public function testSetCache()
 	{

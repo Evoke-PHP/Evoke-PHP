@@ -4,6 +4,9 @@ namespace Evoke_Test\View\XHTML\Input;
 use Evoke\View\XHTML\Input\Select,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\XHTML\Input\Select
+ */
 class SelectTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,8 +15,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\View\XHTML\Input\Select::__construct
 	 */
 	public function testCreate()
 	{
@@ -23,9 +24,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Get a select element.
-	 *
-	 * @covers Evoke\View\XHTML\Input\Select::get
-	 * @covers Evoke\View\XHTML\Input\Select::setOptions
 	 */
 	public function testGetSelect()
 	{
@@ -49,10 +47,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We can have an option selected.
-	 *
-	 * @covers Evoke\View\XHTML\Input\Select::get
-	 * @covers Evoke\View\XHTML\Input\Select::setOptions
-	 * @covers Evoke\View\XHTML\Input\Select::setSelected
 	 */
 	public function testGetOptionSelected()
 	{
@@ -79,7 +73,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	}
 
 	/** 
-	 * @covers            		 Evoke\View\XHTML\Input\Select::setOptions
 	 * @expectedException 		 InvalidArgumentException
 	 * @expectedExceptionMessage needs options to be valid XHTML
 	 */
@@ -90,7 +83,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	}
 
 	/** 
-	 * @covers            		 Evoke\View\XHTML\Input\Select::setOptions
 	 * @expectedException 		 InvalidArgumentException
 	 * @expectedExceptionMessage needs traversable options.
 	 */
@@ -103,7 +95,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Unset data throws.
 	 *
-	 * @covers            Evoke\View\XHTML\Input\Select::get
 	 * @expectedException LogicException
 	 */
 	public function testUnsetData()
@@ -115,8 +106,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Unset Text Field throws.
 	 *
-	 * @covers            Evoke\View\XHTML\Input\Select::get
-	 * @covers            Evoke\View\XHTML\Input\Select::setOptions
 	 * @expectedException LogicException
 	 */
 	public function testUnsetText()
@@ -135,8 +124,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Unset Value Field throws.
 	 *
-	 * @covers            Evoke\View\XHTML\Input\Select::get
-	 * @covers            Evoke\View\XHTML\Input\Select::setOptions
 	 * @expectedException LogicException
 	 */
 	public function testUnsetValue()

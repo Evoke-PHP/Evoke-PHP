@@ -4,6 +4,9 @@ namespace Evoke_Test\Model\Data\FlatTest;
 use Evoke\Model\Data\Flat,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Model\Data\Flat
+ */
 class FlatTest extends PHPUnit_Framework_TestCase
 { 
 	/******************/
@@ -25,8 +28,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we can check for a field in the data.
 	 *
-	 * @covers       Evoke\Model\Data\Flat::offsetExists
-	 * @covers       Evoke\Model\Data\Flat::setData
 	 * @dataProvider providerRecords
 	 */
 	public function testCheckField($rawData)
@@ -41,14 +42,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we can get each record in a set of data.
 	 *
-	 * @covers       Evoke\Model\Data\Flat::current
-	 * @covers 		 Evoke\Model\Data\Flat::getRecord
-	 * @covers       Evoke\Model\Data\Flat::key
-	 * @covers       Evoke\Model\Data\Flat::next
-	 * @covers       Evoke\Model\Data\Flat::rewind
-	 * @covers 		 Evoke\Model\Data\Flat::setData
-	 * @covers       Evoke\Model\Data\Flat::setRecord
-	 * @covers       Evoke\Model\Data\Flat::valid
 	 * @dataProvider providerRecords
 	 */
 	public function testGetRecords($rawData)
@@ -69,9 +62,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	 * Test that data can be accessed by field and that we start from the first
 	 * record.
 	 *
-	 * @covers 		 Evoke\Model\Data\Flat::offsetGet
-	 * @covers 		 Evoke\Model\Data\Flat::setData
-	 * @covers       Evoke\Model\Data\Flat::setRecord
 	 * @dataProvider providerRecords
 	 */
 	public function testOffsetGet($rawData)
@@ -84,8 +74,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Test Loop over empty records.
-	 *
-	 * @covers Evoke\Model\Data\Flat::rewind
 	 */
 	public function testLoopEmpty()
 	{
@@ -103,7 +91,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we can't set individual fields in the data.
 	 *
-	 * @covers            Evoke\Model\Data\Flat::offsetSet
 	 * @dataProvider      providerRecords
 	 * @expectedException BadMethodCallException
 	 */
@@ -116,8 +103,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we start from empty data.
-	 *
-	 * @covers Evoke\Model\Data\Flat::isEmpty
 	 */
 	public function testStartEmpty()
 	{
@@ -129,7 +114,6 @@ class FlatTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that we can't unset individual fields in the data.
 	 *
-	 * @covers            Evoke\Model\Data\Flat::offsetUnset
 	 * @dataProvider      providerRecords
 	 * @expectedException BadMethodCallException
 	 */

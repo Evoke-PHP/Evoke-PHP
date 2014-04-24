@@ -4,6 +4,11 @@ namespace Evoke_Test\Network\HTTP\MediaType\Rule;
 use Evoke\Network\HTTP\MediaType\Rule\Exact,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\HTTP\MediaType\Rule\Exact
+ * @uses   Evoke\Network\HTTP\MediaType\Rule\Match
+ * @uses   Evoke\Network\HTTP\MediaType\Rule\Rule
+ */
 class ExactTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -56,11 +61,6 @@ class ExactTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * Create an object.
-	 *
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Exact::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Exact('OFDC', ['MDC']);
@@ -68,7 +68,6 @@ class ExactTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Exact::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch(

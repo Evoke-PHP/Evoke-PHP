@@ -17,6 +17,9 @@ class Test_Rule_Extended extends Rule
 	}   
 }
 
+/**
+ * @covers Evoke\Network\URI\Rule\Rule
+ */
 class RuleTest extends PHPUnit_Framework_TestCase
 {
 	public function providerIsAuthoritative()
@@ -42,9 +45,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Rule::getParams
-	 */
 	public function testGetParams()
 	{
 		$obj = new Test_Rule_Extended(true);
@@ -52,8 +52,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	}
 		
 	/**
-	 * @covers       Evoke\Network\URI\Rule\Rule::__construct
-	 * @covers       Evoke\Network\URI\Rule\Rule::isAuthoritative
 	 * @dataProvider providerIsAuthoritative
 	 */
 	public function testIsAuthoritative($auth)
@@ -63,7 +61,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Network\URI\Rule\Rule::setURI
 	 * @dataProvider providerSetURI
 	 */
 	public function testSetURI($uri)
@@ -74,7 +71,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Network\URI\Rule\Rule::setURI
 	 * @dataProvider             providerSetURINonString
 	 * @expectedException        InvalidArgumentException
 	 * @expectedExceptionMessage needs URI as string.

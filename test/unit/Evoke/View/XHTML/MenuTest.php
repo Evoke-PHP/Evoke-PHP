@@ -5,6 +5,9 @@ use Evoke\Model\Data\Tree,
 	Evoke\View\XHTML\Menu,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\XHTML\Menu
+ */
 class MenuTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -14,7 +17,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Requires menu data but not given any.
 	 *
-	 * @covers                   Evoke\View\XHTML\Menu::get
 	 * @expectedException        LogicException
 	 * @expectedExceptionMessage needs tree to be set.
 	 */
@@ -25,7 +27,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers            		 Evoke\View\XHTML\Menu::set
 	 * @expectedException        ErrorException
 	 */
 	public function testRequiresTreeInvalidGiven()
@@ -50,10 +51,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Empty Menu.
-	 *
-	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::getMenu
-	 * @covers Evoke\View\XHTML\Menu::set
 	 */
 	public function testGetEmptyMenu()
 	{
@@ -78,10 +75,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Single Level Menu.
-	 *
-	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::getMenu
-	 * @covers Evoke\View\XHTML\Menu::set
 	 */
 	public function testGetSingleLevelMenu()
 	{
@@ -147,9 +140,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::getMenu
-	 * @covers Evoke\View\XHTML\Menu::set
+	 * @uses Evoke\Model\Data\Tree
 	 */
 	public function testSingleLevelMenuRealTree()
 	{
@@ -186,9 +177,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Multi Level Menu.
 	 *
-	 * @covers Evoke\View\XHTML\Menu::get
-	 * @covers Evoke\View\XHTML\Menu::getMenu
-	 * @covers Evoke\View\XHTML\Menu::set
+	 * @uses Evoke\Model\Data\Tree
 	 */
 	public function testMultiLevelMenuRealTree()
 	{
@@ -352,7 +341,6 @@ class MenuTest extends PHPUnit_Framework_TestCase
 			     '0 d']]]]];
 		$actual = $obj->get();
 		
-		// $this->assertEquals($expected, $actual);
 		$this->assertSame($expected, $actual);
 	}	
 }

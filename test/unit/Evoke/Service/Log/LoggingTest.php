@@ -4,6 +4,9 @@ namespace Evoke_Test\Service;
 use Evoke\Service\Log\Logging,
     PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Service\Log\Logging
+ */
 class LoggingTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,8 +15,6 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We can create an object.
-	 *
-	 * @covers Evoke\Service\Log\Logging::__construct
 	 */
 	public function test__construct()
 	{
@@ -23,9 +24,6 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We can log to attached observers.
-	 *
-	 * @covers Evoke\Service\Log\Logging::attach
-	 * @covers Evoke\Service\Log\Logging::log
 	 */
 	public function testCanLogToAttached()
 	{
@@ -50,9 +48,6 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Detaching something that isn't attached is not an error.
-	 *
-	 * @covers Evoke\Service\Log\Logging::detach
-	 * @covers Evoke\Service\Log\Logging::log
 	 */
 	public function testDetachUnattached()
 	{
@@ -68,9 +63,6 @@ class LoggingTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We don't log to detached observers.
-	 *
-	 * @covers Evoke\Service\Log\Logging::attach
-	 * @covers Evoke\Service\Log\Logging::detach
 	 */
 	public function testDontLogToDetached()
 	{

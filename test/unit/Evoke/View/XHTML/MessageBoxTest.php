@@ -4,6 +4,9 @@ namespace Evoke_Test\View\XHTML;
 use Evoke\View\XHTML\MessageBox,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\XHTML\MessageBox
+ */
 class MessageBoxTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,8 +15,6 @@ class MessageBoxTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\View\XHTML\MessageBox::__construct
 	 */
 	public function testCreate()
 	{
@@ -23,10 +24,6 @@ class MessageBoxTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Build a message box and get it.
-	 *
-	 * @covers Evoke\View\XHTML\MessageBox::addContent
-	 * @covers Evoke\View\XHTML\MessageBox::get
-	 * @covers Evoke\View\XHTML\MessageBox::setTitle
 	 */
 	public function testBuildAndGet()
 	{

@@ -4,6 +4,9 @@ namespace Evoke_Test\Model\Data;
 use Evoke\Model\Data\Tree,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Model\Data\Tree
+ */
 class TreeTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -64,10 +67,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Model\Data\Tree::current
-	 * @covers Evoke\Model\Data\Tree::next
-	 */
 	public function testCurrent()
 	{
 		$obj = new Tree;
@@ -83,8 +82,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Model\Data\Tree::add
-	 * @covers       Evoke\Model\Data\Tree::getChildren
 	 * @dataProvider providerGetChildren
 	 */
 	public function testGetChildren(Array $children)
@@ -100,8 +97,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Model\Data\Tree::add
-	 * @covers       Evoke\Model\Data\Tree::hasChildren
 	 * @dataProvider providerHasChildren
 	 */
 	public function testHasChildren(Array $children, $expected)
@@ -116,11 +111,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($expected, $obj->hasChildren());
 	}
 
-   /**
-	 * @covers Evoke\Model\Data\Tree::key
-	 * @covers Evoke\Model\Data\Tree::next
-	 */
-	public function testKey()
+ 	public function testKey()
 	{
 		$obj = new Tree;
 		$obj->add(new Tree);
@@ -131,11 +122,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
 		$this->assertSame(1, $obj->key());
 	}		
 
-	/**
-	 * @covers Evoke\Model\Data\Tree::current
-	 * @covers Evoke\Model\Data\Tree::next
-	 * @covers Evoke\Model\Data\Tree::rewind
-	 */
 	public function testRewind()
 	{
 		$obj = new Tree;
@@ -152,7 +138,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
 	}
 
     /**
-     * @covers 		 Evoke\Model\Data\Tree::valid
      * @dataProvider providerValidNoNext
      */
     public function testValidNoNext($obj, $expected)
@@ -161,8 +146,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
     }
 	
     /**
-     * @covers 		 Evoke\Model\Data\Tree::next
-     * @covers 		 Evoke\Model\Data\Tree::valid
      * @dataProvider providerValidOneNext
      */
     public function testValidOneNext($obj, $expected)
@@ -173,8 +156,6 @@ class TreeTest extends PHPUnit_Framework_TestCase
     }
 	
 	/**
-	 * @covers       Evoke\Model\Data\Tree::get
-	 * @covers       Evoke\Model\Data\Tree::set
 	 * @dataProvider providerUseValue
 	 */
 	public function testUseValue($value)
@@ -184,7 +165,5 @@ class TreeTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertSame($value, $obj->get());		
 	}
-
-
 }
 // EOF

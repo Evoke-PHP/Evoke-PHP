@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\StrReplace,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\StrReplace
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class StrReplaceTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -38,9 +42,6 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\StrReplace::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new StrReplace('Match', 'Replacement');
@@ -48,7 +49,6 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Network\URI\Rule\StrReplace::getController
 	 * @dataProvider providerGetController
 	 */
 	public function testGetController($match, $replacement, $uri, $expected)
@@ -59,7 +59,6 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Evoke\Network\URI\Rule\StrReplace::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($match, $replacement, $uri, $expected)

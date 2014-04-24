@@ -4,6 +4,9 @@ namespace Evoke_Test\View\XHTML;
 use Evoke\View\XHTML\Error,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\XHTML\Error
+ */
 class ErrorTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -16,8 +19,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\View\XHTML\Error::__construct
 	 */
 	public function testCreate()
 	{
@@ -27,10 +28,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Get the view of an error.
-	 *
-	 * @covers Evoke\View\XHTML\Error::get
-	 * @covers Evoke\View\XHTML\Error::getTypeString
-	 * @covers Evoke\View\XHTML\Error::set
 	 */
 	public function testGetView()
 	{
@@ -53,10 +50,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Unknown errors can still be dealt with.
-	 *
-	 * @covers Evoke\View\XHTML\Error::get
-	 * @covers Evoke\View\XHTML\Error::getTypeString
-	 * @covers Evoke\View\XHTML\Error::set
 	 */
 	public function testUnknownError()
 	{
@@ -81,7 +74,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 	/**
 	 * If the error has not been set then it throws.
 	 *
-	 * @covers            Evoke\View\XHTML\Error::get
 	 * @expectedException LogicException
 	 */
 	public function testUnsetError()

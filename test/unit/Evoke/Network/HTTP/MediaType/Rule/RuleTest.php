@@ -17,33 +17,27 @@ class Test_Rule_Extended extends Rule
 	}   
 }
 
+/**
+ * @covers Evoke\Network\HTTP\MediaType\Rule\Rule
+ */
 class RuleTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Rule::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Test_Rule_Extended('Output_Format');
 		$this->assertInstanceOf('Evoke\Network\HTTP\MediaType\Rule\Rule', $obj);
 	}
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Rule::getOutputFormat
-	 */
 	public function testGetOutputFormat()
 	{
 		$obj = new Test_Rule_Extended('Output_Format');
 		$this->assertSame('Output_Format', $obj->getOutputFormat());
 	}
 
-	/**
-	 * @covers Evoke\Network\HTTP\MediaType\Rule\Rule::setMediaType
-	 */
 	public function testSetMediaType()
 	{
 		$obj = new Test_Rule_Extended('DC');

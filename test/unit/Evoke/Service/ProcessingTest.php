@@ -27,19 +27,15 @@ class Test_Callbacks
 	}
 }
 
+/**
+ * @covers Evoke\Service\Processing
+ */
 class ProcessingTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
-	 * @covers Evoke\Service\Processing::setMatchRequired
-	 * @covers Evoke\Service\Processing::setUniqueMatchRequired
-	 */
 	public function testEmptyRequestWithCallback()
 	{
 		$obj = new Processing;
@@ -53,11 +49,6 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 		$this->assertSame([[]], $testCallbacks->getArgs());
 	}
 
-	/**
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
-	 */
 	public function testEmptyRequestWithoutCallback()
 	{
 		$obj = new Processing;
@@ -67,13 +58,6 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(true, 'Processing should do nothing.');
 	}
 
-	/**
-	 *
-	 *
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
-	 */
 	public function testCallsCallbackWithAllButRequestKey()
 	{
 		$obj = new Processing;
@@ -85,15 +69,6 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 		$this->assertSame([['Val' => 1, 'V2' => 2]], $testCallbacks->getArgs());
 	}
 
-	/**
-	 *
-	 *
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
-	 * @covers Evoke\Service\Processing::setMatchRequired
-	 * @covers Evoke\Service\Processing::setUniqueMatchRequired
-	 */
 	public function testCallsAllCallbacks()
 	{
 		$obj = new Processing(true, true);
@@ -115,9 +90,6 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Match required
 	 */
@@ -137,9 +109,6 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Service\Processing::addCallback
-	 * @covers Evoke\Service\Processing::process
-	 * @covers Evoke\Service\Processing::setData
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Unique match required
 	 */

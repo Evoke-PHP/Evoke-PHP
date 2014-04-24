@@ -122,8 +122,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Ensure we can get the method of the request.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getMethod
 	 */
 	public function testGetMethod()
 	{
@@ -135,8 +133,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that if the request method is not set we emit a user error and
 	 * default to GET.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getMethod
 	 */
 	public function testGetMethodNone()
 	{
@@ -157,8 +153,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Ensure that we can get a query parameter by name.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getQueryParam
 	 */
 	public function testGetQueryParam()
 	{
@@ -170,7 +164,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that trying to get a query parameter that isn't set throws.
 	 *
-	 * @covers            Evoke\Network\HTTP\Request::getQueryParam
 	 * @expectedException Exception
 	 */
 	public function testGetQueryParamInexistant()
@@ -181,8 +174,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Ensure that we can get all of the query parameters.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getQueryParams
 	 */
 	public function testGetQueryParams()
 	{
@@ -195,8 +186,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that if the query parameters aren't set then an empty array
 	 * is returned.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getQueryParams
 	 */
 	public function testGetQueryParamsNone()
 	{
@@ -206,8 +195,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * Ensure that we can get the path of the request.
-	 *
-	 * @covers Evoke\Network\HTTP\Request::getURI
 	 */
 	public function testGetURI()
 	{
@@ -220,7 +207,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that we can check if a query parameter is set.
 	 *
-	 * @covers       Evoke\Network\HTTP\Request::issetQueryParam
 	 * @dataProvider providerIssetQueryParam
 	 */
 	public function testIssetQueryParam($expected, $key, $params)
@@ -233,7 +219,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure we can validate the Accept header.
 	 *
-	 * @covers       Evoke\Network\HTTP\Request::isValidAccept
 	 * @dataProvider providerIsValidAccept
 	 */
 	public function testIsValidAccept($header, $validity)
@@ -246,7 +231,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that we can validate the Accept-Language header.
 	 *
-	 * @covers Evoke\Network\HTTP\Request::isValidAcceptLanguage
 	 * @dataProvider providerIsValidAcceptLanguage
 	 */
 	public function testIsValidAcceptLanguage($header, $validity)
@@ -259,9 +243,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that we can parse an Accept header.
 	 *
-	 * @covers       Evoke\Network\HTTP\Request::compareAccept
-	 * @covers       Evoke\Network\HTTP\Request::parseAccept
-	 * @covers       Evoke\Network\HTTP\Request::scoreAccept
 	 * @dataProvider providerParseAccept
 	 */
 	public function testParseAccept($header, $parsedValue)
@@ -275,9 +256,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Ensure that we can parse an Accept-Language header.
 	 *
-	 * @covers       Evoke\Network\HTTP\Request::compareAcceptLanguage
-	 * @covers       Evoke\Network\HTTP\Request::parseAcceptLanguage
-	 * @covers       Evoke\Network\HTTP\Request::scoreAcceptLanguage
 	 * @dataProvider providerParseAcceptLanguage
 	 */
 	public function testParseAcceptLanguage($header, $parsedValue)

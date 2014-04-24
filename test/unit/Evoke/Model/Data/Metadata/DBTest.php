@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Model\Data\Metadata\DBTest;
+namespace Evoke_Test\Model\Data\Metadata;
 
 use Evoke\Model\Data\Metadata\DB,
 	PHPUnit_Framework_TestCase;
@@ -95,11 +95,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	 * Test that the metadata can arrange flat data into a hierarchical
 	 * structure.
 	 *
-	 * @covers  Evoke\Model\Data\Metadata\DB::arrangeFlatData
-	 * @covers  Evoke\Model\Data\Metadata\DB::arrangeSplitResults
-	 * @covers  Evoke\Model\Data\Metadata\DB::getRowID
-	 * @covers  Evoke\Model\Data\Metadata\DB::isResult
-	 * @covers  Evoke\Model\Data\Metadata\DB::splitResultByTables
+	 * @covers Evoke\Model\Data\Metadata\DB
 	 */
 	public function testArrangeFlatData()
 	{
@@ -195,6 +191,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that trying to get a join that is ambiguous throws an exception.
 	 *
+	 * @covers            Evoke\Model\Data\Metadata\DB::__construct
 	 * @covers            Evoke\Model\Data\Metadata\DB::getJoinID
 	 * @expectedException DomainException
 	 */
@@ -218,6 +215,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test that trying to get a join that doesn't exist throws an exception.
 	 *
+	 * @covers                   Evoke\Model\Data\Metadata\DB::__construct
 	 * @covers                   Evoke\Model\Data\Metadata\DB::getJoinID
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Join not found
@@ -237,8 +235,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers                   Evoke\Model\Data\Metadata\DB::arrangeFlatData
-	 * @covers                   Evoke\Model\Data\Metadata\DB::getRowID
+	 * @covers                   Evoke\Model\Data\Metadata\DB
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Missing Primary Key
 	 */
@@ -253,8 +250,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers       Evoke\Model\Data\Metadata\DB::arrangeFlatData
-	 * @covers       Evoke\Model\Data\Metadata\DB::splitResultByTables
+	 * @covers       Evoke\Model\Data\Metadata\DB
 	 * @dataProvider providerPrimaryKeyBadData
 	 * @expectedException        DomainException
 	 * @expectedExceptionMessage Missing Primary Key
@@ -265,7 +261,7 @@ class DBTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers            Evoke\Model\Data\Metadata\DB::splitResultByTables
+	 * @covers            Evoke\Model\Data\Metadata\DB
 	 * @expectedException DomainException
 	 */
 	public function testSplitResultBadData()

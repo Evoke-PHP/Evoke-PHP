@@ -4,6 +4,9 @@ namespace Evoke_Test\View;
 use Evoke\View\Fixed,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\View\Fixed
+ */
 class FixedTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -24,8 +27,6 @@ class FixedTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\View\Fixed::__construct
 	 */
 	public function testCreate()
 	{
@@ -36,7 +37,6 @@ class FixedTest extends PHPUnit_Framework_TestCase
 	/**
 	 * The fixed view returns the fixed data sent to it.
 	 *
-	 * @covers       Evoke\View\Fixed::get
 	 * @dataProvider providerFixed
 	 */
 	public function testGetView($value)

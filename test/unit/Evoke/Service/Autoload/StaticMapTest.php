@@ -5,6 +5,9 @@ use Evoke\Service\Autoload\StaticMap,
 	PHPUnit_Framework_TestCase,
 	org\bovigo\vfs\vfsStream;
 
+/**
+ * @covers Evoke\Service\Autoload\StaticMap
+ */
 class StaticMapTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -13,8 +16,6 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Create an object.
-	 *
-	 * @covers Evoke\Service\Autoload\StaticMap::__construct
 	 */
 	public function testCreate()
 	{
@@ -24,8 +25,6 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We load the class if it exists.
-	 *
-	 * @covers Evoke\Service\Autoload\StaticMap::load
 	 */
 	public function testLoadExisting()
 	{
@@ -47,7 +46,6 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 	/**
 	 * We throw if the class doesn't exist.
 	 *
-	 * @covers            Evoke\Service\Autoload\StaticMap::load
 	 * @expectedException RuntimeException
 	 */
 	public function testLoadNonExistant()
@@ -63,8 +61,6 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * We ignore items that are not covered by the map.
-	 *
-	 * @covers Evoke\Service\Autoload\StaticMap::load
 	 */
 	public function testLoadUncovered()
 	{

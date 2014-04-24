@@ -4,6 +4,10 @@ namespace Evoke_Test\Network\URI\Rule;
 use Evoke\Network\URI\Rule\Blank,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Network\URI\Rule\Blank
+ * @uses   Evoke\Network\URI\Rule\Rule
+ */
 class BlankTest extends PHPUnit_Framework_TestCase
 {
 	/******************/
@@ -24,18 +28,12 @@ class BlankTest extends PHPUnit_Framework_TestCase
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Blank::__construct
-	 */
 	public function testCreate()
 	{
 		$obj = new Blank("ReplaceText");
 		$this->assertInstanceOf('Evoke\Network\URI\Rule\Blank', $obj);
 	}
 
-	/**
-	 * @covers Evoke\Network\URI\Rule\Blank::getController
-	 */
 	public function testGetController()
 	{
 		$obj = new Blank('Replacement');
@@ -44,7 +42,6 @@ class BlankTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Evoke\Network\URI\Rule\Blank::isMatch
 	 * @dataProvider providerIsMatch
 	 */
 	public function testIsMatch($replacement, $expected, $uri)

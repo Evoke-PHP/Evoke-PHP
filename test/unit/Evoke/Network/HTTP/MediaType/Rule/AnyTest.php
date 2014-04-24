@@ -18,6 +18,7 @@ class AnyTest extends PHPUnit_Framework_TestCase
 	/*********/
 
 	/**
+	 * @covers       Evoke\Network\HTTP\MediaType\Rule\Any::__construct
 	 * @covers       Evoke\Network\HTTP\MediaType\Rule\Any::isMatch
 	 * @dataProvider providerAlwaysMatches
 	 */

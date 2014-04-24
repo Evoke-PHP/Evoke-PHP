@@ -161,7 +161,6 @@ class DBDataBuilder
         }
 
         throw new DomainException('Missing child table in join: ' . $join);
-    }
-    
+    }   
 }
 // EOF

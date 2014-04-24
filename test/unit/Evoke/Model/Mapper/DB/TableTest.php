@@ -7,15 +7,15 @@ use Evoke\Model\Mapper\DB\Table,
 class PDOMock extends \PDO { public function __construct() {} }
 class PDOStatementMock extends \PDOStatement { public function __construct() {} }
 
+/**
+ * @covers Evoke\Model\Mapper\DB\Table
+ */
 class TableTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
 	/* Tests */
 	/*********/
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::__construct
-	 */
 	public function testConstruct()
 	{
 		$pdo = $this->getMock('\Evoke_Test\Model\Mapper\DB\PDOMock');
@@ -23,10 +23,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Evoke\Model\Mapper\DB\Table', $obj);
 	}
 	
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::create
-	 * @covers Evoke\Model\Mapper\DB\Table::placeholdersKeyed
-	 */
 	public function testCreateGood()
 	{
 		$record = ['F1' => 1, 'F2' =>'20202', 'F3' => 333];
@@ -46,10 +42,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$obj->create($record);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::create
-	 * @covers Evoke\Model\Mapper\DB\Table::setTable
-	 */
 	public function testCreateGoodAfterSetTable()
 	{
 		$record = ['F1' => 1, 'F2' =>'20202', 'F3' => 333];
@@ -70,9 +62,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$obj->create($record);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::createMultiple
-	 */
 	public function testCreateMultipleGood()
 	{
 		$data = [['F1' => 0, 'F2' => '20202', 'F3' => 3],
@@ -99,9 +88,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$obj->createMultiple($data);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::delete
-	 */
 	public function testDeleteGoodNoLimit()
 	{
 		$conditions = ['ID' => 5];
@@ -122,9 +108,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$obj->delete($conditions);
 	}
 	
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::delete
-	 */
 	public function testDeleteGoodWithLimit()
 	{
 		$conditions = ['ID' => 5];
@@ -146,9 +129,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$obj->delete($conditions, $limit);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::read
-	 */
 	public function testReadGoodBasic()
 	{
 		$readData = [['F1' => 1, 'F2' => 2, 'F3' => 3],
@@ -175,9 +155,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($readData, $obj->read(['F1', 'F2', 'F3']));
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::read
-	 */
 	public function testReadGoodFull()
 	{
 		$readData = [['F1' => 1, 'F2' => 2, 'F3' => 3],
@@ -206,9 +183,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		           3);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::update
-	 */
 	public function testUpdateGood()
 	{
 		$stmt = $this->getMock('PDOStatementMock', ['execute']);
@@ -228,9 +202,6 @@ class TableTest extends PHPUnit_Framework_TestCase
 		             ['Text' => 'Foo']);
 	}
 
-	/**
-	 * @covers Evoke\Model\Mapper\DB\Table::update
-	 */
 	public function testUpdateGoodWithLimit()
 	{
 		$stmt = $this->getMock('PDOStatementMock', ['execute']);

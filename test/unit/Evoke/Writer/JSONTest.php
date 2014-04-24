@@ -4,6 +4,10 @@ namespace Evoke_Test\Writer;
 use Evoke\Writer\JSON,
 	PHPUnit_Framework_TestCase;
 
+/**
+ * @covers Evoke\Writer\JSON
+ * @uses   Evoke\Writer\Writer
+ */
 class JSONTest extends PHPUnit_Framework_TestCase
 {
 	/*********/
@@ -12,9 +16,6 @@ class JSONTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Write JSON data.
-	 *
-	 * @covers Evoke\Writer\JSON::write
-	 * @covers Evoke\Writer\Writer::__toString
 	 */
 	public function testWrite()
 	{
