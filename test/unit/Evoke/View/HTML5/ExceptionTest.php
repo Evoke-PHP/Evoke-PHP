@@ -1,7 +1,7 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\XHTML\Exception,
+use Evoke\View\HTML5\Exception,
 	PHPUnit_Framework_TestCase;
 
 class ExceptionTest extends PHPUnit_Framework_TestCase
@@ -13,8 +13,8 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Get the view.
 	 *
-	 * @covers Evoke\View\XHTML\Exception::get
-	 * @covers Evoke\View\XHTML\Exception::set
+	 * @covers Evoke\View\HTML5\Exception::get
+	 * @covers Evoke\View\HTML5\Exception::set
 	 */
 	public function testGetView()
 	{
@@ -33,7 +33,7 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Unset exception causes throw.
 	 *
-	 * @covers            Evoke\View\XHTML\Exception::get
+	 * @covers            Evoke\View\HTML5\Exception::get
 	 * @expectedException LogicException
 	 */
 	public function testUnsetException()

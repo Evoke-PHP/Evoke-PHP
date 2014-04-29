@@ -1,20 +1,20 @@
 <?php
 /**
- * XHTML Head View
+ * HTML5 Head View
  *
- * @package View\XHTML
+ * @package View\HTML5
  */
-namespace Evoke\View\XHTML;
+namespace Evoke\View\HTML5;
 
 use Evoke\View\ViewIface;
 
 /**
- * XHTML Head View
+ * HTML5 Head View
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   View\XHTML
+ * @package   View\HTML5
  */
 class Head implements ViewIface
 {

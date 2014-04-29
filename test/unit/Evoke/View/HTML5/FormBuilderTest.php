@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\XHTML\FormBuilder,
+use Evoke\View\HTML5\FormBuilder,
     PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\XHTML\FormBuilder
+ *  @covers Evoke\View\HTML5\FormBuilder
  */
 class FormBuilderTest extends PHPUnit_Framework_TestCase
 {

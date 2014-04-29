@@ -1,12 +1,12 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
 use Evoke\Model\Data\Flat,
-	Evoke\View\XHTML\Backtrace,
+	Evoke\View\HTML5\Backtrace,
 	PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\XHTML\Backtrace
+ *  @covers Evoke\View\HTML5\Backtrace
  */
 class BacktraceTest extends PHPUnit_Framework_TestCase
 {
@@ -67,8 +67,8 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	/*********/
 	
 	/**
-	 * @covers 		 Evoke\View\XHTML\Backtrace::get
-	 * @covers 		 Evoke\View\XHTML\Backtrace::set
+	 * @covers 		 Evoke\View\HTML5\Backtrace::get
+	 * @covers 		 Evoke\View\HTML5\Backtrace::set
 	 * @dataProvider providerGoodBacktraceElements
 	 */
 	public function testGoodBacktraceElements($backtrace, $expected)
@@ -79,7 +79,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers 					 Evoke\View\XHTML\Backtrace::get
+	 * @covers 					 Evoke\View\HTML5\Backtrace::get
 	 * @expectedException        LogicException
 	 * @expectedExceptionMessage needs backtrace.
 	 */

@@ -202,12 +202,23 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	/**
 	 * We need a status code to send a response.
 	 *
-	 * @expectedException LogicException
+	 * @expectedException        LogicException
+     * @expectedExceptionMessage HTTP Response code must be set.
 	 */
 	public function testNeedStatusCode()
 	{
-		$response = new Response;
-		$response->send();
+        $this->replaceHeaderFunctions();
+
+        try
+        {
+            $response = new Response;
+            $response->send();
+        }
+        catch (LogicException $e)
+        {
+            $this->restoreHeaderFunctions();
+            throw $e;
+        }
 	}
 	
 	/**

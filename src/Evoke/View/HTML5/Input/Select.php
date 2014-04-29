@@ -2,9 +2,9 @@
 /**
  * Select Input View
  *
- * @package View\XHTML\Input
+ * @package View\HTML5\Input
  */
-namespace Evoke\View\XHTML\Input;
+namespace Evoke\View\HTML5\Input;
 
 use InvalidArgumentException,
 	LogicException;
@@ -15,7 +15,7 @@ use InvalidArgumentException,
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   View\XHTML
+ * @package   View\HTML5
  */
 class Select
 {
@@ -49,6 +49,7 @@ class Select
 		$this->fieldText     = $fieldText;
 		$this->fieldValue    = $fieldValue;
 		$this->optionAttribs = $optionAttribs;
+        $this->options       = array();
 	}
       
 	/******************/
@@ -62,12 +63,6 @@ class Select
 	 */    
 	public function get()
 	{
-		if (empty($this->options))
-		{
-			throw new LogicException(
-				'Select element must have options to be valid XHTML.');
-		}
-
 		$optionElements = array();
 
 		foreach ($this->options as $record)
@@ -104,12 +99,7 @@ class Select
 	 */
 	public function setOptions($options)
 	{
-		if (empty($options))
-		{
-			throw new InvalidArgumentException(
-				'needs options to be valid XHTML');
-		}
-		elseif (!is_array($options) && !$options instanceof Traversable)
+		if (!is_array($options) && !$options instanceof Traversable)
 		{
 			throw new InvalidArgumentException('needs traversable options.');
 		}

@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\XHTML\Head,
+use Evoke\View\HTML5\Head,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\XHTML\Head
+ * @covers Evoke\View\HTML5\Head
  */
 class HeadTest extends PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class HeadTest extends PHPUnit_Framework_TestCase
             ['description' => 'Head Test Meta Description'],
             'Head Test Title',
             [['style', ['type' => 'text/css'], 'body { background: #F00; }']]);
-		$this->assertInstanceOf('Evoke\View\XHTML\Head', $object);
+		$this->assertInstanceOf('Evoke\View\HTML5\Head', $object);
 	}
 
 	/**

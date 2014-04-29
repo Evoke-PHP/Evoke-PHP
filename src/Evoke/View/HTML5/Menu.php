@@ -2,9 +2,9 @@
 /**
  * Menu Control View
  *
- * @package View\XHTML
+ * @package View\HTML5
  */
-namespace Evoke\View\XHTML;
+namespace Evoke\View\HTML5;
 
 use Evoke\Model\Data\TreeIface,
 	Evoke\View\ViewIface,
@@ -17,7 +17,7 @@ use Evoke\Model\Data\TreeIface,
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   View\XHTML
+ * @package   View\HTML5
  */
 class Menu implements ViewIface
 {
@@ -77,7 +77,7 @@ class Menu implements ViewIface
 	 * Get the menu.
 	 *
 	 * @param TreeIface The tree that specified the menu.
-	 * @return mixed[] XHTML menu.
+	 * @return mixed[] HTML5 menu.
 	 */
 	protected function getMenu(TreeIface $tree)
 	{

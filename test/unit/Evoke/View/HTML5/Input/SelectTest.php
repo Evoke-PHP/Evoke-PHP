@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View\XHTML\Input;
+namespace Evoke_Test\View\HTML5\Input;
 
-use Evoke\View\XHTML\Input\Select,
+use Evoke\View\HTML5\Input\Select,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\XHTML\Input\Select
+ * @covers Evoke\View\HTML5\Input\Select
  */
 class SelectTest extends PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
 	public function testCreate()
 	{
 		$object = new Select('Text_Field');
-		$this->assertInstanceOf('Evoke\View\XHTML\Input\Select', $object);
+		$this->assertInstanceOf('Evoke\View\HTML5\Input\Select', $object);
 	}
 
 	/**
@@ -74,16 +74,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 
 	/** 
 	 * @expectedException 		 InvalidArgumentException
-	 * @expectedExceptionMessage needs options to be valid XHTML
-	 */
-	public function testEmptyOptionsAreNotValidXHTML()
-	{
-		$obj = new Select('T_Field');
-		$obj->setOptions([]);
-	}
-
-	/** 
-	 * @expectedException 		 InvalidArgumentException
 	 * @expectedExceptionMessage needs traversable options.
 	 */
 	public function testNonTraversableOptionsAreInvalid()
@@ -92,17 +82,6 @@ class SelectTest extends PHPUnit_Framework_TestCase
 		$obj->setOptions("Non Traversable");
 	}
 	
-	/**
-	 * Unset data throws.
-	 *
-	 * @expectedException LogicException
-	 */
-	public function testUnsetData()
-	{
-		$object = new Select('T_Field');
-		$object->get();
-	}
-
 	/**
 	 * Unset Text Field throws.
 	 *

@@ -2,9 +2,9 @@
 /**
  * Form Builder View
  *
- * @package View\XHTML
+ * @package View\HTML5
  */
-namespace Evoke\View\XHTML;
+namespace Evoke\View\HTML5;
 
 use LogicException;
 
@@ -14,7 +14,7 @@ use LogicException;
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   View\XHTML
+ * @package   View\HTML5
  */
 class FormBuilder implements FormBuilderIface
 {
@@ -31,7 +31,7 @@ class FormBuilder implements FormBuilderIface
 	protected $children = array();
 
 	/**
-	 * Construct a buildable XHTML form.
+	 * Construct a buildable HTML5 form.
 	 *
 	 * @param string[]  Attribs.
 	 */

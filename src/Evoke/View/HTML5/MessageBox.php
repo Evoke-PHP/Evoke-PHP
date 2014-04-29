@@ -2,9 +2,9 @@
 /**
  * Message Box View
  *
- * @package View\XHTML
+ * @package View\HTML5
  */
-namespace Evoke\View\XHTML;
+namespace Evoke\View\HTML5;
 
 use Evoke\View\ViewIface;
 
@@ -14,7 +14,7 @@ use Evoke\View\ViewIface;
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   View\XHTML
+ * @package   View\HTML5
  */
 class MessageBox implements ViewIface
 {

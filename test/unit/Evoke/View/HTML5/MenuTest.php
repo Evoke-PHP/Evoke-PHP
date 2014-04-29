@@ -1,12 +1,12 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
 use Evoke\Model\Data\Tree,
-	Evoke\View\XHTML\Menu,
+	Evoke\View\HTML5\Menu,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\XHTML\Menu
+ * @covers Evoke\View\HTML5\Menu
  */
 class MenuTest extends PHPUnit_Framework_TestCase
 {

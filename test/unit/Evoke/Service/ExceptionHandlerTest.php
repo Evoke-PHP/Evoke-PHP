@@ -6,7 +6,7 @@ use Evoke\Service\ExceptionHandler,
 
 /**
  * @covers Evoke\Service\ExceptionHandler
- * @uses   Evoke\View\XHTML\MessageBox
+ * @uses   Evoke\View\HTML5\MessageBox
  */
 class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
-			$this->getMock('Evoke\View\XHTML\MessageBox'),
+			$this->getMock('Evoke\View\HTML5\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 	}
 
@@ -73,9 +73,9 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			TRUE,
-			$this->getMock('Evoke\View\XHTML\MessageBox'),
+			$this->getMock('Evoke\View\HTML5\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'),
-			$this->getMock('Evoke\View\XHTML\Exception'));
+			$this->getMock('Evoke\View\HTML5\Exception'));
 
 		$this->assertInstanceOf('Evoke\Service\ExceptionHandler', $object);
 	}
@@ -88,7 +88,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$object = new ExceptionHandler(
 			$this->getMock('Evoke\Network\HTTP\ResponseIface'),
 			FALSE,
-			$this->getMock('Evoke\View\XHTML\MessageBox'),
+			$this->getMock('Evoke\View\HTML5\MessageBox'),
 			$this->getMock('Evoke\Writer\WriterIface'));
 
 		$this->assertInstanceOf('Evoke\Service\ExceptionHandler', $object);
@@ -104,8 +104,8 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		$expectedErrors = [[E_USER_WARNING, 'This is it.']];
 		$response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
 		$writer = $this->getMock('Evoke\Writer\WriterIface');
-		$viewException = $this->getMock('Evoke\View\XHTML\Exception');
-		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
+		$viewException = $this->getMock('Evoke\View\HTML5\Exception');
+		$viewMessageBox = $this->getMock('Evoke\View\HTML5\MessageBox');
 
 		if ($requiresFlush)
 		{
@@ -199,7 +199,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
  
 		
 		$viewExceptionIndex = 0;
-		$viewException = $this->getMock('Evoke\View\XHTML\Exception');
+		$viewException = $this->getMock('Evoke\View\HTML5\Exception');
 
 		if ($showException)
 		{
@@ -224,7 +224,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 		}
 
 		$viewMessageBoxIndex = 0;
-		$viewMessageBox = $this->getMock('Evoke\View\XHTML\MessageBox');
+		$viewMessageBox = $this->getMock('Evoke\View\HTML5\MessageBox');
 		$viewMessageBox
 			->expects($this->at($viewMessageBoxIndex++))
 			->method('addContent')

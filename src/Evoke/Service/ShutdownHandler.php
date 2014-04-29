@@ -7,8 +7,8 @@
 namespace Evoke\Service;
 
 use Evoke\Network\HTTP\ResponseIface,
-	Evoke\View\XHTML\Error,
-	Evoke\View\XHTML\MessageBox,
+	Evoke\View\HTML5\Error,
+	Evoke\View\HTML5\MessageBox,
 	Evoke\Writer\WriterIface,
 	InvalidArgumentException;
 
@@ -63,13 +63,13 @@ class ShutdownHandler
 	/**
 	 * Construct the System Shutdown handler.
 	 *
-	 * @param string          Email to use as a contact.
-	 * @param ResponseIface   Response object.
-	 * @param bool            Whether to show the error (You might not want to
-	 *                        do this for security reasons).
-	 * @param MessageBoxIface View for the message box.
-	 * @param WriterIface     The writer object to write the fatal message.
-	 * @param ErrorIface      View for the error.
+	 * @param string        Email to use as a contact.
+	 * @param ResponseIface Response object.
+	 * @param bool          Whether to show the error (You might not want to do
+	 *                      this for security reasons).
+	 * @param MessageBox    View for the message box.
+	 * @param WriterIface   The writer object to write the fatal message.
+	 * @param Error         View for the error.
 	 */
 	public function __construct(/* String */  $email,
 	                            ResponseIface $response,

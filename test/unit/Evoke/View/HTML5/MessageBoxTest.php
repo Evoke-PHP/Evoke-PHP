@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\XHTML\MessageBox,
+use Evoke\View\HTML5\MessageBox,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\XHTML\MessageBox
+ * @covers Evoke\View\HTML5\MessageBox
  */
 class MessageBoxTest extends PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class MessageBoxTest extends PHPUnit_Framework_TestCase
 	public function testCreate()
 	{
 		$object = new MessageBox;
-		$this->assertInstanceOf('Evoke\View\XHTML\MessageBox', $object);
+		$this->assertInstanceOf('Evoke\View\HTML5\MessageBox', $object);
 	}
 
 	/**

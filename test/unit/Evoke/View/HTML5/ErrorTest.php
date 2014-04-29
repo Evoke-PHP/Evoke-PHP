@@ -1,11 +1,11 @@
 <?php
-namespace Evoke_Test\View\XHTML;
+namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\XHTML\Error,
+use Evoke\View\HTML5\Error,
 	PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\XHTML\Error
+ * @covers Evoke\View\HTML5\Error
  */
 class ErrorTest extends PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 	public function testCreate()
 	{
 		$object = new Error;
-		$this->assertInstanceOf('Evoke\View\XHTML\Error', $object);
+		$this->assertInstanceOf('Evoke\View\HTML5\Error', $object);
 	}
 
 	/**
