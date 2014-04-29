@@ -18,7 +18,11 @@ class HeadTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreate()
 	{
-		$object = new Head('desc', 'key', 'title');
+		$object = new Head(
+            [['rel' => 'stylesheet', 'href' => 'styles.css']],
+            ['description' => 'Head Test Meta Description'],
+            'Head Test Title',
+            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]);
 		$this->assertInstanceOf('Evoke\View\XHTML\Head', $object);
 	}
 
@@ -27,30 +31,28 @@ class HeadTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetView()
 	{
-		$object = new Head('DESC', 'KEY', 'TITLE', ['A.CSS'], ['B.JS', 'C.JS']);
+		$object = new Head(
+            [['rel' => 'stylesheet', 'href' => 'styles.css']],
+            ['description' => 'Head Test Meta Description',
+             'keywords'    => 'Head Keywords'],
+            'Head Test Title',
+            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]);
 		$this->assertSame(
 			['head',
 			 [],
-			 [['title', [], 'TITLE'],
+			 [['title', [], 'Head Test Title'],
 			  ['meta',
-			   ['content' => 'TITLE',
-			    'name' => 'title']],
+			   ['name'    => 'description',
+			    'content' => 'Head Test Meta Description']],
 			  ['meta',
-			   ['content' => 'DESC',
-			    'name' => 'description']],
-			  ['meta',
-			   ['content' => 'KEY',
-			    'name' => 'keywords']],
+			   ['name'    => 'keywords',
+                'content' => 'Head Keywords']],
 			  ['link',
-			   ['type' => 'text/css',
-			    'href' => 'A.CSS',
-			    'rel' => 'stylesheet']],
-			  ['script',
-			   ['type' => 'text/javascript',
-			    'src' => 'B.JS']],
-			  ['script',
-			   ['type' => 'text/javascript',
-			    'src' => 'C.JS']]]],
+			   ['rel'  => 'stylesheet',
+			    'href' => 'styles.css']],
+			  ['style',
+			   ['type' => 'text/css'],
+               'body { background: #F00; }']]],
 			$object->get());
 	}
 }

@@ -18,37 +18,52 @@ use Evoke\View\ViewIface;
  */
 class Head implements ViewIface
 {
-	/**
-	 * Protected Properties
-	 *
-	 * @var string   $description Description of the page.
-	 * @var string[] $css         CSS source files.
-	 * @var string[] $js          JavaScript source files.
-	 * @var string   $keywords    Keywords of the page.
-	 * @var string   $title       Title of the page.
-	 */
-	protected $description, $cssSources, $jsSources, $keywords, $title;
+    protected
+        /**
+         * Custom elements to be added to the head of the form:
+         * `array(tag, attribs, children)`
+         * @var mixed[]
+         */
+        $customElements,
+        
+        /**
+         * Array of links, with each link as an array of link attributes.
+         * @var string[][]
+         */
+        $links,
 
+        /**
+         * Array of Meta elements with the key as the name and the value as the
+         * content.
+         * @var string[]
+         */
+        $metas,
+
+        /**
+         * Title
+         * @var string
+         */
+        $title;
+        
 	/**
 	 * Construct a Head object.
 	 *
-	 * @param string   Description.
-	 * @param string   Keywords.
-	 * @param string   Title.
-	 * @param string[] CSS source files.
-	 * @param string[] JavaScript source files.
+	 * @param string[][] Array of Links, with each link as an array of link
+     *                   attributes.
+	 * @param string[]   Array of meta elements with the key as the name and the
+     *                   value as the content.
+	 * @param string     Title.
+     * @param mixed[]    Custom elements to be added to head.
 	 */
-	public function __construct(/* string */ $description,
-	                            /* string */ $keywords,
-	                            /* string */ $title,
-	                            Array        $cssSources = array(),
-	                            Array        $jsSources  = array())
+	public function __construct(Array        $links,
+                                Array        $metas,
+                                /* String */ $title,
+                                Array        $customElements = array())
 	{
-		$this->description = $description;
-		$this->keywords    = $keywords;
-		$this->title       = $title;
-		$this->cssSources  = $cssSources;
-		$this->jsSources   = $jsSources;
+        $this->customElements = $customElements;
+        $this->links          = $links;
+        $this->metas          = $metas;
+		$this->title          = $title;
 	}
 	
 	/******************/
@@ -61,33 +76,25 @@ class Head implements ViewIface
 	 * @return mixed[] The output from the view.
 	 */
 	public function get()
-	{
-		$headElements = array(
-			array('title', array(), $this->title),
-			array('meta', array('content' => $this->title,
-			                    'name'    => 'title')),
-			array('meta', array('content' => $this->description,
-			                    'name'    => 'description')),
-			array('meta', array('content' => $this->keywords,
-			                    'name'    => 'keywords')));
+	{       
+		$headElements = array(array('title', array(), $this->title));
 
-		foreach ($this->cssSources as $cssSrc)
-		{
-			$headElements[] = array(
-				'link',
-				array('type' => 'text/css',
-				      'href' => $cssSrc,
-				      'rel'  => 'stylesheet'));
-		}
+        foreach ($this->metas as $name => $content)
+        {
+            $headElements[] =
+                array('meta', array('name' => $name, 'content' => $content));
+        }
 
-		foreach ($this->jsSources as $jsSrc)
-		{
-			$headElements[] = array(
-				'script',
-				array('type' => 'text/javascript',
-				      'src'  => $jsSrc));
-		}
+        foreach ($this->links as $linkAttributes)
+        {
+            $headElements[] = array('link', $linkAttributes);
+        }
 
+        foreach ($this->customElements as $customElement)
+        {
+            $headElements[] = $customElement;
+        }
+        
 		return array('head', array(), $headElements);
 	}
 }
