@@ -58,9 +58,9 @@ function bootstrap($isDevelopmentServer, $logFile)
 		/* Shutdown Handler */
 		/********************/
 		$component = 'Shutdown Handler';
-		$viewShutdownMessageBox = new View\XHTML\MessageBox(
+		$viewShutdownMessageBox = new View\HTML5\MessageBox(
 			['class' => 'Message_Box Shutdown']);
-		$viewError = new View\XHTML\Error;
+		$viewError = new View\HTML5\Error;
 		$xhtmlWriter = new Writer\XML(new XMLWriter);
 		$shutdownHandler = new Service\ShutdownHandler(
 			'admin@example.com', $response, $isDevelopmentServer,
@@ -71,9 +71,9 @@ function bootstrap($isDevelopmentServer, $logFile)
 		/* Exception Handler */
 		/*********************/
 		$component = 'Exception Handler';
-		$viewExceptionMessageBox = new View\XHTML\MessageBox(
+		$viewExceptionMessageBox = new View\HTML5\MessageBox(
 			['class' => 'Message_Box Exception']);
-		$viewException = new View\XHTML\Exception;
+		$viewException = new View\HTML5\Exception;
 		$exceptionHandler = new Service\ExceptionHandler(
 			$response, $isDevelopmentServer, $viewExceptionMessageBox,
 			$xhtmlWriter, $viewException);
