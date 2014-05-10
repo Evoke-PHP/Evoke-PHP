@@ -14,5 +14,6 @@ before_script:
         - make
         - sudo make install
         - echo "extension=runkit.so" >> `php --ini | grep "Loaded Configuration" | sed "s/.*:\s*//"`
+        - cd ..
 
 script: phpunit --configuration ./build/config/unit.xml --bootstrap ./test/environment/Bootstrap.php
