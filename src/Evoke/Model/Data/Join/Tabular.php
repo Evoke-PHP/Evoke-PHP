@@ -278,7 +278,9 @@ class Tabular implements JoinIface
 				$this->isResult($splitResult[$this->tableName]))
 			{
 				$rowID  = $this->filterRowID($splitResult[$this->tableName]);
-				$result = $this->filterRowFields($splitResult[$this->tableName]);
+				$result = $this->filterRowFields(
+					$splitResult[$this->tableName]);
+
 				if (!isset($rowID))
 				{
 					// As we don't have a key to identify the row we must check
