@@ -291,7 +291,7 @@ class Tabular implements JoinIface
 					{
 						unset($existingEntry[$this->jointKey]);
 
-						if (empty(array_diff_assoc($existingEntry, $result)))
+						if (!array_diff_assoc($existingEntry, $result))
 						{
 							$hasBeenAdded = true;
 							$rowID = $existingID;

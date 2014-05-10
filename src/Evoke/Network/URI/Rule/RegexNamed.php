@@ -10,9 +10,7 @@ namespace Evoke\Network\URI\Rule;
  * URI Regex Named Rule
  *
  * A regex rule to map the uri controller and parameters.  There is a single
- * match for the URI, with all replacements being made from this match.  If
- * there are more complex requirements such as optional parameters then the
- * RegexTwoLevel rule should be used.
+ * match for the URI, with all replacements being made from this match.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
