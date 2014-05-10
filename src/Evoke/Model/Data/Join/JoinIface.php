@@ -1,22 +1,22 @@
 <?php
 /**
- * Metadata Interface
+ * Join Interface
  *
- * @package Model\Data\Metadata
+ * @package Model\Data\Join
  */
-namespace Evoke\Model\Data\Metadata;
+namespace Evoke\Model\Data\Join;
 
 /**
- * Metadata Interface
+ * Join Interface
  *
  * Interface for metadata.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
- * @package   Model\Data\Metadata
+ * @package   Model\Data\Join
  */
-interface MetadataIface
+interface JoinIface
 {
 	/**
 	 * Arrange a set of results according to the Join tree.
@@ -27,14 +27,20 @@ interface MetadataIface
 	public function arrangeFlatData(Array $results);
 
 	/**
-	 * Get the join ID for the specified join or throw an exception if it can't
-	 * be found uniquely.
+	 * Get the canonical join ID for the specified join.
 	 *
 	 * @param string Join to get the ID for.
-	 * @return string The full uniquely matched join ID.
+	 * @return string The canonical join ID.
 	 * @throws DomainException If the join cannot be found uniquely.
 	 */
 	public function getJoinID($join);
-	
+
+	/**
+	 * Get the joins from the join object. The join objects generally form tree
+	 * structures, so these are the joins from the current node in the tree.
+	 *
+	 * @return JoinIface[] The joins from the object identified by their joinID.
+	 */
+	public function getJoins();		
 }
 // EOF

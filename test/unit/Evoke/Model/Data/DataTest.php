@@ -28,33 +28,33 @@ class DataTest extends PHPUnit_Framework_TestCase
 
 	public function providerCreate()
 	{
-		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
-		$join = $this->getDataMock();
+		$join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+		$data = $this->getDataMock();
 
-		return ['Simple'          => [$metadata],
-		        'Two_Specified'   => [$metadata, ['J' => $join]],
-		        'Fully_Specified' => [$metadata, ['J' => $join], 'Join_Key']];
+		return ['Simple'          => [$join],
+		        'Two_Specified'   => [$join, ['J' => $data]],
+		        'Fully_Specified' => [$join, ['J' => $data], 'Join_Key']];
 	}
 
 	public function providerGetJointData()
 	{
-		$simpleMetadata = $this->getMock(
-			'Evoke\Model\Data\Metadata\MetadataIface');
-		$simpleMetadata
+		$simpleJoin = $this->getMock(
+			'Evoke\Model\Data\Join\JoinIface');
+		$simpleJoin
 			->expects($this->once())
 			->method('getJoinID')
 			->with('Join_Name')
 			->will($this->returnValue('Found_Join_ID'));
-		$simpleJoin = $this->getDataMock();
+		$simpleData = $this->getDataMock();
 
 		return ['Simple' =>
-		        ['Metdata'   => $simpleMetadata,
+		        ['Join'      => $simpleJoin,
 		         'Joins'     =>
-		         ['Found_Join_ID' => $simpleJoin,
+		         ['Found_Join_ID' => $simpleData,
 		          'DC'            => $this->getMock(
-			          'Evoke\Model\Data\Metadata\MetadataIface')],
+			          'Evoke\Model\Data\Join\JoinIface')],
 		         'Join_Name' => 'Join_Name',
-		         'Expected'  => $simpleJoin]];
+		         'Expected'  => $simpleData]];
 	}
 
 	/*********/
@@ -90,9 +90,9 @@ class DataTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider providerGetJointData
 	 */
-	public function testGetJointData($metadata, $joins, $joinName, $expected)
+	public function testGetJointData($join, $joins, $joinName, $expected)
 	{
-		$obj = new Data($metadata, $joins);
+		$obj = new Data($join, $joins);
 		$this->assertSame($expected, $obj->$joinName);
 	}
 
@@ -102,37 +102,37 @@ class DataTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetJointDataException()
 	{
-		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
-		$metadata
+		$join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+		$join
 			->expects($this->once())
 			->method('getJoinID')
 			->with('join')
 			->will($this->returnValue('NoMatch'));
 
-		$obj = new Data($metadata);
+		$obj = new Data($join);
 		$obj->join;
 	}
 
     public function testSetArrangedData()
     {
-		$metadataObjectUnderTest = $this->getMock(
-            'Evoke\Model\Data\Metadata\MetadataIface');
-		$metadataObjectUnderTest
+		$joinObjectUnderTest = $this->getMock(
+            'Evoke\Model\Data\Join\JoinIface');
+		$joinObjectUnderTest
 			->expects($this->never())
 			->method('arrangeFlatData');
 
 		$flatResults = [['Dont_Care' => 'Mock Arranges This']];
 		$arrangedData = [['Any'        => 'OK',
 		                  'Joint_Data' => ['J1' => [['F1' => 'Arranged']]]]];
-        $metadataOuter = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
-		$metadataOuter
+        $joinOuter = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+		$joinOuter
 			->expects($this->once())
 			->method('arrangeFlatData')
 			->with($flatResults)
 			->will($this->returnValue($arrangedData));
         
-        $objectUnderTest = new Data($metadataObjectUnderTest);
-        $outer = new Data($metadataOuter,
+        $objectUnderTest = new Data($joinObjectUnderTest);
+        $outer = new Data($joinOuter,
                           ['J1' => $objectUnderTest]);
         $outer->setData($flatResults);
     }
@@ -216,15 +216,15 @@ class DataTest extends PHPUnit_Framework_TestCase
 			->method('setArrangedData')
 			->with($j3Data);
 
-		$metadata = $this->getMock('Evoke\Model\Data\Metadata\MetadataIface');
-		$metadata
+		$join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+		$join
 			->expects($this->at(0))
 			->method('arrangeFlatData')
 			->with($flatResults)
 			->will($this->returnValue($data));
 		
 		$obj = new Data(
-			$metadata,
+			$join,
 			['J1' => $j1, 'J2' => $j2, 'J3' => $j3]);
 		$obj->setData($flatResults);
 		$obj->next();

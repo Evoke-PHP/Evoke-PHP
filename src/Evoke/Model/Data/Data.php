@@ -6,15 +6,13 @@
  */
 namespace Evoke\Model\Data;
 
-use Evoke\Model\Data\Metadata\MetadataIface,
+use Evoke\Model\Data\Join\JoinIface,
 	OutOfBoundsException;
 
 /**
- * Provide access to joint data via class properties according to metadata.
- *
- * By understanding data (using metadata) we can access the hierarchy of the
- * data structure.  This hierarchy is accessed through the joins that are
- * provided at construction.
+ * A general purporse data structure that provides access to hierarchical data.
+ * The tree of data is accessed using array access for the information at the
+ * current level of the tree.  Lower levels are accessed using class properties.
  *
  * ###Joins
  * 
@@ -23,22 +21,22 @@ use Evoke\Model\Data\Metadata\MetadataIface,
  * work with a hierarchy of information considering each part in the hierarchy
  * as a separate data unit.
  *
- * A Data object is a tree of data combined with its metadata. At each level
- * throughout the tree the correct Data and Metadata objects represent the
+ * A Data object is a tree of data combined with its join structure. At each
+ * level throughout the tree the correct Data and join structure represent the
  * tree at that level.  This is a tree of descending trees for both the
- * metadata which is itself a tree of descending trees and the data.  If you
- * aren't scared of that then seek professional help.
+ * join structure and the Data.  This structure allows any part of the data to
+ * stand alone as a Data object.  The Data is valid at all levels of the tree.
  *
- * Use `Evoke\Model\Data\DBDataBuilder::build()` to build Data easily.
+ * Use `Evoke\Model\Data\DataBuilder::build()` to build Data easily.
  *
  * ###Usage
  *
  * This is an exmaple of using Data for products each with a set of images.
- * Further details can be seen by looking at `Evoke\Model\Data\Metadata\DB`.
+ * Further details can be seen by looking at `Evoke\Model\Data\Join\Tabular`.
  *
  * <pre><code>
- * $data = $dbDataBuilder->build(* See DBDataBuilder for parameters to pass *);
- * $data->setData(* Flat results that get organised by data and metadata *);
+ * $data = $dataBuilder->build(* See DataBuilder for parameters to pass *);
+ * $data->setData(* Flat results that get organised by the join structure *);
  *
  * // Traverse over each record in the data.
  * foreach ($data as $product)
@@ -46,13 +44,15 @@ use Evoke\Model\Data\Metadata\MetadataIface,
  *     // Access a field as though it is an array.
  *     $x = $product['Name'];
  *
- *     // Access joint data (with ->).  The joint data is itself a data object
- *     // The name used after -> is determined by the metadata object.  We are
- *     // assuming that we can use lowerCamelCase thanks to the metadata.
- *     foreach ($product->imageList as $imageList)
+ *     // Access joint data via class properties (with ->).  The joint data is
+ *     // itself a data object. The name used after -> is determined by the join
+ *     // structure.
+ *     foreach ($product->image as $images)
  *     {
- *         $y = $imageList['Image'];
- *         $image = $imageList->image;
+ *         foreach ($images as $image)
+ *         {
+ *             $y = $image['Name']; // Array Access
+ *         }
  *     }
  * }
  * </code></pre>
@@ -67,42 +67,42 @@ class Data extends Flat
 	/**
 	 * Properties for the data.
 	 *
-	 * @var Data[]        $joins    Joins for the data.
-	 * @var string        $jointKey Field used to join the data in a record.
-	 * @var MetadataIface $metadata Description of the data we are modelling.
+	 * @var Data[]    $jointData     Joins for the data.
+	 * @var string    $jointKey      Field used to join the data in a record.
+	 * @var JoinIface $joinStructure Structure of the data we are modelling.
 	 */
-	protected $joins, $jointKey, $metadata;
+	protected $jointData, $jointKey, $joinStructure;
 
 	/**
 	 * Construct a Data model.
 	 *
-	 * @param MetadataIface Description of the data we are modelling.
-	 * @param Data[]        Joins for the data.
-	 * @param string        Field used to join the data in a record.
+	 * @param JoinIface Structure of the data we are modelling.
+	 * @param Data[]    Joins for the data.
+	 * @param string    Field used to join the data in a record.
 	 */
-	public function __construct(MetadataIface $metadata,
-	                            Array         $joins    = array(),
-	                            /* String */  $jointKey = 'Joint_Data')
+	public function __construct(JoinIface    $joinStructure,
+	                            Array        $jointData = array(),
+	                            /* String */ $jointKey  = 'Joint_Data')
 	{
-		$this->joins    = $joins;
-		$this->jointKey = $jointKey;
-		$this->metadata = $metadata;
+		$this->joinStructure = $joinStructure;
+		$this->jointData     = $jointData;
+		$this->jointKey      = $jointKey;
 	}
 
 	/**
 	 * Get access to the joint data as though it is a property of the object.
 	 * 
 	 * @param string Join name that identifies the joint data uniquely in the
-	 *               metadata.
+	 *               join structure.
 	 * @return Data The joint data.
 	 */
 	public function __get($join)
 	{
-		$joinID = $this->metadata->getJoinID($join);
+		$joinID = $this->joinStructure->getJoinID($join);
 
-		if (isset($this->joins[$joinID]))
+		if (isset($this->jointData[$joinID]))
 		{
-			return $this->joins[$joinID];
+			return $this->jointData[$joinID];
 		}
 		
 		throw new OutOfBoundsException('no data container for join: ' . $join);
@@ -115,7 +115,7 @@ class Data extends Flat
 	 */
 	public function setData(Array $data)
 	{
-		$this->data = $this->metadata->arrangeFlatData($data);
+		$this->data = $this->joinStructure->arrangeFlatData($data);
 		$this->rewind();
 	}   
 
@@ -124,7 +124,7 @@ class Data extends Flat
 	/*********************/
     
     /**
-     * Set data that has already been arranged by metadata.
+     * Set data that has already been arranged by the join structure.
      *
      * @param mixed[] The data that has already been arranged.
      */
@@ -142,7 +142,7 @@ class Data extends Flat
 	 */
 	protected function setRecord(Array $record)
 	{
-		foreach ($this->joins as $joinID => $data)
+		foreach ($this->jointData as $joinID => $data)
 		{
 			if (isset($record[$this->jointKey][$joinID]))
 			{
