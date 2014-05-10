@@ -24,6 +24,16 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	    self::$headers[] = $header;
     }
 
+    /**
+     * Check that the runkit extension is available.
+     *
+     * @return bool Whether the runkit extension is available.
+     */
+    protected function hasRunkit()
+    {
+        return function_exists('runkit_function_rename') &&
+            function_exists('runkit_function_add');
+    }
 
 	protected function replaceHeaderFunctions()
 	{
@@ -46,17 +56,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 		runkit_function_rename('TEST_SAVED_header',       'header');
 		runkit_function_rename('TEST_SAVED_headers_sent', 'headers_sent');
 	}
-
-	/**
-     * Check that the runkit extension is available.
-     *
-     * @return bool Whether the runkit extension is available.
-     */
-    protected function hasRunkit()
-    {
-        return function_exists('runkit_function_rename') &&
-            function_exists('runkit_function_add');
-    }
     
     public function setUp()
     {
@@ -207,6 +206,13 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testNeedStatusCode()
 	{
+		if (!$this->hasRunkit())
+		{
+            $this->markTestIncomplete(
+                'PHP runkit extension is required for this test.');
+            return;
+		}
+		
         $this->replaceHeaderFunctions();
 
         try
