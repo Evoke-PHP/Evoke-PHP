@@ -2,7 +2,6 @@ language: php
 php:
         - "5.5"
         - "5.4"
-        - "5.3"
 
 before_script:
         - composer self-update
@@ -13,7 +12,7 @@ before_script:
         - ./configure
         - make
         - sudo make install
-        - echo "extension=runkit.so" >> `php --ini | grep "Loaded Configuration" | sed "s/.*:\s*//"`
+        - echo -e "extension=runkit.so\nrunkit.internal_override = 1" >> `php --ini | grep "Loaded Configuration" | sed "s/.*:\s*//"`
         - cd ..
 
 script: phpunit --configuration ./build/config/unit.xml --bootstrap ./test/environment/Bootstrap.php
