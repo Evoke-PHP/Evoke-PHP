@@ -41,17 +41,13 @@ class Exception implements ViewIface
             throw new LogicException('needs exception to be set.');
         }
 
-        return array('div',
-                     array('class' => 'Exception'),
-                     array(array('div',
-                                 array('class' => 'Type'),
-                                 get_class($this->exception)),
-                           array('p',
-                                 array('class' => 'Message'),
-                                 $this->exception->getMessage()),
-                           array('pre',
-                                 array('class' => 'Trace'),
-                                 $this->exception->getTraceAsString())));
+        return ['div',
+                ['class' => 'Exception'],
+                [['div', ['class' => 'Type'], get_class($this->exception)],
+                 ['p', ['class' => 'Message'], $this->exception->getMessage()],
+                 ['pre',
+                  ['class' => 'Trace'],
+                  $this->exception->getTraceAsString()]]];
     }
 
     /**

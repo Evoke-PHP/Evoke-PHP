@@ -20,7 +20,7 @@ class RecordList extends Decorator implements RecordListIface
      * A list of the selected records within the record list.
      * @var mixed[]
      */
-    protected $selectedRecords = array();
+    protected $selectedRecords = [];
 
     /******************/
     /* Public Methods */
@@ -46,7 +46,7 @@ class RecordList extends Decorator implements RecordListIface
      */
     public function clearSelectedRecords()
     {
-        $this->selectedRecords = array();
+        $this->selectedRecords = [];
     }
 
     /**

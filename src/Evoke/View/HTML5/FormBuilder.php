@@ -28,15 +28,15 @@ class FormBuilder implements FormBuilderIface
      * Children of the form.
      * @var mixed[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * Construct a buildable HTML5 form.
      *
      * @param string[]  Attribs.
      */
-    public function __construct(Array $attribs = array('action' => '',
-                                                       'method' => 'POST'))
+    public function __construct(Array $attribs = ['action' => '',
+                                                  'method' => 'POST'])
     {
         $this->attribs = $attribs;
     }
@@ -61,13 +61,10 @@ class FormBuilder implements FormBuilderIface
      * @param string   The name for the input.
      * @param string[] Any other attributes.
      */
-    public function addFile($name, Array $otherAttribs = array())
+    public function addFile($name, Array $otherAttribs = [])
     {
-        $this->add(
-            array('input',
-                  array('name' => $name,
-                        'type' => 'file') +
-                  $otherAttribs));
+        $this->add(['input',
+                    ['name' => $name, 'type' => 'file'] + $otherAttribs]);
     }
 
     /**
@@ -78,9 +75,10 @@ class FormBuilder implements FormBuilderIface
      */
     public function addHidden($name, $value)
     {
-        $this->add(array('input', array('name'  => $name,
-                                        'type'  => 'hidden',
-                                        'value' => $value)));
+        $this->add(['input',
+                    ['name'  => $name,
+                     'type'  => 'hidden',
+                     'value' => $value]]);
     }
 
     /**
@@ -91,7 +89,7 @@ class FormBuilder implements FormBuilderIface
      */
     public function addInput(Array $attribs, $value = NULL)
     {
-        $element = array('input', $attribs);
+        $element = ['input', $attribs];
 
         if (isset($value))
         {
@@ -109,7 +107,7 @@ class FormBuilder implements FormBuilderIface
      */
     public function addLabel($for, $text)
     {
-        $this->add(array('label', array('for' => $for), $text));
+        $this->add(['label', ['for' => $for], $text]);
     }
 
     /**
@@ -120,9 +118,10 @@ class FormBuilder implements FormBuilderIface
      */
     public function addSubmit($name, $value)
     {
-        $this->add(array('input', array('name'  => $name,
-                                        'type'  => 'submit',
-                                        'value' => $value)));
+        $this->add(['input',
+                    ['name'  => $name,
+                     'type'  => 'submit',
+                     'value' => $value]]);
     }
 
     /**
@@ -136,13 +135,13 @@ class FormBuilder implements FormBuilderIface
     public function addText($name,
                             $value,
                             $length       = 30,
-                            $otherAttribs = array())
+                            $otherAttribs = [])
     {
-        $this->add(array('input',
-                         $otherAttribs + array('length' => $length,
-                                               'name'   => $name,
-                                               'type'   => 'text',
-                                               'value'  => $value)));
+        $this->add(['input',
+                    $otherAttribs + ['length' => $length,
+                                     'name'   => $name,
+                                     'type'   => 'text',
+                                     'value'  => $value]]);
     }
 
     /**
@@ -158,13 +157,13 @@ class FormBuilder implements FormBuilderIface
                                 /* String */ $value,
                                 /* Int    */ $rows         = 10,
                                 /* Int    */ $cols         = 50,
-                                Array        $otherAttribs = array())
+                                Array        $otherAttribs = [])
     {
-        $this->add(array('textarea',
-                         $otherAttribs + array('cols' => $cols,
-                                               'name' => $name,
-                                               'rows' => $rows),
-                         $value));
+        $this->add(['textarea',
+                    $otherAttribs + ['cols' => $cols,
+                                     'name' => $name,
+                                     'rows' => $rows],
+                    $value]);
     }
 
     /**
@@ -174,7 +173,7 @@ class FormBuilder implements FormBuilderIface
      */
     public function get()
     {
-        return array('form', $this->attribs, $this->children);
+        return ['form', $this->attribs, $this->children];
     }
 
     /**

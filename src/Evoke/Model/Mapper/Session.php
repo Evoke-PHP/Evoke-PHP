@@ -44,7 +44,7 @@ class Session
      *
      * @param mixed[] The data to create.
      */
-    public function create(Array $data = array())
+    public function create(Array $data = [])
     {
         $this->session->setData($data);
     }
@@ -54,7 +54,7 @@ class Session
      *
      * @param mixed[] The offset in the data to delete.
      */
-    public function delete(Array $offset = array())
+    public function delete(Array $offset = [])
     {
         $this->session->deleteAtOffset($offset);
     }
@@ -65,7 +65,7 @@ class Session
      * @params mixed[]      The offset in the data to fetch.
      * @return mixed[]|null Session data or null if the offset does not exist.
      */
-    public function read(Array $offset = array())
+    public function read(Array $offset = [])
     {
         $session = $this->session->getCopy();
 

@@ -74,8 +74,8 @@ class TreeBuilder
 
         $rootNode = new Tree;
         $level = 0;
-        $treePtrs = array();
-        $children = array();
+        $treePtrs = [];
+        $children = [];
         $children[$level] =
             ($mptt[0][$this->right] - $mptt[0][$this->left] - 1) / 2;
 

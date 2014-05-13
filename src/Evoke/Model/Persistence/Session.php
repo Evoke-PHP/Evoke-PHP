@@ -24,7 +24,7 @@ class Session implements SessionIface
      * The domain within the session that we are managing.  This is an ordered
      * list of the keys required to reach the domain:
      *
-     *     array('L1', 'L2', 'L3') == $_SESSION['L1']['L2']['L3']
+     *     ['L1', 'L2', 'L3'] == $_SESSION['L1']['L2']['L3']
      *
      * @var string[]
      */
@@ -35,7 +35,7 @@ class Session implements SessionIface
      *
      * @param string[] Domain to manage.
      */
-    public function __construct(Array $domain = array())
+    public function __construct(Array $domain = [])
     {
         $this->domain = $domain;
         $this->ensure();
@@ -61,7 +61,7 @@ class Session implements SessionIface
      *
      * @param mixed[] The offset to the part of the session to delete.
      */
-    public function deleteAtOffset(Array $offset = array())
+    public function deleteAtOffset(Array $offset = [])
     {
         $sessionOffset =& $this->getAccess();
 
@@ -76,7 +76,7 @@ class Session implements SessionIface
             $sessionOffset =& $sessionOffset[$part];
         }
 
-        $sessionOffset = array();
+        $sessionOffset = [];
     }
 
     /**
@@ -93,7 +93,7 @@ class Session implements SessionIface
             // about headers sent using the session_start.
             if (php_sapi_name() === 'cli')
             {
-                $_SESSION = array();
+                $_SESSION = [];
             }
             elseif (!headers_sent())
             {
@@ -117,7 +117,7 @@ class Session implements SessionIface
         {
             if (!isset($currentDomain[$subdomain]))
             {
-                $currentDomain[$subdomain] = array();
+                $currentDomain[$subdomain] = [];
             }
 
             // Update the currentDomain to reference the session subdomain.
@@ -146,7 +146,7 @@ class Session implements SessionIface
      * @return mixed|null The data at the offset (NULL if the offset doesn't
      *                    exist).
      */
-    public function getAtOffset(Array $offset = array())
+    public function getAtOffset(Array $offset = [])
     {
         $sessionOffset = $this->getCopy();
 

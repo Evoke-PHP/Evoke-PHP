@@ -21,7 +21,7 @@ class Head implements ViewIface
     protected
         /**
          * Custom elements to be added to the head of the form:
-         * `array(tag, attribs, children)`
+         * `[tag, attribs, children]`
          * @var mixed[]
          */
         $customElements,
@@ -58,7 +58,7 @@ class Head implements ViewIface
     public function __construct(Array        $links,
                                 Array        $metas,
                                 /* String */ $title,
-                                Array        $customElements = array())
+                                Array        $customElements = [])
     {
         $this->customElements = $customElements;
         $this->links          = $links;
@@ -77,17 +77,17 @@ class Head implements ViewIface
      */
     public function get()
     {
-        $headElements = array(array('title', array(), $this->title));
+        $headElements = [['title', [], $this->title]];
 
         foreach ($this->metas as $name => $content)
         {
             $headElements[] =
-                array('meta', array('name' => $name, 'content' => $content));
+                ['meta', ['name' => $name, 'content' => $content]];
         }
 
         foreach ($this->links as $linkAttributes)
         {
-            $headElements[] = array('link', $linkAttributes);
+            $headElements[] = ['link', $linkAttributes];
         }
 
         foreach ($this->customElements as $customElement)
@@ -95,7 +95,7 @@ class Head implements ViewIface
             $headElements[] = $customElement;
         }
 
-        return array('head', array(), $headElements);
+        return ['head', [], $headElements];
     }
 }
 // EOF

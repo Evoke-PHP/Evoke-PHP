@@ -105,7 +105,7 @@ class Regex extends Rule
      */
     public function getParams()
     {
-        $paramsFound = array();
+        $paramsFound = [];
 
         foreach ($this->params as $param)
         {

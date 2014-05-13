@@ -28,7 +28,7 @@ class Logging implements LoggingIface
      * The Logging objects that are observing the log messages.
      * @var LoggerIface[]
      */
-    protected $observers = array();
+    protected $observers = [];
 
     /**
      * Construct a Log object.
@@ -81,21 +81,21 @@ class Logging implements LoggingIface
      */
     public function log($message, $level)
     {
-        $errType = array (E_ERROR             => 'Error',
-                          E_WARNING           => 'Warning',
-                          E_PARSE             => 'Parse',
-                          E_NOTICE            => 'Notice',
-                          E_CORE_ERROR        => 'Core Error',
-                          E_CORE_WARNING      => 'Core Warning',
-                          E_COMPILE_ERROR     => 'Compile Error',
-                          E_COMPILE_WARNING   => 'Compile Warning',
-                          E_USER_ERROR        => 'User Error',
-                          E_USER_WARNING      => 'User Warning',
-                          E_USER_NOTICE       => 'User Notice',
-                          E_STRICT            => 'Strict',
-                          E_RECOVERABLE_ERROR => 'Recoverable Error',
-                          E_DEPRECATED        => 'Deprecated',
-                          E_USER_DEPRECATED   => 'User Deprecated');
+        $errType = [E_ERROR             => 'Error',
+                    E_WARNING           => 'Warning',
+                    E_PARSE             => 'Parse',
+                    E_NOTICE            => 'Notice',
+                    E_CORE_ERROR        => 'Core Error',
+                    E_CORE_WARNING      => 'Core Warning',
+                    E_COMPILE_ERROR     => 'Compile Error',
+                    E_COMPILE_WARNING   => 'Compile Warning',
+                    E_USER_ERROR        => 'User Error',
+                    E_USER_WARNING      => 'User Warning',
+                    E_USER_NOTICE       => 'User Notice',
+                    E_STRICT            => 'Strict',
+                    E_RECOVERABLE_ERROR => 'Recoverable Error',
+                    E_DEPRECATED        => 'Deprecated',
+                    E_USER_DEPRECATED   => 'User Deprecated'];
 
         if (isset($errType[$level]))
         {

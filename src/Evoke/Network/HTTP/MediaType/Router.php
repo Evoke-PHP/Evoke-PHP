@@ -26,7 +26,7 @@ class Router implements RouterIface
      * Rules that the router uses to route.
      * @var RuleIface[]
      */
-    protected $rules = array();
+    protected $rules = [];
 
     /******************/
     /* Public Methods */

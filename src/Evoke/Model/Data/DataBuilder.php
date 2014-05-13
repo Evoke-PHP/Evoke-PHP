@@ -29,7 +29,7 @@ class DataBuilder
      */
     public function build(JoinIface $joinStructure)
     {
-        $jointData = array();
+        $jointData = [];
         $joins = $joinStructure->getJoins();
 
         foreach ($joins as $joinID => $join)

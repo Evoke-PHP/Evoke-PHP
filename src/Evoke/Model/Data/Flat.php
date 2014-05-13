@@ -45,7 +45,7 @@ class Flat implements FlatIface
      * The data that is being modelled.
      * @var mixed[]
      */
-    protected $data = array();
+    protected $data = [];
 
     /******************/
     /* Public Methods */
@@ -121,7 +121,7 @@ class Flat implements FlatIface
 
         if ($nextItem === false)
         {
-            $this->setRecord(array());
+            $this->setRecord([]);
             return false;
         }
 
@@ -142,7 +142,7 @@ class Flat implements FlatIface
         }
         else
         {
-            $this->setRecord(array());
+            $this->setRecord([]);
         }
     }
 

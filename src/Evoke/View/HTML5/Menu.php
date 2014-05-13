@@ -45,7 +45,7 @@ class Menu implements ViewIface
         }
 
         $menuClass = 'Menu ' . $this->tree->get();
-        $menuItems = array();
+        $menuItems = [];
 
         if ($this->tree->hasChildren())
         {
@@ -56,7 +56,7 @@ class Menu implements ViewIface
             $menuClass .= ' Empty';
         }
 
-        return array('ul', array('class' => $menuClass), $menuItems);
+        return ['ul', ['class' => $menuClass], $menuItems];
     }
 
     /**
@@ -85,7 +85,7 @@ class Menu implements ViewIface
         $currentDepth = 0;
         $iterator = new RecursiveIteratorIterator(
             $tree, RecursiveIteratorIterator::SELF_FIRST);
-        $menu = array();
+        $menu = [];
         $menuPtr =& $menu;
 
         foreach ($iterator as $node)
@@ -106,7 +106,7 @@ class Menu implements ViewIface
                 // Build the sub level if it hasn't been built already.
                 if ($depthChange > 0 && $i == $currentDepth - 1)
                 {
-                    $menuPtr[] = array('ul', array(), array());
+                    $menuPtr[] = ['ul', [], []];
                 }
 
                 // Go to the last unordered list elements children. This is
@@ -115,13 +115,11 @@ class Menu implements ViewIface
             }
 
             $menuItem = $node->get();
-            $menuPtr[] = array(
-                'li',
-                array('class' => 'Menu_Item Level_' . $currentDepth),
-                array(array('a',
-                            array('href' => $menuItem['Href']),
-                            $menuItem['Text'])
-                    ));
+            $menuPtr[] = ['li',
+                          ['class' => 'Menu_Item Level_' . $currentDepth],
+                          [['a',
+                            ['href' => $menuItem['Href']],
+                            $menuItem['Text']]]];
         }
 
         return $menu;

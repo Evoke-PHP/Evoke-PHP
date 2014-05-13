@@ -28,7 +28,7 @@ interface SessionIface
      *
      * @param mixed[] The offset to the part of the session to delete.
      */
-    public function deleteAtOffset(Array $offset = array());
+    public function deleteAtOffset(Array $offset = []);
 
     /**
      * Ensure the session is started and the session domain is set or created.
@@ -56,7 +56,7 @@ interface SessionIface
      *
      * @param mixed[] The offset to the data.
      */
-    public function getAtOffset(Array $offset = array());
+    public function getAtOffset(Array $offset = []);
 
     /**
      * Return the domain as a flat array.

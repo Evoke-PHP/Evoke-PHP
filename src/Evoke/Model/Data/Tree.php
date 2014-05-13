@@ -20,7 +20,7 @@ class Tree implements TreeIface
      * The children of the current node.
      * @var Tree[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * The position of the iterator.

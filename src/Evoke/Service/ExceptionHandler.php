@@ -93,9 +93,9 @@ class ExceptionHandler
         }
 
         $this->viewMessageBox->addContent(
-            array('div',
-                  array('class' => 'Description'),
-                  'The administrator has been notified.'));
+            ['div',
+             ['class' => 'Description'],
+             'The administrator has been notified.']);
 
         if ($this->showException)
         {

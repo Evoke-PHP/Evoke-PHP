@@ -27,13 +27,13 @@ class Processing implements ProcessingIface
      * Associative array of request IDs to processing callback.
      * @var callable[]
      */
-    protected $callbacks = array();
+    protected $callbacks = [];
 
     /**
      * The data that we are processing.
      * @var mixed[]
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Whether a key is required to match for processing.
@@ -46,7 +46,6 @@ class Processing implements ProcessingIface
      * @var bool
      */
     protected $uniqueMatchRequired = true;
-
 
     /******************/
     /* Public Methods */
@@ -63,7 +62,7 @@ class Processing implements ProcessingIface
     {
         if (!isset($this->callbacks[$processingKey]))
         {
-            $this->callbacks[$processingKey] = array();
+            $this->callbacks[$processingKey] = [];
         }
 
         $this->callbacks[$processingKey][] = $callback;
@@ -77,7 +76,7 @@ class Processing implements ProcessingIface
         if (empty($this->data))
         {
             $matchedKeys = empty($this->callbacks['']) ?
-                array() : array('' => $this->callbacks['']);
+                [] : ['' => $this->callbacks['']];
         }
         else
         {

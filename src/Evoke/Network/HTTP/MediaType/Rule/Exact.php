@@ -41,7 +41,7 @@ class Exact extends Match
      */
     public function __construct(/* String */ $outputFormat,
                                 Array        $match,
-                                Array        $ignoredFields = array('Q_Factor'))
+                                Array        $ignoredFields = ['Q_Factor'])
     {
         parent::__construct($outputFormat, $match);
 

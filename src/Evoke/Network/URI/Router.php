@@ -22,7 +22,7 @@ class Router implements RouterIface
      * Rules that the router uses to route.
      * @var Rule\RuleIface[]
      */
-    protected $rules = array();
+    protected $rules = [];
 
     /******************/
     /* Public Methods */
@@ -50,7 +50,7 @@ class Router implements RouterIface
         // The URI that is routed is continually refined from the initial URI by
         // the rules.
         $refinedURI = $uri;
-        $params = array();
+        $params = [];
 
         foreach ($this->rules as $rule)
         {
@@ -68,8 +68,8 @@ class Router implements RouterIface
             }
         }
 
-        return array('Controller' => $refinedURI,
-                     'Params'     => $params);
+        return ['Controller' => $refinedURI,
+                'Params'     => $params];
     }
 }
 // EOF

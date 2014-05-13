@@ -42,14 +42,14 @@ class Select
      */
     public function __construct(/* String */ $fieldText,
                                 /* String */ $fieldValue    = 'ID',
-                                Array        $attribs       = array(),
-                                Array        $optionAttribs = array())
+                                Array        $attribs       = [],
+                                Array        $optionAttribs = [])
     {
         $this->attribs       = $attribs;
         $this->fieldText     = $fieldText;
         $this->fieldValue    = $fieldValue;
         $this->optionAttribs = $optionAttribs;
-        $this->options       = array();
+        $this->options       = [];
     }
 
     /******************/
@@ -63,7 +63,7 @@ class Select
      */
     public function get()
     {
-        $optionElements = array();
+        $optionElements = [];
 
         foreach ($this->options as $record)
         {
@@ -77,7 +77,7 @@ class Select
 
             $optionAttribs = array_merge(
                 $this->optionAttribs,
-                array('value' => $record[$this->fieldValue]));
+                ['value' => $record[$this->fieldValue]]);
 
             if (isset($this->selectedValue) &&
                 $record[$this->fieldValue] == $this->selectedValue)
@@ -86,10 +86,10 @@ class Select
             }
 
             $optionElements[] =
-                array('option', $optionAttribs, $record[$this->fieldText]);
+                ['option', $optionAttribs, $record[$this->fieldText]];
         }
 
-        return array('select', $this->attribs, $optionElements);
+        return ['select', $this->attribs, $optionElements];
     }
 
     /**

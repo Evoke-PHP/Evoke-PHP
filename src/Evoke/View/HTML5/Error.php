@@ -53,29 +53,22 @@ class Error implements ViewIface
             throw new LogicException('needs error');
         }
 
-        $error = array_merge(array('file'    => $this->unknown,
-                                   'line'    => $this->unknown,
-                                   'message' => $this->unknown,
-                                   'type'    => $this->unknown),
+        $error = array_merge(['file'    => $this->unknown,
+                              'line'    => $this->unknown,
+                              'message' => $this->unknown,
+                              'type'    => $this->unknown],
                              $this->error);
 
-        return array(
-            'div',
-            array('class' => 'Error'),
-            array(array('div',
-                        array('class' => 'Details'),
-                        array(array('span',
-                                    array('class' => 'Type'),
-                                    $this->getTypeString($error['type'])),
-                              array('span',
-                                    array('class' => 'File'),
-                                    $error['file']),
-                              array('span',
-                                    array('class' => 'Line'),
-                                    $error['line']))),
-                  array('p',
-                        array('class' => 'Message'),
-                        $error['message'])));
+        return ['div',
+                ['class' => 'Error'],
+                [['div',
+                  ['class' => 'Details'],
+                  [['span',
+                    ['class' => 'Type'],
+                    $this->getTypeString($error['type'])],
+                   ['span', ['class' => 'File'], $error['file']],
+                   ['span', ['class' => 'Line'], $error['line']]]],
+                 ['p', ['class' => 'Message'], $error['message']]]];
     }
 
     /**
@@ -101,21 +94,21 @@ class Error implements ViewIface
      */
     private function getTypeString($number)
     {
-        $errorMap = array(E_ERROR             => 'E_ERROR',
-                          E_WARNING           => 'E_WARNING',
-                          E_PARSE             => 'E_PARSE',
-                          E_NOTICE            => 'E_NOTICE',
-                          E_CORE_ERROR        => 'E_CORE_ERROR',
-                          E_CORE_WARNING      => 'E_CORE_WARNING',
-                          E_CORE_ERROR        => 'E_COMPILE_ERROR',
-                          E_CORE_WARNING      => 'E_COMPILE_WARNING',
-                          E_USER_ERROR        => 'E_USER_ERROR',
-                          E_USER_WARNING      => 'E_USER_WARNING',
-                          E_USER_NOTICE       => 'E_USER_NOTICE',
-                          E_STRICT            => 'E_STRICT',
-                          E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-                          E_DEPRECATED        => 'E_DEPRECATED',
-                          E_USER_DEPRECATED   => 'E_USER_DEPRECATED');
+        $errorMap = [E_ERROR             => 'E_ERROR',
+                     E_WARNING           => 'E_WARNING',
+                     E_PARSE             => 'E_PARSE',
+                     E_NOTICE            => 'E_NOTICE',
+                     E_CORE_ERROR        => 'E_CORE_ERROR',
+                     E_CORE_WARNING      => 'E_CORE_WARNING',
+                     E_CORE_ERROR        => 'E_COMPILE_ERROR',
+                     E_CORE_WARNING      => 'E_COMPILE_WARNING',
+                     E_USER_ERROR        => 'E_USER_ERROR',
+                     E_USER_WARNING      => 'E_USER_WARNING',
+                     E_USER_NOTICE       => 'E_USER_NOTICE',
+                     E_STRICT            => 'E_STRICT',
+                     E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+                     E_DEPRECATED        => 'E_DEPRECATED',
+                     E_USER_DEPRECATED   => 'E_USER_DEPRECATED'];
 
         if (isset($errorMap[$number]))
         {

@@ -121,7 +121,7 @@ class Table
      * @return mixed[] Array of records from the table.
      */
     public function read(Array        $fields,
-                         Array        $conditions = array(),
+                         Array        $conditions = [],
                          /* String */ $order      = NULL,
                          /* String */ $limit      = NULL)
     {

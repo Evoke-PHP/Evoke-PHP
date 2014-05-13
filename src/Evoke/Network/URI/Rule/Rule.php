@@ -55,7 +55,7 @@ abstract class Rule implements RuleIface
      */
     public function getParams()
     {
-        return array();
+        return [];
     }
 
     /**

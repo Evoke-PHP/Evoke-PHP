@@ -202,14 +202,14 @@ class Tabular implements JoinIface
      */
     public function __construct(
         /* string */ $tableName,
-        Array        $keys                    = array('ID'),
+        Array        $keys                    = ['ID'],
         /* string */ $jointKey                = 'Joint_Data',
         /* bool   */ $requireAllTabularFields = true,
         /* string */ $separator               = '_T_',
         /* bool   */ $useAlphaNumMatch        = true)
     {
-        $this->joinKeys                = array();
-        $this->joins                   = array();
+        $this->joinKeys                = [];
+        $this->joins                   = [];
         $this->jointKey                = $jointKey;
         $this->keys                    = $keys;
         $this->requireAllTabularFields = $requireAllTabularFields;
@@ -251,7 +251,7 @@ class Tabular implements JoinIface
      */
     public function arrangeFlatData(Array $results)
     {
-        $splitResults = array();
+        $splitResults = [];
 
         foreach ($results as $result)
         {
@@ -270,7 +270,7 @@ class Tabular implements JoinIface
      * @return mixed[] The hierarchical results.
      */
     public function arrangeSplitResults(Array $splitResults,
-                                        Array $data = array())
+                                        Array $data = [])
     {
         foreach ($splitResults as $splitResult)
         {
@@ -317,7 +317,7 @@ class Tabular implements JoinIface
                 {
                     if (!isset($data[$rowID][$this->jointKey]))
                     {
-                        $data[$rowID][$this->jointKey] = array();
+                        $data[$rowID][$this->jointKey] = [];
                     }
 
                     $jointData = &$data[$rowID][$this->jointKey];
@@ -327,7 +327,7 @@ class Tabular implements JoinIface
                     {
                         if (!isset($jointData[$joinID]))
                         {
-                            $jointData[$joinID] = array();
+                            $jointData[$joinID] = [];
                         }
 
                         // Recurse - Arrange the single result (splitResult).
@@ -435,7 +435,7 @@ class Tabular implements JoinIface
      */
     protected function splitResultByTables(Array $result)
     {
-        $splitResult = array();
+        $splitResult = [];
 
         foreach ($result as $field => $value)
         {
@@ -458,7 +458,7 @@ class Tabular implements JoinIface
 
             if (!isset($splitResult[$separated[0]]))
             {
-                $splitResult[$separated[0]] = array();
+                $splitResult[$separated[0]] = [];
             }
 
             $splitResult[$separated[0]][$separated[1]] = $value;

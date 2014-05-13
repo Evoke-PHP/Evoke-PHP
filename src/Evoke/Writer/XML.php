@@ -44,15 +44,14 @@ class XML implements WriterIface
      * @param string    The string that should be used to indent the XML.
      * @param int[]     Position of the tag, attribs & children in the element.
      */
-    public function __construct(
-        XMLWriter    $xmlWriter,
-        /* String */ $docType      = 'XHTML_1_1',
-        /* String */ $language     = 'EN',
-        /* Bool */   $indent       = TRUE,
-        /* String */ $indentString = '   ',
-        /* int[]  */ $pos          = array('Attribs'  => 1,
-                                           'Children' => 2,
-                                           'Tag'      => 0))
+    public function __construct(XMLWriter    $xmlWriter,
+                                /* String */ $docType      = 'XHTML_1_1',
+                                /* String */ $language     = 'EN',
+                                /* Bool */   $indent       = TRUE,
+                                /* String */ $indentString = '   ',
+                                /* int[]  */ $pos          = ['Attribs'  => 1,
+                                                              'Children' => 2,
+                                                              'Tag'      => 0])
     {
         $this->docType   = $docType;
         $this->indent    = $indent;
@@ -104,15 +103,14 @@ class XML implements WriterIface
      * Write XML elements into the memory buffer.
      *
      * @param mixed[] Array accessible value for the xml to be written of the
-     *                form: `array($tag, $attributes, $children)`
+     *                form: `[$tag, $attributes, $children]`
      *
      * An example of this is below with the default values that are used for the
      * options array. Attributes and options are optional.
      * <pre><code>
-     * array(0 => tag,
-     *       1 => array('attrib_1' => '1', 'attrib_2' => '2'),
-     *       2 => array($child, 'text', $anotherChild)
-     *      )
+     * [0 => tag,
+     *  1 => ['attrib_1' => '1', 'attrib_2' => '2'],
+     *  2 => [$child, 'text', $anotherChild]]
      * </code></pre>
      */
     public function write($xml)
@@ -140,9 +138,9 @@ class XML implements WriterIface
 
         $tag      = $xml[$this->pos['Tag']];
         $attribs  = isset($xml[$this->pos['Attribs']]) ?
-            $xml[$this->pos['Attribs']] : array();
+            $xml[$this->pos['Attribs']] : [];
         $children = isset($xml[$this->pos['Children']]) ?
-            $xml[$this->pos['Children']] : array();
+            $xml[$this->pos['Children']] : [];
 
         // Whether we are normally indenting and we see an element that should
         // be inline.

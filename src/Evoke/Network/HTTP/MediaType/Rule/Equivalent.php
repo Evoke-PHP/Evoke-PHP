@@ -36,7 +36,7 @@ class Equivalent extends Match
     public function __construct(
         /* String */ $outputFormat,
         Array        $match,
-        Array        $ignoredFields = array('Params', 'Q_Factor'))
+        Array        $ignoredFields = ['Params', 'Q_Factor'])
     {
         parent::__construct($outputFormat, $match);
 

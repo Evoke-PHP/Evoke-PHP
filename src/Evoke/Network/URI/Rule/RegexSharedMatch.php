@@ -51,7 +51,7 @@ class RegexSharedMatch extends Rule
      */
     public function __construct(/* String */ $match,
                                 /* String */ $replacement,
-                                Array        $params        = array(),
+                                Array        $params        = [],
                                 /* Bool   */ $authoritative = false)
     {
         parent::__construct($authoritative);
@@ -91,7 +91,7 @@ class RegexSharedMatch extends Rule
      */
     public function getParams()
     {
-        $params = array();
+        $params = [];
 
         foreach ($this->params as $paramSpec)
         {

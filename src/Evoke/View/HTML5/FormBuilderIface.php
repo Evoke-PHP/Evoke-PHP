@@ -35,7 +35,7 @@ interface FormBuilderIface extends ViewIface
      * @param string   The name for the input.
      * @param string[] Any other attributes.
      */
-    public function addFile($name, Array $otherAttribs = array());
+    public function addFile($name, Array $otherAttribs = []);
 
     /**
      * Add a hidden input to the form.
@@ -80,7 +80,7 @@ interface FormBuilderIface extends ViewIface
     public function addText($name,
                             $value,
                             $length       = 30,
-                            $otherAttribs = array());
+                            $otherAttribs = []);
 
     /**
      * Add a text area.
@@ -95,7 +95,7 @@ interface FormBuilderIface extends ViewIface
                                 /* String */ $value,
                                 /* Int    */ $rows         = 10,
                                 /* Int    */ $cols         = 50,
-                                Array        $otherAttribs = array());
+                                Array        $otherAttribs = []);
 
     /**
      * Set the action of the form.

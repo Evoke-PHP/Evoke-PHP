@@ -81,7 +81,7 @@ class Data extends Flat
      * @param string    Field used to join the data in a record.
      */
     public function __construct(JoinIface    $joinStructure,
-                                Array        $jointData = array(),
+                                Array        $jointData = [],
                                 /* String */ $jointKey  = 'Joint_Data')
     {
         $this->joinStructure = $joinStructure;
@@ -150,7 +150,7 @@ class Data extends Flat
             }
             else
             {
-                $data->setArrangedData(array());
+                $data->setArrangedData([]);
             }
         }
     }

@@ -105,29 +105,29 @@ class ShutdownHandler
 
         if (!isset($err['type']) ||
             !in_array($err['type'],
-                      array(E_USER_ERROR, E_ERROR, E_PARSE,
-                            E_CORE_ERROR, E_CORE_WARNING,
-                            E_COMPILE_ERROR, E_COMPILE_WARNING)))
+                      [E_USER_ERROR, E_ERROR, E_PARSE,
+                       E_CORE_ERROR, E_CORE_WARNING,
+                       E_COMPILE_ERROR, E_COMPILE_WARNING]))
         {
             return;
         }
 
         $this->viewMessageBox->setTitle('Fatal Error');
         $this->viewMessageBox->addContent(
-            array('p',
-                  array('class' => 'Description'),
-                  'This is an error that we were unable to handle.  Please ' .
-                  'tell us any information that could help us avoid this ' .
-                  'error in the future.  Useful information such as the ' .
-                  'date, time and what you were doing when the error ' .
-                  'occurred should help us fix this.'));
+            ['p',
+             ['class' => 'Description'],
+             'This is an error that we were unable to handle.  Please tell ' .
+             'us any information that could help us avoid this error in the ' .
+             'future.  Useful information such as the date, time and what ' .
+             'you were doing when the error occurred should help us fix ' .
+             'this.']);
 
         if (!empty($this->email))
         {
             $this->viewMessageBox->addContent(
-                array('div',
-                      array('class' => 'Contact'),
-                      'Contact: ' . $this->email));
+                ['div',
+                 ['class' => 'Contact'],
+                 'Contact: ' . $this->email]);
         }
 
         if ($this->showError)

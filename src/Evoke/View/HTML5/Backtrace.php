@@ -41,45 +41,43 @@ class Backtrace implements ViewIface
             throw new LogicException('needs backtrace.');
         }
 
-        $listItems = array();
+        $listItems = [];
 
         foreach ($this->backtrace as $info)
         {
-            $infoElements = array(
-                array('span',
-                      array('class' => 'File'),
-                      empty($info['file']) ? '<internal>' : $info['file']));
+            $infoElements =
+                [['span',
+                  ['class' => 'File'],
+                  empty($info['file']) ? '<internal>' : $info['file']]];
 
             if (isset($info['line']))
             {
-                $infoElements[] = array(
-                    'span',
-                    array('class' => 'Line'),
-                    '(' . $info['line'] . ')');
+                $infoElements[] =
+                    ['span', ['class' => 'Line'], '(' . $info['line'] . ')'];
             }
 
             if (isset($info['class']))
             {
-                $infoElements[] = array(
-                    'span',	array('class' => 'Class'), $info['class']);
+                $infoElements[] =
+                    ['span', ['class' => 'Class'], $info['class']];
             }
 
             if (isset($info['type']))
             {
-                $infoElements[] = array(
-                    'span',	array('class' => 'Type'), $info['type']);
+                $infoElements[] =
+                    ['span', ['class' => 'Type'], $info['type']];
             }
 
             if (isset($info['function']))
             {
-                $infoElements[] = array(
-                    'span', array('class' => 'Function'), $info['function']);
+                $infoElements[] =
+                    ['span', ['class' => 'Function'], $info['function']];
             }
 
-            $listItems[] = array('li', array(), $infoElements);
+            $listItems[] = ['li', [], $infoElements];
         }
 
-        return array('ol', array('class' => 'Backtrace'), $listItems);
+        return ['ol', ['class' => 'Backtrace'], $listItems];
     }
 
     /**

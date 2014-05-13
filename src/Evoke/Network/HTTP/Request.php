@@ -32,11 +32,11 @@ class Request implements RequestIface
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      * @var string
      */
-    const PATTERNS_ACCEPT = <<<'EOP'
+    const PATTERNS_ACCEPT = <<<'EOP_ACCEPT'
         (?<ACCEPT_EXTENSION> ;(?&L)(?&TOKEN)(=((?&TOKEN)|(?&QUOTED_STRING)))?)
         (?<SUBTYPE>          (?&TOKEN)|\*)
         (?<TYPE>             (?&TOKEN)|\*)
-        EOP;
+EOP_ACCEPT;
 
     /**
      * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
@@ -44,12 +44,12 @@ class Request implements RequestIface
      *
      * @var string
      */
-    const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP'
+    const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP_ACCEPT_LANGUAGE'
         (?<ACCEPT_LANGUAGE>         (?&ACCEPT_LANGUAGE_ELEMENT)((?&L),(?&L)(?&ACCEPT_LANGUAGE_ELEMENT))*)
         (?<ACCEPT_LANGUAGE_ELEMENT> (?&L)(?&LANGUAGE_RANGE)((?&L);(?&L)q(?&L)=(?&L)(?&Q_VALUE))?)
         (?<ALPHA_18>                [a-zA-Z]{1,8})
         (?<LANGUAGE_RANGE>          ((?&ALPHA_18)(-(?&ALPHA_18))* | \*))
-        EOP;
+EOP_ACCEPT_LANGUAGE;
 
     /**
      * Regexp subpatterns to match components of the request header values.
@@ -84,7 +84,7 @@ class Request implements RequestIface
         (?<TOKEN>         (?&TOKEN_CHAR)+)
         (?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])
         (?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))
-        EOP;
+EOP;
     // @codingStandardsIgnoreEnd
 
     /******************/
@@ -131,7 +131,7 @@ class Request implements RequestIface
      */
     public function getQueryParams()
     {
-        return isset($_REQUEST) ? $_REQUEST : array();
+        return isset($_REQUEST) ? $_REQUEST : [];
     }
 
     /**
@@ -221,7 +221,7 @@ class Request implements RequestIface
         if (empty($_SERVER['HTTP_ACCEPT']))
         {
             // The Accept header does not appear to be mandatory.
-            return array();
+            return [];
         }
 
         // Match a "Type/Subtype (;q=Q_Factor)? Params" list.
@@ -233,7 +233,7 @@ class Request implements RequestIface
             '(?<Params>(?&ACCEPT_EXTENSION)*)' .
             '/x';
 
-        $accepted = array();
+        $accepted = [];
         $numMatches = preg_match_all(
             $acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
 
@@ -253,7 +253,7 @@ class Request implements RequestIface
 
                 // Parse any accept extensions (more extensions makes a
                 // difference for the Accept preference ordering).
-                $params = array();
+                $params = [];
 
                 if (!empty($matches['Params'][$i]))
                 {
@@ -265,15 +265,14 @@ class Request implements RequestIface
                                             $paramsMatches['P_VAL']);
                 }
 
-                $accepted[] = array(
-                    'Params'   => $params,
-                    'Q_Factor' => $qFactor,
-                    'Subtype'  => $matches['Subtype'][$i],
-                    'Type'     => $matches['Type'][$i]);
+                $accepted[] = ['Params'   => $params,
+                               'Q_Factor' => $qFactor,
+                               'Subtype'  => $matches['Subtype'][$i],
+                               'Type'     => $matches['Type'][$i]];
             }
         }
 
-        usort($accepted, array($this, 'compareAccept'));
+        usort($accepted, [$this, 'compareAccept']);
 
         return $accepted;
     }
@@ -294,7 +293,7 @@ class Request implements RequestIface
         if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
         {
             // Accept-Language header is not mandatory.
-            return array();
+            return [];
         }
 
         // Match the language and its optional Q_Factor.
@@ -303,7 +302,7 @@ class Request implements RequestIface
             '(?<Language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
             '((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
 
-        $acceptLanguages = array();
+        $acceptLanguages = [];
         $numLanguages = preg_match_all(
             $pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
@@ -314,11 +313,11 @@ class Request implements RequestIface
                 empty($matches['Q_Factor'][$i]) ? 1.0 :
                 $matches['Q_Factor'][$i] + 0.0; // Make it float.
 
-            $acceptLanguages[] = array('Language' => $matches['Language'][$i],
-                                       'Q_Factor' => $qFactor);
+            $acceptLanguages[] = ['Language' => $matches['Language'][$i],
+                                  'Q_Factor' => $qFactor];
         }
 
-        usort($acceptLanguages, array($this, 'compareAcceptLanguage'));
+        usort($acceptLanguages, [$this, 'compareAcceptLanguage']);
 
         return $acceptLanguages;
     }

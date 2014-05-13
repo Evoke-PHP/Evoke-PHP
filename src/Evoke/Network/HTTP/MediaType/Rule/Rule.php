@@ -19,7 +19,7 @@ abstract class Rule implements RuleIface
     /**
      * The media type that the rule is checked against.
      */
-    protected $mediaType = array();
+    protected $mediaType = [];
 
     /**
      * The output format.
