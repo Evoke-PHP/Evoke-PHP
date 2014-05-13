@@ -18,38 +18,38 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
  */
 class Match extends Rule
 {
-	/**
-	 * The match for the media type.
-	 * @var mixed[]
-	 */
-	protected $match;
+    /**
+     * The match for the media type.
+     * @var mixed[]
+     */
+    protected $match;
 
-	/**
-	 * Construct the Exact rule.
-	 *
-	 * @param string  The output format for the rule.
-	 * @param mixed[] The match required from the media type.
-	 */
-	public function __construct(/* String */ $outputFormat,
-	                            Array        $match)
-	{
-		parent::__construct($outputFormat, $match);
+    /**
+     * Construct the Exact rule.
+     *
+     * @param string  The output format for the rule.
+     * @param mixed[] The match required from the media type.
+     */
+    public function __construct(/* String */ $outputFormat,
+                                Array        $match)
+    {
+        parent::__construct($outputFormat, $match);
 
-		$this->match = $match;
-	}
-	
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->match = $match;
+    }
 
-	/**
-	 * Check to see if the rule matches.
-	 *
-	 * @return bool Whether the rule matches.
-	 */
-	public function isMatch()
-	{
-		return $this->mediaType === $this->match;
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
+
+    /**
+     * Check to see if the rule matches.
+     *
+     * @return bool Whether the rule matches.
+     */
+    public function isMatch()
+    {
+        return $this->mediaType === $this->match;
+    }
 }
 // EOF

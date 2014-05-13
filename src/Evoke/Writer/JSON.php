@@ -18,18 +18,18 @@ namespace Evoke\Writer;
  */
 class JSON extends Writer
 {
-	/******************/
-	/* Public Methods */
-	/******************/
-	
-	/**
-	 * Write the data in JSON format into the buffer.
-	 *
-	 * @param mixed[] PHP data to be encoded into the buffer as JSON.
-	 */
-	public function write($data)
-	{
-		$this->buffer .= json_encode($data);
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
+
+    /**
+     * Write the data in JSON format into the buffer.
+     *
+     * @param mixed[] PHP data to be encoded into the buffer as JSON.
+     */
+    public function write($data)
+    {
+        $this->buffer .= json_encode($data);
+    }
 }
 // EOF

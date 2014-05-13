@@ -16,34 +16,34 @@ namespace Evoke\View;
  */
 class Fixed implements ViewIface
 {
-	/**
-	 * Contents
-	 * @var mixed
-	 */
-	protected $contents;
+    /**
+     * Contents
+     * @var mixed
+     */
+    protected $contents;
 
-	/**
-	 * Construct a fixed view.
-	 *
-	 * @param mixed Contents.
-	 */
-	public function __construct(/* mixed */ $contents)
-	{
-		$this->contents = $contents;
-	}
+    /**
+     * Construct a fixed view.
+     *
+     * @param mixed Contents.
+     */
+    public function __construct(/* mixed */ $contents)
+    {
+        $this->contents = $contents;
+    }
 
-	/******************/
-	/* Public Methods */
-	/******************/
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Get the fixed view.
-	 *
-	 * @return mixed[] The data for the view.
-	 */
-	public function get()
-	{
-		return $this->contents;
-	}
+    /**
+     * Get the fixed view.
+     *
+     * @return mixed[] The data for the view.
+     */
+    public function get()
+    {
+        return $this->contents;
+    }
 }
 // EOF

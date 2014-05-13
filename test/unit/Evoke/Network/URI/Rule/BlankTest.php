@@ -2,7 +2,7 @@
 namespace Evoke_Test\Network\URI\Rule;
 
 use Evoke\Network\URI\Rule\Blank,
-	PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\Blank
@@ -10,45 +10,45 @@ use Evoke\Network\URI\Rule\Blank,
  */
 class BlankTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
+    /******************/
+    /* Data Providers */
+    /******************/
 
-	public function providerIsMatch()
-	{
-		return ['Is_Blank'  => ['Replacement' => "Replace",
+    public function providerIsMatch()
+    {
+        return ['Is_Blank'  => ['Replacement' => "Replace",
                                 'Expected'    => true,
                                 'URI'         => ""],
-		        'Non_Blank' => ['Replacement' => 'abc',
+                'Non_Blank' => ['Replacement' => 'abc',
                                 'Expected'   => false,
-		                        'URI'        => 'nonBlank']];
-	}
+                                'URI'        => 'nonBlank']];
+    }
 
-	/*********/
-	/* Tests */
-	/*********/
+    /*********/
+    /* Tests */
+    /*********/
 
-	public function testCreate()
-	{
-		$obj = new Blank("ReplaceText");
-		$this->assertInstanceOf('Evoke\Network\URI\Rule\Blank', $obj);
-	}
+    public function testCreate()
+    {
+        $obj = new Blank("ReplaceText");
+        $this->assertInstanceOf('Evoke\Network\URI\Rule\Blank', $obj);
+    }
 
-	public function testGetController()
-	{
-		$obj = new Blank('Replacement');
-		$obj->setURI('');
-		$this->assertSame('Replacement', $obj->getController());
-	}
+    public function testGetController()
+    {
+        $obj = new Blank('Replacement');
+        $obj->setURI('');
+        $this->assertSame('Replacement', $obj->getController());
+    }
 
-	/**
-	 * @dataProvider providerIsMatch
-	 */
-	public function testIsMatch($replacement, $expected, $uri)
-	{
-		$obj = new Blank($replacement);
-		$obj->setURI($uri);
-		$this->assertSame($expected, $obj->isMatch());
-	}  
+    /**
+     * @dataProvider providerIsMatch
+     */
+    public function testIsMatch($replacement, $expected, $uri)
+    {
+        $obj = new Blank($replacement);
+        $obj->setURI($uri);
+        $this->assertSame($expected, $obj->isMatch());
+    }
 }
 // EOF

@@ -16,11 +16,11 @@ namespace Evoke\Network;
  */
 interface RequestIface
 {
-	/**
-	 * Get the URI of the request (without the query string).
-	 *
-	 * @return string The URI of the request.
-	 */
-	public function getURI();
+    /**
+     * Get the URI of the request (without the query string).
+     *
+     * @return string The URI of the request.
+     */
+    public function getURI();
 }
 // EOF

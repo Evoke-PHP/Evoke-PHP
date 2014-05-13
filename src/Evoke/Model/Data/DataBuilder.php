@@ -18,26 +18,26 @@ use Evoke\Model\Data\Join\JoinIface;
  */
 class DataBuilder
 {
-	/******************/
-	/* Public Methods */
-	/******************/
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Build hierarchical Data containers from the associated Join structure.
-	 *
-	 * @param JoinIface The join structure to build the data structure from.
-	 */
+    /**
+     * Build hierarchical Data containers from the associated Join structure.
+     *
+     * @param JoinIface The join structure to build the data structure from.
+     */
     public function build(JoinIface $joinStructure)
-	{
-		$jointData = array();
-		$joins = $joinStructure->getJoins();
+    {
+        $jointData = array();
+        $joins = $joinStructure->getJoins();
 
-		foreach ($joins as $joinID => $join)
-		{
-			$jointData[$joinID] = $this->build($join);
-		}
+        foreach ($joins as $joinID => $join)
+        {
+            $jointData[$joinID] = $this->build($join);
+        }
 
-		return new Data($joinStructure, $jointData);
-	}
+        return new Data($joinStructure, $jointData);
+    }
 }
 // EOF

@@ -18,18 +18,18 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
  */
 class Any extends Rule
 {
-	/******************/
-	/* Public Methods */
-	/******************/
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * This rule matches anything!
-	 *
-	 * @return bool True.
-	 */
-	public function isMatch()
-	{
-		return true;
-	}
+    /**
+     * This rule matches anything!
+     *
+     * @return bool True.
+     */
+    public function isMatch()
+    {
+        return true;
+    }
 }
 // EOF

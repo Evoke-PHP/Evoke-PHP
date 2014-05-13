@@ -41,199 +41,199 @@ use BadMethodCallException;
  */
 class Flat implements FlatIface
 {
-	/**
-	 * The data that is being modelled.
-	 * @var mixed[]
-	 */
-	protected $data = array();
+    /**
+     * The data that is being modelled.
+     * @var mixed[]
+     */
+    protected $data = array();
 
-	/******************/
-	/* Public Methods */
-	/******************/
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Get the current record as a simple array (without iterator or class
-	 * properties).
-	 *
-	 * @return mixed[] The current record as a simple array.
-	 */
-	public function getRecord()
-	{
-		return current($this->data);
-	}
-	
-	/**
-	 * Whether the data is empty or not.
-	 *
-	 * @return bool Whether the data is empty or not.
-	 */
-	public function isEmpty()
-	{
-		return empty($this->data);
-	}
-   
-	/**
-	 * Set the data that we are managing.
-	 *
-	 * @param mixed[] The data we want to manage.
-	 */
-	public function setData(Array $data)
-	{
-		$this->data = $data;
-		$this->rewind();
-	}   
-   
-	/***********************/
-	/* Implements Iterator */
-	/***********************/
+    /**
+     * Get the current record as a simple array (without iterator or class
+     * properties).
+     *
+     * @return mixed[] The current record as a simple array.
+     */
+    public function getRecord()
+    {
+        return current($this->data);
+    }
 
-	/**
-	 * Return the current record of data (as a Data object with iterator and
-	 * reference access).  This is just the object as the object implements the
-	 * iterator and references.
-	 *
-	 * @return FlatIface
-	 */
-	public function current()
-	{
-		return $this;
-	}
+    /**
+     * Whether the data is empty or not.
+     *
+     * @return bool Whether the data is empty or not.
+     */
+    public function isEmpty()
+    {
+        return empty($this->data);
+    }
 
-	/**
-	 * Return the key of the current data item.
-	 *
-	 * @return string|int
-	 */
-	public function key()
-	{
-		return key($this->data);
-	}
+    /**
+     * Set the data that we are managing.
+     *
+     * @param mixed[] The data we want to manage.
+     */
+    public function setData(Array $data)
+    {
+        $this->data = $data;
+        $this->rewind();
+    }
 
-	/**
-	 * Get the next record of data. Set the next record within the Data object
-	 * and return the object.
-	 *
-	 * @return FlatIface|bool Return the next data object, or boolean false.
-	 */
-	public function next()
-	{
-		$nextItem = next($this->data);
+    /***********************/
+    /* Implements Iterator */
+    /***********************/
 
-		if ($nextItem === false)
-		{
-			$this->setRecord(array());
-			return false;
-		}
+    /**
+     * Return the current record of data (as a Data object with iterator and
+     * reference access).  This is just the object as the object implements the
+     * iterator and references.
+     *
+     * @return FlatIface
+     */
+    public function current()
+    {
+        return $this;
+    }
 
-		$this->setRecord($nextItem);
-		return $this;
-	}
+    /**
+     * Return the key of the current data item.
+     *
+     * @return string|int
+     */
+    public function key()
+    {
+        return key($this->data);
+    }
 
-	/**
-	 * Rewind to the first record of data.
-	 */
-	public function rewind()
-	{
-		$first = reset($this->data);
+    /**
+     * Get the next record of data. Set the next record within the Data object
+     * and return the object.
+     *
+     * @return FlatIface|bool Return the next data object, or boolean false.
+     */
+    public function next()
+    {
+        $nextItem = next($this->data);
 
-		if ($first !== false)
-		{
-			$this->setRecord($first);
-		}
-		else
-		{
-			$this->setRecord(array());
-		}
-	}
+        if ($nextItem === false)
+        {
+            $this->setRecord(array());
+            return false;
+        }
 
-	/**
-	 * Whether there are still data records to iterate over.
-	 *
-	 * @return bool Whether the current data record is valid.
-	 */
-	public function valid()
-	{
-		return (current($this->data) !== false);
-	}
+        $this->setRecord($nextItem);
+        return $this;
+    }
 
-	/**************************/
-	/* Implements ArrayAccess */
-	/**************************/
-   
-	/**
-	 * Provide the array isset operator.
-	 *
-	 * @param string The offest to check for existence.
-	 *
-	 * @return bool Whether the offset exists.
-	 */
-	public function offsetExists($offset)
-	{
-		$record = current($this->data);
-		return isset($record[$offset]);
-	}
+    /**
+     * Rewind to the first record of data.
+     */
+    public function rewind()
+    {
+        $first = reset($this->data);
 
-	/**
-	 * Provide the array access operator.
-	 *
-	 * @param string The offset to get.
-	 *
-	 * @return mixed The value at the offset.
-	 */
-	public function offsetGet($offset)
-	{
-		$record = current($this->data);
-		return $record[$offset];
-	}
+        if ($first !== false)
+        {
+            $this->setRecord($first);
+        }
+        else
+        {
+            $this->setRecord(array());
+        }
+    }
 
-	/**
-	 * We are required to make these available to complete the interface,
-	 * but we don't want the element to change, so this should never be called.
-	 *
-	 * @param mixed Offset.
-	 * @param mixed Value.
-	 *
-	 * @throw RuntimeException *** ALWAYS ***
-	 */
-	public function offsetSet($offset, $value)
-	{
-		throw new BadMethodCallException(
-			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.  It was called with ' .
-			'offset: ' . $offset . ' and value: ' . $value);
-	}
+    /**
+     * Whether there are still data records to iterate over.
+     *
+     * @return bool Whether the current data record is valid.
+     */
+    public function valid()
+    {
+        return (current($this->data) !== false);
+    }
 
-	/**
-	 * We are required to make these available to complete the interface,
-	 * but we don't want the element to change, so this should never be called.
-	 *
-	 * @param mixed Offset.
-	 *
-	 * @throw RuntimeException *** ALWAYS ***
-	 */
-	public function offsetUnset($offset)
-	{
-		throw new BadMethodCallException(
-			__METHOD__ . ' should never be called - data is only ' .
-			'transferrable it is not to be modified.  It was called with ' .
-			'offset: ' . $offset);
-	}
+    /**************************/
+    /* Implements ArrayAccess */
+    /**************************/
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
+    /**
+     * Provide the array isset operator.
+     *
+     * @param string The offest to check for existence.
+     *
+     * @return bool Whether the offset exists.
+     */
+    public function offsetExists($offset)
+    {
+        $record = current($this->data);
+        return isset($record[$offset]);
+    }
 
-	/**
-	 * Extra actions to be performed upon updating the current record within the
-	 * data.
-	 *
-	 * @param mixed[] The current record that we are setting.
-	 *
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 */
-	protected function setRecord(Array $record)
-	{
-		// By default nothing extra needs to be done.
-	}
+    /**
+     * Provide the array access operator.
+     *
+     * @param string The offset to get.
+     *
+     * @return mixed The value at the offset.
+     */
+    public function offsetGet($offset)
+    {
+        $record = current($this->data);
+        return $record[$offset];
+    }
+
+    /**
+     * We are required to make these available to complete the interface,
+     * but we don't want the element to change, so this should never be called.
+     *
+     * @param mixed Offset.
+     * @param mixed Value.
+     *
+     * @throw RuntimeException *** ALWAYS ***
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new BadMethodCallException(
+            __METHOD__ . ' should never be called - data is only ' .
+            'transferrable it is not to be modified.  It was called with ' .
+            'offset: ' . $offset . ' and value: ' . $value);
+    }
+
+    /**
+     * We are required to make these available to complete the interface,
+     * but we don't want the element to change, so this should never be called.
+     *
+     * @param mixed Offset.
+     *
+     * @throw RuntimeException *** ALWAYS ***
+     */
+    public function offsetUnset($offset)
+    {
+        throw new BadMethodCallException(
+            __METHOD__ . ' should never be called - data is only ' .
+            'transferrable it is not to be modified.  It was called with ' .
+            'offset: ' . $offset);
+    }
+
+    /*********************/
+    /* Protected Methods */
+    /*********************/
+
+    /**
+     * Extra actions to be performed upon updating the current record within the
+     * data.
+     *
+     * @param mixed[] The current record that we are setting.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function setRecord(Array $record)
+    {
+        // By default nothing extra needs to be done.
+    }
 }
 // EOF

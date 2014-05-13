@@ -7,7 +7,7 @@
 namespace Evoke\Model\Data;
 
 use Evoke\Model\Data\Join\JoinIface,
-	OutOfBoundsException;
+    OutOfBoundsException;
 
 /**
  * A general purporse data structure that provides access to hierarchical data.
@@ -15,7 +15,7 @@ use Evoke\Model\Data\Join\JoinIface,
  * current level of the tree.  Lower levels are accessed using class properties.
  *
  * ###Joins
- * 
+ *
  * Joins provide a way of representing trees of data commonly found in
  * relational databases and many other real world situations.  They allow us to
  * work with a hierarchy of information considering each part in the hierarchy
@@ -56,7 +56,7 @@ use Evoke\Model\Data\Join\JoinIface,
  *     }
  * }
  * </code></pre>
- * 
+ *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
  * @license   MIT
@@ -64,65 +64,65 @@ use Evoke\Model\Data\Join\JoinIface,
  */
 class Data extends Flat
 {
-	/**
-	 * Properties for the data.
-	 *
-	 * @var Data[]    $jointData     Joins for the data.
-	 * @var string    $jointKey      Field used to join the data in a record.
-	 * @var JoinIface $joinStructure Structure of the data we are modelling.
-	 */
-	protected $jointData, $jointKey, $joinStructure;
+    /**
+     * Properties for the data.
+     *
+     * @var Data[]    $jointData     Joins for the data.
+     * @var string    $jointKey      Field used to join the data in a record.
+     * @var JoinIface $joinStructure Structure of the data we are modelling.
+     */
+    protected $jointData, $jointKey, $joinStructure;
 
-	/**
-	 * Construct a Data model.
-	 *
-	 * @param JoinIface Structure of the data we are modelling.
-	 * @param Data[]    Joins for the data.
-	 * @param string    Field used to join the data in a record.
-	 */
-	public function __construct(JoinIface    $joinStructure,
-	                            Array        $jointData = array(),
-	                            /* String */ $jointKey  = 'Joint_Data')
-	{
-		$this->joinStructure = $joinStructure;
-		$this->jointData     = $jointData;
-		$this->jointKey      = $jointKey;
-	}
+    /**
+     * Construct a Data model.
+     *
+     * @param JoinIface Structure of the data we are modelling.
+     * @param Data[]    Joins for the data.
+     * @param string    Field used to join the data in a record.
+     */
+    public function __construct(JoinIface    $joinStructure,
+                                Array        $jointData = array(),
+                                /* String */ $jointKey  = 'Joint_Data')
+    {
+        $this->joinStructure = $joinStructure;
+        $this->jointData     = $jointData;
+        $this->jointKey      = $jointKey;
+    }
 
-	/**
-	 * Get access to the joint data as though it is a property of the object.
-	 * 
-	 * @param string Join name that identifies the joint data uniquely in the
-	 *               join structure.
-	 * @return Data The joint data.
-	 */
-	public function __get($join)
-	{
-		$joinID = $this->joinStructure->getJoinID($join);
+    /**
+     * Get access to the joint data as though it is a property of the object.
+     *
+     * @param string Join name that identifies the joint data uniquely in the
+     *               join structure.
+     * @return Data The joint data.
+     */
+    public function __get($join)
+    {
+        $joinID = $this->joinStructure->getJoinID($join);
 
-		if (isset($this->jointData[$joinID]))
-		{
-			return $this->jointData[$joinID];
-		}
-		
-		throw new OutOfBoundsException('no data container for join: ' . $join);
-	}
+        if (isset($this->jointData[$joinID]))
+        {
+            return $this->jointData[$joinID];
+        }
 
-	/**
-	 * Set the data that we are managing.
-	 *
-	 * @param mixed[] The data we want to manage.
-	 */
-	public function setData(Array $data)
-	{
-		$this->data = $this->joinStructure->arrangeFlatData($data);
-		$this->rewind();
-	}   
+        throw new OutOfBoundsException('no data container for join: ' . $join);
+    }
 
-	/*********************/
-	/* Protected Methods */
-	/*********************/
-    
+    /**
+     * Set the data that we are managing.
+     *
+     * @param mixed[] The data we want to manage.
+     */
+    public function setData(Array $data)
+    {
+        $this->data = $this->joinStructure->arrangeFlatData($data);
+        $this->rewind();
+    }
+
+    /*********************/
+    /* Protected Methods */
+    /*********************/
+
     /**
      * Set data that has already been arranged by the join structure.
      *
@@ -134,25 +134,25 @@ class Data extends Flat
         $this->rewind();
     }
 
-	/**
-	 * Set all of the Joint Data from the current record into the data
-	 * containers supplied by the references given at construction.
-	 *
-	 * @param mixed[] The current record to set the joint data with.
-	 */
-	protected function setRecord(Array $record)
-	{
-		foreach ($this->jointData as $joinID => $data)
-		{
-			if (isset($record[$this->jointKey][$joinID]))
-			{
-				$data->setArrangedData($record[$this->jointKey][$joinID]);
-			}
-			else
-			{
-				$data->setArrangedData(array());
-			}
-		}
-	}
+    /**
+     * Set all of the Joint Data from the current record into the data
+     * containers supplied by the references given at construction.
+     *
+     * @param mixed[] The current record to set the joint data with.
+     */
+    protected function setRecord(Array $record)
+    {
+        foreach ($this->jointData as $joinID => $data)
+        {
+            if (isset($record[$this->jointKey][$joinID]))
+            {
+                $data->setArrangedData($record[$this->jointKey][$joinID]);
+            }
+            else
+            {
+                $data->setArrangedData(array());
+            }
+        }
+    }
 }
 // EOF

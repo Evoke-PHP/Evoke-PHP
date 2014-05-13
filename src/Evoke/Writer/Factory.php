@@ -7,7 +7,7 @@
 namespace Evoke\Writer;
 
 use DomainException,
-	XMLWriter;
+    XMLWriter;
 
 /**
  * Writer Factory
@@ -19,41 +19,41 @@ use DomainException,
  */
 class Factory
 {
-	/******************/
-	/* Public Methods */
-	/******************/
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Create a writer object.
-	 *
-	 * @param string The output format for the writer to create.
-	 */
-	public function create(/* String */ $outputFormat)
-	{
-		$upperOutputFormat = strtoupper($outputFormat);
-		
-		switch ($upperOutputFormat)
-		{
-		case 'JSON':
-			return new JSON;
-		case 'TEXT':
-			return new Text;
-		}
+    /**
+     * Create a writer object.
+     *
+     * @param string The output format for the writer to create.
+     */
+    public function create(/* String */ $outputFormat)
+    {
+        $upperOutputFormat = strtoupper($outputFormat);
 
-		$xmlWriter = new XMLWriter;
+        switch ($upperOutputFormat)
+        {
+        case 'JSON':
+            return new JSON;
+        case 'TEXT':
+            return new Text;
+        }
 
-		switch ($upperOutputFormat)
-		{
-		case 'HTML5':
-			return new XML($xmlWriter, 'HTML5');
-		case 'XHTML':
-			return new XML($xmlWriter, 'XHTML_1_1');
-		case 'XML':
-			return new XML($xmlWriter, 'XML');
-		default:
-			throw new DomainException(
-				'No writer for output format: ' . $outputFormat);
-		}
-	}
+        $xmlWriter = new XMLWriter;
+
+        switch ($upperOutputFormat)
+        {
+        case 'HTML5':
+            return new XML($xmlWriter, 'HTML5');
+        case 'XHTML':
+            return new XML($xmlWriter, 'XHTML_1_1');
+        case 'XML':
+            return new XML($xmlWriter, 'XML');
+        default:
+            throw new DomainException(
+                'No writer for output format: ' . $outputFormat);
+        }
+    }
 }
 // EOF

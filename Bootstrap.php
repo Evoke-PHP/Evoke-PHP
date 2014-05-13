@@ -9,11 +9,11 @@
 namespace Evoke\Bootstrap;
 
 use DateTime,
-	Evoke\Network\HTTP,
-	Evoke\Service,
-	Evoke\View,
-	Evoke\Writer,
-	XMLWriter;
+    Evoke\Network\HTTP,
+    Evoke\Service,
+    Evoke\View,
+    Evoke\Writer,
+    XMLWriter;
 
 /**
  * Bootstrap
@@ -26,73 +26,73 @@ use DateTime,
  */
 function bootstrap($isDevelopmentServer, $logFile)
 {
-	try
-	{
-		/************/
-		/* Autoload */
-		/************/
-		$component = 'Autoload';
-		$evokeDir = __DIR__ . '/src/';
-		$autoloadDir = $evokeDir . 'Evoke/Service/Autoload/';
-		require $autoloadDir . 'AutoloadIface.php';
-		require $autoloadDir . 'PSR0Namespace.php';
+    try
+    {
+        /************/
+        /* Autoload */
+        /************/
+        $component = 'Autoload';
+        $evokeDir = __DIR__ . '/src/';
+        $autoloadDir = $evokeDir . 'Evoke/Service/Autoload/';
+        require $autoloadDir . 'AutoloadIface.php';
+        require $autoloadDir . 'PSR0Namespace.php';
 
-		$autoloader = new Service\Autoload\PSR0Namespace(
-			$evokeDir, 'Evoke\\');
-		spl_autoload_register([$autoloader, 'load']);
+        $autoloader = new Service\Autoload\PSR0Namespace(
+            $evokeDir, 'Evoke\\');
+        spl_autoload_register([$autoloader, 'load']);
 
-		/***********/
-		/* Logging */
-		/***********/
-		$component = 'Logging';
-		$logging = new Service\Log\Logging(new DateTime);
-		$logging->attach(new Service\Log\File($logFile));
+        /***********/
+        /* Logging */
+        /***********/
+        $component = 'Logging';
+        $logging = new Service\Log\Logging(new DateTime);
+        $logging->attach(new Service\Log\File($logFile));
 
-		/************/
-		/* Response */
-		/************/
-		$component = 'Response';
-		$response = new HTTP\Response;
+        /************/
+        /* Response */
+        /************/
+        $component = 'Response';
+        $response = new HTTP\Response;
 
-		/********************/
-		/* Shutdown Handler */
-		/********************/
-		$component = 'Shutdown Handler';
-		$viewShutdownMessageBox = new View\HTML5\MessageBox(
-			['class' => 'Message_Box Shutdown']);
-		$viewError = new View\HTML5\Error;
-		$xhtmlWriter = new Writer\XML(new XMLWriter);
-		$shutdownHandler = new Service\ShutdownHandler(
-			'admin@example.com', $response, $isDevelopmentServer,
-			$viewShutdownMessageBox, $xhtmlWriter, $viewError);
-		register_shutdown_function([$shutdownHandler, 'handler']);
+        /********************/
+        /* Shutdown Handler */
+        /********************/
+        $component = 'Shutdown Handler';
+        $viewShutdownMessageBox = new View\HTML5\MessageBox(
+            ['class' => 'Message_Box Shutdown']);
+        $viewError = new View\HTML5\Error;
+        $xhtmlWriter = new Writer\XML(new XMLWriter);
+        $shutdownHandler = new Service\ShutdownHandler(
+            'admin@example.com', $response, $isDevelopmentServer,
+            $viewShutdownMessageBox, $xhtmlWriter, $viewError);
+        register_shutdown_function([$shutdownHandler, 'handler']);
 
-		/*********************/
-		/* Exception Handler */
-		/*********************/
-		$component = 'Exception Handler';
-		$viewExceptionMessageBox = new View\HTML5\MessageBox(
-			['class' => 'Message_Box Exception']);
-		$viewException = new View\HTML5\Exception;
-		$exceptionHandler = new Service\ExceptionHandler(
-			$response, $isDevelopmentServer, $viewExceptionMessageBox,
-			$xhtmlWriter, $viewException);
-		set_exception_handler([$exceptionHandler, 'handler']);
+        /*********************/
+        /* Exception Handler */
+        /*********************/
+        $component = 'Exception Handler';
+        $viewExceptionMessageBox = new View\HTML5\MessageBox(
+            ['class' => 'Message_Box Exception']);
+        $viewException = new View\HTML5\Exception;
+        $exceptionHandler = new Service\ExceptionHandler(
+            $response, $isDevelopmentServer, $viewExceptionMessageBox,
+            $xhtmlWriter, $viewException);
+        set_exception_handler([$exceptionHandler, 'handler']);
 
-		/*****************/
-		/* Error Handler */
-		/*****************/
-		$component = 'Error Handler';
-		$errorHandler = new Service\ErrorHandler($logging);
-		set_error_handler([$errorHandler, 'handler']);
+        /*****************/
+        /* Error Handler */
+        /*****************/
+        $component = 'Error Handler';
+        $errorHandler = new Service\ErrorHandler($logging);
+        set_error_handler([$errorHandler, 'handler']);
 
-		return $response;
-	}
-	catch(\Exception $e)
-	{
-		header('HTTP/1.1 500 Internal Server Error');
-		die('System failure due to: ' . $component . '.' .
-		    $isDevelopmentServer ? ' Exception: ' . $e->getMessage() : '');
-	}
+        return $response;
+    }
+    catch(\Exception $e)
+    {
+        header('HTTP/1.1 500 Internal Server Error');
+        die('System failure due to: ' . $component . '.' .
+            $isDevelopmentServer ? ' Exception: ' . $e->getMessage() : '');
+    }
 }
 // EOF

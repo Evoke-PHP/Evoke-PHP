@@ -20,53 +20,53 @@ use InvalidArgumentException;
  */
 class Exact extends Match
 {
-	/**
-	 * Fields that can be ignored in the match.
-	 * @var string[]
-	 */
-	protected $ignoredFields;
+    /**
+     * Fields that can be ignored in the match.
+     * @var string[]
+     */
+    protected $ignoredFields;
 
-	/**
-	 * The match for the media type.
-	 * @var mixed[]
-	 */
-	protected $match;
+    /**
+     * The match for the media type.
+     * @var mixed[]
+     */
+    protected $match;
 
-	/**
-	 * Construct the Exact rule.
-	 * 
-	 * @param string   The output format for the rule.
-	 * @param mixed[]  Exact match required from the media type.
-	 * @param string[] Fields that are to be ignored in the match.
-	 */
-	public function __construct(/* String */ $outputFormat,
-	                            Array        $match,
-	                            Array        $ignoredFields = array('Q_Factor'))
-	{
-		parent::__construct($outputFormat, $match);
+    /**
+     * Construct the Exact rule.
+     *
+     * @param string   The output format for the rule.
+     * @param mixed[]  Exact match required from the media type.
+     * @param string[] Fields that are to be ignored in the match.
+     */
+    public function __construct(/* String */ $outputFormat,
+                                Array        $match,
+                                Array        $ignoredFields = array('Q_Factor'))
+    {
+        parent::__construct($outputFormat, $match);
 
-		$this->ignoredFields = $ignoredFields;
-	}
-	
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->ignoredFields = $ignoredFields;
+    }
 
-	/**
-	 * Check to see if the rule matches.
-	 *
-	 * @return bool Whether the rule matches.
-	 */
-	public function isMatch()
-	{
-		$mType = $this->mediaType;
-		
-		foreach ($this->ignoredFields as $ignored)
-		{
-			unset($mType[$ignored]);
-		}
+    /******************/
+    /* Public Methods */
+    /******************/
 
-		return $mType === $this->match;
-	}
+    /**
+     * Check to see if the rule matches.
+     *
+     * @return bool Whether the rule matches.
+     */
+    public function isMatch()
+    {
+        $mType = $this->mediaType;
+
+        foreach ($this->ignoredFields as $ignored)
+        {
+            unset($mType[$ignored]);
+        }
+
+        return $mType === $this->match;
+    }
 }
 // EOF

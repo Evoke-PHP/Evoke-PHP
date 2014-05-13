@@ -19,71 +19,71 @@ namespace Evoke\Network\URI\Rule;
  */
 class UppercaseFirst extends Rule
 {
-	/**
-	 * The delimiters define the boundary of words.
-	 * @var string[]
-	 */
-	protected $delimiters;
+    /**
+     * The delimiters define the boundary of words.
+     * @var string[]
+     */
+    protected $delimiters;
 
-	/**
-	 * Construct the UpperCaseFirst Rule.
-	 *
-	 * @param string[] Delimiter strings that show the boundary of words.
-	 * @param bool     Whether the rule can definitely give the final route for
-	 *                 all URIs that it matches.
-	 */
-	public function __construct(Array      $delimiters,
-	                            /* Bool */ $authoritative=false)
-	{
-		parent::__construct($authoritative);
+    /**
+     * Construct the UpperCaseFirst Rule.
+     *
+     * @param string[] Delimiter strings that show the boundary of words.
+     * @param bool     Whether the rule can definitely give the final route for
+     *                 all URIs that it matches.
+     */
+    public function __construct(Array      $delimiters,
+                                /* Bool */ $authoritative=false)
+    {
+        parent::__construct($authoritative);
 
-		$this->delimiters = $delimiters;
-	}
-   
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->delimiters = $delimiters;
+    }
 
-	/**
-	 * Get the controller with each word starting in upper case.
-	 *
-	 * @return string The string representing the Controller.
-	 */
-	public function getController()
-	{
-		$controller = $this->uri;
-		
-		foreach ($this->delimiters as $delimiter)
-		{
-			$parts = explode($delimiter, $controller);
+    /******************/
+    /* Public Methods */
+    /******************/
 
-			foreach ($parts as &$part)
-			{
-				$part = ucfirst($part);
-			}
+    /**
+     * Get the controller with each word starting in upper case.
+     *
+     * @return string The string representing the Controller.
+     */
+    public function getController()
+    {
+        $controller = $this->uri;
 
-			$controller = implode($delimiter, $parts);
-		}
+        foreach ($this->delimiters as $delimiter)
+        {
+            $parts = explode($delimiter, $controller);
 
-		return $controller;
-	}
+            foreach ($parts as &$part)
+            {
+                $part = ucfirst($part);
+            }
 
-	/**
-	 * Check the uri to see if it matches.
-	 *
-	 * @return bool Whether the uri is matched.
-	 */
-	public function isMatch()
-	{
-		foreach ($this->delimiters as $delimiter)
-		{
-			if (strpos($this->uri, $delimiter) !== false)
-			{
-				return true;
-			}
-		}
-      
-		return false;
-	}
+            $controller = implode($delimiter, $parts);
+        }
+
+        return $controller;
+    }
+
+    /**
+     * Check the uri to see if it matches.
+     *
+     * @return bool Whether the uri is matched.
+     */
+    public function isMatch()
+    {
+        foreach ($this->delimiters as $delimiter)
+        {
+            if (strpos($this->uri, $delimiter) !== false)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 // EOF

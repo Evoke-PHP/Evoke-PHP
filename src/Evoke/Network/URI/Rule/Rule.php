@@ -20,68 +20,68 @@ use InvalidArgumentException;
  */
 abstract class Rule implements RuleIface
 {
-	/**
-	 * Whether the rule can definitely give the final route for all URIs that
-	 * it matches.
-	 * @var bool
-	 */
-	protected $authoritative;
+    /**
+     * Whether the rule can definitely give the final route for all URIs that
+     * it matches.
+     * @var bool
+     */
+    protected $authoritative;
 
-	/**
-	 * The URI that the rule is acting upon.
-	 * @var string
-	 */
-	protected $uri;
-	
-	/**
-	 * Construct the URI Rule.
-	 *
-	 * @param bool Whether the rule can definitely give the final route for all
-	 *             URIs that it matches.
-	 */
-	public function __construct(/* Bool */ $authoritative)
-	{
-		$this->authoritative = $authoritative;
-	}
+    /**
+     * The URI that the rule is acting upon.
+     * @var string
+     */
+    protected $uri;
 
-	/******************/
-	/* Public Methods */
-	/******************/
+    /**
+     * Construct the URI Rule.
+     *
+     * @param bool Whether the rule can definitely give the final route for all
+     *             URIs that it matches.
+     */
+    public function __construct(/* Bool */ $authoritative)
+    {
+        $this->authoritative = $authoritative;
+    }
 
-	/**
-	 * Get the parameters for the URI.
-	 *
-	 * @return [] Empty Array. (By default no parameters are captured)
-	 */	
-	public function getParams()
-	{
-		return array();
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Check whether the rule is authoritative.
-	 *
-	 * @return bool Whether the rule can definitely give the final route for all
-	 *              URIs that it matches.
-	 */
-	public function isAuthoritative()
-	{
-		return $this->authoritative;
-	}
+    /**
+     * Get the parameters for the URI.
+     *
+     * @return [] Empty Array. (By default no parameters are captured)
+     */
+    public function getParams()
+    {
+        return array();
+    }
 
-	/**
-	 * Set the URI that the rule is acting upon.
-	 *
-	 * @param string The value to set the URI to.
-	 */
-	public function setURI($uri)
-	{
-		if (!is_string($uri))
-		{
-			throw new InvalidArgumentException('needs URI as string.');
-		}
-		
-		$this->uri = $uri;
-	}
+    /**
+     * Check whether the rule is authoritative.
+     *
+     * @return bool Whether the rule can definitely give the final route for all
+     *              URIs that it matches.
+     */
+    public function isAuthoritative()
+    {
+        return $this->authoritative;
+    }
+
+    /**
+     * Set the URI that the rule is acting upon.
+     *
+     * @param string The value to set the URI to.
+     */
+    public function setURI($uri)
+    {
+        if (!is_string($uri))
+        {
+            throw new InvalidArgumentException('needs URI as string.');
+        }
+
+        $this->uri = $uri;
+    }
 }
 // EOF

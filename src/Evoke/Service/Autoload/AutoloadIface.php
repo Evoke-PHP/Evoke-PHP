@@ -16,11 +16,11 @@ namespace Evoke\Service\Autoload;
  */
 interface AutoloadIface
 {
-	/**
-	 * Autoload the specified class.
-	 *
-	 * @param string The fully namespaced class to load.
-	 */
-	public function load(/* String */ $name);
+    /**
+     * Autoload the specified class.
+     *
+     * @param string The fully namespaced class to load.
+     */
+    public function load(/* String */ $name);
 }
 // EOF

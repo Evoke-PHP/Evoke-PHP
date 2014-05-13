@@ -18,36 +18,36 @@ namespace Evoke\Writer;
  */
 interface WriterIface
 {
-	/**
-	 * Get the string representation of the buffer that we are writing to.
-	 */
-	public function __toString();
+    /**
+     * Get the string representation of the buffer that we are writing to.
+     */
+    public function __toString();
 
-	/**
-	 * Reset the buffer that we are writing to.
-	 */
-	public function clean();
+    /**
+     * Reset the buffer that we are writing to.
+     */
+    public function clean();
 
-	/**
-	 * Flush the output buffer (send it and then reset).
-	 */
-	public function flush();
-	
-	/**
-	 * Write the data into the buffer.
-	 *
-	 * @param mixed The data to be written.
-	 */
-	public function write($data);
+    /**
+     * Flush the output buffer (send it and then reset).
+     */
+    public function flush();
 
-	/**
-	 * End the writing of a document.
-	 */
-	public function writeEnd();
-	
-	/**
-	 * Start the writing of a document.
-	 */
-	public function writeStart();
+    /**
+     * Write the data into the buffer.
+     *
+     * @param mixed The data to be written.
+     */
+    public function write($data);
+
+    /**
+     * End the writing of a document.
+     */
+    public function writeEnd();
+
+    /**
+     * Start the writing of a document.
+     */
+    public function writeStart();
 }
 // EOF

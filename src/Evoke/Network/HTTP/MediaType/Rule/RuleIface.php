@@ -16,25 +16,25 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
  */
 interface RuleIface
 {
-	/**
-	 * Get the output format for the media type.
-	 *
-	 * @return string The output format.
-	 */
-	public function getOutputFormat();
+    /**
+     * Get the output format for the media type.
+     *
+     * @return string The output format.
+     */
+    public function getOutputFormat();
 
-	/**
-	 * Check to see if the rule matches.
-	 *
-	 * @return bool Whether the rule matches.
-	 */
-	public function isMatch();
+    /**
+     * Check to see if the rule matches.
+     *
+     * @return bool Whether the rule matches.
+     */
+    public function isMatch();
 
-	/**
-	 * Set the media type that the rule is checked against.
-	 *
-	 * @param mixed[] The media type.
-	 */	
-	public function setMediaType(Array $mediaType);
+    /**
+     * Set the media type that the rule is checked against.
+     *
+     * @param mixed[] The media type.
+     */
+    public function setMediaType(Array $mediaType);
 }
 // EOF

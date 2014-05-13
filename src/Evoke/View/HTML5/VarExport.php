@@ -20,36 +20,36 @@ use Evoke\View\ViewIface;
  */
 class VarExport implements ViewIface
 {
-	/**
-	 * Variable to export.
-	 * @var mixed
-	 */
-	protected $var;
-	
-	/******************/
-	/* Public Methods */
-	/******************/
+    /**
+     * Variable to export.
+     * @var mixed
+     */
+    protected $var;
 
-	/**
-	 * Get the view of the parameters.
-	 *
-	 * @return mixed[] The view of the data.
-	 */
-	public function get()
-	{
-		return array('div',
-		             array('class' => 'Var_Export'),
-		             var_export($this->var, true));
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Set the var to export.
-	 *
-	 * @param mixed Var to export.
-	 */
-	public function set($var)
-	{
-		$this->var = $var;
-	}
+    /**
+     * Get the view of the parameters.
+     *
+     * @return mixed[] The view of the data.
+     */
+    public function get()
+    {
+        return array('div',
+                     array('class' => 'Var_Export'),
+                     var_export($this->var, true));
+    }
+
+    /**
+     * Set the var to export.
+     *
+     * @param mixed Var to export.
+     */
+    public function set($var)
+    {
+        $this->var = $var;
+    }
 }
 // EOF

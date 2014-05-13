@@ -16,25 +16,25 @@ namespace Evoke\Service;
  */
 interface ProcessingIface
 {
-	/**
-	 * Add a callback to the request key's list of callbacks.
-	 *
-	 * @param string   The request key for the matching.
-	 * @param callable The callback that is being added.
-	 */
-	public function addCallback(/* String */ $requestKey,
-	                            callable $callback);
-	
-	/**
-	 * Process the request.
-	 */
-	public function process();
+    /**
+     * Add a callback to the request key's list of callbacks.
+     *
+     * @param string   The request key for the matching.
+     * @param callable The callback that is being added.
+     */
+    public function addCallback(/* String */ $requestKey,
+                                callable $callback);
 
-	/**
-	 * Set the data for the request that we are processing.
-	 *
-	 * @param mixed[] The request data that we are processing.
-	 */
-	public function setData(Array $data);
+    /**
+     * Process the request.
+     */
+    public function process();
+
+    /**
+     * Set the data for the request that we are processing.
+     *
+     * @param mixed[] The request data that we are processing.
+     */
+    public function setData(Array $data);
 }
 // EOF

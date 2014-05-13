@@ -2,168 +2,168 @@
 namespace Evoke_Test\Model\Data;
 
 use Evoke\Model\Data\Tree,
-	PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Model\Data\Tree
  */
 class TreeTest extends PHPUnit_Framework_TestCase
 {
-	/******************/
-	/* Data Providers */
-	/******************/
+    /******************/
+    /* Data Providers */
+    /******************/
 
-	public function providerGetChildren()
-	{
-		return ['One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
-		        'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
-		                    $this->getMock('Evoke\Model\Data\TreeIface'),
-		                    $this->getMock('Evoke\Model\Data\TreeIface')]]];
-	}
-	
-	public function providerHasChildren()
-	{
-		return ['None' => [[], false],
-		        'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')],
-		                   true],
-		        'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
-		                    $this->getMock('Evoke\Model\Data\TreeIface'),
-		                    $this->getMock('Evoke\Model\Data\TreeIface')],
-		                   true]];		                    
-	}
-	
-	public function providerUseValue()
-	{
-		return ['Array'  => [[1, '2', new \StdClass]],
-		        'Int'    => [1],
-		        'String' => ['blah'],
-		        'Object' => [new \StdClass]];
-	}
+    public function providerGetChildren()
+    {
+        return ['One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
+                'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
+                            $this->getMock('Evoke\Model\Data\TreeIface'),
+                            $this->getMock('Evoke\Model\Data\TreeIface')]]];
+    }
 
-	public function providerValidNoNext()
-	{
-		$oneTree = new Tree;
-		$oneTree->add(new Tree);
-		
-		return ['Empty' => [new Tree, false],
-		        'One'   => [$oneTree, true]];
-	}
+    public function providerHasChildren()
+    {
+        return ['None' => [[], false],
+                'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')],
+                           true],
+                'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
+                            $this->getMock('Evoke\Model\Data\TreeIface'),
+                            $this->getMock('Evoke\Model\Data\TreeIface')],
+                           true]];
+    }
 
-	public function providerValidOneNext()
-	{
-		$oneTree = new Tree;
-		$oneTree->add(new Tree);
+    public function providerUseValue()
+    {
+        return ['Array'  => [[1, '2', new \StdClass]],
+                'Int'    => [1],
+                'String' => ['blah'],
+                'Object' => [new \StdClass]];
+    }
 
-		$twoTree = new Tree;
-		$twoTree->add(new Tree);
-		$twoTree->add(new Tree);
-		
-		return ['Empty' => [new Tree, false],
-		        'One'   => [$oneTree, false],
-		        'Two'   => [$twoTree, true]];
-	}
+    public function providerValidNoNext()
+    {
+        $oneTree = new Tree;
+        $oneTree->add(new Tree);
 
-	/*********/
-	/* Tests */
-	/*********/
+        return ['Empty' => [new Tree, false],
+                'One'   => [$oneTree, true]];
+    }
 
-	public function testCurrent()
-	{
-		$obj = new Tree;
-		$expected = new Tree;
+    public function providerValidOneNext()
+    {
+        $oneTree = new Tree;
+        $oneTree->add(new Tree);
 
-		$obj->add(new Tree);
-		$obj->add($expected);
-		$obj->add(new Tree);
+        $twoTree = new Tree;
+        $twoTree->add(new Tree);
+        $twoTree->add(new Tree);
 
-		$obj->next();
+        return ['Empty' => [new Tree, false],
+                'One'   => [$oneTree, false],
+                'Two'   => [$twoTree, true]];
+    }
 
-		$this->assertSame($expected, $obj->current());
-	}
-	
-	/**
-	 * @dataProvider providerGetChildren
-	 */
-	public function testGetChildren(Array $children)
-	{
-		$obj = new Tree;
+    /*********/
+    /* Tests */
+    /*********/
 
-		foreach ($children as $child)
-		{
-			$obj->add($child);
-		}
+    public function testCurrent()
+    {
+        $obj = new Tree;
+        $expected = new Tree;
 
-		$this->assertSame(reset($children), $obj->getChildren());
-	}
-	
-	/**
-	 * @dataProvider providerHasChildren
-	 */
-	public function testHasChildren(Array $children, $expected)
-	{
-		$obj = new Tree;
+        $obj->add(new Tree);
+        $obj->add($expected);
+        $obj->add(new Tree);
 
-		foreach ($children as $child)
-		{
-			$obj->add($child);
-		}
+        $obj->next();
 
-		$this->assertSame($expected, $obj->hasChildren());
-	}
+        $this->assertSame($expected, $obj->current());
+    }
 
- 	public function testKey()
-	{
-		$obj = new Tree;
-		$obj->add(new Tree);
-		$obj->add(new Tree);
-		$obj->add(new Tree);
-		$obj->next();
+    /**
+     * @dataProvider providerGetChildren
+     */
+    public function testGetChildren(Array $children)
+    {
+        $obj = new Tree;
 
-		$this->assertSame(1, $obj->key());
-	}		
+        foreach ($children as $child)
+        {
+            $obj->add($child);
+        }
 
-	public function testRewind()
-	{
-		$obj = new Tree;
-		$expected = new Tree;
+        $this->assertSame(reset($children), $obj->getChildren());
+    }
 
-		$obj->add($expected);
-		$obj->add(new Tree);
-		$obj->add(new Tree);
+    /**
+     * @dataProvider providerHasChildren
+     */
+    public function testHasChildren(Array $children, $expected)
+    {
+        $obj = new Tree;
 
-		$obj->next();
-		$obj->rewind();
+        foreach ($children as $child)
+        {
+            $obj->add($child);
+        }
 
-		$this->assertSame($expected, $obj->current());
-	}
+        $this->assertSame($expected, $obj->hasChildren());
+    }
+
+    public function testKey()
+    {
+        $obj = new Tree;
+        $obj->add(new Tree);
+        $obj->add(new Tree);
+        $obj->add(new Tree);
+        $obj->next();
+
+        $this->assertSame(1, $obj->key());
+    }
+
+    public function testRewind()
+    {
+        $obj = new Tree;
+        $expected = new Tree;
+
+        $obj->add($expected);
+        $obj->add(new Tree);
+        $obj->add(new Tree);
+
+        $obj->next();
+        $obj->rewind();
+
+        $this->assertSame($expected, $obj->current());
+    }
 
     /**
      * @dataProvider providerValidNoNext
      */
     public function testValidNoNext($obj, $expected)
     {
-	    $this->assertSame($expected, $obj->valid());
+        $this->assertSame($expected, $obj->valid());
     }
-	
+
     /**
      * @dataProvider providerValidOneNext
      */
     public function testValidOneNext($obj, $expected)
     {
-	    $obj->next();
-	    
-	    $this->assertSame($expected, $obj->valid());
+        $obj->next();
+
+        $this->assertSame($expected, $obj->valid());
     }
-	
-	/**
-	 * @dataProvider providerUseValue
-	 */
-	public function testUseValue($value)
-	{
-		$obj = new Tree;
-		$obj->set($value);
-		
-		$this->assertSame($value, $obj->get());		
-	}
+
+    /**
+     * @dataProvider providerUseValue
+     */
+    public function testUseValue($value)
+    {
+        $obj = new Tree;
+        $obj->set($value);
+
+        $this->assertSame($value, $obj->get());
+    }
 }
 // EOF

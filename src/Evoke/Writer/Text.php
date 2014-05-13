@@ -18,18 +18,18 @@ namespace Evoke\Writer;
  */
 class Text extends Writer
 {
-	/******************/
-	/* Public Methods */
-	/******************/
-	
-	/**
-	 * Write text into the buffer.
-	 *
-	 * @param string The text to write into the buffer.
-	 */
-	public function write($text)
-	{
-		$this->buffer .= $text;
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
+
+    /**
+     * Write text into the buffer.
+     *
+     * @param string The text to write into the buffer.
+     */
+    public function write($text)
+    {
+        $this->buffer .= $text;
+    }
 }
 // EOF

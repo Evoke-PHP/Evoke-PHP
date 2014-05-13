@@ -19,58 +19,58 @@ namespace Evoke\Network\URI\Rule;
  */
 class StrReplace extends Rule
 {
-	/**
-	 * The string to match on.
-	 * @var string
-	 */
-	protected $match;
+    /**
+     * The string to match on.
+     * @var string
+     */
+    protected $match;
 
-	/** 
-	 * The string to use as a replacement.
-	 * @var string
-	 */
-	protected $replacement;
+    /**
+     * The string to use as a replacement.
+     * @var string
+     */
+    protected $replacement;
 
-	/**
-	 * Construct the string replacements rule.
-	 *
-	 * @param string The string to match on.
-	 * @param string The string to use as a replacement.
-	 * @param bool   Whether the rule can definitely give the final route for
-	 *               all URIs that it matches.
-	 */
-	public function __construct(/* String */ $match,
-	                            /* String */ $replacement,
-	                            /* Bool   */ $authoritative = false)
-	{
-		parent::__construct($authoritative);
+    /**
+     * Construct the string replacements rule.
+     *
+     * @param string The string to match on.
+     * @param string The string to use as a replacement.
+     * @param bool   Whether the rule can definitely give the final route for
+     *               all URIs that it matches.
+     */
+    public function __construct(/* String */ $match,
+                                /* String */ $replacement,
+                                /* Bool   */ $authoritative = false)
+    {
+        parent::__construct($authoritative);
 
-		$this->match       = $match;
-		$this->replacement = $replacement;
-	}
-   
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->match       = $match;
+        $this->replacement = $replacement;
+    }
 
-	/**
-	 * Get the controller.
-	 *
-	 * @return string The uri with the string replacements made.
-	 */
-	public function getController()
-	{
-		return str_replace($this->match, $this->replacement, $this->uri);
-	}
-	
-	/**
-	 * Check the uri to see if it matches.
-	 *
-	 * @return bool Whether the uri is matched.
-	 */
-	public function isMatch()
-	{
-		return strpos($this->uri, $this->match) !== false;
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
+
+    /**
+     * Get the controller.
+     *
+     * @return string The uri with the string replacements made.
+     */
+    public function getController()
+    {
+        return str_replace($this->match, $this->replacement, $this->uri);
+    }
+
+    /**
+     * Check the uri to see if it matches.
+     *
+     * @return bool Whether the uri is matched.
+     */
+    public function isMatch()
+    {
+        return strpos($this->uri, $this->match) !== false;
+    }
 }
 // EOF

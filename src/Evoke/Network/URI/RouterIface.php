@@ -15,18 +15,18 @@ namespace Evoke\Network\URI;
  */
 interface RouterIface
 {
-	/**
-	 * Add a rule to the router.
-	 *
-	 * @param Rule\RuleIface The rule.
-	 */
-	public function addRule(Rule\RuleIface $rule);
+    /**
+     * Add a rule to the router.
+     *
+     * @param Rule\RuleIface The rule.
+     */
+    public function addRule(Rule\RuleIface $rule);
 
-	/**
-	 * Perform the routing based on the added rules.
-	 *
-	 * @param string The URI to route.
-	 */
-	public function route($uri);
+    /**
+     * Perform the routing based on the added rules.
+     *
+     * @param string The URI to route.
+     */
+    public function route($uri);
 }
 // EOF

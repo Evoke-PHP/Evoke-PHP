@@ -18,49 +18,49 @@ namespace Evoke\Network\URI\Rule;
  */
 class Trim extends Rule
 {
-	/**
-	 * Characters to trim from the URI.
-	 * @var string
-	 */
-	protected $characters;
+    /**
+     * Characters to trim from the URI.
+     * @var string
+     */
+    protected $characters;
 
-	/**
-	 * Construct the Trim Rule.
-	 *
-	 * @param string The characters to trim from the URI.
-	 * @param bool   Whether the rule can definitely give the final route for
-	 *               all URIs that it matches.
-	 */
-	public function __construct(/* String */ $characters,
-	                            /* Bool   */ $authoritative = false)
-	{
-		parent::__construct($authoritative);
+    /**
+     * Construct the Trim Rule.
+     *
+     * @param string The characters to trim from the URI.
+     * @param bool   Whether the rule can definitely give the final route for
+     *               all URIs that it matches.
+     */
+    public function __construct(/* String */ $characters,
+                                /* Bool   */ $authoritative = false)
+    {
+        parent::__construct($authoritative);
 
-		$this->characters = $characters;
-	}
-   
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->characters = $characters;
+    }
 
-	/**
-	 * Get the controller.
-	 *
-	 * @return string The uri trimmed appropriately.
-	 */
-	public function getController()
-	{
-		return trim($this->uri, $this->characters);
-	}
+    /******************/
+    /* Public Methods */
+    /******************/
 
-	/**
-	 * Check the uri to see if it matches.
-	 *
-	 * @return bool Whether the uri is matched.
-	 */
-	public function isMatch()
-	{
-		return trim($this->uri, $this->characters) !== $this->uri;
-	}	
+    /**
+     * Get the controller.
+     *
+     * @return string The uri trimmed appropriately.
+     */
+    public function getController()
+    {
+        return trim($this->uri, $this->characters);
+    }
+
+    /**
+     * Check the uri to see if it matches.
+     *
+     * @return bool Whether the uri is matched.
+     */
+    public function isMatch()
+    {
+        return trim($this->uri, $this->characters) !== $this->uri;
+    }
 }
 // EOF

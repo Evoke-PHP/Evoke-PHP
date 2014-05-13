@@ -18,18 +18,18 @@ use Evoke\Network\HTTP\MediaType\Rule\RuleIface;
  */
 interface RouterIface
 {
-	/**
-	 * Add a rule to the router.
-	 *
-	 * @param RuleIface The rule to add to the router.
-	 */
-	public function addRule(RuleIface $rule);
+    /**
+     * Add a rule to the router.
+     *
+     * @param RuleIface The rule to add to the router.
+     */
+    public function addRule(RuleIface $rule);
 
-	/**
-	 * Perform the routing based on the rules.
-	 *
-	 * @param mixed[] The media types accepted by the browser.
-	 */
-	public function route(Array $acceptedMediaTypes);
+    /**
+     * Perform the routing based on the rules.
+     *
+     * @param mixed[] The media types accepted by the browser.
+     */
+    public function route(Array $acceptedMediaTypes);
 }
 // EOF

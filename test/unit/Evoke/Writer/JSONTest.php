@@ -2,7 +2,7 @@
 namespace Evoke_Test\Writer;
 
 use Evoke\Writer\JSON,
-	PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Writer\JSON
@@ -10,19 +10,19 @@ use Evoke\Writer\JSON,
  */
 class JSONTest extends PHPUnit_Framework_TestCase
 {
-	/*********/
-	/* Tests */
-	/*********/
+    /*********/
+    /* Tests */
+    /*********/
 
-	/**
-	 * Write JSON data.
-	 */
-	public function testWrite()
-	{
-		$object = new JSON;
-		$object->write(['One' => 1, 'Two' => 'Dos']);
+    /**
+     * Write JSON data.
+     */
+    public function testWrite()
+    {
+        $object = new JSON;
+        $object->write(['One' => 1, 'Two' => 'Dos']);
 
-		$this->assertSame('{"One":1,"Two":"Dos"}', (string)$object);
-	}
+        $this->assertSame('{"One":1,"Two":"Dos"}', (string)$object);
+    }
 }
 // EOF

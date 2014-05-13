@@ -25,7 +25,7 @@ class Head implements ViewIface
          * @var mixed[]
          */
         $customElements,
-        
+
         /**
          * Array of links, with each link as an array of link attributes.
          * @var string[][]
@@ -44,40 +44,40 @@ class Head implements ViewIface
          * @var string
          */
         $title;
-        
-	/**
-	 * Construct a Head object.
-	 *
-	 * @param string[][] Array of Links, with each link as an array of link
+
+    /**
+     * Construct a Head object.
+     *
+     * @param string[][] Array of Links, with each link as an array of link
      *                   attributes.
-	 * @param string[]   Array of meta elements with the key as the name and the
+     * @param string[]   Array of meta elements with the key as the name and the
      *                   value as the content.
-	 * @param string     Title.
+     * @param string     Title.
      * @param mixed[]    Custom elements to be added to head.
-	 */
-	public function __construct(Array        $links,
+     */
+    public function __construct(Array        $links,
                                 Array        $metas,
                                 /* String */ $title,
                                 Array        $customElements = array())
-	{
+    {
         $this->customElements = $customElements;
         $this->links          = $links;
         $this->metas          = $metas;
-		$this->title          = $title;
-	}
-	
-	/******************/
-	/* Public Methods */
-	/******************/
+        $this->title          = $title;
+    }
 
-	/**
-	 * Get the output from the view.
-	 *
-	 * @return mixed[] The output from the view.
-	 */
-	public function get()
-	{       
-		$headElements = array(array('title', array(), $this->title));
+    /******************/
+    /* Public Methods */
+    /******************/
+
+    /**
+     * Get the output from the view.
+     *
+     * @return mixed[] The output from the view.
+     */
+    public function get()
+    {
+        $headElements = array(array('title', array(), $this->title));
 
         foreach ($this->metas as $name => $content)
         {
@@ -94,8 +94,8 @@ class Head implements ViewIface
         {
             $headElements[] = $customElement;
         }
-        
-		return array('head', array(), $headElements);
-	}
+
+        return array('head', array(), $headElements);
+    }
 }
 // EOF
