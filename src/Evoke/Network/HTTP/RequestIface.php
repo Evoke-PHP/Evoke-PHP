@@ -38,7 +38,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
     public function getQueryParams();
 
     /**
-     * Get the URI of the request (without the query string).
+     * Get the full URI of the request.
      *
      * @return string The URI of the request.
      */

@@ -135,7 +135,7 @@ EOP;
     }
 
     /**
-     * Get the path of the request (no scheme, domain name or query).
+     * Get the full URI for the request.
      *
      * @return string The URI of the request.
      */
