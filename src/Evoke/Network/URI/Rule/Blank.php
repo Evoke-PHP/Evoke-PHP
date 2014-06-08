@@ -32,7 +32,7 @@ class Blank extends Rule
      *               all URIs that it matches.
      */
     public function __construct(/* String */ $replacement,
-                                /* Bool   */ $authoritative = false)
+                                /* Bool   */ $authoritative = true)
     {
         parent::__construct($authoritative);
 
@@ -46,7 +46,7 @@ class Blank extends Rule
     /**
      * Get the controller.
      *
-     * @return string The uri trimmed appropriately.
+     * @return string The uri for the blank controller.
      */
     public function getController()
     {
