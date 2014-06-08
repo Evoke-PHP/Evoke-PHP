@@ -140,6 +140,14 @@ interface SessionIface
     public function setData($data);
 
     /**
+     * Set the session data at an offset.
+     *
+     * @param mixed The data to set.
+     * @param mixed[] The offset to set the data at.
+     */
+    public function setDataAtOffset($data, Array $offset = []);
+
+    /**
      * Unset the key in the session domain.
      *
      * @param mixed The index in the session to unset.

@@ -7,6 +7,7 @@
 namespace Evoke\Model\Mapper;
 
 use Evoke\Model\Persistence\SessionIface,
+    InvalidArgumentException,
     RuntimeException;
 
 /**
@@ -17,10 +18,10 @@ use Evoke\Model\Persistence\SessionIface,
  * @license   MIT
  * @package   Model\Mapper
  */
-class Session
+class Session implements MapperIface
 {
     /**
-     * Session
+     * The Session storage that we are mapping.
      * @var Evoke\Model\Persistence\SessionIface
      */
     protected $session;
@@ -40,67 +41,45 @@ class Session
     /******************/
 
     /**
-     * Create some data in the session.
+     * Create data in the session.
      *
-     * @param mixed[] The data to create.
+     * @param mixed[] The data to create in storage as a simple array.
      */
-    public function create(Array $data = [])
+    public function create(Array $data)
     {
         $this->session->setData($data);
     }
 
     /**
-     * Delete some data from the session.
+     * Delete data in the session.
      *
-     * @param mixed[] The offset in the data to delete.
+     * @param mixed[] The offset of the data to delete from storage.
      */
-    public function delete(Array $offset = [])
+    public function delete(Array $offset)
     {
         $this->session->deleteAtOffset($offset);
     }
-
+    
     /**
-     * Get the data from the session.
+     * Read data from the session.
      *
-     * @params mixed[]      The offset in the data to fetch.
+     * @param mixed[] The data to match (the offset).
      * @return mixed[]|null Session data or null if the offset does not exist.
      */
     public function read(Array $offset = [])
     {
-        $session = $this->session->getCopy();
-
-        foreach ($offset as $offsetPart)
-        {
-            if (!isset($session[$offsetPart]))
-            {
-                $session = NULL;
-                break;
-            }
-
-            $session =& $session[$offsetPart];
-        }
-
-        return $session;
+        return $this->session->getAtOffset($offset);
     }
-
+    
     /**
-     * Update some data from the session.
+     * Update data in the session.
      *
-     * @param mixed[] The old data from session.
-     * @param mixed[] The new data to set it to.
+     * @param mixed[] The data to match (the offset).
+     * @param mixed[] The data to set.
      */
-    public function update(Array $old, Array $new)
+    public function update(Array $offset, Array $data)
     {
-        $session = $this->session->getCopy();
-
-        // Ensure the the session has not been modified from the old values.
-        if ($session !== $old)
-        {
-            throw new RuntimeException(
-                'Session update data has already been modified.');
-        }
-
-        $this->session->setData($new);
+        $this->session->setDataAtOffset($data, $offset);
     }
 }
 // EOF

@@ -124,6 +124,38 @@ class SessionTest extends PHPUnit_Framework_TestCase
             ];
     }
 
+    public function providerSetDataAtOffset()
+    {
+        return [
+            'All_Empty'       => [
+                'Domain'       => [],
+                'Expected'     => [],
+                'Initial_Data' => [],
+                'Offset'       => [],
+                'Set_Data'     => []],
+            'Existing_Offset' => [
+                'Domain'       => ['A'],
+                'Expected'     => ['A' => ['B' => ['E' => 'F']]],
+                'Initial_Data' => ['B' => ['C' => 'D']],
+                'Offset'       => ['B'],
+                'Set_Data'     => ['E' => 'F']],
+            'No_Offset'       => [
+                'Domain'       => ['D'],
+                'Expected'     => ['D' => ['Set_Data']],
+                'Initial_Data' => ['Initial_Data'],
+                'Offset'       => [],
+                'Set_Data'     => ['Set_Data']],
+            'Unset_Offset'    => [
+                'Domain'       => ['A'],
+                'Expected'     => ['A' =>
+                                   ['O' => 'Other',
+                                    'B' => ['C' => ['D' => ['E' => 'F']]]]],
+                'Initial_Data' => ['O' => 'Other'],
+                'Offset'       => ['B', 'C'],
+                'Set_Data'     => ['D' => ['E' => 'F']]],
+            ];
+    }
+
     /***********/
     /* Fixture */
     /***********/
@@ -486,6 +518,21 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->assertSame(['a' => []], $_SESSION);
     }
 
+    /**
+     * Ensure that data can be retrieved at an offset.
+     *
+     * @dataProvider providerSetDataAtOffset
+     */
+    public function testSetDataAtOffset(
+        $domain, $expected, $initialData, $offset, $setData)
+    {
+        $object = new Session($domain);
+        $object->setData($initialData);
+        $object->setDataAtOffset($setData, $offset);
+
+        $this->assertSame($expected, $_SESSION);
+    }    
+    
     /**
      * A specific key can be unset.
      */

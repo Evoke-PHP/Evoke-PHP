@@ -6,6 +6,7 @@ use Evoke\Model\Mapper\Session,
 
 /**
  * @covers Evoke\Model\Mapper\Session
+ * @uses   Evoke\Model\Mapper\MapperIface
  */
 class SessionTest extends PHPUnit_Framework_TestCase
 {
@@ -13,52 +14,58 @@ class SessionTest extends PHPUnit_Framework_TestCase
     /* Data Providers */
     /******************/
 
+    public function providerCreate()
+    {
+        return [
+            'Empty'  => ['Data' => []],
+            'Full'   => ['Data' => [1 => 'One', 'Two' => 2, 'Three' => [3]]],
+            'Object' => ['Data' => [new \StdClass]]];
+    }
+    
+    public function providerDelete()
+    {
+        return [
+            'Empty' => ['Data' => []],
+            'Full'  => ['Data' => [1 => 'One', 'Two' => 2, 'Three' => [3]]]];
+    }
+    
     public function providerRead()
     {
         return [
             'Empty_No_Offset' =>
-            ['Session_Data' => [],
-             'Offset'       => [],
+            ['Offset'       => [],
              'Read_Data'    => []],
             'Empty_Offset'    =>
-            ['Session_Data' => ['Offset' => []],
-             'Offset'       => ['Offset'],
+            ['Offset'       => ['Offset'],
              'Read_Data'    => []],
             'Full'            =>
-            ['Session_Data' => ['One', 1, ['Three' => '1 + 1 + 1']],
-             'Offset'       => [],
+            ['Offset'       => [],
              'Read_Data'    => ['One', 1, ['Three' => '1 + 1 + 1']]],
             'From_Offset'     =>
-            ['Session_Data' => ['One', 'Two' => [1 => 'A', 2 => 'B'], 'Three'],
-             'Offset'       => ['Two'],
+            ['Offset'       => ['Two'],
              'Read_Data'    => [1 => 'A', 2 => 'B']],
             'Deep_Offset'     =>
-            ['Session_Data' => ['A' => [2 => ['C' => [0, 1, 2, 3]]]],
-             'Offset'       => ['A', 2, 'C'],
+            ['Offset'       => ['A', 2, 'C'],
              'Read_Data'    => [0, 1, 2, 3]],
             'Unset_Offset'    =>
-            ['Session_Data' => ['A' => 1],
-             'Offset'       => ['B'],
+            ['Offset'       => ['B'],
              'Read_Data'    => NULL]];
     }
 
-    public function providerUpdateSuccess()
+    public function providerUpdate()
     {
         return ['Simple'  =>
-                ['Old' => ['A', 2],
-                 'New' => ['Now', 3]],
+                ['Offset' => ['A', 2],
+                 'Data'   => ['Now', 3]],
                 'Complex' =>
-                ['Old' => ['A' => ['B' => ['C' => 123]]],
-                 'New' => ['B' => ['A' => ['C' => '456']]]]];
+                ['Offset' => ['A' => ['B' => ['C' => 123]]],
+                 'Data'   => ['B' => ['A' => ['C' => '456']]]]];
     }
 
     /*********/
     /* Tests */
     /*********/
 
-    /**
-     * @uses Evoke\Model\Persistence\SessionIface
-     */
     public function testConstruct()
     {
         $obj = new Session($this->getMock(
@@ -66,9 +73,11 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Evoke\Model\Mapper\Session', $obj);
     }
 
-    public function testCreate()
+    /**
+     * @dataProvider providerCreate
+     */
+    public function testCreate(Array $data)
     {
-        $data = ['Any' => 'old', 2 => 'Data', []];
         $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
         $mockSession
             ->expects($this->once())
@@ -79,21 +88,11 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $obj->create($data);
     }
 
-    public function testCreateNoParamGiven()
+    /**
+     * @dataProvider providerDelete
+     */
+    public function testDelete($offset)
     {
-        $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
-        $mockSession
-            ->expects($this->once())
-            ->method('setData')
-            ->with([]);
-
-        $obj = new Session($mockSession);
-        $obj->create();
-    }
-
-    public function testDelete()
-    {
-        $offset = ['Any', 'Offset'];
         $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
         $mockSession
             ->expects($this->once())
@@ -103,84 +102,36 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $obj = new Session($mockSession);
         $obj->delete($offset);
     }
-
-    public function testDeleteNoParamGiven()
-    {
-        $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
-        $mockSession
-            ->expects($this->once())
-            ->method('deleteAtOffset')
-            ->with([]);
-
-        $obj = new Session($mockSession);
-        $obj->delete();
-    }
-
+    
     /**
      * @dataProvider providerRead
      */
-    public function testRead($sessionData, $offset, $readData)
+    public function testRead($offset, $readData)
     {
         $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
         $mockSession
             ->expects($this->once())
-            ->method('getCopy')
-            ->with()
-            ->will($this->returnValue($sessionData));
+            ->method('getAtOffset')
+            ->with($offset)
+            ->will($this->returnValue($readData));
 
         $obj = new Session($mockSession);
         $this->assertSame($readData, $obj->read($offset));
     }
-
-    public function testReadNoParams()
-    {
-        $sessionData = [[1], '2' => 3];
-        $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
-        $mockSession
-            ->expects($this->once())
-            ->method('getCopy')
-            ->with()
-            ->will($this->returnValue($sessionData));
-
-        $obj = new Session($mockSession);
-        $this->assertSame($sessionData, $obj->read());
-    }
-
+    
     /**
-     * @expectedException        RuntimeException
-     * @expectedExceptionMessage Session update data has already been modified.
+     * @dataProvider providerUpdate
      */
-    public function testUpdateFailure()
+    public function testUpdate(Array $offset, Array $data)
     {
         $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
         $mockSession
             ->expects($this->once())
-            ->method('getCopy')
-            ->with()
-            ->will($this->returnValue(['ALREADY_MODIFIED_OLD_VALUE']));
+            ->method('setDataAtOffset')
+            ->with($data, $offset);
 
         $obj = new Session($mockSession);
-        $obj->update(['OLD_VALUE'], ['NEW_VALUE']);
-    }
-
-    /**
-     * @dataProvider providerUpdateSuccess
-     */
-    public function testUpdateSuccess($old, $new)
-    {
-        $mockSession = $this->getMock('Evoke\Model\Persistence\SessionIface');
-        $mockSession
-            ->expects($this->at(0))
-            ->method('getCopy')
-            ->with()
-            ->will($this->returnValue($old));
-        $mockSession
-            ->expects($this->at(1))
-            ->method('setData')
-            ->with($new);
-
-        $obj = new Session($mockSession);
-        $obj->update($old, $new);
+        $obj->update($offset, $data);
     }
 }
 // EOF

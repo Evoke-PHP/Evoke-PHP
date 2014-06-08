@@ -330,6 +330,30 @@ class Session implements SessionIface
     }
 
     /**
+     * Set the session data at an offset.
+     *
+     * @param mixed The data to set.
+     * @param mixed[] The offset to set the data at.
+     */
+    public function setDataAtOffset($data, Array $offset = [])
+    {
+        $sessionOffset =& $this->getAccess();
+
+        foreach ($offset as $part)
+        {
+            // If there is offset is not already set then set it.
+            if (!isset($sessionOffset[$part]))
+            {
+                $sessionOffset[$part] = [];
+            }
+
+            $sessionOffset = &$sessionOffset[$part];
+        }
+
+        $sessionOffset = $data;
+    }
+    
+    /**
      * Unset the key in the session domain.
      *
      * @param mixed The index in the session to unset.
