@@ -20,7 +20,7 @@ use DOMDocument,
  * @package   View\HTML5
  */
 class String implements ViewIface
-{    
+{
     /**
      * HTML5 string for parsing into the array based view.
      * @var string
@@ -68,15 +68,7 @@ class String implements ViewIface
      */
     protected function convertDOMNodeForWriting(DOMNode $node)
     {
-        $attributes = [];
-
-        if ($node->hasAttributes())
-        {
-            foreach ($node->attributes as $attrib => $attribNode)
-            {
-                $attributes[$attrib] = $attribNode->nodeValue;
-            }
-        }
+        $attributes = $this->getAttributes($node);
         
         switch ($node->nodeType)
         {
@@ -119,6 +111,26 @@ class String implements ViewIface
         }
         
         return $data;
+    }
+
+    /**
+     * Get the attributes for the DOM node.
+     *
+     * @return mixed[] The attributes for the node.
+     */
+    protected function getAttributes(DOMNode $node)
+    {
+        $attributes = [];
+
+        if ($node->hasAttributes())
+        {
+            foreach ($node->attributes as $attrib => $attribNode)
+            {
+                $attributes[$attrib] = $attribNode->nodeValue;
+            }
+        }
+
+        return $attributes;
     }
 }
 // EOF
