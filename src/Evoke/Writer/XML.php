@@ -154,7 +154,7 @@ class XML implements WriterIface
         }
 
         $this->xmlWriter->startElement($tag);
-
+        
         foreach ($attribs as $attrib => $value)
         {
             $this->xmlWriter->writeAttribute($attrib, $value);
@@ -174,7 +174,7 @@ class XML implements WriterIface
 
         // Some elements should always have a full end tag <div></div> rather
         // than <div/>
-        if (preg_match('(^(div|script|textarea)$)i', $tag))
+        if (preg_match('(^(div|iframe|script|textarea)$)i', $tag))
         {
             $this->xmlWriter->fullEndElement();
         }
