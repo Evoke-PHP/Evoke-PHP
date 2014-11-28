@@ -7,6 +7,7 @@ use Evoke\Model\Data\Join\JoinIface,
 
 /**
  * @covers Evoke\Model\Data\Join\Tabular
+ * @covers Evoke\Model\Data\Join\Join
  */
 class TabularTest extends PHPUnit_Framework_TestCase
 {

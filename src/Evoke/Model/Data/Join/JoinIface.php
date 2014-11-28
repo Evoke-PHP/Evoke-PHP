@@ -19,6 +19,14 @@ namespace Evoke\Model\Data\Join;
 interface JoinIface
 {
     /**
+     * Add a join for the data.
+     *
+     * @param string    The canonical join ID.
+     * @param JoinIface The join to add.
+     */
+    public function addJoin(/* String */ $joinID, JoinIface $join);
+    
+    /**
      * Arrange a set of results according to the Join tree.
      *
      * @param mixed[] The flat result data.
