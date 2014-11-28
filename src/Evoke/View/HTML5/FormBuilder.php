@@ -18,17 +18,30 @@ use LogicException;
  */
 class FormBuilder implements FormBuilderIface
 {
-    /**
-     * Attributes for the form.
-     * @var mixed[]
-     */
-    protected $attribs;
+    protected 
+        /**
+         * Attributes for the form.
+         * @var mixed[]
+         */
+        $attribs,
+        
+        /**
+         * Children of the form.
+         * @var mixed[]
+         */
+        $children = [],
 
-    /**
-     * Children of the form.
-     * @var mixed[]
-     */
-    protected $children = [];
+        /**
+         * Elements in the current row.
+         * @var mixed[]
+         */
+        $rowElems = [],
+
+        /**
+         * Whether we are adding to a row.
+         * @var bool
+         */
+        $rowStarted = false;
 
     /**
      * Construct a buildable HTML5 form.
@@ -52,7 +65,14 @@ class FormBuilder implements FormBuilderIface
      */
     public function add(Array $element)
     {
-        $this->children[] = $element;
+        if (!$this->rowStarted)
+        {
+            $this->children[] = $element;
+        }
+        else
+        {
+            $this->rowElems[] = $element;
+        }
     }
 
     /**
@@ -96,7 +116,7 @@ class FormBuilder implements FormBuilderIface
             $element[] = $value;
         }
 
-        $this->children[] = $element;
+        $this->add($element);
     }
 
     /**
@@ -110,6 +130,42 @@ class FormBuilder implements FormBuilderIface
         $this->add(['label', ['for' => $for], $text]);
     }
 
+    /**
+     * Add a row to the form.
+     *
+     * @param mixed The elements within the row.
+     */
+    public function addRow($rowElements)
+    {
+        if ($this->rowStarted)
+        {
+            throw new LogicException('Cannot nest rows.');
+        }
+        
+        $this->children[] = ['div', ['class' => 'Row'], $rowElements];
+    }
+
+    /**
+     * Add a select input to the form.
+     *
+     * @param string ID to use for the select input (also used for the name).
+     * @param mixed  Array of options to select from.
+     */
+    public function addSelect($id, $options)
+    {
+        $optionElements = [];
+
+        foreach ($options as $text => $value)
+        {
+            $optionElements[] = ['option', ['value' => $value], $text];
+        }
+        
+        $this->add(['select',
+                    ['id'   => $id,
+                     'name' => $id],
+                    $optionElements]);
+    }
+    
     /**
      * Add a submit button to the form.
      *
@@ -167,15 +223,46 @@ class FormBuilder implements FormBuilderIface
     }
 
     /**
+     * Finish a row in the form.
+     */
+    public function finishRow()
+    {
+        if (!$this->rowStarted)
+        {
+            throw new LogicException('Row was not started.');
+        }
+
+        $this->rowStarted = false;
+        $this->addRow($this->rowElems);
+        $this->rowElems = [];
+    }
+    
+    /**
      * Get the view of the form.
      *
      * @return mixed[] The view data.
      */
     public function get()
     {
+        if ($this->rowStarted)
+        {
+            throw new LogicException('Started row needs to be completed');
+        }
+        
         return ['form', $this->attribs, $this->children];
     }
 
+    /**
+     * Reset the form builder to a blank form.
+     */
+    public function reset()
+    {
+        $this->attribs = ['action' => '', 'method' => 'POST'];
+        $this->children = [];
+        $this->rowElems = [];
+        $this->rowStarted = false;
+    }
+    
     /**
      * Set the action of the form.
      *
@@ -187,6 +274,16 @@ class FormBuilder implements FormBuilderIface
     }
 
     /**
+     * Set the attributes for the form.
+     *
+     * @param mixed Attributes.
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attribs = $attributes;
+    }
+     
+    /**
      * Set the method of the form.
      *
      * @param string Method.
@@ -195,5 +292,19 @@ class FormBuilder implements FormBuilderIface
     {
         $this->attribs['method'] = $method;
     }
+
+    /**
+     * Start a row in the form.
+     */
+    public function startRow()
+    {
+        if ($this->rowStarted)
+        {
+            throw new LogicException('Row already started.');
+        }
+
+        $this->rowStarted = true;
+    }
+     
 }
 // EOF

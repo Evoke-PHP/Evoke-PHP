@@ -102,6 +102,26 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
             $object->get());
     }
 
+    public function testAddSelect()
+    {
+        $object = new FormBuilder;
+        $object->addSelect('Colour',
+                           ['Red'   => 1,
+                            'Blue'  => 2,
+                            'Green' => 3]);
+
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             [['select',
+               ['id'   => 'Colour',
+                'name' => 'Colour'],
+               [['option', ['value' => 1], 'Red'],
+                ['option', ['value' => 2], 'Blue'],
+                ['option', ['value' => 3], 'Green']]]]],
+            $object->get());
+    }
+
     /**
      * Ensure that a submit input can be added to the form.
      */
@@ -162,6 +182,148 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException LogicException
+     */
+    public function testLogicCannotAddRowWithinARow()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->addRow('Bad');
+    }
+
+    /**
+     * @expectedException LogicException
+     */
+    public function testLogicCannotHaveIncompleteRow()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->get();
+    }
+    
+    /**
+     * @expectedException LogicException
+     */
+    public function testLogicStartRowCannotBeNested()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->startRow();
+    }
+    
+    /**
+     * @expectedException LogicException
+     */
+    public function testLogicCannotFinishUnstartedRow()
+    {
+        $object = new FormBuilder;
+        $object->finishRow();
+    }
+    
+    /**
+     * Ensure that the form builder can be reset.
+     */
+    public function testReset()
+    {
+        $object = new FormBuilder;
+        $object->addTextArea(
+            'nameField', 'valueField', 85, 7, ['class' => 'Special']);
+        $object->reset();
+        
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             []],
+            $object->get());
+    }
+
+    /**
+     * Ensure that a reset can be done even if a row is started.
+     */
+    public function testResetEvenIfRowStarted()
+    {
+        $object = new FormBuilder;
+        $object->addTextArea(
+            'nameField', 'valueField', 85, 7, ['class' => 'Special']);
+        $object->startRow();
+        $object->reset();
+        
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             []],
+            $object->get());
+    }
+
+    /**
+     * Test row can be added.
+     */
+    public function testRowAdd()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->add(['div', [], 'A']);
+        $object->finishRow();
+
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             [['div',
+               ['class' => 'Row'],
+               [['div', [], 'A']]]]],
+            $object->get());
+    }
+
+    /**
+     * Test multiple items can be added to a row.
+     */
+    public function testRowMultipleAdd()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->add(['div', [], 'A']);
+        $object->add(['div', ['class' => 'B'], 'B']);
+        $object->finishRow();
+
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             [['div',
+               ['class' => 'Row'],
+               [['div', [], 'A'],
+                ['div', ['class' => 'B'], 'B']]]]],
+            $object->get());
+    }
+
+    /**
+     * Test multiple rows can be added to a form.
+     */
+    public function testRowMultiples()
+    {
+        $object = new FormBuilder;
+        $object->startRow();
+        $object->add(['div', [], 'A']);
+        $object->add(['div', ['class' => 'B'], 'B']);
+        $object->finishRow();
+        $object->startRow();
+        $object->add(['span', [], 'C']);
+        $object->finishRow();
+
+        $this->assertSame(
+            ['form',
+             ['action' => '', 'method' => 'POST'],
+             [['div',
+               ['class' => 'Row'],
+               [['div', [], 'A'],
+                ['div', ['class' => 'B'], 'B']]],
+              ['div',
+               ['class' => 'Row'],
+               [['span', [], 'C']]]]],
+            $object->get());
+
+    }
+    
+    /**
      * Ensure that a form can have it's action set.
      */
     public function testSetAction()
@@ -177,6 +339,22 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
             $object->get());
     }
 
+    public function testSetAttributes()
+    {
+        $object = new FormBuilder();
+        $object->setAttributes(['action' => '/Magic',
+                                'class'  => 'A',
+                                'method' => 'GET']);
+        
+        $this->assertSame(
+            ['form',
+             ['action' => '/Magic',
+              'class'  => 'A',
+              'method' => 'GET'],
+             []],
+            $object->get());
+    }       
+    
     /**
      * Ensure that a form can have it's method set.
      */
