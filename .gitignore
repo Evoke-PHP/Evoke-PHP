@@ -1,4 +1,5 @@
 .directory
+.idea
 build/reports
 test/coverage
 test/environment/composer.lock
