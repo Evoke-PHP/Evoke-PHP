@@ -16,32 +16,31 @@ namespace Evoke\Network\URI\Rule;
  */
 class Equal extends Rule
 {
-    protected
-        /**
-         * The controller to use when the rule matches.
-         * @var string
-         */
-        $controller,
+    /**
+     * The controller to use when the rule matches.
+     * @var string
+     */
+    protected $controller;
 
-        /**
-         * The URI to match.
-         * @var string
-         */
-        $match,
+    /**
+     * The URI to match.
+     * @var string
+     */
+    protected $match;
 
-        /**
-         * The parameters for the controller.
-         * @var mixed[]
-         */
-        $params;
+    /**
+     * The parameters for the controller.
+     * @var mixed[]
+     */
+    protected $params;
 
     /**
      * Construct an Equal rule.
      *
-     * @param string  Controller.
-     * @param string  Match.
-     * @param mixed[] Params.
-     * @param bool    Whether the rule is authoritative.
+     * @param string  $controller
+     * @param string  $match
+     * @param mixed[] $params
+     * @param bool    $authoritative Whether the rule is authoritative.
      */
     public function __construct(/* string */ $controller,
                                 /* string */ $match,

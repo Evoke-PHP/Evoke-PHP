@@ -36,9 +36,10 @@ class RegexNamed extends Rule
     /**
      * Construct the Regex Named rule.
      *
-     * @param string  The Regex to match the URI with named subpatterns.
-     * @param string  The controller regex replacement string.
-     * @param bool    Is this always the final route?
+     * @param string  $match
+     * Regex to match the URI with named subpatterns.
+     * @param string  $replacement   The controller regex replacement string.
+     * @param bool    $authoritative Is this always the final route?
      */
     public function __construct(/* String */ $match,
                                 /* String */ $replacement,

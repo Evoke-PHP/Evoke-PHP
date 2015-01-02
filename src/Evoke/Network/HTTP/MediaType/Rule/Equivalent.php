@@ -6,8 +6,6 @@
  */
 namespace Evoke\Network\HTTP\MediaType\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP Media Type Equivalent Rule
  *
@@ -29,9 +27,9 @@ class Equivalent extends Match
     /**
      * Construct the Equivalent rule.
      *
-     * @param string   The output format for the rule.
-     * @param mixed[]  The equivalent match required by the rule.
-     * @param string[] Fields that are to be ignored in the match.
+     * @param string   $outputFormat  The output format for the rule.
+     * @param mixed[]  $match         The equivalent match required by the rule.
+     * @param string[] $ignoredFields Fields to ignore in the match.
      */
     public function __construct(
         /* String */ $outputFormat,

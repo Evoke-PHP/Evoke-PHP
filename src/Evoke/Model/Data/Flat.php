@@ -75,7 +75,7 @@ class Flat implements FlatIface
     /**
      * Set the data that we are managing.
      *
-     * @param mixed[] The data we want to manage.
+     * @param mixed[] $data The data we want to manage.
      */
     public function setData(Array $data)
     {
@@ -163,9 +163,9 @@ class Flat implements FlatIface
     /**
      * Provide the array isset operator.
      *
-     * @param string The offest to check for existence.
-     *
+     * @param mixed $offset The offset to check for existence
      * @return bool Whether the offset exists.
+     *
      */
     public function offsetExists($offset)
     {
@@ -176,9 +176,9 @@ class Flat implements FlatIface
     /**
      * Provide the array access operator.
      *
-     * @param string The offset to get.
-     *
+     * @param mixed $offset The offset to get.
      * @return mixed The value at the offset.
+     *
      */
     public function offsetGet($offset)
     {
@@ -190,16 +190,15 @@ class Flat implements FlatIface
      * We are required to make these available to complete the interface,
      * but we don't want the element to change, so this should never be called.
      *
-     * @param mixed Offset.
-     * @param mixed Value.
-     *
-     * @throw RuntimeException *** ALWAYS ***
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws BadMethodCallException *** ALWAYS ***
      */
     public function offsetSet($offset, $value)
     {
         throw new BadMethodCallException(
             __METHOD__ . ' should never be called - data is only ' .
-            'transferrable it is not to be modified.  It was called with ' .
+            'transferable it is not to be modified.  It was called with ' .
             'offset: ' . $offset . ' and value: ' . $value);
     }
 
@@ -207,15 +206,14 @@ class Flat implements FlatIface
      * We are required to make these available to complete the interface,
      * but we don't want the element to change, so this should never be called.
      *
-     * @param mixed Offset.
-     *
-     * @throw RuntimeException *** ALWAYS ***
+     * @param mixed $offset
+     * @throws BadMethodCallException *** ALWAYS ***
      */
     public function offsetUnset($offset)
     {
         throw new BadMethodCallException(
             __METHOD__ . ' should never be called - data is only ' .
-            'transferrable it is not to be modified.  It was called with ' .
+            'transferable it is not to be modified.  It was called with ' .
             'offset: ' . $offset);
     }
 
@@ -227,8 +225,7 @@ class Flat implements FlatIface
      * Extra actions to be performed upon updating the current record within the
      * data.
      *
-     * @param mixed[] The current record that we are setting.
-     *
+     * @param mixed[] $record The current record that we are setting.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setRecord(Array $record)

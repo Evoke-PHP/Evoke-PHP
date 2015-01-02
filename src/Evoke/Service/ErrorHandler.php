@@ -35,13 +35,13 @@ class ErrorHandler
     /**
      * Construct a system error handler.
      *
-     * @param LoggingIface Logging object.
-     * @param bool         Whether to stop the standard error handler from
-     *                     running after handling the error here.
+     * @param LoggingIface $logging
+     * @param bool         $suppressErrorHandler
+     * Whether to stop the standard error handler from running after handling
+     * the error here.
      */
-    public function __construct(
-        LoggingIface $logging,
-        /* Bool */   $suppressErrorHandler = false)
+    public function __construct(LoggingIface $logging,
+                                /* Bool */   $suppressErrorHandler = false)
     {
         $this->suppressErrorHandler = $suppressErrorHandler;
         $this->logging              = $logging;
@@ -54,14 +54,14 @@ class ErrorHandler
     /**
      * System Error Handler to log error messages.
      *
-     * @param int     Error Number.
-     * @param string  Error String.
-     * @param string  File where the error occurred.
-     * @param int     Line where the error occurred.
-     * @param mixed[] Context when the error occurred.
-     *
-     * @return bool Whether the default system error handler should be
-     *              suppressed.
+     * @param int    $errNo
+     * @param string $errStr
+     * @param string $errFile
+     * @param int    $errLine
+     * @param array  $errContext
+     * @return bool  Whether the default system error handler should be
+     *               suppressed.
+     * @throws ErrorException If the error is recoverable.
      */
     public function handler(/* Int */    $errNo,
                             /* String */ $errStr,

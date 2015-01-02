@@ -27,8 +27,8 @@ class Match extends Rule
     /**
      * Construct the Exact rule.
      *
-     * @param string  The output format for the rule.
-     * @param mixed[] The match required from the media type.
+     * @param string  $outputFormat The output format for the rule.
+     * @param mixed[] $match        The match required from the media type.
      */
     public function __construct(/* String */ $outputFormat,
                                 Array        $match)

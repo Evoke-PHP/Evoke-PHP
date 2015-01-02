@@ -7,7 +7,6 @@
 namespace Evoke\View\HTML5;
 
 use DOMDocument,
-    DOMDocumentFragment,
     DOMNode,
     Evoke\View\ViewIface;
 
@@ -49,9 +48,9 @@ class String implements ViewIface
     /**
      * Set the string for the view.
      *
-     * @var string The html string to parse for the view.
+     * @param string $html5String The html string to parse for the view.
      */
-    public function setHTML5(/* String */ $html5String)
+    public function setHTML5($html5String)
     {
         $this->html5String = $html5String;
     }
@@ -63,8 +62,8 @@ class String implements ViewIface
     /**
      * Convert a DOM Node to an array.
      *
-     * @param DOMNode The DOM node to convert.
-     * @return string|mixed[][] The DOM node converted read for writing.
+     * @param DOMNode $node The DOM node to convert.
+     * @return mixed[][]|string The DOM node converted read for writing.
      */
     protected function convertDOMNodeForWriting(DOMNode $node)
     {
@@ -116,6 +115,7 @@ class String implements ViewIface
     /**
      * Get the attributes for the DOM node.
      *
+     * @param DOMNode $node
      * @return mixed[] The attributes for the node.
      */
     protected function getAttributes(DOMNode $node)

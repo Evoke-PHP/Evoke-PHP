@@ -29,7 +29,7 @@ class StaticMap implements AutoloadIface
     /**
      * Construct an Autoload object.
      *
-     * @param string[] The static map of classnames to filenames.
+     * @param string[] $staticMap The static map of classnames to filenames.
      */
     public function __construct(Array $staticMap)
     {
@@ -43,9 +43,10 @@ class StaticMap implements AutoloadIface
     /**
      * Autoload the specified class.
      *
-     * @param string The fully namespaced class to load.
+     * @param string $name The fully namespaced class to load.
+     * @throws RuntimeException If the file does not exist.
      */
-    public function load(/* String */ $name)
+    public function load($name)
     {
         if (isset($this->staticMap[$name]))
         {
@@ -55,6 +56,7 @@ class StaticMap implements AutoloadIface
                                            ' does not exist.');
             }
 
+            /** @noinspection PhpIncludeInspection */
             require $this->staticMap[$name];
         }
     }

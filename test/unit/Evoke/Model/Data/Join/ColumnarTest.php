@@ -1,8 +1,7 @@
 <?php
 namespace Evoke_Test\Model\Data\Join;
 
-use Evoke\Model\Data\Join\JoinIface,
-    Evoke\Model\Data\Join\Columnar,
+use Evoke\Model\Data\Join\Columnar,
     PHPUnit_Framework_TestCase;
 
 /**

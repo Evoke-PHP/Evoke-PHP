@@ -19,7 +19,7 @@ interface TreeIface extends \RecursiveIterator
     /**
      * Add a node to the tree.
      *
-     * @param TreeIface The node to add as a child.
+     * @param TreeIface $node The node to add as a child.
      */
     public function add(TreeIface $node);
 
@@ -33,7 +33,7 @@ interface TreeIface extends \RecursiveIterator
     /**
      * Set the value of the node.
      *
-     * @param mixed Value for the node.
+     * @param mixed $value Value for the node.
      */
     public function set($value);
 }

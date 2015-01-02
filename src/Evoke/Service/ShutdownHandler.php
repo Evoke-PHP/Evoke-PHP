@@ -44,13 +44,13 @@ class ShutdownHandler
 
     /**
      * Error view.
-     * @var ErrorIface
+     * @var Error
      */
     protected $viewError;
 
     /**
      * MessageBox view.
-     * @var MessageBoxIface
+     * @var MessageBox
      */
     protected $viewMessageBox;
 
@@ -63,13 +63,18 @@ class ShutdownHandler
     /**
      * Construct the System Shutdown handler.
      *
-     * @param string        Email to use as a contact.
-     * @param ResponseIface Response object.
-     * @param bool          Whether to show the error (You might not want to do
-     *                      this for security reasons).
-     * @param MessageBox    View for the message box.
-     * @param WriterIface   The writer object to write the fatal message.
-     * @param Error         View for the error.
+     * @param string        $email
+     * Email to use as a contact.
+     * @param ResponseIface $response
+     * @param bool          $showError
+     * Whether to show the error (You might not want to do this for security
+     * reasons).
+     * @param MessageBox    $viewMessageBox View for the message box.
+     * @param WriterIface   $writer
+     * Writer object to write the fatal message.
+     * @param Error         $viewError View for the error.
+     * @throws InvalidArgumentException
+     * If showError is set without an error view supplied.
      */
     public function __construct(/* String */  $email,
                                 ResponseIface $response,

@@ -19,18 +19,27 @@ use Evoke\View\ViewIface;
 class MessageBox implements ViewIface
 {
     /**
-     * Protected properties.
-     *
-     * @var mixed[] $attribs  Attributes.
-     * @var mixed[] $elements Content elements.
-     * @var string  $title    Title.
+     * Attributes.
+     * @var mixed[]
      */
-    protected $attribs, $contentElements, $title;
+    protected $attribs;
+
+    /**
+     * Content Elements.
+     * @var mixed[]
+     */
+    protected $contentElements;
+
+    /**
+     * Title.
+     * @var string
+     */
+    protected $title;
 
     /**
      * Construct a Box object.
      *
-     * @param mixed[] Message Box attributes.
+     * @param mixed[] $attribs Message Box attributes.
      */
     public function __construct(
         Array $attribs = ['class' => 'Message_Box Info'])
@@ -47,7 +56,7 @@ class MessageBox implements ViewIface
     /**
      * Add a content element to the message box.
      *
-     * @param mixed Message box element.
+     * @param mixed $element Message box element.
      */
     public function addContent($element)
     {
@@ -70,9 +79,9 @@ class MessageBox implements ViewIface
     /**
      * Set the title for the message box.
      *
-     * @param string Title of the message box.
+     * @param string $title Title of the message box.
      */
-    public function setTitle(/* String */ $title)
+    public function setTitle($title)
     {
         $this->title = $title;
     }

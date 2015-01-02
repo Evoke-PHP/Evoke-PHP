@@ -7,7 +7,8 @@
 namespace Evoke\View\HTML5\Input;
 
 use InvalidArgumentException,
-    LogicException;
+    LogicException,
+    Traversable;
 
 /**
  * Select Input View
@@ -20,25 +21,48 @@ use InvalidArgumentException,
 class Select
 {
     /**
-     * Protected properties.
-     *
-     * @var string[]   $attribs       Attributes for the select element.
-     * @var string     $fieldText     Field in the data for the option text.
-     * @var string     $fieldValue    Field in the data for the option value.
-     * @var string[]   $optionAttribs Attributes for each select option.
-     * @var mixed[]    $options       Options for the select.
-     * @var mixed|null $selectedValue Value that is selected or NULL for none.
+     * Attributes for the select element.
+     * @var string[]   
      */
-    protected $attribs, $fieldText, $fieldValue, $optionAttribs, $options,
-        $selectedValue;
+    protected $attribs;
+
+    /**
+     * Field in the data for the option text.
+     * @var string
+     */
+    protected $fieldText;
+
+    /**
+     * Field in the data for the option value.
+     * @var string
+     */
+    protected $fieldValue;
+    
+    /**
+     * Attributes for each select option.
+     * @var string[]
+     */
+    protected $optionAttribs;
+    
+    /**
+     * Options for the select.
+     * @var mixed[]
+     */
+    protected $options;
+    
+    /**
+     * Value that is selected or NULL for none.
+     * @var mixed|null
+     */
+    protected $selectedValue;
 
     /**
      * Construct a Select view.
      *
-     * @param string   Field from the data for the option text.
-     * @param string   Field from the data for the option value.
-     * @param string[] Attributes for the select element.
-     * @param string[] Attributes for the option elements.
+     * @param string   $fieldText     Field from the data for the option text.
+     * @param string   $fieldValue    Field from the data for the option value.
+     * @param string[] $attribs       Attributes for the select element.
+     * @param string[] $optionAttribs Attributes for the option elements.
      */
     public function __construct(/* String */ $fieldText,
                                 /* String */ $fieldValue    = 'ID',
@@ -60,6 +84,7 @@ class Select
      * Get the select element.
      *
      * @return mixed[] The select element.
+     * @throws LogicException If the option does not have the required fields.
      */
     public function get()
     {
@@ -95,7 +120,8 @@ class Select
     /**
      * Set the options that we are selecting between.
      *
-     * @param mixed[] The options to select between.
+     * @param mixed[] $options The options to select between.
+     * @throws InvalidArgumentException If the options aren't traversable.
      */
     public function setOptions($options)
     {
@@ -110,7 +136,7 @@ class Select
     /**
      * Set the value that has been selected from the options.
      *
-     * @param mixed The selected value.
+     * @param mixed $selectedValue
      */
     public function setSelected($selectedValue)
     {

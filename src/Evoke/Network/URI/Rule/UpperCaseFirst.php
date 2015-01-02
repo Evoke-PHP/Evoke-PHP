@@ -28,9 +28,11 @@ class UppercaseFirst extends Rule
     /**
      * Construct the UpperCaseFirst Rule.
      *
-     * @param string[] Delimiter strings that show the boundary of words.
-     * @param bool     Whether the rule can definitely give the final route for
-     *                 all URIs that it matches.
+     * @param string[] $delimiters
+     * Delimiter strings that show the boundary of words.
+     * @param bool     $authoritative
+     * Whether the rule can definitely give the final route for all URIs that it
+     * matches.
      */
     public function __construct(Array      $delimiters,
                                 /* Bool */ $authoritative=false)

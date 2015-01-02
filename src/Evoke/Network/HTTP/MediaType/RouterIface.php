@@ -21,14 +21,15 @@ interface RouterIface
     /**
      * Add a rule to the router.
      *
-     * @param RuleIface The rule to add to the router.
+     * @param RuleIface $rule The rule to add to the router.
      */
     public function addRule(RuleIface $rule);
 
     /**
      * Perform the routing based on the rules.
      *
-     * @param mixed[] The media types accepted by the browser.
+     * @param mixed[] $acceptedMediaTypes
+     * The media types accepted by the browser.
      */
     public function route(Array $acceptedMediaTypes);
 }

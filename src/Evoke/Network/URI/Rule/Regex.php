@@ -45,11 +45,15 @@ class Regex extends Rule
     /**
      * Construct the Regex Rule.
      *
-     * @param string[] Controller regex match and replace.
-     * @param string   Regex to determine whether the rule matches.
-     * @param Array[]  Parameters each with a key and value regex for match and
-     *                 replacement.
-     * @param bool     Whether the rule is authoritative.
+     * @param string[] $controller
+     * Controller regex match and replace.
+     * @param string   $match
+     * Regex to determine whether the rule matches.
+     * @param Array[]  $params
+     * Parameters each with a key and value regex for match and replacement.
+     * @param bool     $authoritative
+     * Whether the rule is authoritative.
+     * @throws InvalidArgumentException
      */
     public function __construct(Array        $controller,
                                 /* string */ $match,

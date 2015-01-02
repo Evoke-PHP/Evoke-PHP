@@ -58,10 +58,10 @@ class File implements LoggerIface
     /**
      * Construct a File Logger object.
      *
-     * @param string          The filename for the log.
-     * @param int(octal)          The directory mode for the log file.
-     * @param int(octal)          Permissions to set the file to
-     * @param bool                Whether to lock the file for writing.
+     * @param string $filename The filename for the log.
+     * @param int    $dirMode  The directory mode for the log file (octal).
+     * @param int    $fileMode The file permissions for the log file (octal).
+     * @param bool   $locking  Whether to lock the file for writing.
      */
     public function __construct(/* String */      $filename,
                                 /* Int (octal) */ $dirMode  = 0700,
@@ -81,9 +81,9 @@ class File implements LoggerIface
     /**
      * Logs a message to the file.
      *
-     * @param DateTime The DateTime for the log message.
-     * @param mixed    The message to log.
-     * @param mixed    The level of the message.
+     * @param DateTime $date    The DateTime for the log message.
+     * @param mixed    $message The message to log.
+     * @param int      $level   The level of message.
      */
     public function log(DateTime $date, $message, $level)
     {
@@ -116,6 +116,8 @@ class File implements LoggerIface
     /**
      * Open the log file for output. Creating directories and the log file if
      * required using the correct mode.
+     *
+     * @throws RuntimeException If the file cannot be opened in the system.
      */
     private function open()
     {

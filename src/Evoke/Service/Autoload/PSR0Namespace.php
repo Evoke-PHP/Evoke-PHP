@@ -17,29 +17,41 @@ namespace Evoke\Service\Autoload;
 class PSR0Namespace implements AutoloadIface
 {
     /**
-     * Protected Properties
-     *
-     * @var string $baseDir     Base directory for the files.
-     * @var string $extension   File extension to use.
-     * @var string $nsWithSlash Base namespace that we are autoloading with
-     *                          slash at the end.
+     * Base directory for the files.
+     * @var string     
      */
-    protected $baseDir, $extension, $nsWithSlash;
+    protected $baseDir;
+    
+    /**
+     * File extension to use.
+     * @var string
+     */
+    protected $extension;
+    
+    /**
+     * Base namespace that we are autoloading with slash at the end.
+     * @var string
+     */
+    protected $nsWithSlash;
 
     /**
-     * Private Properties
-     *
-     * @var int $nameMinLen     Minimum length of name required to load.
-     * @var int $nsWithSlashLen Length of the namespace with slash.
+     * Minimum length of name required to load.
+     * @var int 
      */
-    private $nameMinLen, $nsWithSlashLen;
+    private $nameMinLen;
+    
+    /**
+     * Length of the namespace with slash.
+     * @var int
+     */
+    private $nsWithSlashLen;
 
     /**
      * Construct an Autoload object.
      *
-     * @param string Base directory.
-     * @param string Namespace.
-     * @param string Extension
+     * @param string $baseDir
+     * @param string $namespace
+     * @param string $extension
      */
     public function __construct(/* String */ $baseDir,
                                 /* String */ $namespace,
@@ -60,11 +72,11 @@ class PSR0Namespace implements AutoloadIface
     /**
      * Autoload the specified class.
      *
-     * @param string The fully namespaced class to load.
+     * @param string $name The fully namespaced class to load.
      */
-    public function load(/* String */ $name)
+    public function load($name)
     {
-        // Only handle the specified namespace (and its subnamespaces).
+        // Only handle the specified namespace (and its sub-namespaces).
         if (strlen($name) >= $this->nameMinLen &&
             substr($name, 0, $this->nsWithSlashLen) !== $this->nsWithSlash)
         {
@@ -82,6 +94,7 @@ class PSR0Namespace implements AutoloadIface
 
         if (file_exists($filename))
         {
+            /** @noinspection PhpIncludeInspection */
             require $filename;
         }
     }

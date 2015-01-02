@@ -164,13 +164,18 @@ class Tabular extends Join
     /**
      * Construct the tabular join tree used to arrange the data.
      *
-     * @param string   Table name for collecting the main results.
-     * @param string[] Key fields for the records.
-     * @param string   Field to use for joining data.
-     * @param bool     Whether all result fields must be tabular.
-     * @param string   Separator between table and fields.
-     * @param bool     Whether we can refer to joins using a case-insenstive
-     *                 alpha numeric match.
+     * @param string   $tableName
+     * Table name for collecting the main results.
+     * @param string[] $keys
+     * Key fields for the records.
+     * @param string   $jointKey
+     * Field to use for joining data.
+     * @param bool     $requireAllTabularFields
+     * Whether all result fields must be tabular.
+     * @param string   $separator
+     * Separator between table and fields.
+     * @param bool     $useAlphaNumMatch
+     * Whether we can refer to joins using a case-insensitive alphanumeric match.
      */
     public function __construct(
         /* string */ $tableName,
@@ -196,7 +201,7 @@ class Tabular extends Join
     /**
      * Arrange a set of results for the database according to the Join tree.
      *
-     * @param mixed[] The flat result data.
+     * @param mixed[] $results The flat result data.
      * @return mixed[] The data arranged into a hierarchy by the joins.
      */
     public function arrangeFlatData(Array $results)
@@ -215,8 +220,9 @@ class Tabular extends Join
      * Arrange the results which have already been split into tables into
      * hierarchical results according to the metadata.
      *
-     * @param string[][][] The split results.
-     * @param mixed[] Any hierarchical data that has already been arranged.
+     * @param string[][][] $splitResults
+     * @param mixed[]      $data
+     * Any hierarchical data that has already been arranged.
      * @return mixed[] The hierarchical results.
      */
     public function arrangeSplitResults(Array $splitResults,
@@ -262,7 +268,7 @@ class Tabular extends Join
                 }
 
                 // If this result could contain information for referenced
-                // tables lower in the heirachy set it in the joint data.
+                // tables lower in the hierarchy set it in the joint data.
                 if (!empty($this->joins))
                 {
                     if (!isset($data[$rowID][$this->jointKey]))
@@ -297,9 +303,10 @@ class Tabular extends Join
     /*********************/
 
     /**
-     * Get the row identifier for the curent row.
+     * Get the row identifier for the current row.
      *
-     * @param mixed[] The data row.
+     * @param mixed[] $row The data row.
+     * @return null|string
      * @throws DomainException If the row does not contain all of the keys.
      */
     protected function filterRowID(Array $row)
@@ -323,7 +330,8 @@ class Tabular extends Join
     /**
      * Get the non-identifying fields from the current row.
      *
-     * @param mixed[] The data row.
+     * @param mixed[] $row The data row.
+     * @return array
      */
     protected function filterRowFields(Array $row)
     {
@@ -334,7 +342,9 @@ class Tabular extends Join
      * Split a result by the tables that the result data is from.  This can be
      * done thanks to the separator that identifies each table.
      *
-     * @param mixed[] A flat result that is to be split.
+     * @param mixed[] $result A flat result that is to be split.
+     * @return array
+     * @throws DomainException If the result cannot be split.
      */
     protected function splitResultByTables(Array $result)
     {
@@ -377,8 +387,7 @@ class Tabular extends Join
     /**
      * Determine whether the result is a result (has data for this table).
      *
-     * @param mixed[] The result data.
-     *
+     * @param mixed[] $result The result data.
      * @return bool Whether the result contains information for this table.
      */
     private function isResult(Array $result)

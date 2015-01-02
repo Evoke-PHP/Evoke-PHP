@@ -33,7 +33,10 @@ class Columnar extends Join
     /**
      * Construct a Columnar join object.
      *
-     * @param string[] Columns.
+     * @param string[] $columns
+     * @param array    $keys
+     * @param string   $jointKey
+     * @param bool     $useAlphaNumMatch
      */
     public function __construct(
         Array        $columns,
@@ -55,7 +58,7 @@ class Columnar extends Join
     /**
      * Arrange a set of results according to the Join tree.
      *
-     * @param mixed[] The flat result data.
+     * @param mixed[] $results The flat result data.
      * @return mixed[] The data arranged into a hierarchy by the joins.
      */
     public function arrangeFlatData(Array $results)

@@ -48,7 +48,7 @@ interface RuleIface
     /**
      * Set the URI that the rule is acting upon.
      *
-     * @param string The URI that the rule should act upon.
+     * @param string $uri The URI that the rule should act upon.
      */
     public function setURI($uri);
 }

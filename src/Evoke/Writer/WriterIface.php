@@ -36,7 +36,7 @@ interface WriterIface
     /**
      * Write the data into the buffer.
      *
-     * @param mixed The data to be written.
+     * @param mixed $data The data to be written.
      */
     public function write($data);
 

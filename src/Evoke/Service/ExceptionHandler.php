@@ -25,25 +25,45 @@ use Evoke\Network\HTTP\ResponseIface,
 class ExceptionHandler
 {
     /**
-     * Properties for the Exception Handler.
-     *
-     * @var ResponseIface $response       Response object.
-     * @var bool          $showException  Whether to display the exception.
-     * @var Exception     $viewException  Exception view.
-     * @var MessageBox    $viewMessageBox MessageBox view.
-     * @var WriterIface   $writer         Writer.
+     * Response Object.
+     * @var ResponseIface
      */
-    protected $response, $showException, $viewException, $viewMessageBox,
-        $writer;
+    protected $response;
+    
+    /**
+     * Whether to display the exception.
+     * @var bool
+     */
+    protected $showException;
+    
+    /**
+     * Exception view.
+     * @var Exception
+     */
+    protected $viewException;
+
+    /**
+     * MessageBox view.
+     * @var MessageBox
+     */
+    protected $viewMessageBox;
+
+    /**
+     * Writer.
+     * @var WriterIface
+     */
+    protected $writer;
 
     /**
      * Construct an Exception Handler object.
      *
-     * @param ResponseIface Response object.
-     * @param bool          Whether to show the exception.
-     * @param MessageBox    MessageBox view.
-     * @param WriterIface   Writer object.
-     * @param Exception     View of the exception (if shown).
+     * @param ResponseIface $response
+     * @param bool          $showException
+     * @param MessageBox    $viewMessageBox
+     * @param WriterIface   $writer
+     * @param Exception     $viewException
+     * @throws InvalidArgumentException
+     * If we are showing the exception and don't provide an exception view.
      */
     public function __construct(ResponseIface $response,
                                 /* Bool */    $showException,
@@ -70,10 +90,11 @@ class ExceptionHandler
 
     /**
      * Handle uncaught exceptions for the system by logging information and
-     * displaying a generic notice to the user so that they are informaed of an
+     * displaying a generic notice to the user so that they are informed of an
      * error without exposing information that could be used for an attack.
      *
-     * @param \Exception An exception that was not caught in the system.
+     * @param \Exception $uncaughtException
+     * An exception that was not caught in the system.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -86,7 +107,7 @@ class ExceptionHandler
         if (!empty($currentBuffer))
         {
             trigger_error(
-                'Bufffer needs to be flushed in exception handler for ' .
+                'Buffer needs to be flushed in exception handler for ' .
                 'clean error page.  Buffer was: ' .	$currentBuffer,
                 E_USER_WARNING);
             $this->writer->flush();

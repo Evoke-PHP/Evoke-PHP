@@ -10,7 +10,7 @@ use Evoke\Model\Data\Join\JoinIface,
     OutOfBoundsException;
 
 /**
- * A general purporse data structure that provides access to hierarchical data.
+ * A general purpose data structure that provides access to hierarchical data.
  * The tree of data is accessed using array access for the information at the
  * current level of the tree.  Lower levels are accessed using class properties.
  *
@@ -31,7 +31,7 @@ use Evoke\Model\Data\Join\JoinIface,
  *
  * ###Usage
  *
- * This is an exmaple of using Data for products each with a set of images.
+ * This is an example of using Data for products each with a set of images.
  * Further details can be seen by looking at `Evoke\Model\Data\Join\Tabular`.
  *
  * <pre><code>
@@ -76,9 +76,9 @@ class Data extends Flat
     /**
      * Construct a Data model.
      *
-     * @param JoinIface Structure of the data we are modelling.
-     * @param Data[]    Joins for the data.
-     * @param string    Field used to join the data in a record.
+     * @param JoinIface $joinStructure Structure of the data we are modelling.
+     * @param Data[]    $jointData     Joins for the data.
+     * @param string    $jointKey      Field used to join the data in a record.
      */
     public function __construct(JoinIface    $joinStructure,
                                 Array        $jointData = [],
@@ -92,9 +92,12 @@ class Data extends Flat
     /**
      * Get access to the joint data as though it is a property of the object.
      *
-     * @param string Join name that identifies the joint data uniquely in the
-     *               join structure.
+     * @param string $join
+     * Join name that identifies the joint data uniquely in the join structure.
      * @return Data The joint data.
+     * @throws OutOfBoundsException
+     * If there is no container for the join (The structure of the data does not
+     * contain the information requested by the consumer).
      */
     public function __get($join)
     {
@@ -111,7 +114,7 @@ class Data extends Flat
     /**
      * Set the data that we are managing.
      *
-     * @param mixed[] The data we want to manage.
+     * @param mixed[] $data The data we want to manage.
      */
     public function setData(Array $data)
     {
@@ -126,7 +129,7 @@ class Data extends Flat
     /**
      * Set data that has already been arranged by the join structure.
      *
-     * @param mixed[] The data that has already been arranged.
+     * @param mixed[] $arrangedData The data that has already been arranged.
      */
     protected function setArrangedData(Array $arrangedData)
     {
@@ -138,7 +141,7 @@ class Data extends Flat
      * Set all of the Joint Data from the current record into the data
      * containers supplied by the references given at construction.
      *
-     * @param mixed[] The current record to set the joint data with.
+     * @param mixed[] $record The current record to set the joint data with.
      */
     protected function setRecord(Array $record)
     {

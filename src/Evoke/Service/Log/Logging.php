@@ -33,7 +33,7 @@ class Logging implements LoggingIface
     /**
      * Construct a Log object.
      *
-     * @param DateTime DateTime object.
+     * @param DateTime $dateTime
      */
     public function __construct(DateTime $dateTime)
     {
@@ -47,7 +47,7 @@ class Logging implements LoggingIface
     /**
      * Add a logger to the observer list.
      *
-     * @param LoggerIface The logger to add.
+     * @param LoggerIface $observer The logger to add.
      */
     public function attach(LoggerIface $observer)
     {
@@ -57,9 +57,9 @@ class Logging implements LoggingIface
     /**
      * Remove a logger from the observer list.
      *
-     * @param LoggerIface The logger to remove (If there is more than one
-     *                    occurence of the logger in the list then only one is
-     *                    removed).
+     * @param LoggerIface $observer
+     * The logger to remove (If there is more than one occurrence of the logger
+     * in the list then only the first one is removed).
      */
     public function detach(LoggerIface $observer)
     {
@@ -76,8 +76,8 @@ class Logging implements LoggingIface
     /**
      * Log a message by calling all of the observers in the observer list.
      *
-     * @param mixed The message to log.
-     * @param mixed The level of the message to log.
+     * @param mixed $message The message to log.
+     * @param mixed $level   The level of the message to log.
      */
     public function log($message, $level)
     {

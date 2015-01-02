@@ -48,7 +48,7 @@ class PSR0NamespaceTest extends PHPUnit_Framework_TestCase
     /**
      * Try to load a class that is outside the namespace.
      */
-    public function testLoadNonExistant()
+    public function testLoadNonExistent()
     {
         vfsStream::setup(
             'root',

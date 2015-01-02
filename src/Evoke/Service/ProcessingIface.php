@@ -19,11 +19,11 @@ interface ProcessingIface
     /**
      * Add a callback to the request key's list of callbacks.
      *
-     * @param string   The request key for the matching.
-     * @param callable The callback that is being added.
+     * @param string   $requestKey The request key for the matching.
+     * @param callable $callback   The callback that is being added.
      */
     public function addCallback(/* String */ $requestKey,
-                                callable $callback);
+                                callable     $callback);
 
     /**
      * Process the request.
@@ -33,7 +33,7 @@ interface ProcessingIface
     /**
      * Set the data for the request that we are processing.
      *
-     * @param mixed[] The request data that we are processing.
+     * @param mixed[] $data The request data that we are processing.
      */
     public function setData(Array $data);
 }

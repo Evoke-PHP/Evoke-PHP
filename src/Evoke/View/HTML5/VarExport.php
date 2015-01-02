@@ -43,7 +43,7 @@ class VarExport implements ViewIface
     /**
      * Set the var to export.
      *
-     * @param mixed Var to export.
+     * @param mixed $var Var to export.
      */
     public function set($var)
     {

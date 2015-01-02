@@ -41,7 +41,7 @@ class Tree implements TreeIface
     /**
      * Add a node to the tree.
      *
-     * @param TreeIface The node to add as a child.
+     * @param TreeIface $node The node to add as a child.
      */
     public function add(TreeIface $node)
     {
@@ -88,21 +88,37 @@ class Tree implements TreeIface
         return !empty($this->children);
     }
 
+    /**
+     * Return the key for the current node.
+     *
+     * @return mixed The key for the current node.
+     */
     public function key()
     {
         return $this->position;
     }
 
+    /**
+     * Increment to the next child node.
+     */
     public function next()
     {
         $this->position++;
     }
 
+    /**
+     * Rewind the iterator.
+     */
     public function rewind()
     {
         $this->position = 0;
     }
 
+    /**
+     * Return whether the current node is valid.
+     *
+     * @return bool Whether the current node is valid.
+     */
     public function valid()
     {
         return $this->position < count($this->children);
@@ -111,7 +127,7 @@ class Tree implements TreeIface
     /**
      * Set the value of the node.
      *
-     * @param mixed Value for the node.
+     * @param mixed $value Value for the node.
      */
     public function set($value)
     {

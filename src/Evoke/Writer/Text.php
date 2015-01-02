@@ -25,7 +25,7 @@ class Text extends Writer
     /**
      * Write text into the buffer.
      *
-     * @param string The text to write into the buffer.
+     * @param string $text The text to write into the buffer.
      */
     public function write($text)
     {

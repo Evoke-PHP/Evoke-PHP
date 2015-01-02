@@ -21,9 +21,9 @@ interface LoggerIface
     /**
      * Logs a message.
      *
-     * @param DateTime The DateTime for the log message.
-     * @param mixed    The message to log.
-     * @param int      The level of the message.
+     * @param DateTime $date    The DateTime for the log message.
+     * @param mixed    $message The message to log.
+     * @param int      $level   The level of the message.
      */
     public function log(DateTime $date, $message, $level);
 }

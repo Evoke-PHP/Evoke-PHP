@@ -33,8 +33,8 @@ class TreeBuilder
     /**
      * Construct a TreeBuilder object.
      *
-     * @param string Left.
-     * @param string Right.
+     * @param string $left
+     * @param string $right
      */
     public function __construct(/* string */ $left  = 'Lft',
                                 /* string */ $right = 'Rgt')
@@ -48,11 +48,12 @@ class TreeBuilder
     /******************/
 
     /**
-     * Build a tree from Modified Preorder Tree Traversal data.
+     * Build a tree from Modified Pre-order Tree Traversal data.
      *
-     * @param string  The name of the tree.
-     * @param mixed[] The Modified Preorder Tree Traversal data.
+     * @param string  $treeName The name of the tree.
+     * @param mixed[] $mptt     The Modified Pre-order Tree Traversal data.
      * @return Tree The tree.
+     * @throws InvalidArgumentException If the MPTT data is bad.
      */
     public function build($treeName, Array $mptt)
     {

@@ -18,6 +18,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     /**
      * Add a header so that we can keep track of the headers set.
+     * @param mixed $header
      */
     public static function addHeader($header)
     {

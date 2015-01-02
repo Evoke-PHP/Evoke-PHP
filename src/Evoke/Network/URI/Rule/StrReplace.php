@@ -34,10 +34,11 @@ class StrReplace extends Rule
     /**
      * Construct the string replacements rule.
      *
-     * @param string The string to match on.
-     * @param string The string to use as a replacement.
-     * @param bool   Whether the rule can definitely give the final route for
-     *               all URIs that it matches.
+     * @param string $match         The string to match on.
+     * @param string $replacement   The string to use as a replacement.
+     * @param bool   $authoritative
+     * Whether the rule can definitely give the final route for all URIs that it
+     * matches.
      */
     public function __construct(/* String */ $match,
                                 /* String */ $replacement,

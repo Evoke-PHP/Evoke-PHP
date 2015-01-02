@@ -31,7 +31,7 @@ class Router implements RouterIface
     /**
      * Add a rule to the router.
      *
-     * @param Rule\RuleIface The rule.
+     * @param Rule\RuleIface $rule The rule.
      */
     public function addRule(Rule\RuleIface $rule)
     {
@@ -41,7 +41,7 @@ class Router implements RouterIface
     /**
      * Route the URI to the controller and parameters that should respond to it.
      *
-     * @param string The URI that we are routing.
+     * @param string $uri The URI that we are routing.
      * @return mixed[] The class and parameters that should respond to the URI
      *                 (generally this should be a Controller class).
      */

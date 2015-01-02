@@ -25,7 +25,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
     /**
      * Get the query parameter.
      *
-     * @param string The parameter to get.
+     * @param string $param The parameter to get.
      * @return mixed The query parameter.
      */
     public function getQueryParam($param);
@@ -47,7 +47,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
     /**
      * Whether the query parameter is set.
      *
-     * @param string param The parameter to check.
+     * @param string $param The parameter to check.
      * @return bool Whether the query parameter is set.
      */
     public function issetQueryParam($param);

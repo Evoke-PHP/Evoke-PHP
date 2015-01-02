@@ -126,7 +126,8 @@ class Response implements ResponseIface
     /**
      * Construct a Response object.
      *
-     * @param string HTTP Version (1.0, 1.1, etc.)
+     * @param string $httpVersion HTTP Version (1.0, 1.1, etc.)
+     * @throws InvalidArgumentException If the HTTP version is invalid.
      */
     public function __construct($httpVersion = '1.1')
     {
@@ -146,6 +147,9 @@ class Response implements ResponseIface
 
     /**
      * Send the Response as per RFC2616-sec6.
+     *
+     * @throws LogicException
+     * If the headers has already been sent or the response code isn't set.
      */
     public function send()
     {
@@ -179,7 +183,7 @@ class Response implements ResponseIface
     /**
      * Set the body of the response.
      *
-     * @param string The text to set the response body to.
+     * @param string $text The text to set the response body to.
      */
     public function setBody($text)
     {
@@ -192,10 +196,10 @@ class Response implements ResponseIface
      * This must be called before any output is sent (otherwise the headers will
      * have already been sent).
      *
-     * @param int The number of days to cache the document for.
-     * @param int The number of hours to cache the document for.
-     * @param int The number of minutes to cache the document for.
-     * @param int The number of seconds to cache the document for.
+     * @param int $days    The number of days to cache the document for.
+     * @param int $hours   The number of hours to cache the document for.
+     * @param int $minutes The number of minutes to cache the document for.
+     * @param int $seconds The number of seconds to cache the document for.
      */
     public function setCache($days=0, $hours=0, $minutes=0, $seconds=0)
     {
@@ -215,8 +219,8 @@ class Response implements ResponseIface
      * (Note: 7.1 extension-header allows for the wide range of headers that we
      * match here, even though they may be ignored by clients.)
      *
-     * @param string The header to set.
-     * @param string The value to set it to.
+     * @param string $field The header to set.
+     * @param string $value The value to set it to.
      */
     public function setHeader($field, $value)
     {
@@ -227,8 +231,8 @@ class Response implements ResponseIface
     /**
      * Set the HTTP status code and reason (200 OK, 404 Not Found, etc.)
      *
-     * @param int The HTTP status code.
-     * @param string The HTTP status reason.
+     * @param int         $code   The HTTP status code.
+     * @param null|string $reason The HTTP status reason.
      */
     public function setStatus($code, $reason = NULL)
     {
@@ -245,7 +249,7 @@ class Response implements ResponseIface
      * Get the status reason for the status code, defaulting to HTTP 1.1
      * recommendations.
      *
-     * @param int Status code.
+     * @param int $code Status code.
      * @return string Status reason.
      */
     protected function getStatusReason($code)

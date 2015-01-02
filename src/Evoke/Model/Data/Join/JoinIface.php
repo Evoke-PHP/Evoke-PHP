@@ -21,15 +21,15 @@ interface JoinIface
     /**
      * Add a join for the data.
      *
-     * @param string    The canonical join ID.
-     * @param JoinIface The join to add.
+     * @param string    $joinID The canonical join ID.
+     * @param JoinIface $join   The join to add.
      */
     public function addJoin(/* String */ $joinID, JoinIface $join);
     
     /**
      * Arrange a set of results according to the Join tree.
      *
-     * @param mixed[] The flat result data.
+     * @param mixed[] $results The flat result data.
      * @return mixed[] The data arranged into a hierarchy by the joins.
      */
     public function arrangeFlatData(Array $results);
@@ -37,9 +37,8 @@ interface JoinIface
     /**
      * Get the canonical join ID for the specified join.
      *
-     * @param string Join to get the ID for.
+     * @param string $join Join to get the ID for.
      * @return string The canonical join ID.
-     * @throws DomainException If the join cannot be found uniquely.
      */
     public function getJoinID($join);
 

@@ -116,7 +116,7 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
 
             $expectedErrors[] =
                 [E_USER_WARNING,
-                 'Bufffer needs to be flushed in exception handler for ' .
+                 'Buffer needs to be flushed in exception handler for ' .
                  'clean error page.  Buffer was: NOT_EMPTY'];
         }
 

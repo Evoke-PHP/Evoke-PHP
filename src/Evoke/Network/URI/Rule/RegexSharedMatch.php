@@ -44,10 +44,15 @@ class RegexSharedMatch extends Rule
     /**
      * Construct the Regex Rule.
      *
-     * @param string  The Regex to match the URI with.
-     * @param string  The controller regex replacement string.
-     * @param Array[] Regexes replacements for the parameters.
-     * @param bool    Is this always the final route?
+     * @param string  $match
+     * The Regex to match the URI with.
+     * @param string  $replacement
+     * The controller regex replacement string.
+     * @param Array[] $params
+     * Regex replacements for the parameters.
+     * @param bool    $authoritative
+     * Is this always the final route?
+     * @throws InvalidArgumentException If the rule is incorrectly formatted.
      */
     public function __construct(/* String */ $match,
                                 /* String */ $replacement,

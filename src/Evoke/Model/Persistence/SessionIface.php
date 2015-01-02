@@ -19,14 +19,14 @@ interface SessionIface
     /**
      * Add a value to the array stored in the session domain.
      *
-     * @param mixed The value to add to the session.
+     * @param mixed $value The value to add to the session.
      */
     public function addValue($value);
 
     /**
      * Delete the portion of the session stored at the offset.
      *
-     * @param mixed[] The offset to the part of the session to delete.
+     * @param mixed[] $offset The offset to the part of the session to delete.
      */
     public function deleteAtOffset(Array $offset = []);
 
@@ -38,8 +38,7 @@ interface SessionIface
     /**
      * Return the value of the key in the session domain.
      *
-     * @param mixed The index of the value to retrieve.
-     *
+     * @param mixed $key The index of the value to retrieve.
      * @return mixed The value from the session.
      */
     public function get($key);
@@ -47,14 +46,14 @@ interface SessionIface
     /**
      * Get a copy of the session domain that we are managing.
      *
-     * @return mixed[] The sesssion data.
+     * @return mixed[] The session data.
      */
     public function getCopy();
 
     /**
      * Get a copy of the data in the session at the offset specified.
      *
-     * @param mixed[] The offset to the data.
+     * @param mixed[] $offset The offset to the data.
      */
     public function getAtOffset(Array $offset = []);
 
@@ -75,8 +74,8 @@ interface SessionIface
     /**
      * Increment the value in the session by the offset.
      *
-     * @param mixed The session key to increment.
-     * @param int   The amount to increment the value.
+     * @param mixed $key    The session key to increment.
+     * @param int   $offset The amount to increment the value.
      */
     public function increment($key, $offset=1);
 
@@ -90,9 +89,8 @@ interface SessionIface
     /**
      * Return whether the key is set to the specified value.
      *
-     * @param mixed The session key to check.
-     * @param mixed The value to check it against.
-     *
+     * @param mixed $key The session key to check.
+     * @param mixed $val The value to check it against.
      * @return bool
      */
     public function isEqual($key, $val);
@@ -100,8 +98,7 @@ interface SessionIface
     /**
      * Whether the key has been set in the session domain.
      *
-     * @param mixed The session key to check.
-     *
+     * @param mixed $key The session key to check.
      * @return bool
      */
     public function issetKey($key);
@@ -127,30 +124,30 @@ interface SessionIface
     /**
      * Set the value of the key in the session domain.
      *
-     * @param mixed The index in the session to set.
-     * @param mixed The value to set.
+     * @param mixed $key   The index in the session to set.
+     * @param mixed $value The value to set.
      */
     public function set($key, $value);
 
     /**
      * Set the session to the specified data.
      *
-     * @param mixed The new data to set the session to.
+     * @param mixed $data The new data to set the session to.
      */
     public function setData($data);
 
     /**
      * Set the session data at an offset.
      *
-     * @param mixed The data to set.
-     * @param mixed[] The offset to set the data at.
+     * @param mixed   $data   The data to set.
+     * @param mixed[] $offset The offset to set the data at.
      */
     public function setDataAtOffset($data, Array $offset = []);
 
     /**
      * Unset the key in the session domain.
      *
-     * @param mixed The index in the session to unset.
+     * @param mixed $key The index in the session to unset.
      */
     public function unsetKey($key);
 }

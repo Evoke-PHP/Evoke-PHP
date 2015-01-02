@@ -53,7 +53,7 @@ class Exception implements ViewIface
     /**
      * Set the exception for the view.
      *
-     * @param \Exception The exception for the view.
+     * @param \Exception $exception The exception for the view.
      */
     public function set(\Exception $exception)
     {

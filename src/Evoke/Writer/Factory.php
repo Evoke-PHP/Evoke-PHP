@@ -26,9 +26,11 @@ class Factory
     /**
      * Create a writer object.
      *
-     * @param string The output format for the writer to create.
+     * @param string $outputFormat The output format for the writer to create.
+     * @return Writer
+     * @throws DomainException If no writer can be found for the output format.
      */
-    public function create(/* String */ $outputFormat)
+    public function create($outputFormat)
     {
         $upperOutputFormat = strtoupper($outputFormat);
 

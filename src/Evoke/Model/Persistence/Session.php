@@ -33,7 +33,7 @@ class Session implements SessionIface
     /**
      * Construct the persistence for a session domain.
      *
-     * @param string[] Domain to manage.
+     * @param string[] $domain Domain to manage.
      */
     public function __construct(Array $domain = [])
     {
@@ -48,7 +48,7 @@ class Session implements SessionIface
     /**
      * Add a value to the array stored in the session domain.
      *
-     * @param mixed The value to add to the session.
+     * @param mixed $value The value to add to the session.
      */
     public function addValue($value)
     {
@@ -59,7 +59,7 @@ class Session implements SessionIface
     /**
      * Delete the portion of the session stored at the offset.
      *
-     * @param mixed[] The offset to the part of the session to delete.
+     * @param mixed[] $offset The offset to the part of the session to delete.
      */
     public function deleteAtOffset(Array $offset = [])
     {
@@ -128,8 +128,7 @@ class Session implements SessionIface
     /**
      * Return the value of the key in the session domain.
      *
-     * @param mixed The index of the value to retrieve.
-     *
+     * @param mixed $key The index of the value to retrieve.
      * @return mixed The value from the session.
      */
     public function get($key)
@@ -141,8 +140,7 @@ class Session implements SessionIface
     /**
      * Get a copy of the data in the session at the offset specified.
      *
-     * @param mixed[] The offset to the data.
-     *
+     * @param mixed[] $offset The offset to the data.
      * @return mixed|null The data at the offset (NULL if the offset doesn't
      *                    exist).
      */
@@ -167,7 +165,7 @@ class Session implements SessionIface
     /**
      * Get a copy of the session domain that we are managing.
      *
-     * @return mixed[] The sesssion data.
+     * @return mixed[] The session data.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -208,8 +206,8 @@ class Session implements SessionIface
     /**
      * Increment the value in the session by the offset.
      *
-     * @param mixed The session key to increment.
-     * @param int   The amount to increment the value.
+     * @param mixed $key    The session key to increment.
+     * @param int   $offset The amount to increment the value.
      */
     public function increment($key, $offset=1)
     {
@@ -231,9 +229,8 @@ class Session implements SessionIface
     /**
      * Return whether the key is set to the specified value.
      *
-     * @param mixed The session key to check.
-     * @param mixed The value to check it against.
-     *
+     * @param mixed $key The session key to check.
+     * @param mixed $val The value to check it against.
      * @return bool
      */
     public function isEqual($key, $val)
@@ -245,8 +242,7 @@ class Session implements SessionIface
     /**
      * Whether the key has been set in the session domain.
      *
-     * @param mixed The session key to check.
-     *
+     * @param mixed $key The session key to check.
      * @return bool
      */
     public function issetKey($key)
@@ -282,7 +278,6 @@ class Session implements SessionIface
         {
             // Set currentDomain to reference $_SESSION.
             $currentDomain =& $_SESSION;
-
             $previousSubdomain = $currentDomain;
 
             foreach($this->domain as $subdomain)
@@ -309,8 +304,8 @@ class Session implements SessionIface
     /**
      * Set the value of the key in the session domain.
      *
-     * @param mixed The index in the session to set.
-     * @param mixed The value to set.
+     * @param mixed $key   The index in the session to set.
+     * @param mixed $value The value to set.
      */
     public function set($key, $value)
     {
@@ -321,7 +316,7 @@ class Session implements SessionIface
     /**
      * Set the session to the specified data.
      *
-     * @param mixed The new data to set the session to.
+     * @param mixed $data The new data to set the session to.
      */
     public function setData($data)
     {
@@ -332,8 +327,8 @@ class Session implements SessionIface
     /**
      * Set the session data at an offset.
      *
-     * @param mixed The data to set.
-     * @param mixed[] The offset to set the data at.
+     * @param mixed   $data   The data to set.
+     * @param mixed[] $offset The offset to set the data at.
      */
     public function setDataAtOffset($data, Array $offset = [])
     {
@@ -356,7 +351,7 @@ class Session implements SessionIface
     /**
      * Unset the key in the session domain.
      *
-     * @param mixed The index in the session to unset.
+     * @param mixed $key The index in the session to unset.
      */
     public function unsetKey($key)
     {

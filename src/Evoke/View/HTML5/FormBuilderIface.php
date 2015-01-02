@@ -25,57 +25,57 @@ interface FormBuilderIface extends ViewIface
     /**
      * Append an element to the form.
      *
-     * @param mixed[] The element to add to the form.
+     * @param mixed[] $element The element to add to the form.
      */
     public function add(Array $element);
 
     /**
      * Add a file input to the form.
      *
-     * @param string   The name for the input.
-     * @param string[] Any other attributes.
+     * @param string   $name         The name for the input.
+     * @param string[] $otherAttribs Any other attributes.
      */
     public function addFile($name, Array $otherAttribs = []);
 
     /**
      * Add a hidden input to the form.
      *
-     * @param string The name for the input.
-     * @param mixed  The value for the hidden input.
+     * @param string $name  The name for the input.
+     * @param mixed  $value The value for the hidden input.
      */
     public function addHidden($name, $value);
 
     /**
      * Add an input to the form.
      *
-     * @param mixed[] Attributes for the input.
-     * @param mixed   Value for the input.
+     * @param mixed[] $attribs Attributes for the input.
+     * @param mixed   $value   Value for the input.
      */
     public function addInput(Array $attribs, $value = NULL);
 
     /**
      * Add a label to the form.
      *
-     * @param string The id for the input that this label is for.
-     * @param string The text for the label.
+     * @param string $for  The id for the input that this label is for.
+     * @param string $text The text for the label.
      */
     public function addLabel($for, $text);
 
     /**
      * Add a submit button to the form.
      *
-     * @param string Name of the submit button.
-     * @param string Value for the button text.
+     * @param string $name  Name of the submit button.
+     * @param string $value Value for the button text.
      */
     public function addSubmit($name, $value);
 
     /**
      * Add a text input.
      *
-     * @param string  The name of the input.
-     * @param string  The initial text.
-     * @param int     The length of the text.
-     * @param mixed[] Other attributes for the input.
+     * @param string  $name         The name of the input.
+     * @param string  $value        The initial text.
+     * @param int     $length       The length of the text.
+     * @param mixed[] $otherAttribs Other attributes for the input.
      */
     public function addText($name,
                             $value,
@@ -85,11 +85,11 @@ interface FormBuilderIface extends ViewIface
     /**
      * Add a text area.
      *
-     * @param string   Name of the text area.
-     * @param string   Initial text.
-     * @param int      Number of rows.
-     * @param int      Number of columns.
-     * @param string[] Other attributes.
+     * @param string   $name         Name of the text area.
+     * @param string   $value        Initial text.
+     * @param int      $rows         Number of rows.
+     * @param int      $cols         Number of columns.
+     * @param string[] $otherAttribs Other attributes.
      */
     public function addTextArea(/* String */ $name,
                                 /* String */ $value,
@@ -100,15 +100,15 @@ interface FormBuilderIface extends ViewIface
     /**
      * Set the action of the form.
      *
-     * @param string Action.
+     * @param string $action
      */
-    public function setAction(/* String */ $action);
+    public function setAction($action);
 
     /**
      * Set the method of the form.
      *
-     * @param string Method.
+     * @param string $method
      */
-    public function setMethod(/* String */ $method);
+    public function setMethod($method);
 }
 // EOF

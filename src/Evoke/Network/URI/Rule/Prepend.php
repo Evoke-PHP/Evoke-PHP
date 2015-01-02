@@ -2,7 +2,7 @@
 /**
  * URI Prepend Rule
  *
- * @pakcage Network\URI\Rule
+ * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
@@ -28,12 +28,12 @@ class Prepend extends Rule
     /**
      * Construct the prepend rule.
      *
-     * @param string The string to prepend.
-     * @param bool   Whether the rule can definitely give the final route for
-     *               all URIs that it matches.
+     * @param string $str           The string to prepend.
+     * @param bool   $authoritative
+     * Whether the rule can definitely give the final route for all URIs that it
+     * matches.
      */
-    public function __construct(/* String */ $str,
-                                /* Bool   */ $authoritative = false)
+    public function __construct($str, $authoritative = false)
     {
         parent::__construct($authoritative);
 

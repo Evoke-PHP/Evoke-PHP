@@ -29,7 +29,7 @@ class RecordList extends Decorator implements RecordListIface
     /**
      * Reset the selection of the specified record in the data.
      *
-     * @param mixed[] The record that should no longer be selected.
+     * @param mixed[] $record The record that should no longer be selected.
      */
     public function clearSelectedRecord(Array $record)
     {
@@ -72,7 +72,7 @@ class RecordList extends Decorator implements RecordListIface
     /**
      * Select a record within the record list data.
      *
-     * @param mixed[] The record to match.
+     * @param mixed[] $record The record to match.
      */
     public function selectRecord(Array $record)
     {

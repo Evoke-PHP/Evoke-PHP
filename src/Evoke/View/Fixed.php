@@ -25,9 +25,9 @@ class Fixed implements ViewIface
     /**
      * Construct a fixed view.
      *
-     * @param mixed Contents.
+     * @param mixed $contents
      */
-    public function __construct(/* mixed */ $contents)
+    public function __construct($contents)
     {
         $this->contents = $contents;
     }

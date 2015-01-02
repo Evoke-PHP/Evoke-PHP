@@ -33,7 +33,7 @@ interface RuleIface
     /**
      * Set the media type that the rule is checked against.
      *
-     * @param mixed[] The media type.
+     * @param mixed[] $mediaType
      */
     public function setMediaType(Array $mediaType);
 }

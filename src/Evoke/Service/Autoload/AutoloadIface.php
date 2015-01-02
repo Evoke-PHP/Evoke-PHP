@@ -19,8 +19,8 @@ interface AutoloadIface
     /**
      * Autoload the specified class.
      *
-     * @param string The fully namespaced class to load.
+     * @param string $name The fully namespaced class to load.
      */
-    public function load(/* String */ $name);
+    public function load($name);
 }
 // EOF

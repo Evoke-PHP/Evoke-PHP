@@ -36,8 +36,9 @@ abstract class Rule implements RuleIface
     /**
      * Construct the URI Rule.
      *
-     * @param bool Whether the rule can definitely give the final route for all
-     *             URIs that it matches.
+     * @param bool $authoritative
+     * Whether the rule can definitely give the final route for all URIs that it
+     * matches.
      */
     public function __construct(/* Bool */ $authoritative)
     {
@@ -50,8 +51,7 @@ abstract class Rule implements RuleIface
 
     /**
      * Get the parameters for the URI.
-     *
-     * @return [] Empty Array. (By default no parameters are captured)
+     * @return array Empty Array. (By default no parameters are captured)
      */
     public function getParams()
     {
@@ -72,7 +72,7 @@ abstract class Rule implements RuleIface
     /**
      * Set the URI that the rule is acting upon.
      *
-     * @param string The value to set the URI to.
+     * @param string $uri The value to set the URI to.
      */
     public function setURI($uri)
     {

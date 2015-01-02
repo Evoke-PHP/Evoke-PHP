@@ -48,7 +48,7 @@ class StaticMapTest extends PHPUnit_Framework_TestCase
      *
      * @expectedException RuntimeException
      */
-    public function testLoadNonExistant()
+    public function testLoadNonExistent()
     {
         vfsStream::setup(
             'root',

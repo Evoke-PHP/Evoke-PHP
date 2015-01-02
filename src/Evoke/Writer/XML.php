@@ -23,26 +23,47 @@ use DomainException,
 class XML implements WriterIface
 {
     /**
-     * Protected Properties
-     *
-     * @var string    $docType   Document type.
-     * @var bool      $indent    Whether we indent non-inline elements.
-     * @var string    $language  Language of XML being written.
-     * @var mixed[]   $pos       Position of the tag, attribs and children in
-     *                           the element.
-     * @var XMLWriter $xmlWriter XML Writer object.
+     * Document type.
+     * @var string
      */
-    protected $docType, $indent, $language, $pos, $xmlWriter;
+    protected $docType;
+
+    /**
+     * Whether we indent non-inline elements.
+     * @var bool
+     */
+    protected $indent;
+    
+    /**
+     * Language of XML being written.
+     * @var string
+     */
+    protected $language;
+    
+    /**
+     * Position of the tag, attribs and children in the element.
+     * @var mixed[]
+     */
+    protected $pos;
+    
+    /**
+     * XML Writer object.
+     * @var XMLWriter
+     */
+    protected $xmlWriter;
 
     /**
      * Create an XML Writer.
      *
-     * @param XMLWriter XMLWriter object.
-     * @param string    Document type.
-     * @param string    Language.
-     * @param bool      Whether the XML produced should be indented.
-     * @param string    The string that should be used to indent the XML.
-     * @param int[]     Position of the tag, attribs & children in the element.
+     * @param XMLWriter $xmlWriter    XMLWriter object.
+     * @param string    $docType      Document Type.
+     * @param string    $language     Language of XML being written.
+     * @param bool      $indent
+     * Whether the XML produced should be indented.
+     * @param string    $indentString
+     * The string that should be used to indent the XML.
+     * @param int[]     $pos
+     * Position of the tag, attribs & children in the element.
      */
     public function __construct(XMLWriter    $xmlWriter,
                                 /* String */ $docType      = 'XHTML_1_1',
@@ -102,8 +123,9 @@ class XML implements WriterIface
     /**
      * Write XML elements into the memory buffer.
      *
-     * @param mixed[] Array accessible value for the xml to be written of the
-     *                form: `[$tag, $attributes, $children]`
+     * @param mixed[] $xml
+     * Array accessible value for the xml to be written of the form:
+     * `[$tag, $attributes, $children]`
      *
      * An example of this is below with the default values that are used for the
      * options array. Attributes and options are optional.
@@ -112,6 +134,8 @@ class XML implements WriterIface
      *  1 => ['attrib_1' => '1', 'attrib_2' => '2'],
      *  2 => [$child, 'text', $anotherChild]]
      * </code></pre>
+     *
+     * @throws InvalidArgumentException for bad xml data.
      */
     public function write($xml)
     {
@@ -200,6 +224,8 @@ class XML implements WriterIface
 
     /**
      * Write the start of the document based on the doc type.
+     *
+     * @throws DomainException For an unknown document type.
      */
     public function writeStart()
     {

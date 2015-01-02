@@ -25,7 +25,8 @@ class DataBuilder
     /**
      * Build hierarchical Data containers from the associated Join structure.
      *
-     * @param JoinIface The join structure to build the data structure from.
+     * @param JoinIface $joinStructure Structure to build the data from.
+     * @return Data
      */
     public function build(JoinIface $joinStructure)
     {

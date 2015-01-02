@@ -19,29 +19,29 @@ interface MapperIface
     /**
      * Create data in storage.
      *
-     * @param mixed[] The data to create in storage as a simple array.
+     * @param mixed[] $data The data to create in storage as a simple array.
      */
     public function create(Array $data);
 
     /**
      * Delete data from storage.
      *
-     * @param mixed[] The data to delete from storage.
+     * @param mixed[] $data The data to delete from storage.
      */
     public function delete(Array $data);
 
     /**
      * Read data from storage.
      *
-     * @param mixed[] The data to match.
+     * @param mixed[] $match The data to match.
      */
     public function read(Array $match = []);
 
     /**
      * Update the matched data.
      *
-     * @param mixed[] The data to match.
-     * @param mixed[] The data to set.
+     * @param mixed[] $match The data to match.
+     * @param mixed[] $data  The data to set.
      */
     public function update(Array $match, Array $data);
 }

@@ -25,7 +25,7 @@ abstract class Decorator implements FlatIface
     /**
      * Construct a Decorator object for Data.
      *
-     * @param FlatIface Data.
+     * @param FlatIface $data
      */
     public function __construct(FlatIface $data)
     {
@@ -92,9 +92,9 @@ abstract class Decorator implements FlatIface
     /**
      * Provide the array isset operator.
      *
-     * @param string The offest to check for existence.
-     *
+     * @param mixed $offset The offset to check for existence.
      * @return bool Whether the offset exists.
+     *
      */
     public function offsetExists($offset)
     {
@@ -104,9 +104,9 @@ abstract class Decorator implements FlatIface
     /**
      * Provide the array access operator.
      *
-     * @param string The offset to get.
-     *
+     * @param mixed $offset The offset to get.
      * @return mixed The value at the offset.
+     *
      */
     public function offsetGet($offset)
     {
@@ -116,8 +116,8 @@ abstract class Decorator implements FlatIface
     /**
      * Set the value at the offset.
      *
-     * @param mixed Offset.
-     * @param mixed Value.
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value)
     {
@@ -127,7 +127,7 @@ abstract class Decorator implements FlatIface
     /**
      * Unset the value at the offset
      *
-     * @param mixed Offset.
+     * @param mixed $offset
      */
     public function offsetUnset($offset)
     {
@@ -145,7 +145,7 @@ abstract class Decorator implements FlatIface
     /**
      * Set the data that we are managing.
      *
-     * @param mixed[] The data we want to manage.
+     * @param mixed[] $data The value for the data.
      */
     public function setData(Array $data)
     {

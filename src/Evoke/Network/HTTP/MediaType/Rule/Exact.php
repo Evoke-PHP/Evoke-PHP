@@ -6,8 +6,6 @@
  */
 namespace Evoke\Network\HTTP\MediaType\Rule;
 
-use InvalidArgumentException;
-
 /**
  * HTTP Media Type Exact Rule
  *
@@ -35,9 +33,9 @@ class Exact extends Match
     /**
      * Construct the Exact rule.
      *
-     * @param string   The output format for the rule.
-     * @param mixed[]  Exact match required from the media type.
-     * @param string[] Fields that are to be ignored in the match.
+     * @param string   $outputFormat  The output format for the rule.
+     * @param mixed[]  $match         Exact match required from the media type.
+     * @param string[] $ignoredFields Fields to be ignored in the match.
      */
     public function __construct(/* String */ $outputFormat,
                                 Array        $match,

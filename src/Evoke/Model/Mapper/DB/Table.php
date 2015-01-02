@@ -45,8 +45,8 @@ class Table
     /**
      * Construct a mapper for a database table.
      *
-     * @param PDO    Database connection.
-     * @param string Table name for the database table we are mapping.
+     * @param PDO    $pdo       Database connection.
+     * @param string $tableName Table Name.
      */
     public function __construct(PDO $pdo, $tableName)
     {
@@ -61,7 +61,7 @@ class Table
     /**
      * Create a record in the table.
      *
-     * @param mixed[] The record to add.
+     * @param mixed[] $record The record to add.
      */
     public function create(Array $record)
     {
@@ -75,7 +75,7 @@ class Table
     /**
      * Create multiple records in the table.
      *
-     * @param mixed[] The records to add.
+     * @param mixed[] $data The records to add.
      */
     public function createMultiple(Array $data)
     {
@@ -93,8 +93,8 @@ class Table
     /**
      * Delete record(s) from the table.
      *
-     * @param mixed[]     Conditions to match.
-     * @param string|null Limit of records to delete.
+     * @param mixed[]     $conditions Conditions to match.
+     * @param string|null $limit      Limit of records to delete.
      */
     public function delete(Array $conditions, $limit = NULL)
     {
@@ -113,10 +113,14 @@ class Table
     /**
      * Read data from the table.
      *
-     * @param mixed[]     The fields to read.
-     * @param mixed[]     Conditions to match (defaults to match all).
-     * @param string|null Order to sort the records by (defaults to no order).
-     * @param string|null Limit of records to read (defaults to unlimited).
+     * @param mixed[]     $fields
+     * The fields to read.
+     * @param mixed[]     $conditions
+     * Conditions to match (defaults to match all).
+     * @param string|null $order
+     * Order to sort the records by (defaults to no order).
+     * @param string|null $limit
+     * Limit of records to read (defaults to unlimited).
      *
      * @return mixed[] Array of records from the table.
      */
@@ -161,9 +165,9 @@ class Table
     /**
      * Set the table that we are mapping.
      *
-     * @param string The name of the table to map.
+     * @param string $tableName The name of the table to map.
      */
-    public function setTable(/* String */ $tableName)
+    public function setTable($tableName)
     {
         $this->tableName = $tableName;
     }
@@ -171,9 +175,9 @@ class Table
     /**
      * Update a record in the table.
      *
-     * @param mixed[] The record(s) to modify.
-     * @param mixed[] The values to set the new record to.
-     * @param int     The limit of records to modify.
+     * @param mixed[] $oldMatch  The record(s) to modify.
+     * @param mixed[] $newRecord The values to set the new record to.
+     * @param int     $limit     The limit of records to modify.
      */
     public function update(Array $oldMatch, Array $newRecord, $limit = 0)
     {
@@ -199,9 +203,12 @@ class Table
     /**
      * Implode the array with placeholders inserted for a PDO statement.
      *
-     * @param mixed[] The array to implode.
-     * @param string  String to place between the key and the placeholder.
-     * @param string  String to use as a separator between items in the array.
+     * @param mixed[] $placeholders The array to implode.
+     * @param string  $between
+     * String to place between the key and the placeholder.
+     * @param string  $separator
+     * String to use as a separator between items in the array.
+     * @return string
      */
     private function placeholdersKeyed(
         Array $placeholders, $between, $separator)

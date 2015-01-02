@@ -6,9 +6,7 @@
  */
 namespace Evoke\Model\Mapper;
 
-use Evoke\Model\Persistence\SessionIface,
-    InvalidArgumentException,
-    RuntimeException;
+use Evoke\Model\Persistence\SessionIface;
 
 /**
  * Session Mapper
@@ -22,14 +20,14 @@ class Session implements MapperIface
 {
     /**
      * The Session storage that we are mapping.
-     * @var Evoke\Model\Persistence\SessionIface
+     * @var SessionIface
      */
     protected $session;
 
     /**
      * Construct a Session Mapper.
      *
-     * @param SessionIface The session that we are mapping.
+     * @param SessionIface $session The session that we are mapping.
      */
     public function __construct(SessionIface $session)
     {
@@ -43,7 +41,7 @@ class Session implements MapperIface
     /**
      * Create data in the session.
      *
-     * @param mixed[] The data to create in storage as a simple array.
+     * @param mixed[] $data The data to create in storage as a simple array.
      */
     public function create(Array $data)
     {
@@ -53,7 +51,7 @@ class Session implements MapperIface
     /**
      * Delete data in the session.
      *
-     * @param mixed[] The offset of the data to delete from storage.
+     * @param mixed[] $offset The offset of the data to delete from storage.
      */
     public function delete(Array $offset)
     {
@@ -63,7 +61,7 @@ class Session implements MapperIface
     /**
      * Read data from the session.
      *
-     * @param mixed[] The data to match (the offset).
+     * @param mixed[] $offset The data to match (the offset).
      * @return mixed[]|null Session data or null if the offset does not exist.
      */
     public function read(Array $offset = [])
@@ -74,8 +72,8 @@ class Session implements MapperIface
     /**
      * Update data in the session.
      *
-     * @param mixed[] The data to match (the offset).
-     * @param mixed[] The data to set.
+     * @param mixed[] $offset The data to match (the offset).
+     * @param mixed[] $data   The data to set.
      */
     public function update(Array $offset, Array $data)
     {

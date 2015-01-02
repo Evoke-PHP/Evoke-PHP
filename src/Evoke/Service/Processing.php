@@ -54,8 +54,8 @@ class Processing implements ProcessingIface
     /**
      * Add a callback to the request key's list of callbacks.
      *
-     * @param string   The request key for the matching.
-     * @param callable The callback that is being added.
+     * @param string   $processingKey The request key for the matching.
+     * @param callable $callback      The callback that is being added.
      */
     public function addCallback(/* String */ $processingKey,
                                 callable     $callback)
@@ -70,6 +70,8 @@ class Processing implements ProcessingIface
 
     /**
      * Process the request.
+     *
+     * @throws DomainException If the required match conditions aren't met.
      */
     public function process()
     {
@@ -118,7 +120,7 @@ class Processing implements ProcessingIface
     /**
      * Set the data for the request that we are processing.
      *
-     * @param mixed[] The request data that we are processing.
+     * @param mixed[] $data The request data that we are processing.
      */
     public function setData(Array $data)
     {
@@ -128,7 +130,7 @@ class Processing implements ProcessingIface
     /**
      * Set whether a match is required when processing the data.
      *
-     * @param bool Whether a match is required.
+     * @param bool $matchRequired Whether a match is required.
      */
     public function setMatchRequired($matchRequired = true)
     {
@@ -138,7 +140,7 @@ class Processing implements ProcessingIface
     /**
      * Set whether a unique match is required when processing the data.
      *
-     * @param bool Whether a unique match is required.
+     * @param bool $uniqueMatchRequired Whether a unique match is required.
      */
     public function setUniqueMatchRequired($uniqueMatchRequired = true)
     {

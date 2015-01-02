@@ -18,35 +18,34 @@ use LogicException;
  */
 class FormBuilder implements FormBuilderIface
 {
-    protected 
-        /**
-         * Attributes for the form.
-         * @var mixed[]
-         */
-        $attribs,
+    /**
+     * Attributes for the form.
+     * @var mixed[]
+     */
+    protected $attribs;
         
-        /**
-         * Children of the form.
-         * @var mixed[]
-         */
-        $children = [],
+    /**
+     * Children of the form.
+     * @var mixed[]
+     */
+    protected $children = [];
 
-        /**
-         * Elements in the current row.
-         * @var mixed[]
-         */
-        $rowElems = [],
+    /**
+     * Elements in the current row.
+     * @var mixed[]
+     */
+    protected $rowElems = [];
 
-        /**
-         * Whether we are adding to a row.
-         * @var bool
-         */
-        $rowStarted = false;
+    /**
+     * Whether we are adding to a row.
+     * @var bool
+     */
+    protected $rowStarted = false;
 
     /**
      * Construct a buildable HTML5 form.
      *
-     * @param string[]  Attribs.
+     * @param string[] $attribs Attributes for the form.
      */
     public function __construct(Array $attribs = ['action' => '',
                                                   'method' => 'POST'])
@@ -78,8 +77,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a file input to the form.
      *
-     * @param string   The name for the input.
-     * @param string[] Any other attributes.
+     * @param string   $name         The name for the input.
+     * @param string[] $otherAttribs Any other attributes.
      */
     public function addFile($name, Array $otherAttribs = [])
     {
@@ -90,8 +89,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a hidden input to the form.
      *
-     * @param string The name for the input.
-     * @param mixed  The value for the hidden input.
+     * @param string $name  The name for the input.
+     * @param mixed  $value The value for the hidden input.
      */
     public function addHidden($name, $value)
     {
@@ -104,8 +103,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add an input to the form.
      *
-     * @param mixed[] Attributes for the input.
-     * @param mixed   Value for the input.
+     * @param mixed[] $attribs Attributes for the input.
+     * @param mixed   $value   Value for the input.
      */
     public function addInput(Array $attribs, $value = NULL)
     {
@@ -122,8 +121,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a label to the form.
      *
-     * @param string The id for the input that this label is for.
-     * @param string The text for the label.
+     * @param string $for  The id for the input that this label is for.
+     * @param string $text The text for the label.
      */
     public function addLabel($for, $text)
     {
@@ -133,7 +132,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a row to the form.
      *
-     * @param mixed The elements within the row.
+     * @param mixed $rowElements The elements within the row.
+     * @throws LogicException If a nested row is attempted.
      */
     public function addRow($rowElements)
     {
@@ -148,8 +148,9 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a select input to the form.
      *
-     * @param string ID to use for the select input (also used for the name).
-     * @param mixed  Array of options to select from.
+     * @param string $id
+     * ID to use for the select input (also used for the name).
+     * @param mixed  $options Array of options to select from.
      */
     public function addSelect($id, $options)
     {
@@ -169,8 +170,8 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a submit button to the form.
      *
-     * @param string Name of the submit button.
-     * @param string Value for the button text.
+     * @param string $name  Name of the submit button.
+     * @param string $value Value for the button text.
      */
     public function addSubmit($name, $value)
     {
@@ -183,10 +184,10 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a text input.
      *
-     * @param string  The name of the input.
-     * @param string  The initial text.
-     * @param int     The length of the text.
-     * @param mixed[] Other attributes for the input.
+     * @param string  $name         The name of the input.
+     * @param string  $value        The initial text.
+     * @param int     $length       The length of the text.
+     * @param mixed[] $otherAttribs Other attributes for the input.
      */
     public function addText($name,
                             $value,
@@ -203,11 +204,11 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a text area.
      *
-     * @param string   Name of the text area.
-     * @param string   Initial text.
-     * @param int      Number of rows.
-     * @param int      Number of columns.
-     * @param string[] Other attributes.
+     * @param string   $name         Name of the text area.
+     * @param string   $value        Initial text.
+     * @param int      $rows         Number of rows.
+     * @param int      $cols         Number of columns.
+     * @param string[] $otherAttribs Other attributes for the input.
      */
     public function addTextArea(/* String */ $name,
                                 /* String */ $value,
@@ -224,6 +225,8 @@ class FormBuilder implements FormBuilderIface
 
     /**
      * Finish a row in the form.
+     *
+     * @throws LogicException If a row has not been started.
      */
     public function finishRow()
     {
@@ -241,6 +244,7 @@ class FormBuilder implements FormBuilderIface
      * Get the view of the form.
      *
      * @return mixed[] The view data.
+     * @throws LogicException If we have an incomplete row.
      */
     public function get()
     {
@@ -266,9 +270,9 @@ class FormBuilder implements FormBuilderIface
     /**
      * Set the action of the form.
      *
-     * @param string Action.
+     * @param string $action
      */
-    public function setAction(/* String */ $action)
+    public function setAction($action)
     {
         $this->attribs['action'] = $action;
     }
@@ -276,7 +280,7 @@ class FormBuilder implements FormBuilderIface
     /**
      * Set the attributes for the form.
      *
-     * @param mixed Attributes.
+     * @param string[] $attributes
      */
     public function setAttributes($attributes)
     {
@@ -286,15 +290,16 @@ class FormBuilder implements FormBuilderIface
     /**
      * Set the method of the form.
      *
-     * @param string Method.
+     * @param string $method
      */
-    public function setMethod(/* String */ $method)
+    public function setMethod($method)
     {
         $this->attribs['method'] = $method;
     }
 
     /**
      * Start a row in the form.
+     * @throws LogicException If a nested row is attempted.
      */
     public function startRow()
     {
@@ -304,7 +309,6 @@ class FormBuilder implements FormBuilderIface
         }
 
         $this->rowStarted = true;
-    }
-     
+    }     
 }
 // EOF

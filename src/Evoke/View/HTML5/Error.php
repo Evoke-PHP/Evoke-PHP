@@ -20,19 +20,23 @@ use Evoke\View\ViewIface,
 class Error implements ViewIface
 {
     /**
-     * Protected Properties.
-     *
-     * @var string[] $error   Error to get the view of.
-     * @var string   $unknown String for an unknown part of the error.
+     * Error to get the view of.
+     * @var string[]
      */
-    protected $error, $unknown;
+    protected $error;
+    
+    /**
+     * String to use for an unknown part of the error.
+     * @var string 
+     */
+    protected $unknown;
 
     /**
      * Construct an Error view.
      *
-     * @param string  String for an unkown part of the error.
+     * @param string $unknown String to use for an unknown part of the error.
      */
-    public function __construct(/* String */ $unknown = '<Unknown>')
+    public function __construct($unknown = '<Unknown>')
     {
         $this->unknown = $unknown;
     }
@@ -45,6 +49,7 @@ class Error implements ViewIface
      * Get the view (of the data) to be written.
      *
      * @return mixed[] The view data.
+     * @throws LogicException
      */
     public function get()
     {
@@ -88,8 +93,7 @@ class Error implements ViewIface
     /**
      * Get the type of error message based on the error number.
      *
-     * @param int The error number.
-     *
+     * @param int $number The error number.
      * @return string The error type as a string.
      */
     private function getTypeString($number)

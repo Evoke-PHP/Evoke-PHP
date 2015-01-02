@@ -47,8 +47,9 @@ abstract class Join implements JoinIface
     /**
      * Construct the Join object.
      *
-     * @param bool     Whether we can refer to joins using a case-insenstive
-     *                 alpha numeric match.
+     * @param bool $useAlphaNumMatch
+     * Whether we can refer to joins using a case-insensitive alpha numeric
+     * match.
      */
     public function __construct($useAlphaNumMatch)
     {
@@ -64,8 +65,9 @@ abstract class Join implements JoinIface
     /**
      * Add a join for the data.
      *
-     * @param string    The canonical join ID.
-     * @param JoinIface The join to add.
+     * @param string    $joinID The canonical join ID.
+     * @param JoinIface $join   The join to add.
+     * @throws LogicException If the join to be added is ambiguous.
      */
     public function addJoin(/* String */ $joinID, JoinIface $join)
     {
@@ -93,8 +95,9 @@ abstract class Join implements JoinIface
      *
      * The Join ID will be returned as the exact match.
      *
-     * @param string Join to get the ID for.
+     * @param string $join Join to get the ID for.
      * @return string The matched join.
+     * @throws DomainException If the join cannot be found.
      */
     public function getJoinID($join)
     {
@@ -137,8 +140,8 @@ abstract class Join implements JoinIface
     /**
      * Convert a string to alpha numeric in lower-case.
      *
-     * @param string Input string.
-     * @return The input string converted to lower alpha numeric.
+     * @param string $input Input string.
+     * @return string The input string converted to lower alpha numeric.
      */
     private function toAlphaNumLower($input)
     {

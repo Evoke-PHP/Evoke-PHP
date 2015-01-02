@@ -33,6 +33,7 @@ class Backtrace implements ViewIface
      * Get the view of the backtrace.
      *
      * @return mixed[] The view.
+     * @throws LogicException If no backtrace has been set.
      */
     public function get()
     {
@@ -83,7 +84,7 @@ class Backtrace implements ViewIface
     /**
      * Set the backtrace data.
      *
-     * @param mixed[] The backtrace data.
+     * @param mixed[] $backtrace The backtrace data.
      */
     public function set(Array $backtrace)
     {

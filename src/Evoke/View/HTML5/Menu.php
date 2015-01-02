@@ -22,9 +22,8 @@ use Evoke\Model\Data\TreeIface,
 class Menu implements ViewIface
 {
     /**
-     * Protected properties.
-     *
-     * @var TreeIface $tree Tree data.
+     * Tree data
+     * @var TreeIface.
      */
     protected $tree;
 
@@ -36,6 +35,7 @@ class Menu implements ViewIface
      * Get the view of the menu.
      *
      * @return mixed[] The view tree.
+     * @throws LogicException If the tree has not been set for the view.
      */
     public function get()
     {
@@ -62,7 +62,7 @@ class Menu implements ViewIface
     /**
      * Set the menu data.
      *
-     * @param TreeIface Menu data.
+     * @param TreeIface $tree Menu data.
      */
     public function set(TreeIface $tree)
     {
@@ -76,7 +76,7 @@ class Menu implements ViewIface
     /**
      * Get the menu.
      *
-     * @param TreeIface The tree that specified the menu.
+     * @param TreeIface $tree The tree that specifies the menu.
      * @return mixed[] HTML5 menu.
      */
     protected function getMenu(TreeIface $tree)

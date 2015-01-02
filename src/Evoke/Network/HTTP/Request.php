@@ -110,7 +110,7 @@ EOP;
     /**
      * Get the query parameter.
      *
-     * @param string The parameter to get.
+     * @param string $param The parameter to get.
      * @return mixed The query parameter.
      */
     public function getQueryParam($param)
@@ -126,8 +126,7 @@ EOP;
 
     /**
      * Get the query parameters.
-     *
-     * @return [] The query parameters.
+     * @return array|mixed[][] The query parameters.
      */
     public function getQueryParams()
     {
@@ -147,7 +146,7 @@ EOP;
     /**
      * Whether the query parameter is set.
      *
-     * @param string param The parameter to check.
+     * @param string $param The parameter to check.
      * @return bool Whether the query parameter is set.
      */
     public function issetQueryParam($param)
@@ -329,8 +328,8 @@ EOP;
     /**
      * Compare two accept media types so that they can be sorted via usort.
      *
-     * @param mixed[] The first accepted media type.
-     * @param mixed[] The second accepted media type.
+     * @param mixed[] $first  The first accepted media type.
+     * @param mixed[] $second The second accepted media type.
      * @return int As required by usort.
      */
     protected function compareAccept(Array $first, Array $second)
@@ -341,8 +340,8 @@ EOP;
     /**
      * Compare two accept languages so that they can be sorted via usort.
      *
-     * @param mixed[] The first accept language.
-     * @param mixed[] The second accept language.
+     * @param mixed[] $first  The first accept language.
+     * @param mixed[] $second The second accept language.
      * @return int as required by usort.
      */
     protected function compareAcceptLanguage(Array $first, Array $second)
@@ -358,7 +357,7 @@ EOP;
     /**
      * Score an accept media type so that they can be compared.
      *
-     * @param [] The accept media type array.
+     * @param mixed[] $accept The accept media type array.
      * @return int The score of the accept array for comparison.
      */
     private function scoreAccept(Array $accept)
@@ -366,7 +365,7 @@ EOP;
         // The Q_Factor dominates, followed by Type, Subtype and then number of
         // parameters. The one unknown is the number of parameters, but we
         // assume that it is less than 10000, so that the score cannot be
-        // overriden by a lower level.
+        // overridden by a lower level.
         return
             // Normalise to 1                         Multiply by Importance
             (($accept['Q_Factor'] * 1000)             * 1000000) +
@@ -378,7 +377,7 @@ EOP;
     /**
      * Score an accept language so that they can be compared.
      *
-     * @param [] The accept language array.
+     * @param mixed[] $acceptLanguage The accept language array.
      * @return int The score of the accept language array for comparison.
      */
     private function scoreAcceptLanguage(Array $acceptLanguage)

@@ -18,14 +18,14 @@ interface RouterIface
     /**
      * Add a rule to the router.
      *
-     * @param Rule\RuleIface The rule.
+     * @param Rule\RuleIface $rule
      */
     public function addRule(Rule\RuleIface $rule);
 
     /**
      * Perform the routing based on the added rules.
      *
-     * @param string The URI to route.
+     * @param string $uri The URI to route.
      */
     public function route($uri);
 }

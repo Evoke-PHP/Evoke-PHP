@@ -18,6 +18,7 @@ abstract class Rule implements RuleIface
 {
     /**
      * The media type that the rule is checked against.
+     * @var mixed[]
      */
     protected $mediaType = [];
 
@@ -30,7 +31,7 @@ abstract class Rule implements RuleIface
     /**
      * Construct the Rule.
      *
-     * @param string The output format for the rule.
+     * @param string $outputFormat The output format for the rule.
      */
     public function __construct($outputFormat)
     {

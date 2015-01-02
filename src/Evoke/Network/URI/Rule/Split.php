@@ -18,46 +18,46 @@ use InvalidArgumentException;
  */
 class Split extends Rule
 {
-    protected
-        /**
-         * Controller
-         * @var string
-         */
-        $controller,
+    /**
+     * Controller
+     * @var string
+     */
+    protected $controller;
 
-        /**
-         * Parts
-         * @var string[]
-         */
-        $parts,
+    /**
+     * Parts
+     * @var string[]
+     */
+    protected $parts;
 
-        /**
-         * Prefix string to ignore for breakdown into parts. It must match the
-         * start of the URI for the rule to match.
-         * @var string
-         */
-        $prefix,
+    /**
+     * Prefix string to ignore for breakdown into parts. It must match the
+     * start of the URI for the rule to match.
+     * @var string
+     */
+    protected $prefix;
 
-        /**
-         * Pre-calculated length for usage throughout.
-         * @var int
-         */
-        $prefixLen,
+    /**
+     * Pre-calculated length for usage throughout.
+     * @var int
+     */
+    protected $prefixLen;
 
-        /**
-         * Separator
-         * @var string
-         */
-        $separator;
+    /**
+     * Separator
+     * @var string
+     */
+    protected $separator;
 
     /**
      * Construct a Split object.
      *
-     * @param string   The controller.
-     * @param string[] Parts.
-     * @param string   The prefix to match.
-     * @param string   Separator to use to split the parts.
-     * @param bool     Whether the rule is authoritative.
+     * @param string   $controller
+     * @param string[] $parts
+     * @param string   $prefix        The prefix to match.
+     * @param string   $separator     Separator to use to split the parts.
+     * @param bool     $authoritative Whether the rule is authoritative.
+     * @throws InvalidArgumentException
      */
     public function __construct(/* String */ $controller,
                                 Array        $parts,
