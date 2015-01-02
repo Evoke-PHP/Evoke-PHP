@@ -6,9 +6,9 @@
  */
 namespace Evoke\Writer;
 
-use DomainException,
-    InvalidArgumentException,
-    XMLWriter;
+use DomainException;
+use InvalidArgumentException;
+use XMLWriter;
 
 /**
  * XML Writer
@@ -24,30 +24,35 @@ class XML implements WriterIface
 {
     /**
      * Document type.
+     *
      * @var string
      */
     protected $docType;
 
     /**
      * Whether we indent non-inline elements.
+     *
      * @var bool
      */
     protected $indent;
-    
+
     /**
      * Language of XML being written.
+     *
      * @var string
      */
     protected $language;
-    
+
     /**
      * Position of the tag, attribs and children in the element.
+     *
      * @var mixed[]
      */
     protected $pos;
-    
+
     /**
      * XML Writer object.
+     *
      * @var XMLWriter
      */
     protected $xmlWriter;
@@ -55,25 +60,30 @@ class XML implements WriterIface
     /**
      * Create an XML Writer.
      *
-     * @param XMLWriter $xmlWriter    XMLWriter object.
-     * @param string    $docType      Document Type.
-     * @param string    $language     Language of XML being written.
+     * @param XMLWriter $xmlWriter XMLWriter object.
+     * @param string    $docType   Document Type.
+     * @param string    $language  Language of XML being written.
      * @param bool      $indent
-     * Whether the XML produced should be indented.
+     *                             Whether the XML produced should be indented.
      * @param string    $indentString
-     * The string that should be used to indent the XML.
+     *                             The string that should be used to indent the
+     *                             XML.
      * @param int[]     $pos
-     * Position of the tag, attribs & children in the element.
+     *                             Position of the tag, attribs & children in
+     *                             the element.
      */
-    public function __construct(XMLWriter    $xmlWriter,
-                                /* String */ $docType      = 'XHTML_1_1',
-                                /* String */ $language     = 'EN',
-                                /* Bool */   $indent       = TRUE,
-                                /* String */ $indentString = '   ',
-                                /* int[]  */ $pos          = ['Attribs'  => 1,
-                                                              'Children' => 2,
-                                                              'Tag'      => 0])
-    {
+    public function __construct(
+        XMLWriter $xmlWriter,
+        $docType = 'XHTML_1_1',
+        $language = 'EN',
+        $indent = true,
+        $indentString = '   ',
+        $pos = [
+            'Attribs'  => 1,
+            'Children' => 2,
+            'Tag'      => 0
+        ]
+    ) {
         $this->docType   = $docType;
         $this->indent    = $indent;
         $this->language  = $language;
@@ -82,8 +92,7 @@ class XML implements WriterIface
 
         $this->xmlWriter->openMemory();
 
-        if ($indent)
-        {
+        if ($indent) {
             $this->xmlWriter->setIndentString($indentString);
             $this->xmlWriter->setIndent(true);
         }
@@ -101,7 +110,7 @@ class XML implements WriterIface
      */
     public function __toString()
     {
-        return $this->xmlWriter->outputMemory(FALSE);
+        return $this->xmlWriter->outputMemory(false);
     }
 
     /**
@@ -109,7 +118,7 @@ class XML implements WriterIface
      */
     public function clean()
     {
-        $this->xmlWriter->outputMemory(TRUE);
+        $this->xmlWriter->outputMemory(true);
     }
 
     /**
@@ -117,7 +126,7 @@ class XML implements WriterIface
      */
     public function flush()
     {
-        echo $this->xmlWriter->outputMemory(TRUE);
+        echo $this->xmlWriter->outputMemory(true);
     }
 
     /**
@@ -140,24 +149,24 @@ class XML implements WriterIface
     public function write($xml)
     {
         if (empty($xml[$this->pos['Tag']]) ||
-            !is_string($xml[$this->pos['Tag']]))
-        {
+            !is_string($xml[$this->pos['Tag']])
+        ) {
             throw new InvalidArgumentException(
                 'bad tag: ' . var_export($xml, true));
         }
 
         if (isset($xml[$this->pos['Attribs']]) &&
-            !is_array($xml[$this->pos['Attribs']]))
-        {
+            !is_array($xml[$this->pos['Attribs']])
+        ) {
             throw new InvalidArgumentException(
                 'bad attributes: ' . var_export($xml, true));
         }
 
         if (isset($xml[$this->pos['Children']]) &&
-            !is_array($xml[$this->pos['Children']]))
-        {
+            !is_array($xml[$this->pos['Children']])
+        ) {
             $xml[$this->pos['Children']]
-                = array($xml[$this->pos['Children']]);
+                = [$xml[$this->pos['Children']]];
         }
 
         $tag      = $xml[$this->pos['Tag']];
@@ -172,43 +181,33 @@ class XML implements WriterIface
             ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
 
         // Toggle the indent off.
-        if ($specialInlineElement)
-        {
+        if ($specialInlineElement) {
             $this->xmlWriter->setIndent(false);
         }
 
         $this->xmlWriter->startElement($tag);
-        
-        foreach ($attribs as $attrib => $value)
-        {
+
+        foreach ($attribs as $attrib => $value) {
             $this->xmlWriter->writeAttribute($attrib, $value);
         }
 
-        foreach ($children as $child)
-        {
-            if (is_scalar($child))
-            {
+        foreach ($children as $child) {
+            if (is_scalar($child)) {
                 $this->xmlWriter->text($child);
-            }
-            elseif (!is_null($child))
-            {
+            } elseif (!is_null($child)) {
                 $this->write($child);
             }
         }
 
         // Some elements should always have a full end tag <div></div> rather
         // than <div/>
-        if (preg_match('(^(div|iframe|script|textarea)$)i', $tag))
-        {
+        if (preg_match('(^(div|iframe|script|textarea)$)i', $tag)) {
             $this->xmlWriter->fullEndElement();
-        }
-        else
-        {
+        } else {
             $this->xmlWriter->endElement();
         }
 
-        if ($specialInlineElement)
-        {
+        if ($specialInlineElement) {
             // Toggle the indent back on.
             $this->xmlWriter->setIndent(true);
         }
@@ -229,33 +228,32 @@ class XML implements WriterIface
      */
     public function writeStart()
     {
-        switch (strtoupper($this->docType))
-        {
-        case 'HTML5':
-            $this->xmlWriter->startDTD('html');
-            $this->xmlWriter->endDTD();
-            $this->xmlWriter->startElement('html');
-            break;
+        switch (strtoupper($this->docType)) {
+            case 'HTML5':
+                $this->xmlWriter->startDTD('html');
+                $this->xmlWriter->endDTD();
+                $this->xmlWriter->startElement('html');
+                break;
 
-        case 'XML':
-            $this->xmlWriter->startDocument('1.0', 'UTF-8');
-            break;
+            case 'XML':
+                $this->xmlWriter->startDocument('1.0', 'UTF-8');
+                break;
 
-        case 'XHTML_1_1':
-            $this->xmlWriter->startDTD(
-                'html',
-                '-//W3C//DTD XHTML 1.1//EN',
-                'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
-            $this->xmlWriter->endDTD();
+            case 'XHTML_1_1':
+                $this->xmlWriter->startDTD(
+                    'html',
+                    '-//W3C//DTD XHTML 1.1//EN',
+                    'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
+                $this->xmlWriter->endDTD();
 
-            $this->xmlWriter->startElementNS(
-                null, 'html', 'http://www.w3.org/1999/xhtml');
-            $this->xmlWriter->writeAttribute('lang', $this->language);
-            $this->xmlWriter->writeAttribute('xml:lang', $this->language);
-            break;
+                $this->xmlWriter->startElementNS(
+                    null, 'html', 'http://www.w3.org/1999/xhtml');
+                $this->xmlWriter->writeAttribute('lang', $this->language);
+                $this->xmlWriter->writeAttribute('xml:lang', $this->language);
+                break;
 
-        default:
-            throw new DomainException('Unknown docType');
+            default:
+                throw new DomainException('Unknown docType');
         }
     }
 }

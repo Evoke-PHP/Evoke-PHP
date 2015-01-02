@@ -23,21 +23,23 @@ use PDO;
  *
  * Maps a single database table.
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model\Mapper\DB
+ * @license   MIT
+ * @package   Model\Mapper\DB
  */
 class Table
 {
     /**
      * The PDO database connection.
+     *
      * @var PDO
      */
     protected $pdo;
 
     /**
      * Table name.
+     *
      * @var string
      */
     protected $tableName;
@@ -84,8 +86,7 @@ class Table
 
         $stmt = $this->pdo->prepare($sql);
 
-        foreach ($data as $record)
-        {
+        foreach ($data as $record) {
             $stmt->execute($record);
         }
     }
@@ -96,13 +97,12 @@ class Table
      * @param mixed[]     $conditions Conditions to match.
      * @param string|null $limit      Limit of records to delete.
      */
-    public function delete(Array $conditions, $limit = NULL)
+    public function delete(Array $conditions, $limit = null)
     {
         $sql = 'DELETE FROM ' . $this->tableName . ' WHERE ' .
             $this->placeholdersKeyed($conditions, '=', ',');
 
-        if (!empty($limit))
-        {
+        if (!empty($limit)) {
             $sql .= ' LIMIT ' . $limit;
         }
 
@@ -124,38 +124,33 @@ class Table
      *
      * @return mixed[] Array of records from the table.
      */
-    public function read(Array        $fields,
-                         Array        $conditions = [],
-                         /* String */ $order      = NULL,
-                         /* String */ $limit      = NULL)
-    {
+    public function read(
+        Array        $fields,
+        Array        $conditions = [],
+        $order = null,
+        $limit = null
+    ) {
         $sql = 'SELECT ' . implode($fields, ',') . ' FROM '
             . $this->tableName;
 
-        if (!empty($conditions))
-        {
+        if (!empty($conditions)) {
             $sql .= ' WHERE ' .
                 $this->placeholdersKeyed($conditions, '=', ' AND ');
         }
 
-        if (!empty($order))
-        {
+        if (!empty($order)) {
             $sql .= ' ORDER BY ' . $order;
         }
 
-        if (!empty($limit))
-        {
+        if (!empty($limit)) {
             $sql .= ' LIMIT ' . $limit;
         }
 
         $stmt = $this->pdo->prepare($sql);
 
-        if (empty($conditions))
-        {
+        if (empty($conditions)) {
             $stmt->execute();
-        }
-        else
-        {
+        } else {
             $stmt->execute($conditions);
         }
 
@@ -181,18 +176,17 @@ class Table
      */
     public function update(Array $oldMatch, Array $newRecord, $limit = 0)
     {
-        $sql  = 'UPDATE ' . $this->tableName . ' SET ' .
+        $sql = 'UPDATE ' . $this->tableName . ' SET ' .
             $this->placeholdersKeyed($newRecord, '=', ',') .
             ' WHERE ' . $this->placeholdersKeyed($oldMatch, '=', ' AND ');
 
-        if (!empty($limit))
-        {
+        if (!empty($limit)) {
             $sql .= ' LIMIT ' . $limit;
         }
 
         $statement = $this->pdo->prepare($sql);
-        $params = array_merge(array_values($newRecord),
-                              array_values($oldMatch));
+        $params    = array_merge(array_values($newRecord),
+            array_values($oldMatch));
         $statement->execute($params);
     }
 
@@ -205,18 +199,21 @@ class Table
      *
      * @param mixed[] $placeholders The array to implode.
      * @param string  $between
-     * String to place between the key and the placeholder.
+     *                              String to place between the key and the
+     *                              placeholder.
      * @param string  $separator
-     * String to use as a separator between items in the array.
+     *                              String to use as a separator between items
+     *                              in the array.
      * @return string
      */
     private function placeholdersKeyed(
-        Array $placeholders, $between, $separator)
-    {
+        Array $placeholders,
+        $between,
+        $separator
+    ) {
         $str = '';
 
-        foreach (array_keys($placeholders) as $key)
-        {
+        foreach (array_keys($placeholders) as $key) {
             $str .= $key . $between . '?' . $separator;
         }
 

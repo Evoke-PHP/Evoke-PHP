@@ -20,6 +20,7 @@ class Session implements MapperIface
 {
     /**
      * The Session storage that we are mapping.
+     *
      * @var SessionIface
      */
     protected $session;
@@ -57,7 +58,7 @@ class Session implements MapperIface
     {
         $this->session->deleteAtOffset($offset);
     }
-    
+
     /**
      * Read data from the session.
      *
@@ -68,7 +69,7 @@ class Session implements MapperIface
     {
         return $this->session->getAtOffset($offset);
     }
-    
+
     /**
      * Update data in the session.
      *

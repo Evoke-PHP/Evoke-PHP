@@ -6,8 +6,8 @@
  */
 namespace Evoke\Model\Data;
 
-use Evoke\Model\Data\Join\JoinIface,
-    OutOfBoundsException;
+use Evoke\Model\Data\Join\JoinIface;
+use OutOfBoundsException;
 
 /**
  * A general purpose data structure that provides access to hierarchical data.
@@ -80,10 +80,11 @@ class Data extends Flat
      * @param Data[]    $jointData     Joins for the data.
      * @param string    $jointKey      Field used to join the data in a record.
      */
-    public function __construct(JoinIface    $joinStructure,
-                                Array        $jointData = [],
-                                /* String */ $jointKey  = 'Joint_Data')
-    {
+    public function __construct(
+        JoinIface $joinStructure,
+        Array     $jointData = [],
+        $jointKey = 'Joint_Data'
+    ) {
         $this->joinStructure = $joinStructure;
         $this->jointData     = $jointData;
         $this->jointKey      = $jointKey;
@@ -103,8 +104,7 @@ class Data extends Flat
     {
         $joinID = $this->joinStructure->getJoinID($join);
 
-        if (isset($this->jointData[$joinID]))
-        {
+        if (isset($this->jointData[$joinID])) {
             return $this->jointData[$joinID];
         }
 
@@ -145,14 +145,10 @@ class Data extends Flat
      */
     protected function setRecord(Array $record)
     {
-        foreach ($this->jointData as $joinID => $data)
-        {
-            if (isset($record[$this->jointKey][$joinID]))
-            {
+        foreach ($this->jointData as $joinID => $data) {
+            if (isset($record[$this->jointKey][$joinID])) {
                 $data->setArrangedData($record[$this->jointKey][$joinID]);
-            }
-            else
-            {
+            } else {
                 $data->setArrangedData([]);
             }
         }

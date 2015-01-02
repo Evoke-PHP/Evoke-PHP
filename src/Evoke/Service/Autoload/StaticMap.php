@@ -22,6 +22,7 @@ class StaticMap implements AutoloadIface
 {
     /**
      * The static map of classnames to filenames.
+     *
      * @var string[]
      */
     protected $staticMap;
@@ -48,12 +49,10 @@ class StaticMap implements AutoloadIface
      */
     public function load($name)
     {
-        if (isset($this->staticMap[$name]))
-        {
-            if (!file_exists($this->staticMap[$name]))
-            {
+        if (isset($this->staticMap[$name])) {
+            if (!file_exists($this->staticMap[$name])) {
                 throw new RuntimeException('File: ' . $this->staticMap[$name] .
-                                           ' does not exist.');
+                    ' does not exist.');
             }
 
             /** @noinspection PhpIncludeInspection */

@@ -50,16 +50,16 @@ use DomainException;
  * The following SQL query would be used to get the flat results:
  *
  * <pre><code>
- SELECT
- Product.ID   AS Product_T_ID,
- Product.Name AS Product_T_Name,
- Image.ID     AS Image_T_ID,
- Image.Name   AS Image_T_Name
- FROM
- Product
- LEFT JOIN Product_Images ON Product.ID = Product_Images.Product_ID
- LEFT JOIN Image          ON Image.ID   = Product_Images.Image_ID
- </code></pre>
+ * SELECT
+ * Product.ID   AS Product_T_ID,
+ * Product.Name AS Product_T_Name,
+ * Image.ID     AS Image_T_ID,
+ * Image.Name   AS Image_T_Name
+ * FROM
+ * Product
+ * LEFT JOIN Product_Images ON Product.ID = Product_Images.Product_ID
+ * LEFT JOIN Image          ON Image.ID   = Product_Images.Image_ID
+ * </code></pre>
  *
  * Note: The SQL query forces the results to a tabular format by prepending the
  *       result fields with the table name. This allows the tabular join to
@@ -71,53 +71,53 @@ use DomainException;
  * The Join structure that will help us arrange this data is:
  *
  * <pre><code>
- $joinStructure = new Tabular('Product');
- $joinStructure->addJoin('Image', new Tabular('Image'));
- </code></pre>
+ * $joinStructure = new Tabular('Product');
+ * $joinStructure->addJoin('Image', new Tabular('Image'));
+ * </code></pre>
  *
  * Example Flat Input Data
  * -----------------------
  *
  * <pre><code>
- $results = [['Product_T_ID'   => 1,
- 'Product_T_Name' => 'P_One',
- 'Image_T_ID'     => NULL,
- 'Image_T_Name'   => NULL],
- ['Product_T_ID'   => 2,
- 'Product_T_Name' => 'P_Two',
- 'Image_T_ID'     => 1,
- 'Image_T_Name'   => 'Image.png'],
- ['Product_T_ID'   => 3,
- 'Product_T_Name' => 'P_Three',
- 'Image_T_ID'     => 2,
- 'Image_T_Name'   => 'I_One.png'],
- ['Product_T_ID'   => 3,
- 'Product_T_Name' => 'P_Three',
- 'Image_T_ID'     => 3,
- 'Image_T_Name'   => 'I_Two.png']];
+ * $results = [['Product_T_ID'   => 1,
+ * 'Product_T_Name' => 'P_One',
+ * 'Image_T_ID'     => NULL,
+ * 'Image_T_Name'   => NULL],
+ * ['Product_T_ID'   => 2,
+ * 'Product_T_Name' => 'P_Two',
+ * 'Image_T_ID'     => 1,
+ * 'Image_T_Name'   => 'Image.png'],
+ * ['Product_T_ID'   => 3,
+ * 'Product_T_Name' => 'P_Three',
+ * 'Image_T_ID'     => 2,
+ * 'Image_T_Name'   => 'I_One.png'],
+ * ['Product_T_ID'   => 3,
+ * 'Product_T_Name' => 'P_Three',
+ * 'Image_T_ID'     => 3,
+ * 'Image_T_Name'   => 'I_Two.png']];
  * </code></pre>
  *
  * Arrange the Data
  * ----------------
  *
  * <pre><code>
- $joinStructure->arrangeFlatData($results);
- </code></pre>
+ * $joinStructure->arrangeFlatData($results);
+ * </code></pre>
  *
  * Below is a pretty version of the hierarchical data from the arrangement:
  *
  * <pre><code>
- [1 => ['Name'       => 'P_One',
- 'Joint_Data' =>
- ['Image' => []]],
- 2 => ['Name'       => 'P_Two',
- 'Joint_Data' =>
- ['Image' => [1 => ['Name' => 'Image.png']]]],
- 3 => ['Name'       => 'P_Three',
- 'Joint_Data' =>
- ['Image' => [2 => ['Name' => 'I_One.png'],
- 3 => ['Name' => 'I_Two.png']]]]];
- </code></pre>
+ * [1 => ['Name'       => 'P_One',
+ * 'Joint_Data' =>
+ * ['Image' => []]],
+ * 2 => ['Name'       => 'P_Two',
+ * 'Joint_Data' =>
+ * ['Image' => [1 => ['Name' => 'Image.png']]]],
+ * 3 => ['Name'       => 'P_Three',
+ * 'Joint_Data' =>
+ * ['Image' => [2 => ['Name' => 'I_One.png'],
+ * 3 => ['Name' => 'I_Two.png']]]]];
+ * </code></pre>
  *
  * The data has been arranged so that a list of products identified by their
  * primary keys contains their associated image lists correctly identified by
@@ -132,12 +132,14 @@ class Tabular extends Join
 {
     /**
      * Field to use for joining data in the arranged results.
+     *
      * @var string
      */
     protected $jointKey;
 
     /**
      * Keys used to identify records in the current table.
+     *
      * @var string[]
      */
     protected $keys;
@@ -145,18 +147,21 @@ class Tabular extends Join
     /**
      * Whether all flat result fields must be tabular (able to be identified
      * by their table prefix and separator before their field name).
+     *
      * @var bool
      */
     protected $requireAllTabularFields;
 
     /**
      * Separator between table and fields.
+     *
      * @var string
      */
     protected $separator;
 
     /**
      * Table name for the main records.
+     *
      * @var string
      */
     protected $tableName;
@@ -175,18 +180,19 @@ class Tabular extends Join
      * @param string   $separator
      * Separator between table and fields.
      * @param bool     $useAlphaNumMatch
-     * Whether we can refer to joins using a case-insensitive alphanumeric match.
+     * Whether we can refer to joins using a case-insensitive alphanumeric
+     * match.
      */
     public function __construct(
-        /* string */ $tableName,
-        Array        $keys                    = ['ID'],
-        /* string */ $jointKey                = 'Joint_Data',
-        /* bool   */ $requireAllTabularFields = true,
-        /* string */ $separator               = '_T_',
-        /* bool   */ $useAlphaNumMatch        = true)
-    {
+        $tableName,
+        Array $keys = ['ID'],
+        $jointKey = 'Joint_Data',
+        $requireAllTabularFields = true,
+        $separator = '_T_',
+        $useAlphaNumMatch = true
+    ) {
         parent::__construct($useAlphaNumMatch);
-        
+
         $this->jointKey                = $jointKey;
         $this->keys                    = $keys;
         $this->requireAllTabularFields = $requireAllTabularFields;
@@ -208,8 +214,7 @@ class Tabular extends Join
     {
         $splitResults = [];
 
-        foreach ($results as $result)
-        {
+        foreach ($results as $result) {
             $splitResults[] = $this->splitResultByTables($result);
         }
 
@@ -225,70 +230,60 @@ class Tabular extends Join
      * Any hierarchical data that has already been arranged.
      * @return mixed[] The hierarchical results.
      */
-    public function arrangeSplitResults(Array $splitResults,
-                                        Array $data = [])
-    {
-        foreach ($splitResults as $splitResult)
-        {
+    public function arrangeSplitResults(
+        Array $splitResults,
+        Array $data = []
+    ) {
+        foreach ($splitResults as $splitResult) {
             if (!empty($splitResult[$this->tableName]) &&
-                $this->isResult($splitResult[$this->tableName]))
-            {
+                $this->isResult($splitResult[$this->tableName])
+            ) {
                 $rowID  = $this->filterRowID($splitResult[$this->tableName]);
                 $result = $this->filterRowFields(
                     $splitResult[$this->tableName]);
 
-                if (!isset($rowID))
-                {
+                if (!isset($rowID)) {
                     // As we don't have a key to identify the row we must check
                     // to ensure that the result has not already been added.
                     $hasBeenAdded = false;
 
-                    foreach ($data as $existingID => $existingEntry)
-                    {
+                    foreach ($data as $existingID => $existingEntry) {
                         unset($existingEntry[$this->jointKey]);
 
-                        if (!array_diff_assoc($existingEntry, $result))
-                        {
+                        if (!array_diff_assoc($existingEntry, $result)) {
                             $hasBeenAdded = true;
-                            $rowID = $existingID;
+                            $rowID        = $existingID;
                             break;
                         }
                     }
 
-                    if (!$hasBeenAdded)
-                    {
+                    if (!$hasBeenAdded) {
                         $data[] = $result;
                         end($data);
                         $rowID = key($data);
                     }
-                }
-                elseif (!isset($data[$rowID]))
-                {
+                } elseif (!isset($data[$rowID])) {
                     $data[$rowID] = $result;
                 }
 
                 // If this result could contain information for referenced
                 // tables lower in the hierarchy set it in the joint data.
-                if (!empty($this->joins))
-                {
-                    if (!isset($data[$rowID][$this->jointKey]))
-                    {
+                if (!empty($this->joins)) {
+                    if (!isset($data[$rowID][$this->jointKey])) {
                         $data[$rowID][$this->jointKey] = [];
                     }
 
                     $jointData = &$data[$rowID][$this->jointKey];
 
                     // Fill in the data for the joins by recursion.
-                    foreach($this->joins as $joinID => $join)
-                    {
-                        if (!isset($jointData[$joinID]))
-                        {
+                    foreach ($this->joins as $joinID => $join) {
+                        if (!isset($jointData[$joinID])) {
                             $jointData[$joinID] = [];
                         }
 
                         // Recurse - Arrange the single result (splitResult).
                         $jointData[$joinID] = $join->arrangeSplitResults(
-                            array($splitResult), $jointData[$joinID]);
+                            [$splitResult], $jointData[$joinID]);
                     }
                 }
             }
@@ -311,12 +306,10 @@ class Tabular extends Join
      */
     protected function filterRowID(Array $row)
     {
-        $rowID = NULL;
+        $rowID = null;
 
-        foreach ($this->keys as $key)
-        {
-            if (!isset($row[$key]))
-            {
+        foreach ($this->keys as $key) {
+            if (!isset($row[$key])) {
                 throw new DomainException(
                     'Missing Key: ' . $key . ' for table: ' . $this->tableName);
             }
@@ -350,14 +343,11 @@ class Tabular extends Join
     {
         $splitResult = [];
 
-        foreach ($result as $field => $value)
-        {
+        foreach ($result as $field => $value) {
             $separated = explode($this->separator, $field);
 
-            if (count($separated) !== 2)
-            {
-                if (!$this->requireAllTabularFields)
-                {
+            if (count($separated) !== 2) {
+                if (!$this->requireAllTabularFields) {
                     // Skip this non tabular field.
                     continue;
                 }
@@ -369,8 +359,7 @@ class Tabular extends Join
                     'Table separator: ' . var_export($this->separator, true));
             }
 
-            if (!isset($splitResult[$separated[0]]))
-            {
+            if (!isset($splitResult[$separated[0]])) {
                 $splitResult[$separated[0]] = [];
             }
 
@@ -395,10 +384,8 @@ class Tabular extends Join
         // A non result may be an array with all NULL entries, so we cannot just
         // check that the result array is empty. The easiest way is just to
         // check that there is at least one value that is set.
-        foreach ($result as $resultData)
-        {
-            if (isset($resultData))
-            {
+        foreach ($result as $resultData) {
+            if (isset($resultData)) {
                 return true;
             }
         }

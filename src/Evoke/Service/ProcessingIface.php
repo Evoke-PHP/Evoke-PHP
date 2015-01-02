@@ -22,8 +22,10 @@ interface ProcessingIface
      * @param string   $requestKey The request key for the matching.
      * @param callable $callback   The callback that is being added.
      */
-    public function addCallback(/* String */ $requestKey,
-                                callable     $callback);
+    public function addCallback(
+        $requestKey,
+        callable     $callback
+    );
 
     /**
      * Process the request.

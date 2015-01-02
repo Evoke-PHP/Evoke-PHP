@@ -9,15 +9,16 @@ namespace Evoke\Model\Data;
 /**
  * RecordList
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model
  */
 class RecordList extends Decorator implements RecordListIface
 {
     /**
      * A list of the selected records within the record list.
+     *
      * @var mixed[]
      */
     protected $selectedRecords = [];
@@ -35,8 +36,7 @@ class RecordList extends Decorator implements RecordListIface
     {
         $key = array_search($record, $this->selectedRecords);
 
-        if ($key !== false)
-        {
+        if ($key !== false) {
             unset($this->selectedRecords[$key]);
         }
     }

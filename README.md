@@ -14,6 +14,7 @@ layered architecture that produces maintainable solutions to complex problems.
 
 ## Features
 * PHP 5.4+
+* PSR-2
 * Object Oriented
 * Loosely Coupled
 * Namespaced

@@ -9,10 +9,10 @@ namespace Evoke\Model\Data;
 /**
  * Data Interface
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model\Data
+ * @license   MIT
+ * @package   Model\Data
  */
 interface FlatIface extends \ArrayAccess, \Iterator
 {

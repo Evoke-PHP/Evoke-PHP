@@ -11,10 +11,10 @@ use Evoke\Network\HTTP\MediaType\Rule\RuleIface;
 /**
  * HTTP Media Type Router Interface
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Network\HTTP\MediaType
+ * @license   MIT
+ * @package   Network\HTTP\MediaType
  */
 interface RouterIface
 {

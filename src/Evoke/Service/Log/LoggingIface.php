@@ -27,8 +27,8 @@ interface LoggingIface
      * Remove a logger from the observer list.
      *
      * @param LoggerIface $observer
-     * The logger to remove (If there are more than one occurrences of the logger
-     * in the list then only one is removed).
+     * The logger to remove (If there are more than one occurrences of the
+     * logger in the list then only one is removed).
      */
     public function detach(LoggerIface $observer);
 

@@ -21,6 +21,7 @@ class UppercaseFirst extends Rule
 {
     /**
      * The delimiters define the boundary of words.
+     *
      * @var string[]
      */
     protected $delimiters;
@@ -34,9 +35,10 @@ class UppercaseFirst extends Rule
      * Whether the rule can definitely give the final route for all URIs that it
      * matches.
      */
-    public function __construct(Array      $delimiters,
-                                /* Bool */ $authoritative=false)
-    {
+    public function __construct(
+        Array $delimiters,
+        $authoritative = false
+    ) {
         parent::__construct($authoritative);
 
         $this->delimiters = $delimiters;
@@ -55,12 +57,10 @@ class UppercaseFirst extends Rule
     {
         $controller = $this->uri;
 
-        foreach ($this->delimiters as $delimiter)
-        {
+        foreach ($this->delimiters as $delimiter) {
             $parts = explode($delimiter, $controller);
 
-            foreach ($parts as &$part)
-            {
+            foreach ($parts as &$part) {
                 $part = ucfirst($part);
             }
 
@@ -77,10 +77,8 @@ class UppercaseFirst extends Rule
      */
     public function isMatch()
     {
-        foreach ($this->delimiters as $delimiter)
-        {
-            if (strpos($this->uri, $delimiter) !== false)
-            {
+        foreach ($this->delimiters as $delimiter) {
+            if (strpos($this->uri, $delimiter) !== false) {
                 return true;
             }
         }

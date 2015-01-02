@@ -20,6 +20,7 @@ class Equivalent extends Match
 {
     /**
      * Fields that can be ignored in the match.
+     *
      * @var string[]
      */
     protected $ignoredFields;
@@ -32,10 +33,10 @@ class Equivalent extends Match
      * @param string[] $ignoredFields Fields to ignore in the match.
      */
     public function __construct(
-        /* String */ $outputFormat,
+        $outputFormat,
         Array        $match,
-        Array        $ignoredFields = ['Params', 'Q_Factor'])
-    {
+        Array        $ignoredFields = ['Params', 'Q_Factor']
+    ) {
         parent::__construct($outputFormat, $match);
 
         $this->ignoredFields = $ignoredFields;
@@ -54,8 +55,7 @@ class Equivalent extends Match
     {
         $mType = $this->mediaType;
 
-        foreach ($this->ignoredFields as $ignored)
-        {
+        foreach ($this->ignoredFields as $ignored) {
             unset($mType[$ignored]);
         }
 

@@ -6,9 +6,9 @@
  */
 namespace Evoke\View\HTML5;
 
-use DOMDocument,
-    DOMNode,
-    Evoke\View\ViewIface;
+use DOMDocument;
+use DOMNode;
+use Evoke\View\ViewIface;
 
 /**
  * HTML5 String View
@@ -22,10 +22,11 @@ class String implements ViewIface
 {
     /**
      * HTML5 string for parsing into the array based view.
+     *
      * @var string
      */
     protected $html5String;
-    
+
     /******************/
     /* Public Methods */
     /******************/
@@ -38,13 +39,13 @@ class String implements ViewIface
      */
     public function get()
     {
-        $dom = new \DOMDocument;
+        $dom     = new \DOMDocument;
         $domNode = $dom->createDocumentFragment();
         $domNode->appendXML($this->html5String);
-        
+
         return $this->convertDOMNodeForWriting($domNode);
     }
-    
+
     /**
      * Set the string for the view.
      *
@@ -54,7 +55,7 @@ class String implements ViewIface
     {
         $this->html5String = $html5String;
     }
-    
+
     /*********************/
     /* Protected Methods */
     /*********************/
@@ -68,47 +69,41 @@ class String implements ViewIface
     protected function convertDOMNodeForWriting(DOMNode $node)
     {
         $attributes = $this->getAttributes($node);
-        
-        switch ($node->nodeType)
-        {
-        case XML_TEXT_NODE:
-        case XML_CDATA_SECTION_NODE:
-            return $node->nodeValue;
-            
-        case XML_DOCUMENT_FRAG_NODE:
-        case XML_HTML_DOCUMENT_NODE:
-            $data = [];
-            $childData =& $data;
-            break;
-            
-        default:
-            $data = [$node->nodeName, $attributes, []];
-            $childData =& $data[2];
+
+        switch ($node->nodeType) {
+            case XML_TEXT_NODE:
+            case XML_CDATA_SECTION_NODE:
+                return $node->nodeValue;
+
+            case XML_DOCUMENT_FRAG_NODE:
+            case XML_HTML_DOCUMENT_NODE:
+                $data      = [];
+                $childData =& $data;
+                break;
+
+            default:
+                $data      = [$node->nodeName, $attributes, []];
+                $childData =& $data[2];
         }
-        
-        if ($node->hasChildNodes())
-        {
-            foreach ($node->childNodes as $child)
-            {
-                if ($child->nodeType === XML_COMMENT_NODE)
-                {
+
+        if ($node->hasChildNodes()) {
+            foreach ($node->childNodes as $child) {
+                if ($child->nodeType === XML_COMMENT_NODE) {
                     continue;
                 }
-                
+
                 $childElements = $this->convertDOMNodeForWriting($child);
-                
+
                 if (is_string($childElements) &&
-                    $node->childNodes->length === 1)
-                {
+                    $node->childNodes->length === 1
+                ) {
                     $childData = $childElements;
-                }
-                else
-                {
+                } else {
                     $childData[] = $childElements;
                 }
             }
         }
-        
+
         return $data;
     }
 
@@ -122,10 +117,8 @@ class String implements ViewIface
     {
         $attributes = [];
 
-        if ($node->hasAttributes())
-        {
-            foreach ($node->attributes as $attrib => $attribNode)
-            {
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attrib => $attribNode) {
                 $attributes[$attrib] = $attribNode->nodeValue;
             }
         }

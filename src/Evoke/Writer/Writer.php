@@ -18,6 +18,7 @@ abstract class Writer implements WriterIface
 {
     /**
      * The buffer that holds the text that is to be written.
+     *
      * @var string
      */
     protected $buffer;

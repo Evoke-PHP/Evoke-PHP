@@ -25,24 +25,28 @@ class Processing implements ProcessingIface
 {
     /**
      * Associative array of request IDs to processing callback.
+     *
      * @var callable[]
      */
     protected $callbacks = [];
 
     /**
      * The data that we are processing.
+     *
      * @var mixed[]
      */
     protected $data = [];
 
     /**
      * Whether a key is required to match for processing.
+     *
      * @var bool
      */
     protected $matchRequired = false;
 
     /**
      * Whether only a single request type can be processed at a time.
+     *
      * @var bool
      */
     protected $uniqueMatchRequired = true;
@@ -57,11 +61,11 @@ class Processing implements ProcessingIface
      * @param string   $processingKey The request key for the matching.
      * @param callable $callback      The callback that is being added.
      */
-    public function addCallback(/* String */ $processingKey,
-                                callable     $callback)
-    {
-        if (!isset($this->callbacks[$processingKey]))
-        {
+    public function addCallback(
+        $processingKey,
+        callable     $callback
+    ) {
+        if (!isset($this->callbacks[$processingKey])) {
             $this->callbacks[$processingKey] = [];
         }
 
@@ -75,26 +79,20 @@ class Processing implements ProcessingIface
      */
     public function process()
     {
-        if (empty($this->data))
-        {
+        if (empty($this->data)) {
             $matchedKeys = empty($this->callbacks['']) ?
                 [] : ['' => $this->callbacks['']];
-        }
-        else
-        {
+        } else {
             $matchedKeys = array_intersect_key($this->callbacks, $this->data);
         }
 
-        if ($this->matchRequired && (count($matchedKeys) === 0))
-        {
+        if ($this->matchRequired && (count($matchedKeys) === 0)) {
             throw new DomainException(
                 'Match required processing request with keys: ' .
                 implode(', ', array_keys($this->data)) .
                 ' recognized keys are: ' .
                 implode(' ', array_keys($this->callbacks)));
-        }
-        elseif ($this->uniqueMatchRequired && count($matchedKeys) > 1)
-        {
+        } elseif ($this->uniqueMatchRequired && count($matchedKeys) > 1) {
             throw new DomainException(
                 'Unique match required processing request with keys: ' .
                 implode(', ', array_keys($this->data)) .
@@ -104,14 +102,12 @@ class Processing implements ProcessingIface
                 implode(', ', array_keys($matchedKeys)));
         }
 
-        foreach ($matchedKeys as $key => $callbacks)
-        {
+        foreach ($matchedKeys as $key => $callbacks) {
             // The key that defines the callback should not be passed.
             $callbackData = $this->data;
             unset($callbackData[$key]);
 
-            foreach ($callbacks as $callback)
-            {
+            foreach ($callbacks as $callback) {
                 call_user_func($callback, $callbackData);
             }
         }

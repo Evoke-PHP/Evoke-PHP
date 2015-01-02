@@ -18,18 +18,21 @@ class Equal extends Rule
 {
     /**
      * The controller to use when the rule matches.
+     *
      * @var string
      */
     protected $controller;
 
     /**
      * The URI to match.
+     *
      * @var string
      */
     protected $match;
 
     /**
      * The parameters for the controller.
+     *
      * @var mixed[]
      */
     protected $params;
@@ -42,18 +45,19 @@ class Equal extends Rule
      * @param mixed[] $params
      * @param bool    $authoritative Whether the rule is authoritative.
      */
-    public function __construct(/* string */ $controller,
-                                /* string */ $match,
-                                Array        $params        = [],
-                                /* bool   */ $authoritative = true)
-    {
+    public function __construct(
+        $controller,
+        $match,
+        Array        $params = [],
+        $authoritative = true
+    ) {
         parent::__construct($authoritative);
-        
+
         $this->controller = $controller;
         $this->match      = $match;
         $this->params     = $params;
     }
-    
+
     /******************/
     /* Public Methods */
     /******************/
@@ -77,7 +81,7 @@ class Equal extends Rule
     {
         return $this->params;
     }
-    
+
     /**
      * Check the uri to see if it matches.
      *

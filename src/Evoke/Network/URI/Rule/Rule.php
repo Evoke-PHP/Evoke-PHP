@@ -23,12 +23,14 @@ abstract class Rule implements RuleIface
     /**
      * Whether the rule can definitely give the final route for all URIs that
      * it matches.
+     *
      * @var bool
      */
     protected $authoritative;
 
     /**
      * The URI that the rule is acting upon.
+     *
      * @var string
      */
     protected $uri;
@@ -40,7 +42,7 @@ abstract class Rule implements RuleIface
      * Whether the rule can definitely give the final route for all URIs that it
      * matches.
      */
-    public function __construct(/* Bool */ $authoritative)
+    public function __construct($authoritative)
     {
         $this->authoritative = $authoritative;
     }
@@ -51,6 +53,7 @@ abstract class Rule implements RuleIface
 
     /**
      * Get the parameters for the URI.
+     *
      * @return array Empty Array. (By default no parameters are captured)
      */
     public function getParams()
@@ -76,8 +79,7 @@ abstract class Rule implements RuleIface
      */
     public function setURI($uri)
     {
-        if (!is_string($uri))
-        {
+        if (!is_string($uri)) {
             throw new InvalidArgumentException('needs URI as string.');
         }
 

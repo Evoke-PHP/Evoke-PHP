@@ -6,9 +6,9 @@
  */
 namespace Evoke\View\HTML5\Input;
 
-use InvalidArgumentException,
-    LogicException,
-    Traversable;
+use InvalidArgumentException;
+use LogicException;
+use Traversable;
 
 /**
  * Select Input View
@@ -22,36 +22,42 @@ class Select
 {
     /**
      * Attributes for the select element.
-     * @var string[]   
+     *
+     * @var string[]
      */
     protected $attribs;
 
     /**
      * Field in the data for the option text.
+     *
      * @var string
      */
     protected $fieldText;
 
     /**
      * Field in the data for the option value.
+     *
      * @var string
      */
     protected $fieldValue;
-    
+
     /**
      * Attributes for each select option.
+     *
      * @var string[]
      */
     protected $optionAttribs;
-    
+
     /**
      * Options for the select.
+     *
      * @var mixed[]
      */
     protected $options;
-    
+
     /**
      * Value that is selected or NULL for none.
+     *
      * @var mixed|null
      */
     protected $selectedValue;
@@ -64,11 +70,12 @@ class Select
      * @param string[] $attribs       Attributes for the select element.
      * @param string[] $optionAttribs Attributes for the option elements.
      */
-    public function __construct(/* String */ $fieldText,
-                                /* String */ $fieldValue    = 'ID',
-                                Array        $attribs       = [],
-                                Array        $optionAttribs = [])
-    {
+    public function __construct(
+        $fieldText,
+        $fieldValue = 'ID',
+        Array        $attribs = [],
+        Array        $optionAttribs = []
+    ) {
         $this->attribs       = $attribs;
         $this->fieldText     = $fieldText;
         $this->fieldValue    = $fieldValue;
@@ -90,11 +97,10 @@ class Select
     {
         $optionElements = [];
 
-        foreach ($this->options as $record)
-        {
+        foreach ($this->options as $record) {
             if (!isset($record[$this->fieldText],
-                       $record[$this->fieldValue]))
-            {
+                $record[$this->fieldValue])
+            ) {
                 throw new LogicException(
                     'Option needs TextField: ' . $this->fieldText .
                     ' and ValueField: ' . $this->fieldValue);
@@ -105,8 +111,8 @@ class Select
                 ['value' => $record[$this->fieldValue]]);
 
             if (isset($this->selectedValue) &&
-                $record[$this->fieldValue] == $this->selectedValue)
-            {
+                $record[$this->fieldValue] == $this->selectedValue
+            ) {
                 $optionAttribs['selected'] = 'selected';
             }
 
@@ -125,8 +131,7 @@ class Select
      */
     public function setOptions($options)
     {
-        if (!is_array($options) && !$options instanceof Traversable)
-        {
+        if (!is_array($options) && !$options instanceof Traversable) {
             throw new InvalidArgumentException('needs traversable options.');
         }
 

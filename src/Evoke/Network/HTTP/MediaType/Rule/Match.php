@@ -20,6 +20,7 @@ class Match extends Rule
 {
     /**
      * The match for the media type.
+     *
      * @var mixed[]
      */
     protected $match;
@@ -30,9 +31,10 @@ class Match extends Rule
      * @param string  $outputFormat The output format for the rule.
      * @param mixed[] $match        The match required from the media type.
      */
-    public function __construct(/* String */ $outputFormat,
-                                Array        $match)
-    {
+    public function __construct(
+        $outputFormat,
+        Array        $match
+    ) {
         parent::__construct($outputFormat, $match);
 
         $this->match = $match;

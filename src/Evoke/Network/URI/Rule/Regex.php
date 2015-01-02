@@ -20,12 +20,14 @@ class Regex extends Rule
 {
     /**
      * Controller regex match and replace.
+     *
      * @var string[]
      */
     protected $controller;
 
     /**
      * Regex to determine whether this rule matches.
+     *
      * @var string
      */
     protected $match;
@@ -55,29 +57,29 @@ class Regex extends Rule
      * Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct(Array        $controller,
-                                /* string */ $match,
-                                Array        $params,
-                                /* bool   */ $authoritative = false)
-    {
+    public function __construct(
+        Array        $controller,
+        $match,
+        Array        $params,
+        $authoritative = false
+    ) {
         parent::__construct($authoritative);
         $invalidArgs = false;
 
-        foreach ($params as $param)
-        {
+        foreach ($params as $param) {
             if (!isset($param['Key']['Match'],
-                       $param['Key']['Replace'],
-                       $param['Value']['Match'],
-                       $param['Value']['Replace']))
-            {
+                $param['Key']['Replace'],
+                $param['Value']['Match'],
+                $param['Value']['Replace'])
+            ) {
                 $invalidArgs = true;
                 break;
             }
         }
 
         if ($invalidArgs ||
-            !isset($controller['Match'], $controller['Replace']))
-        {
+            !isset($controller['Match'], $controller['Replace'])
+        ) {
             throw new InvalidArgumentException('Bad Arguments');
         }
 
@@ -98,8 +100,8 @@ class Regex extends Rule
     public function getController()
     {
         return preg_replace($this->controller['Match'],
-                            $this->controller['Replace'],
-                            $this->uri);
+            $this->controller['Replace'],
+            $this->uri);
     }
 
     /**
@@ -111,17 +113,16 @@ class Regex extends Rule
     {
         $paramsFound = [];
 
-        foreach ($this->params as $param)
-        {
+        foreach ($this->params as $param) {
             if (preg_match($param['Key']['Match'], $this->uri) &&
-                preg_match($param['Value']['Match'], $this->uri))
-            {
+                preg_match($param['Value']['Match'], $this->uri)
+            ) {
                 $paramsFound[preg_replace($param['Key']['Match'],
-                                          $param['Key']['Replace'],
-                                          $this->uri)]
+                    $param['Key']['Replace'],
+                    $this->uri)]
                     = preg_replace($param['Value']['Match'],
-                                   $param['Value']['Replace'],
-                                   $this->uri);
+                    $param['Value']['Replace'],
+                    $this->uri);
             }
         }
 

@@ -18,12 +18,14 @@ class StrReplaceRight extends Rule
 {
     /**
      * The string to match on.
+     *
      * @var string
      */
     protected $match;
 
     /**
      * The string to use as a replacement.
+     *
      * @var string
      */
     protected $replacement;
@@ -31,16 +33,17 @@ class StrReplaceRight extends Rule
     /**
      * Construct the right string replacement rule.
      *
-     * @param string $match         The string to match on.
-     * @param string $replacement   The string to use as a replacement.
+     * @param string $match       The string to match on.
+     * @param string $replacement The string to use as a replacement.
      * @param bool   $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     *                            Whether the rule can definitely give the
+     *                            final route for all URIs that it matches.
      */
-    public function __construct(/* String */ $match,
-                                /* String */ $replacement,
-                                /* Bool   */ $authoritative = false)
-    {
+    public function __construct(
+        $match,
+        $replacement,
+        $authoritative = false
+    ) {
         parent::__construct($authoritative);
 
         $this->match       = $match;
@@ -59,7 +62,7 @@ class StrReplaceRight extends Rule
     public function getController()
     {
         return substr($this->uri, 0, -strlen($this->match)) .
-            $this->replacement;
+        $this->replacement;
     }
 
     /**

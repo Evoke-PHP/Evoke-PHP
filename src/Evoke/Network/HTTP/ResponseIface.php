@@ -33,7 +33,6 @@ interface ResponseIface
 
     /**
      * Set the headers to show that the document should be cached.
-
      * This must be called before any output is sent (otherwise the headers will
      * have already been sent).
      *
@@ -42,7 +41,7 @@ interface ResponseIface
      * @param int $minutes The number of minutes to cache the document for.
      * @param int $seconds The number of seconds to cache the document for.
      */
-    public function setCache($days=0, $hours=0, $minutes=0, $seconds=0);
+    public function setCache($days = 0, $hours = 0, $minutes = 0, $seconds = 0);
 
     /**
      * Set the header field with the given value.
@@ -58,6 +57,6 @@ interface ResponseIface
      * @param int         $code   The HTTP status code.
      * @param null|string $reason The HTTP status reason.
      */
-    public function setStatus($code, $reason = NULL);
+    public function setStatus($code, $reason = null);
 }
 // EOF

@@ -20,6 +20,7 @@ class Router implements RouterIface
 {
     /**
      * Rules that the router uses to route.
+     *
      * @var Rule\RuleIface[]
      */
     protected $rules = [];
@@ -43,33 +44,32 @@ class Router implements RouterIface
      *
      * @param string $uri The URI that we are routing.
      * @return mixed[] The class and parameters that should respond to the URI
-     *                 (generally this should be a Controller class).
+     *                    (generally this should be a Controller class).
      */
     public function route($uri)
     {
         // The URI that is routed is continually refined from the initial URI by
         // the rules.
         $refinedURI = $uri;
-        $params = [];
+        $params     = [];
 
-        foreach ($this->rules as $rule)
-        {
+        foreach ($this->rules as $rule) {
             $rule->setURI($refinedURI);
 
-            if ($rule->isMatch())
-            {
+            if ($rule->isMatch()) {
                 $refinedURI = $rule->getController();
                 $params += $rule->getParams();
 
-                if ($rule->isAuthoritative())
-                {
+                if ($rule->isAuthoritative()) {
                     break;
                 }
             }
         }
 
-        return ['Controller' => $refinedURI,
-                'Params'     => $params];
+        return [
+            'Controller' => $refinedURI,
+            'Params'     => $params
+        ];
     }
 }
 // EOF

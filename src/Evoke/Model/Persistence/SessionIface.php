@@ -9,10 +9,10 @@ namespace Evoke\Model\Persistence;
 /**
  * Session Interface
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model\Persistence
+ * @license   MIT
+ * @package   Model\Persistence
  */
 interface SessionIface
 {
@@ -77,7 +77,7 @@ interface SessionIface
      * @param mixed $key    The session key to increment.
      * @param int   $offset The amount to increment the value.
      */
-    public function increment($key, $offset=1);
+    public function increment($key, $offset = 1);
 
     /**
      * Return whether the session domain is empty or not.

@@ -13,10 +13,10 @@ use RuntimeException;
  *
  * Provide persistence for a session domain.
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model\Persistence
+ * @license   MIT
+ * @package   Model\Persistence
  */
 class Session implements SessionIface
 {
@@ -52,7 +52,7 @@ class Session implements SessionIface
      */
     public function addValue($value)
     {
-        $session =& $this->getAccess();
+        $session   =& $this->getAccess();
         $session[] = $value;
     }
 
@@ -65,10 +65,8 @@ class Session implements SessionIface
     {
         $sessionOffset =& $this->getAccess();
 
-        foreach ($offset as $part)
-        {
-            if (!isset($sessionOffset[$part]))
-            {
+        foreach ($offset as $part) {
+            if (!isset($sessionOffset[$part])) {
                 // It is already deleted.
                 return;
             }
@@ -87,23 +85,16 @@ class Session implements SessionIface
      */
     public function ensure()
     {
-        if (!isset($_SESSION))
-        {
+        if (!isset($_SESSION)) {
             // If we are run from the command line interface then we do not care
             // about headers sent using the session_start.
-            if (php_sapi_name() === 'cli')
-            {
+            if (php_sapi_name() === 'cli') {
                 $_SESSION = [];
-            }
-            elseif (!headers_sent())
-            {
-                if (!session_start())
-                {
+            } elseif (!headers_sent()) {
+                if (!session_start()) {
                     throw new RuntimeException('session_start failed.');
                 }
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException(
                     'session started after headers sent.');
             }
@@ -113,10 +104,8 @@ class Session implements SessionIface
         // we are modifying the session.
         $currentDomain =& $_SESSION;
 
-        foreach($this->domain as $subdomain)
-        {
-            if (!isset($currentDomain[$subdomain]))
-            {
+        foreach ($this->domain as $subdomain) {
+            if (!isset($currentDomain[$subdomain])) {
                 $currentDomain[$subdomain] = [];
             }
 
@@ -134,6 +123,7 @@ class Session implements SessionIface
     public function get($key)
     {
         $session = $this->getCopy();
+
         return $session[$key];
     }
 
@@ -142,18 +132,16 @@ class Session implements SessionIface
      *
      * @param mixed[] $offset The offset to the data.
      * @return mixed|null The data at the offset (NULL if the offset doesn't
-     *                    exist).
+     *                        exist).
      */
     public function getAtOffset(Array $offset = [])
     {
         $sessionOffset = $this->getCopy();
 
-        foreach ($offset as $part)
-        {
+        foreach ($offset as $part) {
             // If there is no data at the offset return NULL.
-            if (!isset($sessionOffset[$part]))
-            {
-                return NULL;
+            if (!isset($sessionOffset[$part])) {
+                return null;
             }
 
             $sessionOffset = $sessionOffset[$part];
@@ -174,8 +162,7 @@ class Session implements SessionIface
     {
         $currentDomain = $_SESSION;
 
-        foreach($this->domain as $subdomain)
-        {
+        foreach ($this->domain as $subdomain) {
             // Update the currentDomain to reference the session subdomain.
             $currentDomain = $currentDomain[$subdomain];
         }
@@ -209,7 +196,7 @@ class Session implements SessionIface
      * @param mixed $key    The session key to increment.
      * @param int   $offset The amount to increment the value.
      */
-    public function increment($key, $offset=1)
+    public function increment($key, $offset = 1)
     {
         $session =& $this->getAccess();
         $session[$key] += $offset;
@@ -223,6 +210,7 @@ class Session implements SessionIface
     public function isEmpty()
     {
         $session = $this->getCopy();
+
         return empty($session);
     }
 
@@ -236,6 +224,7 @@ class Session implements SessionIface
     public function isEqual($key, $val)
     {
         $session = $this->getCopy();
+
         return (isset($session[$key]) && ($session[$key] === $val));
     }
 
@@ -248,6 +237,7 @@ class Session implements SessionIface
     public function issetKey($key)
     {
         $session = $this->getCopy();
+
         return isset($session[$key]);
     }
 
@@ -270,22 +260,18 @@ class Session implements SessionIface
      */
     public function remove()
     {
-        if (empty($this->domain))
-        {
+        if (empty($this->domain)) {
             session_unset();
-        }
-        else
-        {
+        } else {
             // Set currentDomain to reference $_SESSION.
-            $currentDomain =& $_SESSION;
+            $currentDomain     =& $_SESSION;
             $previousSubdomain = $currentDomain;
 
-            foreach($this->domain as $subdomain)
-            {
+            foreach ($this->domain as $subdomain) {
                 // Update the currentDomain to reference the session subdomain.
                 $previousSubdomain =& $currentDomain;
-                $lastSubdomain = $subdomain;
-                $currentDomain =& $currentDomain[$subdomain];
+                $lastSubdomain     = $subdomain;
+                $currentDomain     =& $currentDomain[$subdomain];
             }
 
             unset($previousSubdomain[$lastSubdomain]);
@@ -309,7 +295,7 @@ class Session implements SessionIface
      */
     public function set($key, $value)
     {
-        $session =& $this->getAccess();
+        $session       =& $this->getAccess();
         $session[$key] = $value;
     }
 
@@ -334,11 +320,9 @@ class Session implements SessionIface
     {
         $sessionOffset =& $this->getAccess();
 
-        foreach ($offset as $part)
-        {
+        foreach ($offset as $part) {
             // If there is offset is not already set then set it.
-            if (!isset($sessionOffset[$part]))
-            {
+            if (!isset($sessionOffset[$part])) {
                 $sessionOffset[$part] = [];
             }
 
@@ -347,7 +331,7 @@ class Session implements SessionIface
 
         $sessionOffset = $data;
     }
-    
+
     /**
      * Unset the key in the session domain.
      *
@@ -376,8 +360,7 @@ class Session implements SessionIface
         // Set currentDomain to reference $_SESSION.
         $currentDomain =& $_SESSION;
 
-        foreach($this->domain as $subdomain)
-        {
+        foreach ($this->domain as $subdomain) {
             // Update the currentDomain to reference the session subdomain.
             $currentDomain =& $currentDomain[$subdomain];
         }

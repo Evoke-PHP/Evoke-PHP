@@ -20,6 +20,7 @@ class Blank extends Rule
 {
     /**
      * Replacement for a blank URI.
+     *
      * @var string
      */
     protected $replacement;
@@ -27,10 +28,10 @@ class Blank extends Rule
     /**
      * Construct the Blank URI Rule.
      *
-     * @param string $replacement   Replacement for a blank URI.
+     * @param string $replacement Replacement for a blank URI.
      * @param bool   $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     *                            Whether the rule can definitely give the
+     *                            final route for all URIs that it matches.
      */
     public function __construct($replacement, $authoritative = true)
     {

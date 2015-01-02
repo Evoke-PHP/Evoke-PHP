@@ -6,8 +6,8 @@
  */
 namespace Evoke\Network\HTTP\MediaType;
 
-use OutOfBoundsException,
-    Evoke\Network\HTTP\MediaType\Rule\RuleIface;
+use Evoke\Network\HTTP\MediaType\Rule\RuleIface;
+use OutOfBoundsException;
 
 /**
  * HTTP Media Type Router Interface
@@ -23,6 +23,7 @@ class Router implements RouterIface
 {
     /**
      * Rules that the router uses to route.
+     *
      * @var RuleIface[]
      */
     protected $rules = [];
@@ -47,19 +48,17 @@ class Router implements RouterIface
      * @param  mixed[] $acceptedMediaTypes Accepted media types of the browser.
      * @return string The output format.
      * @throws OutOfBoundsException
-     * When no output format can be chosen that matches the Accepted Media
-     * Types.
+     *                                     When no output format can be chosen
+     *                                     that matches the Accepted Media
+     *                                     Types.
      */
     public function route(Array $acceptedMediaTypes)
     {
-        foreach ($acceptedMediaTypes as $mediaType)
-        {
-            foreach ($this->rules as $rule)
-            {
+        foreach ($acceptedMediaTypes as $mediaType) {
+            foreach ($this->rules as $rule) {
                 $rule->setMediaType($mediaType);
 
-                if ($rule->isMatch())
-                {
+                if ($rule->isMatch()) {
                     return $rule->getOutputFormat();
                 }
             }

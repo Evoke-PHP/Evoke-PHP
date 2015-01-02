@@ -6,8 +6,8 @@
  */
 namespace Evoke\View\HTML5;
 
-use Evoke\View\ViewIface,
-    LogicException;
+use Evoke\View\ViewIface;
+use LogicException;
 
 /**
  * Backtrace View
@@ -21,6 +21,7 @@ class Backtrace implements ViewIface
 {
     /**
      * Backtrace data.
+     *
      * @var mixed[]
      */
     protected $backtrace;
@@ -37,40 +38,38 @@ class Backtrace implements ViewIface
      */
     public function get()
     {
-        if (empty($this->backtrace))
-        {
+        if (empty($this->backtrace)) {
             throw new LogicException('needs backtrace.');
         }
 
         $listItems = [];
 
-        foreach ($this->backtrace as $info)
-        {
+        foreach ($this->backtrace as $info) {
             $infoElements =
-                [['span',
-                  ['class' => 'File'],
-                  empty($info['file']) ? '<internal>' : $info['file']]];
+                [
+                    [
+                        'span',
+                        ['class' => 'File'],
+                        empty($info['file']) ? '<internal>' : $info['file']
+                    ]
+                ];
 
-            if (isset($info['line']))
-            {
+            if (isset($info['line'])) {
                 $infoElements[] =
                     ['span', ['class' => 'Line'], '(' . $info['line'] . ')'];
             }
 
-            if (isset($info['class']))
-            {
+            if (isset($info['class'])) {
                 $infoElements[] =
                     ['span', ['class' => 'Class'], $info['class']];
             }
 
-            if (isset($info['type']))
-            {
+            if (isset($info['type'])) {
                 $infoElements[] =
                     ['span', ['class' => 'Type'], $info['type']];
             }
 
-            if (isset($info['function']))
-            {
+            if (isset($info['function'])) {
                 $infoElements[] =
                     ['span', ['class' => 'Function'], $info['function']];
             }

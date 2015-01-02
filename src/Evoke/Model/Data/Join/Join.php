@@ -6,8 +6,8 @@
  */
 namespace Evoke\Model\Data\Join;
 
-use DomainException,
-    LogicException;
+use DomainException;
+use LogicException;
 
 /**
  * Join
@@ -23,16 +23,18 @@ abstract class Join implements JoinIface
      * Array of join identifiers to join objects from the current join.  The
      * joins form a tree structure which describes the hierarchy of data
      * represented by the flat structure.
+     *
      * @var JoinIface[]
      */
     protected $joins;
 
     /**
      * The join keys from the joins array.
+     *
      * @var string[]
      */
     protected $joinKeys;
-    
+
     /**
      * Whether we can refer to joins using a case-insensitive alpha numeric
      * match in addition to the exact join passed upon adding the join. This
@@ -40,6 +42,7 @@ abstract class Join implements JoinIface
      * Pascal_Case, lowerCamelCase, UpperCamelCase, snake_case. It could
      * also be used to match ST_uP-iD_&*#(C)(*aSe.  These joins would have
      * to be matched exactly if this boolean is not set true.
+     *
      * @var bool
      */
     protected $useAlphaNumMatch;
@@ -55,9 +58,9 @@ abstract class Join implements JoinIface
     {
         $this->joinKeys         = [];
         $this->joins            = [];
-        $this->useAlphaNumMatch = $useAlphaNumMatch;        
+        $this->useAlphaNumMatch = $useAlphaNumMatch;
     }
-    
+
     /******************/
     /* Public Methods */
     /******************/
@@ -69,18 +72,17 @@ abstract class Join implements JoinIface
      * @param JoinIface $join   The join to add.
      * @throws LogicException If the join to be added is ambiguous.
      */
-    public function addJoin(/* String */ $joinID, JoinIface $join)
+    public function addJoin($joinID, JoinIface $join)
     {
         $usableJoinID = $this->useAlphaNumMatch ?
             $this->toAlphaNumLower($joinID) :
             $joinID;
 
-        if (in_array($usableJoinID, $this->joinKeys))
-        {
+        if (in_array($usableJoinID, $this->joinKeys)) {
             throw new LogicException('Ambiguous join: ' . $joinID);
         }
 
-        $this->joinKeys[] = $usableJoinID;
+        $this->joinKeys[]     = $usableJoinID;
         $this->joins[$joinID] = $join;
     }
 
@@ -101,19 +103,14 @@ abstract class Join implements JoinIface
      */
     public function getJoinID($join)
     {
-        if (isset($this->joins[$join]))
-        {
+        if (isset($this->joins[$join])) {
             return $join;
-        }
-        else if ($this->useAlphaNumMatch)
-        {
-            $alphaNumJoin = $this->toAlphaNumLower($join);
+        } else if ($this->useAlphaNumMatch) {
+            $alphaNumJoin      = $this->toAlphaNumLower($join);
             $canonicalJoinKeys = array_keys($this->joins);
 
-            foreach ($canonicalJoinKeys as $joinKey)
-            {
-                if ($alphaNumJoin === $this->toAlphaNumLower($joinKey))
-                {
+            foreach ($canonicalJoinKeys as $joinKey) {
+                if ($alphaNumJoin === $this->toAlphaNumLower($joinKey)) {
                     return $joinKey;
                 }
             }

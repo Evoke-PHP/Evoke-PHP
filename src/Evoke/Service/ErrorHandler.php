@@ -6,8 +6,8 @@
  */
 namespace Evoke\Service;
 
-use ErrorException,
-    Evoke\Service\Log\LoggingIface;
+use ErrorException;
+use Evoke\Service\Log\LoggingIface;
 
 /**
  * Error Handler
@@ -21,6 +21,7 @@ class ErrorHandler
 {
     /**
      * Logging object.
+     *
      * @var LoggingIface
      */
     protected $logging;
@@ -28,6 +29,7 @@ class ErrorHandler
     /**
      * Whether to stop the standard error handler from running after
      * handling the error here.
+     *
      * @var bool
      */
     protected $suppressErrorHandler;
@@ -40,9 +42,10 @@ class ErrorHandler
      * Whether to stop the standard error handler from running after handling
      * the error here.
      */
-    public function __construct(LoggingIface $logging,
-                                /* Bool */   $suppressErrorHandler = false)
-    {
+    public function __construct(
+        LoggingIface $logging,
+        $suppressErrorHandler = false
+    ) {
         $this->suppressErrorHandler = $suppressErrorHandler;
         $this->logging              = $logging;
     }
@@ -63,15 +66,15 @@ class ErrorHandler
      *               suppressed.
      * @throws ErrorException If the error is recoverable.
      */
-    public function handler(/* Int */    $errNo,
-                            /* String */ $errStr,
-                            /* String */ $errFile,
-                            /* Int */    $errLine,
-                            Array        $errContext)
-    {
+    public function handler(
+        $errNo,
+        $errStr,
+        $errFile,
+        $errLine,
+        Array $errContext
+    ) {
         // If the error code should not be reported return.
-        if (!(error_reporting() & $errNo))
-        {
+        if (!(error_reporting() & $errNo)) {
             // Do not allow PHP to report them either as PHP is telling us that
             // they should not be reported.
             return true;
@@ -79,9 +82,8 @@ class ErrorHandler
 
         $message = $errStr . ' in ' . $errFile . ' on ' . $errLine;
 
-        if (!empty($errContext))
-        {
-            $message .= ' context: ' .  print_r($errContext, true);
+        if (!empty($errContext)) {
+            $message .= ' context: ' . print_r($errContext, true);
         }
 
         $this->logging->log($message, $errNo);
@@ -89,8 +91,7 @@ class ErrorHandler
         // The easiest way to recover from a recoverable error is by handling an
         // exception.  This ensures the problem is addressed before any related
         // code fails horribly due to unexpected values.
-        if ($errNo === E_RECOVERABLE_ERROR)
-        {
+        if ($errNo === E_RECOVERABLE_ERROR) {
             throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
         }
 

@@ -6,10 +6,10 @@
  */
 namespace Evoke\View\HTML5;
 
-use Evoke\Model\Data\TreeIface,
-    Evoke\View\ViewIface,
-    LogicException,
-    RecursiveIteratorIterator;
+use Evoke\Model\Data\TreeIface;
+use Evoke\View\ViewIface;
+use LogicException;
+use RecursiveIteratorIterator;
 
 /**
  * Menu Control View
@@ -23,6 +23,7 @@ class Menu implements ViewIface
 {
     /**
      * Tree data
+     *
      * @var TreeIface.
      */
     protected $tree;
@@ -39,20 +40,16 @@ class Menu implements ViewIface
      */
     public function get()
     {
-        if (!isset($this->tree))
-        {
+        if (!isset($this->tree)) {
             throw new LogicException('needs tree to be set.');
         }
 
         $menuClass = 'Menu ' . $this->tree->get();
         $menuItems = [];
 
-        if ($this->tree->hasChildren())
-        {
+        if ($this->tree->hasChildren()) {
             $menuItems = $this->getMenu($this->tree);
-        }
-        else
-        {
+        } else {
             $menuClass .= ' Empty';
         }
 
@@ -82,30 +79,27 @@ class Menu implements ViewIface
     protected function getMenu(TreeIface $tree)
     {
         $childrenPosition = 2;
-        $currentDepth = 0;
-        $iterator = new RecursiveIteratorIterator(
+        $currentDepth     = 0;
+        $iterator         = new RecursiveIteratorIterator(
             $tree, RecursiveIteratorIterator::SELF_FIRST);
-        $menu = [];
-        $menuPtr =& $menu;
+        $menu             = [];
+        $menuPtr          =& $menu;
 
-        foreach ($iterator as $node)
-        {
-            $newDepth = $iterator->getDepth();
-            $depthChange = $newDepth - $currentDepth;
+        foreach ($iterator as $node) {
+            $newDepth     = $iterator->getDepth();
+            $depthChange  = $newDepth - $currentDepth;
             $currentDepth = $newDepth;
-            $menuPtr =& $menu;
+            $menuPtr      =& $menu;
 
             // Set the pointer to the correct depth of the tree.
-            for ($i = 0; $i < $currentDepth; $i++)
-            {
+            for ($i = 0; $i < $currentDepth; $i++) {
                 // Go to the last list item elements children.
                 end($menuPtr);
-                $endKey = key($menuPtr);
+                $endKey  = key($menuPtr);
                 $menuPtr =& $menuPtr[$endKey][$childrenPosition];
 
                 // Build the sub level if it hasn't been built already.
-                if ($depthChange > 0 && $i == $currentDepth - 1)
-                {
+                if ($depthChange > 0 && $i == $currentDepth - 1) {
                     $menuPtr[] = ['ul', [], []];
                 }
 
@@ -114,12 +108,18 @@ class Menu implements ViewIface
                 $menuPtr =& $menuPtr[1][$childrenPosition];
             }
 
-            $menuItem = $node->get();
-            $menuPtr[] = ['li',
-                          ['class' => 'Menu_Item Level_' . $currentDepth],
-                          [['a',
-                            ['href' => $menuItem['Href']],
-                            $menuItem['Text']]]];
+            $menuItem  = $node->get();
+            $menuPtr[] = [
+                'li',
+                ['class' => 'Menu_Item Level_' . $currentDepth],
+                [
+                    [
+                        'a',
+                        ['href' => $menuItem['Href']],
+                        $menuItem['Text']
+                    ]
+                ]
+            ];
         }
 
         return $menu;

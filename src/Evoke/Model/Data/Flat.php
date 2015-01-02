@@ -32,10 +32,10 @@ use BadMethodCallException;
  * }
  * </code></pre>
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model
  *
  * @SuppressWarnings(PHPMD.TooManyMethods) - We need a lot.
  */
@@ -43,6 +43,7 @@ class Flat implements FlatIface
 {
     /**
      * The data that is being modelled.
+     *
      * @var mixed[]
      */
     protected $data = [];
@@ -119,13 +120,14 @@ class Flat implements FlatIface
     {
         $nextItem = next($this->data);
 
-        if ($nextItem === false)
-        {
+        if ($nextItem === false) {
             $this->setRecord([]);
+
             return false;
         }
 
         $this->setRecord($nextItem);
+
         return $this;
     }
 
@@ -136,12 +138,9 @@ class Flat implements FlatIface
     {
         $first = reset($this->data);
 
-        if ($first !== false)
-        {
+        if ($first !== false) {
             $this->setRecord($first);
-        }
-        else
-        {
+        } else {
             $this->setRecord([]);
         }
     }
@@ -170,6 +169,7 @@ class Flat implements FlatIface
     public function offsetExists($offset)
     {
         $record = current($this->data);
+
         return isset($record[$offset]);
     }
 
@@ -183,6 +183,7 @@ class Flat implements FlatIface
     public function offsetGet($offset)
     {
         $record = current($this->data);
+
         return $record[$offset];
     }
 

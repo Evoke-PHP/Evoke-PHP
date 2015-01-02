@@ -6,21 +6,22 @@
  */
 namespace Evoke\View\HTML5;
 
-use Evoke\View\ViewIface,
-    LogicException;
+use Evoke\View\ViewIface;
+use LogicException;
 
 /**
  * Exception View
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package View\HTML5
+ * @license   MIT
+ * @package   View\HTML5
  */
 class Exception implements ViewIface
 {
     /**
      * The exception that we are viewing.
+     *
      * @var \Exception
      */
     protected $exception;
@@ -36,18 +37,23 @@ class Exception implements ViewIface
      */
     public function get()
     {
-        if (!isset($this->exception))
-        {
+        if (!isset($this->exception)) {
             throw new LogicException('needs exception to be set.');
         }
 
-        return ['div',
-                ['class' => 'Exception'],
-                [['div', ['class' => 'Type'], get_class($this->exception)],
-                 ['p', ['class' => 'Message'], $this->exception->getMessage()],
-                 ['pre',
-                  ['class' => 'Trace'],
-                  $this->exception->getTraceAsString()]]];
+        return [
+            'div',
+            ['class' => 'Exception'],
+            [
+                ['div', ['class' => 'Type'], get_class($this->exception)],
+                ['p', ['class' => 'Message'], $this->exception->getMessage()],
+                [
+                    'pre',
+                    ['class' => 'Trace'],
+                    $this->exception->getTraceAsString()
+                ]
+            ]
+        ];
     }
 
     /**

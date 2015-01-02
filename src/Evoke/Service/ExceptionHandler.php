@@ -6,11 +6,11 @@
  */
 namespace Evoke\Service;
 
-use Evoke\Network\HTTP\ResponseIface,
-    Evoke\View\HTML5\Exception,
-    Evoke\View\HTML5\MessageBox,
-    Evoke\Writer\WriterIface,
-    InvalidArgumentException;
+use Evoke\Network\HTTP\ResponseIface;
+use Evoke\View\HTML5\Exception;
+use Evoke\View\HTML5\MessageBox;
+use Evoke\Writer\WriterIface;
+use InvalidArgumentException;
 
 /**
  * Exception Handler
@@ -26,30 +26,35 @@ class ExceptionHandler
 {
     /**
      * Response Object.
+     *
      * @var ResponseIface
      */
     protected $response;
-    
+
     /**
      * Whether to display the exception.
+     *
      * @var bool
      */
     protected $showException;
-    
+
     /**
      * Exception view.
+     *
      * @var Exception
      */
     protected $viewException;
 
     /**
      * MessageBox view.
+     *
      * @var MessageBox
      */
     protected $viewMessageBox;
 
     /**
      * Writer.
+     *
      * @var WriterIface
      */
     protected $writer;
@@ -65,14 +70,14 @@ class ExceptionHandler
      * @throws InvalidArgumentException
      * If we are showing the exception and don't provide an exception view.
      */
-    public function __construct(ResponseIface $response,
-                                /* Bool */    $showException,
-                                MessageBox    $viewMessageBox,
-                                WriterIface   $writer,
-                                Exception     $viewException = NULL)
-    {
-        if ($showException && !isset($viewException))
-        {
+    public function __construct(
+        ResponseIface $response,
+        $showException,
+        MessageBox $viewMessageBox,
+        WriterIface $writer,
+        Exception $viewException = null
+    ) {
+        if ($showException && !isset($viewException)) {
             throw new InvalidArgumentException(
                 'needs Exception view if we are showing the exception.');
         }
@@ -104,35 +109,39 @@ class ExceptionHandler
         trigger_error($uncaughtException->getMessage(), E_USER_WARNING);
         $currentBuffer = (string)($this->writer);
 
-        if (!empty($currentBuffer))
-        {
+        if (!empty($currentBuffer)) {
             trigger_error(
                 'Buffer needs to be flushed in exception handler for ' .
-                'clean error page.  Buffer was: ' .	$currentBuffer,
+                'clean error page.  Buffer was: ' . $currentBuffer,
                 E_USER_WARNING);
             $this->writer->flush();
         }
 
         $this->viewMessageBox->addContent(
-            ['div',
-             ['class' => 'Description'],
-             'The administrator has been notified.']);
+            [
+                'div',
+                ['class' => 'Description'],
+                'The administrator has been notified.'
+            ]);
 
-        if ($this->showException)
-        {
+        if ($this->showException) {
             $this->viewException->set($uncaughtException);
             $this->viewMessageBox->addContent($this->viewException->get());
         }
 
         $this->writer->writeStart();
         $this->writer->write(
-            ['head',
-             [],
-             [['title', [], ['Uncaught Exception']]]]);
+            [
+                'head',
+                [],
+                [['title', [], ['Uncaught Exception']]]
+            ]);
         $this->writer->write(
-            ['body',
-             [],
-             [$this->viewMessageBox->get()]]);
+            [
+                'body',
+                [],
+                [$this->viewMessageBox->get()]
+            ]);
         $this->writer->writeEnd();
 
         $this->response->setStatus(500);

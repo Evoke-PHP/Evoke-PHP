@@ -19,27 +19,29 @@ use Evoke\View\ViewIface;
 class Head implements ViewIface
 {
     /**
-     * Custom elements to be added to the head of the form:
-     * `[tag, attribs, children]`
+     * Custom elements to be added to the head of the form: `[tag, attribs, children]`
+     *
      * @var mixed[]
      */
     protected $customElements;
 
     /**
      * Array of links, with each link as an array of link attributes.
+     *
      * @var string[][]
      */
     protected $links;
 
     /**
-     * Array of Meta elements with the key as the name and the value as the
-     * content.
+     * Array of Meta elements with the key as the name and the value as the content.
+     *
      * @var string[]
      */
     protected $metas;
 
     /**
      * Title
+     *
      * @var string
      */
     protected $title;
@@ -47,19 +49,17 @@ class Head implements ViewIface
     /**
      * Construct a Head object.
      *
-     * @param string[][] $links
-     * Array of Links, with each link as an array of link attributes.
-     * @param string[]   $metas
-     * Array of meta elements with the key as the name and the value as the
-     * content.
+     * @param string[][] $links          Array of Links, with each link as an array of link attributes.
+     * @param string[]   $metas          Array of meta elements with the key as the name and the value as the content.
      * @param string     $title
      * @param mixed[]    $customElements Custom elements to be added to head.
      */
-    public function __construct(Array        $links,
-                                Array        $metas,
-                                /* String */ $title,
-                                Array        $customElements = [])
-    {
+    public function __construct(
+        Array        $links,
+        Array        $metas,
+        $title,
+        Array        $customElements = []
+    ) {
         $this->customElements = $customElements;
         $this->links          = $links;
         $this->metas          = $metas;
@@ -79,19 +79,15 @@ class Head implements ViewIface
     {
         $headElements = [['title', [], $this->title]];
 
-        foreach ($this->metas as $name => $content)
-        {
-            $headElements[] =
-                ['meta', ['name' => $name, 'content' => $content]];
+        foreach ($this->metas as $name => $content) {
+            $headElements[] = ['meta', ['name' => $name, 'content' => $content]];
         }
 
-        foreach ($this->links as $linkAttributes)
-        {
+        foreach ($this->links as $linkAttributes) {
             $headElements[] = ['link', $linkAttributes];
         }
 
-        foreach ($this->customElements as $customElement)
-        {
+        foreach ($this->customElements as $customElement) {
             $headElements[] = $customElement;
         }
 

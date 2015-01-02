@@ -18,12 +18,14 @@ abstract class Rule implements RuleIface
 {
     /**
      * The media type that the rule is checked against.
+     *
      * @var mixed[]
      */
     protected $mediaType = [];
 
     /**
      * The output format.
+     *
      * @var string
      */
     protected $outputFormat;

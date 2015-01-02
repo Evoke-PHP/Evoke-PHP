@@ -22,6 +22,7 @@ class RegexNamed extends Rule
     /**
      * Regex match for the URI.  The named subpatterns are used for the
      * parameters.
+     *
      * @var string
      */
     protected $match;
@@ -29,6 +30,7 @@ class RegexNamed extends Rule
     /**
      * Regex replacement for the controller.  Any named subpatterns must be
      * referred to by number in the replacement.
+     *
      * @var string
      */
     protected $replacement;
@@ -36,15 +38,17 @@ class RegexNamed extends Rule
     /**
      * Construct the Regex Named rule.
      *
-     * @param string  $match
-     * Regex to match the URI with named subpatterns.
-     * @param string  $replacement   The controller regex replacement string.
-     * @param bool    $authoritative Is this always the final route?
+     * @param string $match
+     *                              Regex to match the URI with named
+     *                              subpatterns.
+     * @param string $replacement   The controller regex replacement string.
+     * @param bool   $authoritative Is this always the final route?
      */
-    public function __construct(/* String */ $match,
-                                /* String */ $replacement,
-                                /* Bool   */ $authoritative = false)
-    {
+    public function __construct(
+        $match,
+        $replacement,
+        $authoritative = false
+    ) {
         parent::__construct($authoritative);
 
         $this->match       = $match;
@@ -75,10 +79,8 @@ class RegexNamed extends Rule
         preg_match($this->match, $this->uri, $params);
 
         // Return only the named parameters rather than the numbered ones.
-        foreach (array_keys($params) as $key)
-        {
-            if (!is_string($key))
-            {
+        foreach (array_keys($params) as $key) {
+            if (!is_string($key)) {
                 unset($params[$key]);
             }
         }

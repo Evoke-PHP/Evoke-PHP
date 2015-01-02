@@ -9,15 +9,16 @@ namespace Evoke\Model\Data;
 /**
  * Abstract Data Decorator
  *
- * @author Paul Young <evoke@youngish.org>
+ * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
- * @license MIT
- * @package Model
+ * @license   MIT
+ * @package   Model
  */
 abstract class Decorator implements FlatIface
 {
     /**
      * Data
+     *
      * @var FlatIface
      */
     protected $data;

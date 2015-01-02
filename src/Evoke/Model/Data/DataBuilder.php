@@ -31,10 +31,9 @@ class DataBuilder
     public function build(JoinIface $joinStructure)
     {
         $jointData = [];
-        $joins = $joinStructure->getJoins();
+        $joins     = $joinStructure->getJoins();
 
-        foreach ($joins as $joinID => $join)
-        {
+        foreach ($joins as $joinID => $join) {
             $jointData[$joinID] = $this->build($join);
         }
 

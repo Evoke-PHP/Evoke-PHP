@@ -18,30 +18,35 @@ class PSR0Namespace implements AutoloadIface
 {
     /**
      * Base directory for the files.
-     * @var string     
+     *
+     * @var string
      */
     protected $baseDir;
-    
+
     /**
      * File extension to use.
+     *
      * @var string
      */
     protected $extension;
-    
+
     /**
      * Base namespace that we are autoloading with slash at the end.
+     *
      * @var string
      */
     protected $nsWithSlash;
 
     /**
      * Minimum length of name required to load.
-     * @var int 
+     *
+     * @var int
      */
     private $nameMinLen;
-    
+
     /**
      * Length of the namespace with slash.
+     *
      * @var int
      */
     private $nsWithSlashLen;
@@ -53,10 +58,11 @@ class PSR0Namespace implements AutoloadIface
      * @param string $namespace
      * @param string $extension
      */
-    public function __construct(/* String */ $baseDir,
-                                /* String */ $namespace,
-                                /* String */ $extension='.php')
-    {
+    public function __construct(
+        $baseDir,
+        $namespace,
+        $extension = '.php'
+    ) {
         $this->baseDir     = rtrim($baseDir, DIRECTORY_SEPARATOR);
         $this->extension   = $extension;
         $this->nsWithSlash = rtrim($namespace, '\\') . '\\';
@@ -78,8 +84,8 @@ class PSR0Namespace implements AutoloadIface
     {
         // Only handle the specified namespace (and its sub-namespaces).
         if (strlen($name) >= $this->nameMinLen &&
-            substr($name, 0, $this->nsWithSlashLen) !== $this->nsWithSlash)
-        {
+            substr($name, 0, $this->nsWithSlashLen) !== $this->nsWithSlash
+        ) {
             return;
         }
 
@@ -87,13 +93,12 @@ class PSR0Namespace implements AutoloadIface
         $lastSlash = strrpos($name, '\\');
         $namespace = substr($name, 0, $lastSlash + 1);
         $className = substr($name, $lastSlash + 1);
-        $filename = $this->baseDir . DIRECTORY_SEPARATOR .
+        $filename  = $this->baseDir . DIRECTORY_SEPARATOR .
             str_replace('\\', DIRECTORY_SEPARATOR, $namespace) .
             str_replace('_', DIRECTORY_SEPARATOR, $className) .
             $this->extension;
 
-        if (file_exists($filename))
-        {
+        if (file_exists($filename)) {
             /** @noinspection PhpIncludeInspection */
             require $filename;
         }

@@ -25,18 +25,21 @@ class RegexSharedMatch extends Rule
 {
     /**
      * Regex match for the URI.
+     *
      * @var string
      */
     protected $match;
 
     /**
      * Parameter key and value replacement regex for the URI.
+     *
      * @var Array[]
      */
     protected $params;
 
     /**
      * Regex replacement for the controller.
+     *
      * @var string
      */
     protected $replacement;
@@ -54,17 +57,16 @@ class RegexSharedMatch extends Rule
      * Is this always the final route?
      * @throws InvalidArgumentException If the rule is incorrectly formatted.
      */
-    public function __construct(/* String */ $match,
-                                /* String */ $replacement,
-                                Array        $params        = [],
-                                /* Bool   */ $authoritative = false)
-    {
+    public function __construct(
+        $match,
+        $replacement,
+        Array        $params = [],
+        $authoritative = false
+    ) {
         parent::__construct($authoritative);
 
-        foreach ($params as $index => $paramSpec)
-        {
-            if (!isset($paramSpec['Key'], $paramSpec['Value']))
-            {
+        foreach ($params as $index => $paramSpec) {
+            if (!isset($paramSpec['Key'], $paramSpec['Value'])) {
                 throw new InvalidArgumentException(
                     'param spec needs Key and Value at index: ' . $index);
             }
@@ -98,8 +100,7 @@ class RegexSharedMatch extends Rule
     {
         $params = [];
 
-        foreach ($this->params as $paramSpec)
-        {
+        foreach ($this->params as $paramSpec) {
             $params[preg_replace($this->match, $paramSpec['Key'], $this->uri)] =
                 preg_replace($this->match, $paramSpec['Value'], $this->uri);
         }

@@ -20,6 +20,7 @@ class LeftTrim extends Rule
 {
     /**
      * Characters to trim from the left side of the URI.
+     *
      * @var string
      */
     protected $characters;
@@ -27,10 +28,10 @@ class LeftTrim extends Rule
     /**
      * Construct the LeftTrim URI Rule.
      *
-     * @param string $characters    The characters to left trim from the URI.
+     * @param string $characters The characters to left trim from the URI.
      * @param bool   $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     *                           Whether the rule can definitely give the final
+     *                           route for all URIs that it matches.
      */
     public function __construct($characters, $authoritative = false)
     {
@@ -61,7 +62,7 @@ class LeftTrim extends Rule
     public function isMatch()
     {
         return isset($this->uri[0]) &&
-            (strpos($this->characters, $this->uri[0]) !== false);
+        (strpos($this->characters, $this->uri[0]) !== false);
     }
 }
 // EOF

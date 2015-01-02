@@ -22,6 +22,7 @@ class VarExport implements ViewIface
 {
     /**
      * Variable to export.
+     *
      * @var mixed
      */
     protected $var;

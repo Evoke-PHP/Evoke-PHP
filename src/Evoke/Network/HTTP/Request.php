@@ -97,10 +97,10 @@ EOP;
      */
     public function getMethod()
     {
-        if (!isset($_SERVER['REQUEST_METHOD']))
-        {
+        if (!isset($_SERVER['REQUEST_METHOD'])) {
             trigger_error('Request method is not set, defaulting to GET.',
-                          E_USER_WARNING);
+                E_USER_WARNING);
+
             return 'GET';
         }
 
@@ -115,8 +115,7 @@ EOP;
      */
     public function getQueryParam($param)
     {
-        if (!isset($_REQUEST[$param]))
-        {
+        if (!isset($_REQUEST[$param])) {
             throw new LogicException(
                 __METHOD__ . ' should only be called if the parameter is set.');
         }
@@ -126,6 +125,7 @@ EOP;
 
     /**
      * Get the query parameters.
+     *
      * @return array|mixed[][] The query parameters.
      */
     public function getQueryParams()
@@ -165,9 +165,8 @@ EOP;
     public function isValidAccept()
     {
         // The Accept header does not appear to be mandatory.
-        if (empty($_SERVER['HTTP_ACCEPT']))
-        {
-            return TRUE;
+        if (empty($_SERVER['HTTP_ACCEPT'])) {
+            return true;
         }
 
         $validationPattern =
@@ -190,9 +189,8 @@ EOP;
     public function isValidAcceptLanguage()
     {
         // The Accept-Language header does not appear to be mandatory.
-        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-        {
-            return TRUE;
+        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return true;
         }
 
         $validationPattern =
@@ -200,7 +198,7 @@ EOP;
             self::PATTERNS_ACCEPT_LANGUAGE . ')^(?&ACCEPT_LANGUAGE)$/x';
 
         return preg_match($validationPattern,
-                          $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
+            $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
     }
 
     /**
@@ -217,8 +215,7 @@ EOP;
      */
     public function parseAccept()
     {
-        if (empty($_SERVER['HTTP_ACCEPT']))
-        {
+        if (empty($_SERVER['HTTP_ACCEPT'])) {
             // The Accept header does not appear to be mandatory.
             return [];
         }
@@ -232,12 +229,11 @@ EOP;
             '(?<Params>(?&ACCEPT_EXTENSION)*)' .
             '/x';
 
-        $accepted = [];
+        $accepted   = [];
         $numMatches = preg_match_all(
             $acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
 
-        if ($numMatches > 0)
-        {
+        if ($numMatches > 0) {
             $paramsPattern =
                 '/(?(DEFINE)' . self::PATTERNS_GENERAL . ')' .
                 ';(?&L)(?<P_KEY>(?&TOKEN))' .
@@ -245,8 +241,7 @@ EOP;
                 '/x';
 
             // Loop through each match, storing it in the accepted array.
-            for ($i = 0; $i < $numMatches; $i++)
-            {
+            for ($i = 0; $i < $numMatches; $i++) {
                 $qFactor = empty($matches['Q_Factor'][$i]) ? 1.0 :
                     $matches['Q_Factor'][$i] + 0.0; // Make it a float.
 
@@ -254,20 +249,21 @@ EOP;
                 // difference for the Accept preference ordering).
                 $params = [];
 
-                if (!empty($matches['Params'][$i]))
-                {
+                if (!empty($matches['Params'][$i])) {
                     preg_match_all($paramsPattern,
-                                   $matches['Params'][$i],
-                                   $paramsMatches);
+                        $matches['Params'][$i],
+                        $paramsMatches);
 
                     $params = array_combine($paramsMatches['P_KEY'],
-                                            $paramsMatches['P_VAL']);
+                        $paramsMatches['P_VAL']);
                 }
 
-                $accepted[] = ['Params'   => $params,
-                               'Q_Factor' => $qFactor,
-                               'Subtype'  => $matches['Subtype'][$i],
-                               'Type'     => $matches['Type'][$i]];
+                $accepted[] = [
+                    'Params'   => $params,
+                    'Q_Factor' => $qFactor,
+                    'Subtype'  => $matches['Subtype'][$i],
+                    'Type'     => $matches['Type'][$i]
+                ];
             }
         }
 
@@ -289,31 +285,31 @@ EOP;
      */
     public function parseAcceptLanguage()
     {
-        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-        {
+        if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // Accept-Language header is not mandatory.
             return [];
         }
 
         // Match the language and its optional Q_Factor.
-        $pattern = '/(?(DEFINE)' .	self::PATTERNS_GENERAL .
+        $pattern = '/(?(DEFINE)' . self::PATTERNS_GENERAL .
             self::PATTERNS_ACCEPT_LANGUAGE . ')' .
             '(?<Language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
             '((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
 
         $acceptLanguages = [];
-        $numLanguages = preg_match_all(
+        $numLanguages    = preg_match_all(
             $pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
-        for ($i = 0; $i < $numLanguages; $i++)
-        {
+        for ($i = 0; $i < $numLanguages; $i++) {
             // The quality value defaults to 1.
             $qFactor =
                 empty($matches['Q_Factor'][$i]) ? 1.0 :
-                $matches['Q_Factor'][$i] + 0.0; // Make it float.
+                    $matches['Q_Factor'][$i] + 0.0; // Make it float.
 
-            $acceptLanguages[] = ['Language' => $matches['Language'][$i],
-                                  'Q_Factor' => $qFactor];
+            $acceptLanguages[] = [
+                'Language' => $matches['Language'][$i],
+                'Q_Factor' => $qFactor
+            ];
         }
 
         usort($acceptLanguages, [$this, 'compareAcceptLanguage']);
@@ -347,7 +343,7 @@ EOP;
     protected function compareAcceptLanguage(Array $first, Array $second)
     {
         return $this->scoreAcceptLanguage($second) -
-            $this->scoreAcceptLanguage($first);
+        $this->scoreAcceptLanguage($first);
     }
 
     /*******************/
@@ -368,10 +364,10 @@ EOP;
         // overridden by a lower level.
         return
             // Normalise to 1                         Multiply by Importance
-            (($accept['Q_Factor'] * 1000)             * 1000000) +
-            ((($accept['Type'] !== '*') ? 1 : 0)      *  900000) +
-            ((($accept['Subtype'] !== '*') ? 1 : 0)   *   90000) +
-            ((count($accept['Params']))               *       1);
+            (($accept['Q_Factor'] * 1000) * 1000000) +
+            ((($accept['Type'] !== '*') ? 1 : 0) * 900000) +
+            ((($accept['Subtype'] !== '*') ? 1 : 0) * 90000) +
+            ((count($accept['Params'])) * 1);
     }
 
     /**

@@ -20,12 +20,14 @@ class Exact extends Match
 {
     /**
      * Fields that can be ignored in the match.
+     *
      * @var string[]
      */
     protected $ignoredFields;
 
     /**
      * The match for the media type.
+     *
      * @var mixed[]
      */
     protected $match;
@@ -37,10 +39,11 @@ class Exact extends Match
      * @param mixed[]  $match         Exact match required from the media type.
      * @param string[] $ignoredFields Fields to be ignored in the match.
      */
-    public function __construct(/* String */ $outputFormat,
-                                Array        $match,
-                                Array        $ignoredFields = ['Q_Factor'])
-    {
+    public function __construct(
+        $outputFormat,
+        Array        $match,
+        Array        $ignoredFields = ['Q_Factor']
+    ) {
         parent::__construct($outputFormat, $match);
 
         $this->ignoredFields = $ignoredFields;
@@ -59,8 +62,7 @@ class Exact extends Match
     {
         $mType = $this->mediaType;
 
-        foreach ($this->ignoredFields as $ignored)
-        {
+        foreach ($this->ignoredFields as $ignored) {
             unset($mType[$ignored]);
         }
 

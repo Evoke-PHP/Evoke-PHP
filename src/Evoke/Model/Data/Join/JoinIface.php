@@ -24,8 +24,8 @@ interface JoinIface
      * @param string    $joinID The canonical join ID.
      * @param JoinIface $join   The join to add.
      */
-    public function addJoin(/* String */ $joinID, JoinIface $join);
-    
+    public function addJoin($joinID, JoinIface $join);
+
     /**
      * Arrange a set of results according to the Join tree.
      *

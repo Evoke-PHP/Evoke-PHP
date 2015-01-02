@@ -5,6 +5,7 @@
  * @package Network\URI
  */
 namespace Evoke\Network\URI;
+
 /**
  * URI Router Interface
  *

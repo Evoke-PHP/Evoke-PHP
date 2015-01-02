@@ -21,6 +21,7 @@ class Prepend extends Rule
 {
     /**
      * String to prepend to the controller.
+     *
      * @var string
      */
     protected $str;
@@ -28,10 +29,10 @@ class Prepend extends Rule
     /**
      * Construct the prepend rule.
      *
-     * @param string $str           The string to prepend.
+     * @param string $str The string to prepend.
      * @param bool   $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     *                    Whether the rule can definitely give the final route
+     *                    for all URIs that it matches.
      */
     public function __construct($str, $authoritative = false)
     {

@@ -51,7 +51,7 @@ interface FormBuilderIface extends ViewIface
      * @param mixed[] $attribs Attributes for the input.
      * @param mixed   $value   Value for the input.
      */
-    public function addInput(Array $attribs, $value = NULL);
+    public function addInput(Array $attribs, $value = null);
 
     /**
      * Add a label to the form.
@@ -77,10 +77,12 @@ interface FormBuilderIface extends ViewIface
      * @param int     $length       The length of the text.
      * @param mixed[] $otherAttribs Other attributes for the input.
      */
-    public function addText($name,
-                            $value,
-                            $length       = 30,
-                            $otherAttribs = []);
+    public function addText(
+        $name,
+        $value,
+        $length = 30,
+        $otherAttribs = []
+    );
 
     /**
      * Add a text area.
@@ -91,11 +93,13 @@ interface FormBuilderIface extends ViewIface
      * @param int      $cols         Number of columns.
      * @param string[] $otherAttribs Other attributes.
      */
-    public function addTextArea(/* String */ $name,
-                                /* String */ $value,
-                                /* Int    */ $rows         = 10,
-                                /* Int    */ $cols         = 50,
-                                Array        $otherAttribs = []);
+    public function addTextArea(
+        $name,
+        $value,
+        $rows = 10,
+        $cols = 50,
+        Array $otherAttribs = []
+    );
 
     /**
      * Set the action of the form.

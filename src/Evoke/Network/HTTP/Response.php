@@ -6,8 +6,8 @@
  */
 namespace Evoke\Network\HTTP;
 
-use InvalidArgumentException,
-    LogicException;
+use InvalidArgumentException;
+use LogicException;
 
 /**
  * HTTP Response
@@ -30,6 +30,54 @@ use InvalidArgumentException,
 class Response implements ResponseIface
 {
     /**
+     * Default status reasons as per the HTTP 1.1 recommendations.
+     *
+     * @const string[]
+     */
+    protected static $statusReasonDefaults =
+        [
+            100 => "Continue",
+            101 => "Switching Protocols",
+            200 => "OK",
+            201 => "Created",
+            202 => "Accepted",
+            203 => "Non-Authoritative Information",
+            204 => "No Content",
+            205 => "Reset Content",
+            206 => "Partial Content",
+            300 => "Multiple Choices",
+            301 => "Moved Permanently",
+            302 => "Found",
+            303 => "See Other",
+            304 => "Not Modified",
+            305 => "Use Proxy",
+            307 => "Temporary Redirect",
+            400 => "Bad Request",
+            401 => "Unauthorized",
+            402 => "Payment Required",
+            403 => "Forbidden",
+            404 => "Not Found",
+            405 => "Method Not Allowed",
+            406 => "Not Acceptable",
+            407 => "Proxy Authentication Required",
+            408 => "Request Time-out",
+            409 => "Conflict",
+            410 => "Gone",
+            411 => "Length Required",
+            412 => "Precondition Failed",
+            413 => "Request Entity Too Large",
+            414 => "Request-URI Too Large",
+            415 => "Unsupported Media Type",
+            416 => "Requested range not satisfiable",
+            417 => "Expectation Failed",
+            500 => "Internal Server Error",
+            501 => "Not Implemented",
+            502 => "Bad Gateway",
+            503 => "Service Unavailable",
+            504 => "Gateway Time-out",
+            505 => "HTTP Version not supported"
+        ];
+    /**
      * The body of the response.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2
@@ -37,7 +85,6 @@ class Response implements ResponseIface
      * @var string
      */
     protected $body = '';
-
     /**
      * The headers for the response (Field_Name => Field_Value).
      *
@@ -48,7 +95,6 @@ class Response implements ResponseIface
      * @var string[]
      */
     protected $headers = [];
-
     /**
      * The HTTP status code for automata (and intelligent humans).
      *
@@ -57,7 +103,6 @@ class Response implements ResponseIface
      * @var int
      */
     protected $statusCode;
-
     /**
      * The HTTP status reason for humans.
      *
@@ -66,54 +111,6 @@ class Response implements ResponseIface
      * @var string
      */
     protected $statusReason;
-
-    /**
-     * Default status reasons as per the HTTP 1.1 recommendations.
-     *
-     * @const string[]
-     */
-    protected static $statusReasonDefaults =
-        [100  => "Continue",
-         101  => "Switching Protocols",
-         200  => "OK",
-         201  => "Created",
-         202  => "Accepted",
-         203  => "Non-Authoritative Information",
-         204  => "No Content",
-         205  => "Reset Content",
-         206  => "Partial Content",
-         300  => "Multiple Choices",
-         301  => "Moved Permanently",
-         302  => "Found",
-         303  => "See Other",
-         304  => "Not Modified",
-         305  => "Use Proxy",
-         307  => "Temporary Redirect",
-         400  => "Bad Request",
-         401  => "Unauthorized",
-         402  => "Payment Required",
-         403  => "Forbidden",
-         404  => "Not Found",
-         405  => "Method Not Allowed",
-         406  => "Not Acceptable",
-         407  => "Proxy Authentication Required",
-         408  => "Request Time-out",
-         409  => "Conflict",
-         410  => "Gone",
-         411  => "Length Required",
-         412  => "Precondition Failed",
-         413  => "Request Entity Too Large",
-         414  => "Request-URI Too Large",
-         415  => "Unsupported Media Type",
-         416  => "Requested range not satisfiable",
-         417  => "Expectation Failed",
-         500  => "Internal Server Error",
-         501  => "Not Implemented",
-         502  => "Bad Gateway",
-         503  => "Service Unavailable",
-         504  => "Gateway Time-out",
-         505  => "HTTP Version not supported"];
-
     /**
      * HTTP protocol version (1.0, 1.1, etc.).
      *
@@ -132,8 +129,7 @@ class Response implements ResponseIface
     public function __construct($httpVersion = '1.1')
     {
         // Ensure httpVersion matches the spec.
-        if (!preg_match('(\d+\.\d+)', $httpVersion))
-        {
+        if (!preg_match('(\d+\.\d+)', $httpVersion)) {
             throw new InvalidArgumentException(
                 'HTTP Version must match Augmented BNF: 1*DIGIT "." 1*DIGIT');
         }
@@ -153,27 +149,23 @@ class Response implements ResponseIface
      */
     public function send()
     {
-        if (headers_sent())
-        {
+        if (headers_sent()) {
             throw new LogicException('Headers have already been sent');
         }
 
-        if (!isset($this->statusCode))
-        {
+        if (!isset($this->statusCode)) {
             throw new LogicException('HTTP Response code must be set.');
         }
 
         $statusLine = 'HTTP/' . $this->httpVersion . ' ' . $this->statusCode;
 
-        if (!empty($this->statusReason))
-        {
+        if (!empty($this->statusReason)) {
             $statusLine .= ' ' . $this->statusReason;
         }
 
         header($statusLine);
 
-        foreach ($this->headers as $field => $value)
-        {
+        foreach ($this->headers as $field => $value) {
             header($field . ': ' . $value);
         }
 
@@ -192,7 +184,6 @@ class Response implements ResponseIface
 
     /**
      * Set the headers to show that the document should be cached.
-
      * This must be called before any output is sent (otherwise the headers will
      * have already been sent).
      *
@@ -201,7 +192,7 @@ class Response implements ResponseIface
      * @param int $minutes The number of minutes to cache the document for.
      * @param int $seconds The number of seconds to cache the document for.
      */
-    public function setCache($days=0, $hours=0, $minutes=0, $seconds=0)
+    public function setCache($days = 0, $hours = 0, $minutes = 0, $seconds = 0)
     {
         // Calculate the offset in seconds.
         $offset = ((((($days * 24) + $hours) * 60) + $minutes) * 60) + $seconds;
@@ -209,7 +200,7 @@ class Response implements ResponseIface
         $this->setHeader('Pragma', 'public');
         $this->setHeader('Cache-Control', 'must-revalidate maxage=' . $offset);
         $this->setHeader('Expires',
-                         gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
+            gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
     }
 
     /**
@@ -234,9 +225,9 @@ class Response implements ResponseIface
      * @param int         $code   The HTTP status code.
      * @param null|string $reason The HTTP status reason.
      */
-    public function setStatus($code, $reason = NULL)
+    public function setStatus($code, $reason = null)
     {
-        $this->statusCode = $code;
+        $this->statusCode   = $code;
         $this->statusReason =
             isset($reason) ? $reason : $this->getStatusReason($code);
     }
