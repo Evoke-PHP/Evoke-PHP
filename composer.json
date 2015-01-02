@@ -3,6 +3,6 @@
     "license": "MIT",
     "name": "Evoke-PHP/Evoke-PHP",
     "require": {
-        "php":     ">=5.3.0"
+        "php":     ">=5.4.0"
     }
 }
