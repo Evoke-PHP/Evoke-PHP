@@ -53,15 +53,21 @@
 
   <target name        = "create-reports"
 		  description = "Create reports on the build."
-		  depends     = "loc,
-						 code-sniffer,
-						 copy-paste-detector,
-						 depend,
-						 documentor,
-						 mess-detector,
-						 unit"/>
-  
+		  depends     = "create-reports-directory,
+                                 loc,
+				 code-sniffer,
+				 copy-paste-detector,
+				 depend,
+				 documentor,
+				 mess-detector,
+				 unit"/>
+
   <!-- Sub Target definitions -->
+  <target name="create-reports-directory"
+          description="Create the reports directory.">
+    <mkdir dir = "${project.reports}"/>
+  </target>
+  
   <target name="code-sniffer"
 		  description="Detect coding standard violations.  Output to the Command line.">
 	<exec executable = "phpcs" passthru = "true">
@@ -148,12 +154,14 @@
   <target name        = "loc"
 		  depends     = "clean"
 		  description = "Measure project size using PHPLOC">
-	<PHPLoc reportType      = "csv"
-			reportName      = "loc"
-			reportDirectory = "${project.reports}">
-	  <fileset refid = "src"/>
-	  <fileset refid = "tst"/>
-	</PHPLoc>	
+	<exec executable="/usr/local/bin/phploc">
+		<arg value="--count-tests" />
+		<arg value="--log-csv" />
+		<arg path="${project.reports}/loc.csv" />
+		<arg value="--log-xml" />
+		<arg path="${src}" />
+		<arg path="${tst}" />
+	</exec>
   </target>
 
   <target name        = "mess-detector"
