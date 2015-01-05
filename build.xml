@@ -24,6 +24,10 @@
               description="The directory for the PHP test files."
               value="${project.basedir}/test/unit"/>
 
+    <property name="project.test_env"
+              description="The test environment directory."
+              value="${project.basedir}/test/environment"/>
+
     <property name="project.reports"
               description="Build report directory"
               value="${project.build}/reports"/>
@@ -41,20 +45,40 @@
     <target name="build"
             description="Check for code quality produce reports on it."
             depends="check-build-sanity,
-						 create-reports"/>
+                     clean,
+                     environment-setup,
+                     create-reports"/>
 
     <target name="check-build-sanity"
             description="Check to see whether a build can be made."
-            depends="lint"/>
+            depends="lint-src,lint-test"/>
 
     <target name="clean"
             description="Remove all of the build artefacts.">
-        <delete dir="${project.reports}"/>
+        <if>
+            <available file="${project.reports}" type="dir"/>
+            <then>
+                <delete dir="${project.reports}"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="environment-setup"
+            description="Setup the environment for the build.">
+        <composer composer="/usr/bin/composer" command="update"/>
+        <if>
+            <not>
+                <available file="${project.reports}" type="dir"/>
+            </not>
+            <then>
+                <mkdir dir="${project.reports}"/>
+            </then>
+        </if>
     </target>
 
     <target name="create-reports"
             description="Create reports on the build."
-            depends="create-reports-directory,
+            depends="environment-setup,
                      loc,
 				     code-sniffer,
                      copy-paste-detector,
@@ -64,20 +88,12 @@
 				     unit"/>
 
     <!-- Sub Target definitions -->
-    <target name="create-reports-directory"
-            description="Create the reports directory.">
-        <mkdir dir="${project.reports}"/>
-    </target>
-
     <target name="code-sniffer"
             description="Detect coding standard violations.  Output to the Command line.">
-        <exec executable="phpcs" passthru="true">
-            <arg value="--report-checkstyle=${project.reports}/code-sniffer-checkstyle.xml"/>
-            <arg value="--standard=${project.config}/code-sniffer.xml"/>
-            <arg value="--tab-width=4"/>
-            <arg value="-p"/>
-            <arg path="${project.source}"/>
-        </exec>
+        <phpcodesniffer standard="PSR2">
+            <formatter type="checkstyle" outfile="${project.reports}/code-sniffer-checkstyle.xml"/>
+            <fileset refid="src"/>
+        </phpcodesniffer>
     </target>
 
     <target name="copy-paste-detector">
@@ -106,40 +122,26 @@
         </phpdepend>
     </target>
 
-    <target name="documentor-update"
-            description="Update API documentation using phpDocumentor">
-        <!-- This comment should work, but fails miserably due to a bad phpdoc2 task
-             implementation or my current configuration.
-             <phpdoc2 destdir = "dox">
-               <fileset refid = "src"/>
-             </phpdoc2>
-        -->
-        <exec executable="phpdoc" passthru="true">
-            <arg value="run"/>
-            <arg value="-d"/>
-            <arg path="${project.source}"/>
-            <arg value="-t"/>
-            <arg path="${project.reports}/doc"/>
-            <arg value="--title"/>
-            <arg value="Evoke-PHP"/>
-            <arg value="--defaultpackagename"/>
-            <arg value="Evoke"/>
-            <arg value="--sourcecode"/>
-            <arg value="--visibility"/>
-            <arg value="public,protected,private"/>
-        </exec>
+    <target name="documentor"
+            description="Generate or update API documentation using phpDocumentor">
+        <if>
+            <not>
+                <available file="${project.reports}/doc" type="dir"/>
+            </not>
+            <then>
+                <mkdir dir="${project.reports}/doc"/>
+            </then>
+        </if>
+        <phpdoc2
+                defaultPackageName="Evoke"
+                destdir = "${project.reports}/doc"
+                title="Evoke-PHP">
+            <fileset refid = "src"/>
+        </phpdoc2>
     </target>
 
-    <target name="documentor"
-            depends="clean, documentor-update"
-            description="Generate API documentation using phpDocumentor"/>
-
-    <target name="lint"
-            depends="lint-src, lint-test"
-            description="Syntax check the source and test files."/>
-
     <target name="lint-src"
-            description="Syntax check the php source files">
+            description="Syntax check the php source files.">
         <phplint deprecatedAsError="true">
             <fileset refid="src"/>
         </phplint>
@@ -153,16 +155,14 @@
     </target>
 
     <target name="loc"
-            depends="clean"
             description="Measure project size using PHPLOC">
-        <exec executable="/usr/local/bin/phploc">
-            <arg value="--count-tests"/>
-            <arg value="--log-csv"/>
-            <arg path="${project.reports}/loc.csv"/>
-            <arg value="--log-xml"/>
-            <arg path="${src}"/>
-            <arg path="${tst}"/>
-        </exec>
+        <phploc countTests="true"
+                reportDirectory="${project.reports}"
+                reportName="loc"
+                reportType="csv">
+            <fileset refid="src"/>
+            <fileset refid="tst"/>
+        </phploc>
     </target>
 
     <target name="mess-detector"
@@ -179,13 +179,9 @@
     <target name="unit"
             depends="clean"
             description="Run unit tests with PHPUnit">
-
-        <exec executable="composer" passthru="true">
-            <arg value="update"/>
-            <arg value="-d"/>
-            <arg value="${project.test}/../environment"/>
-        </exec>
-
+        <composer composer="/usr/bin/composer" command="update">
+                <arg value="-d ${project.test_env}"/>
+        </composer>
         <exec executable="phpunit" passthru="true">
             <arg value="-c"/>
             <arg file="${project.config}/unit.xml"/>
