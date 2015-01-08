@@ -64,8 +64,7 @@ class Router implements RouterIface
             }
         }
 
-        throw new OutOfBoundsException(
-            'no output formats match the Accepted Media Types.');
+        throw new OutOfBoundsException('no output formats match the Accepted Media Types.');
     }
 }
 // EOF

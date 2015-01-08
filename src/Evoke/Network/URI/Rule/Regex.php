@@ -20,14 +20,12 @@ class Regex extends Rule
 {
     /**
      * Controller regex match and replace.
-     *
      * @var string[]
      */
     protected $controller;
 
     /**
      * Regex to determine whether this rule matches.
-     *
      * @var string
      */
     protected $match;
@@ -47,14 +45,10 @@ class Regex extends Rule
     /**
      * Construct the Regex Rule.
      *
-     * @param string[] $controller
-     * Controller regex match and replace.
-     * @param string   $match
-     * Regex to determine whether the rule matches.
-     * @param Array[]  $params
-     * Parameters each with a key and value regex for match and replacement.
-     * @param bool     $authoritative
-     * Whether the rule is authoritative.
+     * @param string[] $controller    Controller regex match and replace.
+     * @param string   $match         Regex to determine whether the rule matches.
+     * @param Array[]  $params        Parameters each with a key and value regex for match and replacement.
+     * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
     public function __construct(
@@ -99,9 +93,11 @@ class Regex extends Rule
      */
     public function getController()
     {
-        return preg_replace($this->controller['Match'],
+        return preg_replace(
+            $this->controller['Match'],
             $this->controller['Replace'],
-            $this->uri);
+            $this->uri
+        );
     }
 
     /**
@@ -117,12 +113,8 @@ class Regex extends Rule
             if (preg_match($param['Key']['Match'], $this->uri) &&
                 preg_match($param['Value']['Match'], $this->uri)
             ) {
-                $paramsFound[preg_replace($param['Key']['Match'],
-                    $param['Key']['Replace'],
-                    $this->uri)]
-                    = preg_replace($param['Value']['Match'],
-                    $param['Value']['Replace'],
-                    $this->uri);
+                $paramsFound[preg_replace($param['Key']['Match'], $param['Key']['Replace'], $this->uri)] =
+                    preg_replace($param['Value']['Match'], $param['Value']['Replace'], $this->uri);
             }
         }
 

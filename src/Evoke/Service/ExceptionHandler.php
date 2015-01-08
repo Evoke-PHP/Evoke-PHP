@@ -78,8 +78,7 @@ class ExceptionHandler
         Exception $viewException = null
     ) {
         if ($showException && !isset($viewException)) {
-            throw new InvalidArgumentException(
-                'needs Exception view if we are showing the exception.');
+            throw new InvalidArgumentException('needs Exception view if we are showing the exception.');
         }
 
         $this->response       = $response;
@@ -111,18 +110,15 @@ class ExceptionHandler
 
         if (!empty($currentBuffer)) {
             trigger_error(
-                'Buffer needs to be flushed in exception handler for ' .
-                'clean error page.  Buffer was: ' . $currentBuffer,
-                E_USER_WARNING);
+                'Buffer needs to be flushed in exception handler for clean error page.  Buffer was: ' . $currentBuffer,
+                E_USER_WARNING
+            );
             $this->writer->flush();
         }
 
         $this->viewMessageBox->addContent(
-            [
-                'div',
-                ['class' => 'Description'],
-                'The administrator has been notified.'
-            ]);
+            ['div', ['class' => 'Description'], 'The administrator has been notified.']
+        );
 
         if ($this->showException) {
             $this->viewException->set($uncaughtException);
@@ -130,18 +126,8 @@ class ExceptionHandler
         }
 
         $this->writer->writeStart();
-        $this->writer->write(
-            [
-                'head',
-                [],
-                [['title', [], ['Uncaught Exception']]]
-            ]);
-        $this->writer->write(
-            [
-                'body',
-                [],
-                [$this->viewMessageBox->get()]
-            ]);
+        $this->writer->write(['head', [], [['title', [], ['Uncaught Exception']]]]);
+        $this->writer->write(['body', [], [$this->viewMessageBox->get()]]);
         $this->writer->writeEnd();
 
         $this->response->setStatus(500);

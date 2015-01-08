@@ -68,7 +68,6 @@ class Columnar extends Join
         $data = [];
 
         foreach ($results as $result) {
-
             $key = implode('_', array_intersect_key($result, $this->keys));
 
             if ($key === '') {

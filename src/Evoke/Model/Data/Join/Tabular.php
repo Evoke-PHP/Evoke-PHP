@@ -239,8 +239,7 @@ class Tabular extends Join
                 $this->isResult($splitResult[$this->tableName])
             ) {
                 $rowID  = $this->filterRowID($splitResult[$this->tableName]);
-                $result = $this->filterRowFields(
-                    $splitResult[$this->tableName]);
+                $result = $this->filterRowFields($splitResult[$this->tableName]);
 
                 if (!isset($rowID)) {
                     // As we don't have a key to identify the row we must check
@@ -282,8 +281,7 @@ class Tabular extends Join
                         }
 
                         // Recurse - Arrange the single result (splitResult).
-                        $jointData[$joinID] = $join->arrangeSplitResults(
-                            [$splitResult], $jointData[$joinID]);
+                        $jointData[$joinID] = $join->arrangeSplitResults([$splitResult], $jointData[$joinID]);
                     }
                 }
             }
@@ -310,8 +308,7 @@ class Tabular extends Join
 
         foreach ($this->keys as $key) {
             if (!isset($row[$key])) {
-                throw new DomainException(
-                    'Missing Key: ' . $key . ' for table: ' . $this->tableName);
+                throw new DomainException('Missing Key: ' . $key . ' for table: ' . $this->tableName);
             }
 
             $rowID .= (empty($rowID) ? '' : '_') . $row[$key];
@@ -353,10 +350,10 @@ class Tabular extends Join
                 }
 
                 throw new DomainException(
-                    'Each flat result field should be able to be split by ' .
-                    'containing a single table separator.' . "\n" .
-                    'Flat result field: ' . var_export($field, true) . "\n" .
-                    'Table separator: ' . var_export($this->separator, true));
+                    'Each flat result field should be able to be split by containing a single table separator.' . "\n" .
+                    'Flat result field: ' . var_export($field, true) . "\n" . 'Table separator: ' .
+                    var_export($this->separator, true)
+                );
             }
 
             if (!isset($splitResult[$separated[0]])) {

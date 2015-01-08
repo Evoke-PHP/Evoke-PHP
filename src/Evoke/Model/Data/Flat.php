@@ -198,9 +198,9 @@ class Flat implements FlatIface
     public function offsetSet($offset, $value)
     {
         throw new BadMethodCallException(
-            __METHOD__ . ' should never be called - data is only ' .
-            'transferable it is not to be modified.  It was called with ' .
-            'offset: ' . $offset . ' and value: ' . $value);
+            __METHOD__ . ' should never be called - data is only transferable it is not to be modified.  It was ' .
+            'called with offset: ' . $offset . ' and value: ' . $value
+        );
     }
 
     /**
@@ -213,9 +213,9 @@ class Flat implements FlatIface
     public function offsetUnset($offset)
     {
         throw new BadMethodCallException(
-            __METHOD__ . ' should never be called - data is only ' .
-            'transferable it is not to be modified.  It was called with ' .
-            'offset: ' . $offset);
+            __METHOD__ . ' should never be called - data is only transferable it is not to be modified.  It was ' .
+            'called with offset: ' . $offset
+        );
     }
 
     /*********************/

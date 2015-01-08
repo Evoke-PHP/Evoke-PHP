@@ -95,8 +95,7 @@ class Session implements SessionIface
                     throw new RuntimeException('session_start failed.');
                 }
             } else {
-                throw new RuntimeException(
-                    'session started after headers sent.');
+                throw new RuntimeException('session started after headers sent.');
             }
         }
 
@@ -266,7 +265,7 @@ class Session implements SessionIface
             // Set currentDomain to reference $_SESSION.
             $currentDomain     =& $_SESSION;
             $previousSubdomain = $currentDomain;
-            $lastSubdomain     = NULL;
+            $lastSubdomain     = null;
 
             foreach ($this->domain as $subdomain) {
                 // Update the currentDomain to reference the session subdomain.

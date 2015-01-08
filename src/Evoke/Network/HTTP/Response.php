@@ -130,8 +130,7 @@ class Response implements ResponseIface
     {
         // Ensure httpVersion matches the spec.
         if (!preg_match('(\d+\.\d+)', $httpVersion)) {
-            throw new InvalidArgumentException(
-                'HTTP Version must match Augmented BNF: 1*DIGIT "." 1*DIGIT');
+            throw new InvalidArgumentException('HTTP Version must match Augmented BNF: 1*DIGIT "." 1*DIGIT');
         }
 
         $this->httpVersion = $httpVersion;
@@ -199,8 +198,7 @@ class Response implements ResponseIface
 
         $this->setHeader('Pragma', 'public');
         $this->setHeader('Cache-Control', 'must-revalidate maxage=' . $offset);
-        $this->setHeader('Expires',
-            gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
+        $this->setHeader('Expires', gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
     }
 
     /**

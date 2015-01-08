@@ -63,16 +63,15 @@ class TreeBuilder
         $mpttItems = count($mptt);
 
         if ($mpttItems < 1) {
-            throw new InvalidArgumentException(
-                'needs MPTT entries to build tree.');
+            throw new InvalidArgumentException('needs MPTT entries to build tree.');
         }
 
         if (!isset($mptt[0][$this->left],
             $mptt[0][$this->right])
         ) {
             throw new InvalidArgumentException(
-                'needs MPTT root with ' . $this->left . ' and ' . $this->right .
-                ' fields.');
+                'needs MPTT root with ' . $this->left . ' and ' . $this->right . ' fields.'
+            );
         }
 
         $rootNode         = new Tree;
@@ -92,8 +91,8 @@ class TreeBuilder
                 $mptt[$i][$this->right])
             ) {
                 throw new InvalidArgumentException(
-                    'needs MPTT data at ' . $i . ' with ' . $this->left .
-                    ' and ' . $this->right . ' fields.');
+                    'needs MPTT data at ' . $i . ' with ' . $this->left . ' and ' . $this->right . ' fields.'
+                );
             }
             $node       = new Tree;
             $childNodes = ($mptt[$i][$this->right] -

@@ -18,8 +18,8 @@ use PDO;
  *
  * WARNING
  *
- * This is only to be used for fixed or sanitized data. It should not be used
- * with human input data. This code does not avoid SQL injections.
+ * This is only to be used for fixed or sanitized data. It should not be used with human input data. This code does not
+ * avoid SQL injections.
  *
  * Maps a single database table.
  *
@@ -113,14 +113,10 @@ class Table
     /**
      * Read data from the table.
      *
-     * @param mixed[]     $fields
-     * The fields to read.
-     * @param mixed[]     $conditions
-     * Conditions to match (defaults to match all).
-     * @param string|null $order
-     * Order to sort the records by (defaults to no order).
-     * @param string|null $limit
-     * Limit of records to read (defaults to unlimited).
+     * @param mixed[]     $fields     The fields to read.
+     * @param mixed[]     $conditions Conditions to match (defaults to match all).
+     * @param string|null $order      Order to sort the records by (defaults to no order).
+     * @param string|null $limit      Limit of records to read (defaults to unlimited).
      *
      * @return mixed[] Array of records from the table.
      */
@@ -185,8 +181,7 @@ class Table
         }
 
         $statement = $this->pdo->prepare($sql);
-        $params    = array_merge(array_values($newRecord),
-            array_values($oldMatch));
+        $params    = array_merge(array_values($newRecord), array_values($oldMatch));
         $statement->execute($params);
     }
 
@@ -198,12 +193,8 @@ class Table
      * Implode the array with placeholders inserted for a PDO statement.
      *
      * @param mixed[] $placeholders The array to implode.
-     * @param string  $between
-     *                              String to place between the key and the
-     *                              placeholder.
-     * @param string  $separator
-     *                              String to use as a separator between items
-     *                              in the array.
+     * @param string  $between      String to place between the key and the placeholder.
+     * @param string  $separator    String to use as a separator between items in the array.
      * @return string
      */
     private function placeholdersKeyed(

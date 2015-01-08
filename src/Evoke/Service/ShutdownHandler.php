@@ -71,15 +71,12 @@ class ShutdownHandler
      *
      * @param string        $email          Email to use as a contact.
      * @param ResponseIface $response
-     * @param bool          $showError      Whether to show the error (You
-     *                                      might not want to do this for
-     *                                      security reasons).
+     * @param bool          $showError      Whether to show the error (You might not want to do this for security
+     *                                      reasons).
      * @param MessageBox    $viewMessageBox View for the message box.
-     * @param WriterIface   $writer         Writer object to write the fatal
-     *                                      message.
+     * @param WriterIface   $writer         Writer object to write the fatal message.
      * @param Error         $viewError      View for the error.
-     * @throws InvalidArgumentException     If showError is set without an
-     *                                      error view supplied.
+     * @throws InvalidArgumentException     If showError is set without an error view supplied.
      */
     public function __construct(
         $email,
@@ -90,8 +87,7 @@ class ShutdownHandler
         Error $viewError = null
     ) {
         if ($showError && !isset($viewError)) {
-            throw new InvalidArgumentException(
-                'needs Error view if we are showing the error.');
+            throw new InvalidArgumentException('needs Error view if we are showing the error.');
         }
 
         $this->email          = $email;
@@ -114,7 +110,8 @@ class ShutdownHandler
         $err = error_get_last();
 
         if (!isset($err['type']) ||
-            !in_array($err['type'],
+            !in_array(
+                $err['type'],
                 [
                     E_USER_ERROR,
                     E_ERROR,
@@ -123,7 +120,8 @@ class ShutdownHandler
                     E_CORE_WARNING,
                     E_COMPILE_ERROR,
                     E_COMPILE_WARNING
-                ])
+                ]
+            )
         ) {
             return;
         }
@@ -133,20 +131,14 @@ class ShutdownHandler
             [
                 'p',
                 ['class' => 'Description'],
-                'This is an error that we were unable to handle.  Please tell ' .
-                'us any information that could help us avoid this error in the ' .
-                'future.  Useful information such as the date, time and what ' .
-                'you were doing when the error occurred should help us fix ' .
-                'this.'
-            ]);
+                'This is an error that we were unable to handle.  Please tell us any information that could help us ' .
+                'avoid this error in the future.  Useful information such as the date, time and what you were doing ' .
+                'when the error occurred should help us fix this.'
+            ]
+        );
 
         if (!empty($this->email)) {
-            $this->viewMessageBox->addContent(
-                [
-                    'div',
-                    ['class' => 'Contact'],
-                    'Contact: ' . $this->email
-                ]);
+            $this->viewMessageBox->addContent(['div', ['class' => 'Contact'], 'Contact: ' . $this->email]);
         }
 
         if ($this->showError) {

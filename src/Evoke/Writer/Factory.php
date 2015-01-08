@@ -51,8 +51,7 @@ class Factory
             case 'XML':
                 return new XML($xmlWriter, 'XML');
             default:
-                throw new DomainException(
-                    'No writer for output format: ' . $outputFormat);
+                throw new DomainException('No writer for output format: ' . $outputFormat);
         }
     }
 }

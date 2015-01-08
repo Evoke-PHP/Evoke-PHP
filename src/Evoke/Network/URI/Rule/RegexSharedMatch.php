@@ -67,8 +67,7 @@ class RegexSharedMatch extends Rule
 
         foreach ($params as $index => $paramSpec) {
             if (!isset($paramSpec['Key'], $paramSpec['Value'])) {
-                throw new InvalidArgumentException(
-                    'param spec needs Key and Value at index: ' . $index);
+                throw new InvalidArgumentException('param spec needs Key and Value at index: ' . $index);
             }
         }
 

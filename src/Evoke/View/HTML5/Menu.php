@@ -81,7 +81,9 @@ class Menu implements ViewIface
         $childrenPosition = 2;
         $currentDepth     = 0;
         $iterator         = new RecursiveIteratorIterator(
-            $tree, RecursiveIteratorIterator::SELF_FIRST);
+            $tree,
+            RecursiveIteratorIterator::SELF_FIRST
+        );
         $menu             = [];
         $menuPtr          =& $menu;
 

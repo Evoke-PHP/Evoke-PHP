@@ -59,13 +59,13 @@ class Error implements ViewIface
             throw new LogicException('needs error');
         }
 
-        $error = array_merge([
-            'file'    => $this->unknown,
-            'line'    => $this->unknown,
-            'message' => $this->unknown,
-            'type'    => $this->unknown
-        ],
-            $this->error);
+        $error = array_merge(
+            ['file'    => $this->unknown,
+             'line'    => $this->unknown,
+             'message' => $this->unknown,
+             'type'    => $this->unknown],
+            $this->error
+        );
 
         return [
             'div',

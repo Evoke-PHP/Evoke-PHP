@@ -102,13 +102,14 @@ class Select
                 $record[$this->fieldValue])
             ) {
                 throw new LogicException(
-                    'Option needs TextField: ' . $this->fieldText .
-                    ' and ValueField: ' . $this->fieldValue);
+                    'Option needs TextField: ' . $this->fieldText . ' and ValueField: ' . $this->fieldValue
+                );
             }
 
             $optionAttribs = array_merge(
                 $this->optionAttribs,
-                ['value' => $record[$this->fieldValue]]);
+                ['value' => $record[$this->fieldValue]]
+            );
 
             if (isset($this->selectedValue) &&
                 $record[$this->fieldValue] == $this->selectedValue

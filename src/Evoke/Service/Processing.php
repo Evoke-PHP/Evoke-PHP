@@ -88,18 +88,15 @@ class Processing implements ProcessingIface
 
         if ($this->matchRequired && (count($matchedKeys) === 0)) {
             throw new DomainException(
-                'Match required processing request with keys: ' .
-                implode(', ', array_keys($this->data)) .
-                ' recognized keys are: ' .
-                implode(' ', array_keys($this->callbacks)));
+                'Match required processing request with keys: ' . implode(', ', array_keys($this->data)) .
+                ' recognized keys are: ' . implode(' ', array_keys($this->callbacks))
+            );
         } elseif ($this->uniqueMatchRequired && count($matchedKeys) > 1) {
             throw new DomainException(
-                'Unique match required processing request with keys: ' .
-                implode(', ', array_keys($this->data)) .
-                ' recognized keys are: ' .
-                implode(', ', array_keys($this->callbacks)) .
-                ' matched keys are: ' .
-                implode(', ', array_keys($matchedKeys)));
+                'Unique match required processing request with keys: ' . implode(', ', array_keys($this->data)) .
+                ' recognized keys are: ' . implode(', ', array_keys($this->callbacks)) .
+                ' matched keys are: ' . implode(', ', array_keys($matchedKeys))
+            );
         }
 
         foreach ($matchedKeys as $key => $callbacks) {

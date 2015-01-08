@@ -51,8 +51,7 @@ class StaticMap implements AutoloadIface
     {
         if (isset($this->staticMap[$name])) {
             if (!file_exists($this->staticMap[$name])) {
-                throw new RuntimeException('File: ' . $this->staticMap[$name] .
-                    ' does not exist.');
+                throw new RuntimeException('File: ' . $this->staticMap[$name] . ' does not exist.');
             }
 
             /** @noinspection PhpIncludeInspection */

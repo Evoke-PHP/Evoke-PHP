@@ -105,7 +105,7 @@ abstract class Join implements JoinIface
     {
         if (isset($this->joins[$join])) {
             return $join;
-        } else if ($this->useAlphaNumMatch) {
+        } elseif ($this->useAlphaNumMatch) {
             $alphaNumJoin      = $this->toAlphaNumLower($join);
             $canonicalJoinKeys = array_keys($this->joins);
 
@@ -144,6 +144,5 @@ abstract class Join implements JoinIface
     {
         return strtolower(preg_replace('~[^[:alnum:]]~', '', $input));
     }
-
 }
 // EOF

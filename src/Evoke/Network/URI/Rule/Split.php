@@ -74,13 +74,11 @@ class Split extends Rule
         parent::__construct($authoritative);
 
         if (empty($parts)) {
-            throw new InvalidArgumentException(
-                'need parts as non-empty array.');
+            throw new InvalidArgumentException('need parts as non-empty array.');
         }
 
         if (empty($separator)) {
-            throw new InvalidArgumentException(
-                'need separator as non-empty string.');
+            throw new InvalidArgumentException('need separator as non-empty string.');
         }
 
         $this->controller = $controller;
@@ -109,7 +107,8 @@ class Split extends Rule
     {
         return array_combine(
             $this->parts,
-            explode($this->separator, substr($this->uri, $this->prefixLen)));
+            explode($this->separator, substr($this->uri, $this->prefixLen))
+        );
     }
 
     /**
@@ -120,11 +119,8 @@ class Split extends Rule
     public function isMatch()
     {
         // The prefix matches AND we have the expected number of parts.
-        return strcmp($this->prefix,
-            substr($this->uri, 0, $this->prefixLen)) === 0 &&
-        (count(explode($this->separator,
-                substr($this->uri, $this->prefixLen))) ===
-            count($this->parts));
+        return strcmp($this->prefix, substr($this->uri, 0, $this->prefixLen)) === 0 &&
+        (count(explode($this->separator, substr($this->uri, $this->prefixLen))) === count($this->parts));
     }
 }
 // EOF

@@ -98,8 +98,7 @@ EOP;
     public function getMethod()
     {
         if (!isset($_SERVER['REQUEST_METHOD'])) {
-            trigger_error('Request method is not set, defaulting to GET.',
-                E_USER_WARNING);
+            trigger_error('Request method is not set, defaulting to GET.', E_USER_WARNING);
 
             return 'GET';
         }
@@ -116,8 +115,7 @@ EOP;
     public function getQueryParam($param)
     {
         if (!isset($_REQUEST[$param])) {
-            throw new LogicException(
-                __METHOD__ . ' should only be called if the parameter is set.');
+            throw new LogicException(__METHOD__ . ' should only be called if the parameter is set.');
         }
 
         return $_REQUEST[$param];
@@ -197,8 +195,7 @@ EOP;
             '/(?(DEFINE)' . self::PATTERNS_GENERAL .
             self::PATTERNS_ACCEPT_LANGUAGE . ')^(?&ACCEPT_LANGUAGE)$/x';
 
-        return preg_match($validationPattern,
-            $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
+        return preg_match($validationPattern, $_SERVER['HTTP_ACCEPT_LANGUAGE']) === 1;
     }
 
     /**
@@ -230,8 +227,7 @@ EOP;
             '/x';
 
         $accepted   = [];
-        $numMatches = preg_match_all(
-            $acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
+        $numMatches = preg_match_all($acceptElementPattern, $_SERVER['HTTP_ACCEPT'], $matches);
 
         if ($numMatches > 0) {
             $paramsPattern =
@@ -250,12 +246,9 @@ EOP;
                 $params = [];
 
                 if (!empty($matches['Params'][$i])) {
-                    preg_match_all($paramsPattern,
-                        $matches['Params'][$i],
-                        $paramsMatches);
+                    preg_match_all($paramsPattern, $matches['Params'][$i], $paramsMatches);
 
-                    $params = array_combine($paramsMatches['P_KEY'],
-                        $paramsMatches['P_VAL']);
+                    $params = array_combine($paramsMatches['P_KEY'], $paramsMatches['P_VAL']);
                 }
 
                 $accepted[] = [
@@ -297,8 +290,7 @@ EOP;
             '((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
 
         $acceptLanguages = [];
-        $numLanguages    = preg_match_all(
-            $pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
+        $numLanguages    = preg_match_all($pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
         for ($i = 0; $i < $numLanguages; $i++) {
             // The quality value defaults to 1.

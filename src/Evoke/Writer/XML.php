@@ -60,17 +60,12 @@ class XML implements WriterIface
     /**
      * Create an XML Writer.
      *
-     * @param XMLWriter $xmlWriter XMLWriter object.
-     * @param string    $docType   Document Type.
-     * @param string    $language  Language of XML being written.
-     * @param bool      $indent
-     *                             Whether the XML produced should be indented.
-     * @param string    $indentString
-     *                             The string that should be used to indent the
-     *                             XML.
-     * @param int[]     $pos
-     *                             Position of the tag, attribs & children in
-     *                             the element.
+     * @param XMLWriter $xmlWriter    XMLWriter object.
+     * @param string    $docType      Document Type.
+     * @param string    $language     Language of XML being written.
+     * @param bool      $indent       Whether the XML produced should be indented.
+     * @param string    $indentString The string that should be used to indent the XML.
+     * @param int[]     $pos          Position of the tag, attribs & children in the element.
      */
     public function __construct(
         XMLWriter $xmlWriter,
@@ -103,8 +98,7 @@ class XML implements WriterIface
     /******************/
 
     /**
-     * Get the XHTML that has been written into the memory buffer (without
-     * resetting it).
+     * Get the XHTML that has been written into the memory buffer (without resetting it).
      *
      * @return string The XHTML from the buffer as a string.
      */
@@ -133,11 +127,10 @@ class XML implements WriterIface
      * Write XML elements into the memory buffer.
      *
      * @param mixed[] $xml
-     * Array accessible value for the xml to be written of the form:
-     * `[$tag, $attributes, $children]`
+     * Array accessible value for the xml to be written of the form: `[$tag, $attributes, $children]`
      *
-     * An example of this is below with the default values that are used for the
-     * options array. Attributes and options are optional.
+     * An example of this is below with the default values that are used for the options array. Attributes and options
+     * are optional.
      * <pre><code>
      * [0 => tag,
      *  1 => ['attrib_1' => '1', 'attrib_2' => '2'],
@@ -148,37 +141,24 @@ class XML implements WriterIface
      */
     public function write($xml)
     {
-        if (empty($xml[$this->pos['Tag']]) ||
-            !is_string($xml[$this->pos['Tag']])
-        ) {
-            throw new InvalidArgumentException(
-                'bad tag: ' . var_export($xml, true));
+        if (empty($xml[$this->pos['Tag']]) || !is_string($xml[$this->pos['Tag']])) {
+            throw new InvalidArgumentException('bad tag: ' . var_export($xml, true));
         }
 
-        if (isset($xml[$this->pos['Attribs']]) &&
-            !is_array($xml[$this->pos['Attribs']])
-        ) {
-            throw new InvalidArgumentException(
-                'bad attributes: ' . var_export($xml, true));
+        if (isset($xml[$this->pos['Attribs']]) && !is_array($xml[$this->pos['Attribs']])) {
+            throw new InvalidArgumentException('bad attributes: ' . var_export($xml, true));
         }
 
-        if (isset($xml[$this->pos['Children']]) &&
-            !is_array($xml[$this->pos['Children']])
-        ) {
-            $xml[$this->pos['Children']]
-                = [$xml[$this->pos['Children']]];
+        if (isset($xml[$this->pos['Children']]) && !is_array($xml[$this->pos['Children']])) {
+            $xml[$this->pos['Children']] = [$xml[$this->pos['Children']]];
         }
 
         $tag      = $xml[$this->pos['Tag']];
-        $attribs  = isset($xml[$this->pos['Attribs']]) ?
-            $xml[$this->pos['Attribs']] : [];
-        $children = isset($xml[$this->pos['Children']]) ?
-            $xml[$this->pos['Children']] : [];
+        $attribs  = isset($xml[$this->pos['Attribs']]) ? $xml[$this->pos['Attribs']] : [];
+        $children = isset($xml[$this->pos['Children']]) ? $xml[$this->pos['Children']] : [];
 
-        // Whether we are normally indenting and we see an element that should
-        // be inline.
-        $specialInlineElement =
-            ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
+        // Whether we are normally indenting and we see an element that should be inline.
+        $specialInlineElement = ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
 
         // Toggle the indent off.
         if ($specialInlineElement) {
@@ -199,8 +179,7 @@ class XML implements WriterIface
             }
         }
 
-        // Some elements should always have a full end tag <div></div> rather
-        // than <div/>
+        // Some elements should always have a full end tag <div></div> rather than <div/>
         if (preg_match('(^(div|iframe|script|textarea)$)i', $tag)) {
             $this->xmlWriter->fullEndElement();
         } else {
@@ -243,11 +222,11 @@ class XML implements WriterIface
                 $this->xmlWriter->startDTD(
                     'html',
                     '-//W3C//DTD XHTML 1.1//EN',
-                    'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
+                    'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
+                );
                 $this->xmlWriter->endDTD();
 
-                $this->xmlWriter->startElementNS(
-                    null, 'html', 'http://www.w3.org/1999/xhtml');
+                $this->xmlWriter->startElementNS(null, 'html', 'http://www.w3.org/1999/xhtml');
                 $this->xmlWriter->writeAttribute('lang', $this->language);
                 $this->xmlWriter->writeAttribute('xml:lang', $this->language);
                 break;

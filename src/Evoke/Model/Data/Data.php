@@ -65,13 +65,22 @@ use OutOfBoundsException;
 class Data extends Flat
 {
     /**
-     * Properties for the data.
-     *
-     * @var Data[]    $jointData     Joins for the data.
-     * @var string    $jointKey      Field used to join the data in a record.
-     * @var JoinIface $joinStructure Structure of the data we are modelling.
+     * Joins for the data.
+     * @var Data[]
      */
-    protected $jointData, $jointKey, $joinStructure;
+    protected $jointData;
+
+    /**
+     * Field used to join the data in a record.
+     * @var string
+     */
+    protected $jointKey;
+
+    /**
+     * Structure of the data we are modelling.
+     * @var JoinIface
+     */
+    protected $joinStructure;
 
     /**
      * Construct a Data model.
