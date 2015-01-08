@@ -266,6 +266,7 @@ class Session implements SessionIface
             // Set currentDomain to reference $_SESSION.
             $currentDomain     =& $_SESSION;
             $previousSubdomain = $currentDomain;
+            $lastSubdomain     = NULL;
 
             foreach ($this->domain as $subdomain) {
                 // Update the currentDomain to reference the session subdomain.

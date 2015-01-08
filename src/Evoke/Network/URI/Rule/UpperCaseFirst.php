@@ -1,13 +1,13 @@
 <?php
 /**
- * URI Uppercase First Rule
+ * URI Upper Case First Rule
  *
  * @package Network\URI\Rule
  */
 namespace Evoke\Network\URI\Rule;
 
 /**
- * URI Uppercase First Rule
+ * URI Upper Case First Rule
  *
  * A rule to convert the first letter of each word to upper case.
  * No parameters are matched by this class.
@@ -17,7 +17,7 @@ namespace Evoke\Network\URI\Rule;
  * @license   MIT
  * @package   Network\URI\Rule
  */
-class UppercaseFirst extends Rule
+class UpperCaseFirst extends Rule
 {
     /**
      * The delimiters define the boundary of words.
