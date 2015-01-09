@@ -22,13 +22,9 @@ use LogicException;
  */
 class Request implements RequestIface
 {
-    // @codingStandardsIgnoreStart
-    // The following breaks line length limits, but it aids readability too
-    // much to split the long lines.
     /**
-     * Regexp subpatterns for the HTTP ACCEPT header.
-     * This depends on PATTERNS_GENERAL or something equivalent being defined.
-     *
+     * Regexp subpatterns for the HTTP ACCEPT header. This depends on PATTERNS_GENERAL or something equivalent being
+     * defined.
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      * @var string
      */
@@ -41,7 +37,6 @@ EOP_ACCEPT;
     /**
      * Regexp subpatterns for HTTP ACCEPT LANGUAGE header.
      * This depends on PATTERNS_GENERAL or something equivalent being defined.
-     *
      * @var string
      */
     const PATTERNS_ACCEPT_LANGUAGE = <<<'EOP_ACCEPT_LANGUAGE'
@@ -85,15 +80,13 @@ EOP_ACCEPT_LANGUAGE;
         (?<TOKEN_CHAR>    [\x21\x23-\x27\x2a\x2b\x2d\x2e\x30-\x39\x41-\x5a\x5e-\x7a\x7c\x7e])
         (?<VALUE>         (?&TOKEN) | (?&QUOTED_STRING))
 EOP;
-    // @codingStandardsIgnoreEnd
 
     /******************/
     /* Public Methods */
     /******************/
 
     /**
-     * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST,
-     * PUT or DELETE).
+     * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST, PUT or DELETE).
      */
     public function getMethod()
     {
@@ -153,9 +146,7 @@ EOP;
     }
 
     /**
-     * Whether the HTTP_ACCEPT header field is valid.
-     *
-     *   * This field specifies the preferred media types for responses.
+     * Whether the HTTP_ACCEPT header field is valid. This field specifies the preferred media types for responses.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      * @return bool
@@ -204,7 +195,6 @@ EOP;
      * This field specifies the preferred media types for responses.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-     *
      * @return Array[] Accepted media types with their quality factor, ordered
      *                 by preference according to compareAccept.  Each element
      *                 of the array has keys defining the Params, Q_Factor,
@@ -241,8 +231,7 @@ EOP;
                 $qFactor = empty($matches['Q_Factor'][$i]) ? 1.0 :
                     $matches['Q_Factor'][$i] + 0.0; // Make it a float.
 
-                // Parse any accept extensions (more extensions makes a
-                // difference for the Accept preference ordering).
+                // Parse any accept extensions (more extensions makes a difference for the Accept preference ordering).
                 $params = [];
 
                 if (!empty($matches['Params'][$i])) {
@@ -272,9 +261,9 @@ EOP;
      *
      * This header field specifies the preferred languages for responses.
      *
-     * @return Array[] The accepted languages from the request in order of
-     *                 quality from highest to lowest.  Each element of the
-     *                 array has keys defining the Language and Q_Factor.
+     * @return Array[]
+     * The accepted languages from the request in order of quality from highest to lowest.  Each element of the array
+     * has keys defining the Language and Q_Factor.
      */
     public function parseAcceptLanguage()
     {
@@ -350,12 +339,11 @@ EOP;
      */
     private function scoreAccept(Array $accept)
     {
-        // The Q_Factor dominates, followed by Type, Subtype and then number of
-        // parameters. The one unknown is the number of parameters, but we
-        // assume that it is less than 10000, so that the score cannot be
-        // overridden by a lower level.
+        // The Q_Factor dominates, followed by Type, Subtype and then number of parameters. The one unknown is the
+        // number of parameters, but we assume that it is less than 10000, so that the score cannot be overridden by a
+        // lower level.
         return
-            // Normalise to 1                         Multiply by Importance
+            // Normalise to 1               Multiply by Importance
             (($accept['Q_Factor'] * 1000) * 1000000) +
             ((($accept['Type'] !== '*') ? 1 : 0) * 900000) +
             ((($accept['Subtype'] !== '*') ? 1 : 0) * 90000) +

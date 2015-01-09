@@ -28,10 +28,8 @@ class Blank extends Rule
     /**
      * Construct the Blank URI Rule.
      *
-     * @param string $replacement Replacement for a blank URI.
-     * @param bool   $authoritative
-     *                            Whether the rule can definitely give the
-     *                            final route for all URIs that it matches.
+     * @param string $replacement   Replacement for a blank URI.
+     * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
     public function __construct($replacement, $authoritative = true)
     {

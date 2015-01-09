@@ -33,8 +33,7 @@ interface RuleIface
     /**
      * Check whether the rule is authoritative.
      *
-     * @return bool Whether the rule can definitely give the final route when it
-     *              matches the input.
+     * @return bool Whether the rule can definitely give the final route when it matches the input.
      */
     public function isAuthoritative();
 

@@ -11,8 +11,8 @@ use BadMethodCallException;
 /**
  * Model Read-Only access to flat data.
  *
- * An iterator is supplied to traverse the records within the data.  Fields from
- * the current record of the data are accessed as per a standard Array.
+ * An iterator is supplied to traverse the records within the data.  Fields from the current record of the data are
+ * accessed as per a standard Array.
  *
  * Usage
  * -----
@@ -22,8 +22,7 @@ use BadMethodCallException;
  * $object->setData($data);
  *
  * // Traverse over each record in the data.
- * foreach ($object as $record)
- * {
+ * foreach ($object as $record) {
  *    // Access the fields of each record as though it is an array.
  *    $x = $record['Field'];
  *
@@ -53,8 +52,7 @@ class Flat implements FlatIface
     /******************/
 
     /**
-     * Get the current record as a simple array (without iterator or class
-     * properties).
+     * Get the current record as a simple array (without iterator or class properties).
      *
      * @return mixed[] The current record as a simple array.
      */
@@ -89,9 +87,8 @@ class Flat implements FlatIface
     /***********************/
 
     /**
-     * Return the current record of data (as a Data object with iterator and
-     * reference access).  This is just the object as the object implements the
-     * iterator and references.
+     * Return the current record of data (as a Data object with iterator and reference access).  This is just the object
+     * as the object implements the iterator and references.
      *
      * @return FlatIface
      */
@@ -111,8 +108,7 @@ class Flat implements FlatIface
     }
 
     /**
-     * Get the next record of data. Set the next record within the Data object
-     * and return the object.
+     * Get the next record of data. Set the next record within the Data object and return the object.
      *
      * @return FlatIface|bool Return the next data object, or boolean false.
      */
@@ -204,8 +200,8 @@ class Flat implements FlatIface
     }
 
     /**
-     * We are required to make these available to complete the interface,
-     * but we don't want the element to change, so this should never be called.
+     * We are required to make these available to complete the interface, but we don't want the element to change, so
+     * this should never be called.
      *
      * @param mixed $offset
      * @throws BadMethodCallException *** ALWAYS ***
@@ -223,8 +219,7 @@ class Flat implements FlatIface
     /*********************/
 
     /**
-     * Extra actions to be performed upon updating the current record within the
-     * data.
+     * Extra actions to be performed upon updating the current record within the data.
      *
      * @param mixed[] $record The current record that we are setting.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

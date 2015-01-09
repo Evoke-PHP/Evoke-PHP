@@ -21,16 +21,13 @@ use InvalidArgumentException;
 abstract class Rule implements RuleIface
 {
     /**
-     * Whether the rule can definitely give the final route for all URIs that
-     * it matches.
-     *
+     * Whether the rule can definitely give the final route for all URIs that it matches.
      * @var bool
      */
     protected $authoritative;
 
     /**
      * The URI that the rule is acting upon.
-     *
      * @var string
      */
     protected $uri;
@@ -38,9 +35,7 @@ abstract class Rule implements RuleIface
     /**
      * Construct the URI Rule.
      *
-     * @param bool $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     * @param bool $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
     public function __construct($authoritative)
     {
@@ -64,8 +59,7 @@ abstract class Rule implements RuleIface
     /**
      * Check whether the rule is authoritative.
      *
-     * @return bool Whether the rule can definitely give the final route for all
-     *              URIs that it matches.
+     * @return bool Whether the rule can definitely give the final route for all URIs that it matches.
      */
     public function isAuthoritative()
     {

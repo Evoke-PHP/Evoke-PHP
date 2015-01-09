@@ -13,8 +13,8 @@ use DomainException;
  *
  * The processing class handles the processing of data using callbacks.
  *
- * Each request is received as an array.  We match the keys of the request to
- * the callback array to determine the processing that should be done.
+ * Each request is received as an array.  We match the keys of the request to the callback array to determine the
+ * processing that should be done.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
@@ -25,28 +25,24 @@ class Processing implements ProcessingIface
 {
     /**
      * Associative array of request IDs to processing callback.
-     *
      * @var callable[]
      */
     protected $callbacks = [];
 
     /**
      * The data that we are processing.
-     *
      * @var mixed[]
      */
     protected $data = [];
 
     /**
      * Whether a key is required to match for processing.
-     *
      * @var bool
      */
     protected $matchRequired = false;
 
     /**
      * Whether only a single request type can be processed at a time.
-     *
      * @var bool
      */
     protected $uniqueMatchRequired = true;
@@ -61,10 +57,8 @@ class Processing implements ProcessingIface
      * @param string   $processingKey The request key for the matching.
      * @param callable $callback      The callback that is being added.
      */
-    public function addCallback(
-        $processingKey,
-        callable     $callback
-    ) {
+    public function addCallback($processingKey, callable $callback)
+    {
         if (!isset($this->callbacks[$processingKey])) {
             $this->callbacks[$processingKey] = [];
         }

@@ -9,8 +9,7 @@ namespace Evoke\Network\URI\Rule;
 /**
  * URI String Replace Rule
  *
- * A rule to change strings from the URI so that a controller can be formed.
- * No parameters are matched by this class.
+ * A rule to change strings from the URI so that a controller can be formed. No parameters are matched by this class.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
@@ -21,14 +20,12 @@ class StrReplace extends Rule
 {
     /**
      * The string to match on.
-     *
      * @var string
      */
     protected $match;
 
     /**
      * The string to use as a replacement.
-     *
      * @var string
      */
     protected $replacement;
@@ -36,17 +33,12 @@ class StrReplace extends Rule
     /**
      * Construct the string replacements rule.
      *
-     * @param string $match       The string to match on.
-     * @param string $replacement The string to use as a replacement.
-     * @param bool   $authoritative
-     *                            Whether the rule can definitely give the
-     *                            final route for all URIs that it matches.
+     * @param string $match         The string to match on.
+     * @param string $replacement   The string to use as a replacement.
+     * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct(
-        $match,
-        $replacement,
-        $authoritative = false
-    ) {
+    public function __construct($match, $replacement, $authoritative = false)
+    {
         parent::__construct($authoritative);
 
         $this->match       = $match;

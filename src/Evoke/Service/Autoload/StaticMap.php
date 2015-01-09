@@ -22,7 +22,6 @@ class StaticMap implements AutoloadIface
 {
     /**
      * The static map of classnames to filenames.
-     *
      * @var string[]
      */
     protected $staticMap;

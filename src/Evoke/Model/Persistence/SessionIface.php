@@ -111,8 +111,7 @@ interface SessionIface
     public function keyCount();
 
     /**
-     * Remove the session domain from the session.  This does not remove the
-     * hierarchy above the session domain.
+     * Remove the session domain from the session.  This does not remove the hierarchy above the session domain.
      */
     public function remove();
 

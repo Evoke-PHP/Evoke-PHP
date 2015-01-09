@@ -21,10 +21,10 @@ use RuntimeException;
 class Session implements SessionIface
 {
     /**
-     * The domain within the session that we are managing.  This is an ordered
-     * list of the keys required to reach the domain:
+     * The domain within the session that we are managing.  This is an ordered list of the keys required to reach the
+     * domain:
      *
-     *     ['L1', 'L2', 'L3'] == $_SESSION['L1']['L2']['L3']
+     *     `['L1', 'L2', 'L3'] == $_SESSION['L1']['L2']['L3']`
      *
      * @var string[]
      */
@@ -99,8 +99,7 @@ class Session implements SessionIface
             }
         }
 
-        // Make currentDomain a reference to $_SESSION so that when we change it
-        // we are modifying the session.
+        // Make currentDomain a reference to $_SESSION so that when we change it we are modifying the session.
         $currentDomain =& $_SESSION;
 
         foreach ($this->domain as $subdomain) {
@@ -130,8 +129,7 @@ class Session implements SessionIface
      * Get a copy of the data in the session at the offset specified.
      *
      * @param mixed[] $offset The offset to the data.
-     * @return mixed|null The data at the offset (NULL if the offset doesn't
-     *                        exist).
+     * @return mixed|null The data at the offset (NULL if the offset doesn't exist).
      */
     public function getAtOffset(Array $offset = [])
     {
@@ -251,8 +249,7 @@ class Session implements SessionIface
     }
 
     /**
-     * Remove the session domain from the session.  This does not remove the
-     * hierarchy above the session domain.
+     * Remove the session domain from the session.  This does not remove the hierarchy above the session domain.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)

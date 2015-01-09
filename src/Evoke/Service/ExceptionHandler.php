@@ -26,35 +26,30 @@ class ExceptionHandler
 {
     /**
      * Response Object.
-     *
      * @var ResponseIface
      */
     protected $response;
 
     /**
      * Whether to display the exception.
-     *
      * @var bool
      */
     protected $showException;
 
     /**
      * Exception view.
-     *
      * @var Exception
      */
     protected $viewException;
 
     /**
      * MessageBox view.
-     *
      * @var MessageBox
      */
     protected $viewMessageBox;
 
     /**
      * Writer.
-     *
      * @var WriterIface
      */
     protected $writer;
@@ -67,8 +62,7 @@ class ExceptionHandler
      * @param MessageBox    $viewMessageBox
      * @param WriterIface   $writer
      * @param Exception     $viewException
-     * @throws InvalidArgumentException
-     * If we are showing the exception and don't provide an exception view.
+     * @throws InvalidArgumentException If we are showing the exception and don't provide an exception view.
      */
     public function __construct(
         ResponseIface $response,
@@ -93,12 +87,10 @@ class ExceptionHandler
     /******************/
 
     /**
-     * Handle uncaught exceptions for the system by logging information and
-     * displaying a generic notice to the user so that they are informed of an
-     * error without exposing information that could be used for an attack.
+     * Handle uncaught exceptions for the system by logging information and displaying a generic notice to the user so
+     * that they are informed of an error without exposing information that could be used for an attack.
      *
-     * @param \Exception $uncaughtException
-     * An exception that was not caught in the system.
+     * @param \Exception $uncaughtException An exception that was not caught in the system.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)

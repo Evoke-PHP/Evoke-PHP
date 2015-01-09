@@ -20,14 +20,12 @@ class Logging implements LoggingIface
 {
     /**
      * DateTime for each log message.
-     *
      * @var DateTime
      */
     protected $dateTime;
 
     /**
      * The Logging objects that are observing the log messages.
-     *
      * @var LoggerIface[]
      */
     protected $observers = [];
@@ -59,9 +57,8 @@ class Logging implements LoggingIface
     /**
      * Remove a logger from the observer list.
      *
-     * @param LoggerIface $observer
-     * The logger to remove (If there is more than one occurrence of the logger
-     * in the list then only the first one is removed).
+     * @param LoggerIface $observer The logger to remove (If there is more than one occurrence of the logger in the list
+     *                              then only the first one is removed).
      */
     public function detach(LoggerIface $observer)
     {

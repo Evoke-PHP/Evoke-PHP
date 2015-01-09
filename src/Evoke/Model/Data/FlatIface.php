@@ -17,8 +17,7 @@ namespace Evoke\Model\Data;
 interface FlatIface extends \ArrayAccess, \Iterator
 {
     /**
-     * Get the current record as a simple array (without iterator or class
-     * properties).
+     * Get the current record as a simple array (without iterator or class properties).
      *
      * @return mixed[] The current record as a simple array.
      */

@@ -43,8 +43,8 @@ interface JoinIface
     public function getJoinID($join);
 
     /**
-     * Get the joins from the join object. The join objects generally form tree
-     * structures, so these are the joins from the current node in the tree.
+     * Get the joins from the join object. The join objects generally form tree structures, so these are the joins from
+     * the current node in the tree.
      *
      * @return JoinIface[] The joins from the object identified by their joinID.
      */

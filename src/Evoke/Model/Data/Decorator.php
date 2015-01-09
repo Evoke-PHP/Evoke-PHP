@@ -18,7 +18,6 @@ abstract class Decorator implements FlatIface
 {
     /**
      * Data
-     *
      * @var FlatIface
      */
     protected $data;
@@ -48,8 +47,7 @@ abstract class Decorator implements FlatIface
     }
 
     /**
-     * Get the current record as a simple array (without iterator or class
-     * properties).
+     * Get the current record as a simple array (without iterator or class properties).
      *
      * @return mixed[] The record that we are managing.
      */
@@ -80,8 +78,7 @@ abstract class Decorator implements FlatIface
     }
 
     /**
-     * Get the next record of data. Set the next record within the Data object
-     * and return the object.
+     * Get the next record of data. Set the next record within the Data object and return the object.
      *
      * @return Decorator|bool Return the next data object, or boolean false.
      */

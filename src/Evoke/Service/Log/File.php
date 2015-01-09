@@ -21,42 +21,36 @@ class File implements LoggerIface
 {
     /**
      * The mode for any created directories.
-     *
      * @var int (octal)
      */
     protected $dirMode;
 
     /**
      * The mode for the file.
-     *
      * @var int (octal)
      */
     protected $fileMode;
 
     /**
      * The filename to log to.
-     *
      * @var string
      */
     protected $filename;
 
     /**
      * Whether the file is locked when writing to the file.
-     *
      * @var bool
      */
     protected $locking;
 
     /**
      * Indicates whether or not the resource has been opened.
-     *
      * @var bool
      */
     protected $opened = false;
 
     /**
      * File pointer to the log file.
-     *
      * @var mixed
      */
     private $filePointer;
@@ -69,12 +63,8 @@ class File implements LoggerIface
      * @param int    $fileMode The file permissions for the log file (octal).
      * @param bool   $locking  Whether to lock the file for writing.
      */
-    public function __construct(
-        $filename,
-        $dirMode = 0700,
-        $fileMode = 0640,
-        $locking = true
-    ) {
+    public function __construct($filename, $dirMode = 0700, $fileMode = 0640, $locking = true)
+    {
         $this->dirMode  = $dirMode;
         $this->filename = $filename;
         $this->fileMode = $fileMode;
@@ -99,8 +89,7 @@ class File implements LoggerIface
         }
 
         // Ensure the message is a string.
-        $entry = $date->format('Y-M-d@H:i:sP') . ' [' . $level . '] ' .
-            $message . "\n";
+        $entry = $date->format('Y-M-d@H:i:sP') . ' [' . $level . '] ' . $message . "\n";
 
         // Write to the file, with or without file locking.
         if ($this->locking) {
@@ -117,8 +106,7 @@ class File implements LoggerIface
     /*******************/
 
     /**
-     * Open the log file for output. Creating directories and the log file if
-     * required using the correct mode.
+     * Open the log file for output. Creating directories and the log file if required using the correct mode.
      *
      * @throws RuntimeException If the file cannot be opened in the system.
      */

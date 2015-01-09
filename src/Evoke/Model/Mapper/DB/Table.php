@@ -4,8 +4,8 @@
  *
  * WARNING
  *
- * This is only to be used for fixed or sanitized data. It should not be used
- * with human input data. This code does not avoid SQL injections.
+ * This is only to be used for fixed or sanitized data. It should not be used with human input data. This code does not
+ * avoid SQL injections.
  *
  * @package Model
  */
@@ -117,7 +117,6 @@ class Table
      * @param mixed[]     $conditions Conditions to match (defaults to match all).
      * @param string|null $order      Order to sort the records by (defaults to no order).
      * @param string|null $limit      Limit of records to read (defaults to unlimited).
-     *
      * @return mixed[] Array of records from the table.
      */
     public function read(

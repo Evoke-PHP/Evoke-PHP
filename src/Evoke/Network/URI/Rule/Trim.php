@@ -28,10 +28,8 @@ class Trim extends Rule
     /**
      * Construct the Trim Rule.
      *
-     * @param string $characters The characters to trim from the URI.
-     * @param bool   $authoritative
-     *                           Whether the rule can definitely give the final
-     *                           route for all URIs that it matches.
+     * @param string $characters    The characters to trim from the URI.
+     * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
     public function __construct($characters, $authoritative = false)
     {

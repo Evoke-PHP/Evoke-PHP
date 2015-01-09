@@ -26,42 +26,36 @@ class ShutdownHandler
 {
     /**
      * Email address to be listed as a contact, or empty for no-one.
-     *
      * @var string
      */
     protected $email;
 
     /**
      * Response object.
-     *
      * @var ResponseIface
      */
     protected $response;
 
     /**
      * Whether to show the error.
-     *
      * @var bool
      */
     protected $showError;
 
     /**
      * Error view.
-     *
      * @var Error
      */
     protected $viewError;
 
     /**
      * MessageBox view.
-     *
      * @var MessageBox
      */
     protected $viewMessageBox;
 
     /**
      * Writer object.
-     *
      * @var WriterIface
      */
     protected $writer;
@@ -71,12 +65,11 @@ class ShutdownHandler
      *
      * @param string        $email          Email to use as a contact.
      * @param ResponseIface $response
-     * @param bool          $showError      Whether to show the error (You might not want to do this for security
-     *                                      reasons).
+     * @param bool          $showError      Whether to show the error (You might not want to do this for security).
      * @param MessageBox    $viewMessageBox View for the message box.
      * @param WriterIface   $writer         Writer object to write the fatal message.
      * @param Error         $viewError      View for the error.
-     * @throws InvalidArgumentException     If showError is set without an error view supplied.
+     * @throws InvalidArgumentException If showError is set without an error view supplied.
      */
     public function __construct(
         $email,

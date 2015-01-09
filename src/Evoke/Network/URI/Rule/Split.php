@@ -20,36 +20,30 @@ class Split extends Rule
 {
     /**
      * Controller
-     *
      * @var string
      */
     protected $controller;
 
     /**
      * Parts
-     *
      * @var string[]
      */
     protected $parts;
 
     /**
-     * Prefix string to ignore for breakdown into parts. It must match the
-     * start of the URI for the rule to match.
-     *
+     * Prefix string to ignore for breakdown into parts. It must match the start of the URI for the rule to match.
      * @var string
      */
     protected $prefix;
 
     /**
      * Pre-calculated length for usage throughout.
-     *
      * @var int
      */
     protected $prefixLen;
 
     /**
      * Separator
-     *
      * @var string
      */
     protected $separator;
@@ -64,13 +58,8 @@ class Split extends Rule
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct(
-        $controller,
-        Array        $parts,
-        $prefix,
-        $separator,
-        $authoritative = true
-    ) {
+    public function __construct($controller, Array $parts, $prefix, $separator, $authoritative = true)
+    {
         parent::__construct($authoritative);
 
         if (empty($parts)) {

@@ -9,8 +9,7 @@ namespace Evoke\Network\URI\Rule;
 /**
  * URI Upper Case First Rule
  *
- * A rule to convert the first letter of each word to upper case.
- * No parameters are matched by this class.
+ * A rule to convert the first letter of each word to upper case. No parameters are matched by this class.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
@@ -21,7 +20,6 @@ class UpperCaseFirst extends Rule
 {
     /**
      * The delimiters define the boundary of words.
-     *
      * @var string[]
      */
     protected $delimiters;
@@ -29,16 +27,11 @@ class UpperCaseFirst extends Rule
     /**
      * Construct the UpperCaseFirst Rule.
      *
-     * @param string[] $delimiters
-     * Delimiter strings that show the boundary of words.
-     * @param bool     $authoritative
-     * Whether the rule can definitely give the final route for all URIs that it
-     * matches.
+     * @param string[] $delimiters    Delimiter strings that show the boundary of words.
+     * @param bool     $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct(
-        Array $delimiters,
-        $authoritative = false
-    ) {
+    public function __construct(Array $delimiters, $authoritative = false)
+    {
         parent::__construct($authoritative);
 
         $this->delimiters = $delimiters;

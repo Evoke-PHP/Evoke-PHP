@@ -18,7 +18,6 @@ class RecordList extends Decorator implements RecordListIface
 {
     /**
      * A list of the selected records within the record list.
-     *
      * @var mixed[]
      */
     protected $selectedRecords = [];

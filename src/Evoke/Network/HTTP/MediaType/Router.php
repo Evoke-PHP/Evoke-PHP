@@ -23,7 +23,6 @@ class Router implements RouterIface
 {
     /**
      * Rules that the router uses to route.
-     *
      * @var RuleIface[]
      */
     protected $rules = [];
@@ -34,7 +33,6 @@ class Router implements RouterIface
 
     /**
      * Add a rule to the router.
-     *
      * @param RuleIface $rule HTTP MediaType Rule object.
      */
     public function addRule(RuleIface $rule)
@@ -47,10 +45,7 @@ class Router implements RouterIface
      *
      * @param  mixed[] $acceptedMediaTypes Accepted media types of the browser.
      * @return string The output format.
-     * @throws OutOfBoundsException
-     *                                     When no output format can be chosen
-     *                                     that matches the Accepted Media
-     *                                     Types.
+     * @throws OutOfBoundsException When no output format can be chosen that matches the Accepted Media Types.
      */
     public function route(Array $acceptedMediaTypes)
     {

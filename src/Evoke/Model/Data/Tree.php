@@ -18,21 +18,18 @@ class Tree implements TreeIface
 {
     /**
      * The children of the current node.
-     *
      * @var Tree[]
      */
     protected $children = [];
 
     /**
      * The position of the iterator.
-     *
      * @var int
      */
     protected $position = 0;
 
     /**
      * The value of the current node.
-     *
      * @var mixed
      */
     protected $value;

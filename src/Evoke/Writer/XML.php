@@ -24,35 +24,30 @@ class XML implements WriterIface
 {
     /**
      * Document type.
-     *
      * @var string
      */
     protected $docType;
 
     /**
      * Whether we indent non-inline elements.
-     *
      * @var bool
      */
     protected $indent;
 
     /**
      * Language of XML being written.
-     *
      * @var string
      */
     protected $language;
 
     /**
      * Position of the tag, attribs and children in the element.
-     *
      * @var mixed[]
      */
     protected $pos;
 
     /**
      * XML Writer object.
-     *
      * @var XMLWriter
      */
     protected $xmlWriter;

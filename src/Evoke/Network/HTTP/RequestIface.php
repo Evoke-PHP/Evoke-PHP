@@ -17,8 +17,7 @@ namespace Evoke\Network\HTTP;
 interface RequestIface extends \Evoke\Network\RequestIface
 {
     /**
-     * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST,
-     * PUT or DELETE).
+     * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST, PUT or DELETE).
      */
     public function getMethod();
 
@@ -58,11 +57,9 @@ interface RequestIface extends \Evoke\Network\RequestIface
      * This field specifies the preferred media types for responses.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-     *
-     * @return Array[] Accepted media types with their quality factor, ordered
-     *                 by preference according to compareAccept.  Each element
-     *                 of the array has keys defining the Params, Q_Factor,
-     *                 Subtype and Type.
+     * @return Array[]
+     * Accepted media types with their quality factor, ordered by preference according to compareAccept. Each element of
+     * the array has keys defining the Params, Q_Factor, Subtype and Type.
      */
     public function parseAccept();
 
@@ -73,7 +70,6 @@ interface RequestIface extends \Evoke\Network\RequestIface
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
-     *
      * @return Array[] The accepted languages from the request in order of
      *                 quality from highest to lowest.  Each element of the
      *                 array has keys defining the Language and Q_Factor.

@@ -20,14 +20,12 @@ class TreeBuilder
 {
     /**
      * The left field name.
-     *
      * @var string
      */
     protected $left;
 
     /**
      * The right field name.
-     *
      * @var string
      */
     protected $right;
@@ -101,8 +99,7 @@ class TreeBuilder
             $node->set($mptt[$i]);
             $treePtrs[$level - 1]->add($node);
 
-            // We have processed the node, update the child counts, removing
-            // a level if it has been fully processed.
+            // We have processed the node, update the child counts, removing a level if it has been fully processed.
             for ($lev = $level - 1; $lev >= 0; --$lev) {
                 if (--$children[$lev] === 0) {
                     unset($children[--$level]);
@@ -115,8 +112,7 @@ class TreeBuilder
                 $treePtrs[$level++] =& $node;
             }
 
-            // Unset the local reference to node so that we can use it as a
-            // variable again.
+            // Unset the local reference to node so that we can use it as a variable again.
             unset($node);
         }
 

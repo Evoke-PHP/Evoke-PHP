@@ -20,9 +20,8 @@ use LogicException;
 abstract class Join implements JoinIface
 {
     /**
-     * Array of join identifiers to join objects from the current join.  The
-     * joins form a tree structure which describes the hierarchy of data
-     * represented by the flat structure.
+     * Array of join identifiers to join objects from the current join.  The joins form a tree structure which describes
+     * the hierarchy of data represented by the flat structure.
      *
      * @var JoinIface[]
      */
@@ -36,12 +35,10 @@ abstract class Join implements JoinIface
     protected $joinKeys;
 
     /**
-     * Whether we can refer to joins using a case-insensitive alpha numeric
-     * match in addition to the exact join passed upon adding the join. This
-     * allows us to match joins between different formats such as
-     * Pascal_Case, lowerCamelCase, UpperCamelCase, snake_case. It could
-     * also be used to match ST_uP-iD_&*#(C)(*aSe.  These joins would have
-     * to be matched exactly if this boolean is not set true.
+     * Whether we can refer to joins using a case-insensitive alpha numeric match in addition to the exact join passed
+     * upon adding the join. This allows us to match joins between different formats such as Pascal_Case,
+     * lowerCamelCase, UpperCamelCase, snake_case. It could also be used to match ST_uP-iD_&*#(C)(*aSe.  These joins
+     * would have to be matched exactly if this boolean is not set true.
      *
      * @var bool
      */
@@ -51,8 +48,7 @@ abstract class Join implements JoinIface
      * Construct the Join object.
      *
      * @param bool $useAlphaNumMatch
-     * Whether we can refer to joins using a case-insensitive alpha numeric
-     * match.
+     * Whether we can refer to joins using a case-insensitive alpha numeric match.
      */
     public function __construct($useAlphaNumMatch)
     {
@@ -87,8 +83,7 @@ abstract class Join implements JoinIface
     }
 
     /**
-     * Get the join ID for the specified join or throw an exception if it can't
-     * be found uniquely.
+     * Get the join ID for the specified join or throw an exception if it can't be found uniquely.
      *
      * The join can be matched in two ways:
      *
@@ -120,8 +115,8 @@ abstract class Join implements JoinIface
     }
 
     /**
-     * Get the joins from the join object. The join objects generally form tree
-     * structures, so these are the joins from the current node in the tree.
+     * Get the joins from the join object. The join objects generally form tree structures, so these are the joins from
+     * the current node in the tree.
      *
      * @return JoinIface[] The joins from the object identified by their joinID.
      */

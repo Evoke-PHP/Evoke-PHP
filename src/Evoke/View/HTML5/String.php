@@ -22,7 +22,6 @@ class String implements ViewIface
 {
     /**
      * HTML5 string for parsing into the array based view.
-     *
      * @var string
      */
     protected $html5String;
@@ -32,8 +31,8 @@ class String implements ViewIface
     /******************/
 
     /**
-     * Get the view of the HTML5 in a suitable manner for inclusion of an
-     * element (a single string, or an array of child elements).
+     * Get the view of the HTML5 in a suitable manner for inclusion of an element (a single string, or an array of child
+     * elements).
      *
      * @return string|mixed[][]
      */

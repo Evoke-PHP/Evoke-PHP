@@ -13,20 +13,18 @@ use DomainException;
  *
  * Join data by table.
  *
- * Using a hierarchical join structure we can map a flat set of results like we
- * might receive from a database query to a meaningful hierarchical structure.
+ * Using a hierarchical join structure we can map a flat set of results like we might receive from a database query to a
+ * meaningful hierarchical structure.
  *
  * Usage
  * =====
  *
- * Generally joins should be used via \ref Evoke\Model\Data\Data.  It is a
- * complex task to build a join structure and the associated data containers so
- * \ref Evoke\Model\Data\DBDataBuilder can be used to build the multiple tree
+ * Generally joins should be used via \ref Evoke\Model\Data\Data.  It is a complex task to build a join structure and
+ * the associated data containers so \ref Evoke\Model\Data\DBDataBuilder can be used to build the multiple tree
  * structures required to muster and represent hierarchical data.
  *
- * Below is an example of using Tabular Joins to obtain a meaningful
- * hierarchical structure from a database. The example is for a list of products
- * which can contain a set of related images.
+ * Below is an example of using Tabular Joins to obtain a meaningful hierarchical structure from a database. The example
+ * is for a list of products which can contain a set of related images.
  *
  * Database Structure
  * ------------------
@@ -51,19 +49,18 @@ use DomainException;
  *
  * <pre><code>
  * SELECT
- * Product.ID   AS Product_T_ID,
- * Product.Name AS Product_T_Name,
- * Image.ID     AS Image_T_ID,
- * Image.Name   AS Image_T_Name
+ *     Product.ID   AS Product_T_ID,
+ *     Product.Name AS Product_T_Name,
+ *     Image.ID     AS Image_T_ID,
+ *     Image.Name   AS Image_T_Name
  * FROM
- * Product
- * LEFT JOIN Product_Images ON Product.ID = Product_Images.Product_ID
- * LEFT JOIN Image          ON Image.ID   = Product_Images.Image_ID
+ *     Product
+ *     LEFT JOIN Product_Images ON Product.ID = Product_Images.Product_ID
+ *     LEFT JOIN Image          ON Image.ID   = Product_Images.Image_ID
  * </code></pre>
  *
- * Note: The SQL query forces the results to a tabular format by prepending the
- *       result fields with the table name. This allows the tabular join to
- *       identify the tables which the result fields belong to.
+ * Note: The SQL query forces the results to a tabular format by prepending the result fields with the table name. This
+ *       allows the tabular join to identify the tables which the result fields belong to.
  *
  * Join Structure
  * ------------------
@@ -80,21 +77,21 @@ use DomainException;
  *
  * <pre><code>
  * $results = [['Product_T_ID'   => 1,
- * 'Product_T_Name' => 'P_One',
- * 'Image_T_ID'     => NULL,
- * 'Image_T_Name'   => NULL],
- * ['Product_T_ID'   => 2,
- * 'Product_T_Name' => 'P_Two',
- * 'Image_T_ID'     => 1,
- * 'Image_T_Name'   => 'Image.png'],
- * ['Product_T_ID'   => 3,
- * 'Product_T_Name' => 'P_Three',
- * 'Image_T_ID'     => 2,
- * 'Image_T_Name'   => 'I_One.png'],
- * ['Product_T_ID'   => 3,
- * 'Product_T_Name' => 'P_Three',
- * 'Image_T_ID'     => 3,
- * 'Image_T_Name'   => 'I_Two.png']];
+ *              'Product_T_Name' => 'P_One',
+ *              'Image_T_ID'     => NULL,
+ *              'Image_T_Name'   => NULL],
+ *             ['Product_T_ID'   => 2,
+ *              'Product_T_Name' => 'P_Two',
+ *              'Image_T_ID'     => 1,
+ *              'Image_T_Name'   => 'Image.png'],
+ *             ['Product_T_ID'   => 3,
+ *              'Product_T_Name' => 'P_Three',
+ *              'Image_T_ID'     => 2,
+ *              'Image_T_Name'   => 'I_One.png'],
+ *             ['Product_T_ID'   => 3,
+ *              'Product_T_Name' => 'P_Three',
+ *              'Image_T_ID'     => 3,
+ *              'Image_T_Name'   => 'I_Two.png']];
  * </code></pre>
  *
  * Arrange the Data
@@ -108,20 +105,16 @@ use DomainException;
  *
  * <pre><code>
  * [1 => ['Name'       => 'P_One',
- * 'Joint_Data' =>
- * ['Image' => []]],
- * 2 => ['Name'       => 'P_Two',
- * 'Joint_Data' =>
- * ['Image' => [1 => ['Name' => 'Image.png']]]],
- * 3 => ['Name'       => 'P_Three',
- * 'Joint_Data' =>
- * ['Image' => [2 => ['Name' => 'I_One.png'],
- * 3 => ['Name' => 'I_Two.png']]]]];
+ *        'Joint_Data' => ['Image' => []]],
+ *  2 => ['Name'       => 'P_Two',
+ *        'Joint_Data' => ['Image' => [1 => ['Name' => 'Image.png']]]],
+ *  3 => ['Name'       => 'P_Three',
+ *        'Joint_Data' => ['Image' => [2 => ['Name' => 'I_One.png'],
+ *                                     3 => ['Name' => 'I_Two.png']]]]];
  * </code></pre>
  *
- * The data has been arranged so that a list of products identified by their
- * primary keys contains their associated image lists correctly identified by
- * their image ID.
+ * The data has been arranged so that a list of products identified by their primary keys contains their associated
+ * image lists correctly identified by their image ID.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
@@ -132,36 +125,31 @@ class Tabular extends Join
 {
     /**
      * Field to use for joining data in the arranged results.
-     *
      * @var string
      */
     protected $jointKey;
 
     /**
      * Keys used to identify records in the current table.
-     *
      * @var string[]
      */
     protected $keys;
 
     /**
-     * Whether all flat result fields must be tabular (able to be identified
-     * by their table prefix and separator before their field name).
-     *
+     * Whether all flat result fields must be tabular (able to be identified by their table prefix and separator before
+     * their field name).
      * @var bool
      */
-    protected $requireAllTabularFields;
+    protected $reqAllTabularFields;
 
     /**
      * Separator between table and fields.
-     *
      * @var string
      */
     protected $separator;
 
     /**
      * Table name for the main records.
-     *
      * @var string
      */
     protected $tableName;
@@ -169,19 +157,12 @@ class Tabular extends Join
     /**
      * Construct the tabular join tree used to arrange the data.
      *
-     * @param string   $tableName
-     * Table name for collecting the main results.
-     * @param string[] $keys
-     * Key fields for the records.
-     * @param string   $jointKey
-     * Field to use for joining data.
-     * @param bool     $requireAllTabularFields
-     * Whether all result fields must be tabular.
-     * @param string   $separator
-     * Separator between table and fields.
-     * @param bool     $useAlphaNumMatch
-     * Whether we can refer to joins using a case-insensitive alphanumeric
-     * match.
+     * @param string   $tableName               Table name for collecting the main results.
+     * @param string[] $keys                    Key fields for the records.
+     * @param string   $jointKey                Field to use for joining data.
+     * @param bool     $requireAllTabularFields Whether all result fields must be tabular.
+     * @param string   $separator               Separator between table and fields.
+     * @param bool     $useAlphaNumMatch        Can we refer to joins using a case-insensitive alphanumeric match?
      */
     public function __construct(
         $tableName,
@@ -193,11 +174,11 @@ class Tabular extends Join
     ) {
         parent::__construct($useAlphaNumMatch);
 
-        $this->jointKey                = $jointKey;
-        $this->keys                    = $keys;
-        $this->requireAllTabularFields = $requireAllTabularFields;
-        $this->separator               = $separator;
-        $this->tableName               = $tableName;
+        $this->jointKey            = $jointKey;
+        $this->keys                = $keys;
+        $this->reqAllTabularFields = $requireAllTabularFields;
+        $this->separator           = $separator;
+        $this->tableName           = $tableName;
     }
 
     /******************/
@@ -222,8 +203,8 @@ class Tabular extends Join
     }
 
     /**
-     * Arrange the results which have already been split into tables into
-     * hierarchical results according to the metadata.
+     * Arrange the results which have already been split into tables into hierarchical results according to the
+     * metadata.
      *
      * @param string[][][] $splitResults
      * @param mixed[]      $data
@@ -242,8 +223,8 @@ class Tabular extends Join
                 $result = $this->filterRowFields($splitResult[$this->tableName]);
 
                 if (!isset($rowID)) {
-                    // As we don't have a key to identify the row we must check
-                    // to ensure that the result has not already been added.
+                    // As we don't have a key to identify the row we must check to ensure that the result has not
+                    // already been added.
                     $hasBeenAdded = false;
 
                     foreach ($data as $existingID => $existingEntry) {
@@ -265,8 +246,8 @@ class Tabular extends Join
                     $data[$rowID] = $result;
                 }
 
-                // If this result could contain information for referenced
-                // tables lower in the hierarchy set it in the joint data.
+                // If this result could contain information for referenced tables lower in the hierarchy set it in the
+                // joint data.
                 if (!empty($this->joins)) {
                     if (!isset($data[$rowID][$this->jointKey])) {
                         $data[$rowID][$this->jointKey] = [];
@@ -344,7 +325,7 @@ class Tabular extends Join
             $separated = explode($this->separator, $field);
 
             if (count($separated) !== 2) {
-                if (!$this->requireAllTabularFields) {
+                if (!$this->reqAllTabularFields) {
                     // Skip this non tabular field.
                     continue;
                 }

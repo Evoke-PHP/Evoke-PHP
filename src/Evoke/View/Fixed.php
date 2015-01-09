@@ -18,7 +18,6 @@ class Fixed implements ViewIface
 {
     /**
      * Contents
-     *
      * @var mixed
      */
     protected $contents;

@@ -9,8 +9,7 @@ namespace Evoke\Network\HTTP;
 /**
  * Response Interface
  *
- * The HTTP Response interface designed to meet RFC2616-sec6 and to a lesser
- * extent RFC1945-sec6.
+ * The HTTP Response interface designed to meet RFC2616-sec6 and to a lesser extent RFC1945-sec6.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2014 Paul Young
@@ -32,9 +31,8 @@ interface ResponseIface
     public function setBody($text);
 
     /**
-     * Set the headers to show that the document should be cached.
-     * This must be called before any output is sent (otherwise the headers will
-     * have already been sent).
+     * Set the headers to show that the document should be cached. This must be called before any output is sent
+     * (otherwise the headers will have already been sent).
      *
      * @param int $days    The number of days to cache the document for.
      * @param int $hours   The number of hours to cache the document for.
