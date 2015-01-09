@@ -22,7 +22,7 @@ use LogicException;
  * @link      http://www.w3.org/Protocols/rfc2616/rfc2616.html
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Network\HTTP
  */

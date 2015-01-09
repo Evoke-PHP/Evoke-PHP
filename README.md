@@ -2,10 +2,10 @@
 
 _Bring out your best ideas_
 
-_Evoke PHP_ is a library of independent objects. The library encourages a
-layered architecture that produces maintainable solutions to complex problems.
+_Evoke PHP_ is a library of independent objects. The library encourages a layered architecture that produces
+ maintainable solutions to complex problems.
 
-###Status: ALPHA###
+###Status: Beta###
 [![Build Status](https://secure.travis-ci.org/Evoke-PHP/Evoke-PHP.png?branch=master)](http://travis-ci.org/Evoke-PHP/Evoke-PHP)
 
 * Evoke PHP is still being developed.

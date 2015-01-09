@@ -12,7 +12,7 @@ namespace Evoke\Network\URI\Rule;
  * A rule to convert the first letter of each word to upper case. No parameters are matched by this class.
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Network\URI\Rule
  */

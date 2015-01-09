@@ -12,7 +12,7 @@ namespace Evoke\Network\HTTP;
  * The HTTP Response interface designed to meet RFC2616-sec6 and to a lesser extent RFC1945-sec6.
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Network\HTTP
  */

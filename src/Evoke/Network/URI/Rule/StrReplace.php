@@ -12,7 +12,7 @@ namespace Evoke\Network\URI\Rule;
  * A rule to change strings from the URI so that a controller can be formed. No parameters are matched by this class.
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Network\URI\Rule
  */

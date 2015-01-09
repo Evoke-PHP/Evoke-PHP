@@ -13,7 +13,7 @@ use RuntimeException;
  * File Logger
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Service\Log
  */

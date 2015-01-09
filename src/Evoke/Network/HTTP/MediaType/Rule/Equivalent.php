@@ -12,7 +12,7 @@ namespace Evoke\Network\HTTP\MediaType\Rule;
  * A rule that matches equivalent media types.
  *
  * @author    Paul Young <evoke@youngish.org>
- * @copyright Copyright (c) 2014 Paul Young
+ * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   Network\HTTP\MediaType\Rule
  */
