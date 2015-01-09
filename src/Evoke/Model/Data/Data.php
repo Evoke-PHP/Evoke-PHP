@@ -83,11 +83,8 @@ class Data extends Flat
      * @param Data[]    $jointData     Joins for the data.
      * @param string    $jointKey      Field used to join the data in a record.
      */
-    public function __construct(
-        JoinIface $joinStructure,
-        Array     $jointData = [],
-        $jointKey = 'Joint_Data'
-    ) {
+    public function __construct(JoinIface $joinStructure, Array $jointData = [], $jointKey = 'Joint_Data')
+    {
         $this->joinStructure = $joinStructure;
         $this->jointData     = $jointData;
         $this->jointKey      = $jointKey;

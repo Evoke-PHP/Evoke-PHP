@@ -36,10 +36,8 @@ class TreeBuilder
      * @param string $left
      * @param string $right
      */
-    public function __construct(
-        $left = 'Lft',
-        $right = 'Rgt'
-    ) {
+    public function __construct($left = 'Lft', $right = 'Rgt')
+    {
         $this->left  = $left;
         $this->right = $right;
     }

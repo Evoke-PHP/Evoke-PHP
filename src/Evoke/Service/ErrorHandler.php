@@ -38,10 +38,8 @@ class ErrorHandler
      * @param bool         $suppressErrorHandler Whether to stop the standard error handler from running after handling
      *                                           the error here.
      */
-    public function __construct(
-        LoggingIface $logging,
-        $suppressErrorHandler = false
-    ) {
+    public function __construct(LoggingIface $logging, $suppressErrorHandler = false)
+    {
         $this->suppressErrorHandler = $suppressErrorHandler;
         $this->logging              = $logging;
     }
