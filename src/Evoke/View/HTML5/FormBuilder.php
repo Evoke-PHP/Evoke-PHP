@@ -118,13 +118,11 @@ class FormBuilder implements FormBuilderIface
      */
     public function addInput(Array $attribs, $value = null)
     {
-        $element = ['input', $attribs];
-
         if (isset($value)) {
-            $element[] = $value;
+            $attribs['value'] = $value;
         }
 
-        $this->add($element);
+        $this->add(['input', $attribs]);
     }
 
     /**

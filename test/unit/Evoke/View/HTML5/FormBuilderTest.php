@@ -82,8 +82,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
              ['action' => '', 'method' => 'POST'],
              [
                  ['input',
-                  ['class' => 'Special', 'type' => 'generic'],
-                  'Val']]],
+                  ['class' => 'Special', 'type' => 'generic', 'value' => 'Val']]]],
             $object->get());
     }
 
