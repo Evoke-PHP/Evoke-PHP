@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\HTML5\Error,
-    PHPUnit_Framework_TestCase;
+use Evoke\View\HTML5\Error;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\View\HTML5\Error
@@ -32,20 +32,31 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     public function testGetView()
     {
         $object = new Error('<UNK>');
-        $object->set(['file' => 'FILE',
-                      'line' => 245,
-                      'type' => E_USER_ERROR]);
+        $object->set([
+            'file' => 'FILE',
+            'line' => 245,
+            'type' => E_USER_ERROR
+        ]);
 
         $this->assertSame(
-            ['div',
-             ['class' => 'Error'],
-             [['div',
-               ['class' => 'Details'],
-               [['span', ['class' => 'Type'], 'E_USER_ERROR'],
-                ['span', ['class' => 'File'], 'FILE'],
-                ['span', ['class' => 'Line'], 245]]],
-              ['p', ['class' => 'Message'], '<UNK>']]],
-            $object->get());
+            [
+                'div',
+                ['class' => 'Error'],
+                [
+                    [
+                        'div',
+                        ['class' => 'Details'],
+                        [
+                            ['span', ['class' => 'Type'], 'E_USER_ERROR'],
+                            ['span', ['class' => 'File'], 'FILE'],
+                            ['span', ['class' => 'Line'], 245]
+                        ]
+                    ],
+                    ['p', ['class' => 'Message'], '<UNK>']
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -54,21 +65,32 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     public function testUnknownError()
     {
         $object = new Error('WHO KNOWS');
-        $object->set(['file'    => 'F',
-                      'line'    => 2,
-                      'message' => 'BLAH',
-                      'type'    => -1]);
+        $object->set([
+            'file'    => 'F',
+            'line'    => 2,
+            'message' => 'BLAH',
+            'type'    => -1
+        ]);
 
         $this->assertSame(
-            ['div',
-             ['class' => 'Error'],
-             [['div',
-               ['class' => 'Details'],
-               [['span', ['class' => 'Type'], 'WHO KNOWS'],
-                ['span', ['class' => 'File'], 'F'],
-                ['span', ['class' => 'Line'], 2]]],
-              ['p', ['class' => 'Message'], 'BLAH']]],
-            $object->get());
+            [
+                'div',
+                ['class' => 'Error'],
+                [
+                    [
+                        'div',
+                        ['class' => 'Details'],
+                        [
+                            ['span', ['class' => 'Type'], 'WHO KNOWS'],
+                            ['span', ['class' => 'File'], 'F'],
+                            ['span', ['class' => 'Line'], 2]
+                        ]
+                    ],
+                    ['p', ['class' => 'Message'], 'BLAH']
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**

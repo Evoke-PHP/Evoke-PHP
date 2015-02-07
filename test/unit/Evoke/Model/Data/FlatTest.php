@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Model\Data\FlatTest;
 
-use Evoke\Model\Data\Flat,
-    PHPUnit_Framework_TestCase;
+use Evoke\Model\Data\Flat;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Model\Data\Flat
@@ -17,8 +17,12 @@ class FlatTest extends PHPUnit_Framework_TestCase
     {
         return [
             'Two_Records' => [
-                'Raw_Data' => ['K0' => ['One' => 1, 'Two' => 2],
-                               'K1' => ['One' => 8, 'Two' => 9]]]];
+                'Raw_Data' => [
+                    'K0' => ['One' => 1, 'Two' => 2],
+                    'K1' => ['One' => 8, 'Two' => 9]
+                ]
+            ]
+        ];
     }
 
     /*********/
@@ -36,7 +40,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
         $object->setData($rawData);
 
         $this->assertTrue(isset($object['One'], $object['Two']));
-        $this->assertFalse(isset($object['Non-exsistant']));
+        $this->assertFalse(isset($object['Non-existent']));
     }
 
     /**
@@ -50,8 +54,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
         $object->setData($rawData);
         $count = 0;
 
-        foreach ($object as $testKey => $testData)
-        {
+        foreach ($object as $testKey => $testData) {
             $key = 'K' . $count++;
             $this->assertSame($key, $testKey);
             $this->assertSame($rawData[$key], $testData->getRecord());
@@ -79,10 +82,9 @@ class FlatTest extends PHPUnit_Framework_TestCase
     {
         $object = new Flat;
 
-        foreach ($object as $data)
-        {
+        foreach ($object as $data) {
             // Shouldn't get in here.
-            throw new \Exception('Empty data shouldn\'t enter foreach.');
+            throw new \Exception("Empty data shouldn't enter foreach.");
         }
 
         $this->assertTrue(true);

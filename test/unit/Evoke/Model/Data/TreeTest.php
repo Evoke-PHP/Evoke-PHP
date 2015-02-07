@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Model\Data;
 
-use Evoke\Model\Data\Tree,
-    PHPUnit_Framework_TestCase;
+use Evoke\Model\Data\Tree;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Model\Data\Tree
@@ -15,29 +15,45 @@ class TreeTest extends PHPUnit_Framework_TestCase
 
     public function providerGetChildren()
     {
-        return ['One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
-                'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
-                            $this->getMock('Evoke\Model\Data\TreeIface'),
-                            $this->getMock('Evoke\Model\Data\TreeIface')]]];
+        return [
+            'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
+            'More' => [
+                [
+                    $this->getMock('Evoke\Model\Data\TreeIface'),
+                    $this->getMock('Evoke\Model\Data\TreeIface'),
+                    $this->getMock('Evoke\Model\Data\TreeIface')
+                ]
+            ]
+        ];
     }
 
     public function providerHasChildren()
     {
-        return ['None' => [[], false],
-                'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')],
-                           true],
-                'More' => [[$this->getMock('Evoke\Model\Data\TreeIface'),
-                            $this->getMock('Evoke\Model\Data\TreeIface'),
-                            $this->getMock('Evoke\Model\Data\TreeIface')],
-                           true]];
+        return [
+            'None' => [[], false],
+            'One'  => [
+                [$this->getMock('Evoke\Model\Data\TreeIface')],
+                true
+            ],
+            'More' => [
+                [
+                    $this->getMock('Evoke\Model\Data\TreeIface'),
+                    $this->getMock('Evoke\Model\Data\TreeIface'),
+                    $this->getMock('Evoke\Model\Data\TreeIface')
+                ],
+                true
+            ]
+        ];
     }
 
     public function providerUseValue()
     {
-        return ['Array'  => [[1, '2', new \StdClass]],
-                'Int'    => [1],
-                'String' => ['blah'],
-                'Object' => [new \StdClass]];
+        return [
+            'Array'  => [[1, '2', new \StdClass]],
+            'Int'    => [1],
+            'String' => ['blah'],
+            'Object' => [new \StdClass]
+        ];
     }
 
     public function providerValidNoNext()
@@ -45,8 +61,10 @@ class TreeTest extends PHPUnit_Framework_TestCase
         $oneTree = new Tree;
         $oneTree->add(new Tree);
 
-        return ['Empty' => [new Tree, false],
-                'One'   => [$oneTree, true]];
+        return [
+            'Empty' => [new Tree, false],
+            'One'   => [$oneTree, true]
+        ];
     }
 
     public function providerValidOneNext()
@@ -58,9 +76,11 @@ class TreeTest extends PHPUnit_Framework_TestCase
         $twoTree->add(new Tree);
         $twoTree->add(new Tree);
 
-        return ['Empty' => [new Tree, false],
-                'One'   => [$oneTree, false],
-                'Two'   => [$twoTree, true]];
+        return [
+            'Empty' => [new Tree, false],
+            'One'   => [$oneTree, false],
+            'Two'   => [$twoTree, true]
+        ];
     }
 
     /*********/
@@ -69,13 +89,12 @@ class TreeTest extends PHPUnit_Framework_TestCase
 
     public function testCurrent()
     {
-        $obj = new Tree;
+        $obj      = new Tree;
         $expected = new Tree;
 
         $obj->add(new Tree);
         $obj->add($expected);
         $obj->add(new Tree);
-
         $obj->next();
 
         $this->assertSame($expected, $obj->current());
@@ -88,8 +107,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
     {
         $obj = new Tree;
 
-        foreach ($children as $child)
-        {
+        foreach ($children as $child) {
             $obj->add($child);
         }
 
@@ -103,8 +121,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
     {
         $obj = new Tree;
 
-        foreach ($children as $child)
-        {
+        foreach ($children as $child) {
             $obj->add($child);
         }
 
@@ -124,7 +141,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
 
     public function testRewind()
     {
-        $obj = new Tree;
+        $obj      = new Tree;
         $expected = new Tree;
 
         $obj->add($expected);

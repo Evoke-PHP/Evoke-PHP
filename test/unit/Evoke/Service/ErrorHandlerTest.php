@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Service;
 
-use Evoke\Service\ErrorHandler,
-    PHPUnit_Framework_TestCase;
+use Evoke\Service\ErrorHandler;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Service\ErrorHandler
@@ -34,8 +34,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $object = new ErrorHandler(
-            $this->getMock('Evoke\Service\Log\LoggingIface'));
+        $object = new ErrorHandler($this->getMock('Evoke\Service\Log\LoggingIface'));
         $this->assertInstanceOf('Evoke\Service\ErrorHandler', $object);
     }
 
@@ -56,8 +55,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
 
         // Ensure the error handler returns TRUE which stops the builtin error
         // handler from running on non-reportable errors.
-        $this->assertTrue(
-            $object->handler(1, 'ErrorString', 'ErrorFile', 2, []));
+        $this->assertTrue($object->handler(1, 'ErrorString', 'ErrorFile', 2, []));
     }
 
     /**
@@ -89,15 +87,13 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
         $logging
             ->expects($this->once())
             ->method('log')
-            ->with('EString in EFile on 2 context: ' . print_r(['Yob'], true),
-                   E_USER_ERROR);
+            ->with('EString in EFile on 2 context: ' . print_r(['Yob'], true), E_USER_ERROR);
 
         // Ensure we log all.
         error_reporting(-1);
 
-        $object = new ErrorHandler($logging, TRUE);
-        $this->assertTrue(
-            $object->handler(E_USER_ERROR, 'EString', 'EFile', 2, ['Yob']));
+        $object = new ErrorHandler($logging, true);
+        $this->assertTrue($object->handler(E_USER_ERROR, 'EString', 'EFile', 2, ['Yob']));
     }
 
     /**
@@ -115,8 +111,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
         error_reporting(-1);
 
         $object = new ErrorHandler($logging);
-        $this->assertFalse(
-            $object->handler(E_WARNING, 'EString', 'EFile', 2, []));
+        $this->assertFalse($object->handler(E_WARNING, 'EString', 'EFile', 2, []));
     }
 }
 // EOF

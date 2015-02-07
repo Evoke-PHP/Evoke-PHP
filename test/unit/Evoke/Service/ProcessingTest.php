@@ -1,13 +1,13 @@
 <?php
 namespace Evoke_Test\Service;
 
-use Evoke\Service\Processing,
-    PHPUnit_Framework_TestCase;
+use Evoke\Service\Processing;
+use PHPUnit_Framework_TestCase;
 
-class Test_Callbacks
+class TestCallbacks
 {
     protected $args;
-    protected $argsStack = array();
+    protected $argsStack = [];
 
     public function getArgs()
     {
@@ -21,8 +21,8 @@ class Test_Callbacks
 
     public function setArgs()
     {
-        $arguments = func_get_args();
-        $this->args = $arguments;
+        $arguments         = func_get_args();
+        $this->args        = $arguments;
         $this->argsStack[] = $arguments;
     }
 }
@@ -40,7 +40,7 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
     {
         $obj = new Processing;
         $obj->setData([]);
-        $testCallbacks = new Test_Callbacks;
+        $testCallbacks = new TestCallbacks;
         $obj->addCallback('', [$testCallbacks, 'setArgs']);
         $obj->setMatchRequired();
         $obj->setUniqueMatchRequired();
@@ -60,8 +60,8 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 
     public function testCallsCallbackWithAllButRequestKey()
     {
-        $obj = new Processing;
-        $testCallbacks = new Test_Callbacks;
+        $obj           = new Processing;
+        $testCallbacks = new TestCallbacks;
         $obj->addCallback('RQ', [$testCallbacks, 'setArgs']);
         $obj->setData(['Val' => 1, 'RQ' => 'Key', 'V2' => 2]);
         $obj->process();
@@ -71,22 +71,27 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 
     public function testCallsAllCallbacks()
     {
-        $obj = new Processing(true, true);
-        $testCallbacks = new Test_Callbacks;
+        $obj           = new Processing(true, true);
+        $testCallbacks = new TestCallbacks;
         $obj->addCallback('RQ1', [$testCallbacks, 'setArgs']);
         $obj->addCallback('RQ2', [$testCallbacks, 'setArgs']);
         $obj->setMatchRequired();
         $obj->setUniqueMatchRequired(false);
-        $obj->setData(['V1'  => 1,
-                       'RQ1' => 'K1',
-                       'RQ2' => 'K2',
-                       'V2'  => 2]);
+        $obj->setData([
+            'V1'  => 1,
+            'RQ1' => 'K1',
+            'RQ2' => 'K2',
+            'V2'  => 2
+        ]);
         $obj->process();
 
         $this->assertSame(
-            [[['V1' => 1, 'RQ2' => 'K2', 'V2' => 2]],
-             [['V1' => 1, 'RQ1' => 'K1', 'V2' => 2]]],
-            $testCallbacks->getArgsStack());
+            [
+                [['V1' => 1, 'RQ2' => 'K2', 'V2' => 2]],
+                [['V1' => 1, 'RQ1' => 'K1', 'V2' => 2]]
+            ],
+            $testCallbacks->getArgsStack()
+        );
     }
 
     /**
@@ -95,35 +100,39 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMatchFoundButOneIsRequired()
     {
-        $obj = new Processing;
-        $testCallbacks = new Test_Callbacks;
+        $obj           = new Processing;
+        $testCallbacks = new TestCallbacks;
         $obj->addCallback('RQ1', [$testCallbacks, 'setArgs']);
         $obj->addCallback('RQ2', [$testCallbacks, 'setArgs']);
         $obj->setMatchRequired(true);
         $obj->setUniqueMatchRequired(false);
-        $obj->setData(['V1'  => 1,
-                       'NO1' => 'N1',
-                       'NO2' => 'N2',
-                       'V2'  => 2]);
+        $obj->setData([
+            'V1'  => 1,
+            'NO1' => 'N1',
+            'NO2' => 'N2',
+            'V2'  => 2
+        ]);
         $obj->process();
     }
 
     /**
-         * @expectedException        DomainException
-         * @expectedExceptionMessage Unique match required
-         */
+     * @expectedException        DomainException
+     * @expectedExceptionMessage Unique match required
+     */
     public function testUniqueMatchRequiredButMoreThanOneMatch()
     {
-        $obj = new Processing;
-        $testCallbacks = new Test_Callbacks;
+        $obj           = new Processing;
+        $testCallbacks = new TestCallbacks;
         $obj->addCallback('RQ1', [$testCallbacks, 'setArgs']);
         $obj->addCallback('RQ2', [$testCallbacks, 'setArgs']);
         $obj->setMatchRequired(true);
         $obj->setUniqueMatchRequired(true);
-        $obj->setData(['V1'  => 1,
-                       'RQ1' => 'N1',
-                       'RQ2' => 'N2',
-                       'V2'  => 2]);
+        $obj->setData([
+            'V1'  => 1,
+            'RQ1' => 'N1',
+            'RQ2' => 'N2',
+            'V2'  => 2
+        ]);
         $obj->process();
     }
 }

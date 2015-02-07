@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Writer;
 
-use Evoke\Writer\JSON,
-    PHPUnit_Framework_TestCase;
+use Evoke\Writer\JSON;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Writer\JSON

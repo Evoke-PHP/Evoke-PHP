@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\Prepend,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\Prepend;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\Prepend
@@ -16,12 +16,18 @@ class PrependTest extends PHPUnit_Framework_TestCase
 
     public function providerGetController()
     {
-        return ['Whitespace' => ['Prepend'  => ' ',
-                                 'URI'      => 'any',
-                                 'Expected' => ' any'],
-                'Empty'      => ['Prepend'  => 'Prep',
-                                 'URI'      => '',
-                                 'Expected' => 'Prep']];
+        return [
+            'Whitespace' => [
+                'Prepend'  => ' ',
+                'URI'      => 'any',
+                'Expected' => ' any'
+            ],
+            'Empty'      => [
+                'Prepend'  => 'Prep',
+                'URI'      => '',
+                'Expected' => 'Prep'
+            ]
+        ];
     }
 
     /*********/

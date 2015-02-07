@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Writer;
 
-use Evoke\Writer\Writer,
-    PHPUnit_Framework_TestCase;
+use Evoke\Writer\Writer;
+use PHPUnit_Framework_TestCase;
 
 class WriterNonAbstract extends Writer
 {

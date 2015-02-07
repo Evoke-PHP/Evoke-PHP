@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\StrReplace,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\StrReplace;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\StrReplace
@@ -16,26 +16,38 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
 
     public function providerGetController()
     {
-        return ['Single'   => ['Match'       => 'foo',
-                               'Replacement' => 'bar',
-                               'URI'         => 'thisfoook',
-                               'Expected'    => 'thisbarok'],
-                'Multiple' => ['Match'       => 'a',
-                               'Replacement' => 'zow',
-                               'URI'         => 'arkansas',
-                               'Expected'    => 'zowrkzownszows']];
+        return [
+            'Single'   => [
+                'Match'       => 'foo',
+                'Replacement' => 'bar',
+                'URI'         => 'thisfoook',
+                'Expected'    => 'thisbarok'
+            ],
+            'Multiple' => [
+                'Match'       => 'a',
+                'Replacement' => 'zow',
+                'URI'         => 'arkansas',
+                'Expected'    => 'zowrkzownszows'
+            ]
+        ];
     }
 
     public function providerIsMatch()
     {
-        return ['Matches'   => ['Match'       => 'match',
-                                'Replacement' => 'DC',
-                                'URI'         => 'thismatches',
-                                'Expected'    => true],
-                'Unmatched' => ['Match'       => 'NOT',
-                                'Replacement' => 'DC',
-                                'URI'         => 'notInsensitiveToCase',
-                                'Expected'    => false]];
+        return [
+            'Matches'   => [
+                'Match'       => 'match',
+                'Replacement' => 'DC',
+                'URI'         => 'thismatches',
+                'Expected'    => true
+            ],
+            'Unmatched' => [
+                'Match'       => 'NOT',
+                'Replacement' => 'DC',
+                'URI'         => 'notInsensitiveToCase',
+                'Expected'    => false
+            ]
+        ];
     }
 
     /*********/

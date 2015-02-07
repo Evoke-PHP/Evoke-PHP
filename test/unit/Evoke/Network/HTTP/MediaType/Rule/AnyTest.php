@@ -1,16 +1,18 @@
 <?php
 namespace Evoke_Test\Network\HTTP\MediaType\Rule;
 
-use Evoke\Network\HTTP\MediaType\Rule\Any,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\HTTP\MediaType\Rule\Any;
+use PHPUnit_Framework_TestCase;
 
 class AnyTest extends PHPUnit_Framework_TestCase
 {
     public function providerAlwaysMatches()
     {
-        return ['Any1' => [['blah']],
-                'Any2' => [[]],
-                'Any3' => [[1 => 3, 2 => new \StdClass]]];
+        return [
+            'Any1' => [['blah']],
+            'Any2' => [[]],
+            'Any3' => [[1 => 3, 2 => new \StdClass]]
+        ];
     }
 
     /*********/

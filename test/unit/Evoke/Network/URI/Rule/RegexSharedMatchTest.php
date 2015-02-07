@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule\RegexSharedMatch;
 
-use Evoke\Network\URI\Rule\RegexSharedMatch,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\RegexSharedMatch;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\RegexSharedMatch
@@ -25,21 +25,36 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      */
     public function provider__constructInvalidParamSpec()
     {
-        return array(
-            'Bad_Empty_Param_Spec' =>
-            array('Match'       => 'One1',
-                  'Replacement' => 'One2',
-                  'Params'  => array(array())),
+        return [
+            'Bad_Empty_Param_Spec'       =>
+                [
+                    'Match'       => 'One1',
+                    'Replacement' => 'One2',
+                    'Params'      => [[]]
+                ],
             'Param_Spec_Value_Bad(Bool)' =>
-            array('Match'       => 'Two1',
-                  'Replacement' => 'Two2',
-                  'Params'  => array(array('Key'   => 'Good',
-                                           'NoValue' => false))),
-            'Param_Spec_Key_Bad(Bool)' =>
-            array('Match'       => 'Tri1',
-                  'Replacement' => 'Tri2',
-                  'Params'  => array(array('NoKey'   => false,
-                                           'Value' => 'Good'))));
+                [
+                    'Match'       => 'Two1',
+                    'Replacement' => 'Two2',
+                    'Params'      => [
+                        [
+                            'Key'     => 'Good',
+                            'NoValue' => false
+                        ]
+                    ]
+                ],
+            'Param_Spec_Key_Bad(Bool)'   =>
+                [
+                    'Match'       => 'Tri1',
+                    'Replacement' => 'Tri2',
+                    'Params'      => [
+                        [
+                            'NoKey' => false,
+                            'Value' => 'Good'
+                        ]
+                    ]
+                ]
+        ];
     }
 
     /**
@@ -47,34 +62,48 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      */
     public function providerGetParams()
     {
-        return array(
-            'Empty_Param_Spec' =>
-            array('Match'         => '/myUri/',
-                  'Replacement'   => 'replacement',
-                  'Params'        => array(),
-                  'Authoritative' => false,
-                  'Uri'           => 'myUri/',
-                  'Expected'      => array()),
+        return [
+            'Empty_Param_Spec'          =>
+                [
+                    'Match'         => '/myUri/',
+                    'Replacement'   => 'replacement',
+                    'Params'        => [],
+                    'Authoritative' => false,
+                    'Uri'           => 'myUri/',
+                    'Expected'      => []
+                ],
             'Match_Parameters_From_URI' =>
-            array('Match'         => '/\/Product\/(\w+)\/(\w+)\/(\w+)\/(\d+)/',
-                  'Replacement'   => 'replacement',
-                  'Params'        => array(
-                      array('Key'   => 'Type',
-                            'Value' => '\1'),
-                      array('Key'   => 'Size',
-                            'Value' => '\2'),
-                      array('Key'   => '\3',
-                            'Value' => '\3'),
-                      array('Key'   => 'ID',
-                            'Value' => '\4')),
-                  'Authoritative' => false,
-                  'Uri'           => '/Product/Banana/Big/Yellow/123',
-                  'Expected'      => array(
-                      'Type'   => 'Banana',
-                      'Size'   => 'Big',
-                      'Yellow' => 'Yellow', // Test key can be regexed too.
-                      'ID'     => '123')),
-            );
+                [
+                    'Match'         => '/\/Product\/(\w+)\/(\w+)\/(\w+)\/(\d+)/',
+                    'Replacement'   => 'replacement',
+                    'Params'        => [
+                        [
+                            'Key'   => 'Type',
+                            'Value' => '\1'
+                        ],
+                        [
+                            'Key'   => 'Size',
+                            'Value' => '\2'
+                        ],
+                        [
+                            'Key'   => '\3',
+                            'Value' => '\3'
+                        ],
+                        [
+                            'Key'   => 'ID',
+                            'Value' => '\4'
+                        ]
+                    ],
+                    'Authoritative' => false,
+                    'Uri'           => '/Product/Banana/Big/Yellow/123',
+                    'Expected'      => [
+                        'Type'   => 'Banana',
+                        'Size'   => 'Big',
+                        'Yellow' => 'Yellow', // Test key can be regexed too.
+                        'ID'     => '123'
+                    ]
+                ],
+        ];
     }
 
     /**
@@ -82,35 +111,44 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      */
     public function providerIsMatch()
     {
-        return array(
-            'Match_Empty_Matches_Empty_Uri' =>
-            array('Match'         => '/^$/',
-                  'Replacement'   => 'any',
-                  'Params'        => array(),
-                  'Authoritative' => false,
-                  'Uri'           => '',
-                  'Expected'      => true),
+        return [
+            'Match_Empty_Matches_Empty_Uri'            =>
+                [
+                    'Match'         => '/^$/',
+                    'Replacement'   => 'any',
+                    'Params'        => [],
+                    'Authoritative' => false,
+                    'Uri'           => '',
+                    'Expected'      => true
+                ],
             'Match_Something_Does_Not_Match_Empty_Uri' =>
-            array('Match'         => '/something/',
-                  'Replacement'   => 'good',
-                  'Params'        => array(),
-                  'Authoritative' => false,
-                  'Uri'           => '',
-                  'Expected'      => false),
-            'Match_Different_From_Uri' =>
-            array('Match'         => '/bad/',
-                  'Replacement'   => 'good',
-                  'Params'        => array(),
-                  'Authoritative' => false,
-                  'Uri'           => 'uri',
-                  'Expected'      => false),
-            'Match_Does_Match_Uri' =>
-            array('Match'         => '/good/',
-                  'Replacement'   => 'bad',
-                  'Params'        => array(),
-                  'Authoritative' => false,
-                  'Uri'           => 'hello/goodday',
-                  'Expected'      => true));
+                [
+                    'Match'         => '/something/',
+                    'Replacement'   => 'good',
+                    'Params'        => [],
+                    'Authoritative' => false,
+                    'Uri'           => '',
+                    'Expected'      => false
+                ],
+            'Match_Different_From_Uri'                 =>
+                [
+                    'Match'         => '/bad/',
+                    'Replacement'   => 'good',
+                    'Params'        => [],
+                    'Authoritative' => false,
+                    'Uri'           => 'uri',
+                    'Expected'      => false
+                ],
+            'Match_Does_Match_Uri'                     =>
+                [
+                    'Match'         => '/good/',
+                    'Replacement'   => 'bad',
+                    'Params'        => [],
+                    'Authoritative' => false,
+                    'Uri'           => 'hello/goodday',
+                    'Expected'      => true
+                ]
+        ];
     }
 
     /*********/
@@ -122,9 +160,8 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      */
     public function test__constructGood()
     {
-        $obj = new RegexSharedMatch('str', 'str', array(), true);
-        $this->assertInstanceOf('Evoke\Network\URI\Rule\RegexSharedMatch',
-                                $obj);
+        $obj = new RegexSharedMatch('str', 'str', [], true);
+        $this->assertInstanceOf('Evoke\Network\URI\Rule\RegexSharedMatch', $obj);
     }
 
     /**
@@ -133,14 +170,14 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      * @expectedException InvalidArgumentException
      * @dataProvider      provider__constructInvalidParamSpec
      */
-    public function test__constructInvalidParamSpec(
-        $match, $replacement, Array $paramSpec, $authoritative = false)
+    public function test__constructInvalidParamSpec($match, $replacement, Array $paramSpec, $authoritative = false)
     {
         new RegexSharedMatch($match, $replacement, $paramSpec, $authoritative);
     }
 
     /** Test getResponse and the private method getMappedValue.
-     *  @depends      test__constructGood
+     *
+     * @depends      test__constructGood
      */
     public function testGetController()
     {
@@ -153,11 +190,9 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      * @depends      test__constructGood
      * @dataProvider providerGetParams
      */
-    public function testGetParams(
-        $match, $replacement, Array $params, $authoritative, $uri, $expected)
+    public function testGetParams($match, $replacement, Array $params, $authoritative, $uri, $expected)
     {
-        $obj = new RegexSharedMatch(
-            $match, $replacement, $params, $authoritative);
+        $obj = new RegexSharedMatch($match, $replacement, $params, $authoritative);
         $obj->setURI($uri);
         $this->assertSame($expected, $obj->getParams(), 'unexpected value.');
     }
@@ -168,11 +203,9 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
      * @depends      test__constructGood
      * @dataProvider providerIsMatch
      */
-    public function testIsMatch(
-        $match, $replacement, Array $params, $authoritative, $uri, $expected)
+    public function testIsMatch($match, $replacement, Array $params, $authoritative, $uri, $expected)
     {
-        $obj = new RegexSharedMatch(
-            $match, $replacement, $params, $authoritative);
+        $obj = new RegexSharedMatch($match, $replacement, $params, $authoritative);
         $obj->setURI($uri);
         $this->assertSame($expected, $obj->isMatch(), 'unexpected value.');
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\UpperCaseFirst,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\UpperCaseFirst;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\UpperCaseFirst

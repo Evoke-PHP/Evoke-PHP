@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\StrReplaceRight,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\StrReplaceRight;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\StrReplaceRight
@@ -16,31 +16,44 @@ class StrReplaceRightTest extends PHPUnit_Framework_TestCase
 
     public function providerGetController()
     {
-        return ['Replace_Empty' => ['Uri'         => 'uriEndPart',
-                                    'Match'       => 'EndPart',
-                                    'Replacement' => '',
-                                    'Expected'    => 'uri'],
-                'Change_End'    => ['Uri'         => 'thisMatch',
-                                    'Match'       => 'Match',
-                                    'Replacement' => 'REP',
-                                    'Expected'    => 'thisREP']];
+        return [
+            'Replace_Empty' => [
+                'Uri'         => 'uriEndPart',
+                'Match'       => 'EndPart',
+                'Replacement' => '',
+                'Expected'    => 'uri'
+            ],
+            'Change_End'    => [
+                'Uri'         => 'thisMatch',
+                'Match'       => 'Match',
+                'Replacement' => 'REP',
+                'Expected'    => 'thisREP'
+            ]
+        ];
     }
-
 
     public function providerMatch()
     {
-        return ['Match'     => ['Uri'         => 'uriEndPart',
-                                'Match'       => 'EndPart',
-                                'Replacement' => 'DC',
-                                'Expected'    => true],
-                'No_Match'  => ['Uri'         => 'uriNoMatch',
-                                'Match'       => 'False',
-                                'Replacement' => 'DC',
-                                'Expected'    => false],
-                'Not_Right' => ['Uri'         => 'uriMatchNotAtEnd',
-                                'Match'       => 'Match',
-                                'Replacement' => 'DC',
-                                'Expected'    => false]];
+        return [
+            'Match'     => [
+                'Uri'         => 'uriEndPart',
+                'Match'       => 'EndPart',
+                'Replacement' => 'DC',
+                'Expected'    => true
+            ],
+            'No_Match'  => [
+                'Uri'         => 'uriNoMatch',
+                'Match'       => 'False',
+                'Replacement' => 'DC',
+                'Expected'    => false
+            ],
+            'Not_Right' => [
+                'Uri'         => 'uriMatchNotAtEnd',
+                'Match'       => 'Match',
+                'Replacement' => 'DC',
+                'Expected'    => false
+            ]
+        ];
     }
 
     /*********/

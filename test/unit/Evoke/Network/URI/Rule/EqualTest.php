@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\Equal,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\Equal;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\Equal
@@ -17,10 +17,12 @@ class EqualTest extends PHPUnit_Framework_TestCase
     public function providerMatch()
     {
         return [
-            'Is_Equal' => [true,
-                           new Equal('C', 'M'),
-                           'M']
-            ];
+            'Is_Equal' => [
+                true,
+                new Equal('C', 'M'),
+                'M'
+            ]
+        ];
     }
 
     /*********/
@@ -44,7 +46,7 @@ class EqualTest extends PHPUnit_Framework_TestCase
         $obj = new Equal('controller', 'match', ['Params' => 1], true);
         $this->assertSame(['Params' => 1], $obj->getParams());
     }
-    
+
     /**
      * @dataProvider providerMatch
      */

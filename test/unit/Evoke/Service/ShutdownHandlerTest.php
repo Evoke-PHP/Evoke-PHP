@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Service;
 
-use Evoke\Service\ShutdownHandler,
-    PHPUnit_Framework_TestCase;
+use Evoke\Service\ShutdownHandler;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Service\ShutdownHandler
@@ -23,9 +23,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         $object = new ShutdownHandler(
             'mail@example.com',
             $this->getMock('Evoke\Network\HTTP\ResponseIface'),
-            FALSE,
+            false,
             $this->getMock('Evoke\View\HTML5\MessageBox'),
-            $this->getMock('Evoke\Writer\WriterIface'));
+            $this->getMock('Evoke\Writer\WriterIface')
+        );
 
         $this->assertInstanceOf('Evoke\Service\ShutdownHandler', $object);
     }
@@ -39,9 +40,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         $object = new ShutdownHandler(
             'a@b.com',
             $this->getMock('Evoke\Network\HTTP\ResponseIface'),
-            TRUE,
+            true,
             $this->getMock('Evoke\View\HTML5\MessageBox'),
-            $this->getMock('Evoke\Writer\WriterIface'));
+            $this->getMock('Evoke\Writer\WriterIface')
+        );
     }
 
     /**
@@ -55,7 +57,8 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         set_error_handler(
             function ($errNo, $errStr) {
                 return true;
-            });
+            }
+        );
 
         // Inject a non-shutdown type error.
         trigger_error('Non shutdown type error.', E_USER_ERROR);
@@ -72,9 +75,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         $object = new ShutdownHandler(
             'mail@example.com',
             $this->getMock('Evoke\Network\HTTP\ResponseIface'),
-            FALSE,
+            false,
             $viewMessageBox,
-            $this->getMock('Evoke\Writer\WriterIface'));
+            $this->getMock('Evoke\Writer\WriterIface')
+        );
         $object->handler();
     }
 
@@ -90,7 +94,8 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         set_error_handler(
             function ($errNo, $errStr) {
                 return true;
-            });
+            }
+        );
 
         // Inject a parse error E_PARSE.
         error_reporting(0);
@@ -98,7 +103,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         error_reporting(-1);
 
         $responseIndex = 0;
-        $response = $this->getMock('Evoke\Network\HTTP\ResponseIface');
+        $response      = $this->getMock('Evoke\Network\HTTP\ResponseIface');
         $response
             ->expects($this->at($responseIndex++))
             ->method('setStatus')
@@ -112,7 +117,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             ->method('send');
 
         $viewErrorIndex = 0;
-        $viewError = $this->getMock('Evoke\View\HTML5\Error');
+        $viewError      = $this->getMock('Evoke\View\HTML5\Error');
         $viewError
             ->expects($this->at($viewErrorIndex++))
             ->method('set');
@@ -122,7 +127,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(['div', [], 'View Error']));
 
         $viewMessageBoxIndex = 0;
-        $viewMessageBox = $this->getMock('Evoke\View\HTML5\MessageBox');
+        $viewMessageBox      = $this->getMock('Evoke\View\HTML5\MessageBox');
         $viewMessageBox
             ->expects($this->at($viewMessageBoxIndex++))
             ->method('setTitle')
@@ -130,19 +135,23 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
         $viewMessageBox
             ->expects($this->at($viewMessageBoxIndex++))
             ->method('addContent')
-            ->with(['p',
-                    ['class' => 'Description'],
-                    'This is an error that we were unable to handle.  Please ' .
-                    'tell us any information that could help us avoid this ' .
-                    'error in the future.  Useful information such as the ' .
-                    'date, time and what you were doing when the error ' .
-                    'occurred should help us fix this.']);
+            ->with([
+                'p',
+                ['class' => 'Description'],
+                'This is an error that we were unable to handle.  Please ' .
+                'tell us any information that could help us avoid this ' .
+                'error in the future.  Useful information such as the ' .
+                'date, time and what you were doing when the error ' .
+                'occurred should help us fix this.'
+            ]);
         $viewMessageBox
             ->expects($this->at($viewMessageBoxIndex++))
             ->method('addContent')
-            ->with(['div',
-                    ['class' => 'Contact'],
-                    'Contact: mail@example.com']);
+            ->with([
+                'div',
+                ['class' => 'Contact'],
+                'Contact: mail@example.com'
+            ]);
         $viewMessageBox
             ->expects($this->at($viewMessageBoxIndex++))
             ->method('addContent')
@@ -153,7 +162,7 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue('View Message Box Output'));
 
         $writerIndex = 0;
-        $writer = $this->getMock('Evoke\Writer\WriterIface');
+        $writer      = $this->getMock('Evoke\Writer\WriterIface');
         $writer
             ->expects($this->at($writerIndex++))
             ->method('write')
@@ -163,13 +172,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('Writer Output'));
 
-        $object = new ShutdownHandler(
-            'mail@example.com', $response, TRUE, $viewMessageBox, $writer,
-            $viewError);
+        $object = new ShutdownHandler('mail@example.com', $response, true, $viewMessageBox, $writer, $viewError);
         $object->handler();
 
-        trigger_error('Don\'t leave a E_PARSE as the last error.',
-                      E_USER_WARNING);
+        trigger_error('Don\'t leave a E_PARSE as the last error.', E_USER_WARNING);
         restore_error_handler();
     }
 }

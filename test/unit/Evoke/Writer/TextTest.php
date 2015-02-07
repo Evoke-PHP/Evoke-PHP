@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Writer;
 
-use Evoke\Writer\Text,
-    PHPUnit_Framework_TestCase;
+use Evoke\Writer\Text;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Writer\Text

@@ -1,11 +1,11 @@
 <?php
 namespace Evoke_Test\Network\HTTP;
 
-use Evoke\Network\HTTP\Request,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\HTTP\Request;
+use PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\Network\HTTP\Request
+ * @covers Evoke\Network\HTTP\Request
  */
 class RequestTest extends PHPUnit_Framework_TestCase
 {
@@ -22,16 +22,16 @@ class RequestTest extends PHPUnit_Framework_TestCase
         self::$savedServer  = $_SERVER;
     }
 
-    public function tearDown()
-    {
-        unset($_REQUEST);
-        unset($_SERVER);
-    }
-
     public static function tearDownAfterClass()
     {
         $_REQUEST = self::$savedRequest;
         $_SERVER  = self::$savedServer;
+    }
+
+    public function tearDown()
+    {
+        unset($_REQUEST);
+        unset($_SERVER);
     }
 
     /******************/
@@ -41,79 +41,130 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function providerIssetQueryParam()
     {
         return [
-            'Empty' => ['Expected' => FALSE,
-                        'Key'      => '',
-                        'Params'   => []]];
+            'Empty' => [
+                'Expected' => false,
+                'Key'      => '',
+                'Params'   => []
+            ]
+        ];
     }
 
     public function providerIsValidAccept()
     {
         return [
-            'Empty'   => ['', TRUE],
-            'One'     => ['text/html; q=0.5', TRUE],
-            'Two'     => ['text/html; q=0.1, text/plain', TRUE],
-            'Invalid' => ['>4/yo', FALSE]];
+            'Empty'   => ['', true],
+            'One'     => ['text/html; q=0.5', true],
+            'Two'     => ['text/html; q=0.1, text/plain', true],
+            'Invalid' => ['>4/yo', false]
+        ];
     }
 
     public function providerIsValidAcceptLanguage()
     {
         return [
-            'Empty'   => ['', TRUE],
-            'Mixed'   => ['da, en-gb;q=0.8, en;q=0.7', TRUE],
-            'One-Big' => ['Englishy-Fullsize;q=0.9', TRUE],
-            'Invalid' => ['12-en', FALSE]];
+            'Empty'   => ['', true],
+            'Mixed'   => ['da, en-gb;q=0.8, en;q=0.7', true],
+            'One-Big' => ['Englishy-Fullsize;q=0.9', true],
+            'Invalid' => ['12-en', false]
+        ];
     }
 
     public function providerParseAccept()
     {
         return [
-            'Empty'   => ['Header'       => '',
-                          'Parsed_Value' => []],
-            'One'     => ['Header'       => 'text/html; q=0.5',
-                          'Parsed_Value' =>
-                          [['Params'   => [],
+            'Empty'   => [
+                'Header'       => '',
+                'Parsed_Value' => []
+            ],
+            'One'     => [
+                'Header'       => 'text/html; q=0.5',
+                'Parsed_Value' =>
+                    [
+                        [
+                            'Params'   => [],
                             'Q_Factor' => 0.5,
                             'Subtype'  => 'html',
-                            'Type'     => 'text']]],
-            'Two'     => ['Header'       => 'text/html; q=0.1, text/plain',
-                          'Parsed_Value' =>
-                          [['Params'   => [],
+                            'Type'     => 'text'
+                        ]
+                    ]
+            ],
+            'Two'     => [
+                'Header'       => 'text/html; q=0.1, text/plain',
+                'Parsed_Value' =>
+                    [
+                        [
+                            'Params'   => [],
                             'Q_Factor' => 1.0,
                             'Subtype'  => 'plain',
-                            'Type'     => 'text'],
-                           ['Params'   => [],
+                            'Type'     => 'text'
+                        ],
+                        [
+                            'Params'   => [],
                             'Q_Factor' => 0.1,
                             'Subtype'  => 'html',
-                            'Type'     => 'text']]],
-            'Params'  => ['Header'       => 'audio/*; q=0.2; jim=bo; joe=no',
-                          'Parsed_Value' =>
-                          [['Params'   => ['jim' => 'bo', 'joe' => 'no'],
+                            'Type'     => 'text'
+                        ]
+                    ]
+            ],
+            'Params'  => [
+                'Header'       => 'audio/*; q=0.2; jim=bo; joe=no',
+                'Parsed_Value' =>
+                    [
+                        [
+                            'Params'   => ['jim' => 'bo', 'joe' => 'no'],
                             'Q_Factor' => 0.2,
                             'Subtype'  => '*',
-                            'Type'     => 'audio']]],
-            'Invalid' => ['Header'       => '>4yo',
-                          'Parsed_Value' => []]];
+                            'Type'     => 'audio'
+                        ]
+                    ]
+            ],
+            'Invalid' => [
+                'Header'       => '>4yo',
+                'Parsed_Value' => []
+            ]
+        ];
     }
 
     public function providerParseAcceptLanguage()
     {
         return [
-            'Empty'   => ['Header'       => '',
-                          'Parsed_Value' => []],
-            'Mixed'   => ['Header'       => 'da, en;q=0.7, en-gb;q=0.8',
-                          'Parsed_Value' =>
-                          [['Language' => 'da',
-                            'Q_Factor' => 1.0],
-                           ['Language' => 'en-gb',
-                            'Q_Factor' => 0.8],
-                           ['Language' => 'en',
-                            'Q_Factor' => 0.7]]],
-            'One-Big' => ['Header'       => 'Englishy-Fullsize;q=0.9',
-                          'Parsed_Value' =>
-                          [['Language' => 'Englishy-Fullsize',
-                            'Q_Factor' => 0.9]]],
-            'Invalid' => ['Header'       => '12-34',
-                          'Parsed_Value' => []]];
+            'Empty'   => [
+                'Header'       => '',
+                'Parsed_Value' => []
+            ],
+            'Mixed'   => [
+                'Header'       => 'da, en;q=0.7, en-gb;q=0.8',
+                'Parsed_Value' =>
+                    [
+                        [
+                            'Language' => 'da',
+                            'Q_Factor' => 1.0
+                        ],
+                        [
+                            'Language' => 'en-gb',
+                            'Q_Factor' => 0.8
+                        ],
+                        [
+                            'Language' => 'en',
+                            'Q_Factor' => 0.7
+                        ]
+                    ]
+            ],
+            'One-Big' => [
+                'Header'       => 'Englishy-Fullsize;q=0.9',
+                'Parsed_Value' =>
+                    [
+                        [
+                            'Language' => 'Englishy-Fullsize',
+                            'Q_Factor' => 0.9
+                        ]
+                    ]
+            ],
+            'Invalid' => [
+                'Header'       => '12-34',
+                'Parsed_Value' => []
+            ]
+        ];
     }
 
     /*********/
@@ -126,7 +177,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testGetMethod()
     {
         $_SERVER['REQUEST_METHOD'] = 'ANY_VALUE';
-        $object = new Request;
+        $object                    = new Request;
         $this->assertSame('ANY_VALUE', $object->getMethod());
     }
 
@@ -138,16 +189,14 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $errorHandlerRun = false;
         set_error_handler(
-            function () use(&$errorHandlerRun)
-            {
+            function () use (&$errorHandlerRun) {
                 $errorHandlerRun = true;
-            });
+            }
+        );
 
         $object = new Request;
         $this->assertSame('GET', $object->getMethod());
-        $this->assertTrue(
-            $errorHandlerRun,
-            'Error needs to be generated for missing HTTP Method.');
+        $this->assertTrue($errorHandlerRun, 'Error needs to be generated for missing HTTP Method.');
         restore_error_handler();
     }
 
@@ -157,7 +206,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testGetQueryParam()
     {
         $_REQUEST = ['Test_Key' => 'Test_Val'];
-        $object = new Request;
+        $object   = new Request;
         $this->assertSame('Test_Val', $object->getQueryParam('Test_Key'));
     }
 
@@ -177,9 +226,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetQueryParams()
     {
-        $params = ['One' => 1, 'Two' => 2, 'Three' => 3];
+        $params   = ['One' => 1, 'Two' => 2, 'Three' => 3];
         $_REQUEST = $params;
-        $object = new Request;
+        $object   = new Request;
         $this->assertSame($params, $object->getQueryParams());
     }
 
@@ -198,9 +247,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetURI()
     {
-        $uri = 'http://example.com/index.php?A=1&B=2';
+        $uri                    = 'http://example.com/index.php?A=1&B=2';
         $_SERVER['REQUEST_URI'] = $uri;
-        $object = new Request;
+        $object                 = new Request;
         $this->assertSame($uri, $object->getURI());
     }
 
@@ -212,7 +261,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testIssetQueryParam($expected, $key, $params)
     {
         $_REQUEST = $params;
-        $object = new Request;
+        $object   = new Request;
         $this->assertSame($expected, $object->issetQueryParam($key));
     }
 
@@ -224,7 +273,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testIsValidAccept($header, $validity)
     {
         $_SERVER = ['HTTP_ACCEPT' => $header];
-        $object = new Request;
+        $object  = new Request;
         $this->assertSame($validity, $object->isValidAccept());
     }
 
@@ -236,7 +285,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testIsValidAcceptLanguage($header, $validity)
     {
         $_SERVER = ['HTTP_ACCEPT_LANGUAGE' => $header];
-        $object = new Request;
+        $object  = new Request;
         $this->assertSame($validity, $object->isValidAcceptLanguage());
     }
 
@@ -248,7 +297,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testParseAccept($header, $parsedValue)
     {
         $_SERVER = ['HTTP_ACCEPT' => $header];
-        $object = new Request;
+        $object  = new Request;
 
         $this->assertSame($parsedValue, $object->parseAccept());
     }
@@ -261,7 +310,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testParseAcceptLanguage($header, $parsedValue)
     {
         $_SERVER = ['HTTP_ACCEPT_LANGUAGE' => $header];
-        $object = new Request;
+        $object  = new Request;
 
         $this->assertSame($parsedValue, $object->parseAcceptLanguage());
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\View\HTML5\Input;
 
-use Evoke\View\HTML5\Input\Select,
-    PHPUnit_Framework_TestCase;
+use Evoke\View\HTML5\Input\Select;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\View\HTML5\Input\Select
@@ -27,22 +27,34 @@ class SelectTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSelect()
     {
-        $data = [
-            ['Text_Field' => 'One',
-             'ID_Field'   => 1],
-            ['Text_Field' => 'Two',
-             'ID_Field'   => 2]];
-        $object = new Select('Text_Field',
-                             'ID_Field',
-                             ['Attrib' => 'Main'],
-                             ['Attrib' => 'Option']);
+        $data   = [
+            [
+                'Text_Field' => 'One',
+                'ID_Field'   => 1
+            ],
+            [
+                'Text_Field' => 'Two',
+                'ID_Field'   => 2
+            ]
+        ];
+        $object = new Select(
+            'Text_Field',
+            'ID_Field',
+            ['Attrib' => 'Main'],
+            ['Attrib' => 'Option']
+        );
         $object->setOptions($data);
         $this->assertSame(
-            ['select',
-             ['Attrib' => 'Main'],
-             [['option', ['Attrib' => 'Option', 'value' => 1], 'One'],
-              ['option', ['Attrib' => 'Option', 'value' => 2], 'Two']]],
-            $object->get());
+            [
+                'select',
+                ['Attrib' => 'Main'],
+                [
+                    ['option', ['Attrib' => 'Option', 'value' => 1], 'One'],
+                    ['option', ['Attrib' => 'Option', 'value' => 2], 'Two']
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -51,25 +63,39 @@ class SelectTest extends PHPUnit_Framework_TestCase
     public function testGetOptionSelected()
     {
         $data = [
-            ['Text_Field' => 'One',
-             'ID_Field'   => 1],
-            ['Text_Field' => 'Two',
-             'ID_Field'   => 2]];
+            [
+                'Text_Field' => 'One',
+                'ID_Field'   => 1
+            ],
+            [
+                'Text_Field' => 'Two',
+                'ID_Field'   => 2
+            ]
+        ];
 
-        $object = new Select('Text_Field',
-                             'ID_Field',
-                             ['Attrib' => 'Main'],
-                             ['Attrib' => 'Option']);
+        $object = new Select(
+            'Text_Field',
+            'ID_Field',
+            ['Attrib' => 'Main'],
+            ['Attrib' => 'Option']
+        );
         $object->setSelected(2);
         $object->setOptions($data);
         $this->assertSame(
-            ['select',
-             ['Attrib' => 'Main'],
-             [['option', ['Attrib' => 'Option', 'value' => 1], 'One'],
-              ['option',
-               ['Attrib' => 'Option', 'value' => 2, 'selected' => 'selected'],
-               'Two']]],
-            $object->get());
+            [
+                'select',
+                ['Attrib' => 'Main'],
+                [
+                    ['option', ['Attrib' => 'Option', 'value' => 1], 'One'],
+                    [
+                        'option',
+                        ['Attrib' => 'Option', 'value' => 2, 'selected' => 'selected'],
+                        'Two'
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -90,10 +116,15 @@ class SelectTest extends PHPUnit_Framework_TestCase
     public function testUnsetText()
     {
         $data = [
-            ['Text_Field' => 'One',
-             'ID_Field'   => 1],
-            ['Text_Field' => 'Two',
-             'ID_Field'   => 2]];
+            [
+                'Text_Field' => 'One',
+                'ID_Field'   => 1
+            ],
+            [
+                'Text_Field' => 'Two',
+                'ID_Field'   => 2
+            ]
+        ];
 
         $object = new Select('T_Field');
         $object->setOptions($data);
@@ -108,10 +139,15 @@ class SelectTest extends PHPUnit_Framework_TestCase
     public function testUnsetValue()
     {
         $data = [
-            ['Text_Field' => 'One',
-             'ID_Field'   => 1],
-            ['Text_Field' => 'Two',
-             'ID_Field'   => 2]];
+            [
+                'Text_Field' => 'One',
+                'ID_Field'   => 1
+            ],
+            [
+                'Text_Field' => 'Two',
+                'ID_Field'   => 2
+            ]
+        ];
 
         $object = new Select('Text_Field', 'Value_Field');
         $object->setOptions($data);

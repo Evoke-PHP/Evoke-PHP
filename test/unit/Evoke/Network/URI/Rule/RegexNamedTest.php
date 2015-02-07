@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI\Rule;
 
-use Evoke\Network\URI\Rule\RegexNamed,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Rule\RegexNamed;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Network\URI\Rule\RegexNamed
@@ -47,6 +47,5 @@ class RegexNamedTest extends PHPUnit_Framework_TestCase
         $object->setURI('m1G');
         $this->assertTrue($object->isMatch());
     }
-
 }
 // EOF

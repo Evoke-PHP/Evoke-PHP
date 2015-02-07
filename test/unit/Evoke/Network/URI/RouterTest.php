@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Network\URI;
 
-use Evoke\Network\URI\Router,
-    PHPUnit_Framework_TestCase;
+use Evoke\Network\URI\Router;
+use PHPUnit_Framework_TestCase;
 
 class RouterTest extends PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testSingleRule()
     {
         $ruleIndex = 0;
-        $rule = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
+        $rule      = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
         $rule
             ->expects($this->at($ruleIndex++))
             ->method('setURI')
@@ -46,9 +46,13 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $obj = new Router;
         $obj->addRule($rule);
 
-        $this->assertSame(['Controller' => 'newController',
-                           'Params'     => ['Params' => 'Found']],
-                          $obj->route('oldURI'));
+        $this->assertSame(
+            [
+                'Controller' => 'newController',
+                'Params'     => ['Params' => 'Found']
+            ],
+            $obj->route('oldURI')
+        );
     }
 
     /**
@@ -58,7 +62,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testThreeRulesSecondAuthoritative()
     {
         $rIndex = 0;
-        $r1 = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
+        $r1     = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
         $r1
             ->expects($this->at($rIndex++))
             ->method('setURI')
@@ -85,7 +89,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $rIndex = 0;
-        $r2 = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
+        $r2     = $this->getMock('Evoke\Network\URI\Rule\RuleIface');
         $r2
             ->expects($this->at($rIndex++))
             ->method('setURI')
@@ -123,10 +127,16 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $obj->addRule($r2);
         $obj->addRule($r3);
 
-        $this->assertSame(['Controller' => 'refinedURI',
-                           'Params'     => ['Params' => 'Found',
-                                            'More'   => 'Params']],
-                          $obj->route('oldURI'));
+        $this->assertSame(
+            [
+                'Controller' => 'refinedURI',
+                'Params'     => [
+                    'Params' => 'Found',
+                    'More'   => 'Params'
+                ]
+            ],
+            $obj->route('oldURI')
+        );
     }
 }
 // EOF

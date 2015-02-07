@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Service;
 
-use Evoke\Service\Log\Logging,
-    PHPUnit_Framework_TestCase;
+use Evoke\Service\Log\Logging;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Service\Log\Logging
@@ -27,13 +27,12 @@ class LoggingTest extends PHPUnit_Framework_TestCase
      */
     public function testCanLogToAttached()
     {
-        $dateTime = new \DateTime;
+        $dateTime        = new \DateTime;
         $expectedMessage = 'This is the message.';
-        $expectedLevel = 'User Notice';
-        $object = new Logging($dateTime);
+        $expectedLevel   = 'User Notice';
+        $object          = new Logging($dateTime);
 
-        for ($i = 0; $i < 3; $i++)
-        {
+        for ($i = 0; $i < 3; $i++) {
             $observer = $this->getMock('Evoke\Service\Log\LoggerIface');
             $observer
                 ->expects($this->once())
@@ -66,24 +65,20 @@ class LoggingTest extends PHPUnit_Framework_TestCase
      */
     public function testDontLogToDetached()
     {
-        $dateTime = new \DateTime;
+        $dateTime        = new \DateTime;
         $expectedMessage = 'This is the message.';
-        $expectedLevel = 'User Notice';
-        $detached = 3;
-        $object = new Logging($dateTime);
-        $observers = [];
+        $expectedLevel   = 'User Notice';
+        $detached        = 3;
+        $object          = new Logging($dateTime);
+        $observers       = [];
 
-        for ($i = 0; $i < 4; $i++)
-        {
+        for ($i = 0; $i < 4; $i++) {
             $observers[$i] = $this->getMock('Evoke\Service\Log\LoggerIface');
-            if ($i === $detached)
-            {
+            if ($i === $detached) {
                 $observers[$i]
                     ->expects($this->never())
                     ->method('log');
-            }
-            else
-            {
+            } else {
                 $observers[$i]
                     ->expects($this->once())
                     ->method('log')

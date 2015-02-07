@@ -1,11 +1,11 @@
 <?php
 namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\HTML5\FormBuilder,
-    PHPUnit_Framework_TestCase;
+use Evoke\View\HTML5\FormBuilder;
+use PHPUnit_Framework_TestCase;
 
 /**
- *  @covers Evoke\View\HTML5\FormBuilder
+ * @covers Evoke\View\HTML5\FormBuilder
  */
 class FormBuilderTest extends PHPUnit_Framework_TestCase
 {
@@ -18,17 +18,17 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddElement()
     {
-        $formData = [['div', ['class' => 'testAddElement'], 'Added'],
-                     ['div', ['class' => 'Another'], 'Done']];
+        $formData = [
+            ['div', ['class' => 'testAddElement'], 'Added'],
+            ['div', ['class' => 'Another'], 'Done']
+        ];
 
         $object = new FormBuilder(['action' => '/yodude', 'method' => 'GET']);
 
         $object->add($formData[0]);
         $object->add($formData[1]);
 
-        $this->assertSame(
-            ['form', ['action' => '/yodude', 'method' => 'GET'], $formData],
-            $object->get());
+        $this->assertSame(['form', ['action' => '/yodude', 'method' => 'GET'], $formData], $object->get());
     }
 
     /**
@@ -40,14 +40,22 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addFile('filename', ['class' => 'Special']);
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [
-                 ['input',
-                  ['name' => 'filename',
-                   'type' => 'file',
-                   'class' => 'Special']]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        [
+                            'name'  => 'filename',
+                            'type'  => 'file',
+                            'class' => 'Special'
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -59,14 +67,22 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addHidden('nameField', 'valueField');
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['input',
-               [
-                   'name' => 'nameField',
-                   'type' => 'hidden',
-                   'value' => 'valueField']]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        [
+                            'name'  => 'nameField',
+                            'type'  => 'hidden',
+                            'value' => 'valueField'
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -78,12 +94,18 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addInput(['class' => 'Special', 'type' => 'generic'], 'Val');
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [
-                 ['input',
-                  ['class' => 'Special', 'type' => 'generic', 'value' => 'Val']]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        ['class' => 'Special', 'type' => 'generic', 'value' => 'Val']
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -95,30 +117,48 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addLabel('forField', 'textField');
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['label', ['for' => 'forField'], 'textField']]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [['label', ['for' => 'forField'], 'textField']]
+            ],
+            $object->get()
+        );
     }
 
     public function testAddSelect()
     {
         $object = new FormBuilder;
-        $object->addSelect('Colour',
-                           ['Red'   => 1,
-                            'Blue'  => 2,
-                            'Green' => 3]);
+        $object->addSelect(
+            'Colour',
+            [
+                'Red'   => 1,
+                'Blue'  => 2,
+                'Green' => 3
+            ]
+        );
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['select',
-               ['id'   => 'Colour',
-                'name' => 'Colour'],
-               [['option', ['value' => 1], 'Red'],
-                ['option', ['value' => 2], 'Blue'],
-                ['option', ['value' => 3], 'Green']]]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'select',
+                        [
+                            'id'   => 'Colour',
+                            'name' => 'Colour'
+                        ],
+                        [
+                            ['option', ['value' => 1], 'Red'],
+                            ['option', ['value' => 2], 'Blue'],
+                            ['option', ['value' => 3], 'Green']
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -130,13 +170,22 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addSubmit('nameField', 'valueField');
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['input',
-               ['name'  => 'nameField',
-                'type'  => 'submit',
-                'value' => 'valueField']]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        [
+                            'name'  => 'nameField',
+                            'type'  => 'submit',
+                            'value' => 'valueField'
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -148,15 +197,24 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->addText('nameField', 'valueField', 47, ['class' => 'Special']);
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['input',
-               ['class'  => 'Special',
-                'length' => 47,
-                'name'   => 'nameField',
-                'type'   => 'text',
-                'value'  => 'valueField']]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        [
+                            'class'  => 'Special',
+                            'length' => 47,
+                            'name'   => 'nameField',
+                            'type'   => 'text',
+                            'value'  => 'valueField'
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -165,19 +223,27 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
     public function testAddTextArea()
     {
         $object = new FormBuilder;
-        $object->addTextArea(
-            'nameField', 'valueField', 85, 7, ['class' => 'Special']);
+        $object->addTextArea('nameField', 'valueField', 85, 7, ['class' => 'Special']);
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['textarea',
-               ['class'  => 'Special',
-                'cols'   => 7,
-                'name'   => 'nameField',
-                'rows'   => 85],
-               'valueField']]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'textarea',
+                        [
+                            'class' => 'Special',
+                            'cols'  => 7,
+                            'name'  => 'nameField',
+                            'rows'  => 85
+                        ],
+                        'valueField'
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -199,7 +265,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->startRow();
         $object->get();
     }
-    
+
     /**
      * @expectedException LogicException
      */
@@ -209,7 +275,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->startRow();
         $object->startRow();
     }
-    
+
     /**
      * @expectedException LogicException
      */
@@ -218,22 +284,24 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object = new FormBuilder;
         $object->finishRow();
     }
-    
+
     /**
      * Ensure that the form builder can be reset.
      */
     public function testReset()
     {
         $object = new FormBuilder;
-        $object->addTextArea(
-            'nameField', 'valueField', 85, 7, ['class' => 'Special']);
+        $object->addTextArea('nameField', 'valueField', 85, 7, ['class' => 'Special']);
         $object->reset();
-        
+
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             []],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                []
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -242,16 +310,18 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
     public function testResetEvenIfRowStarted()
     {
         $object = new FormBuilder;
-        $object->addTextArea(
-            'nameField', 'valueField', 85, 7, ['class' => 'Special']);
+        $object->addTextArea('nameField', 'valueField', 85, 7, ['class' => 'Special']);
         $object->startRow();
         $object->reset();
-        
+
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             []],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                []
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -265,12 +335,19 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->finishRow();
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['div',
-               ['class' => 'Row'],
-               [['div', [], 'A']]]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'div',
+                        ['class' => 'Row'],
+                        [['div', [], 'A']]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -285,13 +362,22 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->finishRow();
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['div',
-               ['class' => 'Row'],
-               [['div', [], 'A'],
-                ['div', ['class' => 'B'], 'B']]]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'div',
+                        ['class' => 'Row'],
+                        [
+                            ['div', [], 'A'],
+                            ['div', ['class' => 'B'], 'B']
+                        ]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 
     /**
@@ -309,19 +395,30 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->finishRow();
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'POST'],
-             [['div',
-               ['class' => 'Row'],
-               [['div', [], 'A'],
-                ['div', ['class' => 'B'], 'B']]],
-              ['div',
-               ['class' => 'Row'],
-               [['span', [], 'C']]]]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'div',
+                        ['class' => 'Row'],
+                        [
+                            ['div', [], 'A'],
+                            ['div', ['class' => 'B'], 'B']
+                        ]
+                    ],
+                    [
+                        'div',
+                        ['class' => 'Row'],
+                        [['span', [], 'C']]
+                    ]
+                ]
+            ],
+            $object->get()
+        );
 
     }
-    
+
     /**
      * Ensure that a form can have it's action set.
      */
@@ -332,28 +429,38 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->add(['div', [], 'Non-Empty-Form']);
 
         $this->assertSame(
-            ['form',
-             ['action' => '/Test/Value', 'method' => 'POST'],
-             [['div', [], 'Non-Empty-Form']]],
-            $object->get());
+            [
+                'form',
+                ['action' => '/Test/Value', 'method' => 'POST'],
+                [['div', [], 'Non-Empty-Form']]
+            ],
+            $object->get()
+        );
     }
 
     public function testSetAttributes()
     {
         $object = new FormBuilder();
-        $object->setAttributes(['action' => '/Magic',
-                                'class'  => 'A',
-                                'method' => 'GET']);
-        
+        $object->setAttributes([
+            'action' => '/Magic',
+            'class'  => 'A',
+            'method' => 'GET'
+        ]);
+
         $this->assertSame(
-            ['form',
-             ['action' => '/Magic',
-              'class'  => 'A',
-              'method' => 'GET'],
-             []],
-            $object->get());
-    }       
-    
+            [
+                'form',
+                [
+                    'action' => '/Magic',
+                    'class'  => 'A',
+                    'method' => 'GET'
+                ],
+                []
+            ],
+            $object->get()
+        );
+    }
+
     /**
      * Ensure that a form can have it's method set.
      */
@@ -364,10 +471,13 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         $object->add(['div', [], 'Non-Empty-Form']);
 
         $this->assertSame(
-            ['form',
-             ['action' => '', 'method' => 'PUT'],
-             [['div', [], 'Non-Empty-Form']]],
-            $object->get());
+            [
+                'form',
+                ['action' => '', 'method' => 'PUT'],
+                [['div', [], 'Non-Empty-Form']]
+            ],
+            $object->get()
+        );
     }
 }
 // EOF

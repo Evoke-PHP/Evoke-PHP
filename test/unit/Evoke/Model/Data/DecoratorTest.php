@@ -1,11 +1,11 @@
 <?php
 namespace Evoke_Test\Model\Data;
 
-use Evoke\Model\Data\Decorator,
-    PHPUnit_Framework_TestCase;
+use Evoke\Model\Data\Decorator;
+use PHPUnit_Framework_TestCase;
 
 // We are testing an abstract class.
-class Test_Extended_Decorator extends Decorator
+class TestExtendedDecorator extends Decorator
 {
 }
 
@@ -20,8 +20,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $obj = new Test_Extended_Decorator(
-            $this->getMock('Evoke\Model\Data\FlatIface'));
+        $obj = new TestExtendedDecorator($this->getMock('Evoke\Model\Data\FlatIface'));
         $this->assertInstanceOf('Evoke\Model\Data\Decorator', $obj);
     }
 
@@ -38,7 +37,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($dataMock));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($dataMock, $obj->current());
     }
 
@@ -56,7 +55,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj->getRecord());
     }
 
@@ -74,7 +73,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj->isEmpty());
     }
 
@@ -92,7 +91,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj->key());
     }
 
@@ -110,7 +109,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj->next());
     }
 
@@ -128,7 +127,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with('Offset_To_Check')
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, isset($obj['Offset_To_Check']));
     }
 
@@ -146,7 +145,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with('Offset_Desired')
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj['Offset_Desired']);
     }
 
@@ -163,7 +162,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->method('offsetSet')
             ->with('Offset_Desired', $expected);
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj                   = new TestExtendedDecorator($dataMock);
         $obj['Offset_Desired'] = $expected;
     }
 
@@ -179,7 +178,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->method('offsetUnset')
             ->with('Offset_Desired');
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         unset($obj['Offset_Desired']);
     }
 
@@ -195,7 +194,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->method('rewind')
             ->with();
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $obj->rewind();
     }
 
@@ -205,15 +204,17 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testSetData()
     {
-        $expected = [['ID' => 1, 'V' => 'SD1'],
-                     ['ID' => 2, 'V' => 'SD2']];
+        $expected = [
+            ['ID' => 1, 'V' => 'SD1'],
+            ['ID' => 2, 'V' => 'SD2']
+        ];
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('setData')
             ->with($expected);
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $obj->setData($expected);
     }
 
@@ -231,7 +232,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue($expected));
 
-        $obj = new Test_Extended_Decorator($dataMock);
+        $obj = new TestExtendedDecorator($dataMock);
         $this->assertSame($expected, $obj->valid());
     }
 }

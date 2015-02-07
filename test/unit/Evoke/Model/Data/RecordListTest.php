@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\Model\Data;
 
-use Evoke\Model\Data\RecordList,
-    PHPUnit_Framework_TestCase;
+use Evoke\Model\Data\RecordList;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Model\Data\RecordList
@@ -10,19 +10,17 @@ use Evoke\Model\Data\RecordList,
  */
 class RecordListTest extends PHPUnit_Framework_TestCase
 {
-    /******************/
-    /* Data Providers */
-    /******************/
-
     /*********/
     /* Tests */
     /*********/
 
     public function testFirstRecordSelected()
     {
-        $rawData = [['ID' => 1, 'Text' => 'First'],
-                    ['ID' => 2, 'Text' => 'Second']];
-        $dIndex = 0;
+        $rawData  = [
+            ['ID' => 1, 'Text' => 'First'],
+            ['ID' => 2, 'Text' => 'Second']
+        ];
+        $dIndex   = 0;
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
 
         $dataMock
@@ -39,10 +37,8 @@ class RecordListTest extends PHPUnit_Framework_TestCase
         $obj->setData($rawData);
         $obj->selectRecord($rawData[0]);
 
-        $this->assertTrue($obj->hasSelectedRecord(),
-                          'Should have selected record.');
-        $this->assertTrue($obj->isSelectedRecord(),
-                          'Should be the selected record.');
+        $this->assertTrue($obj->hasSelectedRecord(), 'Should have selected record.');
+        $this->assertTrue($obj->isSelectedRecord(), 'Should be the selected record.');
 
 
     }
@@ -50,7 +46,7 @@ class RecordListTest extends PHPUnit_Framework_TestCase
     public function testClearSelectedRecords()
     {
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
-        $obj = new RecordList($dataMock);
+        $obj      = new RecordList($dataMock);
 
         $obj->selectRecord(['ID' => 1]);
         $obj->selectRecord(['ID' => 2]);
@@ -62,7 +58,7 @@ class RecordListTest extends PHPUnit_Framework_TestCase
     public function testClearSelectedRecord()
     {
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
-        $obj = new RecordList($dataMock);
+        $obj      = new RecordList($dataMock);
 
         $obj->selectRecord(['ID' => 1]);
         $obj->selectRecord(['ID' => 2]);
@@ -74,7 +70,7 @@ class RecordListTest extends PHPUnit_Framework_TestCase
     public function testClearSelectedRecordNotPreviouslyAddedIsOK()
     {
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
-        $obj = new RecordList($dataMock);
+        $obj      = new RecordList($dataMock);
 
         $obj->selectRecord(['ID' => 1]);
         $obj->clearSelectedRecord(['ID' => 3]);

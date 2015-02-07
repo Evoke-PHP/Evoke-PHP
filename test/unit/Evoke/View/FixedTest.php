@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\View;
 
-use Evoke\View\Fixed,
-    PHPUnit_Framework_TestCase;
+use Evoke\View\Fixed;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\View\Fixed
@@ -18,7 +18,8 @@ class FixedTest extends PHPUnit_Framework_TestCase
         return [
             'Integer' => [125],
             'Array'   => [['div', [], 'aiofw']],
-            'String'  => ['str']];
+            'String'  => ['str']
+        ];
     }
 
     /*********/

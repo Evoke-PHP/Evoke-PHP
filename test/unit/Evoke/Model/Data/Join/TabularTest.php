@@ -1,9 +1,8 @@
 <?php
 namespace Evoke_Test\Model\Data\Join;
 
-use Evoke\Model\Data\Join\JoinIface,
-    Evoke\Model\Data\Join\Tabular,
-    PHPUnit_Framework_TestCase;
+use Evoke\Model\Data\Join\Tabular;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\Model\Data\Join\Tabular
@@ -35,41 +34,50 @@ class TabularTest extends PHPUnit_Framework_TestCase
             'Single_Camel'     => [
                 'Obj'      => $obj,
                 'Expected' => 'Single',
-                'Join'     => 'single'],
+                'Join'     => 'single'
+            ],
             'Single_Pascal'    => [
                 'Obj'      => $obj,
                 'Expected' => 'Single',
-                'Join'     => 'Single'],
+                'Join'     => 'Single'
+            ],
             'Two_Word_Pascal'  => [
                 'Obj'      => $obj,
                 'Expected' => 'Two_Word',
-                'Join'     => 'Two_Word'],
+                'Join'     => 'Two_Word'
+            ],
             'Three_Word_Camel' => [
                 'Obj'      => $obj,
                 'Expected' => 'Three_Word_Join',
-                'Join'     => 'threeWordJoin'],
+                'Join'     => 'threeWordJoin'
+            ],
             'Lower_Two_Camel'  => [
                 'Obj'      => $obj,
                 'Expected' => 'lowerTwo',
-                'Join'     => 'lowerTwo'],
+                'Join'     => 'lowerTwo'
+            ],
             'Lower_Camel_Join' => [
                 'Obj'      => $obj,
                 'Expected' => 'lowerCamelJoin',
-                'Join'     => 'lowerCamelJoin'],
+                'Join'     => 'lowerCamelJoin'
+            ],
             'Alpha_Num_Extra'  => [
                 'Obj'      => $obj,
                 'Expected' => 'lowerCamelJoin',
-                'Join'     => 'Lower_Camel_j#O#i#N'],
+                'Join'     => 'Lower_Camel_j#O#i#N'
+            ],
             'Alpha_Num_Less'   => [
                 'Obj'      => $obj,
                 'Expected' => 'Three_Word_Join',
-                'Join'     => 'threewordjoin']];
+                'Join'     => 'threewordjoin'
+            ]
+        ];
     }
 
     public function getJoins()
     {
 
-        $joinMock = $this
+        $joinMock        = $this
             ->getMockBuilder('Evoke\Model\Data\Join\JoinIface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -78,24 +86,26 @@ class TabularTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $one = new Tabular('One');
+        $one     = new Tabular('One');
         $oneJoin = ['Single' => $joinMock];
         $one->addJoin('Single', $joinMock);
 
-        $many = new Tabular('Many');
-        $manyJoins = ['One'   => $joinMock,
-                      'Two'   => $anotherJoinMock,
-                      'Three' => $joinMock];
+        $many      = new Tabular('Many');
+        $manyJoins = [
+            'One'   => $joinMock,
+            'Two'   => $anotherJoinMock,
+            'Three' => $joinMock
+        ];
 
-        foreach ($manyJoins as $joinID => $join)
-        {
+        foreach ($manyJoins as $joinID => $join) {
             $many->addJoin($joinID, $join);
         }
 
         return [
             'No_Joins'   => [new Tabular('None'), []],
             'One_Join'   => [$one, $oneJoin],
-            'Many_Joins' => [$many, $manyJoins]];
+            'Many_Joins' => [$many, $manyJoins]
+        ];
 
     }
 
@@ -118,7 +128,7 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $aEOC = new Tabular('AEOC');
         $aEOC->addJoin('addExactOverCamel', $join);
 
-        $extraChars = '$*()&#@!~`\'"\\/<>,.=-+_';
+        $extraChars  = '$*()&#@!~`\'"\\/<>,.=-+_';
         $extraJoinID = 'exact' . $extraChars . 'Join';
         $lessJoinID  = 'exactJoin';
 
@@ -134,27 +144,39 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $aNumber = new Tabular('Add_Number');
         $aNumber->addJoin('123', $join);
 
-        return ['Camel_Over_Exact'  => [$aCOE, 'addCamelOverExact'],
-                'Camel_Over_Camel'  => [$aCOC, 'addCamelOverCamel'],
-                'Exact_Over_Exact'  => [$aEOE, 'Add_Exact_Over_Exact'],
-                'Exact_Over_Camel'  => [$aEOC, 'Add_Exact_Over_Camel'],
-                'Extra_Over_Less'   => [$aExtra, $extraJoinID],
-                'Less_Over_Extra'   => [$aLess, $lessJoinID],
-                'Empty_Over_Empty'  => [$aEmpty, ''],
-                'Extra_Over_Number' => [$aNumber, '1#2#3#'],
-                'Less_Over_Extra'   => [$aLess, $lessJoinID],
-                'Symbol_Over_Empty' => [$aEmpty, '%$^*&#@!']];
+        return [
+            'Camel_Over_Exact'  => [$aCOE, 'addCamelOverExact'],
+            'Camel_Over_Camel'  => [$aCOC, 'addCamelOverCamel'],
+            'Exact_Over_Exact'  => [$aEOE, 'Add_Exact_Over_Exact'],
+            'Exact_Over_Camel'  => [$aEOC, 'Add_Exact_Over_Camel'],
+            'Extra_Over_Less'   => [$aExtra, $extraJoinID],
+            'Less_Over_Extra'   => [$aLess, $lessJoinID],
+            'Empty_Over_Empty'  => [$aEmpty, ''],
+            'Extra_Over_Number' => [$aNumber, '1#2#3#'],
+            'Less_Over_Extra'   => [$aLess, $lessJoinID],
+            'Symbol_Over_Empty' => [$aEmpty, '%$^*&#@!']
+        ];
     }
 
     public function providerAddJoinGetJoinID()
     {
         return [
             'Exact_Join'            => [
-                new Tabular('A'), 'Exact_Join', 'Exact_Join'],
+                new Tabular('A'),
+                'Exact_Join',
+                'Exact_Join'
+            ],
             'Lower_Camel'           => [
-                new Tabular('B'), 'lowerCamel', 'Lower_Camel'],
+                new Tabular('B'),
+                'lowerCamel',
+                'Lower_Camel'
+            ],
             'Canonical_Lower_Camel' => [
-                new Tabular('C'), 'lowerCamel', 'lowerCamel']];
+                new Tabular('C'),
+                'lowerCamel',
+                'lowerCamel'
+            ]
+        ];
     }
 
     public function providerGetJoinIDNotFound()
@@ -169,24 +191,27 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $objEmpty = new Tabular('Empty');
 
-        $objExact = new Tabular('Exact',
-                                array('ID'),
-                                'Joint_Data',
-                                true,
-                                '_T_',
-                                false); // Don't use alphaNum match
+        $objExact = new Tabular(
+            'Exact',
+            ['ID'],
+            'Joint_Data',
+            true,
+            '_T_',
+            false  // Don't use alphaNum match
+        );
         $objExact->addJoin('Exact_Match', $join);
 
         return [
             'Empty_Given_Empty'        => [$objEmpty, ''],
-            'Empty_Given_Null'         => [$objEmpty, NULL],
+            'Empty_Given_Null'         => [$objEmpty, null],
             'Empty_Given_Something'    => [$objEmpty, 'something'],
             'Exact_Given_Lower_Camel'  => [$objExact, 'exactMatch'],
             'Exact_Given_Lower_Pascal' => [$objExact, 'exact_match'],
             'Exact_Given_Upper_Camel'  => [$objExact, 'ExactMatch'],
             'Exact_Given_Upper_Case'   => [$objExact, 'EXACT_MATCH'],
             'Standard_Missing'         => [$objStandard, 'Wrong_Word'],
-            'Standard_Extra_Num'       => [$objStandard, 'two2WoRD']];
+            'Standard_Extra_Num'       => [$objStandard, 'two2WoRD']
+        ];
     }
 
     /*********/
@@ -228,38 +253,57 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $object->addJoin('List', new Tabular('T2nd'));
 
         $data = [
-            ['T1st_T_ID' => 1,
-             'T1st_T_A'  => 1,
-             'T1st_T_B'  => 'B 1',
-             'T2nd_T_ID' => 1,
-             'T2nd_T_X'  => 1,
-             'T2nd_T_Y'  => 'Y 1'],
-            ['T1st_T_ID' => 1,
-             'T1st_T_A'  => 1,
-             'T1st_T_B'  => 'B 1',
-             'T2nd_T_ID' => 2,
-             'T2nd_T_X'  => 2,
-             'T2nd_T_Y'  => 'Y 2'],
-            ['T1st_T_ID' => 2,
-             'T1st_T_A'  => 2,
-             'T1st_T_B'  => 'B 2',
-             'T2nd_T_ID' => NULL,
-             'T2nd_T_X'  => NULL,
-             'T2nd_T_Y'  => NULL]];
+            [
+                'T1st_T_ID' => 1,
+                'T1st_T_A'  => 1,
+                'T1st_T_B'  => 'B 1',
+                'T2nd_T_ID' => 1,
+                'T2nd_T_X'  => 1,
+                'T2nd_T_Y'  => 'Y 1'
+            ],
+            [
+                'T1st_T_ID' => 1,
+                'T1st_T_A'  => 1,
+                'T1st_T_B'  => 'B 1',
+                'T2nd_T_ID' => 2,
+                'T2nd_T_X'  => 2,
+                'T2nd_T_Y'  => 'Y 2'
+            ],
+            [
+                'T1st_T_ID' => 2,
+                'T1st_T_A'  => 2,
+                'T1st_T_B'  => 'B 2',
+                'T2nd_T_ID' => null,
+                'T2nd_T_X'  => null,
+                'T2nd_T_Y'  => null
+            ]
+        ];
 
         $expectedData = [
-            1 => ['A'        => 1,
-                  'B'        => 'B 1',
-                  'Joint_Data' => [
-                      'List' => [
-                          1 => ['X'     => 1,
-                                'Y'     => 'Y 1'],
-                          2 => ['X'     => 2,
-                                'Y'     => 'Y 2']]]],
-            2 => ['A'     => 2,
-                  'B'     => 'B 2',
-                  'Joint_Data' => [
-                      'List' => []]]];
+            1 => [
+                'A'          => 1,
+                'B'          => 'B 1',
+                'Joint_Data' => [
+                    'List' => [
+                        1 => [
+                            'X' => 1,
+                            'Y' => 'Y 1'
+                        ],
+                        2 => [
+                            'X' => 2,
+                            'Y' => 'Y 2'
+                        ]
+                    ]
+                ]
+            ],
+            2 => [
+                'A'          => 2,
+                'B'          => 'B 2',
+                'Joint_Data' => [
+                    'List' => []
+                ]
+            ]
+        ];
 
         $this->assertSame($expectedData, $object->arrangeFlatData($data));
     }
@@ -270,35 +314,51 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $obj->addJoin('L', new Tabular('T2', ['K3', 'K4']));
 
         $data = [
-            ['T1_T_K1' => 5,
-             'T1_T_K2' => 6,
-             'T1_T_VA' => 7,
-             'T2_T_K3' => 8,
-             'T2_T_K4' => 9,
-             'T2_T_VB' => 10],
-            ['T1_T_K1' => 5,
-             'T1_T_K2' => 6,
-             'T1_T_VA' => 7,
-             'T2_T_K3' => 8,
-             'T2_T_K4' => 19,
-             'T2_T_VB' => 100],
-            ['T1_T_K1' => 555,
-             'T1_T_K2' => 666,
-             'T1_T_VA' => 777,
-             'T2_T_K3' => NULL,
-             'T2_T_K4' => NULL,
-             'T2_T_VB' => NULL]];
+            [
+                'T1_T_K1' => 5,
+                'T1_T_K2' => 6,
+                'T1_T_VA' => 7,
+                'T2_T_K3' => 8,
+                'T2_T_K4' => 9,
+                'T2_T_VB' => 10
+            ],
+            [
+                'T1_T_K1' => 5,
+                'T1_T_K2' => 6,
+                'T1_T_VA' => 7,
+                'T2_T_K3' => 8,
+                'T2_T_K4' => 19,
+                'T2_T_VB' => 100
+            ],
+            [
+                'T1_T_K1' => 555,
+                'T1_T_K2' => 666,
+                'T1_T_VA' => 777,
+                'T2_T_K3' => null,
+                'T2_T_K4' => null,
+                'T2_T_VB' => null
+            ]
+        ];
 
         $expected = [
             '5_6'     =>
-            ['VA'         => 7,
-             'Joint_Data' => [
-                 'L' => ['8_9'  => ['VB' => 10],
-                         '8_19' => ['VB' => 100]]]],
+                [
+                    'VA'         => 7,
+                    'Joint_Data' => [
+                        'L' => [
+                            '8_9'  => ['VB' => 10],
+                            '8_19' => ['VB' => 100]
+                        ]
+                    ]
+                ],
             '555_666' =>
-            ['VA'         => 777,
-             'Joint_Data' => [
-                 'L' => []]]];
+                [
+                    'VA'         => 777,
+                    'Joint_Data' => [
+                        'L' => []
+                    ]
+                ]
+        ];
 
         $this->assertSame($expected, $obj->arrangeFlatData($data));
     }
@@ -315,22 +375,33 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
     public function testArrangeFlatDataWithOptionalNonTabularFields()
     {
-        $obj = new Tabular('Opt',
-                           ['ID'],
-                           'Joint_Data',
-                           false); // Optional Non Tabular Fields.
+        $obj = new Tabular(
+            'Opt',
+            ['ID'],
+            'Joint_Data',
+            false // Optional Non Tabular Fields.
+        );
 
         $data = [
-            ['Opt_T_ID'    => 1,
-             'Opt_T_V1'    => 'One has V1 1',
-             'Non_Tabular' => 3],
-            ['Opt_T_ID'    => 2,
-             'Opt_T_V1'    => 'Two has V1 2',
-             'Non_Tabular' => 4]];
+            [
+                'Opt_T_ID'    => 1,
+                'Opt_T_V1'    => 'One has V1 1',
+                'Non_Tabular' => 3
+            ],
+            [
+                'Opt_T_ID'    => 2,
+                'Opt_T_V1'    => 'Two has V1 2',
+                'Non_Tabular' => 4
+            ]
+        ];
 
-        $this->assertSame([1 => ['V1' => 'One has V1 1'],
-                           2 => ['V1' => 'Two has V1 2']],
-                          $obj->arrangeFlatData($data));
+        $this->assertSame(
+            [
+                1 => ['V1' => 'One has V1 1'],
+                2 => ['V1' => 'Two has V1 2']
+            ],
+            $obj->arrangeFlatData($data)
+        );
     }
 
     /**
@@ -341,12 +412,17 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $obj = new Tabular('Rqd');
 
         $data = [
-            ['Rqd_T_ID'    => 1,
-             'Rqd_T_V1'    => 'One has V1 1',
-             'Non_Tabular' => 3],
-            ['Rqd_T_ID'    => 2,
-             'Rqd_T_V1'    => 'Two has V1 2',
-             'Non_Tabular' => 4]];
+            [
+                'Rqd_T_ID'    => 1,
+                'Rqd_T_V1'    => 'One has V1 1',
+                'Non_Tabular' => 3
+            ],
+            [
+                'Rqd_T_ID'    => 2,
+                'Rqd_T_V1'    => 'Two has V1 2',
+                'Non_Tabular' => 4
+            ]
+        ];
 
         $obj->arrangeFlatData($data);
     }
@@ -356,15 +432,23 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $obj = new Tabular('NK', []);
 
         $data = [
-            ['NK_T_V1' => 1,
-             'NK_T_V2' => 2],
-            ['NK_T_V1' => 3,
-             'NK_T_V2' => 4]];
+            [
+                'NK_T_V1' => 1,
+                'NK_T_V2' => 2
+            ],
+            [
+                'NK_T_V1' => 3,
+                'NK_T_V2' => 4
+            ]
+        ];
 
         $this->assertSame(
-            [0 => ['V1' => 1, 'V2' => 2],
-             1 => ['V1' => 3, 'V2' => 4]],
-            $obj->arrangeFlatData($data));
+            [
+                0 => ['V1' => 1, 'V2' => 2],
+                1 => ['V1' => 3, 'V2' => 4]
+            ],
+            $obj->arrangeFlatData($data)
+        );
     }
 
     public function testArrangeFlatDataWithoutKeysMultipleValues()
@@ -373,32 +457,49 @@ class TabularTest extends PHPUnit_Framework_TestCase
         $obj->addJoin('JT', new Tabular('JR', []));
 
         $data = [
-            ['NK_T_V1' => 1,
-             'NK_T_V2' => 2,
-             'JR_T_VA' => 'First'],
-            ['NK_T_V1' => 1,
-             'NK_T_V2' => 2,
-             'JR_T_VA' => 'Second'],
-            ['NK_T_V1' => 3,
-             'NK_T_V2' => 4]];
+            [
+                'NK_T_V1' => 1,
+                'NK_T_V2' => 2,
+                'JR_T_VA' => 'First'
+            ],
+            [
+                'NK_T_V1' => 1,
+                'NK_T_V2' => 2,
+                'JR_T_VA' => 'Second'
+            ],
+            [
+                'NK_T_V1' => 3,
+                'NK_T_V2' => 4
+            ]
+        ];
 
         $this->assertSame(
-            [0 => ['V1'         => 1,
-                   'V2'         => 2,
-                   'Joint_Data' => [
-                       'JT' => [0 => ['VA' => 'First'],
-                                1 => ['VA' => 'Second']]]],
-             1 => ['V1'         => 3,
-                   'V2'         => 4,
-                   'Joint_Data' => [
-                       'JT' => []]]],
-            $obj->arrangeFlatData($data));
+            [
+                0 => [
+                    'V1'         => 1,
+                    'V2'         => 2,
+                    'Joint_Data' => [
+                        'JT' => [
+                            0 => ['VA' => 'First'],
+                            1 => ['VA' => 'Second']
+                        ]
+                    ]
+                ],
+                1 => [
+                    'V1'         => 3,
+                    'V2'         => 4,
+                    'Joint_Data' => [
+                        'JT' => []
+                    ]
+                ]
+            ],
+            $obj->arrangeFlatData($data)
+        );
     }
 
     public function testCreateStandard()
     {
-        $this->assertInstanceOf('Evoke\Model\Data\Join\Tabular',
-                                new Tabular('Standard'));
+        $this->assertInstanceOf('Evoke\Model\Data\Join\Tabular', new Tabular('Standard'));
     }
 
     /**

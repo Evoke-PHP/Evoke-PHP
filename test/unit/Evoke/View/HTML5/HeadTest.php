@@ -1,8 +1,8 @@
 <?php
 namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\HTML5\Head,
-    PHPUnit_Framework_TestCase;
+use Evoke\View\HTML5\Head;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @covers Evoke\View\HTML5\Head
@@ -22,7 +22,8 @@ class HeadTest extends PHPUnit_Framework_TestCase
             [['rel' => 'stylesheet', 'href' => 'styles.css']],
             ['description' => 'Head Test Meta Description'],
             'Head Test Title',
-            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]);
+            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]
+        );
         $this->assertInstanceOf('Evoke\View\HTML5\Head', $object);
     }
 
@@ -33,27 +34,49 @@ class HeadTest extends PHPUnit_Framework_TestCase
     {
         $object = new Head(
             [['rel' => 'stylesheet', 'href' => 'styles.css']],
-            ['description' => 'Head Test Meta Description',
-             'keywords'    => 'Head Keywords'],
+            [
+                'description' => 'Head Test Meta Description',
+                'keywords'    => 'Head Keywords'
+            ],
             'Head Test Title',
-            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]);
+            [['style', ['type' => 'text/css'], 'body { background: #F00; }']]
+        );
         $this->assertSame(
-            ['head',
-             [],
-             [['title', [], 'Head Test Title'],
-              ['meta',
-               ['name'    => 'description',
-                'content' => 'Head Test Meta Description']],
-              ['meta',
-               ['name'    => 'keywords',
-                'content' => 'Head Keywords']],
-              ['link',
-               ['rel'  => 'stylesheet',
-                'href' => 'styles.css']],
-              ['style',
-               ['type' => 'text/css'],
-               'body { background: #F00; }']]],
-            $object->get());
+            [
+                'head',
+                [],
+                [
+                    ['title', [], 'Head Test Title'],
+                    [
+                        'meta',
+                        [
+                            'name'    => 'description',
+                            'content' => 'Head Test Meta Description'
+                        ]
+                    ],
+                    [
+                        'meta',
+                        [
+                            'name'    => 'keywords',
+                            'content' => 'Head Keywords'
+                        ]
+                    ],
+                    [
+                        'link',
+                        [
+                            'rel'  => 'stylesheet',
+                            'href' => 'styles.css'
+                        ]
+                    ],
+                    [
+                        'style',
+                        ['type' => 'text/css'],
+                        'body { background: #F00; }'
+                    ]
+                ]
+            ],
+            $object->get()
+        );
     }
 }
 // EOF

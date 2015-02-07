@@ -1,34 +1,29 @@
 <?php
 namespace Evoke_Test\Service\Log;
 
-use DateTime,
-    Evoke\Service\Log\File,
-    PHPUnit_Framework_TestCase,
-    org\bovigo\vfs\vfsStream,
-    org\bovigo\vfs\visitor\vfsStreamStructureVisitor,
-    RuntimeException;
+use DateTime;
+use Evoke\Service\Log\File;
+use org\bovigo\vfs\vfsStream;
+use PHPUnit_Framework_TestCase;
+use RuntimeException;
 
 class TestWrapper
 {
     protected static $callbacks;
 
-    public static function setCallback(
-        /* String */ $wrapperFunction,
-        callable $callback)
+    public static function setCallback($wrapperFunction, callable $callback)
     {
         self::$callbacks[$wrapperFunction] = $callback;
     }
 
     public function mkdir($path, $mode, $options)
     {
-        return call_user_func(self::$callbacks['mkdir'],
-                              $path, $mode, $options);
+        return call_user_func(self::$callbacks['mkdir'], $path, $mode, $options);
     }
 
-    public function stream_metadata($path, $option, $value )
+    public function stream_metadata($path, $option, $value)
     {
-        return call_user_func(self::$callbacks['stream_metadata'],
-                              $path, $option, $value);
+        return call_user_func(self::$callbacks['stream_metadata'], $path, $option, $value);
     }
 
     public function url_stat($path, $flags)
@@ -52,14 +47,12 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function handleErrorByRecordingItForTest($errno, $errstr)
     {
         $this->errors[] = [$errno, $errstr];
-        // echo "\n" . $errno . "\n";
     }
 
     public function setUp()
     {
-        $this->errors = [];
-        $this->savedErrorReporting = set_error_handler(
-            [$this, 'handleErrorByRecordingItForTest']);
+        $this->errors              = [];
+        $this->savedErrorReporting = set_error_handler([$this, 'handleErrorByRecordingItForTest']);
     }
 
     public function tearDown()
@@ -92,15 +85,10 @@ class FileTest extends PHPUnit_Framework_TestCase
 
         $object = new File(vfsStream::url('Root/UNWRITEABLE/log.txt'));
 
-        try
-        {
+        try {
             $object->log(new DateTime, 'Message', 'TEST');
-        }
-        catch (RuntimeException $e)
-        {
-            $this->assertSame(
-                [[E_USER_WARNING, 'mkdir(): Path vfs://Root exists']],
-                $this->errors);
+        } catch (RuntimeException $e) {
+            $this->assertSame([[E_USER_WARNING, 'mkdir(): Path vfs://Root exists']], $this->errors);
             throw $e;
         }
     }
@@ -129,58 +117,48 @@ class FileTest extends PHPUnit_Framework_TestCase
     {
         TestWrapper::setCallback(
             'mkdir',
-            function($path, $mode, $options)
-            {
+            function ($path, $mode, $options) {
                 return true;
-            });
+            }
+        );
 
         TestWrapper::setCallback(
             'stream_metadata',
-            function($path, $option, $value)
-            {
+            function ($path, $option, $value) {
                 // Make chmod fail.
-                if ($option === STREAM_META_ACCESS &&
-                    $path === 'test://DIR')
-                {
-                    return false;
-                }
-
-                return true;
-            });
+                return $option !== STREAM_META_ACCESS || $path !== 'test://DIR';
+            }
+        );
 
         TestWrapper::setCallback(
             'url_stat',
-            function($path, $flags)
-            {
+            function ($path, $flags) {
                 return [
-                    'dev' => 2055,
-                    'ino' => 1573894,
-                    'mode' => 16872,
-                    'nlink' => 1,
-                    'uid' => 1000,
-                    'gid' => 1000,
-                    'rdev' => 0,
-                    'size' => 1,
-                    'atime' => 1300000000,
-                    'mtime' => 1300000000,
-                    'ctime' => 1300000000,
+                    'dev'     => 2055,
+                    'ino'     => 1573894,
+                    'mode'    => 16872,
+                    'nlink'   => 1,
+                    'uid'     => 1000,
+                    'gid'     => 1000,
+                    'rdev'    => 0,
+                    'size'    => 1,
+                    'atime'   => 1300000000,
+                    'mtime'   => 1300000000,
+                    'ctime'   => 1300000000,
                     'blksize' => 4096,
-                    'blocks' => 1];
-            });
+                    'blocks'  => 1
+                ];
+            }
+        );
 
-        if (!stream_wrapper_register(
-                'test', '\Evoke_Test\Service\Log\TestWrapper'))
-        {
+        if (!stream_wrapper_register('test', '\Evoke_Test\Service\Log\TestWrapper')) {
             throw new \ErrorException('Cannot register test stream.');
         }
 
-        try
-        {
+        try {
             $object = new File('test://DIR/log');
             $object->log(new DateTime, 'Message', 'Level');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             stream_wrapper_unregister('test');
             throw $e;
         }
@@ -196,58 +174,48 @@ class FileTest extends PHPUnit_Framework_TestCase
     {
         TestWrapper::setCallback(
             'mkdir',
-            function($path, $mode, $options)
-            {
+            function ($path, $mode, $options) {
                 return true;
-            });
+            }
+        );
 
         TestWrapper::setCallback(
             'stream_metadata',
-            function($path, $option, $value)
-            {
+            function ($path, $option, $value) {
                 // Make chmod fail.
-                if ($option === STREAM_META_ACCESS &&
-                    $path === 'test://DIR/log')
-                {
-                    return false;
-                }
-
-                return true;
-            });
+                return $option !== STREAM_META_ACCESS || $path !== 'test://DIR/log';
+            }
+        );
 
         TestWrapper::setCallback(
             'url_stat',
-            function($path, $flags)
-            {
+            function ($path, $flags) {
                 return [
-                    'dev' => 2055,
-                    'ino' => 1573894,
-                    'mode' => 16872,
-                    'nlink' => 1,
-                    'uid' => 1000,
-                    'gid' => 1000,
-                    'rdev' => 0,
-                    'size' => 1,
-                    'atime' => 1300000000,
-                    'mtime' => 1300000000,
-                    'ctime' => 1300000000,
+                    'dev'     => 2055,
+                    'ino'     => 1573894,
+                    'mode'    => 16872,
+                    'nlink'   => 1,
+                    'uid'     => 1000,
+                    'gid'     => 1000,
+                    'rdev'    => 0,
+                    'size'    => 1,
+                    'atime'   => 1300000000,
+                    'mtime'   => 1300000000,
+                    'ctime'   => 1300000000,
                     'blksize' => 4096,
-                    'blocks' => 1];
-            });
+                    'blocks'  => 1
+                ];
+            }
+        );
 
-        if (!stream_wrapper_register(
-                'test', '\Evoke_Test\Service\Log\TestWrapper'))
-        {
+        if (!stream_wrapper_register('test', '\Evoke_Test\Service\Log\TestWrapper')) {
             throw new \ErrorException('Cannot register test stream.');
         }
 
-        try
-        {
+        try {
             $object = new File('test://DIR/log');
             $object->log(new DateTime, 'Message', 'Level');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             stream_wrapper_unregister('test');
             throw $e;
         }
@@ -264,56 +232,47 @@ class FileTest extends PHPUnit_Framework_TestCase
     {
         TestWrapper::setCallback(
             'mkdir',
-            function($path, $mode, $options)
-            {
+            function ($path, $mode, $options) {
                 return true;
-            });
+            }
+        );
 
         TestWrapper::setCallback(
             'stream_metadata',
-            function($path, $option, $value)
-            {
-                if ($option === STREAM_META_TOUCH)
-                {
-                    return false;
-                }
-
-                return true;
-            });
+            function ($path, $option, $value) {
+                return $option !== STREAM_META_TOUCH;
+            }
+        );
 
         TestWrapper::setCallback(
             'url_stat',
-            function($path, $flags)
-            {
+            function ($path, $flags) {
                 return [
-                    'dev' => 2055,
-                    'ino' => 1573894,
-                    'mode' => 16872,
-                    'nlink' => 1,
-                    'uid' => 1000,
-                    'gid' => 1000,
-                    'rdev' => 0,
-                    'size' => 1,
-                    'atime' => 1300000000,
-                    'mtime' => 1300000000,
-                    'ctime' => 1300000000,
+                    'dev'     => 2055,
+                    'ino'     => 1573894,
+                    'mode'    => 16872,
+                    'nlink'   => 1,
+                    'uid'     => 1000,
+                    'gid'     => 1000,
+                    'rdev'    => 0,
+                    'size'    => 1,
+                    'atime'   => 1300000000,
+                    'mtime'   => 1300000000,
+                    'ctime'   => 1300000000,
                     'blksize' => 4096,
-                    'blocks' => 1];
-            });
+                    'blocks'  => 1
+                ];
+            }
+        );
 
-        if (!stream_wrapper_register(
-                'test', '\Evoke_Test\Service\Log\TestWrapper'))
-        {
+        if (!stream_wrapper_register('test', '\Evoke_Test\Service\Log\TestWrapper')) {
             throw new \ErrorException('Cannot register test stream.');
         }
 
-        try
-        {
+        try {
             $object = new File('test://DIR/log');
             $object->log(new DateTime, 'Message', 'Level');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             stream_wrapper_unregister('test');
             throw $e;
         }
@@ -358,7 +317,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testLogToEmpty()
     {
-        $fs = vfsStream::setup('Root', null, ['log_filename.whatever']);
+        $fs       = vfsStream::setup('Root', null, ['log_filename.whatever']);
         $testDate = new DateTime('25 October 2014 15:00:00');
 
         $object = new File(vfsStream::url('Root/log_filename.whatever'));
@@ -367,7 +326,8 @@ class FileTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $testDate->format('Y-M-d@H:i:sP') . ' [NOTICE] Please be on time.' .
             "\n",
-            $fs->getChild('log_filename.whatever')->getContent());
+            $fs->getChild('log_filename.whatever')->getContent()
+        );
     }
 
     /**
@@ -377,19 +337,17 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testWithoutLocking()
     {
-        $fs = vfsStream::setup('Root', null, ['l.txt']);
+        $fs       = vfsStream::setup('Root', null, ['l.txt']);
         $testDate = new DateTime('25 October 2014 15:00:00');
 
-        $object = new File(vfsStream::url('Root/l.txt'),
-                           0700,
-                           0640,
-                           false); // Non-Locking
+        $object = new File(vfsStream::url('Root/l.txt'), 0700, 0640, false); // Non-Locking
         $object->log($testDate, 'Please be on time.', 'NOTICE');
 
         $this->assertSame(
             $testDate->format('Y-M-d@H:i:sP') . ' [NOTICE] Please be on time.' .
             "\n",
-            $fs->getChild('l.txt')->getContent());
+            $fs->getChild('l.txt')->getContent()
+        );
     }
 }
 // EOF
