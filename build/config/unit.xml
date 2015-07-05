@@ -8,7 +8,6 @@
          forceCoversAnnotation              = "true"
          mapTestClassNameToCoveredClassName = "true"
          syntaxCheck                        = "false"
-         strict                             = "true"
          verbose                            = "true">
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
