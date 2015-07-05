@@ -98,9 +98,7 @@ class Select
         $optionElements = [];
 
         foreach ($this->options as $record) {
-            if (!isset($record[$this->fieldText],
-                $record[$this->fieldValue])
-            ) {
+            if (!isset($record[$this->fieldText], $record[$this->fieldValue])) {
                 throw new LogicException(
                     'Option needs TextField: ' . $this->fieldText . ' and ValueField: ' . $this->fieldValue
                 );

@@ -55,23 +55,19 @@ class Backtrace implements ViewIface
                 ];
 
             if (isset($info['line'])) {
-                $infoElements[] =
-                    ['span', ['class' => 'Line'], '(' . $info['line'] . ')'];
+                $infoElements[] = ['span', ['class' => 'Line'], '(' . $info['line'] . ')'];
             }
 
             if (isset($info['class'])) {
-                $infoElements[] =
-                    ['span', ['class' => 'Class'], $info['class']];
+                $infoElements[] = ['span', ['class' => 'Class'], $info['class']];
             }
 
             if (isset($info['type'])) {
-                $infoElements[] =
-                    ['span', ['class' => 'Type'], $info['type']];
+                $infoElements[] = ['span', ['class' => 'Type'], $info['type']];
             }
 
             if (isset($info['function'])) {
-                $infoElements[] =
-                    ['span', ['class' => 'Function'], $info['function']];
+                $infoElements[] = ['span', ['class' => 'Function'], $info['function']];
             }
 
             $listItems[] = ['li', [], $infoElements];

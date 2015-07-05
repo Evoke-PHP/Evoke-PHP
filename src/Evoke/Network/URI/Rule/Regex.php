@@ -61,10 +61,12 @@ class Regex extends Rule
         $invalidArgs = false;
 
         foreach ($params as $param) {
-            if (!isset($param['Key']['Match'],
-                $param['Key']['Replace'],
-                $param['Value']['Match'],
-                $param['Value']['Replace'])
+            if (!isset(
+                    $param['Key']['Match'],
+                    $param['Key']['Replace'],
+                    $param['Value']['Match'],
+                    $param['Value']['Replace']
+                )
             ) {
                 $invalidArgs = true;
                 break;
