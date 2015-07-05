@@ -115,8 +115,6 @@
                     outfile="${project.reports}/depend.xml"/>
             <logger type="overview-pyramid"
                     outfile="${project.reports}/depend-overview-pyramid"/>
-            <logger type="phpunit-xml"
-                    outfile="${project.reports}/depend-phpunit.xml"/>
             <logger type="summary-xml"
                     outfile="${project.reports}/depend-summary.xml"/>
         </phpdepend>

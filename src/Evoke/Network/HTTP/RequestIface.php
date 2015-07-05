@@ -22,36 +22,6 @@ interface RequestIface extends \Evoke\Network\RequestIface
     public function getMethod();
 
     /**
-     * Get the query parameter.
-     *
-     * @param string $param The parameter to get.
-     * @return mixed The query parameter.
-     */
-    public function getQueryParam($param);
-
-    /**
-     * Get the query parameters.
-     *
-     * @return mixed[] The query parameters.
-     */
-    public function getQueryParams();
-
-    /**
-     * Get the full URI of the request.
-     *
-     * @return string The URI of the request.
-     */
-    public function getURI();
-
-    /**
-     * Whether the query parameter is set.
-     *
-     * @param string $param The parameter to check.
-     * @return bool Whether the query parameter is set.
-     */
-    public function issetQueryParam($param);
-
-    /**
      * Parse the Accept header field from the request according to RFC-2616.
      *
      * This field specifies the preferred media types for responses.

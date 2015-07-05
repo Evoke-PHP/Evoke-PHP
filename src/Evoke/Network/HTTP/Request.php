@@ -105,7 +105,7 @@ EOP;
      * @param string $param The parameter to get.
      * @return mixed The query parameter.
      */
-    public function getQueryParam($param)
+    public function getParam($param)
     {
         if (!isset($_REQUEST[$param])) {
             throw new LogicException(__METHOD__ . ' should only be called if the parameter is set.');
@@ -119,7 +119,7 @@ EOP;
      *
      * @return array|mixed[][] The query parameters.
      */
-    public function getQueryParams()
+    public function getParams()
     {
         return isset($_REQUEST) ? $_REQUEST : [];
     }
@@ -140,7 +140,7 @@ EOP;
      * @param string $param The parameter to check.
      * @return bool Whether the query parameter is set.
      */
-    public function issetQueryParam($param)
+    public function issetParam($param)
     {
         return isset($_REQUEST[$param]);
     }

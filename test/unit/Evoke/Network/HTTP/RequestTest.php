@@ -207,7 +207,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $_REQUEST = ['Test_Key' => 'Test_Val'];
         $object   = new Request;
-        $this->assertSame('Test_Val', $object->getQueryParam('Test_Key'));
+        $this->assertSame('Test_Val', $object->getParam('Test_Key'));
     }
 
     /**
@@ -218,7 +218,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testGetQueryParamInexistant()
     {
         $object = new Request;
-        $object->getQueryParam('Inexistant');
+        $object->getParam('Inexistant');
     }
 
     /**
@@ -229,7 +229,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $params   = ['One' => 1, 'Two' => 2, 'Three' => 3];
         $_REQUEST = $params;
         $object   = new Request;
-        $this->assertSame($params, $object->getQueryParams());
+        $this->assertSame($params, $object->getParams());
     }
 
     /**
@@ -239,7 +239,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testGetQueryParamsNone()
     {
         $object = new Request;
-        $this->assertSame([], $object->getQueryParams());
+        $this->assertSame([], $object->getParams());
     }
 
     /**
@@ -262,7 +262,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $_REQUEST = $params;
         $object   = new Request;
-        $this->assertSame($expected, $object->issetQueryParam($key));
+        $this->assertSame($expected, $object->issetParam($key));
     }
 
     /**
