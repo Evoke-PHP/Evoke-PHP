@@ -51,31 +51,24 @@ class Regex extends Rule
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct(
-        Array        $controller,
-        $match,
-        Array        $params,
-        $authoritative = false
-    ) {
+    public function __construct(Array $controller, $match, Array $params, $authoritative = false)
+    {
         parent::__construct($authoritative);
         $invalidArgs = false;
 
         foreach ($params as $param) {
             if (!isset(
-                    $param['Key']['Match'],
-                    $param['Key']['Replace'],
-                    $param['Value']['Match'],
-                    $param['Value']['Replace']
-                )
-            ) {
+                $param['Key']['Match'],
+                $param['Key']['Replace'],
+                $param['Value']['Match'],
+                $param['Value']['Replace']
+            )) {
                 $invalidArgs = true;
                 break;
             }
         }
 
-        if ($invalidArgs ||
-            !isset($controller['Match'], $controller['Replace'])
-        ) {
+        if ($invalidArgs || !isset($controller['Match'], $controller['Replace'])) {
             throw new InvalidArgumentException('Bad Arguments');
         }
 
@@ -95,11 +88,7 @@ class Regex extends Rule
      */
     public function getController()
     {
-        return preg_replace(
-            $this->controller['Match'],
-            $this->controller['Replace'],
-            $this->uri
-        );
+        return preg_replace($this->controller['Match'], $this->controller['Replace'], $this->uri);
     }
 
     /**

@@ -125,7 +125,7 @@ EOP;
     }
 
     /**
-     * Get the full URI for the request.
+     * Get the URI for the request.
      *
      * @return string The URI of the request.
      */

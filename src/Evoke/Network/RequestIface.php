@@ -17,7 +17,7 @@ namespace Evoke\Network;
 interface RequestIface
 {
     /**
-     * Get the URI of the request (without any parameters).
+     * Get the URI of the request.
      *
      * @return string The URI of the request.
      */
