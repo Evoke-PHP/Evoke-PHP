@@ -6,7 +6,6 @@
 
 <!-- The build file for command line building of Evoke-PHP. -->
 <project name="Evoke-PHP" default="build">
-
     <!-- Build properties. -->
     <property name="project.build"
               description="The direcotry for the build information."
@@ -136,6 +135,12 @@
                 title="Evoke-PHP">
             <fileset refid = "src"/>
         </phpdoc2>
+        <if>
+            <available file="/tmp/phpdoc-twig-cache" type="dir"/>
+            <then>
+                <delete dir="/tmp/phpdoc-twig-cache"/>
+            </then>
+        </if>
     </target>
 
     <target name="lint-src"
