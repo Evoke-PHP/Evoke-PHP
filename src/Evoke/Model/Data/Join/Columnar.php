@@ -97,9 +97,12 @@ class Columnar extends Join
                 $jointData = $join->arrangeFlatData([$result]);
 
                 if (!empty($jointData)) {
-                    $data[$key][$this->jointKey][$joinID] = $jointData;
+                    if (!isset($data[$key][$this->jointKey][$joinID])) {
+                        $data[$key][$this->jointKey][$joinID] = $jointData;
+                    } else {
+                        $data[$key][$this->jointKey][$joinID] += $jointData;
+                    }
                 }
-
             }
 
             if (empty($data[$key][$this->jointKey])) {
