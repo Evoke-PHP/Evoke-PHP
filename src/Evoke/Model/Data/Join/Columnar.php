@@ -74,23 +74,24 @@ class Columnar extends Join
                 continue;
             }
 
-            $columnData = array_intersect_key($result, $this->columns);
-            $hasData    = false;
+            if (!isset($data[$key])) {
+                $columnData = array_intersect_key($result, $this->columns);
+                $hasData    = false;
 
-            foreach ($columnData as $val) {
-                if (isset($val)) {
-                    $hasData = true;
-                    break;
+                foreach ($columnData as $val) {
+                    if (isset($val)) {
+                        $hasData = true;
+                        break;
+                    }
                 }
+
+                if (!$hasData) {
+                    continue;
+                }
+
+                $data[$key]                  = $columnData;
+                $data[$key][$this->jointKey] = [];
             }
-
-            if (!$hasData) {
-                continue;
-            }
-
-            $data[$key] = $columnData;
-
-            $data[$key][$this->jointKey] = [];
 
             foreach ($this->joins as $joinID => $join) {
                 $jointData = $join->arrangeFlatData([$result]);
@@ -104,6 +105,7 @@ class Columnar extends Join
             if (empty($data[$key][$this->jointKey])) {
                 unset($data[$key][$this->jointKey]);
             }
+
         }
 
         return $data;
