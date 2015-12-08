@@ -33,8 +33,10 @@ class DataBuilder
         $jointData = [];
         $joins     = $joinStructure->getJoins();
 
-        foreach ($joins as $joinID => $join) {
-            $jointData[$joinID] = $this->build($join);
+        if (isset($joins)) {
+            foreach ($joins as $joinID => $join) {
+                $jointData[$joinID] = $this->build($join);
+            }
         }
 
         return new Data($joinStructure, $jointData);

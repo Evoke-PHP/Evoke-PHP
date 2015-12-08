@@ -54,15 +54,16 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
                 'Leaf_1' => $leaf1,
                 'Leaf_2' => $leaf2
             ]));
+
         $trunk = $this->getMock('Evoke\Model\Data\Join\JoinIface');
         $trunk
             ->expects($this->any())
             ->method('getJoins')
             ->with()
             ->will($this->returnValue([
-                'Branch_1'   => $branch1,
-                'Branch_2'   => $branch2,
-                'Branch_All' => $branchAll
+                'Branch_1'   => clone $branch1,
+                'Branch_2'   => clone $branch2,
+                'Branch_All' => clone $branchAll
             ]));
 
         // Set up the expected data
