@@ -1,6 +1,7 @@
 .directory
 .idea
 build/reports
+composer.lock
 test/coverage
 test/environment/composer.lock
 test/environment/vendor
