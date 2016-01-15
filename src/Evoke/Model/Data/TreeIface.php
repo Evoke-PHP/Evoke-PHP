@@ -14,7 +14,7 @@ namespace Evoke\Model\Data;
  * @license   MIT
  * @package   Model\Data
  */
-interface TreeIface extends \RecursiveIterator
+interface TreeIface extends \RecursiveIterator, \ArrayAccess
 {
     /**
      * Add a node to the tree.

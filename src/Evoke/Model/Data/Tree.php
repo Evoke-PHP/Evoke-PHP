@@ -6,6 +6,8 @@
  */
 namespace Evoke\Model\Data;
 
+use DomainException;
+
 /**
  * Tree
  *
@@ -96,6 +98,56 @@ class Tree implements TreeIface
     public function key()
     {
         return $this->position;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetExists($offset)
+    {
+        return is_array($this->value) && array_key_exists($offset, $this->value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetGet($offset)
+    {
+        if (!is_array($this->value) || !array_key_exists($offset, $this->value)) {
+            throw new DomainException(
+                'Offset: ' . $offset . ' does not exist in Tree node with value: ' . var_export($this->value, true)
+            );
+        }
+
+        return $this->value[$offset];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (!is_array($this->value)) {
+            throw new DomainException(
+                'Cannot set an offset for the non-array node value: ' . var_export($this->value, true)
+            );
+        }
+
+        $this->value[$offset] = $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetUnset($offset)
+    {
+        if (!is_array($this->value)) {
+            throw new DomainException(
+                'Cannot unset an offset from the non-array node value: ' . var_export($this->value, true)
+            );
+        }
+
+        unset($this->value[$offset]);
     }
 
     /**
