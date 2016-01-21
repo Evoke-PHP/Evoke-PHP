@@ -175,7 +175,7 @@ class XML implements WriterIface
         }
 
         // Some elements should always have a full end tag <div></div> rather than <div/>
-        if (preg_match('(^(div|iframe|script|textarea)$)i', $tag)) {
+        if (preg_match('(^(div|iframe|script|span|textarea)$)i', $tag)) {
             $this->xmlWriter->fullEndElement();
         } else {
             $this->xmlWriter->endElement();
