@@ -126,6 +126,29 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testAddRadio()
+    {
+        $object = new FormBuilder;
+        $object->addRadio('Group', 'Val');
+
+        $this->assertSame(
+            [
+                'form',
+                ['action' => '', 'method' => 'POST'],
+                [
+                    [
+                        'input',
+                        [
+                            'name'  => 'Group',
+                            'type'  => 'radio',
+                            'value' => 'Val']
+                    ]
+                ]
+            ],
+            $object->get()
+        );
+    }
+
     public function testAddSelect()
     {
         $object = new FormBuilder;

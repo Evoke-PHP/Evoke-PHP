@@ -137,6 +137,21 @@ class FormBuilder implements FormBuilderIface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function addRadio($name, $value)
+    {
+        $this->add([
+                'input',
+                [
+                    'name'  => $name,
+                    'type'  => 'radio',
+                    'value' => $value
+                ]
+            ]);
+    }
+
+    /**
      * Add a row to the form.
      *
      * @param mixed $rowElements The elements within the row.

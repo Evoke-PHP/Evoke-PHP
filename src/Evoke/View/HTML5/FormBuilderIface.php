@@ -62,6 +62,11 @@ interface FormBuilderIface extends ViewIface
     public function addLabel($for, $text);
 
     /**
+     * Add a radio button to the form.
+     */
+    public function addRadio($name, $value);
+
+    /**
      * Add a submit button to the form.
      *
      * @param string $name  Name of the submit button.
