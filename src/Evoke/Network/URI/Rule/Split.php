@@ -9,7 +9,7 @@ namespace Evoke\Network\URI\Rule;
 use InvalidArgumentException;
 
 /**
- * Split
+ * URI rule to split the uri into named parameters after an optional prefix.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
@@ -49,7 +49,7 @@ class Split extends Rule
     protected $separator;
 
     /**
-     * Construct a Split object.
+     * Construct a Split object to split the uri into named parameters after an optional prefix.
      *
      * @param string   $controller
      * @param string[] $parts
