@@ -2,19 +2,19 @@
 /**
  * ProcessingTest
  *
- * @package   Evoke_Test\Network\URI\Processing
+ * @package   Evoke_Test\Service\Processing
  */
 
-namespace Evoke_Test\Network\URI\Processing;
+namespace Evoke_Test\Service\Processing;
 
 use DomainException;
-use Evoke\Network\URI\Processing\Processing;
+use Evoke\Service\Processing\Processing;
 use PHPUnit_Framework_TestCase;
 
 /**
  * ProcessingTest
  *
- * @covers Evoke\Network\URI\Processing\Processing
+ * @covers Evoke\Service\Processing\Processing
  */
 class ProcessingTest extends PHPUnit_Framework_TestCase
 {
@@ -24,13 +24,13 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 
     public function providerDefaultBehaviourAllowsZeroOneOrMoreMatches()
     {
-        $matchedRule = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $matchedRule = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $matchedRule
             ->expects($this->any())
             ->method('isMatch')
             ->will($this->returnValue(true));
 
-        $unmatchedRule  = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $unmatchedRule  = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $unmatchedRule
             ->expects($this->any())
             ->method('isMatch')
@@ -80,7 +80,7 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
 
     public function testOnlyMatchedRulesAreExecutedOnce()
     {
-        $matchedRule1 = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $matchedRule1 = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $matchedRule1
             ->expects($this->any())
             ->method('isMatch')
@@ -89,7 +89,7 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute');
 
-        $matchedRule2 = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $matchedRule2 = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $matchedRule2
             ->expects($this->any())
             ->method('isMatch')
@@ -98,7 +98,7 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('execute');
 
-        $unmatchedRule  = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $unmatchedRule  = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $unmatchedRule
             ->expects($this->any())
             ->method('isMatch')
@@ -124,7 +124,7 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
         $obj = new Processing;
         $obj->setUniqueMatchRequired();
 
-        $matchedRule = $this->getMock('Evoke\Network\URI\Processing\Rule\RuleIface');
+        $matchedRule = $this->getMock('Evoke\Service\Processing\Rule\RuleIface');
         $matchedRule
             ->expects($this->any())
             ->method('isMatch')
@@ -135,3 +135,4 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
         $obj->process();
     }
 }
+// EOF

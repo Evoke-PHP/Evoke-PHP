@@ -2,11 +2,11 @@
 /**
  * RuleTest
  *
- * @package   Evoke_Test\Network\URI\Processing\Rule
+ * @package   Evoke_Test\Service\Processing\Rule
  */
-namespace Evoke_Test\Network\URI\Processing\Rule;
+namespace Evoke_Test\Service\Processing\Rule;
 
-use Evoke\Network\URI\Processing\Rule\Rule;
+use Evoke\Service\Processing\Rule\Rule;
 
 /**
  * Concrete Rule
@@ -27,7 +27,7 @@ class Concrete extends Rule
 /**
  * RuleTest
  *
- * @covers Evoke\Network\URI\Processing\Rule\Rule
+ * @covers Evoke\Service\Processing\Rule\Rule
  */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,9 +37,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $obj = new Concrete([new \Evoke_Test\Network\URI\Processing\Rule\StubCallback, 'SetArgs']);
+        $obj = new Concrete([new \Evoke_Test\Service\Processing\Rule\StubCallback, 'SetArgs']);
 
-        $this->assertInstanceOf('Evoke\Network\URI\Processing\Rule\Rule', $obj);
+        $this->assertInstanceOf('Evoke\Service\Processing\Rule\Rule', $obj);
     }
 
     public function testSetData()

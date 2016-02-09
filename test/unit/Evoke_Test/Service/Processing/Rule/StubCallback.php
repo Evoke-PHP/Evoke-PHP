@@ -2,9 +2,9 @@
 /**
  * StubCallback
  *
- * @package   Evoke_Test\Network\URI\Processing\Rule
+ * @package   Evoke_Test\Service\Processing\Rule
  */
-namespace Evoke_Test\Network\URI\Processing\Rule;
+namespace Evoke_Test\Service\Processing\Rule;
 
 class StubCallback
 {

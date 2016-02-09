@@ -2,12 +2,12 @@
 /**
  * Processing
  *
- * @package Evoke\Network\URI\Processing
+ * @package Evoke\Service\Processing
  */
-namespace Evoke\Network\URI\Processing;
+namespace Evoke\Service\Processing;
 
 use DomainException;
-use Evoke\Network\URI\Processing\Rule\RuleIface;
+use Evoke\Service\Processing\Rule\RuleIface;
 
 /**
  * Processing
@@ -20,7 +20,7 @@ use Evoke\Network\URI\Processing\Rule\RuleIface;
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
- * @package   Evoke\Network\URI\Processing
+ * @package   Evoke\Service\Processing
  */
 class Processing implements ProcessingIface
 {

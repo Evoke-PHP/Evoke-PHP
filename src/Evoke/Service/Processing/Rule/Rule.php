@@ -2,16 +2,16 @@
 /**
  * Rule
  *
- * @package   Evoke\Network\URI\Processing\Rule
+ * @package   Evoke\Service\Processing\Rule
  */
-namespace Evoke\Network\URI\Processing\Rule;
+namespace Evoke\Service\Processing\Rule;
 
 /**
  * Rule
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
- * @package   Evoke\Network\URI\Processing\Rule
+ * @package   Evoke\Service\Processing\Rule
  */
 abstract class Rule implements RuleIface
 {

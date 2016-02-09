@@ -2,14 +2,14 @@
 /**
  * BlankTest
  *
- * @package   Evoke_Test\Network\URI\Processing\Rule
+ * @package   Evoke_Test\Service\Processing\Rule
  */
-namespace Evoke_Test\Network\URI\Processing\Rule;
+namespace Evoke_Test\Service\Processing\Rule;
 
-use Evoke\Network\URI\Processing\Rule\Blank;
+use Evoke\Service\Processing\Rule\Blank;
 
 /**
- * @covers Evoke\Network\URI\Processing\Rule\Blank
+ * @covers Evoke\Service\Processing\Rule\Blank
  */
 class BlankTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,3 +58,4 @@ class BlankTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([[]], $stubCallback->getArgsStack());
     }
 }
+// EOF
