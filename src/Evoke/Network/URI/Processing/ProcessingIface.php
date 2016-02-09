@@ -2,9 +2,12 @@
 /**
  * Processing Interface
  *
- * @package Service
+ * @package Evoke\Network\URI\Processing
  */
-namespace Evoke\Service;
+namespace Evoke\Network\URI\Processing;
+
+use DomainException;
+use Evoke\Network\URI\Processing\Rule\RuleIface;
 
 /**
  * Processing Interface
@@ -12,20 +15,21 @@ namespace Evoke\Service;
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
- * @package   Service
+ * @package   Evoke\Network\URI\Processing
  */
 interface ProcessingIface
 {
     /**
-     * Add a callback to the request key's list of callbacks.
+     * Add a processing rule to the list of processing.
      *
-     * @param string   $requestKey The request key for the matching.
-     * @param callable $callback   The callback that is being added.
+     * @param RuleIface $rule The rule that is being added.
      */
-    public function addCallback($requestKey, callable $callback);
+    public function addRule(RuleIface $rule);
 
     /**
-     * Process the request.
+     * Process the data.
+     *
+     * @throws DomainException If the required match conditions aren't met.
      */
     public function process();
 
