@@ -57,6 +57,6 @@ class KeyOtherTest extends \PHPUnit_Framework_TestCase
         $obj->setData(['NOT' => 2, 'KEY' => 6, 'Other_Not' => 'Other']);
         $obj->execute();
 
-        $this->assertSame([2, 'Other'], $stubCallback->getArgs());
+        $this->assertSame([['NOT' => 2, 'Other_Not' => 'Other']], $stubCallback->getArgs());
     }
 }

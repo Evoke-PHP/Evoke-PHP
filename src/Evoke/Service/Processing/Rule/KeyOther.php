@@ -47,7 +47,7 @@ class KeyOther extends Rule
         $data = $this->data;
         unset($data[$this->key]);
 
-        call_user_func_array($this->callable, $data);
+        call_user_func($this->callable, $data);
     }
 
     /**
