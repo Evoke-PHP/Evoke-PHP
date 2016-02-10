@@ -57,3 +57,4 @@ class KeyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $obj->isMatch());
     }
 }
+// EOF

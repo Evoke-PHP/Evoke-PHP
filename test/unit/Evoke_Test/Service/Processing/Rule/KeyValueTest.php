@@ -21,7 +21,7 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
     public function testExecutesWithValueFromKey()
     {
         $stubCallback = new StubCallback;
-        $obj               = new KeyValue([$stubCallback, 'setArgs'], 'KEY');
+        $obj          = new KeyValue([$stubCallback, 'setArgs'], 'KEY');
         $obj->setData(['NOT' => 2, 'KEY' => 6]);
         $obj->execute();
 
