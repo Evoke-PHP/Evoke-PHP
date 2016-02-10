@@ -9,6 +9,9 @@ namespace Evoke_Test\Service\Processing\Rule;
 
 use Evoke\Service\Processing\Rule\AlwaysNone;
 
+/**
+ * @covers Evoke\Service\Processing\Rule\AlwaysNone
+ */
 class AlwaysNoneTest extends \PHPUnit_Framework_TestCase
 {
     /*********/
@@ -25,3 +28,4 @@ class AlwaysNoneTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $stubCallback->getArgs());
     }
 }
+// EOF

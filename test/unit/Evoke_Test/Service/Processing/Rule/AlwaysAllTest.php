@@ -8,6 +8,9 @@ namespace Evoke_Test\Service\Processing\Rule;
 
 use Evoke\Service\Processing\Rule\AlwaysAll;
 
+/**
+ * @covers Evoke\Service\Processing\Rule\AlwaysAll
+ */
 class AlwaysAllTest extends \PHPUnit_Framework_TestCase
 {
     /*********/
@@ -24,3 +27,4 @@ class AlwaysAllTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([['NOT' => 2, 'ANOTHER' => 6]], $stubCallback->getArgs());
     }
 }
+// EOF
