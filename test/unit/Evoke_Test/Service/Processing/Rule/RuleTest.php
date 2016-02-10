@@ -15,7 +15,7 @@ class Concrete extends Rule
 {
     public function execute()
     {
-        call_user_func_array($this->callable, $this->data);
+        call_user_func_array($this->callback, $this->data);
     }
 
     public function isMatch()

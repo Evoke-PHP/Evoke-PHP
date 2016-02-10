@@ -22,7 +22,7 @@ class Blank extends Rule
      */
     public function execute()
     {
-        call_user_func($this->callable);
+        call_user_func($this->callback);
     }
 
     /**

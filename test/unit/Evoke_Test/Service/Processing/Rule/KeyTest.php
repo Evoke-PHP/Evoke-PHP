@@ -1,18 +1,25 @@
 <?php
 /**
- * KeyOtherTest
+ * KeyTest
  *
  * @package   Evoke_Test\Service\Processing\Rule
  */
-
 namespace Evoke_Test\Service\Processing\Rule;
 
-use Evoke\Service\Processing\Rule\KeyOther;
+use Evoke\Service\Processing\Rule\Key;
+
+class StubKey extends Key
+{
+    public function execute()
+    {
+        echo __METHOD__ . "Don't Care, this should not be called.";
+    }
+}
 
 /**
- * @covers Evoke\Service\Processing\Rule\KeyOther
+ * @covers Evoke\Service\Processing\Rule\Key
  */
-class KeyOtherTest extends \PHPUnit_Framework_TestCase
+class KeyTest extends \PHPUnit_Framework_TestCase
 {
     /******************/
     /* Data Providers */
@@ -38,13 +45,15 @@ class KeyOtherTest extends \PHPUnit_Framework_TestCase
     /* Tests */
     /*********/
 
-    public function testExecutesWithValueFromKey()
+    /**
+     * @dataProvider providerMatchesWithKeyPresentOnly
+     */
+    public function testMatchesWithKeyPresentOnly($data, $expected, $key)
     {
         $stubCallback = new StubCallback;
-        $obj          = new KeyOther([$stubCallback, 'setArgs'], 'KEY');
-        $obj->setData(['NOT' => 2, 'KEY' => 6, 'Other_Not' => 'Other']);
-        $obj->execute();
+        $obj          = new StubKey([$stubCallback, 'setArgs'], $key);
+        $obj->setData($data);
 
-        $this->assertSame([['NOT' => 2, 'Other_Not' => 'Other']], $stubCallback->getArgs());
+        $this->assertSame($expected, $obj->isMatch());
     }
 }

@@ -19,7 +19,7 @@ abstract class Rule implements RuleIface
      * The callable used to execute the processing.
      * @var callable
      */
-    protected $callable;
+    protected $callback;
 
     /**
      * The data to process.
@@ -30,11 +30,11 @@ abstract class Rule implements RuleIface
     /**
      * Rule constructor.
      *
-     * @param $callable
+     * @param $callback
      */
-    public function __construct(callable $callable)
+    public function __construct(callable $callback)
     {
-        $this->callable = $callable;
+        $this->callback = $callback;
     }
 
     /******************/
