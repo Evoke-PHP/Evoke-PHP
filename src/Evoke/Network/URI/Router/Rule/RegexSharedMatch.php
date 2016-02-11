@@ -11,9 +11,8 @@ use InvalidArgumentException;
 /**
  * URI Regex Rule with one match used for all calculations.
  *
- * A regex rule to map the uri controller and parameters.  There is a single
- * match for the URI, with all replacements being made from this match.  If
- * there are more complex requirements such as optional parameters then the
+ * A regex rule to map the uri controller and parameters.  There is a single match for the URI, with all replacements
+ * being made from this match.  If there are more complex requirements such as optional parameters then the
  * RegexTwoLevel rule should be used.
  *
  * @author    Paul Young <evoke@youngish.org>
@@ -47,14 +46,10 @@ class RegexSharedMatch extends Rule
     /**
      * Construct the Regex Rule.
      *
-     * @param string  $match
-     * The Regex to match the URI with.
-     * @param string  $replacement
-     * The controller regex replacement string.
-     * @param Array[] $params
-     * Regex replacements for the parameters.
-     * @param bool    $authoritative
-     * Is this always the final route?
+     * @param string  $match         The Regex to match the URI with.
+     * @param string  $replacement   The controller regex replacement string.
+     * @param Array[] $params        Regex replacements for the parameters.
+     * @param bool    $authoritative Is this always the final route?
      * @throws InvalidArgumentException If the rule is incorrectly formatted.
      */
     public function __construct(

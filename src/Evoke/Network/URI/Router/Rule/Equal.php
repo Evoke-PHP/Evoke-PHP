@@ -45,12 +45,8 @@ class Equal extends Rule
      * @param mixed[] $params
      * @param bool    $authoritative Whether the rule is authoritative.
      */
-    public function __construct(
-        $controller,
-        $match,
-        Array        $params = [],
-        $authoritative = true
-    ) {
+    public function __construct($controller, $match, Array $params = [], $authoritative = true)
+    {
         parent::__construct($authoritative);
 
         $this->controller = $controller;

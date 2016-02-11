@@ -9,8 +9,8 @@ namespace Evoke\Network\URI\Router\Rule;
 /**
  * URI Regex Named Rule
  *
- * A regex rule to map the uri controller and parameters.  There is a single
- * match for the URI, with all replacements being made from this match.
+ * A regex rule to map the uri controller and parameters.  There is a single match for the URI, with all replacements
+ * being made from this match.
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
@@ -20,16 +20,14 @@ namespace Evoke\Network\URI\Router\Rule;
 class RegexNamed extends Rule
 {
     /**
-     * Regex match for the URI.  The named subpatterns are used for the
-     * parameters.
+     * Regex match for the URI.  The named subpatterns are used for the parameters.
      *
      * @var string
      */
     protected $match;
 
     /**
-     * Regex replacement for the controller.  Any named subpatterns must be
-     * referred to by number in the replacement.
+     * Regex replacement for the controller.  Any named subpatterns must be referred to by number in the replacement.
      *
      * @var string
      */
@@ -38,17 +36,12 @@ class RegexNamed extends Rule
     /**
      * Construct the Regex Named rule.
      *
-     * @param string $match
-     *                              Regex to match the URI with named
-     *                              subpatterns.
+     * @param string $match         Regex to match the URI with named subpatterns.
      * @param string $replacement   The controller regex replacement string.
      * @param bool   $authoritative Is this always the final route?
      */
-    public function __construct(
-        $match,
-        $replacement,
-        $authoritative = false
-    ) {
+    public function __construct($match, $replacement, $authoritative = false)
+    {
         parent::__construct($authoritative);
 
         $this->match       = $match;
