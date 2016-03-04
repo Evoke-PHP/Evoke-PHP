@@ -133,6 +133,128 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function providerMultiLevelJoins()
+    {
+        // A -> B --> C
+        //        `-> D
+        $a = new Columnar(['A'], ['AI']);
+        $b = new Columnar(['B'], ['BI']);
+        $c = new Columnar(['C'], ['CI']);
+        $d = new Columnar(['D'], ['DI']);
+        $b->addJoin('CJ', $c);
+        $b->addJoin('DJ', $d);
+        $a->addJoin('BJ', $b);
+
+        $data = [
+            [
+                'A'  => 'A1',
+                'AI' => 1,
+                'B'  => 'B1',
+                'BI' => 1,
+                'C'  => 'C1',
+                'CI' => 1,
+                'D'  => 'D1',
+                'DI' => 1,
+            ],
+            [
+                'A'  => 'A2',
+                'AI' => 2,
+                'B'  => 'B1',
+                'BI' => 1,
+                'C'  => 'C1',
+                'CI' => 1,
+                'D'  => null,
+                'DI' => null
+            ],
+            [
+                'A'  => 'A2',
+                'AI' => 2,
+                'B'  => 'B2',
+                'BI' => 2,
+                'C'  => 'C2',
+                'CI' => 2,
+                'D'  => 'D2',
+                'DI' => 2
+            ],
+            [
+                'A'  => 'A2',
+                'AI' => 2,
+                'B'  => 'B2',
+                'BI' => 2,
+                'C'  => 'C3',
+                'CI' => 3
+            ]
+        ];
+
+        $expected = [
+            1 => [
+                'A'          => 'A1',
+                'Joint_Data' => [
+                    'BJ' => [
+                        1 => [
+                            'B'          => 'B1',
+                            'Joint_Data' => [
+                                'CJ' => [
+                                    1 => [
+                                        'C' => 'C1'
+                                    ]
+                                ],
+                                'DJ' => [
+                                    1 => [
+                                        'D' => 'D1'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            2 => [
+                'A'          => 'A2',
+                'Joint_Data' => [
+                    'BJ' => [
+                        1 => [
+                            'B'          => 'B1',
+                            'Joint_Data' => [
+                                'CJ' => [
+                                    1 => [
+                                        'C' => 'C1'
+                                    ]
+                                ]
+                            ]
+                        ],
+                        2 => [
+                            'B'          => 'B2',
+                            'Joint_Data' => [
+                                'CJ' => [
+                                    2 => [
+                                        'C' => 'C2'
+                                    ],
+                                    3 => [
+                                        'C' => 'C3'
+                                    ]
+                                ],
+                                'DJ' => [
+                                    2 => [
+                                        'D' => 'D2'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        return [
+            'ABC' => [
+                'Obj'      => $a,
+                'Data'     => $data,
+                'Expected' => $expected
+            ]
+        ];
+    }
+
     /*********/
     /* Tests */
     /*********/
@@ -156,6 +278,14 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
     public function testJointData(Columnar $obj, Array $data, Array $expected)
     {
         $this->assertSame($expected, $obj->arrangeFlatData($data));
+    }
+
+    /**
+     * @dataProvider providerMultiLevelJoins
+     */
+    public function testMultiLevelJoins(Columnar $obj, Array $data, Array $expected)
+    {
+        $this->assertEquals($expected, $obj->arrangeFlatData($data));
     }
 }
 // EOF

@@ -211,14 +211,10 @@ class Tabular extends Join
      * Any hierarchical data that has already been arranged.
      * @return mixed[] The hierarchical results.
      */
-    public function arrangeSplitResults(
-        Array $splitResults,
-        Array $data = []
-    ) {
+    public function arrangeSplitResults(Array $splitResults, Array $data = [])
+    {
         foreach ($splitResults as $splitResult) {
-            if (!empty($splitResult[$this->tableName]) &&
-                $this->isResult($splitResult[$this->tableName])
-            ) {
+            if (!empty($splitResult[$this->tableName]) && $this->isResult($splitResult[$this->tableName])) {
                 $rowID  = $this->filterRowID($splitResult[$this->tableName]);
                 $result = $this->filterRowFields($splitResult[$this->tableName]);
 
@@ -270,7 +266,6 @@ class Tabular extends Join
 
         return $data;
     }
-
 
     /*********************/
     /* Protected Methods */

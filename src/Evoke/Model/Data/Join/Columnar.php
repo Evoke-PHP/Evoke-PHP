@@ -23,7 +23,7 @@ class Columnar extends Join
      *
      * @var string[]
      */
-    protected $fields;
+    protected $columns;
 
     /**
      * Joint Key
@@ -31,6 +31,13 @@ class Columnar extends Join
      * @var string
      */
     protected $jointKey;
+
+    /**
+     * Keys
+     *
+     * @var string[]
+     */
+    protected $keys;
 
     /**
      * Construct a Columnar join object.
@@ -66,6 +73,7 @@ class Columnar extends Join
     public function arrangeFlatData(Array $results)
     {
         $data = [];
+        $resultsToJoin = [];
 
         foreach ($results as $result) {
             $key = implode('_', array_intersect_key($result, $this->keys));
@@ -89,26 +97,40 @@ class Columnar extends Join
                     continue;
                 }
 
-                $data[$key]                  = $columnData;
+                $data[$key] = $columnData;
+
+                if (empty($this->joins)) {
+                    continue;
+                }
+
                 $data[$key][$this->jointKey] = [];
             }
 
-            foreach ($this->joins as $joinID => $join) {
-                $jointData = $join->arrangeFlatData([$result]);
+            if (!isset($resultsToJoin[$key])) {
+                $resultsToJoin[$key] = [];
+            }
 
-                if (!empty($jointData)) {
-                    if (!isset($data[$key][$this->jointKey][$joinID])) {
-                        $data[$key][$this->jointKey][$joinID] = $jointData;
-                    } else {
-                        $data[$key][$this->jointKey][$joinID] += $jointData;
-                    }
+            foreach ($this->joins as $joinID => $join) {
+                if (!isset($resultsToJoin[$key][$joinID])) {
+                    $resultsToJoin[$key][$joinID] = [];
+                }
+
+                $resultsToJoin[$key][$joinID][] = $result;
+            }
+        }
+
+        foreach ($resultsToJoin as $key => $joinResults) {
+            foreach ($joinResults as $joinID => $resultsForJoining) {
+                $data[$key][$this->jointKey][$joinID] = $this->joins[$joinID]->arrangeFlatData($resultsForJoining);
+
+                if (empty($data[$key][$this->jointKey][$joinID])) {
+                    unset($data[$key][$this->jointKey][$joinID]);
                 }
             }
 
             if (empty($data[$key][$this->jointKey])) {
                 unset($data[$key][$this->jointKey]);
             }
-
         }
 
         return $data;
