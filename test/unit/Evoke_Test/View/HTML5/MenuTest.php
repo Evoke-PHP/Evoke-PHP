@@ -81,8 +81,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
             ->method('get')
             ->with()
             ->will($this->returnValue([
-                'Href' => 'SL_Href',
-                'Text' => 'SL_Text'
+                'href' => 'SL_href',
+                'text' => 'SL_text'
             ]));
 
         $tIndex   = 0;
@@ -137,8 +137,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
                         [
                             [
                                 'a',
-                                ['href' => 'SL_Href'],
-                                'SL_Text'
+                                ['href' => 'SL_href'],
+                                'SL_text'
                             ]
                         ]
                     ]
@@ -154,10 +154,10 @@ class MenuTest extends PHPUnit_Framework_TestCase
     public function testSingleLevelMenuRealTree()
     {
         $a = new Tree;
-        $a->set(['Href' => '/a', 'Text' => 'a']);
+        $a->set(['href' => '/a', 'text' => 'a']);
 
         $b = new Tree;
-        $b->set(['Href' => '/b', 'Text' => 'b']);
+        $b->set(['href' => '/b', 'text' => 'b']);
 
         $tree = new Tree;
         $tree->set('Main_Tree');
@@ -218,8 +218,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
         foreach ($letters as $index => $letter) {
             $treeElements[$letter] = new Tree;
             $treeElements[$letter]->set([
-                'Href' => '/0/' . $letter,
-                'Text' => '0 ' . $letter
+                'href' => '/0/' . $letter,
+                'text' => '0 ' . $letter
             ]);
 
             for ($i = 0; $i < $firstLevelItems[$index]; $i++) {
@@ -227,8 +227,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
                 $treeElements[$firstLevelIndex] = new Tree;
                 $treeElements[$firstLevelIndex]->set(
                     [
-                        'Href' => '/1/' . $firstLevelIndex,
-                        'Text' => '1 ' . $firstLevelIndex
+                        'href' => '/1/' . $firstLevelIndex,
+                        'text' => '1 ' . $firstLevelIndex
                     ]
                 );
 
@@ -237,8 +237,8 @@ class MenuTest extends PHPUnit_Framework_TestCase
                     $treeElements[$secondLevelIndex] = new Tree;
                     $treeElements[$secondLevelIndex]->set(
                         [
-                            'Href' => '/2/' . $secondLevelIndex,
-                            'Text' => '2 ' . $secondLevelIndex
+                            'href' => '/2/' . $secondLevelIndex,
+                            'text' => '2 ' . $secondLevelIndex
                         ]
                     );
 

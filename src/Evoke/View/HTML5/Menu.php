@@ -117,8 +117,8 @@ class Menu implements ViewIface
                 [
                     [
                         'a',
-                        ['href' => $menuItem['Href']],
-                        $menuItem['Text']
+                        ['href' => $menuItem['href']],
+                        $menuItem['text']
                     ]
                 ]
             ];
