@@ -49,7 +49,7 @@ class Columnar extends Join
      */
     public function __construct(
         Array $columns,
-        Array $keys = ['ID'],
+        Array $keys = ['id'],
         $jointKey = 'Joint_Data',
         $useAlphaNumMatch = true
     ) {

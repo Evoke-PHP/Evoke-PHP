@@ -18,33 +18,33 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
     {
         return [
             'Multi_Keys' => [
-                new Columnar(['F1'], ['I1', 'I2']),
+                new Columnar(['f1'], ['i1', 'i2']),
                 [
                     [
-                        'F1' => 'r1',
-                        'I1' => 1,
-                        'I2' => 'a'
+                        'f1' => 'r1',
+                        'i1' => 1,
+                        'i2' => 'a'
                     ],
                     [
-                        'F1' => 'r2',
-                        'I1' => 2,
-                        'I2' => 'b'
+                        'f1' => 'r2',
+                        'i1' => 2,
+                        'i2' => 'b'
                     ]
                 ],
                 [
-                    '1_a' => ['F1' => 'r1'],
-                    '2_b' => ['F1' => 'r2']
+                    '1_a' => ['f1' => 'r1'],
+                    '2_b' => ['f1' => 'r2']
                 ]
             ],
             'Simple'     => [
-                new Columnar(['F1']),
+                new Columnar(['f1']),
                 [
-                    ['F1' => 'r1', 'ID' => 1],
-                    ['F1' => 'r2', 'ID' => 2]
+                    ['f1' => 'r1', 'id' => 1],
+                    ['f1' => 'r2', 'id' => 2]
                 ],
                 [
-                    1 => ['F1' => 'r1'],
-                    2 => ['F1' => 'r2']
+                    1 => ['f1' => 'r1'],
+                    2 => ['f1' => 'r2']
                 ]
             ]
         ];
@@ -52,79 +52,79 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
 
     public function providerJointData()
     {
-        $singleJoin = new Columnar(['F1']);
-        $singleJoin->addJoin('J1', new Columnar(['F2'], ['J_ID']));
+        $singleJoin = new Columnar(['f1']);
+        $singleJoin->addJoin('J1', new Columnar(['f2'], ['J_id']));
 
-        $doubleJoin = new Columnar(['F1']);
-        $doubleJoin->addJoin('J1', new Columnar(['F2'], ['J1_ID']));
-        $doubleJoin->addJoin('J2', new Columnar(['F3'], ['J2_ID']));
+        $doubleJoin = new Columnar(['f1']);
+        $doubleJoin->addJoin('J1', new Columnar(['f2'], ['J1_id']));
+        $doubleJoin->addJoin('J2', new Columnar(['f3'], ['J2_id']));
 
         return [
             'Single_Join' => [
                 $singleJoin,
                 [
                     [
-                        'ID'   => 1,
-                        'F1'   => 'F1_1',
-                        'J_ID' => 11,
-                        'F2'   => 'F2_1'
+                        'id'   => 1,
+                        'f1'   => 'f1_1',
+                        'J_id' => 11,
+                        'f2'   => 'f2_1'
                     ],
                     [
-                        'ID'   => 2,
-                        'F1'   => 'F1_2',
-                        'J_ID' => null,
-                        'F2'   => null
+                        'id'   => 2,
+                        'f1'   => 'f1_2',
+                        'J_id' => null,
+                        'f2'   => null
                     ]
                 ],
                 [
                     1 => [
-                        'F1'         => 'F1_1',
+                        'f1'         => 'f1_1',
                         'Joint_Data' => [
                             'J1' => [
-                                11 => ['F2' => 'F2_1']
+                                11 => ['f2' => 'f2_1']
                             ]
                         ]
                     ],
-                    2 => ['F1' => 'F1_2']
+                    2 => ['f1' => 'f1_2']
                 ]
             ],
             'Double_Join' => [
                 $doubleJoin,
                 [
                     [
-                        'ID'    => 1,
-                        'F1'    => 'F1_1',
-                        'F2'    => 'F2_1',
-                        'F3'    => 'F3_1',
-                        'J1_ID' => 'J1_1',
-                        'J2_ID' => 'J2_1'
+                        'id'    => 1,
+                        'f1'    => 'f1_1',
+                        'f2'    => 'f2_1',
+                        'f3'    => 'f3_1',
+                        'J1_id' => 'J1_1',
+                        'J2_id' => 'J2_1'
                     ],
                     [
-                        'ID'    => 2,
-                        'F1'    => 'F1_2',
-                        'F2'    => 'F2_2',
-                        'F3'    => null,
-                        'J1_ID' => 'J1_2',
-                        'J2_ID' => 'J2_2'
+                        'id'    => 2,
+                        'f1'    => 'f1_2',
+                        'f2'    => 'f2_2',
+                        'f3'    => null,
+                        'J1_id' => 'J1_2',
+                        'J2_id' => 'J2_2'
                     ]
                 ],
                 [
                     1 => [
-                        'F1'         => 'F1_1',
+                        'f1'         => 'f1_1',
                         'Joint_Data' => [
                             'J1' => [
-                                'J1_1' => ['F2' => 'F2_1']
+                                'J1_1' => ['f2' => 'f2_1']
                             ],
                             'J2' => [
-                                'J2_1' => ['F3' => 'F3_1']
+                                'J2_1' => ['f3' => 'f3_1']
                             ]
                         ]
                     ],
                     2 => [
-                        'F1'         => 'F1_2',
+                        'f1'         => 'f1_2',
                         'Joint_Data' => [
                             'J1' => [
-                                'J1_2' => ['F2' => 'F2_2']
+                                'J1_2' => ['f2' => 'f2_2']
                             ]
                         ]
                     ]
@@ -261,7 +261,7 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $this->assertInstanceOf('Evoke\Model\Data\Join\Columnar', new Columnar(['F1']));
+        $this->assertInstanceOf('Evoke\Model\Data\Join\Columnar', new Columnar(['f1']));
     }
 
     /**
