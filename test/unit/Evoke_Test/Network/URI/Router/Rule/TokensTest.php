@@ -17,25 +17,25 @@ class TokensTest extends PHPUnit_Framework_TestCase
     public function providerController()
     {
         return [
-            'Defaults' => [
-                'Expected' => 'C1',
-                'Object'   => new Tokens('C1', 'P1'),
-                'URI'      => 'P1/'
+            'defaults' => [
+                'expected' => 'C1',
+                'object'   => new Tokens('C1', 'P1'),
+                'uri'      => 'P1/'
             ],
-            'Empty'    => [
-                'Expected' => 'ControllerName',
-                'Object'   => new Tokens('ControllerName', 'Prefix', '+'),
-                'URI'      => 'Prefix'
+            'empty'    => [
+                'expected' => 'ControllerName',
+                'object'   => new Tokens('ControllerName', 'Prefix', '+'),
+                'uri'      => 'Prefix'
             ],
-            'One'      => [
-                'Expected' => 'ControllerName',
-                'Object'   => new Tokens('ControllerName', 'Prefix', '+'),
-                'URI'      => 'Prefix+Part'
+            'one'      => [
+                'expected' => 'ControllerName',
+                'object'   => new Tokens('ControllerName', 'Prefix', '+'),
+                'uri'      => 'Prefix+Part'
             ],
-            'Two'      => [
-                'Expected' => 'CTRL',
-                'Object'   => new Tokens('CTRL', 'PRE\FIX', '\\'),
-                'URI'      => 'PRE\FIX\Part1\Part2'
+            'two'      => [
+                'expected' => 'CTRL',
+                'object'   => new Tokens('CTRL', 'PRE\FIX', '\\'),
+                'uri'      => 'PRE\FIX\Part1\Part2'
             ]
         ];
     }
@@ -43,35 +43,35 @@ class TokensTest extends PHPUnit_Framework_TestCase
     public function providerMatch()
     {
         return [
-            'Empty_Prefix_1'            => [
-                'Expected' => true,
-                'Object'   => new Tokens('DC', '', '\\'),
-                'URI'      => 'Blah'
+            'empty_prefix_1'            => [
+                'expected' => true,
+                'object'   => new Tokens('DC', '', '\\'),
+                'uri'      => 'Blah'
             ],
-            'Empty_Prefix_2'            => [
-                'Expected' => true,
-                'Object'   => new Tokens('DC', '', '|'),
-                'URI'      => 'a|b'
+            'empty_prefix_2'            => [
+                'expected' => true,
+                'object'   => new Tokens('DC', '', '|'),
+                'uri'      => 'a|b'
             ],
-            'No_Match_Empty'            => [
-                'Expected' => false,
-                'Object'   => new Tokens('C', 'A', 'S'),
-                'URI'      => ''
+            'no_match_empty'            => [
+                'expected' => false,
+                'object'   => new Tokens('C', 'A', 'S'),
+                'uri'      => ''
             ],
-            'No_Match_Wrong_Prefix'     => [
-                'Expected' => false,
-                'Object'   => new Tokens('A', 'B', 'C'),
-                'URI'      => 'Z'
+            'no_match_wrong_prefix'     => [
+                'expected' => false,
+                'object'   => new Tokens('A', 'B', 'C'),
+                'uri'      => 'Z'
             ],
-            'Prefix_Ends_In_Token_Char' => [
-                'Expected' => true,
-                'Object'   => new Tokens('DC', 'CON+', '+'),
-                'URI'      => 'CON+'
+            'prefix_ends_in_token_char' => [
+                'expected' => true,
+                'object'   => new Tokens('DC', 'CON+', '+'),
+                'uri'      => 'CON+'
             ],
-            'Prefix_Match'              => [
-                'Expected' => true,
-                'Object'   => new Tokens('DC', 'match', '/'),
-                'URI'      => 'match/token1/token2'
+            'prefix_match'              => [
+                'expected' => true,
+                'object'   => new Tokens('DC', 'match', '/'),
+                'uri'      => 'match/token1/token2'
             ]
         ];
     }
@@ -79,35 +79,35 @@ class TokensTest extends PHPUnit_Framework_TestCase
     public function providerParams()
     {
         return [
-            'One'        => [
-                'Expected' => ['Part'],
-                'Object'   => new Tokens('DC', 'Cont+', '+'),
-                'URI'      => 'Cont+Part'
+            'one'        => [
+                'expected' => ['Part'],
+                'object'   => new Tokens('DC', 'Cont+', '+'),
+                'uri'      => 'Cont+Part'
             ],
-            'Empty'  => [
-                'Expected' => [],
-                'Object'   => new Tokens('DC', 'Cont+', '+'),
-                'URI'      => 'Cont+'
+            'empty'  => [
+                'expected' => [],
+                'object'   => new Tokens('DC', 'Cont+', '+'),
+                'uri'      => 'Cont+'
             ],
-            'Skip_Empty'  => [
-                'Expected' => ['Part1AsOtherSkipped', 'Part2'],
-                'Object'   => new Tokens('DC', 'Controller', '+'),
-                'URI'      => 'Controller++Part1AsOtherSkipped+++++++++Part2'
+            'skip_empty'  => [
+                'expected' => ['Part1AsOtherSkipped', 'Part2'],
+                'object'   => new Tokens('DC', 'Controller', '+'),
+                'uri'      => 'Controller++Part1AsOtherSkipped+++++++++Part2'
             ],
-            'Skip_Many' => [
-                'Expected' => ['a', 'd', 'g'],
-                'Object'   => new Tokens('C', 'C|', '|*'),
-                'URI'      => 'C|a|***|*|d||*||**|g'
+            'skip_many' => [
+                'expected' => ['a', 'd', 'g'],
+                'object'   => new Tokens('C', 'C|', '|*'),
+                'uri'      => 'C|a|***|*|d||*||**|g'
             ],
-            'Skip_Last' => [
-                'Expected' => ['Part1', 'Last'],
-                'Object'   => new Tokens('DC', 'Controller', '+'),
-                'URI'      => 'Controller+Part1+Last+'
+            'skip_last' => [
+                'expected' => ['Part1', 'Last'],
+                'object'   => new Tokens('DC', 'Controller', '+'),
+                'uri'      => 'Controller+Part1+Last+'
             ],
-            'Two'        => [
-                'Expected' => ['Part1', 'Part2'],
-                'Object'   => new Tokens('DC', 'Controller\\', '\\'),
-                'URI'      => 'Controller\Part1\Part2'
+            'two'        => [
+                'expected' => ['Part1', 'Part2'],
+                'object'   => new Tokens('DC', 'Controller\\', '\\'),
+                'uri'      => 'Controller\Part1\Part2'
             ],
 
         ];

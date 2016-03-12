@@ -24,7 +24,7 @@ class Session implements SessionIface
      * The domain within the session that we are managing.  This is an ordered list of the keys required to reach the
      * domain:
      *
-     *     `['L1', 'L2', 'L3'] == $_SESSION['L1']['L2']['L3']`
+     *     `['k1', 'k2', 'k3'] == $_SESSION['k1']['k2']['k3']`
      *
      * @var string[]
      */

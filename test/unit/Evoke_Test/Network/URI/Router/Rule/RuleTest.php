@@ -25,25 +25,25 @@ class RuleTest extends PHPUnit_Framework_TestCase
     public function providerIsAuthoritative()
     {
         return [
-            'True'  => [true],
-            'False' => [false]
+            'true'  => [true],
+            'false' => [false]
         ];
     }
 
     public function providerSetURI()
     {
         return [
-            'Empty'       => [''],
-            'Long_String' => ['this/is/a/long/Uri']
+            'empty'       => [''],
+            'long_string' => ['this/is/a/long/Uri']
         ];
     }
 
     public function providerSetURINonString()
     {
         return [
-            'Int'    => [123],
-            'Array'  => [['this is an array']],
-            'Object' => [new \StdClass]
+            'int'    => [123],
+            'array'  => [['this is an array']],
+            'object' => [new \StdClass]
         ];
     }
 

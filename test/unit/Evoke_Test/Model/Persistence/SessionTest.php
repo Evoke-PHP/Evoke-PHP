@@ -54,40 +54,40 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $fiftyLevels = [];
 
         for ($level = 0; $level < 50; $level++) {
-            $fiftyLevels[] = 'L' . $level;
+            $fiftyLevels[] = 'l' . $level;
         }
 
         return [
-            'Empty'       => ['Domain' => []],
-            'One_Level'   => ['Domain' => ['L1']],
-            'Two_Level'   => ['Domain' => ['This is level one', 'Now Two']],
-            'Five_Level'  => ['Domain' => ['L1', 'L2', 'L3', 'L4', 'L5']],
-            'Fifty_Level' => ['Domain' => $fiftyLevels]
+            'empty'       => ['domain' => []],
+            'one_level'   => ['domain' => ['l1']],
+            'two_level'   => ['domain' => ['This is level one', 'Now Two']],
+            'five_level'  => ['domain' => ['l1', 'l2', 'l3', 'l4', 'l5']],
+            'fifty_level' => ['domain' => $fiftyLevels]
         ];
     }
 
     public function providerDomainValue()
     {
         return [
-            'Domain_Empty_Value_NULL'     => [
-                'Domain' => [],
-                'Value'  => null
+            'domain_empty_value_null'     => [
+                'domain' => [],
+                'value'  => null
             ],
-            'Domain_Empty_Value_Array'    => [
-                'Domain' => [],
-                'Value'  => ['Arr_Val']
+            'domain_empty_value_array'    => [
+                'domain' => [],
+                'value'  => ['arr_val']
             ],
-            'Domain_Empty_Value_String'   => [
-                'Domain' => [],
-                'Value'  => 'Str_Val'
+            'domain_empty_value_string'   => [
+                'domain' => [],
+                'value'  => 'str_val'
             ],
-            'Domain_Leveled_Value_String' => [
-                'Domain' => ['One', 'Two'],
-                'Value'  => 'Str_Val'
+            'domain_leveled_value_string' => [
+                'domain' => ['one', 'two'],
+                'value'  => 'str_val'
             ],
-            'Domain_Leveled_Value_Array'  => [
-                'Domain' => ['One', 'Two'],
-                'Value'  => 'Str_Val'
+            'domain_leveled_value_array'  => [
+                'domain' => ['one', 'two'],
+                'value'  => 'str_val'
             ]
         ];
 
@@ -96,23 +96,23 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function providerGetAtOffset()
     {
         return [
-            'All_Empty' => [
-                'Data'     => [],
-                'Domain'   => [],
-                'Expected' => [],
-                'Offset'   => []
+            'all_empty' => [
+                'data'     => [],
+                'domain'   => [],
+                'expected' => [],
+                'offset'   => []
             ],
-            'Partial'   => [
-                'Data'     => ['One' => ['Two' => ['Tres' => 'Cuatro']]],
-                'Domain'   => ['No', 'Care'],
-                'Expected' => ['Tres' => 'Cuatro'],
-                'Offset'   => ['One', 'Two']
+            'partial'   => [
+                'data'     => ['one' => ['two' => ['three' => 'four']]],
+                'domain'   => ['no', 'care'],
+                'expected' => ['three' => 'four'],
+                'offset'   => ['one', 'two']
             ],
-            'Non_Exist' => [
-                'Data'     => ['One' => ['Two' => ['Tres' => []]]],
-                'Domain'   => ['A'],
-                'Expected' => null,
-                'Offset'   => ['One', 'Fifty']
+            'non_exist' => [
+                'data'     => ['one' => ['two' => ['three' => []]]],
+                'domain'   => ['a'],
+                'expected' => null,
+                'offset'   => ['one', 'fifty']
             ]
         ];
     }
@@ -120,19 +120,19 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function providerIsEqual()
     {
         return [
-            'Empty' => [
-                'Session'  => [],
-                'Domain'   => [],
-                'Key'      => '',
-                'Value'    => '',
-                'Equality' => false
+            'empty' => [
+                'session'  => [],
+                'domain'   => [],
+                'key'      => '',
+                'value'    => '',
+                'equality' => false
             ],
-            'Root'  => [
-                'Session'  => ['K' => 'Val'],
-                'Domain'   => [],
-                'Key'      => 'K',
-                'Value'    => 'Val',
-                'Equality' => true
+            'root'  => [
+                'session'  => ['k' => 'val'],
+                'domain'   => [],
+                'key'      => 'k',
+                'value'    => 'val',
+                'equality' => true
             ]
         ];
     }
@@ -140,39 +140,39 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function providerSetDataAtOffset()
     {
         return [
-            'All_Empty'       => [
-                'Domain'       => [],
-                'Expected'     => [],
-                'Initial_Data' => [],
-                'Offset'       => [],
-                'Set_Data'     => []
+            'all_empty'       => [
+                'domain'       => [],
+                'expected'     => [],
+                'initial_data' => [],
+                'offset'       => [],
+                'set_data'     => []
             ],
-            'Existing_Offset' => [
-                'Domain'       => ['A'],
-                'Expected'     => ['A' => ['B' => ['E' => 'F']]],
-                'Initial_Data' => ['B' => ['C' => 'D']],
-                'Offset'       => ['B'],
-                'Set_Data'     => ['E' => 'F']
+            'existing_offset' => [
+                'domain'       => ['a'],
+                'expected'     => ['a' => ['b' => ['e' => 'f']]],
+                'initial_data' => ['b' => ['c' => 'd']],
+                'offset'       => ['b'],
+                'set_data'     => ['e' => 'f']
             ],
-            'No_Offset'       => [
-                'Domain'       => ['D'],
-                'Expected'     => ['D' => ['Set_Data']],
-                'Initial_Data' => ['Initial_Data'],
-                'Offset'       => [],
-                'Set_Data'     => ['Set_Data']
+            'no_offset'       => [
+                'domain'       => ['d'],
+                'expected'     => ['d' => ['set_data']],
+                'initial_data' => ['initial_data'],
+                'offset'       => [],
+                'set_data'     => ['set_data']
             ],
-            'Unset_Offset'    => [
-                'Domain'       => ['A'],
-                'Expected'     => [
-                    'A' =>
+            'unset_offset'    => [
+                'domain'       => ['a'],
+                'expected'     => [
+                    'a' =>
                         [
-                            'O' => 'Other',
-                            'B' => ['C' => ['D' => ['E' => 'F']]]
+                            'o' => 'other',
+                            'b' => ['c' => ['d' => ['e' => 'f']]]
                         ]
                 ],
-                'Initial_Data' => ['O' => 'Other'],
-                'Offset'       => ['B', 'C'],
-                'Set_Data'     => ['D' => ['E' => 'F']]
+                'initial_data' => ['o' => 'other'],
+                'offset'       => ['b', 'c'],
+                'set_data'     => ['d' => ['e' => 'f']]
             ],
         ];
     }
@@ -241,10 +241,10 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testEnsureDomainCreatedFromEmpty()
     {
-        $domain = ['L1', 'L2', 'L3'];
+        $domain = ['l1', 'l2', 'l3'];
 
         $object = new Session($domain);
-        $this->assertSame(['L1' => ['L2' => ['L3' => []]]], $_SESSION, 'Ensure domain created from empty.');
+        $this->assertSame(['l1' => ['l2' => ['l3' => []]]], $_SESSION, 'Ensure domain created from empty.');
     }
 
     /**
@@ -252,14 +252,14 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testEnsureSessionAugmentedWithDomain()
     {
-        $domain   = ['L1', 'L2', 'L3'];
-        $_SESSION = ['A1' => ['A2' => 'A2 Val']];
+        $domain   = ['l1', 'l2', 'l3'];
+        $_SESSION = ['a1' => ['a2' => 'A2 Val']];
 
         $object = new Session($domain);
         $this->assertSame(
             [
-                'A1' => ['A2' => 'A2 Val'],
-                'L1' => ['L2' => ['L3' => []]]
+                'a1' => ['a2' => 'A2 Val'],
+                'l1' => ['l2' => ['l3' => []]]
             ],
             $_SESSION,
             'Ensure Session augmented with domain.'
@@ -282,7 +282,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->installRunkit('session_start', 'return false;');
 
         try {
-            $domain = ['L1', 'L2', 'L3'];
+            $domain = ['l1', 'l2', 'l3'];
             $object = new Session($domain, false);
         } catch (\Exception $e) {
             $this->restoreRunkit('php_sapi_name');
@@ -303,9 +303,9 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->installRunkit('headers_sent', 'return false;');
         $this->installRunkit('session_start', '$_SESSION = []; return true;');
 
-        $domain = ['L1', 'L2', 'L3'];
+        $domain = ['l1', 'l2', 'l3'];
         $object = new Session($domain, false);
-        $this->assertSame(['L1' => ['L2' => ['L3' => []]]], $_SESSION);
+        $this->assertSame(['l1' => ['l2' => ['l3' => []]]], $_SESSION);
 
         $this->restoreRunkit('php_sapi_name');
         $this->restoreRunkit('headers_sent');
@@ -327,7 +327,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->installRunkit('headers_sent', 'return true;');
 
         try {
-            $domain = ['L1', 'L2', 'L3'];
+            $domain = ['l1', 'l2', 'l3'];
             $object = new Session($domain, false);
         } catch (\Exception $e) {
             $this->restoreRunkit('php_sapi_name');
@@ -367,7 +367,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFlatDomain()
     {
-        $domain = ['Lev_1', 'Lev_2', 'Lev_3', 'Lev_4'];
+        $domain = ['lev_1', 'lev_2', 'lev_3', 'lev_4'];
         $object = new Session($domain);
 
         $this->assertSame($domain, $object->getFlatDomain());
@@ -387,17 +387,17 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testIncrement()
     {
-        $object = new Session(['A', 'B']);
-        $object->setData(['C' => 1]);
+        $object = new Session(['a', 'b']);
+        $object->setData(['c' => 1]);
 
-        $object->increment('C');
-        $this->assertSame(2, $_SESSION['A']['B']['C']);
+        $object->increment('c');
+        $this->assertSame(2, $_SESSION['a']['b']['c']);
 
-        $object->increment('C', 3);
-        $this->assertSame(5, $_SESSION['A']['B']['C']);
+        $object->increment('c', 3);
+        $this->assertSame(5, $_SESSION['a']['b']['c']);
 
-        $object->increment('C', -1);
-        $this->assertSame(4, $_SESSION['A']['B']['C']);
+        $object->increment('c', -1);
+        $this->assertSame(4, $_SESSION['a']['b']['c']);
     }
 
     /**
@@ -405,7 +405,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testIsEmpty()
     {
-        $object = new Session(['A', 'B']);
+        $object = new Session(['a', 'b']);
 
         $this->assertTrue($object->isEmpty(), 'Domain should be empty.');
 
@@ -452,9 +452,9 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function testKeyGetSet()
     {
         $object = new Session;
-        $object->set('Test_Key', 'Test_Value');
+        $object->set('test_key', 'test_value');
 
-        $this->assertSame('Test_Value', $object->get('Test_Key'));
+        $this->assertSame('test_value', $object->get('test_key'));
     }
 
     /**

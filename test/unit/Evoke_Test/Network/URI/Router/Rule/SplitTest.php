@@ -17,22 +17,22 @@ class SplitTest extends PHPUnit_Framework_TestCase
     public function providerController()
     {
         return [
-            'One'       => [
+            'one'       => [
                 'ControllerName',
                 new Split('ControllerName', ['One'], 'Prefix', '+'),
                 'Prefix+Part'
             ],
-            'One_Empty' => [
+            'one_empty' => [
                 'CON',
                 new Split('CON', ['One'], 'CON+', '+'),
                 'CON+'
             ],
-            'Two'       => [
+            'two'       => [
                 'CTRL',
                 new Split('CTRL', ['P1', 'P2'], 'PRE\FIX', '\\'),
                 'PRE\FIX\Part1\Part2'
             ],
-            'Two_Empty' => [
+            'two_empty' => [
                 'ThisIsIt',
                 new Split('ThisIsIt', ['P1', 'P2'], 'C', '\\'),
                 'C\\'
@@ -43,72 +43,72 @@ class SplitTest extends PHPUnit_Framework_TestCase
     public function providerMatch()
     {
         return [
-            'Empty_Prefix_1'      => [
+            'empty_prefix_1'      => [
                 true,
                 new Split('DC', ['One'], '', '\\'),
                 'Blah'
             ],
-            'Empty_Prefix_2'      => [
+            'empty_prefix_2'      => [
                 true,
                 new Split('DC', ['One', 'Two'], '', '|'),
                 'a|b'
             ],
-            'One_Empty'           => [
+            'one_empty'           => [
                 true,
                 new Split('DC', ['One'], 'CON+', '+'),
                 'CON+'
             ],
-            'One_Extra'           => [
+            'one_extra'           => [
                 false,
                 new Split('Cont', ['One'], 'Cont ', ' '),
                 'Cont One Two'
             ],
-            'One_Match'           => [
+            'one_match'           => [
                 true,
                 new Split('DC', ['One'], 'Cont+', '+'),
                 'Cont+Part'
             ],
-            'One_Prefix_Bad'      => [
+            'one_prefix_bad'      => [
                 false,
                 new Split('C', ['One'], 'A', 'S'),
                 'C'
             ],
-            'Two_Empty'           => [
+            'two_empty'           => [
                 true,
                 new Split('C', ['One', 'Two'], 'C**', '**'),
                 'C**A**'
             ],
-            'Two_Extra'           => [
+            'two_extra'           => [
                 false,
                 new Split('Cont', ['P1', 'P2'], 'Cont\\', '\\'),
                 'Cont\One\Two\Three'
             ],
-            'Two_Less'            => [
+            'two_less'            => [
                 false,
                 new Split('Cont', ['P1', 'P2'], 'Cont\\', '\\'),
                 'Cont\One'
             ],
-            'Two_Match'           => [
+            'two_match'           => [
                 true,
                 new Split('DC', ['P1', 'P2'], 'CTRL\\', '\\'),
                 'CTRL\Part1\Part2'
             ],
-            'Two_Prefix_Bad'      => [
+            'two_prefix_bad'      => [
                 false,
                 new Split('C', ['One', 'Two'], 'A', 'S'),
                 'XoneStwo'
             ],
-            'Many_Empty'          => [
+            'many_empty'          => [
                 true,
                 new Split('C', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'C|', '|'),
                 'C|a|||d|||g'
             ],
-            'Prefix_Without_Sep'  => [
+            'prefix_without_sep'  => [
                 true,
                 new Split('Controller', ['A', 'B'], 'Prefix', 'S'),
                 'PrefixaSb'
             ],
-            'Prefix_WO_Sep_Extra' => [
+            'prefix_wo_sep_extra' => [
                 false,
                 new Split('DC', ['A', 'B'], 'PRE', 'S'),
                 'PRESb_valueS'
@@ -119,27 +119,27 @@ class SplitTest extends PHPUnit_Framework_TestCase
     public function providerParams()
     {
         return [
-            'One'        => [
+            'one'        => [
                 ['One' => 'Part'],
                 new Split('DC', ['One'], 'Cont+', '+'),
                 'Cont+Part'
             ],
-            'One_Empty'  => [
+            'one_empty'  => [
                 ['One' => ''],
                 new Split('DC', ['One'], 'Cont+', '+'),
                 'Cont+'
             ],
-            'Two'        => [
+            'two'        => [
                 ['P1' => 'Part1', 'P2' => 'Part2'],
                 new Split('DC', ['P1', 'P2'], 'Controller\\', '\\'),
                 'Controller\Part1\Part2'
             ],
-            'Two_Empty'  => [
+            'two_empty'  => [
                 ['P1' => 'Part1', 'P2' => ''],
                 new Split('DC', ['P1', 'P2'], 'Controller\\', '\\'),
                 'Controller\Part1\\'
             ],
-            'Many_Empty' => [
+            'many_empty' => [
                 [
                     'A' => 'a',
                     'B' => '',

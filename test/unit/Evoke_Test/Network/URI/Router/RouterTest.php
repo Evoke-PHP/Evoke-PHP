@@ -36,7 +36,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->expects($this->at($ruleIndex++))
             ->method('getParams')
             ->with()
-            ->will($this->returnValue(['Params' => 'Found']));
+            ->will($this->returnValue(['params' => 'Found']));
         $rule
             ->expects($this->at($ruleIndex++))
             ->method('isAuthoritative')
@@ -48,8 +48,8 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'Controller' => 'newController',
-                'Params'     => ['Params' => 'Found']
+                'controller' => 'newController',
+                'params'     => ['params' => 'Found']
             ],
             $obj->route('oldURI')
         );
@@ -81,7 +81,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->expects($this->at($rIndex++))
             ->method('getParams')
             ->with()
-            ->will($this->returnValue(['Params' => 'Found']));
+            ->will($this->returnValue(['params' => 'Found']));
         $r1
             ->expects($this->at($rIndex++))
             ->method('isAuthoritative')
@@ -108,7 +108,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->expects($this->at($rIndex++))
             ->method('getParams')
             ->with()
-            ->will($this->returnValue(['More' => 'Params']));
+            ->will($this->returnValue(['more' => 'Params']));
         $r2
             ->expects($this->at($rIndex++))
             ->method('isAuthoritative')
@@ -129,10 +129,10 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'Controller' => 'refinedURI',
-                'Params'     => [
-                    'Params' => 'Found',
-                    'More'   => 'Params'
+                'controller' => 'refinedURI',
+                'params'     => [
+                    'params' => 'Found',
+                    'more'   => 'Params'
                 ]
             ],
             $obj->route('oldURI')

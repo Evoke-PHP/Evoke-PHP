@@ -26,31 +26,31 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
     public function provider__constructInvalidParamSpec()
     {
         return [
-            'Bad_Empty_Param_Spec'       =>
+            'bad_empty_param_spec'       =>
                 [
-                    'Match'       => 'One1',
-                    'Replacement' => 'One2',
-                    'Params'      => [[]]
+                    'match'       => 'One1',
+                    'replacement' => 'One2',
+                    'params'      => [[]]
                 ],
-            'Param_Spec_Value_Bad(Bool)' =>
+            'param_spec_value_bad(bool)' =>
                 [
-                    'Match'       => 'Two1',
-                    'Replacement' => 'Two2',
-                    'Params'      => [
+                    'match'       => 'Two1',
+                    'replacement' => 'Two2',
+                    'params'      => [
                         [
-                            'Key'     => 'Good',
-                            'NoValue' => false
+                            'key'     => 'Good',
+                            'novalue' => false
                         ]
                     ]
                 ],
-            'Param_Spec_Key_Bad(Bool)'   =>
+            'param_spec_key_bad(bool)'   =>
                 [
-                    'Match'       => 'Tri1',
-                    'Replacement' => 'Tri2',
-                    'Params'      => [
+                    'match'       => 'Tri1',
+                    'replacement' => 'Tri2',
+                    'params'      => [
                         [
-                            'NoKey' => false,
-                            'Value' => 'Good'
+                            'nokey' => false,
+                            'value' => 'Good'
                         ]
                     ]
                 ]
@@ -63,40 +63,40 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
     public function providerGetParams()
     {
         return [
-            'Empty_Param_Spec'          =>
+            'empty_param_spec'          =>
                 [
-                    'Match'         => '/myUri/',
-                    'Replacement'   => 'replacement',
-                    'Params'        => [],
-                    'Authoritative' => false,
-                    'Uri'           => 'myUri/',
-                    'Expected'      => []
+                    'match'         => '/myUri/',
+                    'replacement'   => 'replacement',
+                    'params'        => [],
+                    'authoritative' => false,
+                    'uri'           => 'myUri/',
+                    'expected'      => []
                 ],
-            'Match_Parameters_From_URI' =>
+            'match_parameters_from_urI' =>
                 [
-                    'Match'         => '/\/Product\/(\w+)\/(\w+)\/(\w+)\/(\d+)/',
-                    'Replacement'   => 'replacement',
-                    'Params'        => [
+                    'match'         => '/\/Product\/(\w+)\/(\w+)\/(\w+)\/(\d+)/',
+                    'replacement'   => 'replacement',
+                    'params'        => [
                         [
-                            'Key'   => 'Type',
-                            'Value' => '\1'
+                            'key'   => 'Type',
+                            'value' => '\1'
                         ],
                         [
-                            'Key'   => 'Size',
-                            'Value' => '\2'
+                            'key'   => 'Size',
+                            'value' => '\2'
                         ],
                         [
-                            'Key'   => '\3',
-                            'Value' => '\3'
+                            'key'   => '\3',
+                            'value' => '\3'
                         ],
                         [
-                            'Key'   => 'ID',
-                            'Value' => '\4'
+                            'key'   => 'ID',
+                            'value' => '\4'
                         ]
                     ],
-                    'Authoritative' => false,
-                    'Uri'           => '/Product/Banana/Big/Yellow/123',
-                    'Expected'      => [
+                    'authoritative' => false,
+                    'uri'           => '/Product/Banana/Big/Yellow/123',
+                    'expected'      => [
                         'Type'   => 'Banana',
                         'Size'   => 'Big',
                         'Yellow' => 'Yellow', // Test key can be regexed too.
@@ -112,41 +112,41 @@ class RegexSharedMatchTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Match_Empty_Matches_Empty_Uri'            =>
+            'match_empty_matches_empty_uri'            =>
                 [
-                    'Match'         => '/^$/',
-                    'Replacement'   => 'any',
-                    'Params'        => [],
-                    'Authoritative' => false,
-                    'Uri'           => '',
-                    'Expected'      => true
+                    'match'         => '/^$/',
+                    'replacement'   => 'any',
+                    'params'        => [],
+                    'authoritative' => false,
+                    'uri'           => '',
+                    'expected'      => true
                 ],
-            'Match_Something_Does_Not_Match_Empty_Uri' =>
+            'match_something_does_not_match_empty_uri' =>
                 [
-                    'Match'         => '/something/',
-                    'Replacement'   => 'good',
-                    'Params'        => [],
-                    'Authoritative' => false,
-                    'Uri'           => '',
-                    'Expected'      => false
+                    'match'         => '/something/',
+                    'replacement'   => 'good',
+                    'params'        => [],
+                    'authoritative' => false,
+                    'uri'           => '',
+                    'expected'      => false
                 ],
-            'Match_Different_From_Uri'                 =>
+            'match_different_from_uri'                 =>
                 [
-                    'Match'         => '/bad/',
-                    'Replacement'   => 'good',
-                    'Params'        => [],
-                    'Authoritative' => false,
-                    'Uri'           => 'uri',
-                    'Expected'      => false
+                    'match'         => '/bad/',
+                    'replacement'   => 'good',
+                    'params'        => [],
+                    'authoritative' => false,
+                    'uri'           => 'uri',
+                    'expected'      => false
                 ],
-            'Match_Does_Match_Uri'                     =>
+            'match_does_match_uri'                     =>
                 [
-                    'Match'         => '/good/',
-                    'Replacement'   => 'bad',
-                    'Params'        => [],
-                    'Authoritative' => false,
-                    'Uri'           => 'hello/goodday',
-                    'Expected'      => true
+                    'match'         => '/good/',
+                    'replacement'   => 'bad',
+                    'params'        => [],
+                    'authoritative' => false,
+                    'uri'           => 'hello/goodday',
+                    'expected'      => true
                 ]
         ];
     }

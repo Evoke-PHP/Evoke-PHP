@@ -166,8 +166,8 @@ class Tabular extends Join
      */
     public function __construct(
         $tableName,
-        Array $keys = ['ID'],
-        $jointKey = 'Joint_Data',
+        Array $keys = ['id'],
+        $jointKey = 'joint_data',
         $requireAllTabularFields = true,
         $separator = '_T_',
         $useAlphaNumMatch = true

@@ -29,17 +29,17 @@ class SelectTest extends PHPUnit_Framework_TestCase
     {
         $data   = [
             [
-                'Text_Field' => 'One',
-                'ID_Field'   => 1
+                'text_field' => 'One',
+                'id_field'   => 1
             ],
             [
-                'Text_Field' => 'Two',
-                'ID_Field'   => 2
+                'text_field' => 'Two',
+                'id_field'   => 2
             ]
         ];
         $object = new Select(
-            'Text_Field',
-            'ID_Field',
+            'text_field',
+            'id_field',
             ['Attrib' => 'Main'],
             ['Attrib' => 'Option']
         );
@@ -64,18 +64,18 @@ class SelectTest extends PHPUnit_Framework_TestCase
     {
         $data = [
             [
-                'Text_Field' => 'One',
-                'ID_Field'   => 1
+                'text_field' => 'One',
+                'id_field'   => 1
             ],
             [
-                'Text_Field' => 'Two',
-                'ID_Field'   => 2
+                'text_field' => 'Two',
+                'id_field'   => 2
             ]
         ];
 
         $object = new Select(
-            'Text_Field',
-            'ID_Field',
+            'text_field',
+            'id_field',
             ['Attrib' => 'Main'],
             ['Attrib' => 'Option']
         );
@@ -117,12 +117,12 @@ class SelectTest extends PHPUnit_Framework_TestCase
     {
         $data = [
             [
-                'Text_Field' => 'One',
-                'ID_Field'   => 1
+                'text_field' => 'One',
+                'id_field'   => 1
             ],
             [
-                'Text_Field' => 'Two',
-                'ID_Field'   => 2
+                'text_field' => 'Two',
+                'id_field'   => 2
             ]
         ];
 
@@ -140,16 +140,16 @@ class SelectTest extends PHPUnit_Framework_TestCase
     {
         $data = [
             [
-                'Text_Field' => 'One',
-                'ID_Field'   => 1
+                'text_field' => 'One',
+                'id_field'   => 1
             ],
             [
-                'Text_Field' => 'Two',
-                'ID_Field'   => 2
+                'text_field' => 'Two',
+                'id_field'   => 2
             ]
         ];
 
-        $object = new Select('Text_Field', 'Value_Field');
+        $object = new Select('text_field', 'value_field');
         $object->setOptions($data);
         $object->get();
     }

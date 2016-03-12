@@ -16,9 +16,9 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
     public function providerGoodBacktraceElements()
     {
         return [
-            'One_Level' =>
+            'one_level' =>
                 [
-                    'Backtrace' => [
+                    'backtrace' => [
                         [
                             'class'    => 'One',
                             'file'     => 'one.php',
@@ -27,7 +27,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
                             'type'     => 'one_type'
                         ]
                     ],
-                    'Expected'  =>
+                    'expected'  =>
                         [
                             'ol',
                             ['class' => 'Backtrace'],
@@ -46,9 +46,9 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
                             ]
                         ]
                 ],
-            'Two_Level' =>
+            'two_level' =>
                 [
-                    'Backtrace' => [
+                    'backtrace' => [
                         [
                             'class'    => 'Funky',
                             'file'     => 'Funk.php',
@@ -63,7 +63,7 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
                             'type'     => 'btyped'
                         ]
                     ],
-                    'Expected'  =>
+                    'expected'  =>
                         [
                             'ol',
                             ['class' => 'Backtrace'],

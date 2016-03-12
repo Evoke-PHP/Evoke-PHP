@@ -37,9 +37,9 @@ class ProcessingTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         return [
-            'More' => [
-                'Data'  => ['DC1' => 'A', 'DC2' => 'B'],
-                'Rules' => [$matchedRule, $matchedRule, $unmatchedRule, $matchedRule]
+            'more' => [
+                'data'  => ['DC1' => 'A', 'DC2' => 'B'],
+                'rules' => [$matchedRule, $matchedRule, $unmatchedRule, $matchedRule]
             ]
         ];
     }

@@ -18,41 +18,41 @@ class EquivalentTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Matches'   =>
+            'matches'   =>
                 [
-                    'Output_Format'  => 'DC',
-                    'Match'          =>
+                    'output_format'  => 'DC',
+                    'match'          =>
                         [
-                            'Type'    => 'TEXT',
-                            'Subtype' => 'HTML',
-                            'Params'  => ['A' => 1, 'B' => 2]
+                            'type'    => 'TEXT',
+                            'subtype' => 'HTML',
+                            'params'  => ['A' => 1, 'B' => 2]
                         ],
-                    'Ignored_Fields' => ['Q_Factor'],
-                    'Media_Type'     =>
+                    'ignored_fields' => ['q_factor'],
+                    'media_type'     =>
                         [
-                            'Type'    => 'TEXT',
-                            'Subtype' => 'HTML',
-                            'Params'  => ['A' => '1', 'B' => '2']
+                            'type'    => 'TEXT',
+                            'subtype' => 'HTML',
+                            'params'  => ['A' => '1', 'B' => '2']
                         ],
-                    'Expected'       => true
+                    'expected'       => true
                 ],
-            'Unmatched' =>
+            'unmatched' =>
                 [
-                    'Output_Format'  => 'DC',
-                    'Match'          =>
+                    'output_format'  => 'DC',
+                    'match'          =>
                         [
-                            'Type'    => 'TEXT',
-                            'Subtype' => 'HTML',
-                            'Params'  => ['A' => 1, 'B' => 2]
+                            'type'    => 'TEXT',
+                            'subtype' => 'HTML',
+                            'params'  => ['A' => 1, 'B' => 2]
                         ],
-                    'Ignored_Fields' => ['Q_Factor'],
-                    'Media_Type'     =>
+                    'ignored_fields' => ['q_factor'],
+                    'media_type'     =>
                         [
-                            'Type'    => 'TEXT',
-                            'Subtype' => 'XML',
-                            'Params'  => ['A' => 9, 'B' => 7]
+                            'type'    => 'TEXT',
+                            'subtype' => 'XML',
+                            'params'  => ['A' => 9, 'B' => 7]
                         ],
-                    'Expected'       => false
+                    'expected'       => false
                 ]
         ];
     }

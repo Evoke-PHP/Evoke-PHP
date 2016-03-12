@@ -61,8 +61,8 @@ class RegexSharedMatch extends Rule
         parent::__construct($authoritative);
 
         foreach ($params as $index => $paramSpec) {
-            if (!isset($paramSpec['Key'], $paramSpec['Value'])) {
-                throw new InvalidArgumentException('param spec needs Key and Value at index: ' . $index);
+            if (!isset($paramSpec['key'], $paramSpec['value'])) {
+                throw new InvalidArgumentException('param spec needs key and value at index: ' . $index);
             }
         }
 
@@ -95,8 +95,8 @@ class RegexSharedMatch extends Rule
         $params = [];
 
         foreach ($this->params as $paramSpec) {
-            $params[preg_replace($this->match, $paramSpec['Key'], $this->uri)] =
-                preg_replace($this->match, $paramSpec['Value'], $this->uri);
+            $params[preg_replace($this->match, $paramSpec['key'], $this->uri)] =
+                preg_replace($this->match, $paramSpec['value'], $this->uri);
         }
 
         return $params;

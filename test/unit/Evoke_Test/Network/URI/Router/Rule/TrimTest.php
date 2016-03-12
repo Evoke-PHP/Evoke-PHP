@@ -13,25 +13,25 @@ class TrimTest extends PHPUnit_Framework_TestCase
     public function providerGetController()
     {
         return [
-            'Whitespace' => [
-                'Characters' => " \t\n",
-                'Expected'   => 'Now trail',
-                'URI'        => " \t\nNow trail\n \t"
+            'whitespace' => [
+                'characters' => " \t\n",
+                'expected'   => 'Now trail',
+                'uri'        => " \t\nNow trail\n \t"
             ],
             'abc'        => [
-                'Characters' => 'abc',
-                'Expected'   => 'def',
-                'URI'        => 'accccbdefaccacbbb'
+                'characters' => 'abc',
+                'expected'   => 'def',
+                'uri'        => 'accccbdefaccacbbb'
             ],
-            'Left_Only'  => [
-                'Characters' => 'Z',
-                'Expected'   => '123',
-                'URI'        => 'Z123'
+            'left_only'  => [
+                'characters' => 'Z',
+                'expected'   => '123',
+                'uri'        => 'Z123'
             ],
-            'Right_Only' => [
-                'Characters' => ' ',
-                'Expected'   => 'Input',
-                'URI'        => 'Input      '
+            'right_only' => [
+                'characters' => ' ',
+                'expected'   => 'Input',
+                'uri'        => 'Input      '
             ]
         ];
     }
@@ -39,35 +39,35 @@ class TrimTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Whitespace_Unmatched'         =>
+            'whitespace_unmatched'         =>
                 [
-                    'Characters' => " \t\n",
-                    'Expected'   => false,
-                    'URI'        => "NoWhitespace"
+                    'characters' => " \t\n",
+                    'expected'   => false,
+                    'uri'        => "NoWhitespace"
                 ],
-            'Underscores_And_Dots_Matched' =>
+            'underscores_and_dots_matched' =>
                 [
-                    'Characters' => '_.',
-                    'Expected'   => true,
-                    'URI'        => '_abcde.'
+                    'characters' => '_.',
+                    'expected'   => true,
+                    'uri'        => '_abcde.'
                 ],
-            'First_Character_Match_Only'   =>
+            'first_character_match_Only'   =>
                 [
-                    'Characters' => 'A',
-                    'Expected'   => true,
-                    'URI'        => 'Aasfopwio'
+                    'characters' => 'A',
+                    'expected'   => true,
+                    'uri'        => 'Aasfopwio'
                 ],
-            'Last_Match_Only'              =>
+            'last_match_only'              =>
                 [
-                    'Characters' => 'Z',
-                    'Expected'   => true,
-                    'URI'        => 'InputZ'
+                    'characters' => 'Z',
+                    'expected'   => true,
+                    'uri'        => 'InputZ'
                 ],
-            'Many_Unmatched'               =>
+            'many_unmatched'               =>
                 [
-                    'Characters' => 'abcdefghijklmnopABCDEFG',
-                    'Expected'   => false,
-                    'URI'        => 'zZyY OK zwxq'
+                    'characters' => 'abcdefghijklmnopABCDEFG',
+                    'expected'   => false,
+                    'uri'        => 'zZyY OK zwxq'
                 ]
         ];
     }

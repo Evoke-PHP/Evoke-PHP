@@ -41,10 +41,10 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function providerIssetQueryParam()
     {
         return [
-            'Empty' => [
-                'Expected' => false,
-                'Key'      => '',
-                'Params'   => []
+            'empty' => [
+                'expected' => false,
+                'key'      => '',
+                'params'   => []
             ]
         ];
     }
@@ -52,75 +52,75 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function providerIsValidAccept()
     {
         return [
-            'Empty'   => ['', true],
-            'One'     => ['text/html; q=0.5', true],
-            'Two'     => ['text/html; q=0.1, text/plain', true],
-            'Invalid' => ['>4/yo', false]
+            'empty'   => ['', true],
+            'one'     => ['text/html; q=0.5', true],
+            'two'     => ['text/html; q=0.1, text/plain', true],
+            'invalid' => ['>4/yo', false]
         ];
     }
 
     public function providerIsValidAcceptLanguage()
     {
         return [
-            'Empty'   => ['', true],
-            'Mixed'   => ['da, en-gb;q=0.8, en;q=0.7', true],
-            'One-Big' => ['Englishy-Fullsize;q=0.9', true],
-            'Invalid' => ['12-en', false]
+            'empty'   => ['', true],
+            'mixed'   => ['da, en-gb;q=0.8, en;q=0.7', true],
+            'one-big' => ['Englishy-Fullsize;q=0.9', true],
+            'invalid' => ['12-en', false]
         ];
     }
 
     public function providerParseAccept()
     {
         return [
-            'Empty'   => [
-                'Header'       => '',
-                'Parsed_Value' => []
+            'empty'   => [
+                'header'       => '',
+                'parsed_value' => []
             ],
-            'One'     => [
-                'Header'       => 'text/html; q=0.5',
-                'Parsed_Value' =>
+            'one'     => [
+                'header'       => 'text/html; q=0.5',
+                'parsed_value' =>
                     [
                         [
-                            'Params'   => [],
-                            'Q_Factor' => 0.5,
-                            'Subtype'  => 'html',
-                            'Type'     => 'text'
+                            'params'   => [],
+                            'q_factor' => 0.5,
+                            'subtype'  => 'html',
+                            'type'     => 'text'
                         ]
                     ]
             ],
-            'Two'     => [
-                'Header'       => 'text/html; q=0.1, text/plain',
-                'Parsed_Value' =>
+            'two'     => [
+                'header'       => 'text/html; q=0.1, text/plain',
+                'parsed_value' =>
                     [
                         [
-                            'Params'   => [],
-                            'Q_Factor' => 1.0,
-                            'Subtype'  => 'plain',
-                            'Type'     => 'text'
+                            'params'   => [],
+                            'q_factor' => 1.0,
+                            'subtype'  => 'plain',
+                            'type'     => 'text'
                         ],
                         [
-                            'Params'   => [],
-                            'Q_Factor' => 0.1,
-                            'Subtype'  => 'html',
-                            'Type'     => 'text'
+                            'params'   => [],
+                            'q_factor' => 0.1,
+                            'subtype'  => 'html',
+                            'type'     => 'text'
                         ]
                     ]
             ],
-            'Params'  => [
-                'Header'       => 'audio/*; q=0.2; jim=bo; joe=no',
-                'Parsed_Value' =>
+            'params'  => [
+                'header'       => 'audio/*; q=0.2; jim=bo; joe=no',
+                'parsed_value' =>
                     [
                         [
-                            'Params'   => ['jim' => 'bo', 'joe' => 'no'],
-                            'Q_Factor' => 0.2,
-                            'Subtype'  => '*',
-                            'Type'     => 'audio'
+                            'params'   => ['jim' => 'bo', 'joe' => 'no'],
+                            'q_factor' => 0.2,
+                            'subtype'  => '*',
+                            'type'     => 'audio'
                         ]
                     ]
             ],
-            'Invalid' => [
-                'Header'       => '>4yo',
-                'Parsed_Value' => []
+            'invalid' => [
+                'header'       => '>4yo',
+                'parsed_value' => []
             ]
         ];
     }
@@ -128,41 +128,41 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function providerParseAcceptLanguage()
     {
         return [
-            'Empty'   => [
-                'Header'       => '',
-                'Parsed_Value' => []
+            'empty'   => [
+                'header'       => '',
+                'parsed_value' => []
             ],
-            'Mixed'   => [
-                'Header'       => 'da, en;q=0.7, en-gb;q=0.8',
-                'Parsed_Value' =>
+            'mixed'   => [
+                'header'       => 'da, en;q=0.7, en-gb;q=0.8',
+                'parsed_value' =>
                     [
                         [
-                            'Language' => 'da',
-                            'Q_Factor' => 1.0
+                            'language' => 'da',
+                            'q_factor' => 1.0
                         ],
                         [
-                            'Language' => 'en-gb',
-                            'Q_Factor' => 0.8
+                            'language' => 'en-gb',
+                            'q_factor' => 0.8
                         ],
                         [
-                            'Language' => 'en',
-                            'Q_Factor' => 0.7
+                            'language' => 'en',
+                            'q_factor' => 0.7
                         ]
                     ]
             ],
             'One-Big' => [
-                'Header'       => 'Englishy-Fullsize;q=0.9',
-                'Parsed_Value' =>
+                'header'       => 'Englishy-Fullsize;q=0.9',
+                'parsed_value' =>
                     [
                         [
-                            'Language' => 'Englishy-Fullsize',
-                            'Q_Factor' => 0.9
+                            'language' => 'Englishy-Fullsize',
+                            'q_factor' => 0.9
                         ]
                     ]
             ],
-            'Invalid' => [
-                'Header'       => '12-34',
-                'Parsed_Value' => []
+            'invalid' => [
+                'header'       => '12-34',
+                'parsed_value' => []
             ]
         ];
     }
@@ -205,9 +205,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetQueryParam()
     {
-        $_REQUEST = ['Test_Key' => 'Test_Val'];
+        $_REQUEST = ['test_key' => 'test_val'];
         $object   = new Request;
-        $this->assertSame('Test_Val', $object->getParam('Test_Key'));
+        $this->assertSame('test_val', $object->getParam('test_key'));
     }
 
     /**
@@ -218,7 +218,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
     public function testGetQueryParamInexistant()
     {
         $object = new Request;
-        $object->getParam('Inexistant');
+        $object->getParam('inexistant');
     }
 
     /**
@@ -226,7 +226,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetQueryParams()
     {
-        $params   = ['One' => 1, 'Two' => 2, 'Three' => 3];
+        $params   = ['one' => 1, 'two' => 2, 'three' => 3];
         $_REQUEST = $params;
         $object   = new Request;
         $this->assertSame($params, $object->getParams());

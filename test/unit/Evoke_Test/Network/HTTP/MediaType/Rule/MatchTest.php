@@ -17,35 +17,35 @@ class MatchTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Matched'   =>
+            'matched'   =>
                 [
-                    'Output_Format' => 'DC1',
-                    'Match'         =>
+                    'output_format' => 'DC1',
+                    'match'         =>
                         [
-                            'Type'    => 'Text',
-                            'Subtype' => 'HTML'
+                            'type'    => 'Text',
+                            'subtype' => 'HTML'
                         ],
-                    'Media_Type'    =>
+                    'media_type'    =>
                         [
-                            'Type'    => 'Text',
-                            'Subtype' => 'HTML'
+                            'type'    => 'Text',
+                            'subtype' => 'HTML'
                         ],
-                    'Expected'      => true
+                    'expected'      => true
                 ],
-            'Unmatched' =>
+            'unmatched' =>
                 [
-                    'Output_Format' => 'DC2',
-                    'Match'         =>
+                    'output_format' => 'DC2',
+                    'match'         =>
                         [
-                            'Type'    => 'Text',
-                            'Subtype' => 'HTML'
+                            'type'    => 'Text',
+                            'subtype' => 'HTML'
                         ],
-                    'Media_Type'    =>
+                    'media_type'    =>
                         [
-                            'Type'    => 'Text',
-                            'Subtype' => 'XML'
+                            'type'    => 'Text',
+                            'subtype' => 'XML'
                         ],
-                    'Expected'      => false
+                    'expected'      => false
                 ]
         ];
     }

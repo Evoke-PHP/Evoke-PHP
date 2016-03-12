@@ -63,7 +63,7 @@ class Router implements RouterIface
             }
         }
 
-        return ['Controller' => $refinedURI, 'Params' => $params];
+        return ['controller' => $refinedURI, 'params' => $params];
     }
 }
 // EOF

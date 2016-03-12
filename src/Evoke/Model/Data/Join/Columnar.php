@@ -50,7 +50,7 @@ class Columnar extends Join
     public function __construct(
         Array $columns,
         Array $keys = ['id'],
-        $jointKey = 'Joint_Data',
+        $jointKey = 'joint_data',
         $useAlphaNumMatch = true
     ) {
         parent::__construct($useAlphaNumMatch);

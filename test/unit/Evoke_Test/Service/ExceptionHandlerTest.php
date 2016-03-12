@@ -40,10 +40,10 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
     public function providerConditions()
     {
         return [
-            'NoFlush_NoShow' => [false, false],
-            'NoFlush_DoShow' => [false, true],
-            'DoFlush_NoSHow' => [true, false],
-            'DoFlush_DoShow' => [true, true]
+            'noflush_noshow' => [false, false],
+            'noflush_doshow' => [false, true],
+            'doflush_noshow' => [true, false],
+            'doflush_doshow' => [true, true]
         ];
     }
 

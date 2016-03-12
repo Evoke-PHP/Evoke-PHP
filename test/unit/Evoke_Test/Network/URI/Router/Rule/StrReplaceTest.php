@@ -17,17 +17,17 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
     public function providerGetController()
     {
         return [
-            'Single'   => [
-                'Match'       => 'foo',
-                'Replacement' => 'bar',
-                'URI'         => 'thisfoook',
-                'Expected'    => 'thisbarok'
+            'single'   => [
+                'match'       => 'foo',
+                'replacement' => 'bar',
+                'uri'         => 'thisfoook',
+                'expected'    => 'thisbarok'
             ],
-            'Multiple' => [
-                'Match'       => 'a',
-                'Replacement' => 'zow',
-                'URI'         => 'arkansas',
-                'Expected'    => 'zowrkzownszows'
+            'multiple' => [
+                'match'       => 'a',
+                'replacement' => 'zow',
+                'uri'         => 'arkansas',
+                'expected'    => 'zowrkzownszows'
             ]
         ];
     }
@@ -35,17 +35,17 @@ class StrReplaceTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Matches'   => [
-                'Match'       => 'match',
-                'Replacement' => 'DC',
-                'URI'         => 'thismatches',
-                'Expected'    => true
+            'matches'   => [
+                'match'       => 'match',
+                'replacement' => 'DC',
+                'uri'         => 'thismatches',
+                'expected'    => true
             ],
-            'Unmatched' => [
-                'Match'       => 'NOT',
-                'Replacement' => 'DC',
-                'URI'         => 'notInsensitiveToCase',
-                'Expected'    => false
+            'unmatched' => [
+                'match'       => 'NOT',
+                'replacement' => 'DC',
+                'uri'         => 'notInsensitiveToCase',
+                'expected'    => false
             ]
         ];
     }

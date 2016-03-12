@@ -17,8 +17,8 @@ class RecordListTest extends PHPUnit_Framework_TestCase
     public function testFirstRecordSelected()
     {
         $rawData  = [
-            ['ID' => 1, 'Text' => 'First'],
-            ['ID' => 2, 'Text' => 'Second']
+            ['id' => 1, 'text' => 'first'],
+            ['id' => 2, 'text' => 'second']
         ];
         $dIndex   = 0;
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
@@ -48,8 +48,8 @@ class RecordListTest extends PHPUnit_Framework_TestCase
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $obj      = new RecordList($dataMock);
 
-        $obj->selectRecord(['ID' => 1]);
-        $obj->selectRecord(['ID' => 2]);
+        $obj->selectRecord(['id' => 1]);
+        $obj->selectRecord(['id' => 2]);
         $obj->clearSelectedRecords();
 
         $this->assertFalse($obj->hasSelectedRecord());
@@ -60,9 +60,9 @@ class RecordListTest extends PHPUnit_Framework_TestCase
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $obj      = new RecordList($dataMock);
 
-        $obj->selectRecord(['ID' => 1]);
-        $obj->selectRecord(['ID' => 2]);
-        $obj->clearSelectedRecord(['ID' => 2]);
+        $obj->selectRecord(['id' => 1]);
+        $obj->selectRecord(['id' => 2]);
+        $obj->clearSelectedRecord(['id' => 2]);
 
         $this->assertTrue($obj->hasSelectedRecord());
     }
@@ -72,8 +72,8 @@ class RecordListTest extends PHPUnit_Framework_TestCase
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $obj      = new RecordList($dataMock);
 
-        $obj->selectRecord(['ID' => 1]);
-        $obj->clearSelectedRecord(['ID' => 3]);
+        $obj->selectRecord(['id' => 1]);
+        $obj->clearSelectedRecord(['id' => 3]);
 
         $this->assertTrue($obj->hasSelectedRecord());
     }

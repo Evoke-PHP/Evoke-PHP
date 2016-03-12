@@ -37,13 +37,13 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getJoins')
             ->with()
-            ->will($this->returnValue(['Leaf_1' => $leaf1]));
+            ->will($this->returnValue(['leaf_1' => $leaf1]));
         $branch2 = $this->getMock('Evoke\Model\Data\Join\JoinIface');
         $branch2
             ->expects($this->any())
             ->method('getJoins')
             ->with()
-            ->will($this->returnValue(['Leaf_2' => $leaf2]));
+            ->will($this->returnValue(['leaf_2' => $leaf2]));
 
         $branchAll = $this->getMock('Evoke\Model\Data\Join\JoinIface');
         $branchAll
@@ -51,8 +51,8 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getJoins')
             ->with()
             ->will($this->returnValue([
-                'Leaf_1' => $leaf1,
-                'Leaf_2' => $leaf2
+                'leaf_1' => $leaf1,
+                'leaf_2' => $leaf2
             ]));
 
         $trunk = $this->getMock('Evoke\Model\Data\Join\JoinIface');
@@ -61,50 +61,50 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
             ->method('getJoins')
             ->with()
             ->will($this->returnValue([
-                'Branch_1'   => clone $branch1,
-                'Branch_2'   => clone $branch2,
-                'Branch_All' => clone $branchAll
+                'branch_1'   => clone $branch1,
+                'branch_2'   => clone $branch2,
+                'branch_all' => clone $branchAll
             ]));
 
         // Set up the expected data
         $dataLeaf1     = new Data($leaf1);
         $dataLeaf2     = new Data($leaf2);
-        $dataBranch1   = new Data($branch1, ['Leaf_1' => $dataLeaf1]);
-        $dataBranch2   = new Data($branch2, ['Leaf_2' => $dataLeaf2]);
+        $dataBranch1   = new Data($branch1, ['leaf_1' => $dataLeaf1]);
+        $dataBranch2   = new Data($branch2, ['leaf_2' => $dataLeaf2]);
         $dataBranchAll = new Data($branchAll, [
-            'Leaf_1' => $dataLeaf1,
-            'Leaf_2' => $dataLeaf2
+            'leaf_1' => $dataLeaf1,
+            'leaf_2' => $dataLeaf2
         ]);
         $dataTrunk     = new Data($trunk, [
-            'Branch_1'   => $dataBranch1,
-            'Branch_2'   => $dataBranch2,
-            'Branch_All' => $dataBranchAll
+            'branch_1'   => $dataBranch1,
+            'branch_2'   => $dataBranch2,
+            'branch_all' => $dataBranchAll
         ]);
 
         return [
-            'Branch_All' => [
-                'Expected'       => $dataBranchAll,
-                'Join_Structure' => $branchAll
+            'branch_all' => [
+                'expected'       => $dataBranchAll,
+                'join_structure' => $branchAll
             ],
-            'Branch_1'   => [
-                'Expected'       => $dataBranch1,
-                'Join_Structure' => $branch1
+            'branch_1'   => [
+                'expected'       => $dataBranch1,
+                'join_structure' => $branch1
             ],
-            'Branch_2'   => [
-                'Expected'       => $dataBranch2,
-                'Join_Structure' => $branch2
+            'branch_2'   => [
+                'expected'       => $dataBranch2,
+                'join_structure' => $branch2
             ],
-            'Leaf_1'     => [
-                'Expected'       => $dataLeaf1,
-                'Join_Structure' => $leaf1
+            'leaf_1'     => [
+                'expected'       => $dataLeaf1,
+                'join_structure' => $leaf1
             ],
-            'Leaf_2'     => [
-                'Expected'       => $dataLeaf2,
-                'Join_Structure' => $leaf2
+            'leaf_2'     => [
+                'expected'       => $dataLeaf2,
+                'join_structure' => $leaf2
             ],
-            'Trunk'      => [
-                'Expected'       => $dataTrunk,
-                'Join_Structure' => $trunk
+            'trunk'      => [
+                'expected'       => $dataTrunk,
+                'join_structure' => $trunk
             ]
         ];
     }

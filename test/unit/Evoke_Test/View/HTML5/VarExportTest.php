@@ -13,9 +13,9 @@ class VarExportTest extends PHPUnit_Framework_TestCase
     public function providerVar()
     {
         return [
-            'Integer' => [125],
-            'Array'   => [['div', [], 'aiofw']],
-            'String'  => ['str']
+            'integer' => [125],
+            'array'   => [['div', [], 'aiofw']],
+            'string'  => ['str']
         ];
     }
 

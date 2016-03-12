@@ -17,14 +17,14 @@ class RegexTest extends PHPUnit_Framework_TestCase
     public function providerGood()
     {
         return [
-            'Empty_Params' => [
-                'Controller'    => [
-                    'Match'   => '/Controller_Match/',
-                    'Replace' => 'replace'
+            'empty_params' => [
+                'controller'    => [
+                    'match'   => '/controller_match/',
+                    'replace' => 'replace'
                 ],
-                'Match'         => '/URI_Match/',
-                'Params'        => [],
-                'Authoritative' => true
+                'match'         => '/uri_match/',
+                'params'        => [],
+                'authoritative' => true
             ]
         ];
     }
@@ -32,15 +32,15 @@ class RegexTest extends PHPUnit_Framework_TestCase
     public function providerInvalidArguments()
     {
         return [
-            'Bad_Controller' => [
-                'Controller' => ['M' => '/a/', 'R' => 'only one letter?'],
-                'Match'      => '/match/',
-                'Params'     => []
+            'bad_controller' => [
+                'controller' => ['m' => '/a/', 'r' => 'only one letter?'],
+                'match'      => '/match/',
+                'params'     => []
             ],
-            'Bad_Params'     => [
-                'Controller' => ['Match' => '/Good/', 'Replace' => 'OK'],
-                'Match'      => '/match/',
-                'Params'     => [
+            'bad_params'     => [
+                'controller' => ['match' => '/good/', 'replace' => 'ok'],
+                'match'      => '/match/',
+                'params'     => [
                     ['Bad']
                 ]
             ]
@@ -50,37 +50,37 @@ class RegexTest extends PHPUnit_Framework_TestCase
     public function providerGetParams()
     {
         return [
-            'One_Match_Out_Of_Two' => [
-                'Controller'    => [
-                    'Match'   => '/Any/',
-                    'Replace' => 'Whatever'
+            'one_match_out_of_two' => [
+                'controller'    => [
+                    'match'   => '/Any/',
+                    'replace' => 'Whatever'
                 ],
-                'Match'         => '/./',
-                'Params'        => [
+                'match'         => '/./',
+                'params'        => [
                     [
-                        'Key'   => [
-                            'Match'   => '/.*K(.{3}).*/',
-                            'Replace' => '\1'
+                        'key'   => [
+                            'match'   => '/.*K(.{3}).*/',
+                            'replace' => '\1'
                         ],
-                        'Value' => [
-                            'Match'   => '/.*V(.)(.)/',
-                            'Replace' => 'h\1\2'
+                        'value' => [
+                            'match'   => '/.*V(.)(.)/',
+                            'replace' => 'h\1\2'
                         ]
                     ],
                     [
-                        'Key'   => [
-                            'Match'   => '/.*/',
-                            'Replace' => 'KeyTwo'
+                        'key'   => [
+                            'match'   => '/.*/',
+                            'replace' => 'KeyTwo'
                         ],
-                        'Value' => [
-                            'Match'   => '/NO_MATCH/',
-                            'Replace' => 'any'
+                        'value' => [
+                            'match'   => '/NO_MATCH/',
+                            'replace' => 'any'
                         ]
                     ]
                 ],
-                'Authoritative' => true,
-                'Uri'           => 'KOneVab',
-                'Expected'      => ['One' => 'hab']
+                'authoritative' => true,
+                'uri'           => 'KOneVab',
+                'expected'      => ['One' => 'hab']
             ]
         ];
     }
@@ -88,25 +88,25 @@ class RegexTest extends PHPUnit_Framework_TestCase
     public function providerIsMatch()
     {
         return [
-            'Matches'   => [
-                'Controller' => [
-                    'Match'   => '/DC/',
-                    'Replace' => 'X'
+            'matches'   => [
+                'controller' => [
+                    'match'   => '/DC/',
+                    'replace' => 'X'
                 ],
-                'Match'      => '/Will_M[at]*ch/',
-                'Params'     => [],
-                'Uri'        => 'this/Will_Match',
-                'Expected'   => true
+                'match'      => '/Will_M[at]*ch/',
+                'params'     => [],
+                'uri'        => 'this/Will_Match',
+                'expected'   => true
             ],
-            'Unmatched' => [
-                'Controller' => [
-                    'Match'   => '/DC/',
-                    'Replace' => 'X'
+            'unmatched' => [
+                'controller' => [
+                    'match'   => '/DC/',
+                    'replace' => 'X'
                 ],
-                'Match'      => '/Wont_M[at][at]ch/',
-                'Params'     => [],
-                'Uri'        => 'this/Wont_MXZch',
-                'Expected'   => false
+                'match'      => '/Wont_M[at][at]ch/',
+                'params'     => [],
+                'uri'        => 'this/Wont_MXZch',
+                'expected'   => false
             ]
         ];
     }
@@ -146,8 +146,8 @@ class RegexTest extends PHPUnit_Framework_TestCase
     {
         $object = new Regex(
             [
-                'Match'   => '/foo/',
-                'Replace' => 'bar'
+                'match'   => '/foo/',
+                'replace' => 'bar'
             ],
             'any',
             []

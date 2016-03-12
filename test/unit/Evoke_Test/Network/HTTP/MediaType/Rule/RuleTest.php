@@ -42,10 +42,10 @@ class RuleTest extends PHPUnit_Framework_TestCase
     {
         $obj       = new TestRuleExtended('DC');
         $mediaType = [
-            'Params'   => [],
-            'Q_Factor' => '1.0',
-            'Subtype'  => 'TV',
-            'Type'     => 'Screen'
+            'params'   => [],
+            'q_factor' => '1.0',
+            'subtype'  => 'TV',
+            'type'     => 'Screen'
         ];
         $obj->setMediaType($mediaType);
         $this->assertSame($mediaType, $obj->getMediaType());

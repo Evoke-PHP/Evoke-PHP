@@ -47,7 +47,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRecord()
     {
-        $expected = ['ID' => 1, 'Value' => 'Current'];
+        $expected = ['id' => 1, 'value' => 'current'];
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
@@ -83,7 +83,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testKey()
     {
-        $expected = 'Key_ID';
+        $expected = 'key_id';
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
@@ -124,11 +124,11 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
         $dataMock
             ->expects($this->once())
             ->method('offsetExists')
-            ->with('Offset_To_Check')
+            ->with('offset_to_check')
             ->will($this->returnValue($expected));
 
         $obj = new TestExtendedDecorator($dataMock);
-        $this->assertSame($expected, isset($obj['Offset_To_Check']));
+        $this->assertSame($expected, isset($obj['offset_to_check']));
     }
 
     /**
@@ -137,16 +137,16 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testOffsetGet()
     {
-        $expected = 'Value';
+        $expected = 'value';
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetGet')
-            ->with('Offset_Desired')
+            ->with('offset_desired')
             ->will($this->returnValue($expected));
 
         $obj = new TestExtendedDecorator($dataMock);
-        $this->assertSame($expected, $obj['Offset_Desired']);
+        $this->assertSame($expected, $obj['offset_desired']);
     }
 
     /**
@@ -155,15 +155,15 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testOffsetSet()
     {
-        $expected = 'Value';
+        $expected = 'value';
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetSet')
-            ->with('Offset_Desired', $expected);
+            ->with('offset_desired', $expected);
 
         $obj                   = new TestExtendedDecorator($dataMock);
-        $obj['Offset_Desired'] = $expected;
+        $obj['offset_desired'] = $expected;
     }
 
     /**
@@ -176,10 +176,10 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
         $dataMock
             ->expects($this->once())
             ->method('offsetUnset')
-            ->with('Offset_Desired');
+            ->with('offset_desired');
 
         $obj = new TestExtendedDecorator($dataMock);
-        unset($obj['Offset_Desired']);
+        unset($obj['offset_desired']);
     }
 
     /**
@@ -205,8 +205,8 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $expected = [
-            ['ID' => 1, 'V' => 'SD1'],
-            ['ID' => 2, 'V' => 'SD2']
+            ['id' => 1, 'v' => 'sd1'],
+            ['id' => 2, 'v' => 'sd2']
         ];
         $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
         $dataMock

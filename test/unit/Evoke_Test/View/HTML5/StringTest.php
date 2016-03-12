@@ -16,12 +16,12 @@ class StringTest extends PHPUnit_Framework_TestCase
     public function providerString()
     {
         return [
-            'Commented'      => [
-                'Expected' => ['One', ['div', [], 'Two'], 'Three'],
-                'String'   => 'One<!-- C1 --><div>Two</div><!-- C2 -->Three'
+            'commented'      => [
+                'expected' => ['One', ['div', [], 'Two'], 'Three'],
+                'string'   => 'One<!-- C1 --><div>Two</div><!-- C2 -->Three'
             ],
-            'Multi_Nested'   => [
-                'Expected' =>
+            'multi_nested'   => [
+                'expected' =>
                     [
                         [
                             'div',
@@ -48,7 +48,7 @@ class StringTest extends PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
-                'String'   =>
+                'string'   =>
                     '<div class="First">' .
                     '<div>A</div><div class="Number">1</div></div>' .
                     '<div class="Mid">' .
@@ -56,8 +56,8 @@ class StringTest extends PHPUnit_Framework_TestCase
                     '<div class="Last">' .
                     '<div>Z</div><div class="Number">9</div></div>'
             ],
-            'Single_Nested'  => [
-                'Expected' => [
+            'single_nested'  => [
+                'expected' => [
                     [
                         'div',
                         [],
@@ -71,21 +71,21 @@ class StringTest extends PHPUnit_Framework_TestCase
                         ]
                     ]
                 ],
-                'String'   => '<div><span>SP THIS</span><div class="Other">' .
+                'string'   => '<div><span>SP THIS</span><div class="Other">' .
                     '<div>Alt</div></div></div>'
             ],
-            'Single_String'  => [
-                'Expected' => 'str',
-                'String'   => 'str'
+            'single_string'  => [
+                'expected' => 'str',
+                'string'   => 'str'
             ],
-            'Single_CDATA'   => [
-                'Expected' => 'this <div> can appear > CDATA &! all.',
-                'String'   =>
+            'single_cdata'   => [
+                'expected' => 'this <div> can appear > CDATA &! all.',
+                'string'   =>
                     '<![CDATA[this <div> can appear > CDATA &! all.]]>'
             ],
-            'Single_Element' => [
-                'Expected' => [['span', [], 'SP THIS']],
-                'String'   => '<span>SP THIS</span>'
+            'single_element' => [
+                'expected' => [['span', [], 'SP THIS']],
+                'string'   => '<span>SP THIS</span>'
             ],
         ];
     }

@@ -20,9 +20,9 @@ class DataTest extends PHPUnit_Framework_TestCase
         $data = $this->getDataMock();
 
         return [
-            'Simple'          => [$join],
-            'Two_Specified'   => [$join, ['J' => $data]],
-            'Fully_Specified' => [$join, ['J' => $data], 'Join_Key']
+            'simple'          => [$join],
+            'two_specified'   => [$join, ['j' => $data]],
+            'fully_specified' => [$join, ['j' => $data], 'join_key']
         ];
     }
 
@@ -36,21 +36,21 @@ class DataTest extends PHPUnit_Framework_TestCase
         $simpleJoin
             ->expects($this->once())
             ->method('getJoinID')
-            ->with('Join_Name')
-            ->will($this->returnValue('Found_Join_ID'));
+            ->with('join_name')
+            ->will($this->returnValue('found_join_id'));
         $simpleData = $this->getDataMock();
 
         return [
-            'Simple' =>
+            'simple' =>
                 [
-                    'Join'      => $simpleJoin,
-                    'Joins'     =>
+                    'join'      => $simpleJoin,
+                    'joins'     =>
                         [
-                            'Found_Join_ID' => $simpleData,
-                            'DC'            => $this->getMock('Evoke\Model\Data\Join\JoinIface')
+                            'found_join_id' => $simpleData,
+                            'dc'            => $this->getMock('Evoke\Model\Data\Join\JoinIface')
                         ],
-                    'Join_Name' => 'Join_Name',
-                    'Expected'  => $simpleData
+                    'join_name' => 'join_name',
+                    'expected'  => $simpleData
                 ]
         ];
     }
@@ -116,11 +116,11 @@ class DataTest extends PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('arrangeFlatData');
 
-        $flatResults  = [['Dont_Care' => 'Mock Arranges This']];
+        $flatResults  = [['dont_care' => 'Mock Arranges This']];
         $arrangedData = [
             [
-                'Any'        => 'OK',
-                'Joint_Data' => ['J1' => [['F1' => 'Arranged']]]
+                'any'        => 'ok',
+                'joint_data' => ['j1' => [['f1' => 'arranged']]]
             ]
         ];
         $joinOuter    = $this->getMock('Evoke\Model\Data\Join\JoinIface');
@@ -133,7 +133,7 @@ class DataTest extends PHPUnit_Framework_TestCase
         $objectUnderTest = new Data($joinObjectUnderTest);
         $outer           = new Data(
             $joinOuter,
-            ['J1' => $objectUnderTest]
+            ['j1' => $objectUnderTest]
         );
         $outer->setData($flatResults);
     }
@@ -141,74 +141,74 @@ class DataTest extends PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $j1Data1 = [
-            ['J1_ID' => 1, 'Value' => '1'],
-            ['J1_ID' => 1, 'Value' => 'One']
+            ['j1_id' => 1, 'value' => '1'],
+            ['j1_id' => 1, 'value' => 'one']
         ];
         $j1Data2 = [
-            ['J1_ID' => 2, 'Value' => '12'],
-            ['J1_ID' => 2, 'Value' => 'OneTwo']
+            ['j1_id' => 2, 'value' => '12'],
+            ['j1_id' => 2, 'value' => 'onetwo']
         ];
 
         $j2Data1 = [
-            ['J2_ID' => 1, 'Value' => '21'],
-            ['J2_ID' => 1, 'Value' => 'TwoOne']
+            ['j2_id' => 1, 'value' => '21'],
+            ['j2_id' => 1, 'value' => 'twoone']
         ];
         $j2Data2 = [
-            ['J2_ID' => 2, 'Value' => '2'],
-            ['J2_ID' => 2, 'Value' => 'Two']
+            ['j2_id' => 2, 'value' => '2'],
+            ['j2_id' => 2, 'value' => 'two']
         ];
-        $j3Data  = [['J3_ID' => 3, 'Text' => 'Three']];
+        $j3Data  = [['j3_id' => 3, 'text' => 'three']];
 
         $flatResults =
             [
                 [
-                    'M.Main_Record' => 'One',
-                    'J1.J1_ID'      => 1,
-                    'J1.Value'      => '1',
-                    'J2.J2_ID'      => 1,
-                    'J2.Value'      => '21'
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => '21'
                 ],
                 [
-                    'M.Main_Record' => 'One',
-                    'J1.J1_ID'      => 1,
-                    'J1.Value'      => 'One',
-                    'J2.J2_ID'      => 1,
-                    'J2.Value'      => '21'
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => 'one',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => '21'
                 ],
                 [
-                    'M.Main_Record' => 'One',
-                    'J1.J1_ID'      => 1,
-                    'J1.Value'      => '1',
-                    'J2.J2_ID'      => 1,
-                    'J2.Value'      => 'TwoOne',
-                    'J3.J3_ID'      => 3,
-                    'J3.Text'       => 'Three'
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => 'twoone',
+                    'j3.j3_id'      => 3,
+                    'j3.text'       => 'three'
                 ],
                 [
-                    'M.Main_Record' => 'One',
-                    'J1.J1_ID'      => 1,
-                    'J1.Value'      => '1',
-                    'J2.J2_ID'      => 1,
-                    'J2.Value'      => 'TwoOne',
-                    'J3.J3_ID'      => 3,
-                    'J3.Text'       => 'Three'
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => 'twoone',
+                    'j3.j3_id'      => 3,
+                    'j3.text'       => 'three'
                 ]
             ];
 
         $data = [
             [
-                'Main_Record' => 'One',
-                'Joint_Data'  => [
-                    'J1' => $j1Data1,
-                    'J2' => $j2Data1
+                'main_record' => 'one',
+                'joint_data'  => [
+                    'j1' => $j1Data1,
+                    'j2' => $j2Data1
                 ]
             ],
             [
-                'Main_Record' => 'Two',
-                'Joint_Data'  => [
-                    'J1' => $j1Data2,
-                    'J2' => $j2Data2,
-                    'J3' => $j3Data
+                'main_record' => 'two',
+                'joint_data'  => [
+                    'j1' => $j1Data2,
+                    'j2' => $j2Data2,
+                    'j3' => $j3Data
                 ]
             ]
         ];
@@ -252,7 +252,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 
         $obj = new Data(
             $join,
-            ['J1' => $j1, 'J2' => $j2, 'J3' => $j3]
+            ['j1' => $j1, 'j2' => $j2, 'j3' => $j3]
         );
         $obj->setData($flatResults);
         $obj->next();

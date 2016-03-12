@@ -35,8 +35,8 @@ class Regex extends Rule
      * Example:
      * <pre><code>
      * [
-     *     ['Key'   => ['Match' => 'regex', 'Replace' => 'replacement'],
-     *      'Value' => ['Match' => 'regex', 'Replace' => 'replacement']]
+     *     ['key'   => ['Match' => 'regex', 'Replace' => 'replacement'],
+     *      'value' => ['Match' => 'regex', 'Replace' => 'replacement']]
      * ]
      * </code></pre>
      */
@@ -58,17 +58,17 @@ class Regex extends Rule
 
         foreach ($params as $param) {
             if (!isset(
-                $param['Key']['Match'],
-                $param['Key']['Replace'],
-                $param['Value']['Match'],
-                $param['Value']['Replace']
+                $param['key']['match'],
+                $param['key']['replace'],
+                $param['value']['match'],
+                $param['value']['replace']
             )) {
                 $invalidArgs = true;
                 break;
             }
         }
 
-        if ($invalidArgs || !isset($controller['Match'], $controller['Replace'])) {
+        if ($invalidArgs || !isset($controller['match'], $controller['replace'])) {
             throw new InvalidArgumentException('Bad Arguments');
         }
 
@@ -88,7 +88,7 @@ class Regex extends Rule
      */
     public function getController()
     {
-        return preg_replace($this->controller['Match'], $this->controller['Replace'], $this->uri);
+        return preg_replace($this->controller['match'], $this->controller['replace'], $this->uri);
     }
 
     /**
@@ -101,11 +101,11 @@ class Regex extends Rule
         $paramsFound = [];
 
         foreach ($this->params as $param) {
-            if (preg_match($param['Key']['Match'], $this->uri) &&
-                preg_match($param['Value']['Match'], $this->uri)
+            if (preg_match($param['key']['match'], $this->uri) &&
+                preg_match($param['value']['match'], $this->uri)
             ) {
-                $paramsFound[preg_replace($param['Key']['Match'], $param['Key']['Replace'], $this->uri)] =
-                    preg_replace($param['Value']['Match'], $param['Value']['Replace'], $this->uri);
+                $paramsFound[preg_replace($param['key']['match'], $param['key']['replace'], $this->uri)] =
+                    preg_replace($param['value']['match'], $param['value']['replace'], $this->uri);
             }
         }
 

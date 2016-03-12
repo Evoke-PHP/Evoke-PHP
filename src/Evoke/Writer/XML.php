@@ -69,9 +69,9 @@ class XML implements WriterIface
         $indent = true,
         $indentString = '   ',
         $pos = [
-            'Attribs'  => 1,
-            'Children' => 2,
-            'Tag'      => 0
+            'attribs'  => 1,
+            'children' => 2,
+            'tag'      => 0
         ]
     ) {
         $this->docType   = $docType;
@@ -136,21 +136,21 @@ class XML implements WriterIface
      */
     public function write($xml)
     {
-        if (empty($xml[$this->pos['Tag']]) || !is_string($xml[$this->pos['Tag']])) {
+        if (empty($xml[$this->pos['tag']]) || !is_string($xml[$this->pos['tag']])) {
             throw new InvalidArgumentException('bad tag: ' . var_export($xml, true));
         }
 
-        if (isset($xml[$this->pos['Attribs']]) && !is_array($xml[$this->pos['Attribs']])) {
+        if (isset($xml[$this->pos['attribs']]) && !is_array($xml[$this->pos['attribs']])) {
             throw new InvalidArgumentException('bad attributes: ' . var_export($xml, true));
         }
 
-        if (isset($xml[$this->pos['Children']]) && !is_array($xml[$this->pos['Children']])) {
-            $xml[$this->pos['Children']] = [$xml[$this->pos['Children']]];
+        if (isset($xml[$this->pos['children']]) && !is_array($xml[$this->pos['children']])) {
+            $xml[$this->pos['children']] = [$xml[$this->pos['children']]];
         }
 
-        $tag      = $xml[$this->pos['Tag']];
-        $attribs  = isset($xml[$this->pos['Attribs']]) ? $xml[$this->pos['Attribs']] : [];
-        $children = isset($xml[$this->pos['Children']]) ? $xml[$this->pos['Children']] : [];
+        $tag      = $xml[$this->pos['tag']];
+        $attribs  = isset($xml[$this->pos['attribs']]) ? $xml[$this->pos['attribs']] : [];
+        $children = isset($xml[$this->pos['children']]) ? $xml[$this->pos['children']] : [];
 
         // Whether we are normally indenting and we see an element that should be inline.
         $specialInlineElement = ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));

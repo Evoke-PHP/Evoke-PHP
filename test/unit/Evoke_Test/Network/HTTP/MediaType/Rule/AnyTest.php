@@ -9,9 +9,9 @@ class AnyTest extends PHPUnit_Framework_TestCase
     public function providerAlwaysMatches()
     {
         return [
-            'Any1' => [['blah']],
-            'Any2' => [[]],
-            'Any3' => [[1 => 3, 2 => new \StdClass]]
+            'any1' => [['blah']],
+            'any2' => [[]],
+            'any3' => [[1 => 3, 2 => new \StdClass]]
         ];
     }
 

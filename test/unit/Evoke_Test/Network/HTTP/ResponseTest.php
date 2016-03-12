@@ -34,9 +34,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     public function providerCreate()
     {
         return [
-            'Null'                => [null],
+            'null'                => [null],
             '1.0'                 => ['1.0'],
-            'Hypothetical_Future' => ['25.987']
+            'hypothetical_future' => ['25.987']
         ];
     }
 
@@ -138,7 +138,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $response = new Response;
         $response->setStatus(301);
         $response->setHeader('Location', '/foo');
-        $response->setHeader('Any', 'Value');
+        $response->setHeader('Any', 'value');
         $response->send();
         $this->restoreHeaderFunctions();
 
@@ -146,7 +146,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
             [
                 'HTTP/1.1 301 Moved Permanently',
                 'LOCATION: /foo',
-                'ANY: Value'
+                'ANY: value'
             ],
             self::$headers
         );

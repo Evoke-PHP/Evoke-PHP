@@ -207,13 +207,13 @@ EOP;
             return [];
         }
 
-        // Match a "Type/Subtype (;q=Q_Factor)? Params" list.
+        // Match a "type/subtype (;q=q_factor)? params" list.
         $acceptElementPattern =
             '/(?(DEFINE)' . self::PATTERNS_GENERAL . self::PATTERNS_ACCEPT .
             ')' .
-            '(?&L)(?<Type>(?&TYPE))\/(?<Subtype>(?&SUBTYPE))' .
-            '((?&L);(?&L)q=(?<Q_Factor>(?&Q_VALUE)))?' .
-            '(?<Params>(?&ACCEPT_EXTENSION)*)' .
+            '(?&L)(?<type>(?&TYPE))\/(?<subtype>(?&SUBTYPE))' .
+            '((?&L);(?&L)q=(?<q_factor>(?&Q_VALUE)))?' .
+            '(?<params>(?&ACCEPT_EXTENSION)*)' .
             '/x';
 
         $accepted   = [];
@@ -228,23 +228,23 @@ EOP;
 
             // Loop through each match, storing it in the accepted array.
             for ($i = 0; $i < $numMatches; $i++) {
-                $qFactor = empty($matches['Q_Factor'][$i]) ? 1.0 :
-                    $matches['Q_Factor'][$i] + 0.0; // Make it a float.
+                $qFactor = empty($matches['q_factor'][$i]) ? 1.0 :
+                    $matches['q_factor'][$i] + 0.0; // Make it a float.
 
                 // Parse any accept extensions (more extensions makes a difference for the Accept preference ordering).
                 $params = [];
 
-                if (!empty($matches['Params'][$i])) {
-                    preg_match_all($paramsPattern, $matches['Params'][$i], $paramsMatches);
+                if (!empty($matches['params'][$i])) {
+                    preg_match_all($paramsPattern, $matches['params'][$i], $paramsMatches);
 
                     $params = array_combine($paramsMatches['P_KEY'], $paramsMatches['P_VAL']);
                 }
 
                 $accepted[] = [
-                    'Params'   => $params,
-                    'Q_Factor' => $qFactor,
-                    'Subtype'  => $matches['Subtype'][$i],
-                    'Type'     => $matches['Type'][$i]
+                    'params'   => $params,
+                    'q_factor' => $qFactor,
+                    'subtype'  => $matches['subtype'][$i],
+                    'type'     => $matches['type'][$i]
                 ];
             }
         }
@@ -275,21 +275,19 @@ EOP;
         // Match the language and its optional Q_Factor.
         $pattern = '/(?(DEFINE)' . self::PATTERNS_GENERAL .
             self::PATTERNS_ACCEPT_LANGUAGE . ')' .
-            '(?<Language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
-            '((?&L);(?&L)q(?&L)=(?&L)(?<Q_Factor>(?&Q_VALUE)))?/x';
+            '(?<language>(?&ALPHA_18)(-(?&ALPHA_18))*|\*)' .
+            '((?&L);(?&L)q(?&L)=(?&L)(?<q_factor>(?&Q_VALUE)))?/x';
 
         $acceptLanguages = [];
         $numLanguages    = preg_match_all($pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
         for ($i = 0; $i < $numLanguages; $i++) {
             // The quality value defaults to 1.
-            $qFactor =
-                empty($matches['Q_Factor'][$i]) ? 1.0 :
-                    $matches['Q_Factor'][$i] + 0.0; // Make it float.
+            $qFactor = empty($matches['q_factor'][$i]) ? 1.0 : $matches['q_factor'][$i] + 0.0; // Make it float.
 
             $acceptLanguages[] = [
-                'Language' => $matches['Language'][$i],
-                'Q_Factor' => $qFactor
+                'language' => $matches['language'][$i],
+                'q_factor' => $qFactor
             ];
         }
 
@@ -344,10 +342,10 @@ EOP;
         // lower level.
         return
             // Normalise to 1               Multiply by Importance
-            (($accept['Q_Factor'] * 1000) * 1000000) +
-            ((($accept['Type'] !== '*') ? 1 : 0) * 900000) +
-            ((($accept['Subtype'] !== '*') ? 1 : 0) * 90000) +
-            ((count($accept['Params'])) * 1);
+            (($accept['q_factor'] * 1000) * 1000000) +
+            ((($accept['type'] !== '*') ? 1 : 0) * 900000) +
+            ((($accept['subtype'] !== '*') ? 1 : 0) * 90000) +
+            ((count($accept['params'])) * 1);
     }
 
     /**
@@ -359,7 +357,7 @@ EOP;
     private function scoreAcceptLanguage(Array $acceptLanguage)
     {
         // Make it at least +-1 so that it doesn't evaluate to 0 (i.e equal).
-        return $acceptLanguage['Q_Factor'] * 1000;
+        return $acceptLanguage['q_factor'] * 1000;
     }
 }
 // EOF

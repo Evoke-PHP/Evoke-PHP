@@ -17,20 +17,20 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerArrayGet()
     {
         $obj = new Tree;
-        $obj->set(['A1' => 3, 'A2' => 7]);
+        $obj->set(['a1' => 3, 'a2' => 7]);
 
         return [
-            'Get_First'  =>
+            'get_first'  =>
                 [
-                    'Expected' => 3,
-                    'Obj'      => $obj,
-                    'Offset'   => 'A1'
+                    'expected' => 3,
+                    'obj'      => $obj,
+                    'offset'   => 'a1'
                 ],
-            'Get_Second' =>
+            'get_second' =>
                 [
-                    'Expected' => 7,
-                    'Obj'      => $obj,
-                    'Offset'   => 'A2'
+                    'expected' => 7,
+                    'obj'      => $obj,
+                    'offset'   => 'a2'
                 ]
         ];
 
@@ -39,21 +39,21 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerArrayGetFail()
     {
         $objUnsetIndex = new Tree;
-        $objUnsetIndex->set(['A1' => 3, 'A2' => 7]);
+        $objUnsetIndex->set(['a1' => 3, 'a2' => 7]);
 
         $objNonArray = new Tree;
         $objNonArray->set(67);
 
         return [
-            'Non_Array'  =>
+            'non_array'  =>
                 [
-                    'Obj'      => $objNonArray,
-                    'Offset'   => 'B1'
+                    'obj'      => $objNonArray,
+                    'offset'   => 'b1'
                 ],
-            'Unset_Index' =>
+            'unset_index' =>
                 [
-                    'Obj'      => $objUnsetIndex,
-                    'Offset'   => 'B1'
+                    'obj'      => $objUnsetIndex,
+                    'offset'   => 'b1'
                 ]
         ];
     }
@@ -61,22 +61,22 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerArrayIsset()
     {
         $issetObj = new Tree;
-        $issetObj->set(['A1' => 3]);
+        $issetObj->set(['a1' => 3]);
 
         $unsetObj = clone($issetObj);
 
         return [
-            'Is_Set'  =>
+            'is_set'  =>
                 [
-                    'Expected' => true,
-                    'Obj'      => $issetObj,
-                    'Offset'   => 'A1'
+                    'expected' => true,
+                    'obj'      => $issetObj,
+                    'offset'   => 'a1'
                 ],
-            'Not_Set' =>
+            'not_set' =>
                 [
-                    'Expected' => false,
-                    'Obj'      => $unsetObj,
-                    'Offset'   => 'A2'
+                    'expected' => false,
+                    'obj'      => $unsetObj,
+                    'offset'   => 'a2'
                 ]
         ];
     }
@@ -84,22 +84,22 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerArraySet()
     {
         $obj = new Tree;
-        $obj->set(['A1' => 3]);
+        $obj->set(['a1' => 3]);
 
         return [
-            'Existing_Index' =>
+            'existing_index' =>
                 [
-                    'Expected'  => 7,
-                    'Obj'       => $obj,
-                    'Offset'    => 'A1',
-                    'Set_Value' => 7
+                    'expected'  => 7,
+                    'obj'       => $obj,
+                    'offset'    => 'a1',
+                    'set_value' => 7
                 ],
-            'New_Index'      =>
+            'new_index'      =>
                 [
-                    'Expected'  => '63e',
-                    'Obj'       => $obj,
-                    'Offset'    => 'A2',
-                    'Set_Value' => '63e'
+                    'expected'  => '63e',
+                    'obj'       => $obj,
+                    'offset'    => 'a2',
+                    'set_value' => '63e'
                 ]
         ];
     }
@@ -107,14 +107,14 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerArrayUnset()
     {
         $obj = new Tree;
-        $obj->set(['A1' => 1, 'A2' => 2, 'A3' => 3]);
+        $obj->set(['a1' => 1, 'a2' => 2, 'a3' => 3]);
 
         return [
-            'Middle' =>
+            'middle' =>
                 [
-                    'Expected' => ['A1' => 1, 'A3' => 3],
-                    'Index'    => 'A2',
-                    'Obj'      => $obj
+                    'expected' => ['a1' => 1, 'a3' => 3],
+                    'index'    => 'a2',
+                    'obj'      => $obj
                 ]
         ];
     }
@@ -122,8 +122,8 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerGetChildren()
     {
         return [
-            'One'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
-            'More' => [
+            'one'  => [[$this->getMock('Evoke\Model\Data\TreeIface')]],
+            'more' => [
                 [
                     $this->getMock('Evoke\Model\Data\TreeIface'),
                     $this->getMock('Evoke\Model\Data\TreeIface'),
@@ -136,12 +136,12 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerHasChildren()
     {
         return [
-            'None' => [[], false],
-            'One'  => [
+            'none' => [[], false],
+            'one'  => [
                 [$this->getMock('Evoke\Model\Data\TreeIface')],
                 true
             ],
-            'More' => [
+            'more' => [
                 [
                     $this->getMock('Evoke\Model\Data\TreeIface'),
                     $this->getMock('Evoke\Model\Data\TreeIface'),
@@ -155,10 +155,10 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerUseValue()
     {
         return [
-            'Array'  => [[1, '2', new \StdClass]],
-            'Int'    => [1],
-            'String' => ['blah'],
-            'Object' => [new \StdClass]
+            'array'  => [[1, '2', new \StdClass]],
+            'int'    => [1],
+            'string' => ['blah'],
+            'object' => [new \StdClass]
         ];
     }
 
@@ -168,8 +168,8 @@ class TreeTest extends PHPUnit_Framework_TestCase
         $oneTree->add(new Tree);
 
         return [
-            'Empty' => [new Tree, false],
-            'One'   => [$oneTree, true]
+            'empty' => [new Tree, false],
+            'one'   => [$oneTree, true]
         ];
     }
 
@@ -183,9 +183,9 @@ class TreeTest extends PHPUnit_Framework_TestCase
         $twoTree->add(new Tree);
 
         return [
-            'Empty' => [new Tree, false],
-            'One'   => [$oneTree, false],
-            'Two'   => [$twoTree, true]
+            'empty' => [new Tree, false],
+            'one'   => [$oneTree, false],
+            'two'   => [$twoTree, true]
         ];
     }
 
@@ -197,22 +197,22 @@ class TreeTest extends PHPUnit_Framework_TestCase
     {
         $structure =
             [
-                'Alpha' =>
+                'alpha' =>
                     [
                         1,
                         2,
                         3
                     ],
-                'Berta' =>
+                'berta' =>
                     [
-                        ['V1' => 'Beta', 'V2' => '1'],
-                        ['V1' => 'Beta', 'V2' => '2']
+                        ['v1' => 'beta', 'v2' => '1'],
+                        ['v1' => 'beta', 'v2' => '2']
                     ]
 
             ];
 
         $obj = new Tree;
-        $obj->set('Root');
+        $obj->set('root');
 
         foreach ($structure as $levelOne => $levelTwo) {
             $levelOneTree = new Tree;
@@ -231,8 +231,8 @@ class TreeTest extends PHPUnit_Framework_TestCase
         $children = $obj->getChildren();
         $grandchild = $children->getChildren();
 
-        $this->assertSame('Beta', $grandchild['V1']);
-        $this->assertSame('1', $grandchild['V2']);
+        $this->assertSame('beta', $grandchild['v1']);
+        $this->assertSame('1', $grandchild['v2']);
     }
 
     /**
@@ -288,7 +288,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
     {
         $obj = new Tree;
         $obj->set(65);
-        $obj['A1'] = 'bad';
+        $obj['a1'] = 'bad';
     }
 
     /**
@@ -310,7 +310,7 @@ class TreeTest extends PHPUnit_Framework_TestCase
     {
         $obj = new Tree;
         $obj->set(65);
-        unset($obj['A1']);
+        unset($obj['a1']);
     }
 
     public function testCurrent()

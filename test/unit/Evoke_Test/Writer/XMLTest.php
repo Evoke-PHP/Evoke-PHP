@@ -16,9 +16,9 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function providerConstruct()
     {
         return [
-            'Indent_On'       => [true],
-            'Indent_Off'      => [false],
-            'Indent_Specific' => [true, '        ']
+            'indent_on'       => [true],
+            'indent_off'      => [false],
+            'indent_specific' => [true, '        ']
         ];
     }
 

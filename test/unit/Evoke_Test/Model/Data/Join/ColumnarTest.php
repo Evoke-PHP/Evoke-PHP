@@ -17,7 +17,7 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
     public function providerFlatData()
     {
         return [
-            'Multi_Keys' => [
+            'multi_keys' => [
                 new Columnar(['f1'], ['i1', 'i2']),
                 [
                     [
@@ -36,7 +36,7 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
                     '2_b' => ['f1' => 'r2']
                 ]
             ],
-            'Simple'     => [
+            'simple'     => [
                 new Columnar(['f1']),
                 [
                     ['f1' => 'r1', 'id' => 1],
@@ -53,34 +53,34 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
     public function providerJointData()
     {
         $singleJoin = new Columnar(['f1']);
-        $singleJoin->addJoin('J1', new Columnar(['f2'], ['J_id']));
+        $singleJoin->addJoin('j1', new Columnar(['f2'], ['j_id']));
 
         $doubleJoin = new Columnar(['f1']);
-        $doubleJoin->addJoin('J1', new Columnar(['f2'], ['J1_id']));
-        $doubleJoin->addJoin('J2', new Columnar(['f3'], ['J2_id']));
+        $doubleJoin->addJoin('j1', new Columnar(['f2'], ['j1_id']));
+        $doubleJoin->addJoin('j2', new Columnar(['f3'], ['j2_id']));
 
         return [
-            'Single_Join' => [
+            'single_join' => [
                 $singleJoin,
                 [
                     [
                         'id'   => 1,
                         'f1'   => 'f1_1',
-                        'J_id' => 11,
+                        'j_id' => 11,
                         'f2'   => 'f2_1'
                     ],
                     [
                         'id'   => 2,
                         'f1'   => 'f1_2',
-                        'J_id' => null,
+                        'j_id' => null,
                         'f2'   => null
                     ]
                 ],
                 [
                     1 => [
                         'f1'         => 'f1_1',
-                        'Joint_Data' => [
-                            'J1' => [
+                        'joint_data' => [
+                            'j1' => [
                                 11 => ['f2' => 'f2_1']
                             ]
                         ]
@@ -88,7 +88,7 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
                     2 => ['f1' => 'f1_2']
                 ]
             ],
-            'Double_Join' => [
+            'double_join' => [
                 $doubleJoin,
                 [
                     [
@@ -96,35 +96,35 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
                         'f1'    => 'f1_1',
                         'f2'    => 'f2_1',
                         'f3'    => 'f3_1',
-                        'J1_id' => 'J1_1',
-                        'J2_id' => 'J2_1'
+                        'j1_id' => 'j1_1',
+                        'j2_id' => 'j2_1'
                     ],
                     [
                         'id'    => 2,
                         'f1'    => 'f1_2',
                         'f2'    => 'f2_2',
                         'f3'    => null,
-                        'J1_id' => 'J1_2',
-                        'J2_id' => 'J2_2'
+                        'j1_id' => 'j1_2',
+                        'j2_id' => 'j2_2'
                     ]
                 ],
                 [
                     1 => [
                         'f1'         => 'f1_1',
-                        'Joint_Data' => [
-                            'J1' => [
-                                'J1_1' => ['f2' => 'f2_1']
+                        'joint_data' => [
+                            'j1' => [
+                                'j1_1' => ['f2' => 'f2_1']
                             ],
-                            'J2' => [
-                                'J2_1' => ['f3' => 'f3_1']
+                            'j2' => [
+                                'j2_1' => ['f3' => 'f3_1']
                             ]
                         ]
                     ],
                     2 => [
                         'f1'         => 'f1_2',
-                        'Joint_Data' => [
-                            'J1' => [
-                                'J1_2' => ['f2' => 'f2_2']
+                        'joint_data' => [
+                            'j1' => [
+                                'j1_2' => ['f2' => 'f2_2']
                             ]
                         ]
                     ]
@@ -137,71 +137,71 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
     {
         // A -> B --> C
         //        `-> D
-        $a = new Columnar(['A'], ['AI']);
-        $b = new Columnar(['B'], ['BI']);
-        $c = new Columnar(['C'], ['CI']);
-        $d = new Columnar(['D'], ['DI']);
-        $b->addJoin('CJ', $c);
-        $b->addJoin('DJ', $d);
-        $a->addJoin('BJ', $b);
+        $a = new Columnar(['a'], ['ai']);
+        $b = new Columnar(['b'], ['bi']);
+        $c = new Columnar(['c'], ['ci']);
+        $d = new Columnar(['d'], ['di']);
+        $b->addJoin('cj', $c);
+        $b->addJoin('dj', $d);
+        $a->addJoin('bj', $b);
 
         $data = [
             [
-                'A'  => 'A1',
-                'AI' => 1,
-                'B'  => 'B1',
-                'BI' => 1,
-                'C'  => 'C1',
-                'CI' => 1,
-                'D'  => 'D1',
-                'DI' => 1,
+                'a'  => 'a1',
+                'ai' => 1,
+                'b'  => 'b1',
+                'bi' => 1,
+                'c'  => 'c1',
+                'ci' => 1,
+                'd'  => 'd1',
+                'di' => 1,
             ],
             [
-                'A'  => 'A2',
-                'AI' => 2,
-                'B'  => 'B1',
-                'BI' => 1,
-                'C'  => 'C1',
-                'CI' => 1,
-                'D'  => null,
-                'DI' => null
+                'a'  => 'a2',
+                'ai' => 2,
+                'b'  => 'b1',
+                'bi' => 1,
+                'c'  => 'c1',
+                'ci' => 1,
+                'd'  => null,
+                'di' => null
             ],
             [
-                'A'  => 'A2',
-                'AI' => 2,
-                'B'  => 'B2',
-                'BI' => 2,
-                'C'  => 'C2',
-                'CI' => 2,
-                'D'  => 'D2',
-                'DI' => 2
+                'a'  => 'a2',
+                'ai' => 2,
+                'b'  => 'b2',
+                'bi' => 2,
+                'c'  => 'c2',
+                'ci' => 2,
+                'd'  => 'd2',
+                'di' => 2
             ],
             [
-                'A'  => 'A2',
-                'AI' => 2,
-                'B'  => 'B2',
-                'BI' => 2,
-                'C'  => 'C3',
-                'CI' => 3
+                'a'  => 'a2',
+                'ai' => 2,
+                'b'  => 'b2',
+                'bi' => 2,
+                'c'  => 'c3',
+                'ci' => 3
             ]
         ];
 
         $expected = [
             1 => [
-                'A'          => 'A1',
-                'Joint_Data' => [
-                    'BJ' => [
+                'a'          => 'a1',
+                'joint_data' => [
+                    'bj' => [
                         1 => [
-                            'B'          => 'B1',
-                            'Joint_Data' => [
-                                'CJ' => [
+                            'b'          => 'b1',
+                            'joint_data' => [
+                                'cj' => [
                                     1 => [
-                                        'C' => 'C1'
+                                        'c' => 'c1'
                                     ]
                                 ],
-                                'DJ' => [
+                                'dj' => [
                                     1 => [
-                                        'D' => 'D1'
+                                        'd' => 'd1'
                                     ]
                                 ]
                             ]
@@ -210,33 +210,33 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
                 ]
             ],
             2 => [
-                'A'          => 'A2',
-                'Joint_Data' => [
-                    'BJ' => [
+                'a'          => 'a2',
+                'joint_data' => [
+                    'bj' => [
                         1 => [
-                            'B'          => 'B1',
-                            'Joint_Data' => [
-                                'CJ' => [
+                            'b'          => 'b1',
+                            'joint_data' => [
+                                'cj' => [
                                     1 => [
-                                        'C' => 'C1'
+                                        'c' => 'c1'
                                     ]
                                 ]
                             ]
                         ],
                         2 => [
-                            'B'          => 'B2',
-                            'Joint_Data' => [
-                                'CJ' => [
+                            'b'          => 'b2',
+                            'joint_data' => [
+                                'cj' => [
                                     2 => [
-                                        'C' => 'C2'
+                                        'c' => 'c2'
                                     ],
                                     3 => [
-                                        'C' => 'C3'
+                                        'c' => 'c3'
                                     ]
                                 ],
-                                'DJ' => [
+                                'dj' => [
                                     2 => [
-                                        'D' => 'D2'
+                                        'd' => 'd2'
                                     ]
                                 ]
                             ]
@@ -247,10 +247,10 @@ class ColumnarTest extends PHPUnit_Framework_TestCase
         ];
 
         return [
-            'ABC' => [
-                'Obj'      => $a,
-                'Data'     => $data,
-                'Expected' => $expected
+            'abc' => [
+                'obj'      => $a,
+                'data'     => $data,
+                'expected' => $expected
             ]
         ];
     }

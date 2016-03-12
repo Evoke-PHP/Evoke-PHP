@@ -16,10 +16,10 @@ class FlatTest extends PHPUnit_Framework_TestCase
     public function providerRecords()
     {
         return [
-            'Two_Records' => [
-                'Raw_Data' => [
-                    'K0' => ['One' => 1, 'Two' => 2],
-                    'K1' => ['One' => 8, 'Two' => 9]
+            'two_records' => [
+                'raw_data' => [
+                    'k0' => ['one' => 1, 'two' => 2],
+                    'k1' => ['one' => 8, 'two' => 9]
                 ]
             ]
         ];
@@ -39,7 +39,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
         $object = new Flat;
         $object->setData($rawData);
 
-        $this->assertTrue(isset($object['One'], $object['Two']));
+        $this->assertTrue(isset($object['one'], $object['two']));
         $this->assertFalse(isset($object['Non-existent']));
     }
 
@@ -55,7 +55,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
         $count = 0;
 
         foreach ($object as $testKey => $testData) {
-            $key = 'K' . $count++;
+            $key = 'k' . $count++;
             $this->assertSame($key, $testKey);
             $this->assertSame($rawData[$key], $testData->getRecord());
         }
@@ -72,7 +72,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
         $object = new Flat;
         $object->setData($rawData);
 
-        $this->assertSame(1, $object['One']);
+        $this->assertSame(1, $object['one']);
     }
 
     /**
@@ -100,7 +100,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
     {
         $object = new Flat;
         $object->setData($rawData);
-        $object['One'] = 'Onety1';
+        $object['one'] = 'onety1';
     }
 
     /**
@@ -123,7 +123,7 @@ class FlatTest extends PHPUnit_Framework_TestCase
     {
         $object = new Flat;
         $object->setData($rawData);
-        unset($object['One']);
+        unset($object['one']);
     }
 }
 // EOF

@@ -17,17 +17,17 @@ class StrReplaceRightTest extends PHPUnit_Framework_TestCase
     public function providerGetController()
     {
         return [
-            'Replace_Empty' => [
-                'Uri'         => 'uriEndPart',
-                'Match'       => 'EndPart',
-                'Replacement' => '',
-                'Expected'    => 'uri'
+            'replace_empty' => [
+                'uri'         => 'uriEndPart',
+                'match'       => 'EndPart',
+                'replacement' => '',
+                'expected'    => 'uri'
             ],
-            'Change_End'    => [
-                'Uri'         => 'thisMatch',
-                'Match'       => 'Match',
-                'Replacement' => 'REP',
-                'Expected'    => 'thisREP'
+            'change_end'    => [
+                'uri'         => 'thisMatch',
+                'match'       => 'Match',
+                'replacement' => 'REP',
+                'expected'    => 'thisREP'
             ]
         ];
     }
@@ -35,23 +35,23 @@ class StrReplaceRightTest extends PHPUnit_Framework_TestCase
     public function providerMatch()
     {
         return [
-            'Match'     => [
-                'Uri'         => 'uriEndPart',
-                'Match'       => 'EndPart',
-                'Replacement' => 'DC',
-                'Expected'    => true
+            'match'     => [
+                'uri'         => 'uriEndPart',
+                'match'       => 'EndPart',
+                'replacement' => 'DC',
+                'expected'    => true
             ],
-            'No_Match'  => [
-                'Uri'         => 'uriNoMatch',
-                'Match'       => 'False',
-                'Replacement' => 'DC',
-                'Expected'    => false
+            'no_match'  => [
+                'uri'         => 'uriNoMatch',
+                'match'       => 'False',
+                'replacement' => 'DC',
+                'expected'    => false
             ],
-            'Not_Right' => [
-                'Uri'         => 'uriMatchNotAtEnd',
-                'Match'       => 'Match',
-                'Replacement' => 'DC',
-                'Expected'    => false
+            'not_right' => [
+                'uri'         => 'uriMatchNotAtEnd',
+                'match'       => 'Match',
+                'replacement' => 'DC',
+                'expected'    => false
             ]
         ];
     }
