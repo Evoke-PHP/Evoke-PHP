@@ -32,7 +32,7 @@ class Equivalent extends Match
      * @param mixed[]  $match         The equivalent match required by the rule.
      * @param string[] $ignoredFields Fields to ignore in the match.
      */
-    public function __construct($outputFormat, Array $match, Array $ignoredFields = ['Params', 'Q_Factor'])
+    public function __construct($outputFormat, Array $match, Array $ignoredFields = ['params', 'q_factor'])
     {
         parent::__construct($outputFormat, $match);
 
