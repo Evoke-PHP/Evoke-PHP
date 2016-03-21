@@ -166,10 +166,10 @@ class TabularTest extends PHPUnit_Framework_TestCase
                 'exact_join',
                 'exact_join'
             ],
-            'lower_camel'           => [
+            'upper_Pascal'          => [
                 new Tabular('b'),
-                'lowerCamel',
-                'Lower_Camel'
+                'upperPascal',
+                'Upper_Pascal'
             ],
             'canonical_lower_camel' => [
                 new Tabular('c'),
@@ -196,7 +196,7 @@ class TabularTest extends PHPUnit_Framework_TestCase
             ['id'],
             'joint_data',
             true,
-            '_T_',
+            '_t_',
             false  // Don't use alphaNum match
         );
         $objExact->addJoin('exact_match', $join);
@@ -254,28 +254,28 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                't1st_T_id' => 1,
-                't1st_T_a'  => 1,
-                't1st_T_b'  => 'B 1',
-                't2nd_T_id' => 1,
-                't2nd_T_x'  => 1,
-                't2nd_T_y'  => 'Y 1'
+                't1st_t_id' => 1,
+                't1st_t_a'  => 1,
+                't1st_t_b'  => 'B 1',
+                't2nd_t_id' => 1,
+                't2nd_t_x'  => 1,
+                't2nd_t_y'  => 'Y 1'
             ],
             [
-                't1st_T_id' => 1,
-                't1st_T_a'  => 1,
-                't1st_T_b'  => 'B 1',
-                't2nd_T_id' => 2,
-                't2nd_T_x'  => 2,
-                't2nd_T_y'  => 'Y 2'
+                't1st_t_id' => 1,
+                't1st_t_a'  => 1,
+                't1st_t_b'  => 'B 1',
+                't2nd_t_id' => 2,
+                't2nd_t_x'  => 2,
+                't2nd_t_y'  => 'Y 2'
             ],
             [
-                't1st_T_id' => 2,
-                't1st_T_a'  => 2,
-                't1st_T_b'  => 'B 2',
-                't2nd_T_id' => null,
-                't2nd_T_x'  => null,
-                't2nd_T_y'  => null
+                't1st_t_id' => 2,
+                't1st_t_a'  => 2,
+                't1st_t_b'  => 'B 2',
+                't2nd_t_id' => null,
+                't2nd_t_x'  => null,
+                't2nd_t_y'  => null
             ]
         ];
 
@@ -315,28 +315,28 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                't1_T_k1' => 5,
-                't1_T_k2' => 6,
-                't1_T_va' => 7,
-                't2_T_k3' => 8,
-                't2_T_k4' => 9,
-                't2_T_vb' => 10
+                't1_t_k1' => 5,
+                't1_t_k2' => 6,
+                't1_t_va' => 7,
+                't2_t_k3' => 8,
+                't2_t_k4' => 9,
+                't2_t_vb' => 10
             ],
             [
-                't1_T_k1' => 5,
-                't1_T_k2' => 6,
-                't1_T_va' => 7,
-                't2_T_k3' => 8,
-                't2_T_k4' => 19,
-                't2_T_vb' => 100
+                't1_t_k1' => 5,
+                't1_t_k2' => 6,
+                't1_t_va' => 7,
+                't2_t_k3' => 8,
+                't2_t_k4' => 19,
+                't2_t_vb' => 100
             ],
             [
-                't1_T_k1' => 555,
-                't1_T_k2' => 666,
-                't1_T_va' => 777,
-                't2_T_k3' => null,
-                't2_T_k4' => null,
-                't2_T_vb' => null
+                't1_t_k1' => 555,
+                't1_t_k2' => 666,
+                't1_t_va' => 777,
+                't2_t_k3' => null,
+                't2_t_k4' => null,
+                't2_t_vb' => null
             ]
         ];
 
@@ -370,7 +370,7 @@ class TabularTest extends PHPUnit_Framework_TestCase
     public function testArrangeFlatDataMissingKeys()
     {
         $obj = new Tabular('standard');
-        $obj->arrangeFlatData([['standard_T_missing_id' => 1]]);
+        $obj->arrangeFlatData([['standard_t_missing_id' => 1]]);
     }
 
     public function testArrangeFlatDataWithOptionalNonTabularFields()
@@ -384,13 +384,13 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                'opt_T_id'    => 1,
-                'opt_T_v1'    => 'One has V1 1',
+                'opt_t_id'    => 1,
+                'opt_t_v1'    => 'One has V1 1',
                 'non_tabular' => 3
             ],
             [
-                'opt_T_id'    => 2,
-                'opt_T_v1'    => 'Two has V1 2',
+                'opt_t_id'    => 2,
+                'opt_t_v1'    => 'Two has V1 2',
                 'non_tabular' => 4
             ]
         ];
@@ -413,13 +413,13 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                'rqd_T_id'    => 1,
-                'rqd_T_v1'    => 'One has V1 1',
+                'rqd_t_id'    => 1,
+                'rqd_t_v1'    => 'One has V1 1',
                 'non_tabular' => 3
             ],
             [
-                'rqd_T_id'    => 2,
-                'rqd_T_v1'    => 'Two has V1 2',
+                'rqd_t_id'    => 2,
+                'rqd_t_v1'    => 'Two has V1 2',
                 'non_tabular' => 4
             ]
         ];
@@ -433,12 +433,12 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                'nk_T_v1' => 1,
-                'nk_T_v2' => 2
+                'nk_t_v1' => 1,
+                'nk_t_v2' => 2
             ],
             [
-                'nk_T_v1' => 3,
-                'nk_T_v2' => 4
+                'nk_t_v1' => 3,
+                'nk_t_v2' => 4
             ]
         ];
 
@@ -458,18 +458,18 @@ class TabularTest extends PHPUnit_Framework_TestCase
 
         $data = [
             [
-                'nk_T_v1' => 1,
-                'nk_T_v2' => 2,
-                'jr_T_va' => 'first'
+                'nk_t_v1' => 1,
+                'nk_t_v2' => 2,
+                'jr_t_va' => 'first'
             ],
             [
-                'nk_T_v1' => 1,
-                'nk_T_v2' => 2,
-                'jr_T_va' => 'second'
+                'nk_t_v1' => 1,
+                'nk_t_v2' => 2,
+                'jr_t_va' => 'second'
             ],
             [
-                'nk_T_v1' => 3,
-                'nk_T_v2' => 4
+                'nk_t_v1' => 3,
+                'nk_t_v2' => 4
             ]
         ];
 

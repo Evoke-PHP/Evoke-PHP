@@ -83,14 +83,14 @@ abstract class Join implements JoinIface
     }
 
     /**
-     * Get the join ID for the specified join or throw an exception if it can't be found uniquely.
+     * Get the join ID for the specified join or throw an exception if it can't be found.
      *
-     * The join can be matched in two ways:
+     * The join ID match depends on the value of useAlphaNumMatch:
      *
-     * - An exact match: `Join_Name`
-     * - A lowerCamelCase match: `joinName`
+     * If useAlphaNumMatch is true  - Only an exact join will match: `Join_Name`
+     * If useAlphaNumMatch is false - A case-insensitive alpha numeric will match:`j#o_InNaMe`
      *
-     * The Join ID will be returned as the exact match.
+     * The Join ID will be returned as the exact match that was provided when the join was added.
      *
      * @param string $join Join to get the ID for.
      * @return string The matched join.

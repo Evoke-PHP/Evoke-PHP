@@ -33,12 +33,12 @@ use DomainException;
  *
  * <pre>
  *                          +=================+
- *   +============+         | Product_Images  |
- *   | Product    |         +-----------------+         +============+
- *   +------------+         | PK | ID         |         | Image      |
- *   | PK | ID    |-||----|<| FK | Product_ID |         +------------+
- *   |    | Name  |         | FK | Image_ID   |>|----||-| PK | ID    |
- *   +============+         +=================+         |    | Name  |
+ *   +============+         | product_images  |
+ *   | product    |         +-----------------+         +============+
+ *   +------------+         | PK | id         |         | image      |
+ *   | PK | id    |-||----|<| FK | product_id |         +------------+
+ *   |    | name  |         | FK | image_id   |>|----||-| PK | id    |
+ *   +============+         +=================+         |    | name  |
  *                                                      +============+
  * </pre>
  *
@@ -49,14 +49,14 @@ use DomainException;
  *
  * <pre><code>
  * SELECT
- *     Product.ID   AS Product_T_ID,
- *     Product.Name AS Product_T_Name,
- *     Image.ID     AS Image_T_ID,
- *     Image.Name   AS Image_T_Name
+ *     product.id   AS product_t_id,
+ *     product.name AS product_t_name,
+ *     image.id     AS image_t_id,
+ *     image.name   AS image_t_name
  * FROM
- *     Product
- *     LEFT JOIN Product_Images ON Product.ID = Product_Images.Product_ID
- *     LEFT JOIN Image          ON Image.ID   = Product_Images.Image_ID
+ *     product
+ *     LEFT JOIN product_images ON product.id = product_images.product_id
+ *     LEFT JOIN image          ON image.id   = product_images.image_id
  * </code></pre>
  *
  * Note: The SQL query forces the results to a tabular format by prepending the result fields with the table name. This
@@ -68,30 +68,30 @@ use DomainException;
  * The Join structure that will help us arrange this data is:
  *
  * <pre><code>
- * $joinStructure = new Tabular('Product');
- * $joinStructure->addJoin('Image', new Tabular('Image'));
+ * $joinStructure = new Tabular('product');
+ * $joinStructure->addJoin('image', new Tabular('image'));
  * </code></pre>
  *
  * Example Flat Input Data
  * -----------------------
  *
  * <pre><code>
- * $results = [['Product_T_ID'   => 1,
- *              'Product_T_Name' => 'P_One',
- *              'Image_T_ID'     => NULL,
- *              'Image_T_Name'   => NULL],
- *             ['Product_T_ID'   => 2,
- *              'Product_T_Name' => 'P_Two',
- *              'Image_T_ID'     => 1,
- *              'Image_T_Name'   => 'Image.png'],
- *             ['Product_T_ID'   => 3,
- *              'Product_T_Name' => 'P_Three',
- *              'Image_T_ID'     => 2,
- *              'Image_T_Name'   => 'I_One.png'],
- *             ['Product_T_ID'   => 3,
- *              'Product_T_Name' => 'P_Three',
- *              'Image_T_ID'     => 3,
- *              'Image_T_Name'   => 'I_Two.png']];
+ * $results = [['product_t_id'   => 1,
+ *              'product_t_name' => 'P_One',
+ *              'image_t_id'     => NULL,
+ *              'image_t_name'   => NULL],
+ *             ['product_t_id'   => 2,
+ *              'product_t_name' => 'P_Two',
+ *              'image_t_id'     => 1,
+ *              'image_t_name'   => 'Image.png'],
+ *             ['product_t_id'   => 3,
+ *              'product_t_name' => 'P_Three',
+ *              'image_t_id'     => 2,
+ *              'image_t_name'   => 'I_One.png'],
+ *             ['product_t_id'   => 3,
+ *              'product_t_name' => 'P_Three',
+ *              'image_t_id'     => 3,
+ *              'image_t_name'   => 'I_Two.png']];
  * </code></pre>
  *
  * Arrange the Data
@@ -104,13 +104,13 @@ use DomainException;
  * Below is a pretty version of the hierarchical data from the arrangement:
  *
  * <pre><code>
- * [1 => ['Name'       => 'P_One',
- *        'Joint_Data' => ['Image' => []]],
- *  2 => ['Name'       => 'P_Two',
- *        'Joint_Data' => ['Image' => [1 => ['Name' => 'Image.png']]]],
- *  3 => ['Name'       => 'P_Three',
- *        'Joint_Data' => ['Image' => [2 => ['Name' => 'I_One.png'],
- *                                     3 => ['Name' => 'I_Two.png']]]]];
+ * [1 => ['name'       => 'P_One',
+ *        'joint_data' => ['image' => []]],
+ *  2 => ['name'       => 'P_Two',
+ *        'joint_data' => ['image' => [1 => ['name' => 'Image.png']]]],
+ *  3 => ['name'       => 'P_Three',
+ *        'joint_data' => ['image' => [2 => ['name' => 'I_One.png'],
+ *                                     3 => ['name' => 'I_Two.png']]]]];
  * </code></pre>
  *
  * The data has been arranged so that a list of products identified by their primary keys contains their associated
@@ -169,7 +169,7 @@ class Tabular extends Join
         Array $keys = ['id'],
         $jointKey = 'joint_data',
         $requireAllTabularFields = true,
-        $separator = '_T_',
+        $separator = '_t_',
         $useAlphaNumMatch = true
     ) {
         parent::__construct($useAlphaNumMatch);
