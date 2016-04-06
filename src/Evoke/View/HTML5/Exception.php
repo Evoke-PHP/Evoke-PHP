@@ -43,13 +43,13 @@ class Exception implements ViewIface
 
         return [
             'div',
-            ['class' => 'Exception'],
+            ['class' => 'exception'],
             [
-                ['div', ['class' => 'Type'], get_class($this->exception)],
-                ['p', ['class' => 'Message'], $this->exception->getMessage()],
+                ['div', ['class' => 'type'], get_class($this->exception)],
+                ['p', ['class' => 'message'], $this->exception->getMessage()],
                 [
                     'pre',
-                    ['class' => 'Trace'],
+                    ['class' => 'trace'],
                     $this->exception->getTraceAsString()
                 ]
             ]

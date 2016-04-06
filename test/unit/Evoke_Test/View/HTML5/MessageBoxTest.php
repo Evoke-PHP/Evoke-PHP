@@ -27,7 +27,7 @@ class MessageBoxTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildAndGet()
     {
-        $object = new MessageBox(['class' => 'Test Message_Box Info']);
+        $object = new MessageBox(['class' => 'test message_box info']);
         $object->setTitle('Test Box');
         $object->addContent(['div', [], 'One']);
         $object->addContent('Text');
@@ -35,12 +35,12 @@ class MessageBoxTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'div',
-                ['class' => 'Test Message_Box Info'],
+                ['class' => 'test message_box info'],
                 [
-                    ['div', ['class' => 'Title'], 'Test Box'],
+                    ['div', ['class' => 'title'], 'Test Box'],
                     [
                         'div',
-                        ['class' => 'Content'],
+                        ['class' => 'content'],
                         [
                             ['div', [], 'One'],
                             'Text'

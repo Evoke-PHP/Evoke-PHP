@@ -44,13 +44,13 @@ class Menu implements ViewIface
             throw new LogicException('needs tree to be set.');
         }
 
-        $menuClass = 'Menu ' . $this->tree->get();
+        $menuClass = 'menu ' . $this->tree->get();
         $menuItems = [];
 
         if ($this->tree->hasChildren()) {
             $menuItems = $this->getMenu($this->tree);
         } else {
-            $menuClass .= ' Empty';
+            $menuClass .= ' empty';
         }
 
         return ['ul', ['class' => $menuClass], $menuItems];
@@ -113,7 +113,7 @@ class Menu implements ViewIface
             $menuItem  = $node->get();
             $menuPtr[] = [
                 'li',
-                ['class' => 'Menu_Item Level_' . $currentDepth],
+                ['class' => 'menu_item level_' . $currentDepth],
                 [
                     [
                         'a',

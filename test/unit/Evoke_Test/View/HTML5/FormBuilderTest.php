@@ -364,7 +364,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
                 [
                     [
                         'div',
-                        ['class' => 'Row'],
+                        ['class' => 'row'],
                         [['div', [], 'A']]
                     ]
                 ]
@@ -391,7 +391,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
                 [
                     [
                         'div',
-                        ['class' => 'Row'],
+                        ['class' => 'row'],
                         [
                             ['div', [], 'A'],
                             ['div', ['class' => 'B'], 'B']
@@ -424,7 +424,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
                 [
                     [
                         'div',
-                        ['class' => 'Row'],
+                        ['class' => 'row'],
                         [
                             ['div', [], 'A'],
                             ['div', ['class' => 'B'], 'B']
@@ -432,7 +432,7 @@ class FormBuilderTest extends PHPUnit_Framework_TestCase
                     ],
                     [
                         'div',
-                        ['class' => 'Row'],
+                        ['class' => 'row'],
                         [['span', [], 'C']]
                     ]
                 ]

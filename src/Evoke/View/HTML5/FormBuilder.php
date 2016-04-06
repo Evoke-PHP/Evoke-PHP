@@ -163,7 +163,7 @@ class FormBuilder implements FormBuilderIface
             throw new LogicException('Cannot nest rows.');
         }
 
-        $this->children[] = ['div', ['class' => 'Row'], $rowElements];
+        $this->children[] = ['div', ['class' => 'row'], $rowElements];
     }
 
     /**

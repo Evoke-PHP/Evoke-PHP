@@ -57,7 +57,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
             ->expects($this->at($tIndex++))
             ->method('get')
             ->with()
-            ->will($this->returnValue('Name'));
+            ->will($this->returnValue('name'));
         $mockTree
             ->expects($this->at($tIndex++))
             ->method('hasChildren')
@@ -66,7 +66,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
 
         $obj = new Menu;
         $obj->set($mockTree);
-        $this->assertSame(['ul', ['class' => 'Menu Name Empty'], []], $obj->get());
+        $this->assertSame(['ul', ['class' => 'menu name empty'], []], $obj->get());
     }
 
     /**
@@ -129,11 +129,11 @@ class MenuTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'ul',
-                ['class' => 'Menu SL_Name'],
+                ['class' => 'menu SL_Name'],
                 [
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -170,11 +170,11 @@ class MenuTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'ul',
-                ['class' => 'Menu Main_Tree'],
+                ['class' => 'menu Main_Tree'],
                 [
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -185,7 +185,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                     ],
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -212,7 +212,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
         $secondLevelItems = [[1, 2, 3], [2, 0], [1]];
         $treeElements     = [];
         $tree             = new Tree;
-        $tree->set('Multi');
+        $tree->set('multi');
 
         // Use a real tree because mocking this is too complex.
         foreach ($letters as $index => $letter) {
@@ -257,11 +257,11 @@ class MenuTest extends PHPUnit_Framework_TestCase
         $expected =
             [
                 'ul',
-                ['class' => 'Menu Multi'],
+                ['class' => 'menu multi'],
                 [
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -274,7 +274,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                 [
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -287,7 +287,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                 [
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -302,7 +302,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                     ],
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -315,7 +315,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                 [
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -326,7 +326,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                     ],
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -341,7 +341,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                     ],
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -354,7 +354,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                 [
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -365,7 +365,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                     ],
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -376,7 +376,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                     ],
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -395,7 +395,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                     ],
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -408,7 +408,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                 [
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -421,7 +421,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                 [
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -432,7 +432,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                     ],
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -447,7 +447,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                     ],
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -462,7 +462,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                     ],
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',
@@ -475,7 +475,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                 [
                                     [
                                         'li',
-                                        ['class' => 'Menu_Item Level_1'],
+                                        ['class' => 'menu_item level_1'],
                                         [
                                             [
                                                 'a',
@@ -488,7 +488,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                                                 [
                                                     [
                                                         'li',
-                                                        ['class' => 'Menu_Item Level_2'],
+                                                        ['class' => 'menu_item level_2'],
                                                         [
                                                             [
                                                                 'a',
@@ -507,7 +507,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
                     ],
                     [
                         'li',
-                        ['class' => 'Menu_Item Level_0'],
+                        ['class' => 'menu_item level_0'],
                         [
                             [
                                 'a',

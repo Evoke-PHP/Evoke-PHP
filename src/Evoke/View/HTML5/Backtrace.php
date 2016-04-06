@@ -49,31 +49,31 @@ class Backtrace implements ViewIface
                 [
                     [
                         'span',
-                        ['class' => 'File'],
+                        ['class' => 'file'],
                         empty($info['file']) ? '<internal>' : $info['file']
                     ]
                 ];
 
             if (isset($info['line'])) {
-                $infoElements[] = ['span', ['class' => 'Line'], '(' . $info['line'] . ')'];
+                $infoElements[] = ['span', ['class' => 'line'], '(' . $info['line'] . ')'];
             }
 
             if (isset($info['class'])) {
-                $infoElements[] = ['span', ['class' => 'Class'], $info['class']];
+                $infoElements[] = ['span', ['class' => 'class'], $info['class']];
             }
 
             if (isset($info['type'])) {
-                $infoElements[] = ['span', ['class' => 'Type'], $info['type']];
+                $infoElements[] = ['span', ['class' => 'type'], $info['type']];
             }
 
             if (isset($info['function'])) {
-                $infoElements[] = ['span', ['class' => 'Function'], $info['function']];
+                $infoElements[] = ['span', ['class' => 'function'], $info['function']];
             }
 
             $listItems[] = ['li', [], $infoElements];
         }
 
-        return ['ol', ['class' => 'Backtrace'], $listItems];
+        return ['ol', ['class' => 'backtrace'], $listItems];
     }
 
     /**

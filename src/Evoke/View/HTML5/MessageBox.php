@@ -44,7 +44,7 @@ class MessageBox implements ViewIface
      *
      * @param mixed[] $attribs Message Box attributes.
      */
-    public function __construct(Array $attribs = ['class' => 'Message_Box Info'])
+    public function __construct(Array $attribs = ['class' => 'message_box info'])
     {
         $this->attribs         = $attribs;
         $this->contentElements = [];
@@ -76,8 +76,8 @@ class MessageBox implements ViewIface
             'div',
             $this->attribs,
             [
-                ['div', ['class' => 'Title'], $this->title],
-                ['div', ['class' => 'Content'], $this->contentElements]
+                ['div', ['class' => 'title'], $this->title],
+                ['div', ['class' => 'content'], $this->contentElements]
             ]
         ];
     }

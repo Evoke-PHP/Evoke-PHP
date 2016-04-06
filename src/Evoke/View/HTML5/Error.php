@@ -69,22 +69,22 @@ class Error implements ViewIface
 
         return [
             'div',
-            ['class' => 'Error'],
+            ['class' => 'error'],
             [
                 [
                     'div',
-                    ['class' => 'Details'],
+                    ['class' => 'details'],
                     [
                         [
                             'span',
-                            ['class' => 'Type'],
+                            ['class' => 'type'],
                             $this->getTypeString($error['type'])
                         ],
-                        ['span', ['class' => 'File'], $error['file']],
-                        ['span', ['class' => 'Line'], $error['line']]
+                        ['span', ['class' => 'file'], $error['file']],
+                        ['span', ['class' => 'line'], $error['line']]
                     ]
                 ],
-                ['p', ['class' => 'Message'], $error['message']]
+                ['p', ['class' => 'message'], $error['message']]
             ]
         ];
     }

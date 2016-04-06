@@ -30,17 +30,17 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
                     'expected'  =>
                         [
                             'ol',
-                            ['class' => 'Backtrace'],
+                            ['class' => 'backtrace'],
                             [
                                 [
                                     'li',
                                     [],
                                     [
-                                        ['span', ['class' => 'File'], 'one.php'],
-                                        ['span', ['class' => 'Line'], '(111)'],
-                                        ['span', ['class' => 'Class'], 'One'],
-                                        ['span', ['class' => 'Type'], 'one_type'],
-                                        ['span', ['class' => 'Function'], 'oneUp']
+                                        ['span', ['class' => 'file'], 'one.php'],
+                                        ['span', ['class' => 'line'], '(111)'],
+                                        ['span', ['class' => 'class'], 'One'],
+                                        ['span', ['class' => 'type'], 'one_type'],
+                                        ['span', ['class' => 'function'], 'oneUp']
                                     ]
                                 ]
                             ]
@@ -66,27 +66,27 @@ class BacktraceTest extends PHPUnit_Framework_TestCase
                     'expected'  =>
                         [
                             'ol',
-                            ['class' => 'Backtrace'],
+                            ['class' => 'backtrace'],
                             [
                                 [
                                     'li',
                                     [],
                                     [
-                                        ['span', ['class' => 'File'], 'Funk.php'],
-                                        ['span', ['class' => 'Line'], '(78)'],
-                                        ['span', ['class' => 'Class'], 'Funky'],
-                                        ['span', ['class' => 'Type'], 'typed'],
-                                        ['span', ['class' => 'Function'], 'funkItUp']
+                                        ['span', ['class' => 'file'], 'Funk.php'],
+                                        ['span', ['class' => 'line'], '(78)'],
+                                        ['span', ['class' => 'class'], 'Funky'],
+                                        ['span', ['class' => 'type'], 'typed'],
+                                        ['span', ['class' => 'function'], 'funkItUp']
                                     ]
                                 ],
                                 [
                                     'li',
                                     [],
                                     [
-                                        ['span', ['class' => 'File'], 'Boog.php'],
-                                        ['span', ['class' => 'Class'], 'Boogie'],
-                                        ['span', ['class' => 'Type'], 'btyped'],
-                                        ['span', ['class' => 'Function'], 'boogieItUp']
+                                        ['span', ['class' => 'file'], 'Boog.php'],
+                                        ['span', ['class' => 'class'], 'Boogie'],
+                                        ['span', ['class' => 'type'], 'btyped'],
+                                        ['span', ['class' => 'function'], 'boogieItUp']
                                     ]
                                 ]
                             ]

@@ -41,18 +41,18 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'div',
-                ['class' => 'Error'],
+                ['class' => 'error'],
                 [
                     [
                         'div',
-                        ['class' => 'Details'],
+                        ['class' => 'details'],
                         [
-                            ['span', ['class' => 'Type'], 'E_USER_ERROR'],
-                            ['span', ['class' => 'File'], 'FILE'],
-                            ['span', ['class' => 'Line'], 245]
+                            ['span', ['class' => 'type'], 'E_USER_ERROR'],
+                            ['span', ['class' => 'file'], 'FILE'],
+                            ['span', ['class' => 'line'], 245]
                         ]
                     ],
-                    ['p', ['class' => 'Message'], '<UNK>']
+                    ['p', ['class' => 'message'], '<UNK>']
                 ]
             ],
             $object->get()
@@ -75,18 +75,18 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'div',
-                ['class' => 'Error'],
+                ['class' => 'error'],
                 [
                     [
                         'div',
-                        ['class' => 'Details'],
+                        ['class' => 'details'],
                         [
-                            ['span', ['class' => 'Type'], 'WHO KNOWS'],
-                            ['span', ['class' => 'File'], 'F'],
-                            ['span', ['class' => 'Line'], 2]
+                            ['span', ['class' => 'type'], 'WHO KNOWS'],
+                            ['span', ['class' => 'file'], 'F'],
+                            ['span', ['class' => 'line'], 2]
                         ]
                     ],
-                    ['p', ['class' => 'Message'], 'BLAH']
+                    ['p', ['class' => 'message'], 'BLAH']
                 ]
             ],
             $object->get()

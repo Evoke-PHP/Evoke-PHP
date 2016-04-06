@@ -23,13 +23,13 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
         $object->set($testException);
         $expected = [
             'div',
-            ['class' => 'Exception'],
+            ['class' => 'exception'],
             [
-                ['div', ['class' => 'Type'], 'Exception'],
-                ['p', ['class' => 'Message'], 'Created in test.'],
+                ['div', ['class' => 'type'], 'Exception'],
+                ['p', ['class' => 'message'], 'Created in test.'],
                 [
                     'pre',
-                    ['class' => 'Trace'],
+                    ['class' => 'trace'],
                     $testException->getTraceAsString()
                 ]
             ]

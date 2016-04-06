@@ -38,7 +38,7 @@ class VarExport implements ViewIface
      */
     public function get()
     {
-        return ['div', ['class' => 'Var_Export'], var_export($this->var, true)];
+        return ['div', ['class' => 'var_export'], var_export($this->var, true)];
     }
 
     /**
