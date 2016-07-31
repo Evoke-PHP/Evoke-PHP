@@ -40,15 +40,28 @@ class Number extends Rule
     protected $prefixLen;
 
     /**
-     * Construct a Split object to split the uri into named parameters after an optional prefix.
+     * Suffix string to match after the numbered part of the URI.
+     * @var string
+     */
+    protected $suffix;
+
+    /**
+     * Pre-calculated length for usage throughout.
+     * @var int
+     */
+    protected $suffixLen;
+
+    /**
+     * Create a rule to get the number from the URI as a parameter.
      *
      * @param string   $controller
      * @param string   $key           The parameter key to store the number in.
      * @param string   $prefix        The prefix to match.
+     * @param string   $suffix        An optional suffix to match.
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct($controller, $key, $prefix, $authoritative = true)
+    public function __construct($controller, $key, $prefix, $suffix = '', $authoritative = true)
     {
         parent::__construct($authoritative);
 
@@ -56,6 +69,8 @@ class Number extends Rule
         $this->key        = $key;
         $this->prefix     = $prefix;
         $this->prefixLen  = strlen($prefix);
+        $this->suffix     = $suffix;
+        $this->suffixLen  = strlen($suffix);
     }
 
     /**
@@ -71,7 +86,7 @@ class Number extends Rule
      */
     public function getParams()
     {
-        return [$this->key => (int)(substr($this->uri, $this->prefixLen))];
+        return [$this->key => (int)(substr($this->uri, $this->prefixLen, strlen($this->uri) - $this->suffixLen))];
     }
 
     /**
@@ -81,7 +96,8 @@ class Number extends Rule
     {
         return (
             strcmp($this->prefix, substr($this->uri, 0, $this->prefixLen)) === 0 &&
-            ctype_digit(substr($this->uri, $this->prefixLen))
+            strcmp($this->suffix, substr($this->uri, - $this->suffixLen, $this->suffixLen)) === 0 &&
+            ctype_digit(substr($this->uri, $this->prefixLen, strlen($this->uri) - $this->suffixLen))
         );
     }
 }
