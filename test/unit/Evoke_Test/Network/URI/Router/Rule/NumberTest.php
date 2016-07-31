@@ -70,6 +70,11 @@ class NumberTest extends \PHPUnit_Framework_TestCase
                 'obj'      => new Number('DC', 'Found', 'A/'),
                 'uri'      => 'A/21'
             ],
+            'Has_Number_Both'      => [
+                'expected' => true,
+                'obj'      => new Number('DC', 'Found', 'A/', '/B'),
+                'uri'      => 'A/21/B'
+            ],
             'No_Prefix'            => [
                 'expected' => true,
                 'obj'      => new Number('DC', 'Found', ''),

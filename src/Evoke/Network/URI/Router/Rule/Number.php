@@ -86,7 +86,11 @@ class Number extends Rule
      */
     public function getParams()
     {
-        return [$this->key => (int)(substr($this->uri, $this->prefixLen, strlen($this->uri) - $this->suffixLen))];
+        return [$this->key => (int)(substr(
+            $this->uri,
+            $this->prefixLen,
+            strlen($this->uri) - $this->prefixLen - $this->suffixLen
+        ))];
     }
 
     /**
@@ -97,7 +101,7 @@ class Number extends Rule
         return (
             strcmp($this->prefix, substr($this->uri, 0, $this->prefixLen)) === 0 &&
             strcmp($this->suffix, substr($this->uri, - $this->suffixLen, $this->suffixLen)) === 0 &&
-            ctype_digit(substr($this->uri, $this->prefixLen, strlen($this->uri) - $this->suffixLen))
+            ctype_digit(substr($this->uri, $this->prefixLen, strlen($this->uri) - $this->prefixLen - $this->suffixLen))
         );
     }
 }
