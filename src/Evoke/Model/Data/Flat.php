@@ -214,6 +214,20 @@ class Flat implements FlatIface
         );
     }
 
+    /************************/
+    /* Implements Countable */
+    /************************/
+
+    /**
+     * Return the number of records in the data.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->data);
+    }
+
     /*********************/
     /* Protected Methods */
     /*********************/

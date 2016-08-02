@@ -37,6 +37,16 @@ abstract class Decorator implements FlatIface
     /******************/
 
     /**
+     * Return the number of records in the data.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->data->count();
+    }
+
+    /**
      * Return the current record of data.
      *
      * @return Decorator

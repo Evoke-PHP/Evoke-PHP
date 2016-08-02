@@ -84,6 +84,131 @@ class DataTest extends PHPUnit_Framework_TestCase
     /*********/
 
     /**
+     * @covers Evoke\Model\Data\Flat:count
+     */
+    public function testCount()
+    {
+        $j1Data1 = [
+            ['j1_id' => 1, 'value' => '1'],
+            ['j1_id' => 1, 'value' => 'one']
+        ];
+        $j1Data2 = [
+            ['j1_id' => 2, 'value' => '12'],
+            ['j1_id' => 2, 'value' => 'onetwo']
+        ];
+
+        $j2Data1 = [
+            ['j2_id' => 1, 'value' => '21'],
+            ['j2_id' => 1, 'value' => 'twoone']
+        ];
+        $j2Data2 = [
+            ['j2_id' => 2, 'value' => '2'],
+            ['j2_id' => 2, 'value' => 'two']
+        ];
+        $j3Data  = [['j3_id' => 3, 'text' => 'three']];
+
+        $flatResults =
+            [
+                [
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => '21'
+                ],
+                [
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => 'one',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => '21'
+                ],
+                [
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => 'twoone',
+                    'j3.j3_id'      => 3,
+                    'j3.text'       => 'three'
+                ],
+                [
+                    'm.main_record' => 'one',
+                    'j1.j1_id'      => 1,
+                    'j1.value'      => '1',
+                    'j2.j2_id'      => 1,
+                    'j2.value'      => 'twoone',
+                    'j3.j3_id'      => 3,
+                    'j3.text'       => 'three'
+                ]
+            ];
+
+        $data = [
+            [
+                'main_record' => 'one',
+                'joint_data'  => [
+                    'j1' => $j1Data1,
+                    'j2' => $j2Data1
+                ]
+            ],
+            [
+                'main_record' => 'two',
+                'joint_data'  => [
+                    'j1' => $j1Data2,
+                    'j2' => $j2Data2,
+                    'j3' => $j3Data
+                ]
+            ]
+        ];
+
+        $j1 = $this->getDataMock();
+        $j1
+            ->expects($this->at(0))
+            ->method('setArrangedData')
+            ->with($j1Data1);
+        $j1
+            ->expects($this->at(1))
+            ->method('setArrangedData')
+            ->with($j1Data2);
+
+        $j2 = $this->getDataMock();
+        $j2
+            ->expects($this->at(0))
+            ->method('setArrangedData')
+            ->with($j2Data1);
+        $j2
+            ->expects($this->at(1))
+            ->method('setArrangedData')
+            ->with($j2Data2);
+
+        $j3 = $this->getDataMock();
+        $j3
+            ->expects($this->at(0))
+            ->method('setArrangedData')
+            ->with([]);
+        $j3
+            ->expects($this->at(1))
+            ->method('setArrangedData')
+            ->with($j3Data);
+
+        $join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $join
+            ->expects($this->at(0))
+            ->method('arrangeFlatData')
+            ->with($flatResults)
+            ->will($this->returnValue($data));
+
+        $obj = new Data(
+            $join,
+            ['j1' => $j1, 'j2' => $j2, 'j3' => $j3]
+        );
+        $obj->setData($flatResults);
+        $obj->next();
+
+        $this->assertEquals(2, $obj->count());
+    }
+
+    /**
      * @dataProvider providerGetJointData
      */
     public function testGetJointData($join, $joins, $joinName, $expected)
@@ -257,6 +382,10 @@ class DataTest extends PHPUnit_Framework_TestCase
         $obj->setData($flatResults);
         $obj->next();
     }
+
+    /*******************/
+    /* Private Methods */
+    /*******************/
 
     private function getDataMock()
     {

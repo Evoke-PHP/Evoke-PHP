@@ -14,7 +14,7 @@ namespace Evoke\Model\Data;
  * @license   MIT
  * @package   Model\Data
  */
-interface FlatIface extends \ArrayAccess, \Iterator
+interface FlatIface extends \ArrayAccess, \Countable, \Iterator
 {
     /**
      * Get the current record as a simple array (without iterator or class properties).
