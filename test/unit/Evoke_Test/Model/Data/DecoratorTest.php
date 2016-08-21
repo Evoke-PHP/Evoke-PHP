@@ -26,6 +26,24 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers Evoke\Model\Data\Decorator::__construct
+     * @covers Evoke\Model\Data\Decorator::count
+     */
+    public function testCount()
+    {
+        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock
+            ->expects($this->any())
+            ->method('count')
+            ->with()
+            ->will($this->returnValue(5));
+
+        $obj = new TestExtendedDecorator($dataMock);
+        $this->assertSame(5, $obj->count());
+        $this->assertSame(5, count($obj));
+    }
+
+    /**
+     * @covers Evoke\Model\Data\Decorator::__construct
      * @covers Evoke\Model\Data\Decorator::current
      */
     public function testCurrent()

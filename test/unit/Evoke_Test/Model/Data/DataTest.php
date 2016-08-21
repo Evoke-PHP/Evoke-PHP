@@ -84,7 +84,7 @@ class DataTest extends PHPUnit_Framework_TestCase
     /*********/
 
     /**
-     * @covers Evoke\Model\Data\Flat:count
+     * @covers Evoke\Model\Data\Flat::count
      */
     public function testCount()
     {
@@ -206,6 +206,7 @@ class DataTest extends PHPUnit_Framework_TestCase
         $obj->next();
 
         $this->assertEquals(2, $obj->count());
+        $this->assertEquals(2, count($obj));
     }
 
     /**
