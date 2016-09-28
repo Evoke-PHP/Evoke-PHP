@@ -207,6 +207,7 @@ class XML implements WriterIface
                 $this->xmlWriter->startDTD('html');
                 $this->xmlWriter->endDTD();
                 $this->xmlWriter->startElement('html');
+                $this->xmlWriter->writeAttribute('class', 'no-js');
                 break;
 
             case 'XML':
@@ -224,6 +225,7 @@ class XML implements WriterIface
                 $this->xmlWriter->startElementNS(null, 'html', 'http://www.w3.org/1999/xhtml');
                 $this->xmlWriter->writeAttribute('lang', $this->language);
                 $this->xmlWriter->writeAttribute('xml:lang', $this->language);
+                $this->xmlWriter->writeAttribute('class', 'no-js');
                 break;
 
             default:
