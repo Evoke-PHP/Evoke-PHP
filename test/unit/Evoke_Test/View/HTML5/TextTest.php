@@ -1,13 +1,13 @@
 <?php
 namespace Evoke_Test\View\HTML5;
 
-use Evoke\View\HTML5\String;
+use Evoke\View\HTML5\Text;
 use PHPUnit_Framework_TestCase;
 
 /**
- * @covers Evoke\View\HTML5\String
+ * @covers Evoke\View\HTML5\Text
  */
-class StringTest extends PHPUnit_Framework_TestCase
+class TextTest extends PHPUnit_Framework_TestCase
 {
     /******************/
     /* Data Providers */
@@ -99,7 +99,7 @@ class StringTest extends PHPUnit_Framework_TestCase
      */
     public function testString($expected, $string)
     {
-        $obj = new String;
+        $obj = new Text;
         $obj->setHTML5($string);
 
         $this->assertSame($expected, $obj->get());

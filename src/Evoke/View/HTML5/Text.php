@@ -1,6 +1,6 @@
 <?php
 /**
- * HTML5 String View
+ * HTML5 Text View
  *
  * @package View\HTML5
  */
@@ -11,14 +11,14 @@ use DOMNode;
 use Evoke\View\ViewIface;
 
 /**
- * HTML5 String View
+ * HTML5 Text View
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
  * @license   MIT
  * @package   View\HTML5
  */
-class String implements ViewIface
+class Text implements ViewIface
 {
     /**
      * HTML5 string for parsing into the array based view.
