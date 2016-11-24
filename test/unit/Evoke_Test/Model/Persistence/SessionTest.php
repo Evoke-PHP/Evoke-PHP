@@ -272,44 +272,34 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testEnsureFailedSessionStart()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
-        $this->installRunkit('php_sapi_name', 'return "TEST_VALUE";');
-        $this->installRunkit('headers_sent', 'return false;');
-        $this->installRunkit('session_start', 'return false;');
+        uopz_set_return('php_sapi_name', 'TEST_VALUE');
+        uopz_set_return('headers_sent', false);
+        uopz_set_return('session_start', false);
 
         try {
             $domain = ['l1', 'l2', 'l3'];
             $object = new Session($domain, false);
         } catch (\Exception $e) {
-            $this->restoreRunkit('php_sapi_name');
-            $this->restoreRunkit('headers_sent');
-            $this->restoreRunkit('session_start');
+            uopz_unset_return('php_sapi_name');
+            uopz_unset_return('headers_sent');
+            uopz_unset_return('session_start');
             throw $e;
         }
     }
 
     public function testEnsureGoodSessionStart()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
-        $this->installRunkit('php_sapi_name', 'return "TEST_VALUE";');
-        $this->installRunkit('headers_sent', 'return false;');
-        $this->installRunkit('session_start', '$_SESSION = []; return true;');
+        uopz_set_return('php_sapi_name', 'TEST_VALUE');
+        uopz_set_return('headers_sent', false);
+        uopz_set_return('session_start', function () { $_SESSION = []; return true; }, true);
 
         $domain = ['l1', 'l2', 'l3'];
         $object = new Session($domain, false);
         $this->assertSame(['l1' => ['l2' => ['l3' => []]]], $_SESSION);
 
-        $this->restoreRunkit('php_sapi_name');
-        $this->restoreRunkit('headers_sent');
-        $this->restoreRunkit('session_start');
+        uopz_unset_return('php_sapi_name');
+        uopz_unset_return('headers_sent');
+        uopz_unset_return('session_start');
     }
 
     /**
@@ -318,20 +308,15 @@ class SessionTest extends PHPUnit_Framework_TestCase
      */
     public function testEnsureHeadersAlreadySentException()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
-        $this->installRunkit('php_sapi_name', 'return "NON_CLI";');
-        $this->installRunkit('headers_sent', 'return true;');
+        uopz_set_return('php_sapi_name', 'NON_CLI');
+        uopz_set_return('headers_sent', true);
 
         try {
             $domain = ['l1', 'l2', 'l3'];
             $object = new Session($domain, false);
         } catch (\Exception $e) {
-            $this->restoreRunkit('php_sapi_name');
-            $this->restoreRunkit('headers_sent');
+            uopz_unset_return('php_sapi_name');
+            uopz_unset_return('headers_sent');
             throw $e;
         }
     }
@@ -518,34 +503,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $object->unsetKey('d');
 
         $this->assertSame(['a' => ['b' => 'c', 'f' => 'g']], $_SESSION);
-    }
-
-    /**
-     * Check that the runkit extension is available.
-     *
-     * @return bool Whether the runkit extension is available.
-     */
-    protected function hasRunkit()
-    {
-        return function_exists('runkit_function_rename') && function_exists('runkit_function_add');
-    }
-
-    /**
-     * Install session function using runkit.
-     */
-    protected function installRunkit($functionName, $code)
-    {
-        runkit_function_rename($functionName, 'TEST_SAVED_' . $functionName);
-        runkit_function_add($functionName, '', $code);
-    }
-
-    /**
-     * Restore session function using runkit.
-     */
-    protected function restoreRunkit($functionName)
-    {
-        runkit_function_remove($functionName);
-        runkit_function_rename('TEST_SAVED_' . $functionName, $functionName);
     }
 }
 // EOF

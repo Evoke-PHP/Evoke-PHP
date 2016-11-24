@@ -3,6 +3,7 @@ namespace Evoke_Test\Service;
 
 use Evoke\Service\ShutdownHandler;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * @covers Evoke\Service\ShutdownHandler
@@ -97,11 +98,6 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        // Inject a parse error E_PARSE.
-        error_reporting(0);
-        eval('$generateParseError =();');
-        error_reporting(-1);
-
         $responseIndex = 0;
         $response      = $this->getMock('Evoke\Network\HTTP\ResponseIface');
         $response
@@ -173,9 +169,10 @@ class ShutdownHandlerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue('Writer Output'));
 
         $object = new ShutdownHandler('mail@example.com', $response, true, $viewMessageBox, $writer, $viewError);
-        $object->handler();
 
-        trigger_error('Don\'t leave a E_PARSE as the last error.', E_USER_WARNING);
+        uopz_set_return('error_get_last', ['type' => E_COMPILE_ERROR]);
+        $object->handler();
+        uopz_unset_return('error_get_last');
         restore_error_handler();
     }
 }

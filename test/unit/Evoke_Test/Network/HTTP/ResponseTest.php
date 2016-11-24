@@ -72,11 +72,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     public function testBodyBeginsEmpty()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
         $this->replaceHeaderFunctions();
         $response = new Response;
         $response->setStatus(200);
@@ -103,15 +98,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testCantSendAfterHeadersSent()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
-        runkit_function_rename('header', 'TEST_SAVED_header');
-        runkit_function_rename('headers_sent', 'TEST_SAVED_headers_sent');
-        runkit_function_add('header', '$str', 'Evoke_Test\Network\HTTP\ResponseTest::addHeader($str);');
-        runkit_function_add('headers_sent', '', 'return true;');
+        uopz_set_return('headers_sent', true);
 
         $object = new Response;
         $object->setStatus(200);
@@ -119,7 +106,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         try {
             $object->send();
         } catch (LogicException $e) {
-            $this->restoreHeaderFunctions();
+            uopz_unset_return('headers_sent');
             throw $e;
         }
     }
@@ -129,11 +116,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testHeaderFields()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
         $this->replaceHeaderFunctions();
         $response = new Response;
         $response->setStatus(301);
@@ -164,11 +146,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testNeedStatusCode()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
         $this->replaceHeaderFunctions();
 
         try {
@@ -185,11 +162,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSendBody()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
         $this->replaceHeaderFunctions();
         $response = new Response;
         $response->setStatus(200);
@@ -210,19 +182,14 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSetCache()
     {
-        if (!$this->hasRunkit()) {
-            $this->markTestIncomplete('PHP runkit extension is required for this test.');
-            return;
-        }
-
         $this->replaceHeaderFunctions();
-        runkit_function_rename('time', 'TEST_SAVED_time');
-        runkit_function_add('time', '', "return strtotime('1 Jan 2010 12:00 GMT');");
+        uopz_set_return('time', strtotime('1 Jan 2010 12:00 GMT'));
         $response = new Response;
         $response->setStatus(200);
         $response->setCache(1, 2, 3, 4); // 1 day, 2 hours, 3 minutes, 4 secs.
         $age = (((((1 * 24) + 2) * 60) + 3) * 60) + 4;
         $response->send();
+        uopz_unset_return('time');
         $this->restoreHeaderFunctions();
 
         $this->assertSame(
@@ -234,34 +201,18 @@ class ResponseTest extends PHPUnit_Framework_TestCase
             ],
             self::$headers
         );
-        runkit_function_remove('time');
-        runkit_function_rename('TEST_SAVED_time', 'time');
-    }
-
-    /**
-     * Check that the runkit extension is available.
-     *
-     * @return bool Whether the runkit extension is available.
-     */
-    protected function hasRunkit()
-    {
-        return function_exists('runkit_function_rename') && function_exists('runkit_function_add');
     }
 
     protected function replaceHeaderFunctions()
     {
-        runkit_function_rename('header', 'TEST_SAVED_header');
-        runkit_function_rename('headers_sent', 'TEST_SAVED_headers_sent');
-        runkit_function_add('header', '$str', 'Evoke_Test\Network\HTTP\ResponseTest::addHeader($str);');
-        runkit_function_add('headers_sent', '', 'return false;');
+        uopz_set_return('headers_sent', false);
+        uopz_set_return('header', function($str) { \Evoke_Test\Network\HTTP\ResponseTest::addHeader($str); }, true);
     }
 
     protected function restoreHeaderFunctions()
     {
-        runkit_function_remove('header');
-        runkit_function_remove('headers_sent');
-        runkit_function_rename('TEST_SAVED_header', 'header');
-        runkit_function_rename('TEST_SAVED_headers_sent', 'headers_sent');
+        uopz_unset_return('headers_sent');
+        uopz_unset_return('header');
     }
 }
 // EOF
