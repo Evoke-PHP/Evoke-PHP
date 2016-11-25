@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * Menu Control View
  *
@@ -85,7 +86,6 @@ class Menu implements ViewIface
             RecursiveIteratorIterator::SELF_FIRST
         );
         $menu             = [];
-        $menuPtr          =& $menu;
 
         foreach ($iterator as $node) {
             $newDepth     = $iterator->getDepth();
@@ -94,14 +94,14 @@ class Menu implements ViewIface
             $menuPtr      =& $menu;
 
             // Set the pointer to the correct depth of the tree.
-            for ($i = 0; $i < $currentDepth; $i++) {
+            for ($item = 0; $item < $currentDepth; $item++) {
                 // Go to the last list item elements children.
                 end($menuPtr);
                 $endKey  = key($menuPtr);
                 $menuPtr =& $menuPtr[$endKey][$childrenPosition];
 
                 // Build the sub level if it hasn't been built already.
-                if ($depthChange > 0 && $i == $currentDepth - 1) {
+                if ($depthChange > 0 && $item == $currentDepth - 1) {
                     $menuPtr[] = ['ul', [], []];
                 }
 

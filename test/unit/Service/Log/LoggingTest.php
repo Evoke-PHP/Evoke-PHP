@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Service;
+namespace Evoke_Test\Service\Log;
 
 use Evoke\Service\Log\Logging;
 use PHPUnit_Framework_TestCase;

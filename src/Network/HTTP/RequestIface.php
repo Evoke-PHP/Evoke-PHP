@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * HTTP Request Interface
  *
@@ -27,7 +28,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
      * This field specifies the preferred media types for responses.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-     * @return Array[]
+     * @return array[]
      * Accepted media types with their quality factor, ordered by preference according to compareAccept. Each element of
      * the array has keys defining the Params, Q_Factor, Subtype and Type.
      */
@@ -40,7 +41,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
-     * @return Array[] The accepted languages from the request in order of
+     * @return array[] The accepted languages from the request in order of
      *                 quality from highest to lowest.  Each element of the
      *                 array has keys defining the Language and Q_Factor.
      */

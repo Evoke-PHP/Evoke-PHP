@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * Number
  *
@@ -59,7 +60,6 @@ class Number extends Rule
      * @param string   $prefix        The prefix to match.
      * @param string   $suffix        An optional suffix to match.
      * @param bool     $authoritative Whether the rule is authoritative.
-     * @throws InvalidArgumentException
      */
     public function __construct($controller, $key, $prefix, $suffix = '', $authoritative = true)
     {

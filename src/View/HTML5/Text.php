@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * HTML5 Text View
  *
@@ -38,7 +39,7 @@ class Text implements ViewIface
      */
     public function get()
     {
-        $dom     = new \DOMDocument;
+        $dom     = new DOMDocument;
         $domNode = $dom->createDocumentFragment();
         $domNode->appendXML($this->html5String);
 

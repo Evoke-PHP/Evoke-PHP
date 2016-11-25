@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * URI Regex Rule with one match used for all calculations.
  *
@@ -32,7 +33,7 @@ class RegexSharedMatch extends Rule
     /**
      * Parameter key and value replacement regex for the URI.
      *
-     * @var Array[]
+     * @var array[]
      */
     protected $params;
 
@@ -48,7 +49,7 @@ class RegexSharedMatch extends Rule
      *
      * @param string  $match         The Regex to match the URI with.
      * @param string  $replacement   The controller regex replacement string.
-     * @param Array[] $params        Regex replacements for the parameters.
+     * @param array[] $params        Regex replacements for the parameters.
      * @param bool    $authoritative Is this always the final route?
      * @throws InvalidArgumentException If the rule is incorrectly formatted.
      */

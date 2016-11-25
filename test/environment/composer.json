@@ -9,9 +9,11 @@
 
     "autoload": {
         "psr-0": {
-            "Evoke": "../../src",
-            "Evoke_Test": "../unit",
-			"org/bovigo/vfs": "vendor/mikey179/vfsStream/src/main/php/"
-		}
+            "org/bovigo/vfs": "vendor/mikey179/vfsStream/src/main/php/"
+		},
+        "psr-4": {
+            "Evoke\\": "../../src",
+            "Evoke_Test\\": "../unit"
+        }
     }
 }

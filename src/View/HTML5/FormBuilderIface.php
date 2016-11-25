@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * Form Builder Interface
  *
@@ -63,6 +64,9 @@ interface FormBuilderIface extends ViewIface
 
     /**
      * Add a radio button to the form.
+     *
+     * @param string $name  Name of the radio button.
+     * @param string $value Value of the radio.
      */
     public function addRadio($name, $value);
 

@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Model\Data\FlatTest;
+namespace Evoke_Test\Model\Data;
 
 use Evoke\Model\Data\Flat;
 use PHPUnit_Framework_TestCase;

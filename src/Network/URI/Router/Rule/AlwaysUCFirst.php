@@ -1,22 +1,23 @@
 <?php
+declare(strict_types = 1);
 /**
- * AlwaysUcfirst
+ * AlwaysUCFirst
  *
  * @package   Evoke\Network\URI\Router\Rule
  */
 namespace Evoke\Network\URI\Router\Rule;
 
 /**
- * AlwaysUcfirst
+ * AlwaysUCFirst
  *
  * @author    Paul Young <evoke@youngish.org>
  * @copyright Copyright (c) 2015 Paul Young
  * @package   Evoke\Network\URI\Router\Rule
  */
-class AlwaysUcfirst extends Rule
+class AlwaysUCFirst extends Rule
 {
     /**
-     * AlwaysUcfirst constructor.
+     * @inheritdoc
      */
     public function __construct($authoritative = false)
     {

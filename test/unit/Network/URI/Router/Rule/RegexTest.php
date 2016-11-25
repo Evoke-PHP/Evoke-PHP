@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Network\URI\Router\Rule\Regex;
+namespace Evoke_Test\Network\URI\Router\Rule;
 
 use Evoke\Network\URI\Router\Rule\Regex;
 use PHPUnit_Framework_TestCase;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * Evoke HTTP Request
  *
@@ -195,7 +196,7 @@ EOP;
      * This field specifies the preferred media types for responses.
      *
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
-     * @return Array[] Accepted media types with their quality factor, ordered
+     * @return array[] Accepted media types with their quality factor, ordered
      *                 by preference according to compareAccept.  Each element
      *                 of the array has keys defining the Params, Q_Factor,
      *                 Subtype and Type.
@@ -227,15 +228,15 @@ EOP;
                 '/x';
 
             // Loop through each match, storing it in the accepted array.
-            for ($i = 0; $i < $numMatches; $i++) {
-                $qFactor = empty($matches['q_factor'][$i]) ? 1.0 :
-                    $matches['q_factor'][$i] + 0.0; // Make it a float.
+            for ($match = 0; $match < $numMatches; $match++) {
+                $qFactor = empty($matches['q_factor'][$match]) ? 1.0 :
+                    $matches['q_factor'][$match] + 0.0; // Make it a float.
 
                 // Parse any accept extensions (more extensions makes a difference for the Accept preference ordering).
                 $params = [];
 
-                if (!empty($matches['params'][$i])) {
-                    preg_match_all($paramsPattern, $matches['params'][$i], $paramsMatches);
+                if (!empty($matches['params'][$match])) {
+                    preg_match_all($paramsPattern, $matches['params'][$match], $paramsMatches);
 
                     $params = array_combine($paramsMatches['P_KEY'], $paramsMatches['P_VAL']);
                 }
@@ -243,8 +244,8 @@ EOP;
                 $accepted[] = [
                     'params'   => $params,
                     'q_factor' => $qFactor,
-                    'subtype'  => $matches['subtype'][$i],
-                    'type'     => $matches['type'][$i]
+                    'subtype'  => $matches['subtype'][$match],
+                    'type'     => $matches['type'][$match]
                 ];
             }
         }
@@ -261,7 +262,7 @@ EOP;
      *
      * This header field specifies the preferred languages for responses.
      *
-     * @return Array[]
+     * @return array[]
      * The accepted languages from the request in order of quality from highest to lowest.  Each element of the array
      * has keys defining the Language and Q_Factor.
      */
@@ -281,12 +282,12 @@ EOP;
         $acceptLanguages = [];
         $numLanguages    = preg_match_all($pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
 
-        for ($i = 0; $i < $numLanguages; $i++) {
+        for ($lang = 0; $lang < $numLanguages; $lang++) {
             // The quality value defaults to 1.
-            $qFactor = empty($matches['q_factor'][$i]) ? 1.0 : $matches['q_factor'][$i] + 0.0; // Make it float.
+            $qFactor = empty($matches['q_factor'][$lang]) ? 1.0 : $matches['q_factor'][$lang] + 0.0; // Make it float.
 
             $acceptLanguages[] = [
-                'language' => $matches['language'][$i],
+                'language' => $matches['language'][$lang],
                 'q_factor' => $qFactor
             ];
         }

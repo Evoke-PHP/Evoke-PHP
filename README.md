@@ -13,7 +13,7 @@ _Evoke PHP_ is a library of independent objects. The library encourages a layere
 * Unit test code coverage is 100%.
 
 ## Features
-* PHP 5.4+
+* PHP 7+
 * PSR-2
 * Object Oriented
 * Loosely Coupled

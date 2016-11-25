@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * URI Regex Rule
  *
@@ -47,7 +48,7 @@ class Regex extends Rule
      *
      * @param string[] $controller    Controller regex match and replace.
      * @param string   $match         Regex to determine whether the rule matches.
-     * @param Array[]  $params        Parameters each with a key and value regex for match and replacement.
+     * @param array[]  $params        Parameters each with a key and value regex for match and replacement.
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */

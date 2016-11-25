@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 /**
  * TreeBuilder
  *
@@ -81,18 +82,18 @@ class TreeBuilder
 
         $treePtrs[$level++] =& $rootNode;
 
-        for ($i = 1; $i < $mpttItems; ++$i) {
-            if (!isset($mptt[$i][$this->left], $mptt[$i][$this->right])
-            ) {
+        for ($item = 1; $item < $mpttItems; ++$item) {
+            if (!isset($mptt[$item][$this->left], $mptt[$item][$this->right])) {
                 throw new InvalidArgumentException(
-                    'needs MPTT data at ' . $i . ' with ' . $this->left . ' and ' . $this->right . ' fields.'
+                    'needs MPTT data at ' . $item . ' with ' . $this->left . ' and ' . $this->right . ' fields.'
                 );
             }
+
             $node       = new Tree;
-            $childNodes = ($mptt[$i][$this->right] -
-                    $mptt[$i][$this->left] - 1) / 2;
-            unset($mptt[$i][$this->left], $mptt[$i][$this->right]);
-            $node->set($mptt[$i]);
+            $childNodes = ($mptt[$item][$this->right] -
+                    $mptt[$item][$this->left] - 1) / 2;
+            unset($mptt[$item][$this->left], $mptt[$item][$this->right]);
+            $node->set($mptt[$item]);
             $treePtrs[$level - 1]->add($node);
 
             // We have processed the node, update the child counts, removing a level if it has been fully processed.
