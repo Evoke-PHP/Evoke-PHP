@@ -204,8 +204,8 @@ class XML implements WriterIface
     {
         switch (strtoupper($this->docType)) {
             case 'HTML5':
-                $this->xmlWriter->startDTD('html');
-                $this->xmlWriter->endDTD();
+                $this->xmlWriter->startDtd('html');
+                $this->xmlWriter->endDtd();
                 $this->xmlWriter->startElement('html');
                 $this->xmlWriter->writeAttribute('class', 'no-js');
                 break;
@@ -215,12 +215,12 @@ class XML implements WriterIface
                 break;
 
             case 'XHTML_1_1':
-                $this->xmlWriter->startDTD(
+                $this->xmlWriter->startDtd(
                     'html',
                     '-//W3C//DTD XHTML 1.1//EN',
                     'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
                 );
-                $this->xmlWriter->endDTD();
+                $this->xmlWriter->endDtd();
 
                 $this->xmlWriter->startElementNS(null, 'html', 'http://www.w3.org/1999/xhtml');
                 $this->xmlWriter->writeAttribute('lang', $this->language);

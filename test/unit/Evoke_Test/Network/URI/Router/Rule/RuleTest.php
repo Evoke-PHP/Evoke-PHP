@@ -43,7 +43,7 @@ class RuleTest extends PHPUnit_Framework_TestCase
         return [
             'int'    => [123],
             'array'  => [['this is an array']],
-            'object' => [new \StdClass]
+            'object' => [new \stdClass]
         ];
     }
 

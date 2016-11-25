@@ -155,10 +155,10 @@ class TreeTest extends PHPUnit_Framework_TestCase
     public function providerUseValue()
     {
         return [
-            'array'  => [[1, '2', new \StdClass]],
+            'array'  => [[1, '2', new \stdClass]],
             'int'    => [1],
             'string' => ['blah'],
-            'object' => [new \StdClass]
+            'object' => [new \stdClass]
         ];
     }
 

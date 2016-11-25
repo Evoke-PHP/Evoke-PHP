@@ -32,7 +32,7 @@ class Match extends Rule
      */
     public function __construct($outputFormat, Array $match)
     {
-        parent::__construct($outputFormat, $match);
+        parent::__construct($outputFormat);
 
         $this->match = $match;
     }

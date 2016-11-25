@@ -11,7 +11,7 @@ class AnyTest extends PHPUnit_Framework_TestCase
         return [
             'any1' => [['blah']],
             'any2' => [[]],
-            'any3' => [[1 => 3, 2 => new \StdClass]]
+            'any3' => [[1 => 3, 2 => new \stdClass]]
         ];
     }
 
