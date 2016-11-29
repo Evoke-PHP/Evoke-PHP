@@ -156,7 +156,7 @@ class Session implements SessionIface
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getCopy() : array
+    public function getCopy()
     {
         $currentDomain = $_SESSION;
 

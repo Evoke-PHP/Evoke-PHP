@@ -49,7 +49,7 @@ interface SessionIface
      *
      * @return mixed[] The session data.
      */
-    public function getCopy() : array;
+    public function getCopy();
 
     /**
      * Get a copy of the data in the session at the offset specified.

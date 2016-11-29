@@ -189,6 +189,10 @@ class SessionTest extends PHPUnit_Framework_TestCase
         unset($_SESSION);
     }
 
+    /*********/
+    /* Tests */
+    /*********/
+
     /**
      * Ensure that before a session is created that $_SESSION does
      * not exist.
@@ -232,9 +236,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expected, $_SESSION);
     }
 
-    /*********/
-    /* Tests */
-    /*********/
 
     /**
      * Ensure that a session domain is created for an empty session.

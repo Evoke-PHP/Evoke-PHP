@@ -50,9 +50,9 @@ abstract class Decorator implements FlatIface
     /**
      * Return the current record of data.
      *
-     * @return Decorator
+     * @return FlatIface
      */
-    public function current() : Decorator
+    public function current() : FlatIface
     {
         return $this->data->current();
     }

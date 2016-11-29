@@ -74,9 +74,9 @@ class Tree implements TreeIface
     /**
      * Get the children of the node.
      *
-     * @return TreeIface[]
+     * @return \RecursiveIterator
      */
-    public function getChildren() : array
+    public function getChildren() : \RecursiveIterator
     {
         return $this->children[$this->position];
     }
