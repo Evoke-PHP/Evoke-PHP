@@ -17,7 +17,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testSingleRule()
     {
         $ruleIndex = 0;
-        $rule      = $this->getMock('Evoke\Network\URI\Router\Rule\RuleIface');
+        $rule      = $this->createMock('Evoke\Network\URI\Router\Rule\RuleIface');
         $rule
             ->expects($this->at($ruleIndex++))
             ->method('setURI')
@@ -62,7 +62,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testThreeRulesSecondAuthoritative()
     {
         $rIndex = 0;
-        $r1     = $this->getMock('Evoke\Network\URI\Router\Rule\RuleIface');
+        $r1     = $this->createMock('Evoke\Network\URI\Router\Rule\RuleIface');
         $r1
             ->expects($this->at($rIndex++))
             ->method('setURI')
@@ -89,7 +89,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $rIndex = 0;
-        $r2     = $this->getMock('Evoke\Network\URI\Router\Rule\RuleIface');
+        $r2     = $this->createMock('Evoke\Network\URI\Router\Rule\RuleIface');
         $r2
             ->expects($this->at($rIndex++))
             ->method('setURI')
@@ -115,7 +115,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->with()
             ->will($this->returnValue(true));
 
-        $r3 = $this->getMock('Evoke\Network\URI\Router\Rule\RuleIface');
+        $r3 = $this->createMock('Evoke\Network\URI\Router\Rule\RuleIface');
         $r3->expects($this->never())->method('setURI');
         $r3->expects($this->never())->method('isMatch');
         $r3->expects($this->never())->method('getController');

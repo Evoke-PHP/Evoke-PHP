@@ -52,7 +52,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
     public function testGetEmptyMenu()
     {
         $tIndex   = 0;
-        $mockTree = $this->getMock('Evoke\Model\Data\TreeIface');
+        $mockTree = $this->createMock('Evoke\Model\Data\TreeIface');
         $mockTree
             ->expects($this->at($tIndex++))
             ->method('get')
@@ -75,7 +75,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
     public function testGetSingleLevelMenu()
     {
         $cIndex        = 0;
-        $mockChildTree = $this->getMock('Evoke\Model\Data\TreeIface');
+        $mockChildTree = $this->createMock('Evoke\Model\Data\TreeIface');
         $mockChildTree
             ->expects($this->at($cIndex++))
             ->method('get')
@@ -86,7 +86,7 @@ class MenuTest extends PHPUnit_Framework_TestCase
             ]));
 
         $tIndex   = 0;
-        $mockTree = $this->getMock('Evoke\Model\Data\TreeIface');
+        $mockTree = $this->createMock('Evoke\Model\Data\TreeIface');
         $mockTree
             ->expects($this->at($tIndex++))
             ->method('get')

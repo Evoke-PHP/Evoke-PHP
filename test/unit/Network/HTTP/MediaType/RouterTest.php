@@ -20,7 +20,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testSingleRule()
     {
         $rIndex = 0;
-        $rule   = $this->getMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
+        $rule   = $this->createMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
         $rule
             ->expects($this->at($rIndex++))
             ->method('setMediaType')
@@ -45,7 +45,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testTwoRules()
     {
         $rIndex = 0;
-        $r1     = $this->getMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
+        $r1     = $this->createMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
 
         // Check first media type.
         $r1
@@ -73,7 +73,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
             ->method('getOutputFormat');
 
         $rIndex = 0;
-        $r2     = $this->getMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
+        $r2     = $this->createMock('Evoke\Network\HTTP\MediaType\Rule\RuleIface');
 
         // Check first media type.
         $r2

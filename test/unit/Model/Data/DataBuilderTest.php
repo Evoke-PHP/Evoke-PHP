@@ -19,33 +19,33 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
     public function providerBuild()
     {
         // Set up the joins.
-        $leaf1 = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $leaf1 = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $leaf1
             ->expects($this->any())
             ->method('getJoins')
             ->with()
             ->will($this->returnValue([]));
-        $leaf2 = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $leaf2 = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $leaf2
             ->expects($this->any())
             ->method('getJoins')
             ->with()
             ->will($this->returnValue([]));
 
-        $branch1 = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $branch1 = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $branch1
             ->expects($this->any())
             ->method('getJoins')
             ->with()
             ->will($this->returnValue(['leaf_1' => $leaf1]));
-        $branch2 = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $branch2 = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $branch2
             ->expects($this->any())
             ->method('getJoins')
             ->with()
             ->will($this->returnValue(['leaf_2' => $leaf2]));
 
-        $branchAll = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $branchAll = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $branchAll
             ->expects($this->any())
             ->method('getJoins')
@@ -55,7 +55,7 @@ class DataBuilderTest extends PHPUnit_Framework_TestCase
                 'leaf_2' => $leaf2
             ]));
 
-        $trunk = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $trunk = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $trunk
             ->expects($this->any())
             ->method('getJoins')

@@ -34,7 +34,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function test__construct($indent, $indentString = '   ')
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -60,7 +60,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testConvertsToAString()
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -77,7 +77,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testCleanable()
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -99,7 +99,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testFlush()
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -128,7 +128,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testWriteEnd()
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -144,7 +144,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testWriteStartDefault()
     {
         $xIndex    = 0;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('openMemory');
@@ -181,7 +181,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testWriteStartHTML5()
     {
         $xIndex    = 3;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('startDTD')
@@ -201,14 +201,14 @@ class XMLTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteStartUnknown()
     {
-        $object = new XML($this->getMock('XMLWriter'), 'UNKNOWN_DOCTYPE');
+        $object = new XML($this->createMock('XMLWriter'), 'UNKNOWN_DOCTYPE');
         $object->writeStart();
     }
 
     public function testWriteStartXML()
     {
         $xIndex    = 3;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('startDocument')
@@ -239,7 +239,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteXMLBadAttribs()
     {
-        $object = new XML($this->getMock('XMLWriter'));
+        $object = new XML($this->createMock('XMLWriter'));
         $object->write(['div', 'BadAttribs', 'b']);
     }
 
@@ -250,7 +250,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteXMLBadTag()
     {
-        $object = new XML($this->getMock('XMLWriter'));
+        $object = new XML($this->createMock('XMLWriter'));
         $object->write([null, 'a', 'b']);
     }
 
@@ -260,7 +260,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function testWriteXMLInlineIndent()
     {
         $xIndex    = 3;
-        $xmlWriter = $this->getMock('XMLWriter');
+        $xmlWriter = $this->createMock('XMLWriter');
         $xmlWriter
             ->expects($this->at($xIndex++))
             ->method('setIndent')

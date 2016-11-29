@@ -18,7 +18,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
      */
     public function test__construct()
     {
-        $object = new Logging($this->getMock('DateTime'));
+        $object = new Logging($this->createMock('DateTime'));
         $this->assertInstanceOf('Evoke\Service\Log\Logging', $object);
     }
 
@@ -33,7 +33,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
         $object          = new Logging($dateTime);
 
         for ($i = 0; $i < 3; $i++) {
-            $observer = $this->getMock('Evoke\Service\Log\LoggerIface');
+            $observer = $this->createMock('Evoke\Service\Log\LoggerIface');
             $observer
                 ->expects($this->once())
                 ->method('log')
@@ -50,12 +50,12 @@ class LoggingTest extends PHPUnit_Framework_TestCase
      */
     public function testDetachUnattached()
     {
-        $logger = $this->getMock('Evoke\Service\Log\LoggerIface');
+        $logger = $this->createMock('Evoke\Service\Log\LoggerIface');
         $logger
             ->expects($this->never())
             ->method('log');
 
-        $object = new Logging($this->getMock('DateTime'));
+        $object = new Logging($this->createMock('DateTime'));
         $object->detach($logger);
         $object->log('any', E_USER_WARNING);
     }
@@ -73,7 +73,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
         $observers       = [];
 
         for ($i = 0; $i < 4; $i++) {
-            $observers[$i] = $this->getMock('Evoke\Service\Log\LoggerIface');
+            $observers[$i] = $this->createMock('Evoke\Service\Log\LoggerIface');
             if ($i === $detached) {
                 $observers[$i]
                     ->expects($this->never())

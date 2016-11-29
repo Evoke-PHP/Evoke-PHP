@@ -20,7 +20,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $obj = new TestExtendedDecorator($this->getMock('Evoke\Model\Data\FlatIface'));
+        $obj = new TestExtendedDecorator($this->createMock('Evoke\Model\Data\FlatIface'));
         $this->assertInstanceOf('Evoke\Model\Data\Decorator', $obj);
     }
 
@@ -30,7 +30,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testCount()
     {
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->any())
             ->method('count')
@@ -48,7 +48,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testCurrent()
     {
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('current')
@@ -66,7 +66,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testGetRecord()
     {
         $expected = ['id' => 1, 'value' => 'current'];
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('getRecord')
@@ -84,7 +84,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testIsEmpty()
     {
         $expected = true;
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('isEmpty')
@@ -102,7 +102,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testKey()
     {
         $expected = 'key_id';
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('key')
@@ -120,7 +120,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testNext()
     {
         $expected = false;
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('next')
@@ -138,7 +138,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testOffsetExists()
     {
         $expected = true;
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetExists')
@@ -156,7 +156,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testOffsetGet()
     {
         $expected = 'value';
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetGet')
@@ -174,7 +174,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testOffsetSet()
     {
         $expected = 'value';
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetSet')
@@ -190,7 +190,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testOffsetUnset()
     {
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('offsetUnset')
@@ -206,7 +206,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
      */
     public function testRewind()
     {
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('rewind')
@@ -226,7 +226,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
             ['id' => 1, 'v' => 'sd1'],
             ['id' => 2, 'v' => 'sd2']
         ];
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('setData')
@@ -243,7 +243,7 @@ class DecoratorTest extends PHPUnit_Framework_TestCase
     public function testValid()
     {
         $expected = true;
-        $dataMock = $this->getMock('Evoke\Model\Data\FlatIface');
+        $dataMock = $this->createMock('Evoke\Model\Data\FlatIface');
         $dataMock
             ->expects($this->once())
             ->method('valid')

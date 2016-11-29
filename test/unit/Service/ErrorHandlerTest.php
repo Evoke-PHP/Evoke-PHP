@@ -34,7 +34,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $object = new ErrorHandler($this->getMock('Evoke\Service\Log\LoggingIface'));
+        $object = new ErrorHandler($this->createMock('Evoke\Service\Log\LoggingIface'));
         $this->assertInstanceOf('Evoke\Service\ErrorHandler', $object);
     }
 
@@ -43,7 +43,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testNonReportableError()
     {
-        $logging = $this->getMock('Evoke\Service\Log\LoggingIface');
+        $logging = $this->createMock('Evoke\Service\Log\LoggingIface');
         $logging
             ->expects($this->never())
             ->method('log');
@@ -65,7 +65,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testRecoverAfterLogging()
     {
-        $logging = $this->getMock('Evoke\Service\Log\LoggingIface');
+        $logging = $this->createMock('Evoke\Service\Log\LoggingIface');
         $logging
             ->expects($this->once())
             ->method('log')
@@ -83,7 +83,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testReportComplex()
     {
-        $logging = $this->getMock('Evoke\Service\Log\LoggingIface');
+        $logging = $this->createMock('Evoke\Service\Log\LoggingIface');
         $logging
             ->expects($this->once())
             ->method('log')
@@ -101,7 +101,7 @@ class ErrorHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testReportSimple()
     {
-        $logging = $this->getMock('Evoke\Service\Log\LoggingIface');
+        $logging = $this->createMock('Evoke\Service\Log\LoggingIface');
         $logging
             ->expects($this->once())
             ->method('log')

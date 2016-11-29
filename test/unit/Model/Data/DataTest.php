@@ -16,7 +16,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 
     public function providerCreate()
     {
-        $join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $join = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $data = $this->getDataMock();
 
         return [
@@ -32,7 +32,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 
     public function providerGetJointData()
     {
-        $simpleJoin = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $simpleJoin = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $simpleJoin
             ->expects($this->once())
             ->method('getJoinID')
@@ -47,7 +47,7 @@ class DataTest extends PHPUnit_Framework_TestCase
                     'joins'     =>
                         [
                             'found_join_id' => $simpleData,
-                            'dc'            => $this->getMock('Evoke\Model\Data\Join\JoinIface')
+                            'dc'            => $this->createMock('Evoke\Model\Data\Join\JoinIface')
                         ],
                     'join_name' => 'join_name',
                     'expected'  => $simpleData
@@ -191,7 +191,7 @@ class DataTest extends PHPUnit_Framework_TestCase
             ->method('setArrangedData')
             ->with($j3Data);
 
-        $join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $join = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $join
             ->expects($this->at(0))
             ->method('arrangeFlatData')
@@ -224,7 +224,7 @@ class DataTest extends PHPUnit_Framework_TestCase
      */
     public function testGetJointDataException()
     {
-        $join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $join = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $join
             ->expects($this->once())
             ->method('getJoinID')
@@ -237,7 +237,7 @@ class DataTest extends PHPUnit_Framework_TestCase
 
     public function testSetArrangedData()
     {
-        $joinObjectUnderTest = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $joinObjectUnderTest = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $joinObjectUnderTest
             ->expects($this->never())
             ->method('arrangeFlatData');
@@ -249,7 +249,7 @@ class DataTest extends PHPUnit_Framework_TestCase
                 'joint_data' => ['j1' => [['f1' => 'arranged']]]
             ]
         ];
-        $joinOuter    = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $joinOuter    = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $joinOuter
             ->expects($this->once())
             ->method('arrangeFlatData')
@@ -369,7 +369,7 @@ class DataTest extends PHPUnit_Framework_TestCase
             ->method('setArrangedData')
             ->with($j3Data);
 
-        $join = $this->getMock('Evoke\Model\Data\Join\JoinIface');
+        $join = $this->createMock('Evoke\Model\Data\Join\JoinIface');
         $join
             ->expects($this->at(0))
             ->method('arrangeFlatData')
