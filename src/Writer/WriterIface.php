@@ -22,7 +22,7 @@ interface WriterIface
     /**
      * Get the string representation of the buffer that we are writing to.
      */
-    public function __toString();
+    public function __toString() : string;
 
     /**
      * Reset the buffer that we are writing to.

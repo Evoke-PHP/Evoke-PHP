@@ -28,10 +28,10 @@ class Factory
      * Create a writer object.
      *
      * @param string $outputFormat The output format for the writer to create.
-     * @return Writer
+     * @return WriterIface
      * @throws DomainException If no writer can be found for the output format.
      */
-    public function create($outputFormat)
+    public function create($outputFormat) : WriterIface
     {
         $upperOutputFormat = strtoupper($outputFormat);
 

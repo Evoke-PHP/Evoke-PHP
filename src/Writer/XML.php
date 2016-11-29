@@ -65,16 +65,16 @@ class XML implements WriterIface
      */
     public function __construct(
         XMLWriter $xmlWriter,
-        $docType = 'XHTML_1_1',
-        $language = 'EN',
-        $indent = true,
-        $indentString = '   ',
-        $pos = [
+        string    $docType = 'XHTML_1_1',
+        string    $language = 'EN',
+        bool      $indent = true,
+        string    $indentString = '   ',
+        array     $pos = [
             'attribs'  => 1,
             'children' => 2,
             'tag'      => 0
-        ]
-    ) {
+        ])
+    {
         $this->docType   = $docType;
         $this->indent    = $indent;
         $this->language  = $language;
@@ -98,7 +98,7 @@ class XML implements WriterIface
      *
      * @return string The XHTML from the buffer as a string.
      */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->xmlWriter->outputMemory(false);
     }
