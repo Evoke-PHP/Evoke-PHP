@@ -20,7 +20,7 @@ interface ViewIface
     /**
      * Get the view ready for writing.
      *
-     * @return mixed[] The output of the view.
+     * @return mixed The output of the view.
      */
     public function get();
 }

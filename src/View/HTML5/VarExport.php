@@ -37,7 +37,7 @@ class VarExport implements ViewIface
      *
      * @return mixed[] The view of the data.
      */
-    public function get()
+    public function get() : array
     {
         return ['div', ['class' => 'var_export'], var_export($this->var, true)];
     }

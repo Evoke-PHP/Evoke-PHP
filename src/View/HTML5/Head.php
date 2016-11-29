@@ -55,12 +55,8 @@ class Head implements ViewIface
      * @param string     $title
      * @param mixed[]    $customElements Custom elements to be added to head.
      */
-    public function __construct(
-        Array        $links,
-        Array        $metas,
-        $title,
-        Array        $customElements = []
-    ) {
+    public function __construct(array $links, array $metas, string $title, array $customElements = [])
+    {
         $this->customElements = $customElements;
         $this->links          = $links;
         $this->metas          = $metas;

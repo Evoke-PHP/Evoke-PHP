@@ -95,7 +95,7 @@ class Error implements ViewIface
      *
      * @param mixed[] Error .
      */
-    public function set(Array $error)
+    public function set(array $error)
     {
         $this->error = $error;
     }
@@ -110,7 +110,7 @@ class Error implements ViewIface
      * @param int $number The error number.
      * @return string The error type as a string.
      */
-    private function getTypeString($number)
+    private function getTypeString(int $number) : string
     {
         $errorMap = [
             E_ERROR             => 'E_ERROR',

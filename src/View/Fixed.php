@@ -40,7 +40,7 @@ class Fixed implements ViewIface
     /**
      * Get the fixed view.
      *
-     * @return mixed[] The data for the view.
+     * @return mixed The data for the view.
      */
     public function get()
     {

@@ -52,12 +52,8 @@ class FormBuilder implements FormBuilderIface
      *
      * @param string[] $attribs Attributes for the form.
      */
-    public function __construct(
-        Array $attribs = [
-            'action' => '',
-            'method' => 'POST'
-        ]
-    ) {
+    public function __construct(array $attribs = ['action' => '', 'method' => 'POST'])
+    {
         $this->attribs = $attribs;
     }
 
@@ -70,7 +66,7 @@ class FormBuilder implements FormBuilderIface
      *
      * @param mixed[] The element to add to the form.
      */
-    public function add(Array $element)
+    public function add(array $element)
     {
         if (!$this->rowStarted) {
             $this->children[] = $element;
@@ -85,7 +81,7 @@ class FormBuilder implements FormBuilderIface
      * @param string   $name         The name for the input.
      * @param string[] $otherAttribs Any other attributes.
      */
-    public function addFile($name, Array $otherAttribs = [])
+    public function addFile(string $name, array $otherAttribs = [])
     {
         $this->add([
             'input',
@@ -99,7 +95,7 @@ class FormBuilder implements FormBuilderIface
      * @param string $name  The name for the input.
      * @param mixed  $value The value for the hidden input.
      */
-    public function addHidden($name, $value)
+    public function addHidden(string $name, $value)
     {
         $this->add([
             'input',
@@ -117,7 +113,7 @@ class FormBuilder implements FormBuilderIface
      * @param mixed[] $attribs Attributes for the input.
      * @param mixed   $value   Value for the input.
      */
-    public function addInput(Array $attribs, $value = null)
+    public function addInput(array $attribs, $value = null)
     {
         if (isset($value)) {
             $attribs['value'] = $value;
@@ -132,7 +128,7 @@ class FormBuilder implements FormBuilderIface
      * @param string $for  The id for the input that this label is for.
      * @param string $text The text for the label.
      */
-    public function addLabel($for, $text)
+    public function addLabel(string $for, string $text)
     {
         $this->add(['label', ['for' => $for], $text]);
     }
@@ -140,7 +136,7 @@ class FormBuilder implements FormBuilderIface
     /**
      * @inheritDoc
      */
-    public function addRadio($name, $value)
+    public function addRadio(string $name, string $value)
     {
         $this->add([
                 'input',
@@ -170,12 +166,10 @@ class FormBuilder implements FormBuilderIface
     /**
      * Add a select input to the form.
      *
-     * @param string $id
-     *                        ID to use for the select input (also used for the
-     *                        name).
+     * @param string $id      ID to use for the select input (also used for the name).
      * @param mixed  $options Array of options to select from.
      */
-    public function addSelect($id, $options)
+    public function addSelect(string $id, array $options)
     {
         $optionElements = [];
 
@@ -199,7 +193,7 @@ class FormBuilder implements FormBuilderIface
      * @param string $name  Name of the submit button.
      * @param string $value Value for the button text.
      */
-    public function addSubmit($name, $value)
+    public function addSubmit(string $name, string $value)
     {
         $this->add([
             'input',
@@ -219,12 +213,8 @@ class FormBuilder implements FormBuilderIface
      * @param int     $length       The length of the text.
      * @param mixed[] $otherAttribs Other attributes for the input.
      */
-    public function addText(
-        $name,
-        $value,
-        $length = 30,
-        $otherAttribs = []
-    ) {
+    public function addText(string $name, string $value, int $length = 30, array $otherAttribs = [])
+    {
         $this->add([
             'input',
             $otherAttribs + [
@@ -245,13 +235,8 @@ class FormBuilder implements FormBuilderIface
      * @param int      $cols         Number of columns.
      * @param string[] $otherAttribs Other attributes for the input.
      */
-    public function addTextArea(
-        $name,
-        $value,
-        $rows = 10,
-        $cols = 50,
-        Array $otherAttribs = []
-    ) {
+    public function addTextArea(string $name, string $value, int $rows = 10, int $cols = 50, array $otherAttribs = [])
+    {
         $this->add([
             'textarea',
             $otherAttribs + [
@@ -310,7 +295,7 @@ class FormBuilder implements FormBuilderIface
      *
      * @param string $action
      */
-    public function setAction($action)
+    public function setAction(string $action)
     {
         $this->attribs['action'] = $action;
     }
@@ -320,7 +305,7 @@ class FormBuilder implements FormBuilderIface
      *
      * @param string[] $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attribs = $attributes;
     }
@@ -330,7 +315,7 @@ class FormBuilder implements FormBuilderIface
      *
      * @param string $method
      */
-    public function setMethod($method)
+    public function setMethod(string $method)
     {
         $this->attribs['method'] = $method;
     }

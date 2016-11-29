@@ -28,7 +28,7 @@ interface FormBuilderIface extends ViewIface
      *
      * @param mixed[] $element The element to add to the form.
      */
-    public function add(Array $element);
+    public function add(array $element);
 
     /**
      * Add a file input to the form.
@@ -36,7 +36,7 @@ interface FormBuilderIface extends ViewIface
      * @param string   $name         The name for the input.
      * @param string[] $otherAttribs Any other attributes.
      */
-    public function addFile($name, Array $otherAttribs = []);
+    public function addFile(string $name, array $otherAttribs = []);
 
     /**
      * Add a hidden input to the form.
@@ -44,7 +44,7 @@ interface FormBuilderIface extends ViewIface
      * @param string $name  The name for the input.
      * @param mixed  $value The value for the hidden input.
      */
-    public function addHidden($name, $value);
+    public function addHidden(string $name, $value);
 
     /**
      * Add an input to the form.
@@ -52,7 +52,7 @@ interface FormBuilderIface extends ViewIface
      * @param mixed[] $attribs Attributes for the input.
      * @param mixed   $value   Value for the input.
      */
-    public function addInput(Array $attribs, $value = null);
+    public function addInput(array $attribs, $value = null);
 
     /**
      * Add a label to the form.
@@ -60,7 +60,7 @@ interface FormBuilderIface extends ViewIface
      * @param string $for  The id for the input that this label is for.
      * @param string $text The text for the label.
      */
-    public function addLabel($for, $text);
+    public function addLabel(string $for, string $text);
 
     /**
      * Add a radio button to the form.
@@ -68,7 +68,7 @@ interface FormBuilderIface extends ViewIface
      * @param string $name  Name of the radio button.
      * @param string $value Value of the radio.
      */
-    public function addRadio($name, $value);
+    public function addRadio(string $name, string $value);
 
     /**
      * Add a submit button to the form.
@@ -76,7 +76,7 @@ interface FormBuilderIface extends ViewIface
      * @param string $name  Name of the submit button.
      * @param string $value Value for the button text.
      */
-    public function addSubmit($name, $value);
+    public function addSubmit(string $name, string $value);
 
     /**
      * Add a text input.
@@ -86,12 +86,7 @@ interface FormBuilderIface extends ViewIface
      * @param int     $length       The length of the text.
      * @param mixed[] $otherAttribs Other attributes for the input.
      */
-    public function addText(
-        $name,
-        $value,
-        $length = 30,
-        $otherAttribs = []
-    );
+    public function addText(string $name, string $value, int $length = 30, array $otherAttribs = []);
 
     /**
      * Add a text area.
@@ -102,26 +97,20 @@ interface FormBuilderIface extends ViewIface
      * @param int      $cols         Number of columns.
      * @param string[] $otherAttribs Other attributes.
      */
-    public function addTextArea(
-        $name,
-        $value,
-        $rows = 10,
-        $cols = 50,
-        Array $otherAttribs = []
-    );
+    public function addTextArea(string $name, string $value, int $rows = 10, int $cols = 50, array $otherAttribs = []);
 
     /**
      * Set the action of the form.
      *
      * @param string $action
      */
-    public function setAction($action);
+    public function setAction(string $action);
 
     /**
      * Set the method of the form.
      *
      * @param string $method
      */
-    public function setMethod($method);
+    public function setMethod(string $method);
 }
 // EOF

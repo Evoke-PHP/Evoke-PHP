@@ -72,11 +72,8 @@ class Select
      * @param string[] $optionAttribs Attributes for the option elements.
      */
     public function __construct(
-        $fieldText,
-        $fieldValue = 'ID',
-        Array        $attribs = [],
-        Array        $optionAttribs = []
-    ) {
+        string $fieldText, string $fieldValue = 'ID', array $attribs = [], array $optionAttribs = [])
+    {
         $this->attribs       = $attribs;
         $this->fieldText     = $fieldText;
         $this->fieldValue    = $fieldValue;
@@ -94,7 +91,7 @@ class Select
      * @return mixed[] The select element.
      * @throws LogicException If the option does not have the required fields.
      */
-    public function get()
+    public function get() : array
     {
         $optionElements = [];
 

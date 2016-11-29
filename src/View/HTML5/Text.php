@@ -51,7 +51,7 @@ class Text implements ViewIface
      *
      * @param string $html5String The html string to parse for the view.
      */
-    public function setHTML5($html5String)
+    public function setHTML5(string $html5String)
     {
         $this->html5String = $html5String;
     }
