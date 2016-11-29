@@ -1,7 +1,7 @@
 #!/bin/bash
 # Source this file for useful aliasses.
 export EVOKE=$(dirname $BASH_SOURCE)
-export EVOKE_SRC=$EVOKE/src/Evoke
+export EVOKE_SRC=$EVOKE/src
 export EVOKE_TEST=$EVOKE/test
 
 alias cde='cd $EVOKE_SRC'

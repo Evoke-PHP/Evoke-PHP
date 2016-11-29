@@ -56,7 +56,7 @@ class Tree implements TreeIface
      *
      * @return TreeIface The current node that we are iterating over.
      */
-    public function current()
+    public function current() : TreeIface
     {
         return $this->children[$this->position];
     }
@@ -76,7 +76,7 @@ class Tree implements TreeIface
      *
      * @return TreeIface[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children[$this->position];
     }
@@ -86,7 +86,7 @@ class Tree implements TreeIface
      *
      * @return bool Whether the node has any children.
      */
-    public function hasChildren()
+    public function hasChildren() : bool
     {
         return !empty($this->children);
     }
@@ -172,7 +172,7 @@ class Tree implements TreeIface
      *
      * @return bool Whether the current node is valid.
      */
-    public function valid()
+    public function valid() : bool
     {
         return $this->position < count($this->children);
     }

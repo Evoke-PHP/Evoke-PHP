@@ -54,7 +54,7 @@ class RecordList extends Decorator implements RecordListIface
      *
      * @return bool Whether there is a selected record within the record list.
      */
-    public function hasSelectedRecord()
+    public function hasSelectedRecord() : bool
     {
         return !empty($this->selectedRecords);
     }
@@ -64,7 +64,7 @@ class RecordList extends Decorator implements RecordListIface
      *
      * @return bool Whether the current record is selected.
      */
-    public function isSelectedRecord()
+    public function isSelectedRecord() : bool
     {
         return in_array($this->data->getRecord(), $this->selectedRecords);
     }

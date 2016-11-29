@@ -37,7 +37,7 @@ class TreeBuilder
      * @param string $left
      * @param string $right
      */
-    public function __construct($left = 'lft', $right = 'rgt')
+    public function __construct(string $left = 'lft', string $right = 'rgt')
     {
         $this->left  = $left;
         $this->right = $right;
@@ -55,7 +55,7 @@ class TreeBuilder
      * @return Tree The tree.
      * @throws InvalidArgumentException If the MPTT data is bad.
      */
-    public function build($treeName, Array $mptt)
+    public function build(string $treeName, Array $mptt) : Tree
     {
         $mpttItems = count($mptt);
 

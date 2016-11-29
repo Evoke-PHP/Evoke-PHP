@@ -29,7 +29,7 @@ interface ResponseIface
      *
      * @param string $text The text to set the response body to.
      */
-    public function setBody($text);
+    public function setBody(string $text);
 
     /**
      * Set the headers to show that the document should be cached. This must be called before any output is sent
@@ -40,7 +40,7 @@ interface ResponseIface
      * @param int $minutes The number of minutes to cache the document for.
      * @param int $seconds The number of seconds to cache the document for.
      */
-    public function setCache($days = 0, $hours = 0, $minutes = 0, $seconds = 0);
+    public function setCache(int $days = 0, int $hours = 0, int $minutes = 0, int $seconds = 0);
 
     /**
      * Set the header field with the given value.
@@ -48,7 +48,7 @@ interface ResponseIface
      * @param string $field The header field to set.
      * @param string $value The value to set the header field to.
      */
-    public function setHeader($field, $value);
+    public function setHeader(string $field, string $value);
 
     /**
      * Set the HTTP status code and reason (200 OK, 404 Not Found, etc.)
@@ -56,6 +56,6 @@ interface ResponseIface
      * @param int         $code   The HTTP status code.
      * @param null|string $reason The HTTP status reason.
      */
-    public function setStatus($code, $reason = null);
+    public function setStatus(int $code, $reason = null);
 }
 // EOF

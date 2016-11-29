@@ -34,14 +34,14 @@ interface RecordListIface extends FlatIface
      *
      * @return bool Whether there is a selected record within the record list.
      */
-    public function hasSelectedRecord();
+    public function hasSelectedRecord() : bool;
 
     /**
      * Whether the current record is selected.
      *
      * @return bool Whether the current record is selected.
      */
-    public function isSelectedRecord();
+    public function isSelectedRecord() : bool;
 
     /**
      * Select a record within the record list data.

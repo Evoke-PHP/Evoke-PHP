@@ -57,7 +57,7 @@ class Flat implements FlatIface
      *
      * @return mixed[] The current record as a simple array.
      */
-    public function getRecord()
+    public function getRecord() : array
     {
         return current($this->data);
     }
@@ -67,7 +67,7 @@ class Flat implements FlatIface
      *
      * @return bool Whether the data is empty or not.
      */
-    public function isEmpty()
+    public function isEmpty() : bool
     {
         return empty($this->data);
     }
@@ -77,7 +77,7 @@ class Flat implements FlatIface
      *
      * @param mixed[] $data The data we want to manage.
      */
-    public function setData(Array $data)
+    public function setData(array $data)
     {
         $this->data = $data;
         $this->rewind();
@@ -93,7 +93,7 @@ class Flat implements FlatIface
      *
      * @return FlatIface
      */
-    public function current()
+    public function current() : FlatIface
     {
         return $this;
     }
@@ -147,7 +147,7 @@ class Flat implements FlatIface
      *
      * @return bool Whether the current data record is valid.
      */
-    public function valid()
+    public function valid() : bool
     {
         return (current($this->data) !== false);
     }
@@ -163,7 +163,7 @@ class Flat implements FlatIface
      * @return bool Whether the offset exists.
      *
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         $record = current($this->data);
 
@@ -224,7 +224,7 @@ class Flat implements FlatIface
      *
      * @return int
      */
-    public function count()
+    public function count() : int
     {
         return count($this->data);
     }

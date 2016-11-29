@@ -35,7 +35,7 @@ class Prepend extends Rule
      *                    Whether the rule can definitely give the final route
      *                    for all URIs that it matches.
      */
-    public function __construct($str, $authoritative = false)
+    public function __construct(string $str, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -51,7 +51,7 @@ class Prepend extends Rule
      *
      * @return string The uri with the string prepended.
      */
-    public function getController()
+    public function getController() : string
     {
         return $this->str . $this->uri;
     }
@@ -61,7 +61,7 @@ class Prepend extends Rule
      *
      * @return bool TRUE.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return true;
     }

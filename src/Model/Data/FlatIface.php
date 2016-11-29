@@ -22,20 +22,20 @@ interface FlatIface extends \ArrayAccess, \Countable, \Iterator
      *
      * @return mixed[] The current record as a simple array.
      */
-    public function getRecord();
+    public function getRecord() : array;
 
     /**
      * Whether the data is empty or not.
      *
      * @return bool Whether the data is empty or not.
      */
-    public function isEmpty();
+    public function isEmpty() : bool;
 
     /**
      * Set the data that we are managing.
      *
      * @param mixed[] $data The data we want to manage.
      */
-    public function setData(Array $data);
+    public function setData(array $data);
 }
 // EOF

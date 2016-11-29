@@ -42,7 +42,7 @@ abstract class Decorator implements FlatIface
      *
      * @return int
      */
-    public function count()
+    public function count() : int
     {
         return $this->data->count();
     }
@@ -52,7 +52,7 @@ abstract class Decorator implements FlatIface
      *
      * @return Decorator
      */
-    public function current()
+    public function current() : Decorator
     {
         return $this->data->current();
     }
@@ -62,7 +62,7 @@ abstract class Decorator implements FlatIface
      *
      * @return mixed[] The record that we are managing.
      */
-    public function getRecord()
+    public function getRecord() : array
     {
         return $this->data->getRecord();
     }
@@ -72,7 +72,7 @@ abstract class Decorator implements FlatIface
      *
      * @return bool Whether the data is empty or not.
      */
-    public function isEmpty()
+    public function isEmpty() : bool
     {
         return $this->data->isEmpty();
     }
@@ -81,9 +81,9 @@ abstract class Decorator implements FlatIface
     /**
      * Return the key of the current data item.
      *
-     * @return string|int
+     * @return string
      */
-    public function key()
+    public function key() : string
     {
         return $this->data->key();
     }
@@ -166,7 +166,7 @@ abstract class Decorator implements FlatIface
      *
      * @return bool Whether the current data record is valid.
      */
-    public function valid()
+    public function valid() : bool
     {
         return $this->data->valid();
     }

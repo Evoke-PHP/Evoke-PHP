@@ -116,10 +116,10 @@ class Session implements SessionIface
     /**
      * Return the value of the key in the session domain.
      *
-     * @param mixed $key The index of the value to retrieve.
+     * @param string $key The index of the value to retrieve.
      * @return mixed The value from the session.
      */
-    public function get($key)
+    public function get(string $key)
     {
         $session = $this->getCopy();
 
@@ -156,7 +156,7 @@ class Session implements SessionIface
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getCopy()
+    public function getCopy() : array
     {
         $currentDomain = $_SESSION;
 
@@ -173,7 +173,7 @@ class Session implements SessionIface
      *
      * @return string[]
      */
-    public function getFlatDomain()
+    public function getFlatDomain() : array
     {
         return $this->domain;
     }
@@ -183,7 +183,7 @@ class Session implements SessionIface
      *
      * @return string
      */
-    public function getID()
+    public function getID() : string
     {
         return (PHP_SAPI === 'cli') ? 'CLI_SESSION' : session_id();
     }
@@ -191,10 +191,10 @@ class Session implements SessionIface
     /**
      * Increment the value in the session by the offset.
      *
-     * @param mixed $key    The session key to increment.
-     * @param int   $offset The amount to increment the value.
+     * @param string $key    The session key to increment.
+     * @param int    $offset The amount to increment the value.
      */
-    public function increment($key, $offset = 1)
+    public function increment(string $key, int $offset = 1)
     {
         $session =& $this->getAccess();
         $session[$key] += $offset;
@@ -205,7 +205,7 @@ class Session implements SessionIface
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty() : bool
     {
         $session = $this->getCopy();
 
@@ -215,11 +215,11 @@ class Session implements SessionIface
     /**
      * Return whether the key is set to the specified value.
      *
-     * @param mixed $key The session key to check.
+     * @param string $key The session key to check.
      * @param mixed $val The value to check it against.
      * @return bool
      */
-    public function isEqual($key, $val)
+    public function isEqual(string $key, $val) : bool
     {
         $session = $this->getCopy();
 
@@ -229,10 +229,10 @@ class Session implements SessionIface
     /**
      * Whether the key has been set in the session domain.
      *
-     * @param mixed $key The session key to check.
+     * @param string $key The session key to check.
      * @return bool
      */
-    public function issetKey($key)
+    public function issetKey(string $key) : bool
     {
         $session = $this->getCopy();
 
@@ -244,7 +244,7 @@ class Session implements SessionIface
      *
      * @return int
      */
-    public function keyCount()
+    public function keyCount() : int
     {
         return count($this->getCopy());
     }
@@ -288,10 +288,10 @@ class Session implements SessionIface
     /**
      * Set the value of the key in the session domain.
      *
-     * @param mixed $key   The index in the session to set.
-     * @param mixed $value The value to set.
+     * @param string $key   The index in the session to set.
+     * @param mixed  $value The value to set.
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         $session       =& $this->getAccess();
         $session[$key] = $value;
@@ -333,9 +333,9 @@ class Session implements SessionIface
     /**
      * Unset the key in the session domain.
      *
-     * @param mixed $key The index in the session to unset.
+     * @param string $key The index in the session to unset.
      */
-    public function unsetKey($key)
+    public function unsetKey(string $key)
     {
         $session =& $this->getAccess();
         unset($session[$key]);

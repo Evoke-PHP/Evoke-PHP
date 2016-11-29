@@ -119,7 +119,7 @@ class Response implements ResponseIface
      * @param string $httpVersion HTTP Version (1.0, 1.1, etc.)
      * @throws InvalidArgumentException If the HTTP version is invalid.
      */
-    public function __construct($httpVersion = '1.1')
+    public function __construct(string $httpVersion = '1.1')
     {
         // Ensure httpVersion matches the spec.
         if (!preg_match('(\d+\.\d+)', $httpVersion)) {
@@ -168,7 +168,7 @@ class Response implements ResponseIface
      *
      * @param string $text The text to set the response body to.
      */
-    public function setBody($text)
+    public function setBody(string $text)
     {
         $this->body = $text;
     }
@@ -182,7 +182,7 @@ class Response implements ResponseIface
      * @param int $minutes The number of minutes to cache the document for.
      * @param int $seconds The number of seconds to cache the document for.
      */
-    public function setCache($days = 0, $hours = 0, $minutes = 0, $seconds = 0)
+    public function setCache(int $days = 0, int $hours = 0, int $minutes = 0, int $seconds = 0)
     {
         // Calculate the offset in seconds.
         $offset = ((((($days * 24) + $hours) * 60) + $minutes) * 60) + $seconds;
@@ -201,7 +201,7 @@ class Response implements ResponseIface
      * @param string $field The header to set.
      * @param string $value The value to set it to.
      */
-    public function setHeader($field, $value)
+    public function setHeader(string $field, string $value)
     {
         // RFC2616-sec4.2 Field names are case-insensitive.
         $this->headers[strtoupper($field)] = $value;
@@ -213,7 +213,7 @@ class Response implements ResponseIface
      * @param int         $code   The HTTP status code.
      * @param null|string $reason The HTTP status reason.
      */
-    public function setStatus($code, $reason = null)
+    public function setStatus(int $code, $reason = null)
     {
         $this->statusCode   = $code;
         $this->statusReason =
@@ -230,7 +230,7 @@ class Response implements ResponseIface
      * @param int $code Status code.
      * @return string Status reason.
      */
-    protected function getStatusReason($code)
+    protected function getStatusReason(int $code) : string
     {
         return isset(self::$statusReasonDefaults[$code]) ?
             self::$statusReasonDefaults[$code] : '';
