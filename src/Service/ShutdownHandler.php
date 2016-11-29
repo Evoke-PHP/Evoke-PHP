@@ -73,12 +73,12 @@ class ShutdownHandler
      * @throws InvalidArgumentException If showError is set without an error view supplied.
      */
     public function __construct(
-        $email,
+        string        $email,
         ResponseIface $response,
-        $showError,
-        MessageBox $viewMessageBox,
-        WriterIface $writer,
-        Error $viewError = null
+        bool          $showError,
+        MessageBox    $viewMessageBox,
+        WriterIface   $writer,
+        Error         $viewError = null
     ) {
         if ($showError && !isset($viewError)) {
             throw new InvalidArgumentException('needs Error view if we are showing the error.');

@@ -39,6 +39,6 @@ interface ProcessingIface
      *
      * @param mixed[] $data The request data that we are processing.
      */
-    public function setData(Array $data);
+    public function setData(array $data);
 }
 // EOF

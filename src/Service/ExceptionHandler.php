@@ -67,10 +67,10 @@ class ExceptionHandler
      */
     public function __construct(
         ResponseIface $response,
-        $showException,
-        MessageBox $viewMessageBox,
-        WriterIface $writer,
-        Exception $viewException = null
+        bool          $showException,
+        MessageBox    $viewMessageBox,
+        WriterIface   $writer,
+        Exception     $viewException = null
     ) {
         if ($showException && !isset($viewException)) {
             throw new InvalidArgumentException('needs Exception view if we are showing the exception.');

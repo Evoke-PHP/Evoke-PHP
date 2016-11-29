@@ -64,7 +64,7 @@ class File implements LoggerIface
      * @param int    $fileMode The file permissions for the log file (octal).
      * @param bool   $locking  Whether to lock the file for writing.
      */
-    public function __construct($filename, $dirMode = 0700, $fileMode = 0640, $locking = true)
+    public function __construct(string $filename, int $dirMode = 0700, int $fileMode = 0640, bool $locking = true)
     {
         $this->dirMode  = $dirMode;
         $this->filename = $filename;

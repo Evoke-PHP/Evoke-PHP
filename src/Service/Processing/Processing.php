@@ -90,7 +90,7 @@ class Processing implements ProcessingIface
     /**
      * @inheritDoc
      */
-    public function setData(Array $data)
+    public function setData(array $data)
     {
         $this->data = $data;
     }
@@ -100,7 +100,7 @@ class Processing implements ProcessingIface
      *
      * @param bool $matchRequired Whether a match is required.
      */
-    public function setMatchRequired($matchRequired = true)
+    public function setMatchRequired(bool $matchRequired = true)
     {
         $this->matchRequired = $matchRequired;
     }
@@ -110,7 +110,7 @@ class Processing implements ProcessingIface
      *
      * @param bool $uniqueMatchRequired Whether a unique match is required.
      */
-    public function setUniqueMatchRequired($uniqueMatchRequired = true)
+    public function setUniqueMatchRequired(bool $uniqueMatchRequired = true)
     {
         $this->uniqueMatchRequired = $uniqueMatchRequired;
     }

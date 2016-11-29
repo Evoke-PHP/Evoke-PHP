@@ -39,7 +39,7 @@ class ErrorHandler
      * @param bool         $suppressErrorHandler Whether to stop the standard error handler from running after handling
      *                                           the error here.
      */
-    public function __construct(LoggingIface $logging, $suppressErrorHandler = false)
+    public function __construct(LoggingIface $logging, bool $suppressErrorHandler = false)
     {
         $this->suppressErrorHandler = $suppressErrorHandler;
         $this->logging              = $logging;
@@ -60,7 +60,7 @@ class ErrorHandler
      * @return bool Whether the default system error handler should be suppressed.
      * @throws ErrorException If the error is recoverable.
      */
-    public function handler($errNo, $errStr, $errFile, $errLine, Array $errContext)
+    public function handler(int $errNo, string $errStr, string $errFile, int $errLine, array $errContext)
     {
         // If the error code should not be reported return.
         if (!(error_reporting() & $errNo)) {

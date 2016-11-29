@@ -59,11 +59,8 @@ class PSR0Namespace implements AutoloadIface
      * @param string $namespace
      * @param string $extension
      */
-    public function __construct(
-        $baseDir,
-        $namespace,
-        $extension = '.php'
-    ) {
+    public function __construct(string $baseDir, string $namespace, string $extension = '.php')
+    {
         $this->baseDir     = rtrim($baseDir, DIRECTORY_SEPARATOR);
         $this->extension   = $extension;
         $this->nsWithSlash = rtrim($namespace, '\\') . '\\';
@@ -81,7 +78,7 @@ class PSR0Namespace implements AutoloadIface
      *
      * @param string $name The fully namespaced class to load.
      */
-    public function load($name)
+    public function load(string $name)
     {
         // Only handle the specified namespace (and its sub-namespaces).
         if (strlen($name) >= $this->nameMinLen &&

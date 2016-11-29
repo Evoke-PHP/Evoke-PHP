@@ -32,7 +32,7 @@ class StaticMap implements AutoloadIface
      *
      * @param string[] $staticMap The static map of classnames to filenames.
      */
-    public function __construct(Array $staticMap)
+    public function __construct(array $staticMap)
     {
         $this->staticMap = $staticMap;
     }
@@ -47,7 +47,7 @@ class StaticMap implements AutoloadIface
      * @param string $name The fully namespaced class to load.
      * @throws RuntimeException If the file does not exist.
      */
-    public function load($name)
+    public function load(string $name)
     {
         if (isset($this->staticMap[$name])) {
             if (!file_exists($this->staticMap[$name])) {
