@@ -40,7 +40,7 @@ class Exact extends Match
      * @param mixed[]  $match         Exact match required from the media type.
      * @param string[] $ignoredFields Fields to be ignored in the match.
      */
-    public function __construct($outputFormat, Array $match, Array $ignoredFields = ['q_factor'])
+    public function __construct(string $outputFormat, array $match, array $ignoredFields = ['q_factor'])
     {
         parent::__construct($outputFormat, $match);
 
@@ -56,7 +56,7 @@ class Exact extends Match
      *
      * @return bool Whether the rule matches.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         $mType = $this->mediaType;
 

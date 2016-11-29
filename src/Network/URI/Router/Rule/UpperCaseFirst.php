@@ -31,7 +31,7 @@ class UpperCaseFirst extends Rule
      * @param string[] $delimiters    Delimiter strings that show the boundary of words.
      * @param bool     $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct(Array $delimiters, $authoritative = false)
+    public function __construct(array $delimiters, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -47,7 +47,7 @@ class UpperCaseFirst extends Rule
      *
      * @return string The string representing the Controller.
      */
-    public function getController()
+    public function getController() : string
     {
         $controller = $this->uri;
 
@@ -69,7 +69,7 @@ class UpperCaseFirst extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         foreach ($this->delimiters as $delimiter) {
             if (strpos($this->uri, $delimiter) !== false) {

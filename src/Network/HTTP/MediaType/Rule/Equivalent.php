@@ -33,7 +33,7 @@ class Equivalent extends Match
      * @param mixed[]  $match         The equivalent match required by the rule.
      * @param string[] $ignoredFields Fields to ignore in the match.
      */
-    public function __construct($outputFormat, Array $match, Array $ignoredFields = ['params', 'q_factor'])
+    public function __construct(string $outputFormat, Array $match, Array $ignoredFields = ['params', 'q_factor'])
     {
         parent::__construct($outputFormat, $match);
 
@@ -49,7 +49,7 @@ class Equivalent extends Match
      *
      * @return bool Whether the rule matches.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         $mType = $this->mediaType;
 

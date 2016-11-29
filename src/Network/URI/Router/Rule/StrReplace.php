@@ -38,7 +38,7 @@ class StrReplace extends Rule
      * @param string $replacement   The string to use as a replacement.
      * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct($match, $replacement, $authoritative = false)
+    public function __construct(string $match, string $replacement, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -55,7 +55,7 @@ class StrReplace extends Rule
      *
      * @return string The uri with the string replacements made.
      */
-    public function getController()
+    public function getController() : string
     {
         return str_replace($this->match, $this->replacement, $this->uri);
     }
@@ -65,7 +65,7 @@ class StrReplace extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return strpos($this->uri, $this->match) !== false;
     }

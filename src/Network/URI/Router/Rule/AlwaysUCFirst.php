@@ -19,7 +19,7 @@ class AlwaysUCFirst extends Rule
     /**
      * @inheritdoc
      */
-    public function __construct($authoritative = false)
+    public function __construct(bool $authoritative = false)
     {
         parent::__construct($authoritative);
     }
@@ -31,7 +31,7 @@ class AlwaysUCFirst extends Rule
     /**
      * @inheritDoc
      */
-    public function getController()
+    public function getController() : string
     {
         return ucfirst($this->uri);
     }
@@ -39,7 +39,7 @@ class AlwaysUCFirst extends Rule
     /**
      * @inheritDoc
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return true;
     }

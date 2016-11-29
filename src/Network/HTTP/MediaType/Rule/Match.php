@@ -31,7 +31,7 @@ class Match extends Rule
      * @param string  $outputFormat The output format for the rule.
      * @param mixed[] $match        The match required from the media type.
      */
-    public function __construct($outputFormat, Array $match)
+    public function __construct(string $outputFormat, Array $match)
     {
         parent::__construct($outputFormat);
 
@@ -47,7 +47,7 @@ class Match extends Rule
      *
      * @return bool Whether the rule matches.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return $this->mediaType === $this->match;
     }

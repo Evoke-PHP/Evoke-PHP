@@ -46,7 +46,7 @@ class Equal extends Rule
      * @param mixed[] $params
      * @param bool    $authoritative Whether the rule is authoritative.
      */
-    public function __construct($controller, $match, Array $params = [], $authoritative = true)
+    public function __construct(string $controller, string $match, array $params = [], bool $authoritative = true)
     {
         parent::__construct($authoritative);
 
@@ -64,7 +64,7 @@ class Equal extends Rule
      *
      * @return string The controller for the match.
      */
-    public function getController()
+    public function getController() : string
     {
         return $this->controller;
     }
@@ -74,7 +74,7 @@ class Equal extends Rule
      *
      * @return mixed[] The controller parameters.
      */
-    public function getParams()
+    public function getParams() : array
     {
         return $this->params;
     }
@@ -84,7 +84,7 @@ class Equal extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return $this->uri == $this->match;
     }

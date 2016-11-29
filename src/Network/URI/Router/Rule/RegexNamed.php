@@ -41,7 +41,7 @@ class RegexNamed extends Rule
      * @param string $replacement   The controller regex replacement string.
      * @param bool   $authoritative Is this always the final route?
      */
-    public function __construct($match, $replacement, $authoritative = false)
+    public function __construct(string $match, string $replacement, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -58,7 +58,7 @@ class RegexNamed extends Rule
      *
      * @return string The uri with the match replaced.
      */
-    public function getController()
+    public function getController() : string
     {
         return preg_replace($this->match, $this->replacement, $this->uri);
     }
@@ -68,7 +68,7 @@ class RegexNamed extends Rule
      *
      * @return mixed[] Named parameters from the URI subpattern matches.
      */
-    public function getParams()
+    public function getParams() : array
     {
         preg_match($this->match, $this->uri, $params);
 
@@ -87,7 +87,7 @@ class RegexNamed extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         $result = preg_match($this->match, $this->uri);
 

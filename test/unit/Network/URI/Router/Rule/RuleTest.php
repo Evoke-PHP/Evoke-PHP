@@ -4,19 +4,6 @@ namespace Evoke_Test\Network\URI\Router\Rule;
 use Evoke\Network\URI\Router\Rule\Rule;
 use PHPUnit_Framework_TestCase;
 
-class TestRuleExtended extends Rule
-{
-    public function getController()
-    {
-        return $this->uri;
-    }
-
-    public function isMatch()
-    {
-        return true;
-    }
-}
-
 /**
  * @covers Evoke\Network\URI\Router\Rule\Rule
  */
@@ -35,15 +22,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
         return [
             'empty'       => [''],
             'long_string' => ['this/is/a/long/Uri']
-        ];
-    }
-
-    public function providerSetURINonString()
-    {
-        return [
-            'int'    => [123],
-            'array'  => [['this is an array']],
-            'object' => [new \stdClass]
         ];
     }
 
@@ -74,17 +52,6 @@ class RuleTest extends PHPUnit_Framework_TestCase
         $obj = new TestRuleExtended(true);
         $obj->setURI($uri);
         $this->assertSame($uri, $obj->getController());
-    }
-
-    /**
-     * @dataProvider             providerSetURINonString
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage needs URI as string.
-     */
-    public function testSetURINonString($uriNonString)
-    {
-        $obj = new TestRuleExtended(true);
-        $obj->setURI($uriNonString);
     }
 }
 // EOF

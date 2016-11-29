@@ -22,7 +22,7 @@ interface RequestIface
      *
      * @return string The URI of the request.
      */
-    public function getURI();
+    public function getURI() : string;
 
     /**
      * Get the named parameter from the request.
@@ -30,14 +30,14 @@ interface RequestIface
      * @param string $param The parameter to get.
      * @return mixed The parameter.
      */
-    public function getParam($param);
+    public function getParam(string $param);
 
     /**
      * Get the parameters of the request.
      *
      * @return mixed[] The parameters of the request.
      */
-    public function getParams();
+    public function getParams() : array;
 
     /**
      * Whether the named parameter is set.
@@ -45,6 +45,6 @@ interface RequestIface
      * @param string $param The parameter to check.
      * @return bool Whether the parameter is set.
      */
-    public function issetParam($param);
+    public function issetParam(string $param) : bool;
 }
 // EOF

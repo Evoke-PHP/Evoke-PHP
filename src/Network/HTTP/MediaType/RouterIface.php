@@ -30,7 +30,8 @@ interface RouterIface
      * Perform the routing based on the rules.
      *
      * @param mixed[] $acceptedMediaTypes The media types accepted by the browser.
+     * @return string The output format.
      */
-    public function route(Array $acceptedMediaTypes);
+    public function route(array $acceptedMediaTypes);
 }
 // EOF

@@ -61,7 +61,12 @@ class Number extends Rule
      * @param string   $suffix        An optional suffix to match.
      * @param bool     $authoritative Whether the rule is authoritative.
      */
-    public function __construct($controller, $key, $prefix, $suffix = '', $authoritative = true)
+    public function __construct(
+        string $controller,
+        string $key,
+        string $prefix,
+        string $suffix = '',
+        bool   $authoritative = true)
     {
         parent::__construct($authoritative);
 
@@ -76,7 +81,7 @@ class Number extends Rule
     /**
      * @inheritDoc
      */
-    public function getController()
+    public function getController() : string
     {
         return $this->controller;
     }
@@ -84,7 +89,7 @@ class Number extends Rule
     /**
      * @inheritDoc
      */
-    public function getParams()
+    public function getParams() : array
     {
         return [$this->key => (int)(substr(
             $this->uri,
@@ -96,7 +101,7 @@ class Number extends Rule
     /**
      * @inheritDoc
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return (
             strcmp($this->prefix, substr($this->uri, 0, $this->prefixLen)) === 0 &&

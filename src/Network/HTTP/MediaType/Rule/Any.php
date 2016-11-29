@@ -28,7 +28,7 @@ class Any extends Rule
      *
      * @return bool True.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return true;
     }

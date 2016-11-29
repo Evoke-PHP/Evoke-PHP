@@ -34,7 +34,7 @@ abstract class Rule implements RuleIface
      *
      * @param string $outputFormat The output format for the rule.
      */
-    public function __construct($outputFormat)
+    public function __construct(string $outputFormat)
     {
         $this->outputFormat = $outputFormat;
     }
@@ -48,7 +48,7 @@ abstract class Rule implements RuleIface
      *
      * @return string The output format.
      */
-    public function getOutputFormat()
+    public function getOutputFormat() : string
     {
         return $this->outputFormat;
     }
@@ -58,7 +58,7 @@ abstract class Rule implements RuleIface
      *
      * @param mixed[] The media type.
      */
-    public function setMediaType(Array $mediaType)
+    public function setMediaType(array $mediaType)
     {
         $this->mediaType = $mediaType;
     }

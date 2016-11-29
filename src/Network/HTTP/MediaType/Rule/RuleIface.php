@@ -22,20 +22,20 @@ interface RuleIface
      *
      * @return string The output format.
      */
-    public function getOutputFormat();
+    public function getOutputFormat() : string;
 
     /**
      * Check to see if the rule matches.
      *
      * @return bool Whether the rule matches.
      */
-    public function isMatch();
+    public function isMatch() : bool;
 
     /**
      * Set the media type that the rule is checked against.
      *
      * @param mixed[] $mediaType
      */
-    public function setMediaType(Array $mediaType);
+    public function setMediaType(array $mediaType);
 }
 // EOF

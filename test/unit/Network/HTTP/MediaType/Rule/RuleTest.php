@@ -11,7 +11,7 @@ class TestRuleExtended extends Rule
         return $this->mediaType;
     }
 
-    public function isMatch()
+    public function isMatch() : bool
     {
         return true;
     }

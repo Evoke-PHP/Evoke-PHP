@@ -34,7 +34,7 @@ class LeftTrim extends Rule
      *                           Whether the rule can definitely give the final
      *                           route for all URIs that it matches.
      */
-    public function __construct($characters, $authoritative = false)
+    public function __construct(string $characters, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -50,7 +50,7 @@ class LeftTrim extends Rule
      *
      * @return string The uri trimmed appropriately.
      */
-    public function getController()
+    public function getController() : string
     {
         return ltrim($this->uri, $this->characters);
     }
@@ -60,10 +60,9 @@ class LeftTrim extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
-        return isset($this->uri[0]) &&
-        (strpos($this->characters, $this->uri[0]) !== false);
+        return isset($this->uri[0]) && (strpos($this->characters, $this->uri[0]) !== false);
     }
 }
 // EOF

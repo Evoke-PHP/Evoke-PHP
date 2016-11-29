@@ -28,7 +28,8 @@ interface RouterIface
      * Perform the routing based on the added rules.
      *
      * @param string $uri The URI to route.
+     * @return mixed[] The details for the route.
      */
-    public function route($uri);
+    public function route(string $uri) : array;
 }
 // EOF

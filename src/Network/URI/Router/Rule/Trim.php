@@ -32,7 +32,7 @@ class Trim extends Rule
      * @param string $characters    The characters to trim from the URI.
      * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct($characters, $authoritative = false)
+    public function __construct(string $characters, bool $authoritative = false)
     {
         parent::__construct($authoritative);
 
@@ -48,7 +48,7 @@ class Trim extends Rule
      *
      * @return string The uri trimmed appropriately.
      */
-    public function getController()
+    public function getController() : string
     {
         return trim($this->uri, $this->characters);
     }
@@ -58,7 +58,7 @@ class Trim extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return trim($this->uri, $this->characters) !== $this->uri;
     }

@@ -89,7 +89,7 @@ EOP;
     /**
      * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST, PUT or DELETE).
      */
-    public function getMethod()
+    public function getMethod() : string
     {
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             trigger_error('Request method is not set, defaulting to GET.', E_USER_WARNING);
@@ -106,7 +106,7 @@ EOP;
      * @param string $param The parameter to get.
      * @return mixed The query parameter.
      */
-    public function getParam($param)
+    public function getParam(string $param)
     {
         if (!isset($_REQUEST[$param])) {
             throw new LogicException(__METHOD__ . ' should only be called if the parameter is set.');
@@ -120,7 +120,7 @@ EOP;
      *
      * @return array|mixed[][] The query parameters.
      */
-    public function getParams()
+    public function getParams() : array
     {
         return isset($_REQUEST) ? $_REQUEST : [];
     }
@@ -130,7 +130,7 @@ EOP;
      *
      * @return string The URI of the request.
      */
-    public function getURI()
+    public function getURI() : string
     {
         return $_SERVER['REQUEST_URI'];
     }
@@ -141,7 +141,7 @@ EOP;
      * @param string $param The parameter to check.
      * @return bool Whether the query parameter is set.
      */
-    public function issetParam($param)
+    public function issetParam(string $param) : bool
     {
         return isset($_REQUEST[$param]);
     }
@@ -152,7 +152,7 @@ EOP;
      * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
      * @return bool
      */
-    public function isValidAccept()
+    public function isValidAccept() : bool
     {
         // The Accept header does not appear to be mandatory.
         if (empty($_SERVER['HTTP_ACCEPT'])) {
@@ -175,8 +175,9 @@ EOP;
     /**
      * Whether the HTTP ACCEPT LANGUAGE header is of the correct format.
      *
+     * @return bool
      */
-    public function isValidAcceptLanguage()
+    public function isValidAcceptLanguage() : bool
     {
         // The Accept-Language header does not appear to be mandatory.
         if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
@@ -201,7 +202,7 @@ EOP;
      *                 of the array has keys defining the Params, Q_Factor,
      *                 Subtype and Type.
      */
-    public function parseAccept()
+    public function parseAccept() : array
     {
         if (empty($_SERVER['HTTP_ACCEPT'])) {
             // The Accept header does not appear to be mandatory.
@@ -266,7 +267,7 @@ EOP;
      * The accepted languages from the request in order of quality from highest to lowest.  Each element of the array
      * has keys defining the Language and Q_Factor.
      */
-    public function parseAcceptLanguage()
+    public function parseAcceptLanguage() : array
     {
         if (empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // Accept-Language header is not mandatory.
@@ -308,7 +309,7 @@ EOP;
      * @param mixed[] $second The second accepted media type.
      * @return int As required by usort.
      */
-    protected function compareAccept(Array $first, Array $second)
+    protected function compareAccept(array $first, array $second) : int
     {
         return $this->scoreAccept($second) - $this->scoreAccept($first);
     }
@@ -320,10 +321,9 @@ EOP;
      * @param mixed[] $second The second accept language.
      * @return int as required by usort.
      */
-    protected function compareAcceptLanguage(Array $first, Array $second)
+    protected function compareAcceptLanguage(Array $first, Array $second) : int
     {
-        return $this->scoreAcceptLanguage($second) -
-        $this->scoreAcceptLanguage($first);
+        return $this->scoreAcceptLanguage($second) - $this->scoreAcceptLanguage($first);
     }
 
     /*******************/
@@ -336,12 +336,12 @@ EOP;
      * @param mixed[] $accept The accept media type array.
      * @return int The score of the accept array for comparison.
      */
-    private function scoreAccept(Array $accept)
+    private function scoreAccept(Array $accept) : int
     {
         // The Q_Factor dominates, followed by Type, Subtype and then number of parameters. The one unknown is the
         // number of parameters, but we assume that it is less than 10000, so that the score cannot be overridden by a
         // lower level.
-        return
+        return (int)
             // Normalise to 1               Multiply by Importance
             (($accept['q_factor'] * 1000) * 1000000) +
             ((($accept['type'] !== '*') ? 1 : 0) * 900000) +
@@ -355,10 +355,10 @@ EOP;
      * @param mixed[] $acceptLanguage The accept language array.
      * @return int The score of the accept language array for comparison.
      */
-    private function scoreAcceptLanguage(Array $acceptLanguage)
+    private function scoreAcceptLanguage(Array $acceptLanguage) : int
     {
         // Make it at least +-1 so that it doesn't evaluate to 0 (i.e equal).
-        return $acceptLanguage['q_factor'] * 1000;
+        return (int)($acceptLanguage['q_factor'] * 1000);
     }
 }
 // EOF

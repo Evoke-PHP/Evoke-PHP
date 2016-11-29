@@ -52,7 +52,7 @@ class Regex extends Rule
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct(Array $controller, $match, Array $params, $authoritative = false)
+    public function __construct(array $controller, string $match, array $params, bool $authoritative = false)
     {
         parent::__construct($authoritative);
         $invalidArgs = false;
@@ -87,7 +87,7 @@ class Regex extends Rule
      *
      * @return string The uri with the match replaced.
      */
-    public function getController()
+    public function getController() : string
     {
         return preg_replace($this->controller['match'], $this->controller['replace'], $this->uri);
     }
@@ -97,7 +97,7 @@ class Regex extends Rule
      *
      * @return mixed[] Parameters from the URI.
      */
-    public function getParams()
+    public function getParams() : array
     {
         $paramsFound = [];
 
@@ -118,7 +118,7 @@ class Regex extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return preg_match($this->match, $this->uri) > 0;
     }

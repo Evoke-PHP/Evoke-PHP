@@ -54,10 +54,10 @@ class RegexSharedMatch extends Rule
      * @throws InvalidArgumentException If the rule is incorrectly formatted.
      */
     public function __construct(
-        $match,
-        $replacement,
-        Array        $params = [],
-        $authoritative = false
+        string $match,
+        string $replacement,
+        array  $params = [],
+        bool   $authoritative = false
     ) {
         parent::__construct($authoritative);
 
@@ -81,7 +81,7 @@ class RegexSharedMatch extends Rule
      *
      * @return string The uri with the match replaced.
      */
-    public function getController()
+    public function getController() : string
     {
         return preg_replace($this->match, $this->replacement, $this->uri);
     }
@@ -91,7 +91,7 @@ class RegexSharedMatch extends Rule
      *
      * @return mixed[] Parameters from the URI.
      */
-    public function getParams()
+    public function getParams() : array
     {
         $params = [];
 
@@ -108,7 +108,7 @@ class RegexSharedMatch extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         $result = preg_match($this->match, $this->uri);
 

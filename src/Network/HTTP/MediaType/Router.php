@@ -48,7 +48,7 @@ class Router implements RouterIface
      * @return string The output format.
      * @throws OutOfBoundsException When no output format can be chosen that matches the Accepted Media Types.
      */
-    public function route(Array $acceptedMediaTypes)
+    public function route(array $acceptedMediaTypes) : string
     {
         foreach ($acceptedMediaTypes as $mediaType) {
             foreach ($this->rules as $rule) {

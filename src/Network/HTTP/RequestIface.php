@@ -20,7 +20,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
     /**
      * Get the method.  (One of the HTTP verbs HEAD, GET, OPTIONS, TRACE, POST, PUT or DELETE).
      */
-    public function getMethod();
+    public function getMethod() : string;
 
     /**
      * Parse the Accept header field from the request according to RFC-2616.
@@ -32,7 +32,7 @@ interface RequestIface extends \Evoke\Network\RequestIface
      * Accepted media types with their quality factor, ordered by preference according to compareAccept. Each element of
      * the array has keys defining the Params, Q_Factor, Subtype and Type.
      */
-    public function parseAccept();
+    public function parseAccept() : array;
 
     /**
      * Parse the Accept-Language header from the request according to RFC-2616.
@@ -45,6 +45,6 @@ interface RequestIface extends \Evoke\Network\RequestIface
      *                 quality from highest to lowest.  Each element of the
      *                 array has keys defining the Language and Q_Factor.
      */
-    public function parseAcceptLanguage();
+    public function parseAcceptLanguage() : array;
 }
 // EOF

@@ -20,23 +20,23 @@ namespace Evoke\Network\URI\Router\Rule;
 class Blank extends Rule
 {
     /**
-     * Replacement for a blank URI.
+     * Value for a blank URI.
      *
      * @var string
      */
-    protected $replacement;
+    protected $value;
 
     /**
      * Construct the Blank URI Rule.
      *
-     * @param string $replacement   Replacement for a blank URI.
+     * @param string $value         Value for a blank URI.
      * @param bool   $authoritative Whether the rule can definitely give the final route for all URIs that it matches.
      */
-    public function __construct($replacement, $authoritative = true)
+    public function __construct(string $value, bool $authoritative = true)
     {
         parent::__construct($authoritative);
 
-        $this->replacement = $replacement;
+        $this->value = $value;
     }
 
     /******************/
@@ -48,9 +48,9 @@ class Blank extends Rule
      *
      * @return string The uri for the blank controller.
      */
-    public function getController()
+    public function getController() : string
     {
-        return $this->replacement;
+        return $this->value;
     }
 
     /**
@@ -58,7 +58,7 @@ class Blank extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return empty($this->uri);
     }

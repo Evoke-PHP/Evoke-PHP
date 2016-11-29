@@ -51,7 +51,11 @@ class Tokens extends Rule
      * @param bool     $authoritative   Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct($controller, $prefix, $tokenCharacters = '/', $authoritative = true)
+    public function __construct(
+        string $controller,
+        string $prefix,
+        string $tokenCharacters = '/',
+        bool   $authoritative   = true)
     {
         parent::__construct($authoritative);
 
@@ -72,7 +76,7 @@ class Tokens extends Rule
     /**
      * @inheritDoc
      */
-    public function getController()
+    public function getController() : string
     {
         return $this->controller;
     }
@@ -80,7 +84,7 @@ class Tokens extends Rule
     /**
      * @inheritDoc
      */
-    public function getParams()
+    public function getParams() : array
     {
         $token = strtok(substr($this->uri, $this->prefixLen), $this->tokenCharacters);
 
@@ -100,7 +104,7 @@ class Tokens extends Rule
     /**
      * @inheritDoc
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         return substr($this->uri, 0, $this->prefixLen) === $this->prefix;
     }

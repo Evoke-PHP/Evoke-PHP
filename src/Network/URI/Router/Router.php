@@ -45,7 +45,7 @@ class Router implements RouterIface
      * @param string $uri The URI that we are routing.
      * @return mixed[] The class and parameters that should respond to the URI (generally this should be a Controller).
      */
-    public function route($uri)
+    public function route(string $uri) : array
     {
         // The URI that is routed is continually refined from the initial URI by the rules.
         $refinedURI = $uri;

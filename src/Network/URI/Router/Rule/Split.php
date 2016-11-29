@@ -59,7 +59,7 @@ class Split extends Rule
      * @param bool     $authoritative Whether the rule is authoritative.
      * @throws InvalidArgumentException
      */
-    public function __construct($controller, Array $parts, $prefix, $separator, $authoritative = true)
+    public function __construct(string $controller, array $parts, string $prefix, string $separator, bool $authoritative = true)
     {
         parent::__construct($authoritative);
 
@@ -83,7 +83,7 @@ class Split extends Rule
      *
      * @return string The controller.
      */
-    public function getController()
+    public function getController() : string
     {
         return $this->controller;
     }
@@ -93,7 +93,7 @@ class Split extends Rule
      *
      * @return mixed[] The parameters found using the rule.
      */
-    public function getParams()
+    public function getParams() : array
     {
         return array_combine(
             $this->parts,
@@ -106,7 +106,7 @@ class Split extends Rule
      *
      * @return bool Whether the uri is matched.
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         // The prefix matches AND we have the expected number of parts.
         return strcmp($this->prefix, substr($this->uri, 0, $this->prefixLen)) === 0 &&
