@@ -1,19 +1,17 @@
 language: php
 php:
-        - "5.5"
-        - "5.4"
         - "7.0"
 
 before_script:
         - composer self-update
         - composer install -d ./test/environment
-        - git clone http://github.com/zenovich/runkit.git runkit
-        - cd runkit
+        - git clone http://github.com/krakjoe/uopz uopz
+        - cd uopz
         - phpize
         - ./configure
         - make
         - sudo make install
-        - echo -e "extension=runkit.so\nrunkit.internal_override = 1" >> `php --ini | grep "Loaded Configuration" | sed "s/.*:\s*//"`
+        - echo "extension=uopz.so" >> `php --ini | grep "Loaded Configuration" | sed "s/.*:\s*//"`
         - cd ..
 
 script: phpunit --configuration ./build/config/unit.xml --bootstrap ./test/environment/Bootstrap.php
