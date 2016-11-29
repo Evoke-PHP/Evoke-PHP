@@ -31,7 +31,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerConstruct
      */
-    public function test__construct($indent, $indentString = '   ')
+    public function testConstruct($indent, $indentString = '   ')
     {
         $xIndex    = 0;
         $xmlWriter = $this->createMock('XMLWriter');

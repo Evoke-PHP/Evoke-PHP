@@ -193,7 +193,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
      * Ensure that before a session is created that $_SESSION does
      * not exist.
      */
-    public function test__constructGood()
+    public function testConstructGood()
     {
 
         $this->assertTrue(!isset($_SESSION), 'Ensure we are starting from a clean state.');

@@ -99,7 +99,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException                InvalidArgumentException
+     * @expectedException        InvalidArgumentException
      * @expectedExceptionMessage needs traversable options.
      */
     public function testNonTraversableOptionsAreInvalid()

@@ -150,7 +150,6 @@ class TabularTest extends PHPUnit_Framework_TestCase
             'exact_over_exact'  => [$aEOE, 'Add_Exact_Over_Exact'],
             'exact_over_camel'  => [$aEOC, 'Add_Exact_Over_Camel'],
             'extra_over_less'   => [$aExtra, $extraJoinID],
-            'less_over_extra'   => [$aLess, $lessJoinID],
             'empty_over_empty'  => [$aEmpty, ''],
             'extra_over_number' => [$aNumber, '1#2#3#'],
             'less_over_extra'   => [$aLess, $lessJoinID],

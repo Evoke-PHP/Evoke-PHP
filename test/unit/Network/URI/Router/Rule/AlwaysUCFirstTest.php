@@ -1,18 +1,18 @@
 <?php
 /**
- * AlwaysUcfirstTest
+ * AlwaysUCFirstTest
  *
  * @package   Evoke_Test\Network\URI\Router\Rule
  */
 
 namespace Evoke_Test\Network\URI\Router\Rule;
 
-use Evoke\Network\URI\Router\Rule\AlwaysUcfirst;
+use Evoke\Network\URI\Router\Rule\AlwaysUCFirst;
 
 /**
- * @covers Evoke\Network\URI\Router\Rule\AlwaysUcfirst
+ * @covers Evoke\Network\URI\Router\Rule\AlwaysUCFirst
  */
-class AlwaysUcfirstTest extends \PHPUnit_Framework_TestCase
+class AlwaysUCFirstTest extends \PHPUnit_Framework_TestCase
 {
     /******************/
     /* Data Providers */
@@ -61,13 +61,13 @@ class AlwaysUcfirstTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstruct($auth)
     {
-        $this->assertInstanceOf('Evoke\Network\URI\Router\Rule\AlwaysUcfirst', new AlwaysUcfirst($auth));
+        $this->assertInstanceOf('Evoke\Network\URI\Router\Rule\AlwaysUCFirst', new AlwaysUcfirst($auth));
     }
 
     /**
      * @dataProvider providerGetController
      */
-    public function testGetController($expected, AlwaysUcfirst $obj, $uri)
+    public function testGetController($expected, AlwaysUCFirst $obj, $uri)
     {
         $obj->setURI($uri);
         $this->assertEquals($expected, $obj->getController());

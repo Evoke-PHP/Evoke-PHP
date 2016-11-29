@@ -206,7 +206,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     protected function replaceHeaderFunctions()
     {
         uopz_set_return('headers_sent', false);
-        uopz_set_return('header', function($str) { \Evoke_Test\Network\HTTP\ResponseTest::addHeader($str); }, true);
+        uopz_set_return('header', function($str) { ResponseTest::addHeader($str); }, true);
     }
 
     protected function restoreHeaderFunctions()

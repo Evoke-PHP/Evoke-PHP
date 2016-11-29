@@ -120,7 +120,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerGood
      */
-    public function test__constructGood($controller, $match, $params, $authoritative)
+    public function testConstructGood($controller, $match, $params, $authoritative)
     {
         $object = new Regex($controller, $match, $params, $authoritative);
         $this->assertInstanceOf('Evoke\Network\URI\Router\Rule\Regex', $object);
@@ -132,7 +132,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
      * @expectedException InvalidArgumentException
      * @dataProvider      providerInvalidArguments
      */
-    public function test__constructInvalidParamSpec($controller, $match, $params, $authoritative = false)
+    public function testConstructInvalidParamSpec($controller, $match, $params, $authoritative = false)
     {
         new Regex($controller, $match, $params, $authoritative);
     }
@@ -140,7 +140,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
     /**
      * Test that we get the expected controller.
      *
-     * @depends test__constructGood
+     * @depends testConstructGood
      */
     public function testGetController()
     {
@@ -160,7 +160,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
     /**
      * Test that we get the expected parameters.
      *
-     * @depends      test__constructGood
+     * @depends      testConstructGood
      * @dataProvider providerGetParams
      */
     public function testGetParams($controller, $match, $params, $authoritative, $uri, $expected)
@@ -173,7 +173,7 @@ class RegexTest extends PHPUnit_Framework_TestCase
     /**
      * Test the matches for the regex.
      *
-     * @depends      test__constructGood
+     * @depends      testConstructGood
      * @dataProvider providerIsMatch
      */
     public function testIsMatch($controller, $match, $params, $uri, $expected)

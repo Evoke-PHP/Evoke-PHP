@@ -27,23 +27,12 @@ class MenuTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        ErrorException
+     * @expectedException \TypeError
      */
     public function testRequiresTreeInvalidGiven()
     {
         $obj = new Menu;
-        set_error_handler(function () {
-            throw new \ErrorException("Expected");
-        });
-
-        try {
-            $obj->set(34);
-        } catch (\ErrorException $e) {
-            restore_error_handler();
-            throw $e;
-        }
-
-        restore_error_handler();
+        $obj->set(34);
     }
 
     /**

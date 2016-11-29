@@ -1,5 +1,5 @@
 <?php
-namespace Evoke_Test\Network\URI\Router\Rule\RegexSharedMatch;
+namespace Evoke_Test\Network\URI\Router\Rule;
 
 use Evoke\Network\URI\Router\Rule\RegexSharedMatch;
 use PHPUnit_Framework_TestCase;

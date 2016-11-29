@@ -16,7 +16,7 @@ class LoggingTest extends PHPUnit_Framework_TestCase
     /**
      * We can create an object.
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $object = new Logging($this->createMock('DateTime'));
         $this->assertInstanceOf('Evoke\Service\Log\Logging', $object);
