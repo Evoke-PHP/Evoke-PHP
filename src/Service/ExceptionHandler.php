@@ -91,12 +91,12 @@ class ExceptionHandler
      * Handle uncaught exceptions for the system by logging information and displaying a generic notice to the user so
      * that they are informed of an error without exposing information that could be used for an attack.
      *
-     * @param \Exception $uncaughtException An exception that was not caught in the system.
+     * @param \Throwable $uncaughtException An exception that was not caught in the system.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function handler(\Exception $uncaughtException)
+    public function handler(\Throwable $uncaughtException)
     {
         trigger_error($uncaughtException->getMessage(), E_USER_WARNING);
         $currentBuffer = (string)($this->writer);
