@@ -8,10 +8,8 @@ declare(strict_types = 1);
 namespace Evoke\Service;
 
 use Evoke\Network\HTTP\ResponseIface;
-use Evoke\View\HTML5\Exception;
-use Evoke\View\HTML5\MessageBox;
+use Evoke\View\ThrowableIface;
 use Evoke\Writer\WriterIface;
-use InvalidArgumentException;
 
 /**
  * Exception Handler
@@ -32,22 +30,10 @@ class ExceptionHandler
     protected $response;
 
     /**
-     * Whether to display the exception.
-     * @var bool
+     * Throwable view.
+     * @var ThrowableIface
      */
-    protected $showException;
-
-    /**
-     * Exception view.
-     * @var Exception
-     */
-    protected $viewException;
-
-    /**
-     * MessageBox view.
-     * @var MessageBox
-     */
-    protected $viewMessageBox;
+    protected $viewThrowable;
 
     /**
      * Writer.
@@ -58,28 +44,14 @@ class ExceptionHandler
     /**
      * Construct an Exception Handler object.
      *
-     * @param ResponseIface $response
-     * @param bool          $showException
-     * @param MessageBox    $viewMessageBox
-     * @param WriterIface   $writer
-     * @param Exception     $viewException
-     * @throws InvalidArgumentException If we are showing the exception and don't provide an exception view.
+     * @param ResponseIface  $response
+     * @param WriterIface    $writer
+     * @param ThrowableIface $viewThrowable
      */
-    public function __construct(
-        ResponseIface $response,
-        bool          $showException,
-        MessageBox    $viewMessageBox,
-        WriterIface   $writer,
-        Exception     $viewException = null
-    ) {
-        if ($showException && !isset($viewException)) {
-            throw new InvalidArgumentException('needs Exception view if we are showing the exception.');
-        }
-
+    public function __construct(ResponseIface $response, WriterIface $writer, ThrowableIface $viewThrowable = null)
+    {
         $this->response       = $response;
-        $this->showException  = $showException;
-        $this->viewException  = $viewException;
-        $this->viewMessageBox = $viewMessageBox;
+        $this->viewThrowable  = $viewThrowable;
         $this->writer         = $writer;
     }
 
@@ -88,17 +60,17 @@ class ExceptionHandler
     /******************/
 
     /**
-     * Handle uncaught exceptions for the system by logging information and displaying a generic notice to the user so
-     * that they are informed of an error without exposing information that could be used for an attack.
+     * Handle uncaught exception and throwables for the system by logging information and displaying a generic notice
+     * to the user so that they are informed of an error without exposing information that could be used for an attack.
      *
-     * @param \Throwable $uncaughtException An exception that was not caught in the system.
+     * @param \Throwable $uncaught A throwable that was not caught in the system.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function handler(\Throwable $uncaughtException)
+    public function handler(\Throwable $uncaught)
     {
-        trigger_error($uncaughtException->getMessage(), E_USER_WARNING);
+        trigger_error($uncaught->getMessage(), E_USER_WARNING);
         $currentBuffer = (string)($this->writer);
 
         if (!empty($currentBuffer)) {
@@ -109,18 +81,36 @@ class ExceptionHandler
             $this->writer->flush();
         }
 
-        $this->viewMessageBox->addContent(
-            ['div', ['class' => 'Description'], 'The administrator has been notified.']
-        );
+        $this->writer->writeStart();
+        $this->writer->write(['head', [], [['title', [], ['Internal Error']]]]);
 
-        if ($this->showException) {
-            $this->viewException->set($uncaughtException);
-            $this->viewMessageBox->addContent($this->viewException->get());
+        if (isset($this->viewThrowable)) {
+            $this->viewThrowable->set($uncaught);
+            $this->writer->write(
+                [
+                    'body',
+                    [],
+                    [
+                        ['h1', [], 'Internal Error'],
+                        $this->viewThrowable->get()
+                    ]
+                ]);
+        } else {
+            $this->writer->write(
+                [
+                    'body',
+                    [],
+                    [
+                        ['h1', [], 'Internal Error'],
+                        [
+                            'p',
+                            [],
+                            'We are sorry about this error, the administrator has been notified and we will fix this issue as soon as possible.  Please contact us for more information.'
+                        ]
+                    ]
+                ]);
         }
 
-        $this->writer->writeStart();
-        $this->writer->write(['head', [], [['title', [], ['Uncaught Exception']]]]);
-        $this->writer->write(['body', [], [$this->viewMessageBox->get()]]);
         $this->writer->writeEnd();
 
         $this->response->setStatus(500);
