@@ -27,13 +27,14 @@ class ThrowableTest extends PHPUnit_Framework_TestCase
             [
                 ['div', ['class' => 'location'], 'Thrown at ' . __FILE__ . ' line 21'],
                 ['pre', [], 'MESSAGE'],
+
             ]
         ];
 
         $actual = $object->get();
-        unset($actual[2][2]);
+        $actualMatchable = ['div', ['class' => 'Throwable'], [$actual[2][0], $actual[2][1]]];
 
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $actualMatchable);
     }
 
     /**

@@ -32,6 +32,10 @@ class Throwable implements ThrowableIface
             throw new LogicException('Throwable must be set to get view.');
         }
 
+        ob_start();
+        var_dump($this->throwable->getTrace());
+        $fullTrace = ob_get_clean();
+
         return [
             'div',
             ['class' => 'Throwable'],
@@ -42,7 +46,10 @@ class Throwable implements ThrowableIface
                     'Thrown at ' . $this->throwable->getFile() . ' line ' . $this->throwable->getLine()
                 ],
                 ['pre', [], $this->throwable->getMessage()],
-                ['pre', ['class' => 'trace'], $this->throwable->getTraceAsString()]
+                ['h2', [], 'Basic Trace'],
+                ['pre', ['class' => 'basic_trace'], $this->throwable->getTraceAsString()],
+                ['h2', [], 'Full Trace'],
+                ['pre', ['class' => 'full_trace'], $fullTrace]
             ]
         ];
     }
