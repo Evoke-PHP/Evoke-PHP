@@ -25,7 +25,7 @@ class ThrowableTest extends PHPUnit_Framework_TestCase
             'div',
             ['class' => 'Throwable'],
             [
-                ['div', ['class' => 'location'], 'Thrown at /home/pyoung/Coding/Evoke-PHP/test/unit/View/HTML5/ThrowableTest.php line 21'],
+                ['div', ['class' => 'location'], 'Thrown at ' . __FILE__ . ' line 21'],
                 ['pre', [], 'MESSAGE'],
             ]
         ];
