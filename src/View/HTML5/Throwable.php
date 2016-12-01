@@ -36,6 +36,15 @@ class Throwable implements ThrowableIface
         var_dump($this->throwable->getTrace());
         $fullTrace = ob_get_clean();
 
+        // If xdebug is installed then var_dump is pretty printed for html already.
+        if (function_exists('xdebug_var_dump')) {
+            $viewTrace = new Text;
+            $viewTrace->setHTML5($fullTrace);
+            $fullTrace = $viewTrace->get();
+        } else {
+            $fullTrace = ['pre', ['class' => 'full_trace'], $fullTrace];
+        }
+
         return [
             'div',
             ['class' => 'Throwable'],
@@ -49,7 +58,7 @@ class Throwable implements ThrowableIface
                 ['h2', [], 'Basic Trace'],
                 ['pre', ['class' => 'basic_trace'], $this->throwable->getTraceAsString()],
                 ['h2', [], 'Full Trace'],
-                ['pre', ['class' => 'full_trace'], $fullTrace]
+                $fullTrace
             ]
         ];
     }
