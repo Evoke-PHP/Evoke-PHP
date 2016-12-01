@@ -40,7 +40,7 @@ class Throwable implements ThrowableIface
         if (function_exists('xdebug_var_dump')) {
             $viewTrace = new Text;
             $viewTrace->setHTML5($fullTrace);
-            $fullTrace = $viewTrace->get();
+            $fullTrace = ['div', ['class' => 'full_trace'], $viewTrace->get()];
         } else {
             $fullTrace = ['pre', ['class' => 'full_trace'], $fullTrace];
         }
