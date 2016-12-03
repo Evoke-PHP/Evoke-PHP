@@ -7,8 +7,9 @@ declare(strict_types = 1);
  */
 namespace Evoke\Writer;
 
-use DomainException;
 use InvalidArgumentException;
+use LogicException;
+use Throwable;
 use XMLWriter;
 
 /**
@@ -34,19 +35,6 @@ class XML implements WriterIface
      * @var bool
      */
     protected $indent;
-
-    /**
-     * Language of XML being written.
-     * @var string
-     */
-    protected $language;
-
-    /**
-     * Position of the tag, attribs and children in the element.
-     * @var mixed[]
-     */
-    protected $pos;
-
     /**
      * XML Writer object.
      * @var XMLWriter
@@ -57,28 +45,12 @@ class XML implements WriterIface
      * Create an XML Writer.
      *
      * @param XMLWriter $xmlWriter    XMLWriter object.
-     * @param string    $docType      Document Type.
-     * @param string    $language     Language of XML being written.
      * @param bool      $indent       Whether the XML produced should be indented.
      * @param string    $indentString The string that should be used to indent the XML.
-     * @param int[]     $pos          Position of the tag, attribs & children in the element.
      */
-    public function __construct(
-        XMLWriter $xmlWriter,
-        string    $docType = 'XHTML_1_1',
-        string    $language = 'EN',
-        bool      $indent = true,
-        string    $indentString = '   ',
-        array     $pos = [
-            'attribs'  => 1,
-            'children' => 2,
-            'tag'      => 0
-        ])
+    public function __construct(XMLWriter $xmlWriter, bool $indent = true, string $indentString = '    ')
     {
-        $this->docType   = $docType;
         $this->indent    = $indent;
-        $this->language  = $language;
-        $this->pos       = $pos;
         $this->xmlWriter = $xmlWriter;
 
         $this->xmlWriter->openMemory();
@@ -122,69 +94,19 @@ class XML implements WriterIface
     /**
      * Write XML elements into the memory buffer.
      *
-     * @param mixed[] $xml
-     * Array accessible value for the xml to be written of the form: `[$tag, $attributes, $children]`
-     *
-     * An example of this is below with the default values that are used for the options array. Attributes and options
-     * are optional.
-     * <pre><code>
-     * [0 => tag,
-     *  1 => ['attrib_1' => '1', 'attrib_2' => '2'],
-     *  2 => [$child, 'text', $anotherChild]]
-     * </code></pre>
-     *
+     * @param mixed[] $xml Array for the xml to be written of the form: `[$tag, $attributes, $children]`
      * @throws InvalidArgumentException for bad xml data.
      */
     public function write($xml)
     {
-        if (empty($xml[$this->pos['tag']]) || !is_string($xml[$this->pos['tag']])) {
-            throw new InvalidArgumentException('bad tag: ' . var_export($xml, true));
-        }
-
-        if (isset($xml[$this->pos['attribs']]) && !is_array($xml[$this->pos['attribs']])) {
-            throw new InvalidArgumentException('bad attributes: ' . var_export($xml, true));
-        }
-
-        if (isset($xml[$this->pos['children']]) && !is_array($xml[$this->pos['children']])) {
-            $xml[$this->pos['children']] = [$xml[$this->pos['children']]];
-        }
-
-        $tag      = $xml[$this->pos['tag']];
-        $attribs  = isset($xml[$this->pos['attribs']]) ? $xml[$this->pos['attribs']] : [];
-        $children = isset($xml[$this->pos['children']]) ? $xml[$this->pos['children']] : [];
-
-        // Whether we are normally indenting and we see an element that should be inline.
-        $specialInlineElement = ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
-
-        // Toggle the indent off.
-        if ($specialInlineElement) {
-            $this->xmlWriter->setIndent(false);
-        }
-
-        $this->xmlWriter->startElement($tag);
-
-        foreach ($attribs as $attrib => $value) {
-            $this->xmlWriter->writeAttribute($attrib, $value);
-        }
-
-        foreach ($children as $child) {
-            if (is_scalar($child)) {
-                $this->xmlWriter->text($child);
-            } elseif (!is_null($child)) {
-                $this->write($child);
+        if (is_array($xml) && 3 === count($xml)) {
+            try {
+                $this->writeXMLElement($xml[0], $xml[1], $xml[2]);
+            } catch (Throwable $thrown) {
+                throw new LogicException('Failure writing: ' . var_export($xml, true), 0, $thrown);
             }
-        }
-
-        // Some elements should always have a full end tag <div></div> rather than <div/>
-        if (preg_match('(^(div|iframe|script|span|textarea)$)i', $tag)) {
-            $this->xmlWriter->fullEndElement();
         } else {
-            $this->xmlWriter->endElement();
-        }
-
-        if ($specialInlineElement) {
-            // Toggle the indent back on.
-            $this->xmlWriter->setIndent(true);
+            throw new InvalidArgumentException('Bad root element: ' . var_export($xml, true));
         }
     }
 
@@ -197,41 +119,49 @@ class XML implements WriterIface
     }
 
     /**
-     * Write the start of the document based on the doc type.
-     *
-     * @throws DomainException For an unknown document type.
+     * Write the start of the document.
      */
     public function writeStart()
     {
-        switch (strtoupper($this->docType)) {
-            case 'HTML5':
-                $this->xmlWriter->startDtd('html');
-                $this->xmlWriter->endDtd();
-                $this->xmlWriter->startElement('html');
-                $this->xmlWriter->writeAttribute('class', 'no-js');
-                break;
+        $this->xmlWriter->startDocument('1.0', 'UTF-8');
+    }
 
-            case 'XML':
-                $this->xmlWriter->startDocument('1.0', 'UTF-8');
-                break;
+    /*********************/
+    /* Protected Methods */
+    /*********************/
 
-            case 'XHTML_1_1':
-                $this->xmlWriter->startDtd(
-                    'html',
-                    '-//W3C//DTD XHTML 1.1//EN',
-                    'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'
-                );
-                $this->xmlWriter->endDtd();
+    /**
+     * Write an element and all its children
+     *
+     * @param string       $tag
+     * @param array        $attribs
+     * @param array|string $children Children can be specified as a single text node or a list of child nodes.
+     */
+    protected function writeXMLElement(string $tag, array $attribs, $children)
+    {
+        $this->xmlWriter->startElement($tag);
 
-                $this->xmlWriter->startElementNS(null, 'html', 'http://www.w3.org/1999/xhtml');
-                $this->xmlWriter->writeAttribute('lang', $this->language);
-                $this->xmlWriter->writeAttribute('xml:lang', $this->language);
-                $this->xmlWriter->writeAttribute('class', 'no-js');
-                break;
-
-            default:
-                throw new DomainException('Unknown docType');
+        foreach ($attribs as $attrib => $value) {
+            $this->xmlWriter->writeAttribute($attrib, $value);
         }
+
+        if (is_string($children)) {
+            $this->xmlWriter->text($children);
+        } elseif (is_array($children)) {
+            foreach ($children as $child) {
+                if (is_string($child)) {
+                    $this->xmlWriter->text($child);
+                } elseif (is_array($child) && 3 == count($child)) {
+                    $this->writeXMLElement($child[0], $child[1], $child[2]);
+                } else {
+                    throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
+                }
+            }
+        } else {
+            throw new InvalidArgumentException('Bad children: ' . var_export($children, true));
+        }
+
+        $this->xmlWriter->endElement();
     }
 }
 // EOF

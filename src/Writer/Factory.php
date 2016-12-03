@@ -36,21 +36,16 @@ class Factory
         $upperOutputFormat = strtoupper($outputFormat);
 
         switch ($upperOutputFormat) {
+            case 'HTML5':
+                return new HTML5(new XMLWriter);
             case 'JSON':
                 return new JSON;
             case 'TEXT':
                 return new Text;
-        }
-
-        $xmlWriter = new XMLWriter;
-
-        switch ($upperOutputFormat) {
-            case 'HTML5':
-                return new XML($xmlWriter, 'HTML5');
             case 'XHTML':
-                return new XML($xmlWriter, 'XHTML_1_1');
+                return new XHTML(new XMLWriter);
             case 'XML':
-                return new XML($xmlWriter, 'XML');
+                return new XML(new XMLWriter);
             default:
                 throw new DomainException('No writer for output format: ' . $outputFormat);
         }

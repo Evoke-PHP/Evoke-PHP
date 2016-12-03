@@ -22,6 +22,36 @@ class XMLTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function providerWriteBadChild()
+    {
+        return [
+            'Child_Arr_Too_Long'  => ['xhtml' => ['a', [], [[1, 2, 3, 4]]]],
+            'Child_Arr_Too_Short' => ['xhtml' => ['a', [], [[1, 2]]]],
+            'Child_Non_Arr_Str'   => ['xhtml' => ['a', ['b' => '2'], [2]]],
+            'Child_Second_Bad'    => [
+                'xhtml' =>
+                    [
+                        'a',
+                        [],
+                        [
+                            ['b', [], 'Good'],
+                            ['c', 'BAD']
+                        ]
+                    ]
+            ]
+        ];
+    }
+
+    public function providerWriteBadRoot()
+    {
+        return [
+            'Array_Too_Few'  => ['xml' => ['a', ['b' => '2']]],
+            'Array_Too_Many' => ['xml' => ['1', '2', '3', '4']],
+            'Non-Array'      => ['xml' => 'non_array']
+
+        ];
+    }
+
     /*********/
     /* Tests */
     /*********/
@@ -31,7 +61,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerConstruct
      */
-    public function testConstruct($indent, $indentString = '   ')
+    public function testConstruct($indent, $indentString = '    ')
     {
         $xIndex    = 0;
         $xmlWriter = $this->createMock('XMLWriter');
@@ -50,7 +80,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
                 ->with(true);
         }
 
-        $object = new XML($xmlWriter, 'XHTML_1_1', 'EN', $indent, $indentString);
+        $object = new XML($xmlWriter, $indent, $indentString);
         $this->assertInstanceOf('Evoke\Writer\XML', $object);
     }
 
@@ -70,7 +100,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
             ->with(false)
             ->will($this->returnValue('Whatever'));
 
-        $object = new XML($xmlWriter, 'XHTML_1_1', 'EN', false);
+        $object = new XML($xmlWriter, false);
         $this->assertSame('Whatever', (string)$object);
     }
 
@@ -91,7 +121,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
             ->with(false)
             ->will($this->returnValue(''));
 
-        $object = new XML($xmlWriter, 'XML', 'ES', false);
+        $object = new XML($xmlWriter, false);
         $object->clean();
         $this->assertSame('', (string)$object);
     }
@@ -114,7 +144,7 @@ class XMLTest extends PHPUnit_Framework_TestCase
             ->with(false)
             ->will($this->returnValue(''));
 
-        $object = new XML($xmlWriter, 'HTML5', 'EN', false);
+        $object = new XML($xmlWriter, false);
         ob_start();
         $object->flush();
         $flushed = ob_get_contents();
@@ -123,6 +153,128 @@ class XMLTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Flush Whatever', $flushed);
         $this->assertSame('', (string)$object);
 
+    }
+
+    public function testWrite()
+    {
+        $expectedOutput = <<<XML
+<library location="bedroom">
+    <book>
+        <title>Self help 101</title>
+        <author>self</author>
+    </book>
+    <book type="hardcover">
+        <title>Fix it after you broke it</title>
+        <author>Needs help</author>
+    </book>
+</library>
+
+XML
+        ;
+        $object         = new XML(new \XMLWriter);
+        $object->write([
+            'library',
+            ['location' => 'bedroom'],
+            [
+                [
+                    'book',
+                    [],
+                    [
+                        ['title', [], 'Self help 101'],
+                        ['author', [], 'self']
+                    ]
+                ],
+                [
+                    'book',
+                    ['type' => 'hardcover'],
+                    [
+                        ['title', [], 'Fix it after you broke it'],
+                        ['author', [], 'Needs help']
+                    ]
+                ]
+            ]
+        ]);
+        $this->assertSame($expectedOutput, (string)($object));
+    }
+
+    /**
+     * @expectedException        \LogicException
+     * @expectedExceptionMessage Failure writing:
+     */
+    public function testWriteBadAttributeType()
+    {
+        $object = new XML($this->createMock('XMLWriter'));
+        $object->write(['book', 'BadAttribs', 'b']);
+    }
+
+    /**
+     * @dataProvider             providerWriteBadChild
+     * @expectedException        \LogicException
+     * @expectedExceptionMessage Failure writing:
+     */
+    public function testWriteBadChild($xml)
+    {
+        $object = new XML($this->createMock('XMLWriter'));
+        $object->write($xml);
+    }
+
+    /**
+     * @expectedException              \TypeError
+     * @expectedExceptionMessageRegExp /^Argument 2 passed to.*must be of the type array, string given/
+     */
+    public function testWriteBadChildAttributeType()
+    {
+        try {
+            $object = new XML($this->createMock('XMLWriter'));
+            $object->write([
+                'book',
+                [],
+                [
+                    ['author', 'BAD', ['Count of author is correct at 3']]
+                ]
+            ]);
+        } catch (\LogicException $thrown) {
+            throw $thrown->getPrevious();
+        }
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage Bad children:
+     */
+    public function testWriteBadChildren()
+    {
+        try {
+            $object = new XML($this->createMock('XMLWriter'));
+            $object->write(['book', [], 123]);
+        } catch (\LogicException $thrown) {
+            throw $thrown->getPrevious();
+        }
+    }
+
+    /**
+     * @dataProvider             providerWriteBadRoot
+     * @expectedException        \InvalidArgumentException
+     * @expectedExceptionMessage Bad root element
+     */
+    public function testWriteBadRoot($xml)
+    {
+        $object = new XML($this->createMock('XMLWriter'));
+        $object->write($xml);
+    }
+
+    /**
+     * @expectedException              \TypeError
+     * @expectedExceptionMessageRegExp /^Argument 1 passed to.*must be of the type string, integer given/
+     */
+    public function testWriteBadTagType()
+    {
+        try {
+            $object = new XML($this->createMock('XMLWriter'));
+            $object->write([241, 'a', 'b']);
+        } catch (\LogicException $thrown) {
+            throw $thrown->getPrevious();
+        }
     }
 
     public function testWriteEnd()
@@ -137,75 +289,11 @@ class XMLTest extends PHPUnit_Framework_TestCase
             ->method('endDocument')
             ->with();
 
-        $object = new XML($xmlWriter, 'XML', 'EN', false);
+        $object = new XML($xmlWriter, false);
         $object->writeEnd();
     }
 
-    public function testWriteStartDefault()
-    {
-        $xIndex    = 0;
-        $xmlWriter = $this->createMock('XMLWriter');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('openMemory');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('setIndentString');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('setIndent');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('startDTD')
-            ->with('html', '-//W3C//DTD XHTML 1.1//EN', 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('endDTD');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('startElementNS')
-            ->with(null, 'html', 'http://www.w3.org/1999/xhtml');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('writeAttribute')
-            ->with('lang', 'EN');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('writeAttribute')
-            ->with('xml:lang', 'EN');
-
-        $object = new XML($xmlWriter);
-        $object->writeStart();
-    }
-
-    public function testWriteStartHTML5()
-    {
-        $xIndex    = 3;
-        $xmlWriter = $this->createMock('XMLWriter');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('startDTD')
-            ->with('html');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('endDTD');
-
-        $object = new XML($xmlWriter, 'HTML5');
-        $object->writeStart();
-    }
-
-    /**
-     * Writing the start of an unknown type of document throws.
-     *
-     * @expectedException DomainException
-     */
-    public function testWriteStartUnknown()
-    {
-        $object = new XML($this->createMock('XMLWriter'), 'UNKNOWN_DOCTYPE');
-        $object->writeStart();
-    }
-
-    public function testWriteStartXML()
+    public function testWriteStart()
     {
         $xIndex    = 3;
         $xmlWriter = $this->createMock('XMLWriter');
@@ -216,77 +304,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
 
         $object = new XML($xmlWriter, 'XML');
         $object->writeStart();
-    }
-
-    public function testWriteXML()
-    {
-        $expectedOutput = '<div class="Test"><span>Span_Text</span></div>';
-        $object         = new XML(new \XMLWriter, 'XML', 'EN', false);
-        $object->write([
-            'div',
-            ['class' => 'Test'],
-            [
-                ['span', [], 'Span_Text']
-            ]
-        ]);
-        $this->assertSame($expectedOutput, (string)($object));
-    }
-
-    /**
-     * Writing a bad attrib throws.
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testWriteXMLBadAttribs()
-    {
-        $object = new XML($this->createMock('XMLWriter'));
-        $object->write(['div', 'BadAttribs', 'b']);
-    }
-
-    /**
-     * Writing a bad tag throws.
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testWriteXMLBadTag()
-    {
-        $object = new XML($this->createMock('XMLWriter'));
-        $object->write([null, 'a', 'b']);
-    }
-
-    /**
-     * Writing an inline element turns off indenting during the write.
-     */
-    public function testWriteXMLInlineIndent()
-    {
-        $xIndex    = 3;
-        $xmlWriter = $this->createMock('XMLWriter');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('setIndent')
-            ->with(false);
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('startElement')
-            ->with('pre');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('writeAttribute')
-            ->with('A', 'Val');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('text')
-            ->with("This text\nis inline\nOK\n");
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('endElement');
-        $xmlWriter
-            ->expects($this->at($xIndex++))
-            ->method('setIndent')
-            ->with(true);
-
-        $object = new XML($xmlWriter);
-        $object->write(['pre', ['A' => 'Val'], "This text\nis inline\nOK\n"]);
     }
 }
 // EOF

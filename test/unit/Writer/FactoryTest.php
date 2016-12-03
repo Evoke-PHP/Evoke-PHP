@@ -15,7 +15,20 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     /*********/
 
     /**
+     * Create a HTML writer.
+     *
+     * @uses Evoke\Writer\HTML5
+     */
+    public function testCreateHTML5()
+    {
+        $object = new Factory;
+        $this->assertInstanceOf('Evoke\Writer\HTML5', $object->create('HTML5'));
+    }
+
+    /**
      * Create a JSON writer.
+     *
+     * @uses Evoke\Writer\JSON
      */
     public function testCreateJSON()
     {
@@ -24,18 +37,9 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create a HTML writer.
-     *
-     * @uses Evoke\Writer\XML
-     */
-    public function testCreateHTML()
-    {
-        $object = new Factory;
-        $this->assertInstanceOf('Evoke\Writer\XML', $object->create('HTML5'));
-    }
-
-    /**
      * Create a Text writer.
+     *
+     * @uses Evoke\Writer\Text
      */
     public function testCreateText()
     {
@@ -46,12 +50,12 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     /**
      * Create an XHTML writer.
      *
-     * @uses Evoke\Writer\XML
+     * @uses Evoke\Writer\XHTML
      */
     public function testCreateXHTML()
     {
         $object = new Factory;
-        $this->assertInstanceOf('Evoke\Writer\XML', $object->create('XHTML'));
+        $this->assertInstanceOf('Evoke\Writer\XHTML', $object->create('XHTML'));
     }
 
     /**
@@ -66,7 +70,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Creating an unkown writer throws
+     * Creating an unknown writer throws
      *
      * @expectedException DomainException
      */
