@@ -190,6 +190,89 @@ class ExceptionHandlerTest extends PHPUnit_Framework_TestCase
         $object->handler($exception);
     }
 
+    public function testHandleExceptionShowingThrowableChain()
+    {
+        $firstException  = new \Exception('First in chain');
+        $secondException = new \Exception('Second in chain', 0, $firstException);
+        $responseIndex = 0;
+        $response      = $this->createMock('Evoke\Network\HTTP\ResponseIface');
+        $response
+            ->expects($this->at($responseIndex++))
+            ->method('setStatus')
+            ->with(500);
+        $response
+            ->expects($this->at($responseIndex++))
+            ->method('setBody')
+            ->with('whatever the writer says goes: ' . __METHOD__);
+        $response
+            ->expects($this->at($responseIndex))
+            ->method('send');
+
+        $writerIndex = 0;
+        $writer      = $this->createMock('Evoke\Writer\WriterIface');
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('__toString')
+            ->with()
+            ->will($this->returnValue(''));
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('writeStart')
+            ->with();
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('write')
+            ->with([
+                'head',
+                [],
+                [['title', [], ['Internal Error']]]
+            ]);
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('write')
+            ->with([
+                'body',
+                [],
+                [
+                    ['h1', [], 'Internal Error'],
+                    ['div', [], 'Throwable View E2'],
+                    ['div', [], 'Throwable View E1']
+                ]
+            ]);
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('writeEnd')
+            ->with();
+        $writer
+            ->expects($this->at($writerIndex++))
+            ->method('__toString')
+            ->with()
+            ->will($this->returnValue('whatever the writer says goes: ' . __METHOD__));
+
+        $viewThrowableIndex = 0;
+        $viewThrowable      = $this->createMock('Evoke\View\ThrowableIface');
+        $viewThrowable
+            ->expects($this->at($viewThrowableIndex++))
+            ->method('set')
+            ->with($secondException);
+        $viewThrowable
+            ->expects($this->at($viewThrowableIndex++))
+            ->method('get')
+            ->will($this->returnValue(['div', [], 'Throwable View E2']));
+        $viewThrowable
+            ->expects($this->at($viewThrowableIndex++))
+            ->method('set')
+            ->with($firstException);
+        $viewThrowable
+            ->expects($this->at($viewThrowableIndex++))
+            ->method('get')
+            ->will($this->returnValue(['div', [], 'Throwable View E1']));
+
+
+        $object = new ExceptionHandler($response, $writer, $viewThrowable);
+        $object->handler($secondException);
+    }
+
     public function testHandleExceptionWithoutShowingThrowable()
     {
         $exception     = new \Exception('This is it.');

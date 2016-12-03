@@ -85,16 +85,14 @@ class ExceptionHandler
         $this->writer->write(['head', [], [['title', [], ['Internal Error']]]]);
 
         if (isset($this->viewThrowable)) {
-            $this->viewThrowable->set($uncaught);
-            $this->writer->write(
-                [
-                    'body',
-                    [],
-                    [
-                        ['h1', [], 'Internal Error'],
-                        $this->viewThrowable->get()
-                    ]
-                ]);
+            $throwDetails = [['h1', [], 'Internal Error']];
+
+            do {
+                $this->viewThrowable->set($uncaught);
+                $throwDetails[] = $this->viewThrowable->get();
+            } while ($uncaught = $uncaught->getPrevious());
+
+            $this->writer->write(['body', [], $throwDetails]);
         } else {
             $this->writer->write(
                 [
