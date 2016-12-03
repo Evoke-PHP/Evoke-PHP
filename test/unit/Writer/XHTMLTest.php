@@ -37,7 +37,6 @@ class XHTMLTest extends PHPUnit_Framework_TestCase
     public function providerWriteBadRoot()
     {
         return [
-            'Array_Too_Few'       => ['xhtml' => ['a', ['b' => '2']]],
             'Array_Too_Many'      => ['xhtml' => ['1', '2', '3', '4']],
             'Non_Array_Or_String' => ['xhtml' => 213]
 
@@ -106,8 +105,8 @@ class XHTMLTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Bad children:
+     * @expectedException        \TypeError
+     * @expectedExceptionMessage Argument 1 passed to Evoke\Writer\XHTML::writeXHTMLChildren() must be of the type array, integer given
      */
     public function testWriteBadChildren()
     {
@@ -131,8 +130,8 @@ class XHTMLTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException              \TypeError
-     * @expectedExceptionMessageRegExp /^Argument 1 passed to.*must be of the type string, null given/
+     * @expectedException        \TypeError
+     * @expectedExceptionMessage Argument 1 passed to Evoke\Writer\XHTML::writeXHTMLElement() must be of the type string, null given
      */
     public function testWriteBadTagType()
     {
@@ -142,6 +141,22 @@ class XHTMLTest extends PHPUnit_Framework_TestCase
         } catch (LogicException $thrown) {
             throw $thrown->getPrevious();
         }
+    }
+
+    public function testWriteTagOnly()
+    {
+        $expectedOutput = '<span></span>';
+        $object         = new XHTML(new \XMLWriter, false);
+        $object->write(['span']);
+        $this->assertSame($expectedOutput, (string)($object));
+    }
+
+    public function testWriteTagAndAttributesOnly()
+    {
+        $expectedOutput = '<img src="cool.png" alt="cool"/>';
+        $object         = new XHTML(new \XMLWriter, false);
+        $object->write(['img', ['src' => 'cool.png', 'alt' => 'cool']]);
+        $this->assertSame($expectedOutput, (string)($object));
     }
 
     /**

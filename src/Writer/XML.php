@@ -99,9 +99,9 @@ class XML implements WriterIface
      */
     public function write($xml)
     {
-        if (is_array($xml) && 3 === count($xml)) {
+        if (is_array($xml) && count($xml) <= 3) {
             try {
-                $this->writeXMLElement($xml[0], $xml[1], $xml[2]);
+                $this->writeXMLElement(...$xml);
             } catch (Throwable $thrown) {
                 throw new LogicException('Failure writing: ' . var_export($xml, true), 0, $thrown);
             }
@@ -131,13 +131,31 @@ class XML implements WriterIface
     /*********************/
 
     /**
+     * Write XML children and their descendants.
+     *
+     * @param array $children
+     */
+    protected function writeXMLChildren(array $children)
+    {
+        foreach ($children as $child) {
+            if (is_string($child)) {
+                $this->xmlWriter->text($child);
+            } elseif (is_array($child) && count($child) <= 3) {
+                $this->writeXMLElement(...$child);
+            } else {
+                throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
+            }
+        }
+    }
+
+    /**
      * Write an element and all its children
      *
-     * @param string       $tag
-     * @param array        $attribs
-     * @param array|string $children Children can be specified as a single text node or a list of child nodes.
+     * @param string            $tag
+     * @param array             $attribs
+     * @param array|string|null $children Children can be specified as a single text node or a list of child nodes.
      */
-    protected function writeXMLElement(string $tag, array $attribs, $children)
+    protected function writeXMLElement(string $tag, array $attribs = [], $children = null)
     {
         $this->xmlWriter->startElement($tag);
 
@@ -145,20 +163,12 @@ class XML implements WriterIface
             $this->xmlWriter->writeAttribute($attrib, $value);
         }
 
-        if (is_string($children)) {
-            $this->xmlWriter->text($children);
-        } elseif (is_array($children)) {
-            foreach ($children as $child) {
-                if (is_string($child)) {
-                    $this->xmlWriter->text($child);
-                } elseif (is_array($child) && 3 == count($child)) {
-                    $this->writeXMLElement($child[0], $child[1], $child[2]);
-                } else {
-                    throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
-                }
+        if (isset($children)) {
+            if (is_string($children)) {
+                $this->xmlWriter->text($children);
+            } else {
+                $this->writeXMLChildren($children);
             }
-        } else {
-            throw new InvalidArgumentException('Bad children: ' . var_export($children, true));
         }
 
         $this->xmlWriter->endElement();

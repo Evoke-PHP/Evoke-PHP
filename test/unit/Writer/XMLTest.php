@@ -45,7 +45,6 @@ class XMLTest extends PHPUnit_Framework_TestCase
     public function providerWriteBadRoot()
     {
         return [
-            'Array_Too_Few'  => ['xml' => ['a', ['b' => '2']]],
             'Array_Too_Many' => ['xml' => ['1', '2', '3', '4']],
             'Non-Array'      => ['xml' => 'non_array']
 
@@ -239,8 +238,8 @@ XML
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Bad children:
+     * @expectedException        \TypeError
+     * @expectedExceptionMessage Argument 1 passed to Evoke\Writer\XML::writeXMLChildren() must be of the type array, integer given
      */
     public function testWriteBadChildren()
     {
@@ -275,6 +274,22 @@ XML
         } catch (\LogicException $thrown) {
             throw $thrown->getPrevious();
         }
+    }
+
+    public function testWriteTagOnly()
+    {
+        $expectedOutput = '<book/>';
+        $object         = new XML(new \XMLWriter, false);
+        $object->write(['book']);
+        $this->assertSame($expectedOutput, (string)($object));
+    }
+
+    public function testWriteTagAndAttributesOnly()
+    {
+        $expectedOutput = '<book auth="Smith"/>';
+        $object         = new XML(new \XMLWriter, false);
+        $object->write(['book', ['auth' => 'Smith']]);
+        $this->assertSame($expectedOutput, (string)($object));
     }
 
     public function testWriteEnd()

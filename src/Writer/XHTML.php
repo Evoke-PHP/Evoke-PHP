@@ -59,9 +59,9 @@ class XHTML extends XML
     {
         if (is_string($xhtml)) {
             $this->xmlWriter->text($xhtml);
-        } elseif (is_array($xhtml) && 3 === count($xhtml)) {
+        } elseif (is_array($xhtml) && count($xhtml) <= 3) {
             try {
-                $this->writeXHTMLElement($xhtml[0], $xhtml[1], $xhtml[2]);
+                $this->writeXHTMLElement(...$xhtml);
             } catch (Throwable $thrown) {
                 throw new LogicException('Failure writing: ' . var_export($xhtml, true), 0, $thrown);
             }
@@ -90,13 +90,31 @@ class XHTML extends XML
     /*********************/
 
     /**
+     * Write XHTML children and their descendants.
+     *
+     * @param array $children
+     */
+    protected function writeXHTMLChildren(array $children)
+    {
+        foreach ($children as $child) {
+            if (is_string($child)) {
+                $this->xmlWriter->text($child);
+            } elseif (is_array($child) && count($child) <= 3) {
+                $this->writeXHTMLElement(...$child);
+            } else {
+                throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
+            }
+        }
+    }
+
+    /**
      * Write an element and all its children
      *
      * @param string       $tag
      * @param array        $attribs
      * @param array|string $children
      */
-    protected function writeXHTMLElement(string $tag, array $attribs, $children)
+    protected function writeXHTMLElement(string $tag, array $attribs = [], $children = null)
     {
         // Whether we are normally indenting and we see an element that should be inline.
         $specialInlineElement = ($this->indent && preg_match('(^(strong|em|pre|code)$)i', $tag));
@@ -112,20 +130,12 @@ class XHTML extends XML
             $this->xmlWriter->writeAttribute($attrib, $value);
         }
 
-        if (is_string($children)) {
-            $this->xmlWriter->text($children);
-        } elseif (is_array($children)) {
-            foreach ($children as $child) {
-                if (is_string($child)) {
-                    $this->xmlWriter->text($child);
-                } elseif (is_array($child) && 3 == count($child)) {
-                    $this->writeXHTMLElement($child[0], $child[1], $child[2]);
-                } else {
-                    throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
-                }
+        if (isset($children)) {
+            if (is_string($children)) {
+                $this->xmlWriter->text($children);
+            } else {
+                $this->writeXHTMLChildren($children);
             }
-        } else {
-            throw new InvalidArgumentException('Bad children: ' . var_export($children, true));
         }
 
         // Some elements should always have a full end tag <div></div> rather than <div/>
