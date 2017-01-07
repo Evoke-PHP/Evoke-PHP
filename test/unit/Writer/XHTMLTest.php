@@ -85,8 +85,8 @@ class XHTMLTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException              \TypeError
-     * @expectedExceptionMessageRegExp /^Argument 2 passed to.*must be of the type array, string given/
+     * @expectedException              \LogicException
+     * @expectedExceptionMessageRegExp /^Exception splatting: /
      */
     public function testWriteBadChildAttributeType()
     {

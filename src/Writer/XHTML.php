@@ -100,7 +100,13 @@ class XHTML extends XML
             if (is_string($child)) {
                 $this->xmlWriter->text($child);
             } elseif (is_array($child) && count($child) <= 3) {
-                $this->writeXHTMLElement(...$child);
+                try {
+                    $this->writeXHTMLElement(...$child);
+                } catch (LogicException $e) {
+                    throw $e;
+                } catch (Throwable $e) {
+                    throw new LogicException('Exception splatting: ' . var_export($child, true), 0, $e);
+                }
             } else {
                 throw new InvalidArgumentException('Bad child: ' . var_export($child, true));
             }
