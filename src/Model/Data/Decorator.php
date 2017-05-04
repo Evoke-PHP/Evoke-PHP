@@ -152,6 +152,14 @@ abstract class Decorator implements FlatIface
     }
 
     /**
+     * Reset the data that we are managing to empty.
+     */
+    public function reset()
+    {
+        $this->data->reset();
+    }
+
+    /**
      * Set the data that we are managing.
      *
      * @param mixed[] $data The value for the data.

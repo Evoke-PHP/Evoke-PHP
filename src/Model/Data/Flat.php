@@ -73,6 +73,15 @@ class Flat implements FlatIface
     }
 
     /**
+     * Reset the data we are managing to empty.
+     */
+    public function reset()
+    {
+        $this->data = [];
+        $this->rewind();
+    }
+
+    /**
      * Set the data that we are managing.
      *
      * @param mixed[] $data The data we want to manage.
